@@ -1,8 +1,8 @@
-Package: phylo4
+Package: phylobase
 Type: Package
-Title: Base package for phylogenetic structures
+Title: Base package for phylogenetic structures and comparative data
 Version: 0.1
-Date: 2007-12-10
+Date: 2007-12-18
 Depends: methods
 Suggests: ape, ade4
 Author: R Hackathon (Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vienne, Thibaut Jombart, Steve Kembel, David Orme, Emmanuel Paradis)

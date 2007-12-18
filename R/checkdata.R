@@ -109,7 +109,7 @@ check_data <- function(object,
 		else
 		{
 			#don't use tip names or attempt to sort - but check to make sure dimensions match
-			if (!(phylo4::nTips(object)==dim(object@tip.data)[1])) {
+			if (!(phylobase::nTips(object)==dim(object@tip.data)[1])) {
 				stop("Ignoring tip data names. Number of tip data do not match number of tree tips.")
 			}
 		}
@@ -124,7 +124,7 @@ check_data <- function(object,
 		#check for default names
 		#could be 1:nTips or nTips+1:nEdges
 		if (all(row.names(object@node.data) == 1:length(row.names(object@node.data))) 
-					|| all(row.names(object@node.data) == (phylo4::nTips(object)+1):nEdges(object)))
+					|| all(row.names(object@node.data) == (phylobase::nTips(object)+1):nEdges(object)))
 		{
 				#no node.names
 				if (default.node.names == "fail") {
@@ -189,7 +189,7 @@ check_data <- function(object,
 		else
 		{
 			#don't use node names or attempt to sort - but check to make sure dimensions match
-			if (!(phylo4::nNodes(object)==dim(object@node.data)[1])) {
+			if (!(phylobase::nNodes(object)==dim(object@node.data)[1])) {
 				stop("Ignoring node data names. Number of node data do not match number of tree nodes.")
 			}
 		}
