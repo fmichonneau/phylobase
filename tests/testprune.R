@@ -1,4 +1,4 @@
-library(phylo4)
+library(phylobase)
 library(ape)
 r1 <- rcoal(5)
 

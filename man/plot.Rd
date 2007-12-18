@@ -1,7 +1,7 @@
 \name{plot for phylo4 and phylo4d}
 \docType{methods}
-\alias{plot,phylo4-methods}
-\alias{plot,phylo4d-methods}
+\alias{plot,phylo4,missing-method}
+\alias{plot,phylo4d,missing-method}
 \title{Plot a phylogenetic tree alone or with data}
 \description{
   These methods display graphics for objects of class \code{phylo4} and
@@ -20,8 +20,8 @@
    }
  }
  \usage{
-\S4method{plot}{phylo4}(x, \dots)
-\S4method{plot}{phylo4d}(x, type=c("symbols", "squares", "dotchart"), \dots)
+\S4method{plot}{phylo4,missing}(x, \dots)
+\S4method{plot}{phylo4d,missing}(x, type=c("symbols", "squares", "dotchart"), \dots)
 
 }
 \arguments{
