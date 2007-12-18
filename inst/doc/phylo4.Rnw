@@ -1,0 +1,110 @@
+\documentclass{article}
+%\VignettePackage{phylo4}
+% \VignetteIndexEntry{phylo4: classes and methods for phylogenetic trees and data}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+
+\usepackage{color}
+
+\usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
+\newcommand{\code}[1]{{{\tt #1}}}
+\title{The \code{phylo4} S4 classes and methods}
+\author{Peter Cowan}
+\date{\today}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+
+This document describes the new \code{phylo4} S4 classes and methods, which are intended to provide a unifying standard for phylogenetic data in R.  The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple tree respectively.
+
+\section{Definitions/slots}
+
+\subsection{phylo4}
+Like \code{phylo}, the main components of
+the \code{phylo4} class are:
+\begin{description}
+\item[edge]{an $N \times 2$ matrix of integers,
+  where the first column \ldots}
+\item[edge.length]{numeric list of edge lengths
+(length $N$ or empty)}
+\item[Nnode]{integer, number of nodes}
+\item[tip.label]{character vector of tip labels (required)}
+\item[node.label]{character vector of node labels (maybe empty)}
+\item[root.edge]{integer defining root edge (maybe NA)}
+\end{description}
+
+We have defined basic methods for \code{phylo4}:
+\code{show}, \code{print} (copied from \code{print.phylo} in
+\code{ape}), and a variety of accessor functions (see help files).
+
+\code{summary} does not seem to be terribly useful in the
+context of a ``raw'' tree, because there is not much to
+compute: \textbf{end users?}
+
+Print method: add information about
+(ultrametric, scaled, polytomies (zero-length or structural))?
+
+\subsection{phylo4d}
+
+The \code{phylo4d} class extends \code{phylo4}
+with data.  Tip data, (internal) node data, and edge
+data are stored separately, but can be retrieved
+together or separately with \code{tdata(x,"tip")}
+or \code{tdata(x,"all")}.
+
+\textbf{edge data can also be included --- is this
+useful/worth keeping?}
+
+\subsection{multiphylo4}
+
+\section{Validity checking}
+
+\begin{itemize}
+\item number of rows of edge matrix ($N$) == length of edge-length vector (if $>0$)
+\item (number of tip labels)+(nNode)-1 == $N$
+\item data matrix must have row names
+\item row names must match tip labels (if not, spit out mismatches)
+\item 
+\end{itemize}
+ 
+Default node labels:
+
+\section{Hacks/backward compatibility}
+
+Hilmar Lapp very kindly showed a way to hack
+the \verb+$+ operator so that it would provide
+backward compatibility with code that is 
+extracting internal elements of a \code{phylo4}.
+The basic recipe is:
+<<eval=FALSE>>=
+setMethod("$","phylo4",function(x,name) { attr(x,name)})
+@ 
+but this has to be hacked slightly to intercept
+calls to elements that might be missing.  For example,
+\code{ape} detects whether log-likelihood, root edges,
+node labels, etc. are missing by testing whether they
+are \code{NULL}, whereas missing items are represented
+in \code{phylo4} by zero-length vectors in the slots 
+(or \code{NA} for the root edge) --- so we need code
+like
+<<eval=FALSE>>=
+if(!hasNodeLabels(x)) NULL else x@node.label
+@ 
+to handle these cases.
+
+\section{To do/problems}
+
+\begin{itemize}
+\item Conflict with \code{nTips} if \code{ape} is loaded first:
+ask EP to get rid of this (obsolete?) function? (\code{Ntips}
+is the real \code{ape} function for getting the number of tips)
+\item basic tree manipulation: tip-dropping, \code{na.omit}, etc. --- 
+  especially for multi-tree and tree-with-data cases
+\item tree-manipulation code: tree traversal (store current
+  position as an attribute), pruning, etc.
+\item restrict/specify edges matrix to be integer?
+\end{itemize}
+
+\end{document}

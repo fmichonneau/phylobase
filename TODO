@@ -1,0 +1,41 @@
+# HIGH PRIORITY
+================
+* Pass 'R CMD check' implement a few things that can't easily be done already with other packages
+* summary method: if tip and node don't have identical colnames, don't try to get alldata and/or: more stringent tests e.g. column names match in tip and node (if all.data)? FIXED?
+
+# MEDIUM: tasks in the categories "basic functionality"
+=======================================================
+* make sure the data structures are reasonably complete"
+* Replacement methods:
+   (in root.edge<- style, perhaps also setRoot style)
+* order: All phylo4 edge matrices are internally stored as "cladewise"/Newick traversal order.  Extend edges accessor method with optional argument that allows edges to be extracted in a different order (possibly with an attribute as in ape); need to steal 'reorder' from ape
+* Root node data characteristics (compare what OUCH does):
+    root node doesn't have corresponding entry in the edge matrix: ouch adds a row to the edge matrix (1-row data frame matching node column info)
+    Not entirely clear how we should deal with this, MB has a proposal.
+* Rewrite methods in native phylo4 as necessary/desirable
+* Plot method for phylo4d: what would be a good default?
+* Figure out best way to deal with namespace/conflicts (overriding ape methods)
+* graphical identify.node
+* Implement "data class" by wrapping data.frame and writing an [ accessor method; reconsider this general topic -- is there 
+* tree walking/generic manipulation methods
+* compare: Mesquite, ape (check O'Meara list)
+* change name to phylobase
+* test the new plot functions 
+
+## I/O
+------
+
+## Multiphylo Issues
+--------------------
+* extend classes: should we have both multiPhylo4 (no data) and multiPhylo4d (with data) 
+* Implement multiphylo tree names?
+* check multiPhylo! "unpack"/"pack" methods
+* ctree method
+
+# LOW PRIORITY
+==============
+* TreeLib wrapper?
+* more tree manipulation methods
+* lapply/multiple-tree methods, or at least documentation on how to do it
+* compare Sidlauskas wiki documentation, how would one do it in phylo4?
+* phylo4 constructor should have its own method manpage (currently is inside the class doc)
