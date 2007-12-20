@@ -2,7 +2,7 @@ require(methods)
 require(ape)
 
 setOldClass("phylo")
-## setOldClass("multi.tree")
+## setOldClass("multi.tree") ## obsolete
 setOldClass("multiPhylo")
 
 setClass("phylo4",
@@ -78,7 +78,7 @@ setGeneric("isRooted", function(x) {
 
 
 setMethod("isRooted","phylo4", function(x) {
-  # hack to avoid failure on an empty object
+                                        # hack to avoid failure on an empty object
   if(phylobase::nTips(x)==0) return(FALSE)  
   !is.na(x@root.edge) ||  ## root edge explicitly defined
   ## HACK: make sure we find the right "nTips"
@@ -123,7 +123,7 @@ setGeneric("NodeLabels", function(x) {
 setMethod("NodeLabels","phylo4", function(x) {
   x@node.label
 })
-                
+
 ## hack to allow access with $
 setMethod("$","phylo4",function(x,name) {
   switch(name,
@@ -134,47 +134,47 @@ setMethod("$","phylo4",function(x,name) {
 })
 
 printphylo <- function (x,printlen=6,...) {
-    printlen <- max(1,printlen)
-    nb.tip <- length(x$tip.label)
-    nb.node <- x$Nnode
-    nb.edge <- length(x$edge.label)
-    cat(paste("\nPhylogenetic tree with", nb.tip, "tips and", 
-        nb.node, "internal nodes\n"))
+  printlen <- max(1,printlen)
+  nb.tip <- length(x$tip.label)
+  nb.node <- x$Nnode
+  nb.edge <- length(x$edge.label)
+  cat(paste("\nPhylogenetic tree with", nb.tip, "tips and", 
+            nb.node, "internal nodes\n"))
 
-    # print tip labels
-    cat("\nTip labels:\n")
-    if (nb.tip > printlen) {
-        cat(paste("\t", paste(x$tip.label[1:printlen], collapse = ", "), 
-                  ", ...\n", sep = ""))
-    } else print(x$tip.label)
-    
-    # print node labels
-    cat("\nNode labels:\n")
-    if (nb.node > printlen) {
-        cat(paste("\t", paste(x$node.label[1:printlen], collapse = ", "), 
-                  ", ...\n", sep = ""))
-    } else print(x$node.label)
-    
-    # print edge labels
-    cat("\nEdge labels:\n")
-    if (nb.edge > printlen) {
-        cat(paste("\t", paste(x$edge.label[1:printlen], collapse = ", "), 
-                  ", ...\n", sep = ""))
-    } else print(x$edge.label)
+                                        # print tip labels
+  cat("\nTip labels:\n")
+  if (nb.tip > printlen) {
+    cat(paste("\t", paste(x$tip.label[1:printlen], collapse = ", "), 
+              ", ...\n", sep = ""))
+  } else print(x$tip.label)
+  
+                                        # print node labels
+  cat("\nNode labels:\n")
+  if (nb.node > printlen) {
+    cat(paste("\t", paste(x$node.label[1:printlen], collapse = ", "), 
+              ", ...\n", sep = ""))
+  } else print(x$node.label)
+  
+                                        # print edge labels
+  cat("\nEdge labels:\n")
+  if (nb.edge > printlen) {
+    cat(paste("\t", paste(x$edge.label[1:printlen], collapse = ", "), 
+              ", ...\n", sep = ""))
+  } else print(x$edge.label)
 
-    # slots
-    cat("\nSlots:\n")
-    cat(paste("@", names(x)[1:4], sep=""),sep="\t")
-    cat("\n")
-    cat(paste("@", names(x)[5:7], sep=""),sep="\t")
-    cat("\n")
-    
-    rlab <- if (isRooted(x)) "Rooted"  else "Unrooted"
-    cat("\n", rlab, "; ", sep = "")
-    blen <- if (hasEdgeLength(x))
-        "no branch lengths"
-    else "includes branch lengths"
-    cat(blen, "\n\n", sep = "")
+                                        # slots
+  cat("\nSlots:\n")
+  cat(paste("@", names(x)[1:4], sep=""),sep="\t")
+  cat("\n")
+  cat(paste("@", names(x)[5:7], sep=""),sep="\t")
+  cat("\n")
+  
+  rlab <- if (isRooted(x)) "Rooted"  else "Unrooted"
+  cat("\n", rlab, "; ", sep = "")
+  blen <- if (hasEdgeLength(x))
+    "no branch lengths"
+  else "includes branch lengths"
+  cat(blen, "\n\n", sep = "")
 }
 
 
@@ -189,74 +189,73 @@ setMethod("show", "phylo4", function(object) printphylo(object))
 
 
 #################
-# summary phylo4
+                                        # summary phylo4
 #################
 ## have to check that x$root.edge is NULL if missing
-setMethod("summary","phylo4", function (object, quiet=FALSE)
-          {
-            x <- object
-            res <- list()
-             
-            # build the result object
-            res$name <- deparse(substitute(object, sys.frame(-1)))
-            res$nb.tips <- length(x$tip.label)
-            res$nb.nodes <- x$Nnode
-              
-            if(!is.null(x$edge.length)){
-              res$mean.el <- mean(x$edge.length, na.rm=TRUE)
-              res$var.el <- var(x$edge.length, na.rm=TRUE)
-              res$sumry.el <- summary(x$edge.length)[-4]
-            } else {
-              res$mean.el <- NULL
-              res$var.el <- NULL
-              res$sumry.el <- NULL
-            }
+setMethod("summary","phylo4", function (object, quiet=FALSE) {
+  x <- object
+  res <- list()
+  
+                                        # build the result object
+  res$name <- deparse(substitute(object, sys.frame(-1)))
+  res$nb.tips <- length(x$tip.label)
+  res$nb.nodes <- x$Nnode
+  
+  if(!is.null(x$edge.length)){
+    res$mean.el <- mean(x$edge.length, na.rm=TRUE)
+    res$var.el <- var(x$edge.length, na.rm=TRUE)
+    res$sumry.el <- summary(x$edge.length)[-4]
+  } else {
+    res$mean.el <- NULL
+    res$var.el <- NULL
+    res$sumry.el <- NULL
+  }
 
-            #TODO: polytomies
-            # I'll finish this - Tibo
-            
-            # model info
-            res$loglik <- attr(x, "loglik")
-            res$para <- attr(x, "para")
-            res$xi <- attr(x, "xi")
-            
-            # if quiet, stop here                                        
-            if(quiet) return(invisible(res))
-            
-            if(!is.null(x$root.edge)){
-              cat("  Root edge:", x$root.edge, "\n")
-            } else {
-              cat("  No root edge.\n")
-            }
-            # now, print to screen is !quiet
-            cat("\n Phylogenetic tree :", res$name, "\n\n")
-            cat(" Number of tips    :", res$nb.tips, "\n")
-            cat(" Number of nodes   :", res$nb.nodes, "\n")
-            # cat("  ")
-            if(is.null(x$edge.length)) {
-              cat(" Branch lengths      : No branch lengths.\n")
-            } else {
-              cat(" Branch lengths:\n")
-              cat("        mean         :", res$mean.el, "\n")
-              cat("        variance     :", res$var.el, "\n")
-              cat("        distribution :\n")
-              print(res$sumry.el)
-            }
-                                   
-            if (!is.null(attr(x, "loglik"))) {
-              cat("Phylogeny estimated by maximum likelihood.\n")
-              cat("  log-likelihood:", attr(x, "loglik"), "\n\n")
-              npart <- length(attr(x, "para"))
-              for (i in 1:npart) {
-                cat("partition ", i, ":\n", sep = "")
-                print(attr(x, "para")[[i]])
-                if (i == 1)
-                  next
-                else cat("  contrast parameter (xi):", attr(x,"xi")[i - 1], "\n")
-              }
-            }
-            return(invisible(res))
-          } # end summary phylo4
+                                        #TODO: polytomies
+                                        # I'll finish this - Tibo
+  
+                                        # model info
+  res$loglik <- attr(x, "loglik")
+  res$para <- attr(x, "para")
+  res$xi <- attr(x, "xi")
+  
+                                        # if quiet, stop here                                        
+  if(quiet) return(invisible(res))
+  
+  if(!is.null(x$root.edge)){
+    cat("  Root edge:", x$root.edge, "\n")
+  } else {
+    cat("  No root edge.\n")
+  }
+                                        # now, print to screen is !quiet
+  cat("\n Phylogenetic tree :", res$name, "\n\n")
+  cat(" Number of tips    :", res$nb.tips, "\n")
+  cat(" Number of nodes   :", res$nb.nodes, "\n")
+                                        # cat("  ")
+  if(is.null(x$edge.length)) {
+    cat(" Branch lengths      : No branch lengths.\n")
+  } else {
+    cat(" Branch lengths:\n")
+    cat("        mean         :", res$mean.el, "\n")
+    cat("        variance     :", res$var.el, "\n")
+    cat("        distribution :\n")
+    print(res$sumry.el)
+  }
+  
+  if (!is.null(attr(x, "loglik"))) {
+    cat("Phylogeny estimated by maximum likelihood.\n")
+    cat("  log-likelihood:", attr(x, "loglik"), "\n\n")
+    npart <- length(attr(x, "para"))
+    for (i in 1:npart) {
+      cat("partition ", i, ":\n", sep = "")
+      print(attr(x, "para")[[i]])
+      if (i == 1)
+        next
+      else cat("  contrast parameter (xi):", attr(x,"xi")[i - 1], "\n")
+    }
+  }
+  return(invisible(res))
+} # end summary phylo4
           ) # end setMethod summary phylo4
 
 ## S3 generic for conversion to S4
@@ -274,10 +273,10 @@ setMethod("summary","phylo4", function (object, quiet=FALSE)
 setClass("phylo4d",
          representation(tip.data="data.frame",
                         node.data="data.frame"),
-##                        edgedata="data.frame"),
+         ##                        edgedata="data.frame"),
          prototype = list( tip.data = data.frame(NULL),
            node.data = data.frame(NULL) ),
-           ##all.data = data.frame(NULL) ),
+         ##all.data = data.frame(NULL) ),
          validity = function(object) {
            ## FIXME: finish this by intercepting FALSE, char string, etc.
            check1 <- check_data(object)
@@ -302,55 +301,55 @@ setMethod("tdata","phylo4d", function(x,which=c("tip","node","allnode"),...) {
 
 
 
-# setMethod("summary", "phylo4d", function(object){
-#   x <- object
-#   tdata(x, "tip") -> tips
-#   tdata(x, "allnode") -> allnodes
-#   cat("Phylogenetic tree with", phylobase::nTips(x), " species and", nNodes(x), "internal nodes\n\n")
-#   cat("  Tree plus data object of type:", class(x), "\n")
-#   cat("  Species Names                :", labels(x), "\n")
-#   if (hasEdgeLength(x)){ 
-#     cat("  Has Branch Lengths (first 10):", EdgeLength(x)[1:min(length(EdgeLength(x)),10)], "\n")
-#   } 
-#   cat("  Rooted                       :", isRooted(x), "\n\n\n")
-#  
-#   cat("\nComparative data\n")
-#   if (nrow(tips)>0) 
-#     {
-#       cat("\nTips: data.frame with", phylobase::nTips(x), "species and", ncol(tips), "variables \n")
-#       print(summary(tips))
-#     }
-#   if (nrow(allnodes)>0) 
-#     {
-#       cat("\nNodes: data.frame with", nEdges(x), "species and internal nodes and", ncol(allnodes), "variables \n")                  ## May have to fix once  Node=Edge issue is settled
-#       print(summary(allnodes))
-#     }
-#   
-# }) # end summary phylo4d
-# 
+                                        # setMethod("summary", "phylo4d", function(object){
+                                        #   x <- object
+                                        #   tdata(x, "tip") -> tips
+                                        #   tdata(x, "allnode") -> allnodes
+                                        #   cat("Phylogenetic tree with", phylobase::nTips(x), " species and", nNodes(x), "internal nodes\n\n")
+                                        #   cat("  Tree plus data object of type:", class(x), "\n")
+                                        #   cat("  Species Names                :", labels(x), "\n")
+                                        #   if (hasEdgeLength(x)){ 
+                                        #     cat("  Has Branch Lengths (first 10):", EdgeLength(x)[1:min(length(EdgeLength(x)),10)], "\n")
+                                        #   } 
+                                        #   cat("  Rooted                       :", isRooted(x), "\n\n\n")
+                                        #  
+                                        #   cat("\nComparative data\n")
+                                        #   if (nrow(tips)>0) 
+                                        #     {
+                                        #       cat("\nTips: data.frame with", phylobase::nTips(x), "species and", ncol(tips), "variables \n")
+                                        #       print(summary(tips))
+                                        #     }
+                                        #   if (nrow(allnodes)>0) 
+                                        #     {
+                                        #       cat("\nNodes: data.frame with", nEdges(x), "species and internal nodes and", ncol(allnodes), "variables \n")                  ## May have to fix once  Node=Edge issue is settled
+                                        #       print(summary(allnodes))
+                                        #     }
+                                        #   
+                                        # }) # end summary phylo4d
+                                        # 
 
 ## Alternative phylo4d summary method, using phylo4 summary
 ## Marguerite Butler & Peter Cowan
 setMethod("summary", "phylo4d", function(object){
- x <- object
+  x <- object
 
- summary(as(object, "phylo4"))
+  summary(as(object, "phylo4"))
 
- tdata(object, "tip") -> tips
- tdata(object, "node") -> nodes
+  tdata(object, "tip") -> tips
+  tdata(object, "node") -> nodes
 
-cat("\nComparative data:\n")
-if (nrow(tips) > 0) 
-{
-  cat("\nTips: data.frame with", phylobase::nTips(object), "taxa and", ncol(tips), "variables \n\n")
-  print(summary(tips))
-}else {cat('\nObject contains no tip data.')}
+  cat("\nComparative data:\n")
+  if (nrow(tips) > 0) 
+    {
+      cat("\nTips: data.frame with", phylobase::nTips(object), "taxa and", ncol(tips), "variables \n\n")
+      print(summary(tips))
+    }else {cat('\nObject contains no tip data.')}
 
-if (nrow(nodes) > 0) 
-{
-  cat("\nNodes: data.frame with", nNodes(object), "internal nodes and", ncol(nodes), "variables \n\n")                  ## May have to fix once  Node=Edge issue is settled
-  print(summary(nodes))
-} else {cat('\nObject contains no node data.\n')}
+  if (nrow(nodes) > 0) 
+    {
+      cat("\nNodes: data.frame with", nNodes(object), "internal nodes and", ncol(nodes), "variables \n\n")                  ## May have to fix once  Node=Edge issue is settled
+      print(summary(nodes))
+    } else {cat('\nObject contains no node data.\n')}
 
 }) # end summary phylo4d
 
@@ -359,7 +358,7 @@ if (nrow(nodes) > 0)
 
 
 
-  
+
 setClass("multiPhylo4",
          representation(phylolist="list",
                         tree.names="character",
@@ -368,18 +367,18 @@ setClass("multiPhylo4",
 
 
 ################
-# show phylo4d
+                                        # show phylo4d
 ################
-#
+                                        #
 setMethod("show", "phylo4d", function(object){
   x <- object
 
   cat("\n##Comparative data##\n")
-  #  print tree
+                                        #  print tree
   cat("\n#Tree#\n")
   printphylo(x)
 
-  # print traits
+                                        # print traits
   cat("\n#Traits#\n")
   cat("\ntip.data: data.frame containing", ncol(tdata(x,"tip")), "traits for", nrow(tdata(x,"tip")),"tips" )
   cat("\nnode.data: data.frame containing", ncol(tdata(x,"node")), "traits for", nrow(tdata(x,"node")),"nodes" )
@@ -392,7 +391,7 @@ setMethod("show", "phylo4d", function(object){
 
 
 ################
-# names methods
+                                        # names methods
 ################
 setMethod("names", signature(x = "phylo4"), function(x){
   temp <- rev(names(attributes(x)))[-1]
@@ -409,11 +408,11 @@ setMethod("names", signature(x = "phylo4d"), function(x){
 
 
 ###################
-# Function .genlab
+                                        # Function .genlab
 ###################
-# recursive function to have labels of constant length
-# base = a character string
-# n = number of labels
+                                        # recursive function to have labels of constant length
+                                        # base = a character string
+                                        # n = number of labels
 .genlab <- function(base, n) {
   f1 <- function(cha,n){
     if(nchar(cha)<n){
@@ -432,20 +431,20 @@ setMethod("names", signature(x = "phylo4d"), function(x){
 
 
 #####################
-# phylo4 constructor
+                                        # phylo4 constructor
 #####################
-#
-# TEST ME . wait for validity check
-#
+                                        #
+                                        # TEST ME . wait for validity check
+                                        #
 phylo4 <- function(edge, edge.length=NULL, tip.label=NULL, node.label=NULL,
                    edge.label=NULL, root.edge=NULL,...){
-  # edge
+                                        # edge
   mode(edge) <- "integer"
   if(any(is.na(edge))) stop("NA are not allowed in edge matrix")
   if(ncol(edge)>2) warning("the edge matrix has more than two columns")
   edge <- as.matrix(edge[,1:2])
   
-  # edge.length
+                                        # edge.length
   if(!is.null(edge.length)) {
     if(!is.numeric(edge.length)) stop("edge.length is not numeric")
     edge.length <- edge.length
@@ -453,7 +452,7 @@ phylo4 <- function(edge, edge.length=NULL, tip.label=NULL, node.label=NULL,
     edge.length <- as.numeric(NULL)
   }
 
-  # tip.label
+                                        # tip.label
   ntips <- sum(tabulate(edge[,1]) == 0)
   if(is.null(tip.label)) {
     tip.label <- .genlab("T",ntips)
@@ -462,7 +461,7 @@ phylo4 <- function(edge, edge.length=NULL, tip.label=NULL, node.label=NULL,
     tip.label <- as.character(tip.label)
   } 
 
-  # node.label
+                                        # node.label
   nnodes <- sum(tabulate(edge[,1]) > 0)
   if(is.null(node.label)) {
     node.label <- .genlab("N",nnodes)
@@ -470,15 +469,15 @@ phylo4 <- function(edge, edge.length=NULL, tip.label=NULL, node.label=NULL,
     if(length(node.label) != nnodes) stop("the node labels are not consistent with the number of nodes")
   } 
 
-  # edge.label
-  # an edge is named by the descendant
-   if(is.null(edge.label)) {
-     edge.label <- paste("E", edge[,2], sep="")
+                                        # edge.label
+                                        # an edge is named by the descendant
+  if(is.null(edge.label)) {
+    edge.label <- paste("E", edge[,2], sep="")
   } else {
     if(length(edge.label) != nrow(edge)) stop("the edge labels are not consistent with the number of edges")
-     } 
+  } 
 
-  # root.edge
+                                        # root.edge
   if(!is.null(root.edge)) {
     if(!round(root.edge)==root.edge) stop("root.edge must be an integer")
     root.edge <- as.integer(root.edge)
@@ -487,7 +486,7 @@ phylo4 <- function(edge, edge.length=NULL, tip.label=NULL, node.label=NULL,
     root.edge <- as.integer(NA)
   }
   
-  # fill in the result
+                                        # fill in the result
   res <- new("phylo4")
   res@edge <- edge
   res@edge.length <- edge.length
@@ -505,17 +504,17 @@ phylo4 <- function(edge, edge.length=NULL, tip.label=NULL, node.label=NULL,
 
 
 ######################
-# phylo4d constructor
+## phylo4d constructor
 ######################
-# TEST ME 
-# '...' recognized args for data are tipdata and nodedata.
-# other recognized options are those known by the phylo4 constructor
-#
+## TEST ME 
+## '...' recognized args for data are tipdata and nodedata.
+## other recognized options are those known by the phylo4 constructor
+##
 
-# generic
+## generic
 setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
 
-# first arg is a phylo4
+## first arg is a phylo4
 setMethod("phylo4d", c("phylo4"), function(x, tip.data=NULL, node.data=NULL, all.data=NULL, ...){
 
   if(!check_phylo4(x)) stop("invalid phylo4 object provided in x")
@@ -529,13 +528,15 @@ setMethod("phylo4d", c("phylo4"), function(x, tip.data=NULL, node.data=NULL, all
   res@edge.label <- x@edge.label
   res@root.edge <- x@root.edge
 
-  # handle a which argument
+  ## handle a which argument
   which.dat <- match.arg(list(...)$"which", c("tip","node","all"))
 
-  # handle data
-  if(all(is.null(c(tip.data, node.data, all.data)))) stop("no data provided; please use phylo4 class")
+  ## handle data
+  if(all(is.null(c(tip.data, node.data, all.data)))) {
+    stop("no data provided; please use phylo4 class")
+  }
 
-  # convert vector to data.frames
+  ## convert vector to data.frames
   if(is.vector(tip.data)) tip.data <- as.data.frame(tip.data)
   if(is.vector(node.data)) node.data <- as.data.frame(node.data)
   if(is.vector(all.data)) all.data <- as.data.frame(all.data)
@@ -546,7 +547,7 @@ setMethod("phylo4d", c("phylo4"), function(x, tip.data=NULL, node.data=NULL, all
     node.data <- all.data[-(1:phylobase::nTips(x)) , , drop=FALSE]
   }
 
-  # now at least one data.frame is provided
+  ## now at least one data.frame is provided
   if(is.null(tip.data)) tip.data <- data.frame(NULL)
   if(is.null(node.data)) node.data <- data.frame(NULL)
   if(!is.data.frame(tip.data)) stop("tip.data must be a data.frame")
@@ -560,21 +561,19 @@ setMethod("phylo4d", c("phylo4"), function(x, tip.data=NULL, node.data=NULL, all
   return(res)  
 })
 
-# first arg is a matrix of edges
+## first arg is a matrix of edges
 setMethod("phylo4d", c("matrix"), function(x, tip.data=NULL, node.data=NULL, all.data=NULL, ...){
   tree <- phylo4(edge=x,...)
   res <- phylo4d(tree, tip.data, node.data, all.data, ...)
   return(res)
 })
 
-# first arg is a phylo
+## first arg is a phylo
 setMethod("phylo4d", c("phylo"), function(x, tip.data=NULL, node.data=NULL, all.data=NULL, ...){
   tree <- as(x, "phylo4")
   res <- phylo4d(tree, tip.data, node.data, all.data, ...)
   return(res)
 })
-
-### coercions moved to the end
 
 ## convert from phylo4 to phylo
 setAs("phylo","phylo4",
@@ -649,7 +648,7 @@ setAs("phylo4d","phylo",
 
 
 ####################
-# as(phylo4,phylog)
+                                        # as(phylo4,phylog)
 ####################
 setOldClass("phylog")
 setAs("phylo4","phylog", function(from, to){
