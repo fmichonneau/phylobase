@@ -1,11 +1,11 @@
 # HIGH PRIORITY
 ================
 * Pass 'R CMD check' implement a few things that can't easily be done already with other packages
-* summary method: if tip and node don't have identical colnames, don't try to get alldata and/or: more stringent tests e.g. column names match in tip and node (if all.data)? FIXED?
+* summary method: if tip and node don't have identical colnames, don't try to get alldata and/or: more stringent tests e.g. column names match in tip and node (if all.data)? [FIXED: tips and nodes get summarized separately now]
 
 # MEDIUM: tasks in the categories "basic functionality"
 =======================================================
-* make sure the data structures are reasonably complete"
+* make sure the data structures are reasonably complete
 * Replacement methods:
    (in root.edge<- style, perhaps also setRoot style)
 * order: All phylo4 edge matrices are internally stored as "cladewise"/Newick traversal order.  Extend edges accessor method with optional argument that allows edges to be extracted in a different order (possibly with an attribute as in ape); need to steal 'reorder' from ape
@@ -39,3 +39,5 @@
 * lapply/multiple-tree methods, or at least documentation on how to do it
 * compare Sidlauskas wiki documentation, how would one do it in phylo4?
 * phylo4 constructor should have its own method manpage (currently is inside the class doc)
+
+FIXED (we think)

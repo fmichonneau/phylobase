@@ -7,7 +7,10 @@
 \alias{nTips-methods}
 \alias{nTips,phylo4-method}
 \alias{nTips,ANY-method}
+\alias{labels<-}
 \alias{labels,phylo4-method}
+\alias{labels<-,phylo4-method}
+\alias{labels<-,phylo4d-method}
 \alias{edges}
 \alias{edges-methods}
 \alias{edges,phylo4-method}
@@ -32,6 +35,18 @@
 \alias{NodeLabels}
 \alias{NodeLabels-methods}
 \alias{NodeLabels,phylo4-method}
+\alias{NodeLabels<-}
+\alias{NodeLabels<-,phylo4-method}
+\alias{NodeLabels<-,phylo4d-method}
+\alias{hasEdgeLabels}
+\alias{hasEdgeLabels-methods}
+\alias{hasEdgeLabels,phylo4-method}
+\alias{EdgeLabels}
+\alias{EdgeLabels<-}
+\alias{EdgeLabels-methods}
+\alias{EdgeLabels,phylo4-method}
+\alias{EdgeLabels<-,phylo4-method}
+
 \alias{tdata}
 \alias{tdata-methods}
 \alias{tdata,phylo4d-method}
@@ -54,6 +69,11 @@
     tree has edge (branch) lengths}
   \item{EdgeLength}{\code{signature(object = "phylo4")}: edge (branch)
     lengths (or NULL if none)}
+  \item{hasEdgeLabels}{\code{signature(object = "phylo4")}: whether
+    tree has (internal) edge labels}
+  \item{EdgeLabels}{\code{signature(object = "phylo4")}: internal
+    edge labels}
+
   \item{isRooted}{\code{signature(object = "phylo4")}: whether tree is
     rooted (i.e. has explicit root edge defined \emph{or} root node has
     <= 2 descendants)}

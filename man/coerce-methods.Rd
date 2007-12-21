@@ -5,6 +5,7 @@
 \alias{coerce,phylo,phylo4d-method}
 \alias{coerce,multiPhylo4,multiPhylo-method}
 \alias{coerce,multiPhylo,multiPhylo4-method}
+\alias{coerce,multiPhylo4d,multiPhylo-method}
 \alias{coerce,phylo4,phylo-method}
 \alias{coerce,phylo4d,phylo-method}
 \alias{extract.tree}

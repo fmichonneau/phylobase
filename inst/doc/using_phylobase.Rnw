@@ -1,0 +1,32 @@
+\documentclass{article}
+%\VignettePackage{phylo4}
+% \VignetteIndexEntry{Using the phylobase package}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+
+\usepackage{color}
+
+\usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
+\newcommand{\code}[1]{{{\tt #1}}}
+\title{The \code{phylo4} S4 classes and methods}
+\author{Ben Bolker}
+\date{\today}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+
+This document is supposed to be a more basic/beginner-oriented
+introduction to using the \code{phylobase} package 
+(which contains the \code{phylo4} classes and other
+supporting methods) to read and plot basic information
+about phylogenetic trees and associated data.
+
+\section{Getting data into \code{phylo4} objects}
+
+
+<<>>=
+@ 
+
+\end{document}

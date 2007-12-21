@@ -1,22 +1,24 @@
 \documentclass{article}
-%\VignetteIndexEntry{phylo4 design}
 %\VignettePackage{phylo4}
-%\VignetteDepends{ape}
+% \VignetteIndexEntry{phylo4: classes and methods for phylogenetic trees and data}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+
+\usepackage{color}
+
 \usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
 \newcommand{\code}[1]{{{\tt #1}}}
-\title{Design decisions for the phylo4 class}
-\author{Ben Bolker}
+\title{The \code{phylo4} S4 classes and methods}
+\author{Peter Cowan}
 \date{\today}
-\usepackage{/usr/local/lib64/R-2.6.1/share/texmf/Sweave}
+\usepackage{/usr/share/R/share/texmf/Sweave}
 \begin{document}
 \maketitle
+\tableofcontents
 
-This document describes the design decisions associated
-with the new ``phylo4'' class, which is intended to
-provide some kind of unifying standard for phylogenetic
-data in R.  It is closely modeled on the the \code{phylo}
-class in \code{ape}, which is the dominant data structure
-at the moment.
+\section{Introduction}
+
+This document describes the new \code{phylo4} S4 classes and methods, which are intended to provide a unifying standard for phylogenetic data in R.  The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple tree respectively.
 
 \section{Definitions/slots}
 
@@ -56,6 +58,8 @@ or \code{tdata(x,"all")}.
 \textbf{edge data can also be included --- is this
 useful/worth keeping?}
 
+\subsection{multiphylo4}
+
 \section{Validity checking}
 
 \begin{itemize}
@@ -77,7 +81,7 @@ extracting internal elements of a \code{phylo4}.
 The basic recipe is:
 \begin{Schunk}
 \begin{Sinput}
-cmd > setMethod("$", "phylo4", function(x, name) {
+> setMethod("$", "phylo4", function(x, name) {
 +     attr(x, name)
 + })
 \end{Sinput}
@@ -92,16 +96,11 @@ in \code{phylo4} by zero-length vectors in the slots
 like
 \begin{Schunk}
 \begin{Sinput}
-cmd > if (!hasNodeLabels(x)) NULL else x@node.label
+> if (!hasNodeLabels(x)) NULL else x@node.label
 \end{Sinput}
 \end{Schunk}
 to handle these cases.
 
-\begin{Schunk}
-\begin{Sinput}
-cmd > library(ape)
-\end{Sinput}
-\end{Schunk}
 \section{To do/problems}
 
 \begin{itemize}

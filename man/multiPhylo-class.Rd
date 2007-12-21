@@ -1,27 +1,25 @@
-\name{phylo4-class}
+\name{multiPhylo-class}
 \docType{class}
-\alias{phylo4}
-\alias{phylo-class}
-\alias{phylo4-class}
-\alias{$,phylo4-method}
-\alias{print,phylo4-method}
-\alias{show,phylo4-method}
-\alias{summary,phylo4-method}
-\alias{names,phylo4-method}
-\title{phylo4 and extended classes}
-\description{Classes for phylogenetic trees}
+\alias{multiPhylo-class}
+\alias{multiPhylo4-class}
+\alias{multiPhylo4d-class}
+\title{multiPhylo4 and extended classes}
+\description{Classes for lists of phylogenetic trees
+(FIXME: passes check but very incomplete)}
 \section{Objects from the Class}{
   Objects can be created by calls of the form \code{new("phylo4", ...)}
   Translation from other phylogenetic packages ...
   }
 \section{Slots}{
   \describe{
-    \item{\code{edge}:}{Matrix of edges}
+    \item{\code{phylo}:}{Matrix of edges}
     \item{\code{edge.length}:}{Numeric vector of edge lengths}
     \item{\code{Nnode}:}{Integer: number of nodes}
     \item{\code{tip.label}:}{Character vector of tip labels}
     \item{\code{root.edge}:}{Integer: root edge (NA if none)}
-    }
+    \item{\code{phylolist}:}{(multiPhylo4) list of phylogenetic trees (each of which
+    may be of type \code{phylo4d}, containing node and/or edge data)}
+}
 }
 \section{Methods}{
   \describe{
@@ -33,9 +31,6 @@
 }
 }
 \usage{
-    \S4method{print}{phylo4}(x,printlen,\dots)
-    \S4method{summary}{phylo4}(x,quiet=FALSE,\dots)
-    \S4method{names}{phylo4}(x)
   }
   \arguments{
     \item{x}{a phylo4 object}
