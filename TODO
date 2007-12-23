@@ -38,6 +38,4 @@
 * more tree manipulation methods
 * lapply/multiple-tree methods, or at least documentation on how to do it
 * compare Sidlauskas wiki documentation, how would one do it in phylo4?
-* phylo4 constructor should have its own method manpage (currently is inside the class doc)
-
-FIXED (we think)
+* phylo4 constructor should have its own method manpage (currently is inside the class doc) FIXED (we think)
