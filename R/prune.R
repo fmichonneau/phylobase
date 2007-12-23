@@ -15,7 +15,12 @@ setGeneric("prune",function(phy, ...) {
            
 
 DropTip <- function(phy,tip,...) {
-  if (length(tip)==0) phy else as(ape::drop.tip(as(phy,"phylo"),tip,...),class(phy))
+  if (length(tip)==0) {
+      phy
+  } else if (is(phy,"phylo4d")) {
+      ## use extract.tree instead of as() to avoid warning
+      as(ape::drop.tip(as(extract.tree(phy),"phylo"),tip,...),"phylo4d")
+  } else as(ape::drop.tip(as(phy,"phylo"),tip,...),class(phy))
 }
 
 
@@ -34,15 +39,19 @@ setMethod("prune","phylo4d",
             ## need unique labels to match data correctly
             tags <- paste("N",1:nNodes(phy),sep="")
             phy@node.label <- tags
-            rownames(phy@node.data) <- phy@node.label
+            if (hasNodeData(phy)) {
+              rownames(phy@node.data) <- phy@node.label
+            }
             phytr <- DropTip(phy,tip,trim.internal, subtree, root.edge)
             ## this DROPS data
-            phytr@tip.data=phy@tip.data[phytr@tip.label,,drop=FALSE]
+            phytr@tip.data <- phy@tip.data[phytr@tip.label,,drop=FALSE]
             m1  = match(phytr@node.label,tags)
-            phytr@node.data=phy@node.data[m1,,drop=FALSE]
-            phytr@node.label=oldnodelabels[m1]
-            rownames(phytr@node.data)=phytr@node.label
-            phytr@node.label=oldnodelabels
+            phytr@node.label <- oldnodelabels[m1]
+            if (hasNodeData(phy)) {
+              phytr@node.data <- phy@node.data[m1,,drop=FALSE]
+              rownames(phytr@node.data) <- phytr@node.label
+            }
+            phytr@node.label <- oldnodelabels
             phytr
           })
 

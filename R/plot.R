@@ -26,11 +26,16 @@ setMethod("plot",signature(x="phylo4",y="missing"), function(x,...){
 setMethod("plot", signature(x="phylo4d",y="missing"), function(x, type=c("symbols", "squares", "dotchart"), ...){
   if(!require(ade4)) stop("the ade4 package is required")
 
+  if (any(is.na(tdata(x,which="tip")))) {
+      warning("dropping NA values from tip data for plot")
+      x <- na.omit(x)
+  }
   dat <- tdata(x, which="tip")
+
+     
   x <- as(x,"phylog")
   type <- match.arg(type)
   if(ncol(dat)>1 & type=="symbols") type <- "squares" 
-  
   if(ncol(dat)==1 | type=="symbols"){
 
     res <- symbols.phylog(x, squares=dat[,1], ...)

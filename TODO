@@ -1,36 +1,77 @@
 # HIGH PRIORITY
 ================
-* Pass 'R CMD check' implement a few things that can't easily be done already with other packages
+* Pass 'R CMD check'  [FIXED]
+* implement a few things that can't easily be done already with other packages
+   
 * summary method: if tip and node don't have identical colnames, don't try to get alldata and/or: more stringent tests e.g. column names match in tip and node (if all.data)? [FIXED: tips and nodes get summarized separately now]
 
 # MEDIUM: tasks in the categories "basic functionality"
+#  for Jan 1
 =======================================================
-* make sure the data structures are reasonably complete
-* Replacement methods:
-   (in root.edge<- style, perhaps also setRoot style)
-* order: All phylo4 edge matrices are internally stored as "cladewise"/Newick traversal order.  Extend edges accessor method with optional argument that allows edges to be extracted in a different order (possibly with an attribute as in ape); need to steal 'reorder' from ape
-* Root node data characteristics (compare what OUCH does):
-    root node doesn't have corresponding entry in the edge matrix: ouch adds a row to the edge matrix (1-row data frame matching node column info)
+* Replacement methods: mostly done, need to check completeness
+* Plot method for phylo4d: defaults to the ade4/phylog plots
+   - is there a way to label nodes, edges, and branches in this context?
+   - crashes with NAs in data matrix; intercept this  [DONE]
+   - further tests/examples
+* subsetting and pruning: 
+    - graphical identify.node (from Damien?) [DONE]
+    - FINISH: implement node.subtree method
+    - finish/test subset methods
+* clean up/resolve spurious warnings about "losing data while
+    coercing phylo4 to phylo" (still get these when plotting phylo4d)
+* testing/doc: make sure we can get through a basic example
+* data class: check and incorporate into phylo4d (maybe move to Jan 21?)
+* change name to phylobase [DONE]
+* ioNCL?? (see below)
+
+# for Jan 21
+=======================================================
+* options
+   - phylo.compat: default=TRUE, allows accessing internal
+     phylo4 elements with $ and $<-
+   - check.data defaults
+* rooting
+    - check with Sidlauskas: is there an "infelicity" in the
+     way ape does it that we should modify?
+* order: All phylo4 edge matrices are internally stored as 
+    "cladewise"/Newick traversal order.  Extend edges accessor
+    method with optional argument that allows edges to be extracted in a
+    different order (possibly with an attribute as in ape); need to steal
+   'reorder' from ape, extend for phylo4d keeping track of traits
+* root node data characteristics (compare what OUCH does):
+    root node doesn't have corresponding entry in the edge matrix: 
+    ouch adds a row to the edge matrix (1-row data frame matching 
+    node column info)
     Not entirely clear how we should deal with this, MB has a proposal.
-* Rewrite methods in native phylo4 as necessary/desirable
-* Plot method for phylo4d: what would be a good default?
-* Figure out best way to deal with namespace/conflicts (overriding ape methods)
-* graphical identify.node
-* Implement "data class" by wrapping data.frame and writing an [ accessor method; reconsider this general topic -- is there 
 * tree walking/generic manipulation methods
-* compare: Mesquite, ape (check O'Meara list)
-* change name to phylobase
-* test the new plot functions 
+  - compare: Mesquite, ape (check O'Meara list)
+  - compare Sidlauskas wiki page
+   https://www.nescent.org/wg_phyloinformatics/R_Hackathon/DataTreeManipulation
+   and make sure all of these can be done with phylobase
+
+
+
+# MEDIUM but open-ended/vague/design decisions
+=======
+* make sure the data structures are reasonably complete
+* Rewrite methods in native phylo4 as necessary/desirable [????]
+* Figure out best way to deal with namespace/conflicts (overriding ape methods)
+   - synch with newest ape release:
+      - is multi.tree now multiPhylo?
+      - is nTips persisting?
 
 ## I/O
 ------
+* integrate ioNCL package
 
 ## Multiphylo Issues
 --------------------
-* extend classes: should we have both multiPhylo4 (no data) and multiPhylo4d (with data) 
-* Implement multiphylo tree names?
+* extend classes: should we have both 
+     multiPhylo4 (no data) and multiPhylo4d (with data) 
+* Implement multiphylo tree names? [DONE]
 * check multiPhylo! "unpack"/"pack" methods
 * ctree method
+* need all basic methods
 
 # LOW PRIORITY
 ==============
@@ -38,4 +79,6 @@
 * more tree manipulation methods
 * lapply/multiple-tree methods, or at least documentation on how to do it
 * compare Sidlauskas wiki documentation, how would one do it in phylo4?
-* phylo4 constructor should have its own method manpage (currently is inside the class doc) FIXED (we think)
+* phylo4 constructor should have its own method manpage (currently is inside the class doc)  FIXED (we think)
+
+

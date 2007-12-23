@@ -4,6 +4,7 @@
 \alias{phylo-class}
 \alias{phylo4-class}
 \alias{$,phylo4-method}
+\alias{$<-,phylo4-method}
 \alias{print,phylo4-method}
 \alias{show,phylo4-method}
 \alias{summary,phylo4-method}

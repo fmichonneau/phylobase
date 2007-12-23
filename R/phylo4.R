@@ -131,11 +131,6 @@ setMethod("labels<-","phylo4", function(object,...,value) {
     object
 })
 
-setMethod("labels<-","phylo4d", function(object,...,value) {
-    object@tip.label <- value
-    rownames(object@tip.data) <- value
-    object
-})
 
 setGeneric("NodeLabels", function(x) {
     standardGeneric("NodeLabels")
@@ -154,11 +149,6 @@ setMethod("NodeLabels<-","phylo4", function(object,...,value) {
     object
 })
 
-setMethod("NodeLabels<-","phylo4d", function(object,...,value) {
-    object@node.label <- value
-    rownames(object@node.data) <- value
-    object
-})
 
 setGeneric("EdgeLabels", function(x) {
     standardGeneric("EdgeLabels")
@@ -185,6 +175,13 @@ setMethod("$","phylo4",function(x,name) {
            node.label=if(!hasNodeLabels(x)) NULL else x@node.label,
            root.edge=if(is.na(x@root.edge)) NULL else x@root.edge,
            attr(x,name))
+})
+
+## FIXME: implement more checks on this!!
+##  do we want to be this permissive??
+setMethod("$<-","phylo4",function(x,name,value) {
+  attr(x,name) <- value
+  x
 })
 
 printphylo <- function (x,printlen=6,...) {
@@ -439,6 +436,25 @@ setMethod("show", "phylo4d", function(object){
 ## ?? setMethod("print", "phylo4", o)
 
 
+setGeneric("hasNodeData", function(x) {
+    standardGeneric("hasNodeData")
+})
+setMethod("hasNodeData","phylo4d", function(x) {
+    nrow(x@node.data)>0
+})
+
+setMethod("NodeLabels<-","phylo4d", function(object,...,value) {
+    object@node.label <- value
+    rownames(object@node.data) <- value
+    object
+})
+
+setMethod("labels<-","phylo4d", function(object,...,value) {
+    object@tip.label <- value
+    rownames(object@tip.data) <- value
+    object
+})
+
 
 ################
 ## names methods
@@ -621,11 +637,12 @@ setMethod("phylo4d", c("phylo"), function(x, tip.data=NULL, node.data=NULL, all.
     return(res)
 })
 
-## convert from phylo4 to phylo
+## convert from phylo to phylo4
 setAs("phylo","phylo4",
       function(from,to) {
           newobj <- phylo4(from$edge, from$edge.length,
-                           from$tip.label, node.label=from$node.label,
+                           from$tip.label,
+                           node.label=from$node.label,
                            edge.label=from$edge.label, ## ???
                            root.edge=from$root.edge)
           attribs = attributes(from)
@@ -673,9 +690,9 @@ setAs("phylo4","phylo",
           y <- list(edge=from@edge,
                     edge.length=from@edge.length,
                     Nnode=from@Nnode,
-                    tip.label=from@tip.label)
+                    tip.label=from@tip.label,
+                    node.label=from@node.label)
           class(y) <- "phylo"
-          warning("losing data while coercing phylo4 to phylo")
           y
       })
 
@@ -694,6 +711,7 @@ setAs("phylo4d","phylo",
                     Nnode=from@Nnode,
                     tip.label=from@tip.label)
           class(y) <- "phylo"
+          warning("losing data while coercing phylo4d to phylo")
           y
       })
 
@@ -711,4 +729,12 @@ setAs("phylo4","phylog", function(from, to){
     return(x)
 })
 
-
+## FIXME: doesn't deal with missing node data
+##   (don't even know how that should be done in this case)
+setGeneric("na.omit")
+setMethod("na.omit", "phylo4d",
+          function(object, ...) {
+            tipdata <- tdata(object,"tip")
+            na.names <- rownames(tipdata)[!complete.cases(tipdata)]
+            prune(object,tip=na.names)
+          })

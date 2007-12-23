@@ -32,6 +32,9 @@
 \alias{hasNodeLabels}
 \alias{hasNodeLabels-methods}
 \alias{hasNodeLabels,phylo4-method}
+\alias{hasNodeData}
+\alias{hasNodeData-methods}
+\alias{hasNodeData,phylo4d-method}
 \alias{NodeLabels}
 \alias{NodeLabels-methods}
 \alias{NodeLabels,phylo4-method}
@@ -61,6 +64,8 @@
   \item{nNodes}{\code{signature(object="phylo4")}: number of internal nodes}
   \item{hasNodeLabels}{\code{signature(object = "phylo4")}: whether
     tree has (internal) node labels}
+  \item{hasNodeData}{\code{signature(object = "phylo4d")}: whether
+    tree has (internal) node data}
   \item{NodeLabels}{\code{signature(object = "phylo4")}: internal
     node labels}
   \item{nEdges}{\code{signature(object = "phylo4")}: number of edges}

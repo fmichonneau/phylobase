@@ -5,6 +5,7 @@
 \alias{prune,phylo-method}
 \alias{prune,phylo4-method}
 \alias{prune,phylo4d-method}
+\alias{na.omit,phylo4d-method}
 \alias{DropTip}
 \title{Methods for dropping tips}
 \description{
