@@ -31,7 +31,7 @@
   \item{tips.include}{A vector containing tips to include in the pruned tree}
   \item{tips.exclude}{A vector containing tips to exclude from the pruned tree}
   \item{mrca}{Prune tree to include all descendents of the most recent common ancestor of the specified taxa}
-  \item{node.subtree}{Not implemented yet. Evenetually will allow pruning to all descendants of a specified node}
+  \item{node.subtree}{Prune to all descendants of a specified node}
   \item{\dots}{further arguments to be passed to other methods}
 }
 \details{
@@ -47,7 +47,12 @@
 }
 \author{Steven Kembel \email{skembel@berkeley.edu} and Damien de Vienne \email{damien.de-vienne@u-psud.fr}}
 \examples{
-
+library(geiger)
+data(geospiza)
+g1 <- as(geospiza$geospiza.tree,"phylo4")
+plot(subset(g1,tips.exclude="scandens"))
+plot(subset(g1,mrca=c("scandens","fortis","pauper")))
+plot(subset(g1,node.subtree=18))
 }
 \keyword{manip}
 \keyword{methods}

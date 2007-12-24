@@ -15,7 +15,7 @@
    - further tests/examples
 * subsetting and pruning: 
     - graphical identify.node (from Damien?) [DONE]
-    - FINISH: implement node.subtree method
+    - FINISH: implement node.subtree method [DONE]
     - finish/test subset methods
 * clean up/resolve spurious warnings about "losing data while
     coercing phylo4 to phylo" (still get these when plotting phylo4d)
@@ -23,6 +23,7 @@
 * data class: check and incorporate into phylo4d (maybe move to Jan 21?)
 * change name to phylobase [DONE]
 * ioNCL?? (see below)
+* check_data: incorporate label-matching stuff from geiger
 
 # for Jan 21
 =======================================================
@@ -48,7 +49,6 @@
   - compare Sidlauskas wiki page
    https://www.nescent.org/wg_phyloinformatics/R_Hackathon/DataTreeManipulation
    and make sure all of these can be done with phylobase
-
 
 
 # MEDIUM but open-ended/vague/design decisions

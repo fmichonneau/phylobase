@@ -21,57 +21,58 @@ setMethod("subset", "phylo4",
               }
               
               if (!is.null(node.subtree)) {
-                  return("Method not implemented yet.")
+                  return(prune(x,x@tip.label[!(x@tip.label %in% allDescend(x,node.subtree))]))
               }
               
               if (!is.null(mrca)) {
+                  mnode <- MRCA(x,mrca)
+                  return(prune(x,x@tip.label[!(x@tip.label %in% allDescend(x,mnode))]))
                   ## FIXME: could this be modified to allow > 3 ??
-                  if (length(mrca) != 2) {
-                      return(paste("MRCA subset requires 2 terminal taxa, you supplied",length(mrca)))
-                  }
+                  ## if (length(mrca) != 2) {
+                  ## return(paste("MRCA subset requires 2 terminal taxa, you supplied",length(mrca)))
+                  ##}
                   
-                  if (is.numeric(mrca)) {
-                      mrca <- x@tip.label[mrca]
-                  }
+##                   if (is.numeric(mrca)) {
+##                       mrca <- labels(x)[mrca]
+##                   }
                   
-                  list.nodes<-list(2)
-                  m<-1:length(x@tip.label)
+##                   list.nodes<-list(2)
+##                   m<-1:phylobase::nTips(x)
                   
-                  for (i in 1:2) {
-                      fils <- m[x@tip.label[]==mrca[i]]
+##                   for (i in 1:2) {
+##                       fils <- m[labels(x)[]==mrca[i]]
                       
-                      res<-NULL
-                      repeat
-                        {
-                            pere<-x$edge[,1][x$edge[,2]==fils]
-                            res<-c(res,pere)
-                            fils<-pere
-                            if(pere==(length(x@tip.label)+1)) break
-                        }
-                      list.nodes[[i]]<-res
-                  } 
+##                       res<-NULL
+##                       repeat
+##                         {
+##                             pere<-x@edge[,1][x@edge[,2]==fils]
+##                             res<-c(res,pere)
+##                             fils<-pere
+##                             if(pere==(phylobase::nTips(x)+1)) break
+##                         }
+##                       list.nodes[[i]]<-res
+##                   } 
                   
-                  MRCA<-max(intersect(list.nodes[[1]],list.nodes[[2]]))     
+##                   MRCA<-max(intersect(list.nodes[[1]],list.nodes[[2]]))     
                   
-                  fils<-NULL
-                  pere<-res <- MRCA
-                  if (MRCA==length(x@tip.label)+1) return(x)
-                  else {
-                      repeat
-                        {
-                            for (i in 1: length(pere)) fils<-c(fils, x@edge[,2][x@edge[,1]==pere[i]])
-                            res<-c(res, fils)
-                            pere<-fils
-                            fils<-NULL
-                            if (length(pere)==0) break
-                        }
+##                   fils<-NULL
+##                   pere<-res <- MRCA
+##                   if (MRCA==length(x@tip.label)+1) return(x)
+##                   else {
+##                       repeat
+##                         {
+##                             for (i in 1: length(pere))
+##                               fils<-c(fils, x@edge[,2][x@edge[,1]==pere[i]])
+##                             res<-c(res, fils)
+##                             pere<-fils
+##                             fils<-NULL
+##                             if (length(pere)==0) break
+##                         }
                       
-                      tips.exclude <- setdiff(x@tip.label,x@tip.label[res[res<length(x@tip.label)+1]])
-                      print(tips.exclude)
-                      return(prune(x,tips.exclude))
-                  } 
+##                      tips.exclude <- setdiff(x@tip.label,x@tip.label[res[res<length(x@tip.label)+1]])
+##                      print(tips.exclude)
+##                      return(prune(x,tips.exclude))
               }
-              
               return(x)
           })
 
