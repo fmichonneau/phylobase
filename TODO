@@ -10,16 +10,14 @@
 =======================================================
 * Replacement methods: mostly done, need to check completeness
 * Plot method for phylo4d: defaults to the ade4/phylog plots
-   - is there a way to label nodes, edges, and branches in this context?
+   - is there a way to label nodes, edges, and branches in this context? -> partial yes for nodes and branches ; need for a general argument
    - crashes with NAs in data matrix; intercept this  [DONE]
    - further tests/examples
 * subsetting and pruning: 
     - graphical identify.node (from Damien?) [DONE]
     - FINISH: implement node.subtree method [DONE]
     - finish/test subset methods
-* clean up/resolve spurious warnings about "losing data while
-    coercing phylo4 to phylo" (still get these when plotting phylo4d)
-   I'm on it -- Thibaut.
+* clean up/resolve spurious warnings about "losing data while coercing phylo4 to phylo" (still get these when plotting phylo4d) [DONE]
 * testing/doc: make sure we can get through a basic example
 * data class: check and incorporate into phylo4d (maybe move to Jan 21?)
 * change name to phylobase [DONE]
@@ -81,5 +79,4 @@
 * lapply/multiple-tree methods, or at least documentation on how to do it
 * compare Sidlauskas wiki documentation, how would one do it in phylo4?
 * phylo4 constructor should have its own method manpage (currently is inside the class doc)  FIXED (we think)
-* Add an argument to plot methods to specify if node names should be printed or not.
 
