@@ -19,6 +19,7 @@
     - finish/test subset methods
 * clean up/resolve spurious warnings about "losing data while
     coercing phylo4 to phylo" (still get these when plotting phylo4d)
+   I'm on it -- Thibaut.
 * testing/doc: make sure we can get through a basic example
 * data class: check and incorporate into phylo4d (maybe move to Jan 21?)
 * change name to phylobase [DONE]
@@ -80,5 +81,5 @@
 * lapply/multiple-tree methods, or at least documentation on how to do it
 * compare Sidlauskas wiki documentation, how would one do it in phylo4?
 * phylo4 constructor should have its own method manpage (currently is inside the class doc)  FIXED (we think)
-
+* Add an argument to plot methods to specify if node names should be printed or not.
 
