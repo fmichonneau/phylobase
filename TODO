@@ -10,7 +10,7 @@
 =======================================================
 * Replacement methods: mostly done, need to check completeness
 * Plot method for phylo4d: defaults to the ade4/phylog plots
-   - is there a way to label nodes, edges, and branches in this context? -> partial yes for nodes and branches ; need for a general argument
+   - is there a way to label nodes, edges, and branches in this context? [DONE, as much as possible not recoding the whole functions] 
    - crashes with NAs in data matrix; intercept this  [DONE]
    - further tests/examples
 * subsetting and pruning: 
