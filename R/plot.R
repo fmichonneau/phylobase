@@ -14,8 +14,8 @@ setGeneric("plot")
 setMethod("plot",signature(x="phylo4",y="missing"), function(x,...){
     if(!require(ape)) stop("the ape package is required")
     x <- as(x, "phylo")
-    res <- plot(x, ...)
-    return(invisible(res))
+    plot(x, ...)
+    return(invisible())
 }) # end plot phylo4
 
 
@@ -23,7 +23,9 @@ setMethod("plot",signature(x="phylo4",y="missing"), function(x,...){
 ################
 ## plot phylo4d
 ################
-setMethod("plot", signature(x="phylo4d",y="missing"), function(x, type=c("symbols", "squares", "dotchart"), ...){
+setMethod("plot", signature(x="phylo4d",y="missing"), function(x, type=c("symbols", "squares", "dotchart"),
+                                          show.tip.label=TRUE, show.node.label=FALSE, cex.label=par("cex"),
+                                          cex.symbol=1, ...){
     if(!require(ade4)) stop("the ade4 package is required")
     
     if (any(is.na(tdata(x,which="tip")))) {
@@ -32,24 +34,34 @@ setMethod("plot", signature(x="phylo4d",y="missing"), function(x, type=c("symbol
     }
     dat <- tdata(x, which="tip")
 
+    cex <- list(...)$cex
+    if(is.null(cex)) cex <- par("cex")
      
-    x <- suppressWarnings(as(x,"phylog"))
+    tre <- suppressWarnings(as(x,"phylog"))
     type <- match.arg(type)
     if(ncol(dat)>1 & type=="symbols") type <- "squares" 
     if(ncol(dat)==1 | type=="symbols"){
         
-        res <- symbols.phylog(x, squares=dat[,1], ...)
+        symbols.phylog(tre, squares=dat[,1], csize=cex.symbol, ...)
         
     } else if(type == "squares"){
-        
-        res <- table.phylog(dat,x,...)
+        arglist <- list(df=dat, phylog=tre, labels.nod=rev(x$node.label),
+                        clabel.row=as.numeric(show.tip.label)*cex.label,
+                        clabel.nod=as.numeric(show.node.label)*cex.label,
+                        csize=max(2,cex.symbol),
+                        ...)
+
+        do.call(table.phylog, arglist)
         
     } else if(type == "dotchart"){
-        
-        res <- dotchart.phylog(x, dat, ...)
+        arglist <- list(phylog=tre, values=dat, labels.nod=rev(x$node.label),
+                        clabel.row=as.numeric(show.tip.label)*cex.label,
+                        clabel.nod=as.numeric(show.node.label)*cex.label,
+                        ...)
+           
+        do.call(dotchart.phylog, arglist)
         
     }
     
-    return(invisible(res))
-    
-})
+    return(invisible())
+}) # end plot phylo4d

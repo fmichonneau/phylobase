@@ -21,21 +21,25 @@
  }
  \usage{
 \S4method{plot}{phylo4,missing}(x, \dots)
-\S4method{plot}{phylo4d,missing}(x, type=c("symbols", "squares", "dotchart"), \dots)
+\S4method{plot}{phylo4d,missing}(x, type=c("symbols", "squares",
+"dotchart"), show.tip.label=TRUE, show.node.label=FALSE,
+cex.label=par("cex"), cex.symbol=1, \dots)
 
 }
 \arguments{
   \item{x}{an object of class \linkS4class{phylo4} or \linkS4class{phylo4d}}
   \item{type}{a character string giving the type of graphic to be drawn:
   "symbols" is used for a single variable; "squares" and "dotchart" are
-  used for multivariate methods.}
+  used for multivariate data.}
+\item{show.tip.label}{a logical stating whether tip labels should be
+  printed (TRUE, default) or not (FALSE)}
+\item{show.node.label}{a logical stating whether node labels should be
+  printed (TRUE) or not (FALSE, default)}
+\item{cex.label}{a numeric giving the factor scaling the tip and node labels}
+\item{cex.symbol}{a numeric giving the factor scaling the symbols (not
+  used if type=="dotchart")}
   \item{\dots}{further arguments to be passed to plot methods from \code{ape}
     or \code{ade4}.}
-}
-\value{
- These functions invisibly return the value returned by
- \code{plot.phylo} or graphic functions from \code{ade4}, which are
- respectively a list and the matched call.
 }
 \seealso{the  \linkS4class{phylo4} and \linkS4class{phylo4d} classes;
   \code{\link[pkg:ape]{plot.phylo}} from the \code{ape} package,
@@ -51,8 +55,8 @@ obj2 <- phylo4d(as(tree.owls,"phylo4"),data.frame(wing=1:4, tail=4:1, body.lengt
 par(mfrow=c(2,2))
 plot(as(obj1,"phylo4"))
 plot(obj1)
-plot(obj2, csize=3)
-plot(obj2,type="dotchart")
+plot(obj2, show.node=TRUE)
+plot(obj2, type="dotchart")
 
 }
 }
