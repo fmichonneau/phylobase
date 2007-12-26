@@ -1,8 +1,31 @@
+
+## matching node labels with node numbers ...
+## e.g.
+## 14 tips, 13 int nodes
+## N04 = NodeLabels[4]
+##   <-> node 18
+## x = n-nTips(phy)
+## so:     n = x+nTips(phy)
+
 getNodeByLabel <- function(phy,lab) {
+    nt <- phylobase::nTips(phy)
     tipmatch <- match(lab,labels(phy))
-    if (!is.na(tipmatch)) return(tipmatch)
-    if (!hasNodeLabels(phy)) return(NULL)
-    which(NodeLabels(phy)==lab)+phylobase::nTips(phy)
+    ifelse(!is.na(tipmatch),
+           tipmatch,
+           if (!hasNodeLabels(phy)) NA else {
+               nt+match(lab,NodeLabels(phy))
+           })
+}
+       
+getLabelByNode <- function(phy,num) {
+    nt <- phylobase::nTips(phy)
+    ifelse(num<=nt,
+           labels(phy)[num],
+           ifelse(num<=nt+nNodes(phy)-1,
+                  if (!hasNodeLabels(phy)) NA else {
+                      ## pmax to avoid error from negative indices
+                      NodeLabels(phy)[pmax(0,num-nt)]
+                  }))
 }
 
 getAncest <- function(phy,node) {

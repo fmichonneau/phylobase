@@ -87,6 +87,25 @@ setMethod("isRooted","phylo4", function(x) {
     ## FIXME (?): fails with empty tree
 })
 
+setGeneric("rootNode", function(x) {
+    standardGeneric("rootNode")
+})
+
+
+setMethod("rootNode","phylo4", function(x) {
+    if (!isRooted(x)) return(NA)
+    if (!is.na(x@root.edge)) stop("FIXME: don't know what to do in this case")
+    return(phylobase::nTips(x)+1)
+})
+
+setGeneric("rootNode<-", function(x,value) {
+    standardGeneric("rootNode<-")
+})
+
+setMethod("rootNode<-","phylo4", function(x,value) {
+    stop("not implemented yet")
+})
+
 setGeneric("hasEdgeLength", function(x) {
     standardGeneric("hasEdgeLength")
 })
@@ -154,7 +173,7 @@ setGeneric("EdgeLabels", function(x) {
     standardGeneric("EdgeLabels")
 })
 setMethod("EdgeLabels","phylo4", function(x) {
-    x@node.label
+    x@edge.label
 })
 
 setGeneric("EdgeLabels<-",
@@ -214,17 +233,17 @@ printphylo <- function (x,printlen=6,...) {
     } else print(x$edge.label)
 
     ## slots
-    cat("\nSlots:\n")
-    cat(paste("@", names(x)[1:4], sep=""),sep="\t")
-    cat("\n")
-    cat(paste("@", names(x)[5:7], sep=""),sep="\t")
-    cat("\n")
+    ##     cat("\nSlots:\n")
+    ##     cat(paste("@", names(x)[1:4], sep=""),sep="\t")
+    ##     cat("\n")
+    ##     cat(paste("@", names(x)[5:7], sep=""),sep="\t")
+    ##     cat("\n")
     
     rlab <- if (isRooted(x)) "Rooted"  else "Unrooted"
     cat("\n", rlab, "; ", sep = "")
     blen <- if (hasEdgeLength(x))
-      "no branch lengths"
-    else "includes branch lengths"
+      "includes branch lengths"
+    else       "no branch lengths"
     cat(blen, "\n\n", sep = "")
 }
 

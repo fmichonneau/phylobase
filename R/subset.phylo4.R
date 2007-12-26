@@ -1,14 +1,16 @@
 ################
-                                        # subset phylo4
+## subset phylo4
 ################
-                                        #
+##
 
 ## 
 
+setGeneric("subset")
 setMethod("subset", "phylo4",
-          function(x,tips.include=NULL,tips.exclude=NULL,mrca=NULL,node.subtree=NULL,...) {
-              ##  FIXME: could do eliminate NULL and make the test if (!missing)
-              ##  rather than if (!is.null)
+          function(x,tips.include=NULL,tips.exclude=NULL,
+                   mrca=NULL,node.subtree=NULL,...) {
+              ##  FIXME: could do eliminate NULL and make the test
+              ## if (!missing) rather than if (!is.null)
               if (!is.null(tips.include)) {
                   if (is.numeric(tips.include)) {
                       tips.include <- x@tip.label[tips.include]
@@ -27,76 +29,20 @@ setMethod("subset", "phylo4",
               if (!is.null(mrca)) {
                   mnode <- MRCA(x,mrca)
                   return(prune(x,x@tip.label[!(x@tip.label %in% allDescend(x,mnode))]))
-                  ## FIXME: could this be modified to allow > 3 ??
-                  ## if (length(mrca) != 2) {
-                  ## return(paste("MRCA subset requires 2 terminal taxa, you supplied",length(mrca)))
-                  ##}
-                  
-##                   if (is.numeric(mrca)) {
-##                       mrca <- labels(x)[mrca]
-##                   }
-                  
-##                   list.nodes<-list(2)
-##                   m<-1:phylobase::nTips(x)
-                  
-##                   for (i in 1:2) {
-##                       fils <- m[labels(x)[]==mrca[i]]
-                      
-##                       res<-NULL
-##                       repeat
-##                         {
-##                             pere<-x@edge[,1][x@edge[,2]==fils]
-##                             res<-c(res,pere)
-##                             fils<-pere
-##                             if(pere==(phylobase::nTips(x)+1)) break
-##                         }
-##                       list.nodes[[i]]<-res
-##                   } 
-                  
-##                   MRCA<-max(intersect(list.nodes[[1]],list.nodes[[2]]))     
-                  
-##                   fils<-NULL
-##                   pere<-res <- MRCA
-##                   if (MRCA==length(x@tip.label)+1) return(x)
-##                   else {
-##                       repeat
-##                         {
-##                             for (i in 1: length(pere))
-##                               fils<-c(fils, x@edge[,2][x@edge[,1]==pere[i]])
-##                             res<-c(res, fils)
-##                             pere<-fils
-##                             fils<-NULL
-##                             if (length(pere)==0) break
-##                         }
-                      
-##                      tips.exclude <- setdiff(x@tip.label,x@tip.label[res[res<length(x@tip.label)+1]])
-##                      print(tips.exclude)
-##                      return(prune(x,tips.exclude))
+              }
+              arglist <- list(...)
+              if (length(arglist)>0) {
+                  warning("unused arguments: ",
+                          paste(names(arglist),collapse=","))
               }
               return(x)
           })
 
 
-
-setMethod("subset", "phylo", function(x,tips.include=NULL,tips.exclude=NULL,mrca=NULL,node.subtree=NULL,...) {
-
-    ## FIXME: should this be a conversion to and from phylo4???
-    x <- as(x,"phylo")
-    res <- subset(x,tips.include=NULL,tips.exclude=NULL,mrca=NULL,node.subtree=NULL,...)
-    return(res)
+setMethod("subset", "phylo", function(x,...) {
+    x <- as(x,"phylo4")
+    res <- subset(x,...)
+    return(as(res,"phylo"))
 })
-
-
-
-##
-## FIXME: PLEASE CODE ME 
-##
-setMethod("subset", "phylo4d",
-          function(x,tips.include=NULL,
-                   tips.exclude=NULL,mrca=NULL,node.subtree=NULL,...) {
-
-              ## place commercial here.
-          })
-
 
 

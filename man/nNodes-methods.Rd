@@ -29,6 +29,11 @@
 \alias{RootEdge}
 \alias{RootEdge-methods}
 \alias{RootEdge,phylo4-method}
+\alias{rootNode}
+\alias{rootNode-methods}
+\alias{rootNode,phylo4-method}
+\alias{rootNode<-}
+\alias{rootNode<-,phylo4-method}
 \alias{hasNodeLabels}
 \alias{hasNodeLabels-methods}
 \alias{hasNodeLabels,phylo4-method}

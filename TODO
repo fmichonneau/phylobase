@@ -22,7 +22,7 @@
 * data class: check and incorporate into phylo4d (maybe move to Jan 21?)
 * change name to phylobase [DONE]
 * ioNCL?? (see below)
-* check_data: incorporate label-matching stuff from geiger
+* check_data: incorporate label-matching stuff from geiger [DONE for tip labels, need to do for nodes]
 
 # for Jan 21
 =======================================================
@@ -38,6 +38,7 @@
     method with optional argument that allows edges to be extracted in a
     different order (possibly with an attribute as in ape); need to steal
    'reorder' from ape, extend for phylo4d keeping track of traits
+   Also see ape::ladderize
 * root node data characteristics (compare what OUCH does):
     root node doesn't have corresponding entry in the edge matrix: 
     ouch adds a row to the edge matrix (1-row data frame matching 
@@ -58,6 +59,11 @@
    - synch with newest ape release:
       - is multi.tree now multiPhylo?
       - is nTips persisting?
+* fuzzy matching options in check_data?
+("fuzzywarn" for fuzzy matching with warning,
+  "fuzzy" for fuzzy matching w/o warning (perhaps not a good
+  idea to even allow this?))
+
 
 ## I/O
 ------
