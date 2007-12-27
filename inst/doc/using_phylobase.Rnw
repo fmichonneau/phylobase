@@ -179,7 +179,7 @@ clade:
 <<results=hide>>=
 subset(g2,tips.include=c("fuliginosa","fortis","magnirostris",
             "conirostris","scandens"))
-subset(g2,node.subtree="N06")
+subset(g2,node.subtree="N07")
 subset(g2,mrca=c("scandens","fortis"))
 @ 
 
@@ -189,6 +189,27 @@ subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
             "conirostris","scandens"))
 subset(g2,tips.exclude=allDescend(g2,MRCA(g2,c("difficilis","fortis"))))
 @ 
+
+Another approach is to pick the subtree graphically,
+by plotting the tree and using \code{identify},
+which returns the identify of the node you
+click on with the mouse.
+
+<<eval=FALSE>>=
+plot(g1)
+n1 <- identify(g1)
+subset(g2,node.subtree=n1)
+@ 
+
+\section{Tree-walking}
+
+\code{getDescend}, \code{getAncest},
+\code{allDescend}, \code{allAncest},
+\code{getNodeByLabel}, \code{getLabelByNode}:
+not sure about the names or functionality
+of these (how much do we work in terms
+of labels and how much in terms of internal
+numbers?)
 
 \section{multiPhylo classes}
 \end{document}

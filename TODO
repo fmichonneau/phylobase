@@ -1,28 +1,22 @@
-# HIGH PRIORITY
-================
-* Pass 'R CMD check'  [FIXED]
-* implement a few things that can't easily be done already with other packages
-   
-* summary method: if tip and node don't have identical colnames, don't try to get alldata and/or: more stringent tests e.g. column names match in tip and node (if all.data)? [FIXED: tips and nodes get summarized separately now]
 
 # MEDIUM: tasks in the categories "basic functionality"
 #  for Jan 1
 =======================================================
-* Replacement methods: mostly done, need to check completeness
-* Plot method for phylo4d: defaults to the ade4/phylog plots
-   - is there a way to label nodes, edges, and branches in this context? [DONE, as much as possible not recoding the whole functions] 
-   - crashes with NAs in data matrix; intercept this  [DONE]
-   - further tests/examples
-* subsetting and pruning: 
-    - graphical identify.node (from Damien?) [DONE]
-    - FINISH: implement node.subtree method [DONE]
-    - finish/test subset methods
-* clean up/resolve spurious warnings about "losing data while coercing phylo4 to phylo" (still get these when plotting phylo4d) [DONE]
-* testing/doc: make sure we can get through a basic example
-* data class: check and incorporate into phylo4d (maybe move to Jan 21?)
-* change name to phylobase [DONE]
-* ioNCL?? (see below)
-* check_data: incorporate label-matching stuff from geiger [DONE for tip labels, need to do for nodes]
+* Check in general for completeness (i.e. replacement functions),
+   obvious bugs
+* Plotting:
+   - plotting scrambles order of internal nodes
+      (if we can't fix this we at least need a big warning --
+       maybe even an error if show.node.label=TRUE for phylo4d??)
+   - error in plotting a subsetted tree: see tests/plottest.R
+   
+* check_data: test label-matching code, extend to node labels
+
+# MAYBE for Jan 1:
+==============================
+* multiPhylo (see below)
+* data class: check and incorporate into phylo4d
+* incorporate ioNCL?? (see below)
 
 # for Jan 21
 =======================================================
@@ -30,7 +24,9 @@
    - phylo.compat: default=TRUE, allows accessing internal
      phylo4 elements with $ and $<-
    - check.data defaults
+   - cf implementations in other packages (e.g. bbmle)
 * rooting
+    - implement re-rooting
     - check with Sidlauskas: is there an "infelicity" in the
      way ape does it that we should modify?
 * order: All phylo4 edge matrices are internally stored as 
@@ -49,6 +45,9 @@
   - compare Sidlauskas wiki page
    https://www.nescent.org/wg_phyloinformatics/R_Hackathon/DataTreeManipulation
    and make sure all of these can be done with phylobase
+  - geiger: prune.extinct.taxa, prune.random.taxa?
+  - allDescend to give internal nodes as well as tips?
+  - decide on a coherent numbers/names policy
 
 
 # MEDIUM but open-ended/vague/design decisions
@@ -63,20 +62,23 @@
 ("fuzzywarn" for fuzzy matching with warning,
   "fuzzy" for fuzzy matching w/o warning (perhaps not a good
   idea to even allow this?))
+* implement NAMESPACE??
 
 
 ## I/O
 ------
 * integrate ioNCL package
 
-## Multiphylo Issues
+## Multiphylo
 --------------------
 * extend classes: should we have both 
-     multiPhylo4 (no data) and multiPhylo4d (with data) 
+     multiPhylo4 (no data) and multiPhylo4d (with data)  [DONE]
 * Implement multiphylo tree names? [DONE]
-* check multiPhylo! "unpack"/"pack" methods
+* need multiPhylo! "unpack"/"pack" methods
+   (convert multiPhylo4x to list of phylo4x, convert list of phylo4x to multiPhylo4x)
 * ctree method
 * need all basic methods
+* later: trackObjs approach for large sets of trees?
 
 # LOW PRIORITY
 ==============
