@@ -275,7 +275,7 @@ Default node labels:
 Hilmar Lapp very kindly showed a way to hack the \verb+$+ operator so that it would provide backward compatibility with code that is extracting internal elements of a \code{phylo4}. The basic recipe is: 
 
 <<eval=FALSE>>=
-setMethod("\$","phylo4",function(x,name) { attr(x,name)})
+setMethod("$","phylo4",function(x,name) { attr(x,name)})
 @ 
 
 but this has to be hacked slightly to intercept calls to elements that might be missing.  For example, \code{ape} detects whether log-likelihood, root edges, node labels, etc. are missing by testing whether they are \code{NULL}, whereas missing items are represented in \code{phylo4} by zero-length vectors in the slots (or \code{NA} for the root edge) --- so we need code like 
