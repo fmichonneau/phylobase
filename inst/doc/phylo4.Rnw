@@ -9,7 +9,7 @@
 \usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
 \newcommand{\code}[1]{{{\tt #1}}}
 \title{The \code{phylo4} S4 classes and methods}
-\author{Peter Cowan}
+\author{Ben Bolker \& Peter Cowan}
 \date{\today}
 \begin{document}
 \maketitle
@@ -17,8 +17,218 @@
 
 \section{Introduction}
 
-This document describes the new \code{phylo4} S4 classes and methods, which are intended to provide a unifying standard for phylogenetic data in R.  The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple tree respectively.
+This document describes the new \code{phylo4} S4 classes and methods, which are intended to provide a unifying standard for phylogenetic data in R.  The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple tree respectively.  In addition to describing the classes and methods this vignette gives examples of how they might be used.
 
+\section{Package Overview}
+
+The phylobase package currently implements functions and data structures that implement the following:
+
+\begin{itemize}
+  \item Data structures for storing a tree and multiple trees
+  \item A data structure for storing a tree with associated tip and node data
+  \item A data structure for storing multiple trees with one set of tip data
+  \item Functions for reading nexus files into the above data structures
+  \item Functions for converting between the above data structures and \code{ape phylo} objects as well as \code{ade4 phylog} objects
+  \item Functions for subsetting, replacing, and plotting the above structures
+\end{itemize}
+
+\section{Trees without data}
+
+You can start with a tree --- an object of
+class \code{phylo} from the \code{ape} package
+(e.g., read in using the \code{read.tree()} or \code{read.nexus()}
+functions), and convert it to a \code{phylo4} object.
+
+For example, get the \emph{Geospiza} data from the \code{geiger} package:
+<<>>=
+library(geiger)
+data(geospiza)
+names(geospiza)
+@ 
+
+Convert the \code{S3} tree to a \code{S4 phylo4} object using the \code{as()} function:
+<<>>=
+library(phylobase)
+g1 <- as(geospiza$geospiza.tree,"phylo4")
+g1
+@ 
+
+Note that the nodes and edges are given default names if the tree contains no node or edge names.
+
+The \code{summary} method gives a little extra information, including information on branch lengths:
+<<>>=
+summary(g1)
+@ 
+
+Print tip labels:
+<<>>=
+labels(g1)
+@ 
+
+Print internal node labels (R automatically assigns values):
+<<>>=
+NodeLabels(g1)
+@ 
+
+Print edge labels (also automatically assigned):
+<<>>=
+EdgeLabels(g1)
+@ 
+
+Is it rooted?
+<<>>=
+isRooted(g1)
+@
+
+Which node is the root?
+<<>>=
+rootNode(g1)
+@ 
+
+Does it have any polytomies?
+<<>>=
+hasPoly(g1)
+@ 
+
+Does it have branch lengths?
+<<>>=
+hasEdgeLength(g1)
+@ 
+
+You can modify labels and other aspects
+of the tree --- for example,
+<<>>=
+labels(g1) <- tolower(labels(g1))
+@ 
+
+You can use \code{plot(g1)} to plot the tree (at this
+point, this just calls the \code{plot.phylo} command from
+the \code{ape} package).
+
+\textbf{Q: what else do people want to do to check
+their trees?}
+
+\section{Trees with data}
+
+The \code{phylo4d} class matches trees with data.
+(\textbf{fixme: need to be able to use ioNCL!})
+or combine it with a data frame to make a \code{phylo4d} (tree-with-data)
+object.
+
+Now we'll take the \emph{Geospiza} data from \verb+geospiza$geospiza.data+
+and merge it with the tree.  However, since \emph{G. olivacea} is included
+in the tree but not in the data set, we will initially run into some trouble:
+
+<<eval=FALSE>>=
+g2 <- phylo4d(g1,geospiza$geospiza.data)
+@ 
+
+gives
+<<echo=FALSE>>=
+err1 <- try(g2 <- phylo4d(g1,geospiza$geospiza.data),silent=TRUE)
+cat(as.character(err1))
+@ 
+
+We have two problems --- the first is that we forgot to lowercase
+the labels on the data to match the tip labels:
+
+<<>>=
+gdata <- geospiza$geospiza.data
+row.names(gdata) <- tolower(row.names(gdata))
+@ 
+
+To deal with the second problem
+(missing data for \emph{G. olivacea}), we have a few choices.
+The easiest is to use \code{missing.tip.data="OK"}
+to allow R to create the new object:
+<<>>=
+g2 <- phylo4d(g1,gdata,missing.tip.data="OK")
+@ 
+(setting \code{missing.tip.data} to \code{"warn"}
+would create the new object but print a warning).
+
+Another way to deal with this would be to 
+use \code{prune()} to drop
+the offending tip from the tree first:
+<<results=hide>>=
+g1B <- prune(g1,"olivacea")
+phylo4d(g1B,gdata)
+@ 
+
+You can summarize the new object:
+<<>>=
+summary(g2)
+@ 
+
+Or use \code{tdata()} to extract the
+data (i.e., \code{tdata(g2)}).
+By default, \code{tdata()} will retrieve
+tip data, but you can also get internal
+node data only (\code{tdata(tree,"node")})
+or --- if the tip and node data have the
+same format --- all the data combined
+(\code{tdata(tree,"allnode")}).
+
+Plotting calls \code{plot.phylog} from the \code{ade4} package.
+
+\section{Subsetting}
+
+The \code{subset} command offers a variety of ways
+of extracting portions of a \code{phylo4} or \code{phylo4d}
+tree, keeping any tip/node data consistent.
+
+\begin{description}
+\item[tips.include]{give a vector of tips (names or numbers) to retain}
+\item[tips.exclude]{give a vector of tips (names or numbers) to drop}
+\item[mrca]{give a vector of node or tip names or numbers; extract the clade containing these taxa}
+\item[node.subtree]{give a node (name or number); extract the subtree starting from this node}
+\end{description}
+
+Different ways to extract the \emph{fuliginosa}-\emph{scandens}
+clade:
+<<results=hide>>=
+subset(g2,tips.include=c("fuliginosa","fortis","magnirostris",
+            "conirostris","scandens"))
+subset(g2,node.subtree="N07")
+subset(g2,mrca=c("scandens","fortis"))
+@ 
+
+One could drop the clade by  doing
+<<results=hide>>=
+subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
+            "conirostris","scandens"))
+subset(g2,tips.exclude=allDescend(g2,MRCA(g2,c("difficilis","fortis"))))
+@ 
+
+Another approach is to pick the subtree graphically,
+by plotting the tree and using \code{identify},
+which returns the identify of the node you
+click on with the mouse.
+
+<<eval=FALSE>>=
+plot(g1)
+n1 <- identify(g1)
+subset(g2,node.subtree=n1)
+@ 
+
+\section{Tree-walking}
+
+\code{getDescend}, \code{getAncest},
+\code{allDescend}, \code{allAncest},
+\code{getNodeByLabel}, \code{getLabelByNode}:
+not sure about the names or functionality
+of these (how much do we work in terms
+of labels and how much in terms of internal
+numbers?)
+
+\section{multiPhylo classes}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Appendices %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
 \section{Definitions/slots}
 
 \subsection{phylo4}
@@ -35,24 +245,13 @@ the \code{phylo4} class are:
 \item[root.edge]{integer defining root edge (maybe NA)}
 \end{description}
 
-We have defined basic methods for \code{phylo4}:
-\code{show}, \code{print} (copied from \code{print.phylo} in
-\code{ape}), and a variety of accessor functions (see help files).
+We have defined basic methods for \code{phylo4}:\code{show}, \code{print} (copied from \code{print.phylo} in\code{ape}), and a variety of accessor functions (see help files). \code{summary} does not seem to be terribly useful in the context of a ``raw'' tree, because there is not much to compute: \textbf{end users?}
 
-\code{summary} does not seem to be terribly useful in the
-context of a ``raw'' tree, because there is not much to
-compute: \textbf{end users?}
-
-Print method: add information about
-(ultrametric, scaled, polytomies (zero-length or structural))?
+Print method: add information about (ultrametric, scaled, polytomies (zero-length or structural))?
 
 \subsection{phylo4d}
 
-The \code{phylo4d} class extends \code{phylo4}
-with data.  Tip data, (internal) node data, and edge
-data are stored separately, but can be retrieved
-together or separately with \code{tdata(x,"tip")}
-or \code{tdata(x,"all")}.
+The \code{phylo4d} class extends \code{phylo4} with data.  Tip data, (internal) node data, and edge data are stored separately, but can be retrieved together or separately with \code{tdata(x,"tip")} or \code{tdata(x,"all")}.
 
 \textbf{edge data can also be included --- is this
 useful/worth keeping?}
@@ -73,38 +272,17 @@ Default node labels:
 
 \section{Hacks/backward compatibility}
 
-Hilmar Lapp very kindly showed a way to hack
-the \verb+$+ operator so that it would provide
-backward compatibility with code that is 
-extracting internal elements of a \code{phylo4}.
-The basic recipe is:
+Hilmar Lapp very kindly showed a way to hack the \verb+$+ operator so that it would provide backward compatibility with code that is extracting internal elements of a \code{phylo4}. The basic recipe is: 
+
 <<eval=FALSE>>=
-setMethod("$","phylo4",function(x,name) { attr(x,name)})
+setMethod("\$","phylo4",function(x,name) { attr(x,name)})
 @ 
-but this has to be hacked slightly to intercept
-calls to elements that might be missing.  For example,
-\code{ape} detects whether log-likelihood, root edges,
-node labels, etc. are missing by testing whether they
-are \code{NULL}, whereas missing items are represented
-in \code{phylo4} by zero-length vectors in the slots 
-(or \code{NA} for the root edge) --- so we need code
-like
+
+but this has to be hacked slightly to intercept calls to elements that might be missing.  For example, \code{ape} detects whether log-likelihood, root edges, node labels, etc. are missing by testing whether they are \code{NULL}, whereas missing items are represented in \code{phylo4} by zero-length vectors in the slots (or \code{NA} for the root edge) --- so we need code like 
 <<eval=FALSE>>=
 if(!hasNodeLabels(x)) NULL else x@node.label
 @ 
 to handle these cases.
 
-\section{To do/problems}
-
-\begin{itemize}
-\item Conflict with \code{nTips} if \code{ape} is loaded first:
-ask EP to get rid of this (obsolete?) function? (\code{Ntips}
-is the real \code{ape} function for getting the number of tips)
-\item basic tree manipulation: tip-dropping, \code{na.omit}, etc. --- 
-  especially for multi-tree and tree-with-data cases
-\item tree-manipulation code: tree traversal (store current
-  position as an attribute), pruning, etc.
-\item restrict/specify edges matrix to be integer?
-\end{itemize}
 
 \end{document}
