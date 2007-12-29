@@ -62,10 +62,15 @@ setMethod("$","pdata",function(x,name) {
   x@data[[name]]
 })
 
+
 setMethod("$<-","pdata",function(x,name,value) {
   x@data[[name]] <- value
   x
 })
+
+setMethod("plot",signature(x="pdata",y="missing"), function(x,...){
+    return(plot(x@data, ...))
+}) # end plot phylo4
 
 
 ## od = data.frame(a=1:3,b=4:6)

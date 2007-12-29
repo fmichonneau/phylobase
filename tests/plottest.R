@@ -12,7 +12,22 @@ plot(g2,show.node.label=TRUE)
 
 ##  Note the numbering differences!
 
- g3 = subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
-            "conirostris","scandens"))
- plot(extract.tree(g3))  ## phylo4
+g3 = subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
+                 "conirostris","scandens"))
+plot(extract.tree(g3))  ## phylo4
 t1 <- try(plot(g3))                 ## phylo4d -- error
+
+## Playing with new ways of plotting
+
+dist1 <- cophenetic.phylo(as(g2,"phylo"))
+mdspos <- isoMDS(dist1)$points
+par(mfrow=c(2,2))
+plot(g1)
+plot(mdspos,type="n")
+text(mdspos[,1],mdspos[,2],abbreviate(rownames(mdspos)))
+cmdpos <- cmdscale(dist1)
+plot(cmdpos,type="n")
+text(cmdpos[,1],cmdpos[,2],abbreviate(rownames(mdspos)))
+
+## never mind, I don't know how to construct a useful
+##  2D color space anyway ...

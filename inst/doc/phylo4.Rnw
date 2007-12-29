@@ -171,6 +171,12 @@ same format --- all the data combined
 
 Plotting calls \code{plot.phylog} from the \code{ade4} package.
 
+If you want to plot the data (e.g. for checking the input),
+\code{plot(tdata(g2))} will create the default plot for the
+data --- in this case, since it is a data frame [\textbf{this may
+change in future versions but should remain transparent}]
+this will be a \code{pairs} plot of the data.
+
 \section{Subsetting}
 
 The \code{subset} command offers a variety of ways
