@@ -76,7 +76,6 @@ setGeneric("isRooted", function(x) {
     standardGeneric("isRooted")
 })
 
-
 setMethod("isRooted","phylo4", function(x) {
     ## hack to avoid failure on an empty object
     if(phylobase::nTips(x)==0) return(FALSE)  
@@ -577,7 +576,9 @@ phylo4 <- function(edge, edge.length=NULL, tip.label=NULL, node.label=NULL,
     res@edge.label <- edge.label
     res@root.edge <- root.edge
 
-    if(!check_phylo4(res)) stop("Invalid object created")
+    ## check_phylo4 will return a character string if object is
+    ##  bad, otherwise TRUE
+    if (is.character(checkval <- check_phylo4(res))) stop(checkval)
     return(res)
 }
 

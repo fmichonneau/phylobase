@@ -1,12 +1,18 @@
 
 ## REQUIRED for all trees
 check_phylo4 <- function(object) {
-    ## check consistency of edges etc.
-    N <- nrow(object@edge)
+    ## FIXME: check for cyclicity?
+    N <- nrow(object@edge)  
     if (hasEdgeLength(object) && length(object@edge.length) != N)
       return("edge lengths do not match number of edges")
     if (length(object@tip.label)+object@Nnode-1 != N)
       return("number of tip labels not consistent with number of edges and nodes")
+    nAncest <- tabulate(edges(object)[, 2])
+    nRoots <- sum(nAncest==0)
+    if (nRoots>1)
+      return("tree has more than one root")
+    if (any(nAncest>1))
+      return("some nodes have multiple ancestors")
     return(TRUE)
 }
 
