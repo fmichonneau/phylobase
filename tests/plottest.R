@@ -10,7 +10,14 @@ par(mfrow=c(1,2))
 plot(g1,show.node.label=TRUE)
 plot(g2,show.node.label=TRUE)
 
+g2B <- as(g2,"phylog")
 ##  Note the numbering differences!
+
+## round trip 
+g2C <- as(read.tree(text=write.tree(as(g1,"phylo"))),"phylo4")
+## comes back in same order
+plot(g1,show.node.label=TRUE)
+plot(g2C,show.node.label=TRUE)
 
 g3 = subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
                  "conirostris","scandens"))

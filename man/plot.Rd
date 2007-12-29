@@ -44,7 +44,10 @@ cex.label=par("cex"), cex.symbol=1, \dots)
 \seealso{the  \linkS4class{phylo4} and \linkS4class{phylo4d} classes;
   \code{\link[pkg:ape]{plot.phylo}} from the \code{ape} package,
     \code{\link[pkg:ade4]{symbols.phylog}},
-    \code{\link[pkg:ade4]{table.phylog}} and \code{\link[pkg:ade4]{dotchart.phylog}}.}
+    \code{\link[pkg:ade4]{table.phylog}} and
+    \code{\link[pkg:ade4]{dotchart.phylog}}.}
+  \section{Warning}{Node labels in phylo4d plots may be rearranged (i.e., incorrect), because of
+    differences in the way that ape and ade4 structure trees!}
 \author{Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}}
 \examples{
 if(require(ape) & require(ade4)){
@@ -53,7 +56,7 @@ obj1 <- phylo4d(as(tree.owls,"phylo4"),data.frame(wing=1:4), use.tip.name=FALSE)
 obj2 <- phylo4d(as(tree.owls,"phylo4"),data.frame(wing=1:4, tail=4:1, body.length=c(10,15,5,20)), use.tip.name=FALSE)
 
 par(mfrow=c(2,2))
-plot(as(obj1,"phylo4"))
+plot(as(obj1,"phylo4"),show.node=TRUE)
 plot(obj1)
 plot(obj2, show.node=TRUE)
 plot(obj2, type="dotchart")

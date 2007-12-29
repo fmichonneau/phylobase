@@ -32,6 +32,7 @@ setMethod("plot", signature(x="phylo4d",y="missing"), function(x, type=c("symbol
         warning("dropping NA values from tip data for plot")
         x <- na.omit(x)
     }
+    if (show.node.label) warning("DANGER: node labels may be reordered from original tree")
     dat <- tdata(x, which="tip")
 
     cex <- list(...)$cex
