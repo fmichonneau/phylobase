@@ -9,8 +9,6 @@
       (if we can't fix this we at least need a big warning --
        maybe even an error if show.node.label=TRUE for phylo4d??)
    - error in plotting a subsetted tree: see tests/plottest.R
-   
-* check_data: test label-matching code, extend to node labels
 
 # MAYBE for Jan 1:
 ==============================
