@@ -714,6 +714,8 @@ setAs("phylo4","phylo",
                     node.label=from@node.label)
           class(y) <- "phylo"
           if(length(y$edge.length) == 0) y$edge.length <- NULL
+          if(length(y$node.label) == 0) y$node.label <- NULL
+          if (!is.na(from@root.edge)) y$root.edge <- from@root.edge
           y
       })
 
