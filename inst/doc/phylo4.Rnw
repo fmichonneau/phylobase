@@ -278,7 +278,7 @@ Default node labels:
 
 \section{Hacks/backward compatibility}
 
-Hilmar Lapp very kindly showed a way to hack the \verb+$+ operator so that it would provide backward compatibility with code that is extracting internal elements of a \code{phylo4}. The basic recipe is: 
+There is a way to hack the \verb+$+ operator so that it would provide backward compatibility with code that is extracting internal elements of a \code{phylo4}. The basic recipe is: 
 
 <<eval=FALSE>>=
 setMethod("$","phylo4",function(x,name) { attr(x,name)})
