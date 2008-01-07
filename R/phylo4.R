@@ -713,6 +713,7 @@ setAs("phylo4","phylo",
                     tip.label=from@tip.label,
                     node.label=from@node.label)
           class(y) <- "phylo"
+          if(length(y$edge.length) == 0) y$edge.length <- NULL
           y
       })
 
