@@ -46,12 +46,20 @@
   - geiger: prune.extinct.taxa, prune.random.taxa?
   - allDescend to give internal nodes as well as tips?
   - decide on a coherent numbers/names policy
+* plot for phylo4d objects
+  - current devel version in pkg/misc/plottest.R
+  - test and refine the function
+  - implement legend when (and only when) all data are represented on a common scale
+  - verify that identify works with this version
+  - possibly restrain the arguments passed to plot.phylo
+
 
 
 # MEDIUM but open-ended/vague/design decisions
 =======
 * make sure the data structures are reasonably complete
 * Rewrite methods in native phylo4 as necessary/desirable [????]
+  - Code from ape often call some C code... so I would leave what calls ape as it is most of possible (T.J.).
 * Figure out best way to deal with namespace/conflicts (overriding ape methods)
    - synch with newest ape release:
       - is multi.tree now multiPhylo?
