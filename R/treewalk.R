@@ -8,7 +8,7 @@
 ## so:     n = x+nTips(phy)
 
 getNodeByLabel <- function(phy,lab) {
-    nt <- phylobase::nTips(phy)
+    nt <- nTips(phy)
     tipmatch <- match(lab,labels(phy))
     ifelse(!is.na(tipmatch),
            tipmatch,
@@ -18,7 +18,7 @@ getNodeByLabel <- function(phy,lab) {
 }
        
 getLabelByNode <- function(phy,num) {
-    nt <- phylobase::nTips(phy)
+    nt <- nTips(phy)
     ifelse(num<=nt,
            labels(phy)[num],
            ifelse(num<=nt+nNodes(phy)-1,
@@ -46,7 +46,7 @@ getDescend <- function(phy,node) {
 allDescend <- function (phy, node) 
 {
     if (is.character(node)) node <- getNodeByLabel(phy,node)
-    n <- phylobase::nTips(phy)
+    n <- nTips(phy)
     if (node <= n) return(labels(phy)[node])
     l <- character()
     d <- getDescend(phy, node)
@@ -63,7 +63,7 @@ allAncest <- function (phy, node)
 {
     if (is.character(node)) node <- getNodeByLabel(phy,node)
     res <- numeric(0)
-    n <- phylobase::nTips(phy)
+    n <- nTips(phy)
     repeat {
         anc <- getAncest(phy,node)
         res <- c(res,anc)

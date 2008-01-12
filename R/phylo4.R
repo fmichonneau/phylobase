@@ -78,10 +78,10 @@ setGeneric("isRooted", function(x) {
 
 setMethod("isRooted","phylo4", function(x) {
     ## hack to avoid failure on an empty object
-    if(phylobase::nTips(x)==0) return(FALSE)  
+    if(nTips(x)==0) return(FALSE)  
     !is.na(x@root.edge) ||  ## root edge explicitly defined
     ## HACK: make sure we find the right "nTips"
-    tabulate(edges(x)[, 1])[phylobase::nTips(x)+1] <= 2
+    tabulate(edges(x)[, 1])[nTips(x)+1] <= 2
     ## root node (first node after last tip) has <= 2 descendants
     ## FIXME (?): fails with empty tree
 })
@@ -94,7 +94,7 @@ setGeneric("rootNode", function(x) {
 setMethod("rootNode","phylo4", function(x) {
     if (!isRooted(x)) return(NA)
     if (!is.na(x@root.edge)) stop("FIXME: don't know what to do in this case")
-    return(phylobase::nTips(x)+1)
+    return(nTips(x)+1)
 })
 
 setGeneric("rootNode<-", function(x,value) {
@@ -367,7 +367,7 @@ setMethod("tdata","phylo4d", function(x,which=c("tip","node","allnode"),...) {
 ##   x <- object
 ##   tdata(x, "tip") -> tips
 ##   tdata(x, "allnode") -> allnodes
-##   cat("Phylogenetic tree with", phylobase::nTips(x), " species and", nNodes(x), "internal nodes\n\n")
+##   cat("Phylogenetic tree with", nTips(x), " species and", nNodes(x), "internal nodes\n\n")
 ##   cat("  Tree plus data object of type:", class(x), "\n")
 ##   cat("  Species Names                :", labels(x), "\n")
 ##   if (hasEdgeLength(x)){ 
@@ -378,7 +378,7 @@ setMethod("tdata","phylo4d", function(x,which=c("tip","node","allnode"),...) {
 ##   cat("\nComparative data\n")
 ##   if (nrow(tips)>0) 
 ##     {
-##       cat("\nTips: data.frame with", phylobase::nTips(x), "species and", ncol(tips), "variables \n")
+##       cat("\nTips: data.frame with", nTips(x), "species and", ncol(tips), "variables \n")
 ##       print(summary(tips))
 ##     }
 ##   if (nrow(allnodes)>0) 
@@ -403,7 +403,7 @@ setMethod("summary", "phylo4d", function(object){
     cat("\nComparative data:\n")
     if (nrow(tips) > 0) 
       {
-          cat("\nTips: data.frame with", phylobase::nTips(object), "taxa and", ncol(tips), "variables \n\n")
+          cat("\nTips: data.frame with", nTips(object), "taxa and", ncol(tips), "variables \n\n")
           print(summary(tips))
       }else {cat('\nObject contains no tip data.')}
 
@@ -625,8 +625,8 @@ setMethod("phylo4d", c("phylo4"), function(x, tip.data=NULL, node.data=NULL, all
     
     if(!is.null(all.data)){
         if(!is.data.frame(all.data)) stop("all.data must be a data.frame")
-        tip.data <- all.data[1:phylobase::nTips(x) , , drop=FALSE]
-        node.data <- all.data[-(1:phylobase::nTips(x)) , , drop=FALSE]
+        tip.data <- all.data[1:nTips(x) , , drop=FALSE]
+        node.data <- all.data[-(1:nTips(x)) , , drop=FALSE]
     }
 
     ## now at least one data.frame is provided
