@@ -196,10 +196,10 @@ setMethod("$","phylo4",function(x,name) {
 })
 
 ## FIXME: implement more checks on this!!
-##  do we want to be this permissive??
+##  do we want to be this permissive?? -- fixed
 setMethod("$<-","phylo4",function(x,name,value) {
-  attr(x,name) <- value
-  x
+  slot(x,name,check=TRUE) <- value
+  return(x)
 })
 
 printphylo <- function (x,printlen=6,...) {
@@ -734,6 +734,10 @@ setAs("phylo4d","phylo",
                     Nnode=from@Nnode,
                     tip.label=from@tip.label)
           class(y) <- "phylo"
+          if(length(y$edge.length) == 0) y$edge.length <- NULL
+          if(length(y$node.label) == 0) y$node.label <- NULL
+          if (!is.na(from@root.edge)) y$root.edge <- from@root.edge
+         
           warning("losing data while coercing phylo4d to phylo")
           y
       })

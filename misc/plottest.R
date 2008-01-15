@@ -1,8 +1,7 @@
 ################
 ## plot phylo4d
 ################
-#setMethod("plot", signature(x="phylo4d",y="missing"), function(x, symbol=c("circles", "squares"), center=TRUE,
-
+#setMethod("plot", signature(x="phylo4d",y="missing"), 
 plottemp <- function(x, symbol=c("circles", "squares"), usebw=TRUE, center=TRUE, scale=TRUE, legend=TRUE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=par("cex"), cex.legend=1, ...){
 
     #### preliminary stuff and checks
@@ -138,11 +137,6 @@ plottemp <- function(x, symbol=c("circles", "squares"), usebw=TRUE, center=TRUE,
 
 
 
-
-
-
-
-
 #####
 ## tests
 ##
@@ -160,3 +154,9 @@ par(mar=rep(.5,4))
 plottemp(obj3,box=FALSE,cex.sym=1.2,cex.la=.8)
 
 
+library(ade4)
+data(mjrochet)
+temp <- as(read.tree(text=mjrochet$tre),"phylo4")
+obj <- phylo4d(x=temp,tip.data=mjrochet$tab)
+obj
+plot(obj)
