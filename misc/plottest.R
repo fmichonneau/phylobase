@@ -2,7 +2,7 @@
 ## plot phylo4d
 ################
 #setMethod("plot", signature(x="phylo4d",y="missing"), 
-plottemp <- function(x, symbol=c("circles", "squares"), usebw=TRUE, center=TRUE, scale=TRUE, legend=TRUE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=par("cex"), cex.legend=1, ...){
+plottemp <- function(x, symbol=c("circles", "squares"), center=TRUE, scale=TRUE, legend=FALSE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=par("cex"), cex.legend=1, ...){
 
     #### preliminary stuff and checks
     if(ncol(tdata(x,which="tip")) == 0) stop("no data in this phylo4d object")
@@ -31,14 +31,19 @@ plottemp <- function(x, symbol=c("circles", "squares"), usebw=TRUE, center=TRUE,
     ## centring / scaling
     dat <- as.data.frame(scale(dat,center=center,scale=scale))
     
-   
+    ## compute bottom margin
+    ## ! use inches as units still these won't be changed by plot.phylo
+    temp <- var.label[which.max(nchar(var.label))] # longest tip label
+    lab.height <- strwidth(temp, units="inches", cex=cex.label) # height required by the longest var label
+    lab.height <- lab.height / par("pin")[1] # returned as a fraction of the plot region
+    
     #### define plot region
     plotreg <- plotreg0 <- par("plt")
     plotreg.width <- plotreg0[2] - plotreg0[1]
     plotreg.height <- plotreg0[4] - plotreg0[3]
-    plotreg[2] <- plotreg[1] + (ratio.tree)*plotreg.width ## restrain the width for phylo
-    plotreg[3] <- plotreg[3] + plotreg.height*ifelse(show.var.label,0.20,0.05) ## add internal vertical margins
-    plotreg[4] <- plotreg[4] - plotreg.height*0.05 ## add internal vertical margins
+    plotreg[2] <- plotreg[1] + (ratio.tree)*plotreg.width # restrain the width for phylo
+    plotreg[3] <- plotreg[3] + plotreg.height*ifelse(show.var.label,lab.height+0.05,0.05) ## add internal vertical margins
+    plotreg[4] <- plotreg[4] - plotreg.height*0.05 # add internal vertical margins
     
     #### plot the tree
     par(plt = plotreg)
@@ -88,15 +93,19 @@ plottemp <- function(x, symbol=c("circles", "squares"), usebw=TRUE, center=TRUE,
     ## auxiliary function to plot a single variable
     ## max size of a symbol is set to 0.2*cex inches
     ## if changes here, beware to change the 0.15 in x.inset as well
-    plotaux <- function(x,y,var,symbol,usebw,cex){
-        if(any(var<0)) usebw <- TRUE
+    plotaux <- function(x,y,var,symbol,cex){
+        if(any(var<0)) {
+            usebw <- TRUE
+        } else {
+            usebw <- FALSE
+        }
         
         if(usebw){
             ispos <- var>0
-            fg.col <- rep("white",length(var))
-            fg.col[ispos] <- "black"
-            bg.col <- rep("black",length(var))
-            bg.col[ispos] <- "white"
+            fg.col <- rep("black",length(var))
+            fg.col[ispos] <- "white"
+            bg.col <- rep("white",length(var))
+            bg.col[ispos] <- "black"
             
             if(symbol == "squares"){
                 symbols(x=x, y=y, squares=abs(var), inches=0.2*cex, fg=fg.col, bg=bg.col, add=TRUE)
@@ -119,10 +128,10 @@ plottemp <- function(x, symbol=c("circles", "squares"), usebw=TRUE, center=TRUE,
     } # end plotaux
 
 
-    ## plot the data
-    lapply(alldat, function(X) plotaux(X[,1],X[,2],X[,3],symbol,usebw,cex.symbol))
+    ## finally plot the data
+    lapply(alldat, function(X) plotaux(X[,1],X[,2],X[,3],symbol,cex.symbol))
 
-    ## add legend for variables
+    #### plot labels for variables
     if(show.var.label) text(x=x.grid, y=rep(min(y.grid)-1.5*y.inset, ncol(dat)), lab=var.label,
                             adj=1, srt=90, cex=cex.label)
 
@@ -130,6 +139,49 @@ plottemp <- function(x, symbol=c("circles", "squares"), usebw=TRUE, center=TRUE,
     x.base <- xrange.data[2] + x.inset
     text(x=rep(x.base,plotres$Ntip), y=1:plotres$Ntip, lab=tip.label, font=font, cex=cex.label, pos=4)
 
+
+    #### add a legend for symbols
+    if(legend){
+        leg.var <- alldat[[1]][,3]
+        leg.values <- pretty(leg.var,n=4, min.n=1)
+        temp <- length(leg.values)
+        ## make sure to get maximum 4 symbols
+        if(temp>4) {
+            leg.values <- leg.values[c(1,2,temp-1,temp)]
+        }
+        leg.txt <- as.character(leg.values)
+
+        ## temp is a matrix with two columns:
+        ## first contains widths of annotations
+        ## second contains maximum width of symbols
+        temp <- cbind(strwidth(leg.txt,units="user",cex=cex.label*cex.legend) , x.inset*2)
+        leg.widths <- apply(temp,1,max)*1.05
+        leg.height <- max(strheight(leg.txt, units="user",cex=cex.label*cex.legend))
+
+        ## find basic coordinates
+        x.base <- par("usr")[1]+ 0.01*usr.width
+        temp <- lab.height * usr.height / (1 - lab.height) ## need to substract temp from par("usr")[3]
+        y.base <- par("usr")[3] - temp - y.inset ## to get closer the actual par("usr")[3] !
+      
+        ## plot annotations
+        leg.x <- x.base + leg.widths
+        leg.x <- cumsum(leg.x)
+        text(leg.x, y.base, leg.txt, cex=cex.label*cex.legend)
+
+        ## plot symbols
+        leg.y <- y.base + 2*y.inset
+        leg.y <- rep(leg.y,length(leg.x))
+        plotaux(leg.x, leg.y, leg.values, symbol, cex.symbol*cex.legend)
+
+        ## FIXME ##
+        ## draw a rectangle around the legend
+        #rect.size <- c(diff(range(leg.x)) , diff(c(y.base, max(leg.y))) )
+        #rect(min(leg.x)- rect.size[1]*0.05,
+        #     min(y.base) - rect.size[2]*0.05,
+        #     max(leg.x) + rect.size[1]*0.05,
+        #     max(y.base) + rect.size[2]*0.05)
+    } ## end legend
+    
     return(invisible())
 } # end plot phylo4d
 
@@ -153,10 +205,13 @@ plottemp(obj3)
 par(mar=rep(.5,4))
 plottemp(obj3,box=FALSE,cex.sym=1.2,cex.la=.8)
 
+plottemp(obj2,leg=TRUE,ratio=.5)
+plottemp(obj1,leg=TRUE,cex.leg=0.5)
+plottemp(obj1,leg=TRUE,cex.leg=1,ratio=.7)
 
 library(ade4)
 data(mjrochet)
 temp <- as(read.tree(text=mjrochet$tre),"phylo4")
 obj <- phylo4d(x=temp,tip.data=mjrochet$tab)
 obj
-plot(obj)
+plottemp(obj)
