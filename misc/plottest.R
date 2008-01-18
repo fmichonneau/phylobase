@@ -2,19 +2,15 @@
 ## plot phylo4d
 ################
 #setMethod("plot", signature(x="phylo4d",y="missing"), 
-plottemp <- function(x, symbol=c("circles", "squares"), center=TRUE, scale=TRUE, legend=FALSE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=par("cex"), cex.legend=1, ...){
+plottemp <- function(x, treetype=c("phylogram","cladogram"), symbol=c("circles", "squares"), center=TRUE, scale=TRUE, legend=FALSE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=par("cex"), cex.legend=1, ...){
 
     #### preliminary stuff and checks
     if(ncol(tdata(x,which="tip")) == 0) stop("no data in this phylo4d object")
-    if (any(is.na(tdata(x,which="tip")))) {
-        warning("dropping NA values from tip data for plot")
-        x <- na.omit(x)
-    }
-
-    cex <- par("cex")
     
+    cex <- par("cex")
     symbol <- match.arg(symbol)
-
+    treetype <- match.arg(treetype)
+    
     ## convert the tree into phylo
     tre <- suppressWarnings(as(x,"phylo"))
     tre$node.label <- x@node.label # this should be done by the as(x,"phylo")
@@ -47,8 +43,9 @@ plottemp <- function(x, symbol=c("circles", "squares"), center=TRUE, scale=TRUE,
     
     #### plot the tree
     par(plt = plotreg)
-    plotres <- plot(tre, direction="rightwards", show.tip.label=FALSE,
-                    show.node.label=show.node.label, cex=cex.label, ...)
+    plotres <- plot.phylo(tre, direction="rightwards", show.tip.label=FALSE,
+                          show.node.label=show.node.label, cex=cex.label,
+                          no.margin=FALSE, x.lim=NULL, y.lim=NULL, ...)
     
     #### plot the data
     par(plt=plotreg0)
@@ -125,6 +122,11 @@ plottemp <- function(x, symbol=c("circles", "squares"), center=TRUE, scale=TRUE,
                 symbols(x=x, y=y, circles=var, inches=0.2*cex, fg="white", bg="black", add=TRUE)
             } # end circles
         } # end else
+        
+        if(any(is.na(var))){
+            isNA <- is.na(var)
+            points(x[isNA],y[isNA],pch=4,cex=cex.symbol)
+        }
     } # end plotaux
 
 
@@ -154,7 +156,7 @@ plottemp <- function(x, symbol=c("circles", "squares"), center=TRUE, scale=TRUE,
         ## temp is a matrix with two columns:
         ## first contains widths of annotations
         ## second contains maximum width of symbols
-        temp <- cbind(strwidth(leg.txt,units="user",cex=cex.label*cex.legend) , x.inset*2)
+        temp <- cbind(strwidth(leg.txt,units="user",cex=cex.label*cex.legend) , x.inset*2*cex.legend)
         leg.widths <- apply(temp,1,max)*1.05
         leg.height <- max(strheight(leg.txt, units="user",cex=cex.label*cex.legend))
 
@@ -169,7 +171,7 @@ plottemp <- function(x, symbol=c("circles", "squares"), center=TRUE, scale=TRUE,
         text(leg.x, y.base, leg.txt, cex=cex.label*cex.legend)
 
         ## plot symbols
-        leg.y <- y.base + 2*y.inset
+        leg.y <- y.base + 2*y.inset*cex.legend
         leg.y <- rep(leg.y,length(leg.x))
         plotaux(leg.x, leg.y, leg.values, symbol, cex.symbol*cex.legend)
 
@@ -208,6 +210,11 @@ plottemp(obj3,box=FALSE,cex.sym=1.2,cex.la=.8)
 plottemp(obj2,leg=TRUE,ratio=.5)
 plottemp(obj1,leg=TRUE,cex.leg=0.5)
 plottemp(obj1,leg=TRUE,cex.leg=1,ratio=.7)
+
+obj4 <- obj1
+obj4$tip.data[2,3] <- NA
+obj4$tip.data[3,2] <- NA
+plottemp(obj4,leg=TRUE)
 
 library(ade4)
 data(mjrochet)
