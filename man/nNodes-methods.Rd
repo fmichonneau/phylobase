@@ -58,7 +58,7 @@
 \alias{tdata}
 \alias{tdata-methods}
 \alias{tdata,phylo4d-method}
-\title{Methods for S4 phylog classes}
+\title{Methods for S4 phylogeny classes}
 \description{
    Generic methods for phylogenetic trees represented as S4 classes
 }
