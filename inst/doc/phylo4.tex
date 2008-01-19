@@ -11,14 +11,16 @@
 \title{The \code{phylo4} S4 classes and methods}
 \author{Ben Bolker \& Peter Cowan}
 \date{\today}
-\usepackage{/usr/share/R/share/texmf/Sweave}
+\usepackage{/Library/Frameworks/R.framework/Resources/share/texmf/Sweave}
 \begin{document}
 \maketitle
 \tableofcontents
 
 \section{Introduction}
 
-This document describes the new \code{phylo4} S4 classes and methods, which are intended to provide a unifying standard for phylogenetic data in R.  The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple tree respectively.  In addition to describing the classes and methods this vignette gives examples of how they might be used.
+This document describes the new \code{phylo4} S4 classes and methods, which are intended to provide a unifying standard for phylogenetic data in R.  The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple trees respectively.  In addition to describing the classes and methods this vignette gives examples of how they might be used.
+
+Two motivations for the development of this package were better data checking and abstraction of the tree data formats.  Currently \code{phylobase} is capable of checking that data and trees are associated in the proper fashion, and protects users and developers from accidently reordering one, but not the other.  The \code{phylobase} package also seeks to abstract the data format so that commonly desired attributes can be accessed without knowing the underlying data structure.  This is achieved through generic functions which should ease development and protect functions from possible future changes in the data format.
 
 \section{Package Overview}
 
@@ -32,6 +34,50 @@ The phylobase package currently implements functions and data structures that im
   \item Functions for converting between the above data structures and \code{ape phylo} objects as well as \code{ade4 phylog} objects
   \item Functions for subsetting, replacing, and plotting the above structures
 \end{itemize}
+
+\section{Using the S4 help system}
+
+The \code{S4} help system works similarly to the \code{S3} help system with some small differences relating to how \code{S4} methods are written.  The \code{plot()} function is a good example.  When we type \code{?plot} we are provided the help for the default plotting function which expects \code{x} and \code{y}.  \code{R} also provides a way to smartly dispatch the right type of plotting function.  In the case of an \code{ape phylo} object (a \code{S3} class object) \code{R} evaluates the class of the object and finds the correct functions, so the following works correctly.
+
+\begin{Schunk}
+\begin{Sinput}
+> library(ape)
+> rand_tree <- rcoal(10)
+> plot(rand_tree)
+\end{Sinput}
+\end{Schunk}
+
+However, typing \code{?plot} still takes us to the default \code{plot} help.  We have to type \code{plot.phylo} to find what we are looking for.  This is because \code{S3} generics are simply functions with a dot and the class name added.  
+
+The \code{S4} generic system is too complicated to describe here, but doesn't include the same dot notation.  As a result \code{?plot.phylo4} doesn't work, \code{R} does, however, find the right plotting function.
+
+\begin{Schunk}
+\begin{Sinput}
+> library(phylobase)
+> rand_p4_tree <- as(rand_tree, "phylo4")
+> plot(rand_p4_tree)
+\end{Sinput}
+\end{Schunk}
+
+All fine and good, but how to we find out about all the great features of the \code{phylobase} plotting function?  \code{R} has two nifty ways to find it, the first is to simply put a question mark in front of the whole call:
+
+\begin{verbatim}
+	> ?plot(rand_p4_tree)
+\end{verbatim}
+
+\code{R} looks at the class of the \code{rand\_p4\_tree} object and takes us to the correct help file (note: this only works with \code{S4} objects).  The second ways is handy if you already know the class of your object, or want to compare to generics for different classes:
+
+\begin{verbatim}
+	> method?plot("phylo4")
+\end{verbatim}
+
+More information about how \code{S4} documentation works can be found in the methods package, but running the following command.
+
+\begin{Schunk}
+\begin{Sinput}
+> help("Documentation", package = "methods")
+\end{Sinput}
+\end{Schunk}
 
 \section{Trees without data}
 
@@ -181,13 +227,6 @@ of the tree --- for example,
 \end{Sinput}
 \end{Schunk}
 
-You can use \code{plot(g1)} to plot the tree (at this
-point, this just calls the \code{plot.phylo} command from
-the \code{ape} package).
-
-\textbf{Q: what else do people want to do to check
-their trees?}
-
 \section{Trees with data}
 
 The \code{phylo4d} class matches trees with data.
@@ -291,22 +330,15 @@ Object contains no node data.
 \end{Soutput}
 \end{Schunk}
 
-Or use \code{tdata()} to extract the
-data (i.e., \code{tdata(g2)}).
-By default, \code{tdata()} will retrieve
-tip data, but you can also get internal
-node data only (\code{tdata(tree,"node")})
-or --- if the tip and node data have the
-same format --- all the data combined
-(\code{tdata(tree,"allnode")}).
+Or use \code{tdata()} to extract the data (i.e., \code{tdata(g2)}). By default, \code{tdata()} will retrieve tip data, but you can also get internal node data only (\code{tdata(tree,"node")}) or --- if the tip and node data have the same format --- all the data combined (\code{tdata(tree,"allnode")}).
 
 Plotting calls \code{plot.phylog} from the \code{ade4} package.
 
+If you want to plot the data (e.g. for checking the input), \code{plot(tdata(g2))} will create the default plot for the data --- in this case, since it is a data frame [\textbf{this may change in future versions but should remain transparent}] this will be a \code{pairs} plot of the data.
+
 \section{Subsetting}
 
-The \code{subset} command offers a variety of ways
-of extracting portions of a \code{phylo4} or \code{phylo4d}
-tree, keeping any tip/node data consistent.
+The \code{subset} command offers a variety of ways of extracting portions of a \code{phylo4} or \code{phylo4d} tree, keeping any tip/node data consistent.
 
 \begin{description}
 \item[tips.include]{give a vector of tips (names or numbers) to retain}
@@ -336,10 +368,7 @@ One could drop the clade by  doing
 \end{Sinput}
 \end{Schunk}
 
-Another approach is to pick the subtree graphically,
-by plotting the tree and using \code{identify},
-which returns the identify of the node you
-click on with the mouse.
+Another approach is to pick the subtree graphically, by plotting the tree and using \code{identify}, which returns the identify of the node you click on with the mouse.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -354,10 +383,7 @@ click on with the mouse.
 \code{getDescend}, \code{getAncest},
 \code{allDescend}, \code{allAncest},
 \code{getNodeByLabel}, \code{getLabelByNode}:
-not sure about the names or functionality
-of these (how much do we work in terms
-of labels and how much in terms of internal
-numbers?)
+not sure about the names or functionality of these (how much do we work in terms of labels and how much in terms of internal numbers?)
 
 \section{multiPhylo classes}
 
@@ -410,7 +436,7 @@ Default node labels:
 
 \section{Hacks/backward compatibility}
 
-Hilmar Lapp very kindly showed a way to hack the \verb+$+ operator so that it would provide backward compatibility with code that is extracting internal elements of a \code{phylo4}. The basic recipe is: 
+There is a way to hack the \verb+$+ operator so that it would provide backward compatibility with code that is extracting internal elements of a \code{phylo4}. The basic recipe is: 
 
 \begin{Schunk}
 \begin{Sinput}
