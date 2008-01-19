@@ -17,7 +17,9 @@
 
 \section{Introduction}
 
-This document describes the new \code{phylo4} S4 classes and methods, which are intended to provide a unifying standard for phylogenetic data in R.  The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple tree respectively.  In addition to describing the classes and methods this vignette gives examples of how they might be used.
+This document describes the new \code{phylo4} S4 classes and methods, which are intended to provide a unifying standard for phylogenetic data in R.  The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple trees respectively.  In addition to describing the classes and methods this vignette gives examples of how they might be used.
+
+Two motivations for the development of this package were better data checking and abstraction of the tree data formats.  Currently \code{phylobase} is capable of checking that data and trees are associated in the proper fashion, and protects users and developers from accidently reordering one, but not the other.  The \code{phylobase} package also seeks to abstract the data format so that commonly desired attributes can be accessed without knowing the underlying data structure.  This is achieved through generic functions which should ease development and protect functions from possible future changes in the data format.
 
 \section{Package Overview}
 
