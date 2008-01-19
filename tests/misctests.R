@@ -1,22 +1,25 @@
 library(phylobase)
 library(ape)
-library(geiger)
 
 data(geospiza)
-t1 <-  try(p1 <- phylo4d(geospiza$geospiza.tree,geospiza$geospiza.data))
+geospiza0 <-
+  list(geospiza.tree=as(geospiza,"phylo"),geospiza.data=tdata(geospiza))
+## push data back into list form as in geiger
+
+t1 <-  try(p1 <- phylo4d(geospiza0$geospiza.tree,geospiza0$geospiza.data))
 ## Error in check_data(res, ...) : 
 ##   Tip data names are a subset of tree tip labels.
 
-p2 <- as(geospiza$geospiza.tree,"phylo4")
+p2 <- as(geospiza0$geospiza.tree,"phylo4")
 plot(p2)
 
 lab1 <- labels(p2)
-lab2 <- rownames(geospiza$geospiza.data)
+lab2 <- rownames(geospiza0$geospiza.data)
 
 lab1[!lab1 %in% lab2]  ## missing data
 lab2[!lab2 %in% lab1]  ## extra data (none)
-p1 <- phylo4d(p2,geospiza$geospiza.data,missing.tip.data="warn")
-p1 <- phylo4d(p2,geospiza$geospiza.data,missing.tip.data="OK")
+p1 <- phylo4d(p2,geospiza0$geospiza.data,missing.tip.data="warn")
+p1 <- phylo4d(p2,geospiza0$geospiza.data,missing.tip.data="OK")
 
 plot(p1)
 plot(p1,show.node.label=TRUE)

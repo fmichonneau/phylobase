@@ -1,13 +1,14 @@
 library(phylobase)
-library(geiger)
 library(ape)
 
 data(geospiza)
-g1 <- as(geospiza$geospiza.tree,"phylo4")
-g2 <- phylo4d(g1,geospiza$geospiza.data,missing.tip.data="OK")
+g1 <- as(geospiza,"phylo4")
+g2 <- geospiza
 
 par(mfrow=c(1,2))
 plot(g1,show.node.label=TRUE)
+## be careful with this: works if par("fin")=c(5.56,6.77)
+##                       fails if par("fin")=c(4.87,6.77)
 plot(g2,show.node.label=TRUE)
 
 g2B <- as(g2,"phylog")
@@ -26,6 +27,7 @@ t1 <- try(plot(g3))                 ## phylo4d -- error
 
 ## Playing with new ways of plotting
 
+library(MASS)
 dist1 <- cophenetic.phylo(as(g2,"phylo"))
 mdspos <- isoMDS(dist1)$points
 par(mfrow=c(2,2))

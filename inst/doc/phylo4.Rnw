@@ -68,9 +68,10 @@ All fine and good, but how to we find out about all the great features of the \c
 	> method?plot("phylo4")
 \end{verbatim}
 
-More information about how \code{S4} documentation works can be found in the methods package, but running the following command.
+More information about how \code{S4} documentation works 
+can be found in the methods package, by running the following command.
 
-<<>>=
+<<eval=FALSE>>=
 help('Documentation', package = "methods") 
 @ 
 
