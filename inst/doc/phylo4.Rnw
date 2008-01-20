@@ -82,17 +82,16 @@ class \code{phylo} from the \code{ape} package
 (e.g., read in using the \code{read.tree()} or \code{read.nexus()}
 functions), and convert it to a \code{phylo4} object.
 
-For example, get the \emph{Geospiza} data from the \code{geiger} package:
+For example, load the raw \emph{Geospiza} data:
 <<>>=
-library(geiger)
-data(geospiza)
-names(geospiza)
+data(geospiza_raw)
+names(geospiza_raw)
 @ 
 
 Convert the \code{S3} tree to a \code{S4 phylo4} object using the \code{as()} function:
 <<>>=
 library(phylobase)
-g1 <- as(geospiza$geospiza.tree,"phylo4")
+g1 <- as(geospiza_raw$tree,"phylo4")
 g1
 @ 
 
@@ -151,17 +150,17 @@ The \code{phylo4d} class matches trees with data.
 or combine it with a data frame to make a \code{phylo4d} (tree-with-data)
 object.
 
-Now we'll take the \emph{Geospiza} data from \verb+geospiza$geospiza.data+
+Now we'll take the \emph{Geospiza} data from \verb+geospiza_raw$data+
 and merge it with the tree.  However, since \emph{G. olivacea} is included
 in the tree but not in the data set, we will initially run into some trouble:
 
 <<eval=FALSE>>=
-g2 <- phylo4d(g1,geospiza$geospiza.data)
+g2 <- phylo4d(g1,geospiza_raw$data)
 @ 
 
 gives
 <<echo=FALSE>>=
-err1 <- try(g2 <- phylo4d(g1,geospiza$geospiza.data),silent=TRUE)
+err1 <- try(g2 <- phylo4d(g1,geospiza_raw$data),silent=TRUE)
 cat(as.character(err1))
 @ 
 
@@ -169,7 +168,7 @@ We have two problems --- the first is that we forgot to lowercase
 the labels on the data to match the tip labels:
 
 <<>>=
-gdata <- geospiza$geospiza.data
+gdata <- geospiza_raw$data
 row.names(gdata) <- tolower(row.names(gdata))
 @ 
 

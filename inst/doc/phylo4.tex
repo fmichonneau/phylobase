@@ -11,7 +11,7 @@
 \title{The \code{phylo4} S4 classes and methods}
 \author{Ben Bolker \& Peter Cowan}
 \date{\today}
-\usepackage{/Library/Frameworks/R.framework/Resources/share/texmf/Sweave}
+\usepackage{/usr/share/R/share/texmf/Sweave}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -71,7 +71,8 @@ All fine and good, but how to we find out about all the great features of the \c
 	> method?plot("phylo4")
 \end{verbatim}
 
-More information about how \code{S4} documentation works can be found in the methods package, but running the following command.
+More information about how \code{S4} documentation works 
+can be found in the methods package, by running the following command.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -86,15 +87,14 @@ class \code{phylo} from the \code{ape} package
 (e.g., read in using the \code{read.tree()} or \code{read.nexus()}
 functions), and convert it to a \code{phylo4} object.
 
-For example, get the \emph{Geospiza} data from the \code{geiger} package:
+For example, load the raw \emph{Geospiza} data:
 \begin{Schunk}
 \begin{Sinput}
-> library(geiger)
-> data(geospiza)
-> names(geospiza)
+> data(geospiza_raw)
+> names(geospiza_raw)
 \end{Sinput}
 \begin{Soutput}
-[1] "geospiza.tree" "geospiza.data"
+[1] "tree" "data"
 \end{Soutput}
 \end{Schunk}
 
@@ -102,7 +102,7 @@ Convert the \code{S3} tree to a \code{S4 phylo4} object using the \code{as()} fu
 \begin{Schunk}
 \begin{Sinput}
 > library(phylobase)
-> g1 <- as(geospiza$geospiza.tree, "phylo4")
+> g1 <- as(geospiza_raw$tree, "phylo4")
 > g1
 \end{Sinput}
 \begin{Soutput}
@@ -234,13 +234,13 @@ The \code{phylo4d} class matches trees with data.
 or combine it with a data frame to make a \code{phylo4d} (tree-with-data)
 object.
 
-Now we'll take the \emph{Geospiza} data from \verb+geospiza$geospiza.data+
+Now we'll take the \emph{Geospiza} data from \verb+geospiza_raw$data+
 and merge it with the tree.  However, since \emph{G. olivacea} is included
 in the tree but not in the data set, we will initially run into some trouble:
 
 \begin{Schunk}
 \begin{Sinput}
-> g2 <- phylo4d(g1, geospiza$geospiza.data)
+> g2 <- phylo4d(g1, geospiza_raw$data)
 \end{Sinput}
 \end{Schunk}
 
@@ -249,8 +249,8 @@ gives
 \begin{Soutput}
 Error in check_data(res, ...) : 
   Tip data names are a subset of tree tip labels 
-(missing data names: platyspiza,pinaroloxias,olivacea) 
-(extra data names: Pinaroloxias,Platyspiza)
+(missing data names: platyspiza,pinaroloxias) 
+(extra data names: Platyspiza,Pinaroloxias)
 \end{Soutput}
 \end{Schunk}
 
@@ -259,7 +259,7 @@ the labels on the data to match the tip labels:
 
 \begin{Schunk}
 \begin{Sinput}
-> gdata <- geospiza$geospiza.data
+> gdata <- geospiza_raw$data
 > row.names(gdata) <- tolower(row.names(gdata))
 \end{Sinput}
 \end{Schunk}
@@ -283,176 +283,3 @@ the offending tip from the tree first:
 \begin{Sinput}
 > g1B <- prune(g1, "olivacea")
 > phylo4d(g1B, gdata)
-\end{Sinput}
-\end{Schunk}
-
-You can summarize the new object:
-\begin{Schunk}
-\begin{Sinput}
-> summary(g2)
-\end{Sinput}
-\begin{Soutput}
-  No root edge.
-
- Phylogenetic tree : as(object, "phylo4") 
-
- Number of tips    : 14 
- Number of nodes   : 13 
- Branch lengths:
-        mean         : 0.1764008 
-        variance     : 0.04624379 
-        distribution :
-   Min. 1st Qu.  Median 3rd Qu.    Max. 
-0.00917 0.04985 0.08000 0.21910 0.88080 
-
-Comparative data:
-
-Tips: data.frame with 14 taxa and 5 variables 
-
-     wingL          tarsusL         culmenL          beakD      
- Min.   :3.975   Min.   :2.807   Min.   :1.974   Min.   :1.191  
- 1st Qu.:4.189   1st Qu.:2.929   1st Qu.:2.187   1st Qu.:1.941  
- Median :4.235   Median :2.980   Median :2.311   Median :2.073  
- Mean   :4.236   Mean   :2.991   Mean   :2.333   Mean   :2.083  
- 3rd Qu.:4.265   3rd Qu.:3.039   3rd Qu.:2.430   3rd Qu.:2.347  
- Max.   :4.420   Max.   :3.271   Max.   :2.725   Max.   :2.824  
- NA's   :1.000   NA's   :1.000   NA's   :1.000   NA's   :1.000  
-     gonysW     
- Min.   :1.401  
- 1st Qu.:1.845  
- Median :1.962  
- Mean   :2.014  
- 3rd Qu.:2.222  
- Max.   :2.676  
- NA's   :1.000  
-
-Object contains no node data.
-\end{Soutput}
-\end{Schunk}
-
-Or use \code{tdata()} to extract the data (i.e., \code{tdata(g2)}). By default, \code{tdata()} will retrieve tip data, but you can also get internal node data only (\code{tdata(tree,"node")}) or --- if the tip and node data have the same format --- all the data combined (\code{tdata(tree,"allnode")}).
-
-Plotting calls \code{plot.phylog} from the \code{ade4} package.
-
-If you want to plot the data (e.g. for checking the input), \code{plot(tdata(g2))} will create the default plot for the data --- in this case, since it is a data frame [\textbf{this may change in future versions but should remain transparent}] this will be a \code{pairs} plot of the data.
-
-\section{Subsetting}
-
-The \code{subset} command offers a variety of ways of extracting portions of a \code{phylo4} or \code{phylo4d} tree, keeping any tip/node data consistent.
-
-\begin{description}
-\item[tips.include]{give a vector of tips (names or numbers) to retain}
-\item[tips.exclude]{give a vector of tips (names or numbers) to drop}
-\item[mrca]{give a vector of node or tip names or numbers; extract the clade containing these taxa}
-\item[node.subtree]{give a node (name or number); extract the subtree starting from this node}
-\end{description}
-
-Different ways to extract the \emph{fuliginosa}-\emph{scandens}
-clade:
-\begin{Schunk}
-\begin{Sinput}
-> subset(g2, tips.include = c("fuliginosa", "fortis", "magnirostris", 
-+     "conirostris", "scandens"))
-> subset(g2, node.subtree = "N07")
-> subset(g2, mrca = c("scandens", "fortis"))
-\end{Sinput}
-\end{Schunk}
-
-One could drop the clade by  doing
-\begin{Schunk}
-\begin{Sinput}
-> subset(g2, tips.exclude = c("fuliginosa", "fortis", "magnirostris", 
-+     "conirostris", "scandens"))
-> subset(g2, tips.exclude = allDescend(g2, MRCA(g2, c("difficilis", 
-+     "fortis"))))
-\end{Sinput}
-\end{Schunk}
-
-Another approach is to pick the subtree graphically, by plotting the tree and using \code{identify}, which returns the identify of the node you click on with the mouse.
-
-\begin{Schunk}
-\begin{Sinput}
-> plot(g1)
-> n1 <- identify(g1)
-> subset(g2, node.subtree = n1)
-\end{Sinput}
-\end{Schunk}
-
-\section{Tree-walking}
-
-\code{getDescend}, \code{getAncest},
-\code{allDescend}, \code{allAncest},
-\code{getNodeByLabel}, \code{getLabelByNode}:
-not sure about the names or functionality of these (how much do we work in terms of labels and how much in terms of internal numbers?)
-
-\section{multiPhylo classes}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Appendices %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\appendix
-\section{Definitions/slots}
-
-\subsection{phylo4}
-Like \code{phylo}, the main components of
-the \code{phylo4} class are:
-\begin{description}
-\item[edge]{an $N \times 2$ matrix of integers,
-  where the first column \ldots}
-\item[edge.length]{numeric list of edge lengths
-(length $N$ or empty)}
-\item[Nnode]{integer, number of nodes}
-\item[tip.label]{character vector of tip labels (required)}
-\item[node.label]{character vector of node labels (maybe empty)}
-\item[root.edge]{integer defining root edge (maybe NA)}
-\end{description}
-
-We have defined basic methods for \code{phylo4}:\code{show}, \code{print} (copied from \code{print.phylo} in\code{ape}), and a variety of accessor functions (see help files). \code{summary} does not seem to be terribly useful in the context of a ``raw'' tree, because there is not much to compute: \textbf{end users?}
-
-Print method: add information about (ultrametric, scaled, polytomies (zero-length or structural))?
-
-\subsection{phylo4d}
-
-The \code{phylo4d} class extends \code{phylo4} with data.  Tip data, (internal) node data, and edge data are stored separately, but can be retrieved together or separately with \code{tdata(x,"tip")} or \code{tdata(x,"all")}.
-
-\textbf{edge data can also be included --- is this
-useful/worth keeping?}
-
-\subsection{multiphylo4}
-
-\section{Validity checking}
-
-\begin{itemize}
-\item number of rows of edge matrix ($N$) == length of edge-length vector (if $>0$)
-\item (number of tip labels)+(nNode)-1 == $N$
-\item data matrix must have row names
-\item row names must match tip labels (if not, spit out mismatches)
-\item 
-\end{itemize}
- 
-Default node labels:
-
-\section{Hacks/backward compatibility}
-
-There is a way to hack the \verb+$+ operator so that it would provide backward compatibility with code that is extracting internal elements of a \code{phylo4}. The basic recipe is: 
-
-\begin{Schunk}
-\begin{Sinput}
-> setMethod("$", "phylo4", function(x, name) {
-+     attr(x, name)
-+ })
-\end{Sinput}
-\end{Schunk}
-
-but this has to be hacked slightly to intercept calls to elements that might be missing.  For example, \code{ape} detects whether log-likelihood, root edges, node labels, etc. are missing by testing whether they are \code{NULL}, whereas missing items are represented in \code{phylo4} by zero-length vectors in the slots (or \code{NA} for the root edge) --- so we need code like 
-\begin{Schunk}
-\begin{Sinput}
-> if (!hasNodeLabels(x)) NULL else x@node.label
-\end{Sinput}
-\end{Schunk}
-to handle these cases.
-
-
-\end{document}
