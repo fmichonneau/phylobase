@@ -1,92 +1,120 @@
-
-# MEDIUM: tasks in the categories "basic functionality"
-#  for Jan 1
+FOR VERSION 0.3
 =======================================================
-* Check in general for completeness (i.e. replacement functions),
-   obvious bugs
-* Plotting:
-   - plotting scrambles order of internal nodes
-      (if we can't fix this we at least need a big warning --
-       maybe even an error if show.node.label=TRUE for phylo4d??)
-   - error in plotting a subsetted tree: see tests/plottest.R
+* Check in general for completeness (i.e. replacement functions), obvious bugs
+* Plotting: see below
+* Data classes: see below
+* multiPhylo: see below
+* Documentation: see below
+* data class: check and incorporate into phylo4d FIXME: what do we mean here?
+* incorporate ioNCL
 
-# MAYBE for Jan 1:
-==============================
-* multiPhylo (see below)
-* data class: check and incorporate into phylo4d
-* incorporate ioNCL?? (see below)
+## Plotting
+### phylo4d objects
+  * verify that identify works with this version
+  * error in plotting a subsetted tree: see tests/plottest.R
+  * modify phylo4 method to allow "Singles" (plot.phylo doesn't)?
+  * plotting with data and `show.node.label` scrambles order of node labels *this is really a problem with ade4 vs ape ordering of nodes*
+  * plotting with subsetted data can throw error (see tests/plottest.R)
+  * multiPhylo4x plotting
 
-# for Jan 21
-=======================================================
-* options
-   - phylo.compat: default=TRUE, allows accessing internal
-     phylo4 elements with $ and $<-
-   - check.data defaults
-   - cf implementations in other packages (e.g. bbmle)
-* rooting
-    - implement re-rooting
-    - check with Sidlauskas: is there an "infelicity" in the
-     way ape does it that we should modify?
-* order: All phylo4 edge matrices are internally stored as 
-    "cladewise"/Newick traversal order.  Extend edges accessor
-    method with optional argument that allows edges to be extracted in a
-    different order (possibly with an attribute as in ape); need to steal
-   'reorder' from ape, extend for phylo4d keeping track of traits
-   Also see ape::ladderize
-* root node data characteristics (compare what OUCH does):
-    root node doesn't have corresponding entry in the edge matrix: 
-    ouch adds a row to the edge matrix (1-row data frame matching 
-    node column info)
-    Not entirely clear how we should deal with this, MB has a proposal.
-* tree walking/generic manipulation methods
-  - compare: Mesquite, ape (check O'Meara list)
-  - compare Sidlauskas wiki page
-   https://www.nescent.org/wg_phyloinformatics/R_Hackathon/DataTreeManipulation
-   and make sure all of these can be done with phylobase
-  - geiger: prune.extinct.taxa, prune.random.taxa?
-  - allDescend to give internal nodes as well as tips?
-  - decide on a coherent numbers/names policy
-* plot for phylo4d objects
-  - verify that identify works with this version
+## Data classes
+### Tree model:
+* assigning edge and node labels -- is there/should there be an option to turn this off?  assign empty ("") labels?
+* should default node labels start at N(nTips+1), to match internal node numbers?
+* should coercing phylo4d to phylo4 give a warning message about losing data?   Should phylo4d to phylo4?
+* order: All phylo4 edge matrices are internally stored as "cladewise"/Newick traversal order.  Extend edges accessor method with optional argument that allows edges to be extracted in a different order (possibly with an attribute as in ape); need to steal 'reorder' from ape, extend for phylo4d keeping track of traits also see ape::ladderize
+* root node data characteristics (compare what OUCH does): root node doesn't have corresponding entry in the edge matrix:  ouch adds a row to the edge matrix (1-row data frame matching node column info). Not entirely clear how we should deal with this, MB has a proposal.
+* Data model: There seems to be consensus that the data model should be at least a little bit richer than a straight data frame, that we should create a new data class.  There's a draft standard in pdata.R in the current package.  
+    * "Basic" metadata (slot 'type' in the data class) is implemented as a factor with allowed levels ("multitype", "binary", "continuous", "DNA", "RNA", "aacid", "other", "unknown"). There's an argument for sticking with the NEXUS types exactly, and one for extending them.  
+    * "Extended" metadata (slot 'metadata' in the data class) is implemented as an arbitrary list.  
+    * There are two camps over how molecular data should be incorporated.  1) Do we want two slots -- one for molecular and one for non-molecular -- or 2) do we want to stick the molecular data (especially long alignments) in a data frame as (e.g.) a character?  
+        1. Doing it the first way makes it hard to do subsetting operations transparently.  
+        2. Doing it the second way makes handling genetic data harder (and wastes space etc.). It is possible to have a "raw" vector within a data frame (which is the base type for "DNAbin" objects in ape), but we can't have a DNAbin object itself.  We could either convert to/from DNAbin as we accessed slots from the data frame (ugh), or we could try to write the rich data frame.  
+        3. **If we design the accessor functions really well, and people use them rather than digging into the guts, we can change things later.**  Do the people at the [R Genetics project](http://rgenetics.org/) have any ideas about this?  
+    * do we want to allow an accessor method to do the equivalent of `tdata(object)[i,j] <- value` ? or should people mess with their data before they attach it to the tree? (is this harder once the data are packed inside an additional layer of structure?)
 
-
-
-# MEDIUM but open-ended/vague/design decisions
-=======
-* make sure the data structures are reasonably complete
-* Rewrite methods in native phylo4 as necessary/desirable [????]
-  - Code from ape often call some C code... so I would leave what calls ape as it is most of possible (T.J.).
-* Figure out best way to deal with namespace/conflicts (overriding ape methods)
-   - synch with newest ape release:
-      - is multi.tree now multiPhylo?
-      - is nTips persisting?
-* fuzzy matching options in check_data?
-("fuzzywarn" for fuzzy matching with warning,
-  "fuzzy" for fuzzy matching w/o warning (perhaps not a good
-  idea to even allow this?))
-* implement NAMESPACE??
-
-
-## I/O
-------
-* integrate ioNCL package
-
-## Multiphylo
---------------------
-* extend classes: should we have both 
-     multiPhylo4 (no data) and multiPhylo4d (with data)  [DONE]
+### multiPhylo
+* extend classes: should we have both multiPhylo4 (no data) and multiPhylo4d (with data) [DONE]
 * Implement multiphylo tree names? [DONE]
-* need multiPhylo! "unpack"/"pack" methods
-   (convert multiPhylo4x to list of phylo4x, convert list of phylo4x to multiPhylo4x)
-* ctree method
-* need all basic methods
-* later: trackObjs approach for large sets of trees?
+* need multiPhylo! "unpack"/"pack" methods (convert multiPhylo4x to list of phylo4x, convert list of phylo4x to multiPhylo4x)
+* `ctree()` method
+* Still need many basic methods
+* `show()`, `summary()`, `plot()` methods can mimic `ape`'s new `multiphylo` class, though multiPhylo4d will need to match what we do for phylo4d
 
-# LOW PRIORITY
-==============
+### Documentation
+* Complete full example in vignette
+* Does S4-style help access really work? FIXME: Be more specific
+* is the phylo4 constructor actually documented anywhere?
+* phylo4 constructor should have its own method manpage (currently is inside the class doc)  FIXED (we think)
+
+FOR VERSION 0.4
+=======================================================
+### Options
+* phylo.compat: default=TRUE, allows accessing internal phylo4 elements with $ and $<- FIXME: Is this different than the current implementation? 
+* check.data defaults FIXME: what does this mean?
+* cf implementations in other packages (e.g. bbmle) FIXME: what does "cf" and "bbmle" mean?
+   
+### Rooting
+* implement re-rooting
+* check with Sidlauskas: is there an "infelicity" in the way ape does it that we should modify? FIXME: what feature/aspect are we talking about here?
+
+### Tree walking/generic manipulation methods
+* Decide on a coherent numbers/names policy
+* General practice: how much should we work with/return internal node numbers, and how much node names/tags?  Current methods are a mishmash
+* Can all of these can be done with phylobase:
+    * compare: with Mesquite, ape (check O'Meara list), and Sidlauskas [wiki page](https://www.nescent.org/wg_phyloinformatics/R_Hackathon/DataTreeManipulation)
+    * geiger: prune.extinct.taxa, prune.random.taxa
+    * allDescend to give internal nodes as well as tips?
+    * Movement along branches, traversal, etc.: what operations are needed?
+    * allDescend gets tips only -- option to get list including internal nodes?
+    * time slices: prune back by time ?
+
+### Documentation
+* work through Sidlauskas wiki page
+
+FUTURE DISCUSSIONS
+==================
+## Terminology
+### Some things to think about (re)naming:
+* tree walking: `getDescend`, `getAncest`, `allDescend`, `allAncest` -- sons and fathers, daughters and mothers, tips/leaves, ?
+* should `check_data` be `check_phylo4d` for consistency with `check_phylo4` (or should `check_phylo4` be `check_tree`?)
+* EdgeLength/BranchLength?
+* root, Root, rootNode, RootNode?
+* `subset(phy,node.subtree= )` == `subset(phy,subtree= )` ?
+
+## Plotting
+* other ways of plotting tree+data?  isoMDS + color space?
+* ggplot2 extension?  grid version?
+* look for nice examples of ways people have plotted trees+data
+
+## multiPhylo
+* Eventually may want to use something like the [trackObjs package](http://wiki.r-project.org/rwiki/doku.php?id=packages:cran:trackobjs) if we have lots and lots of trees
+* Do we want to write some kind of `apply()` function for these? Or, alternatively, just provide documentation for how you would use [ls]apply on a multiPhylo object e.g., `sapply(object@phylolist,fn,data=tdata(object),...)`
+
+
+## Data checking
+* should `check_phylo4` check for cyclicity, or is this overkill?
+* what other checks should there be on a phylo4 tree?  right now we check for (1) right number of edge lengths (if >0), (2) right number of tip labels, (3) at most one root, (4) only one ancestor per node.
+* information returned by `check_data` isn't quite the same format as geiger's matching function. Clear enough?
+* should there be an option for pruning tree to data? does this already exist?
+* option for fuzzy matching with `agrep()`?
+    * ("fuzzywarn" for fuzzy matching with warning,
+* extend label-matching code to node labels
+
+## Discuss
+* Rewrite methods in native phylo4 as necessary/desirable [????]
+    * Code from ape often calls some C code... so I would leave what calls ape as much as possible (T.J.)
+* Figure out best way to deal with namespace/conflicts (overriding ape methods)
+   * synch with newest ape release:
+      * is `multi.tree` now `multiPhylo`?
+* implement NAMESPACE??
 * TreeLib wrapper?
 * more tree manipulation methods
 * lapply/multiple-tree methods, or at least documentation on how to do it
 * compare Sidlauskas wiki documentation, how would one do it in phylo4?
-* phylo4 constructor should have its own method manpage (currently is inside the class doc)  FIXED (we think)
+* synch with `ape` on name conflicts, multi.tree/multiPhylo
+* implement NAMESPACE?
+
+## Testing
+* end users need to start reading documentation, testing ...
 
