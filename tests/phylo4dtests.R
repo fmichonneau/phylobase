@@ -12,10 +12,10 @@ rownames(tip.data) <- c("A", "B", "E", "D")
 treed <- phylo4d(tree, tip.data)
 dat2 <- data.frame(size=c(0,1,2), row.names=c("G", "F", "C"))
 
-phylo4d(tree, node.data=dat2)  # error, cannot match data because no node labels on tree
+try(phylo4d(tree, node.data=dat2), silent = TRUE)  # error, cannot match data because no node labels on tree
 phylo4d(tree2, node.data=dat2) -> treed2  # OK tree labelled; has node data, no tip data 
 
-plot(treed2)  #causes problems with plot() no output
+try(plot(treed2), silent = TRUE)  #causes problems with plot() no output
 tdata(treed2) #returns null unless "allnode" or "node" is specified
 
 phylo4d(tree2, tip.data=tip.data, node.data=dat2) -> treed3 #node+tip data
