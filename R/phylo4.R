@@ -301,7 +301,7 @@ setAs(from='phylo4',to='data.frame',
     return(data.frame(taxon, descendant, ancestor, branch.length, type))
 })
 
-printphylo4 <- function(x, printall=T){
+printphylo4 <- function(x, printall = TRUE){
     if (printall)
       print(as(x, 'data.frame'))
     else print(head(as(x, 'data.frame')))
