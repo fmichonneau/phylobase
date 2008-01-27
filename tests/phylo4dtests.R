@@ -1,3 +1,4 @@
+require(ape)
 tree.phylo <- read.tree(text="(((A,B)C,D),E);")  #only one node is labelled
 tree <- as(tree.phylo, "phylo4")
 
