@@ -23,6 +23,24 @@ setClass("phylo4",
            ##           node.label = as.character(1:Nnode),
            root.edge=as.integer(NA)),
          validity=check_phylo4)
+         
+###################################
+## phylo4d class
+## extend: phylo with data
+setClass("phylo4d",
+         representation(tip.data="data.frame",
+                        node.data="data.frame"),
+         ##                        edgedata="data.frame"),
+         prototype = list( tip.data = data.frame(NULL),
+           node.data = data.frame(NULL) ),
+         ##all.data = data.frame(NULL) ),
+         validity = function(object) {
+             ## FIXME: finish this by intercepting FALSE, char string, etc.
+             check1 <- check_data(object)
+             check2 <- check_phylo4(object)          
+         },                   
+         contains="phylo4")
+         
 
 ## accessor functions for all internal bits
 ## HORRIBLE KLUGE
@@ -250,11 +268,70 @@ printphylo <- function (x,printlen=6,...) {
 ## hack for print/show 
 ## from http://tolstoy.newcastle.edu.au/R/e2/devel/06/12/1363.html
 
+
+##
+# Alternative print method for phylo4, showing the contents of the tree data.
+##  Not sure if it works for unrooted trees
+setAs(from='phylo4',to='data.frame',
+      def = function(from) {
+      	x <- from
+	ancestor <- x@edge[,1]
+	descendant <- x@edge[,2]
+	root <- unique(ancestor[!ancestor %in% descendant])
+	int.node <- c(root, unique(ancestor[ancestor %in% descendant]))
+    tip <- descendant[!(descendant %in% ancestor)]
+	n.tip <- length(tip)
+    n.int <- length(int.node)
+
+    descendant <- c(root, descendant)
+    ancestor <- c(NA, ancestor)
+    branch.length <- c(0, x@edge.length)
+    if (length(branch.length) == 1) branch.length <- rep("", n.tip+n.int)
+    if (print.taxon <- !(is.null(x@node.label) & is.null(x@tip.label)))
+    { 
+    	nl <- x@node.label       
+    	if (is.null(nl)) nl <-  rep("", n.int)   # phylo4 has a node.label for the root?
+    	tl <- x@tip.label
+    	if (is.null(tl)) tl <-  rep("", n.tip)
+        taxon <- c(nl, tl)
+	}
+    if (is.null(root)) type <- c(rep("node", n.int), rep("tip", n.tip))
+    else type <- c("root", rep("node", n.int-1), rep("tip", n.tip))
+
+    return(data.frame(taxon, descendant, ancestor, branch.length, type))
+})
+
+printphylo4 <- function(x, printall=T){
+    if (printall)
+      print(as(x, 'data.frame'))
+    else print(head(as(x, 'data.frame')))
+}
+
+setAs(from='phylo4d', to='data.frame',
+      function(from) {
+
+    as(from, "phylo4") -> tree  	 # get tree
+    as(tree, "data.frame") -> t_df   # convert to data.frame
+    tdata(from, "allnode") -> dat               # get data
+    t_df$order <- rownames(t_df)     # save roworder of tree
+
+    merge(t_df, dat, by.x="taxon", by.y="row.names", all.x=TRUE, sort=FALSE) -> tdat
+                                     # merged tree, data, but mixed up
+
+    order(tdat$order) -> o           # ordering to get back original roworder                              
+    tdat[o,] -> tdat                 # original order of tree
+    rownames(tdat) <- tdat$order     # fix scrambled row numbers
+    return(tdat[,!colnames(tdat) %in% "order"]) # drop "order"
+})
+    
 setGeneric("print")
 
-
-setMethod("print", "phylo4", printphylo)
-setMethod("show", "phylo4", function(object) printphylo(object))
+#setMethod("print", "phylo4", printphylo)
+#setMethod("show", "phylo4", function(object) printphylo(object))
+setMethod("print", "phylo4", printphylo4)
+setMethod("show", "phylo4", function(object) printphylo4(object))
+setMethod("print", "phylo4d", printphylo4)
+setMethod("show", "phylo4d", function(object) printphylo4(object))
 
 
 #################
@@ -328,23 +405,6 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
           ) # end setMethod summary phylo4
 
 
-###################################
-## extensions
-## phylo4d class
-## extend: phylo with data
-setClass("phylo4d",
-         representation(tip.data="data.frame",
-                        node.data="data.frame"),
-         ##                        edgedata="data.frame"),
-         prototype = list( tip.data = data.frame(NULL),
-           node.data = data.frame(NULL) ),
-         ##all.data = data.frame(NULL) ),
-         validity = function(object) {
-             ## FIXME: finish this by intercepting FALSE, char string, etc.
-             check1 <- check_data(object)
-             check2 <- check_phylo4(object)          
-         },                   
-         contains="phylo4")
 
 setGeneric("tdata", function(x,...) {
     standardGeneric("tdata")
