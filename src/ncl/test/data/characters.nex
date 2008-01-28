@@ -1,0 +1,95 @@
+#NEXUS
+BEGIN TAXA;
+	DIMENSIONS NTax = 6;
+	TAXLABELS 'P. fimbriata' 'P. robusta' 'P. americana' 'P. myriophylla' 'P. polygama' 'P. macrophylla';
+END;
+[!
+*************
+* Standard  *
+*************
+]
+BEGIN CHARACTERS;
+	DIMENSIONS NChar=45;
+	
+	
+	FORMAT Datatype=DNA  Gap=-;
+Matrix
+'P. fimbriata'     ACCTCGGCTTAACGAACCTCGGCTTAACGAACCTCGGCTTAACGA
+'P. robusta'       ACCTCGGCTTAACCAACCTCGGCTTAACGAACCTCGGCTTAACGA
+'P. americana'     ACGTCGCTTTCA---ACGTCGCTTTCACCAACGTCGCTTTCACCA
+'P. myriophylla'   ACGTCGCTTTCA---ACGTCGCTTTCACCAACGTC?CTTTCACCA
+'P. polygama'      ACGTCGCTCTCACCAACGTCGCTTTCACCAACGTC?CTTTCACCA
+'P. macrophylla'   ACGTCGCTCTCACCAACGTCGCTTTCACCAACGTCGCTTTCACCA;
+END;
+[!
+**********
+* Tokens *
+**********
+]
+BEGIN CHARACTERS;
+	DIMENSIONS NChar=3;
+	
+	CHARSTATELABELS 1 'leaf margins' /  entire fimbriate, 2 'flower color' /  'white to cream' crimson, 3 'breeding system' /  hermaphroditic gynomonoecious gynodioecious dioecious;
+	FORMAT Datatype=Standard Symbols="01";
+Matrix
+'P. fimbriata'      fimbriate crimson gynomonoecious
+'P. robusta'        fimbriate crimson gynomonoecious
+'P. americana'      entire 'white to cream' hermaphroditic
+'P. myriophylla'    entire 'white to cream' hermaphroditic
+'P. polygama'       entire 'white to cream' dioecious
+'P. macrophylla'    entire crimson gynodioecious;
+END;
+[!
+***********
+* Symbols *
+***********
+]
+BEGIN CHARACTERS;
+	DIMENSIONS NChar=3;
+	
+	CHARSTATELABELS 1 'leaf margins' /  entire fimbriate, 2 'flower color' /  'white to cream' crimson, 3 'breeding system' /  hermaphroditic gynomonoecious gynodioecious dioecious;
+	FORMAT Datatype=Standard Symbols="0123";
+Matrix
+'P. fimbriata'     111
+'P. robusta'       111
+'P. americana'     000
+'P. myriophylla'   000
+'P. polygama'      003
+'P. macrophylla'   012;
+END;
+[!
+*****************************
+* Interleaved, missing taxa *
+*****************************
+]
+BEGIN CHARACTERS;
+	DIMENSIONS NChar=15;
+	
+	
+	FORMAT Datatype=DNA;
+Matrix
+'P. fimbriata'     ACCTCGGCTTAACGA
+'P. robusta'       ACCTCGGCTTAACCA
+'P. americana'     ACGTCGCTCTCACCA
+'P. myriophylla'   ACGTCGCTTTCACCA
+
+;
+END;
+[!
+****************
+** transposed **
+****************
+]
+BEGIN CHARACTERS;
+	DIMENSIONS NChar=15;
+	
+	CHARLABELS  'site 1' 'site 2' 'site 3' 'site 4' 'site 5' 'site 6' 'site 7' 'site 8' 'site 9' 'site 10' 'site 11' 'site 12' 'site 13' 'site 14' 'site 15';
+	FORMAT Datatype=DNA;
+Matrix
+'P. fimbriata'     ACCTCGGCTTAACGA
+'P. robusta'       ACCTCGGCTTAACCA
+'P. americana'     ACGTCGCTCTCACCA
+'P. myriophylla'   ACGTCGCTTTCACCA
+'P. polygama'      ACCTCGCTTTCACGA
+'P. macrophylla'   ACCTCGCTTTCACGA;
+END;

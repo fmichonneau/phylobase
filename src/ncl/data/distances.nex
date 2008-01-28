@@ -1,0 +1,246 @@
+#nexus
+
+begin taxa;
+  dimensions ntax=8;
+  taxlabels taxon_1 taxon_2 taxon_3 taxon_4 taxon_5 taxon_6 taxon_7 taxon_8;
+end;
+
+[!
+***************************************************
+* Non-interleaved, lower-triangular, no diagonals *
+***************************************************
+]
+begin distances;
+  format nodiagonal;
+  matrix
+    taxon_1
+    taxon_2    1
+    taxon_3    2   3
+    taxon_4    4   5   6
+    taxon_5    7   8   9  10
+    taxon_6   11  12  13  14  15
+    taxon_7   16  17  18  19  20  21
+    taxon_8   22  23  24  25  26  27  28;
+end;
+
+[!
+************************************************
+* Non-interleaved, lower-triangular, diagonals *
+************************************************
+]
+begin distances;
+  matrix
+    taxon_1    0
+    taxon_2    1   0
+    taxon_3    2   3   0
+    taxon_4    4   5   6   0
+    taxon_5    7   8   9  10   0
+    taxon_6   11  12  13  14  15   0
+    taxon_7   16  17  18  19  20  21   0
+    taxon_8   22  23  24  25  26  27  28   0;
+end;
+
+[!
+***************************************************
+* Non-interleaved, upper-triangular, no diagonals *
+***************************************************
+]
+begin distances;
+  format triangle=upper nodiagonal;
+  matrix
+    taxon_1    1   2   3   4   5   6   7
+    taxon_2        8   9  10  11  12  13
+    taxon_3           14  15  16  17  18
+    taxon_4               19  20  21  22
+    taxon_5                   23  24  25
+    taxon_6                       26  27
+    taxon_7                           28
+    taxon_8;
+end;
+
+[!
+************************************************
+* Non-interleaved, upper-triangular, diagonals *
+************************************************
+]
+begin distances;
+  format triangle=upper;
+  matrix
+    taxon_1    0  1   2   3   4   5   6   7
+    taxon_2       0   8   9  10  11  12  13
+    taxon_3           0  14  15  16  17  18
+    taxon_4               0  19  20  21  22
+    taxon_5                   0  23  24  25
+    taxon_6                       0  26  27
+    taxon_7                           0  28
+    taxon_8                               0;
+end;
+
+[!
+*******************************************
+* Non-interleaved, rectangular, diagonals *
+*******************************************
+]
+begin distances;
+  format triangle=both;
+  matrix
+    taxon_1    0   1   2   3   4   5   6   7
+    taxon_2    1   0   8   9  10  11  12  13
+    taxon_3    2   3   0  14  15  16  17  18
+    taxon_4    4   5   6   0  19  20  21  22
+    taxon_5    7   8   9  10   0  23  24  25
+    taxon_6   11  12  13  14  15   0  26  27
+    taxon_7   16  17  18  19  20  21   0  28
+    taxon_8   22  23  24  25  26  27  28   0;
+end;
+
+[!
+***********************************************
+* Interleaved, lower-triangular, no diagonals *
+***********************************************
+]
+begin distances;
+  format nodiagonal interleave;
+  matrix
+    taxon_1
+    taxon_2   1
+    taxon_3   2  3
+    taxon_4   4  5
+    taxon_5   7  8
+    taxon_6  11 12
+    taxon_7  16 17
+    taxon_8  22 23
+
+    taxon_3
+    taxon_4   6
+    taxon_5   9 10
+    taxon_6  13 14 15
+    taxon_7  18 19 20
+    taxon_8  24 25 26
+
+    taxon_6
+    taxon_7  21
+    taxon_8  27 28;
+end;
+
+[!
+********************************************
+* Interleaved, lower-triangular, diagonals *
+********************************************
+]
+begin distances;
+  format interleave;
+  matrix
+    taxon_1   0
+    taxon_2   1  0
+    taxon_3   2  3
+    taxon_4   4  5
+    taxon_5   7  8
+    taxon_6  11 12
+    taxon_7  16 17
+    taxon_8  22 23
+
+    taxon_3   0
+    taxon_4   6  0
+    taxon_5   9 10  0
+    taxon_6  13 14 15
+    taxon_7  18 19 20
+    taxon_8  24 25 26
+
+    taxon_6   0
+    taxon_7  21  0
+    taxon_8  27 28  0;
+end;
+
+[!
+***********************************************
+* Interleaved, upper-triangular, no diagonals *
+***********************************************
+]
+begin distances;
+  format nodiagonal triangle=upper interleave;
+  matrix
+    taxon_1      1  2
+    taxon_2         8
+    taxon_3
+
+    taxon_1   3   4
+    taxon_2   9  10
+    taxon_3  14  15
+    taxon_4      19
+    taxon_5
+
+    taxon_1   5   6   7
+    taxon_2  11  12  13
+    taxon_3  16  17  18
+    taxon_4  20  21  22
+    taxon_5  23  24  25
+    taxon_6      26  27
+    taxon_7          28
+    taxon_8;
+end;
+
+[!
+********************************************
+* Interleaved, upper-triangular, diagonals *
+********************************************
+]
+begin distances;
+  format triangle=upper interleave;
+  matrix
+    taxon_1   0  1  2
+    taxon_2      0  8
+    taxon_3         0
+
+    taxon_1   3   4
+    taxon_2   9  10
+    taxon_3  14  15
+    taxon_4   0  19
+    taxon_5       0
+
+    taxon_1   5   6   7
+    taxon_2  11  12  13
+    taxon_3  16  17  18
+    taxon_4  20  21  22
+    taxon_5  23  24  25
+    taxon_6   0  26  27
+    taxon_7       0  28
+    taxon_8           0;
+end;
+
+[!
+******************************************
+* Interleaved, rectangular, no diagonals *
+******************************************
+]
+begin distances;
+  format interleave triangle=both;
+  matrix
+    taxon_1   0   1   2   3
+    taxon_2   1   0   8   9
+    taxon_3   2   3   0  14
+    taxon_4   4   5   6   0
+    taxon_5   7   8   9  10
+    taxon_6  11  12  13  14
+    taxon_7  16  17  18  19
+    taxon_8  22  23  24  25
+
+    taxon_1   4   5
+    taxon_2  10  11
+    taxon_3  15  16
+    taxon_4  19  20
+    taxon_5   0  23
+    taxon_6  15   0
+    taxon_7  20  21
+    taxon_8  26  27
+
+    taxon_1   6   7
+    taxon_2  12  13
+    taxon_3  17  18
+    taxon_4  21  22
+    taxon_5  24  25
+    taxon_6  26  27
+    taxon_7   0  28
+    taxon_8  28   0;
+end;
+

@@ -1,0 +1,1186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head><title>NEXUS CLASS LIBRARY: NxsString Class</title>
+
+<style type="text/css"> 
+<!--
+@import url(ncl.css);
+.quickref {font-family: Arial, sans-serif}
+.public {font-weight: bold; color: black; background: white;}
+.protected {font-weight: bold; color: teal; background: white;}
+.private {font-weight: bold; color: red; background: white;}
+.groupheading {font-size: large; font-weight: bold;}
+.classy {font-family: Arial, sans-serif; color: navy;}
+.variablename {font-weight: bold; color: maroon;}
+-->
+</style>
+</head>
+<body>
+
+<table border="1" width="100%">
+<tr><td>
+<table border="0" width="100%">
+<tr>
+<td align="left"><span class="classy">NEXUS CLASS LIBRARY</span></td>
+<td align="right"><span class="classy"><a href="index.html">home</a> | <a href="classes.html">classes</a> | <a href="functions.html">functions</a></span></td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+<h1>Class NxsString</h1>
+
+<h2>Friends</h2>
+<a href="#operator598"><span class="quickref">operator <<</span></a>
+<h2>Exceptions</h2>
+<span class="quickref">NxsX_NotANumber</span>
+<h2>Enums</h2>
+<a href="#CmpEnum"><span class="quickref">CmpEnum</span></a>
+<h2>Member Functions</h2>
+<a href="#Abbreviates391"><span class="quickref">Abbreviates</span></a><a href="#AddQuotes81"><span class="quickref">, AddQuotes</span></a><a href="#AddTail63"><span class="quickref">, AddTail</span></a><a href="#BlanksToUnderscores437"><span class="quickref">, BlanksToUnderscores</span></a><a href="#BreakPipeSeparatedList856"><span class="quickref">, BreakPipeSeparatedList</span></a><a href="#Capitalize382"><span class="quickref">, Capitalize</span></a><a href="#clear267"><span class="quickref">, clear</span></a><a href="#ConvertToDouble699"><span class="quickref">, ConvertToDouble</span></a><a href="#ConvertToInt669"><span class="quickref">, ConvertToInt</span></a><a href="#ConvertToLong683"><span class="quickref">, ConvertToLong</span></a><a href="#ConvertToUnsigned657"><span class="quickref">, ConvertToUnsigned</span></a><a href="#endl589"><span class="quickref">, endl</span></a><a href="#Equals441"><span class="quickref">, Equals</span></a><a href="#EqualsCaseInsensitive601"><span class="quickref">, EqualsCaseInsensitive</span></a><a href="#GetQuoted255"><span class="quickref">, GetQuoted</span></a><a href="#GetVecOfPossibleAbbrevMatches839"><span class="quickref">, GetVecOfPossibleAbbrevMatches</span></a><a href="#IsADouble506"><span class="quickref">, IsADouble</span></a><a href="#IsALong574"><span class="quickref">, IsALong</span></a><a href="#IsCapAbbreviation220"><span class="quickref">, IsCapAbbreviation</span></a><a href="#IsInVector275"><span class="quickref">, IsInVector</span></a><a href="#IsNexusPunctuation475"><span class="quickref">, IsNexusPunctuation</span></a><a href="#IsStdAbbreviation176"><span class="quickref">, IsStdAbbreviation</span></a><a href="#NumberThenWord488"><span class="quickref">, NumberThenWord</span></a><a href="#NxsString246"><span class="quickref">, NxsString</span></a><a href="#NxsString291"><span class="quickref">, NxsString</span></a><a href="#NxsString300"><span class="quickref">, NxsString</span></a><a href="#operator35"><span class="quickref">, operator+=</span></a><a href="#operator326"><span class="quickref">, operator+=</span></a><a href="#operator336"><span class="quickref">, operator+=</span></a><a href="#operator346"><span class="quickref">, operator+=</span></a><a href="#operator370"><span class="quickref">, operator+=</span></a><a href="#operator405"><span class="quickref">, operator+=</span></a><a href="#operator417"><span class="quickref">, operator+=</span></a><a href="#operator429"><span class="quickref">, operator+=</span></a><a href="#operator463"><span class="quickref">, operator<<</span></a><a href="#operator502"><span class="quickref">, operator<<</span></a><a href="#operator511"><span class="quickref">, operator<<</span></a><a href="#operator520"><span class="quickref">, operator<<</span></a><a href="#operator529"><span class="quickref">, operator<<</span></a><a href="#operator538"><span class="quickref">, operator<<</span></a><a href="#operator547"><span class="quickref">, operator<<</span></a><a href="#operator556"><span class="quickref">, operator<<</span></a><a href="#operator565"><span class="quickref">, operator<<</span></a><a href="#operator598"><span class="quickref">, operator<<</span></a><a href="#operator309"><span class="quickref">, operator=</span></a><a href="#operator359"><span class="quickref">, operator=</span></a><a href="#PrintF108"><span class="quickref">, PrintF</span></a><a href="#p_str574"><span class="quickref">, p_str</span></a><a href="#QuotesNeeded393"><span class="quickref">, QuotesNeeded</span></a><a href="#RightJustifyDbl343"><span class="quickref">, RightJustifyDbl</span></a><a href="#RightJustifyLong305"><span class="quickref">, RightJustifyLong</span></a><a href="#RightJustifyString372"><span class="quickref">, RightJustifyString</span></a><a href="#SetToShortestAbbreviation729"><span class="quickref">, SetToShortestAbbreviation</span></a><a href="#ShortenTo470"><span class="quickref">, ShortenTo</span></a><a href="#ToHex625"><span class="quickref">, ToHex</span></a><a href="#ToLower493"><span class="quickref">, ToLower</span></a><a href="#ToUpper25"><span class="quickref">, ToUpper</span></a><a href="#UnderscoresToBlanks452"><span class="quickref">, UnderscoresToBlanks</span></a><a href="#UpperCasePrefix644"><span class="quickref">, UpperCasePrefix</span></a>
+<h2>Class Description</h2>
+
+<p>
+A string class for use with the Nexus Class Library. NxsString inherits most of its functionality from the standard template library class string, adding certain abilities needed for use in NCL, such as the ability to discern  whether a short string represents an abbreviation for the string currently stored. Another important addition is the member function PrintF, which accepts a format string and an arbitrary number of arguments, allowing a string to be built in a manner similar to the standard C function printf. Many operators are also provided for appending numbers to the ends of strings, an ability which is very useful for producing default labels (e.g. taxon1, taxon2, etc.).
+
+
+<h3>Key to symbols and colors</h3>
+
+<p><span class="public">public</span>, <span class="protected">protected</span>, <span class="private">private</span>, <code>A</code> = abstract, <code>C</code> = constructor, <code>D</code> = destructor, <code>I</code> = inline, <code>S</code> = static, <code>V</code> = virtual, <code>F</code> = friend</p>
+<p>&nbsp;</p>
+<center>
+<table border="5" cellpadding="1" cellspacing="0" width="95%">
+<tr bgcolor="#CCCCFF">
+<td><span class="groupheading">Enums</span></td>
+</tr>
+</table>
+
+<table border="1" cellpadding="3" cellspacing="0" width="95%">
+  <tr><td>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td>
+        <table border="0" width="100%" cellpadding="1">
+          <tr>
+            <td align="left" width="25%"><code class="public"><a name="CmpEnum">enum CmpEnum</a></code></td>
+            <td></td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>respect_case = 0</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td></td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>no_respect_case = 1</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td></td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>abbrev = 2</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</center>
+<p>&nbsp;</p>
+<center>
+<table border="5" cellpadding="1" cellspacing="0" width="95%">
+<tr bgcolor="#CCCCFF">
+<td><span class="groupheading">Member Functions</span></td>
+</table>
+<table border="1" cellpadding="3" cellspacing="0" width="95%">
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Abbreviates391">Abbreviates</a></code><code>(const NxsString &s, NxsString::CmpEnum mode)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if the stored string is an abbreviation (or complete copy) of the supplied string <span class="variablename">s</span>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="AddQuotes81">&AddQuotes</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Replaces the stored string with a copy of itself surrounded by single quotes (single quotes inside the string are  converted to the '' pair of characters that signify a single quote). Returns a reference to itself.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="AddTail63">&AddTail</a></code><code>(char c, unsigned n)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Adds <span class="variablename">n</span> copies of the character <span class="variablename">c</span> to the end of the stored string and returns a reference to itself.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="BlanksToUnderscores437">&BlanksToUnderscores</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Converts any blank spaces found in the stored string to the underscore character.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>F</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsStringVector</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="BreakPipeSeparatedList856">BreakPipeSeparatedList</a></code><code>(const NxsString &strList)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Written to make it easy to initialize a vector of strings. Similar to the perl split function. Converts a string like this -- "A|bro|ken strin|g" -- to a vector of strings with four elements:  "A", "bro", "ken string", and "g".</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Capitalize382">&Capitalize</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Capitalizes all lower case letters in the stored string by calling ToUpper.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="clear267">clear</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Most containers in the standard template library can be completely erased using the clear function, but none is  provided for the class string and hence is provided here.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>double</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ConvertToDouble699">ConvertToDouble</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Converts the stored string to a double using the standard C function strtod, throwing NxsX_NotANumber if the conversion fails. Returns DBL_MAX or -DBL_MAX if the number is out of bounds.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>int</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ConvertToInt669">ConvertToInt</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Converts the stored string to an int using the standard C function strtol, throwing NxsX_NotANumber if the conversion  fails. Returns INT_MAX if the number is too large to fit in an int or -INT_MAX if it is too small.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>long</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ConvertToLong683">ConvertToLong</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Converts the stored string to a long using the standard C function strtol, throwing NxsX_NotANumber if the conversion  fails.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>unsigned</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ConvertToUnsigned657">ConvertToUnsigned</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Converts the stored string to an unsigned int using the standard C function strtol, throwing NxsX_NotANumber if the  conversion fails. Returns UINT_MAX if the number is too large to fit in an unsigned (or was a negative number).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>IF</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="endl589">&endl</a></code><code>(NxsString &s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Appends a newline character to the string <span class="variablename">s</span> and the returns a reference to <span class="variablename">s</span>. Used with << operator to allow  strings to be written to like ostreams.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Equals441">Equals</a></code><code>(const NxsString &s, NxsString::CmpEnum mode)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Uses the mode argument to call (and return the result of) the correct string comparison function.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="EqualsCaseInsensitive601">EqualsCaseInsensitive</a></code><code>(const NxsString &s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if the stored string is a non-case-sensitive copy of the argument <span class="variablename">s</span>. Note: will return true if both the stored string and <span class="variablename">s</span> are empty strings.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetQuoted255">GetQuoted</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns a single-quoted version of the NxsString. The calling object is not altered. Written for ease of use. Simply  copies the stored string, then returns the copy after calling its AddQuotes function.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>F</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsStringVector</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetVecOfPossibleAbbrevMatches839">GetVecOfPossibleAbbrevMatches</a></code><code>(const NxsString &testStr, const NxsStringVector &possMatches)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns a vector of NxsString objects that match the entire <span class="variablename">testStr</span>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="IsADouble506">IsADouble</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if the stored string can be interpreted as a double value, and returns false otherwise.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="IsALong574">IsALong</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if stored string can be interpreted as a long integer.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="IsCapAbbreviation220">IsCapAbbreviation</a></code><code>(const NxsString &s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if the stored string is a case-insensitive abbreviation (or complete copy) of <span class="variablename">s</span> and the stored string  	has all of the characters that are in the initial capitalized portion of <span class="variablename">s</span>. For example if <span class="variablename">s</span> is "KAPpa" then  "kappa", "kapp", or "kap" (with any capitalization pattern) will return true and all other strings will return false.  Always returns false if the stored string has length of zero.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="IsInVector275">IsInVector</a></code><code>(const NxsStringVector &s, NxsString::CmpEnum mode)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if the Equals comparison function is true for this or any element in the vector <span class="variablename">s</span>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="IsNexusPunctuation475">IsNexusPunctuation</a></code><code>(const char c)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if <span class="variablename">c</span> is any Nexus punctuation character:<pre> ()[]{}/,;:=*'"`-+<>
+</pre></dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="IsStdAbbreviation176">IsStdAbbreviation</a></code><code>(const NxsString &s, bool respectCase)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if the string is a abbreviation (or complete copy) of the argument <span class="variablename">s</span>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="NumberThenWord488">&NumberThenWord</a></code><code>(unsigned i, const NxsString s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Creates a new string (and returns a reference to the new string) composed of the integer <span class="variablename">i</span> followed by a space and then the string <span class="variablename">s</span>. If <span class="variablename">i</span> is not 1, then an 's' character is appended to make <span class="variablename">s</span> plural. For example, if <span class="variablename">i</span> were 0, 1, or 2, and <span class="variablename">s</span> is "character", then the returned string would be "0 characters", "1 character" or "2 characters",  respectively. Obviously this only works if adding an 's' to the supplied string makes it plural.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>CI</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="NxsString246">NxsString</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>The default constructor.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>CI</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="NxsString291">NxsString</a></code><code>(const char *s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>A copy constructor taking a C-string argument.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>CI</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="NxsString300">NxsString</a></code><code>(const NxsString &s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>A copy constructor taking a NxsString reference argument.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator35">&operator+=</a></code><code>(const double d)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Appends a string representation of the supplied double to the stored string and returns a reference to itself.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator326">&operator+=</a></code><code>(const char *s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Appends the supplied C-string <span class="variablename">s</span> to the stored string.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator336">&operator+=</a></code><code>(const NxsString &s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Appends the characters in the supplied NxsString reference <span class="variablename">s</span> to the stored string.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator346">&operator+=</a></code><code>(const char c)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Appends the character <span class="variablename">c</span> to the stored string.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator370">&operator+=</a></code><code>(const int i)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Uses the standard C sprintf function to append the character representation of the supplied integer i' to the stored string (format code %d). For example, if the stored string is "taxon" and <span class="variablename">i</span> is 9, the result is "taxon9".</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator405">&operator+=</a></code><code>(unsigned i)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Uses standard C function sprintf to append the unsigned integer <span class="variablename">i</span> to the stored string (format code %u).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator417">&operator+=</a></code><code>(const long l)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Uses standard C function sprintf to append the long integer <span class="variablename">l</span> to the stored string (format code %ld).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator429">&operator+=</a></code><code>(const unsigned lon)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Uses standard C function sprintf to append the unsigned long integer <span class="variablename">l</span> to the stored string (format code %lu).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator463">&operator<<</a></code><code>(NxsString &(*funcPtr)(NxsStrin)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Allows functions that take and return references to NxsString strings to be placed in a series of << operators. See the NxsString endl function.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator502">&operator<<</a></code><code>(int i)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Another way to call the += operator (written to make it possible to use a NxsString like an ostream)</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator511">&operator<<</a></code><code>(unsigned i)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Another way to call the += operator (written to make it possible to use a NxsString like an ostream)</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator520">&operator<<</a></code><code>(long l)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Another way to call the += operator (written to make it possible to use a NxsString like an ostream)</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator529">&operator<<</a></code><code>(unsigned lon)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Another way to call the += operator (written to make it possible to use a NxsString like an ostream)</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator538">&operator<<</a></code><code>(double d)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Another way to call the += operator (written to make it possible to use a NxsString like an ostream)</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator547">&operator<<</a></code><code>(const char *c)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Another way to call the += operator (written to make it possible to use a NxsString like an ostream)</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator556">&operator<<</a></code><code>(char c)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Another way to call the += operator (written to make it possible to use a NxsString like an ostream)</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator565">&operator<<</a></code><code>(const NxsString &s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Another way to call the += operator (written to make it possible to use a NxsString like an ostream)</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>IF</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>ostream</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator598">&operator<<</a></code><code>(ostream &out, const NxsString &s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Writes the string <span class="variablename">s</span> to the ostream <span class="variablename">out</span>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator309">&operator=</a></code><code>(const char *s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Sets the stored string equal to the supplied C-string <span class="variablename">s</span>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="operator359">&operator=</a></code><code>(char c)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Sets the stored string to the supplied character 'c'.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>int</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="PrintF108">PrintF</a></code><code>(const char *formatStr,  ...)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Appends a printf-style formatted string onto the end of this NxsString and returns the number of characters added to the  string. For example, the following code would result in the string s being set to "ts-tv rate ratio = 4.56789":<pre> double kappa = 4.56789;
+ NxsString s;
+ s.PrintF("ts-tv rate ratio = %.5f", kappa);
+</pre></dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>unsigned</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="p_str574">*p_str</a></code><code>(unsigned cha)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns string as a Pascal string (array of unsigned characters with the length in the first byte).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="QuotesNeeded393">QuotesNeeded</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if the string needs to be surrounded by single-quotes to make it a single nexus token.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="RightJustifyDbl343">&RightJustifyDbl</a></code><code>(double x, unsigned w, unsigned p, bool clear_first)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Right-justifies <span class="variablename">x</span> in a field <span class="variablename">w</span> characters wide with precision <span class="variablename">p</span>, using blank spaces to fill in unused  portions on the left-hand side of the field. Specify true for <span class="variablename">clear_first</span> to first empty the string. Assumes that the specified width is enough to accommodate the string representation of <span class="variablename">x</span>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="RightJustifyLong305">&RightJustifyLong</a></code><code>(long x, unsigned in, bool clear_first)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Right-justifies <span class="variablename">x</span> in a field <span class="variablename">w</span> characters wide, using blank spaces to fill in unused portions on the left-hand  side of the field. Specify true for <span class="variablename">clear_first</span> to first empty the string. Assumes <span class="variablename">w</span> is large enough to  accommodate the string representation of <span class="variablename">x</span>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="RightJustifyString372">&RightJustifyString</a></code><code>(const NxsString &s, unsigned w, bool clear_first)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Right-justifies <span class="variablename">s</span> in a field <span class="variablename">w</span> characters wide, using blank spaces to fill in unused portions on the left-hand side of the field. Specify true for <span class="variablename">clear_first</span> to first empty the string. Assumes that the specified width is  enough to accommodate <span class="variablename">s</span>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>F</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="SetToShortestAbbreviation729">SetToShortestAbbreviation</a></code><code>(NxsStringVector &strVec, bool allowTooShort)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Transforms the vector of NxsString objects by making them all lower case and then capitalizing the first portion of  them so that the capitalized portion is enough to uniquely specify each. Returns true if the strings are long enough  to uniquely specify each. Horrendously bad algorithm, but shouldn't be called often.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ShortenTo470">&ShortenTo</a></code><code>(unsigned n)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Shortens stored string to <span class="variablename">n</span> - 3 characters, making the last three characters "...". If string is already less than  <span class="variablename">n</span> characters in length, this function has no effect. This is useful when it is desirable to show some of the contents of a string, even when the string will not fit in its entirety into the space available for displaying it. Assumes that <span class="variablename">n</span> is at least 4.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>S</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ToHex625">ToHex</a></code><code>(long p, unsigned nFours)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Creates a string representation of the hexadecimal version of the long integer <span class="variablename">p</span>. For example, if <span class="variablename">p</span> equals 123, and if 2 was specified for <span class="variablename">nFours</span>, the resulting string would be "7B". If 4 was specified for <span class="variablename">nFours</span>, then the resulting string would be "007B".</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ToLower493">&ToLower</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Converts every character in the stored string to its lower case equivalent.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ToUpper25">&ToUpper</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Capitalizes every character in the stored string.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="UnderscoresToBlanks452">&UnderscoresToBlanks</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Converts any underscore characters found in the stored string to blank spaces.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>NxsString</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="UpperCasePrefix644">UpperCasePrefix</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Checks to see if the stored string begins with upper case letters and, if so, returns all of the contiguous capitalized prefix. If the stored string begins with lower case letters, an empty string is returned.</dd></td>
+</tr>
+</table>
+</td></tr>
+</table>
+</center>

@@ -1,0 +1,856 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head><title>NEXUS CLASS LIBRARY: BASICCMDLINE Class</title>
+
+<style type="text/css"> 
+<!--
+@import url(ncl.css);
+.quickref {font-family: Arial, sans-serif}
+.public {font-weight: bold; color: black; background: white;}
+.protected {font-weight: bold; color: teal; background: white;}
+.private {font-weight: bold; color: red; background: white;}
+.groupheading {font-size: large; font-weight: bold;}
+.classy {font-family: Arial, sans-serif; color: navy;}
+.variablename {font-weight: bold; color: maroon;}
+-->
+</style>
+</head>
+<body>
+
+<table border="1" width="100%">
+<tr><td>
+<table border="0" width="100%">
+<tr>
+<td align="left"><span class="classy">NEXUS CLASS LIBRARY</span></td>
+<td align="right"><span class="classy"><a href="index.html">home</a> | <a href="classes.html">classes</a> | <a href="functions.html">functions</a></span></td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+<h1>Class BASICCMDLINE</h1>
+
+<h2>Enums</h2>
+<a href="#UserQueryEnum"><span class="quickref">UserQueryEnum</span></a>
+<h2>Data Members</h2>
+<a href="#assumptions"><span class="quickref">assumptions</span></a>, <a href="#characters"><span class="quickref">characters</span></a>, <a href="#data"><span class="quickref">data</span></a>, <a href="#distances"><span class="quickref">distances</span></a>, <a href="#inf_open"><span class="quickref">inf_open</span></a>, <a href="#logf"><span class="quickref">logf</span></a>, <a href="#logf_open"><span class="quickref">logf_open</span></a>, <a href="#message"><span class="quickref">message</span></a>, <a href="#next_command"><span class="quickref">next_command</span></a>, <a href="#quit_now"><span class="quickref">quit_now</span></a>, <a href="#taxa"><span class="quickref">taxa</span></a>, <a href="#trees"><span class="quickref">trees</span></a>
+<h2>Member Functions</h2>
+<a href="#BASICCMDLINE49"><span class="quickref">BASICCMDLINE</span></a><a href="#BASICCMDLINE71"><span class="quickref">, ~BASICCMDLINE</span></a><a href="#CharLabelToNumber88"><span class="quickref">, CharLabelToNumber</span></a><a href="#EnteringBlock100"><span class="quickref">, EnteringBlock</span></a><a href="#ExitingBlock115"><span class="quickref">, ExitingBlock</span></a><a href="#FactoryDefaults126"><span class="quickref">, FactoryDefaults</span></a><a href="#FileExists184"><span class="quickref">, FileExists</span></a><a href="#GetFileName209"><span class="quickref">, GetFileName</span></a><a href="#HandleEndblock235"><span class="quickref">, HandleEndblock</span></a><a href="#HandleExecute255"><span class="quickref">, HandleExecute</span></a><a href="#HandleHelp331"><span class="quickref">, HandleHelp</span></a><a href="#HandleLog444"><span class="quickref">, HandleLog</span></a><a href="#HandleNextCommand596"><span class="quickref">, HandleNextCommand</span></a><a href="#HandleShow368"><span class="quickref">, HandleShow</span></a><a href="#NexusError615"><span class="quickref">, NexusError</span></a><a href="#PreprocessNextCommand643"><span class="quickref">, PreprocessNextCommand</span></a><a href="#PrintMessage686"><span class="quickref">, PrintMessage</span></a><a href="#PurgeBlocks705"><span class="quickref">, PurgeBlocks</span></a><a href="#Read744"><span class="quickref">, Read</span></a><a href="#Report827"><span class="quickref">, Report</span></a><a href="#Reset819"><span class="quickref">, Reset</span></a><a href="#Run843"><span class="quickref">, Run</span></a><a href="#SkippingBlock900"><span class="quickref">, SkippingBlock</span></a><a href="#SkippingCommand915"><span class="quickref">, SkippingCommand</span></a><a href="#SkippingDisabledBlock929"><span class="quickref">, SkippingDisabledBlock</span></a><a href="#TaxonLabelToNumber942"><span class="quickref">, TaxonLabelToNumber</span></a><a href="#UserQuery954"><span class="quickref">, UserQuery</span></a>
+<h2>Class Description</h2>
+
+<p>
+BASICCMDLINE provides a template for creating a program that reads NEXUS data files and provides a basic command  line. After compiling BASICCMDLINE, you will already have a program that understands the following commands, either  typed in at the console or provided in a BASICCMDLINE block in a NEXUS data file (exception is the execute command, which can only be entered at the console). Keywords in the descriptions below are given in uppercase, however the commands themselves are case-insensitive. Lower-case indicates a parameter supplied by the user (e.g., "filename"  would be replaced by the actual name of the file). Square brackets indicate optional keywords or subcommands.<pre> EXECUTE filename;
+ 
+ LOG [options];
+ 
+   Option         Action
+   ------------------------------------------------------
+   FILE=filename  specifies name of log file to start
+   START          indicates logging is to be started
+   STOP           indicates logging is to be stopped
+   APPEND         append to log file if it already exists
+   REPLACE        replace log file without asking
+ 
+ QUIT;
+</pre> See the Read function for details and to add other commands.  To change the name of the program (which is also the prompt name and the name of the program's private NEXUS  block), replace all occurrences of BASICCMDLINE with the name of your program (also search for the string  "basiccmdline" and replace with an appropriate string at each occurrence).  This class handles reading and storage for the  <a href="NxsReader.html">NxsReader</a>  block BASICCMDLINE. It also serves as the main class for  the program BASICCMDLINE, acting as both a  <a href="NxsReader.html">NxsReader</a>  object (in order to be capable of parsing data files) as well  as a  <a href="NxsBlock.html">NxsBlock</a>  object (in order to be able to process commands in a BASICCMDLINE block).   Acting as a  <a href="NxsBlock.html">NxsBlock</a> , it overrides the member functions Read and Reset, which are virtual functions in the base  class  <a href="NxsBlock.html">NxsBlock</a> . Acting as a  <a href="NxsReader.html">NxsReader</a>  object, it overrides the member functions EnteringBlock, SkippingBlock, and  NexusError.  Adding a new data member? Don't forget to:<ul> <li>Describe it in the class header comment at the top of "basiccmdline.h"</li> <li>Initialize it (unless it is self-initializing) in the constructor and reinitialize it in the Reset function</li> <li>Describe the initial state in the constructor documentation</li> <li>Delete memory allocated to it in both the destructor and Reset function</li> <li>Report it in some way in the Report function</li></ul>
+
+
+<h3>Key to symbols and colors</h3>
+
+<p><span class="public">public</span>, <span class="protected">protected</span>, <span class="private">private</span>, <code>A</code> = abstract, <code>C</code> = constructor, <code>D</code> = destructor, <code>I</code> = inline, <code>S</code> = static, <code>V</code> = virtual, <code>F</code> = friend</p>
+<p>&nbsp;</p>
+<center>
+<table border="5" cellpadding="1" cellspacing="0" width="95%">
+<tr bgcolor="#CCCCFF">
+<td><span class="groupheading">Enums</span></td>
+</tr>
+</table>
+
+<table border="1" cellpadding="3" cellspacing="0" width="95%">
+  <tr><td>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td>
+        <table border="0" width="100%" cellpadding="1">
+          <tr>
+            <td align="left" width="25%"><code class="public"><a name="UserQueryEnum">enum UserQueryEnum</a></code></td>
+            <td></td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>uq_cancel = 0x01</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>provide opportunity to cancel</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>uq_ok = 0x02</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>provide opportunity to answer ok</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>uq_yes = 0x04</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>provide opportunity to answer yes</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>uq_no = 0x08</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>provide opportunity to answer no</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</center>
+<p>&nbsp;</p>
+<center>
+<table border="5" cellpadding="1" cellspacing="0" width="95%">
+<tr bgcolor="#CCCCFF">
+<td><span class="groupheading">Data Members</span></td>
+</table>
+<table border="1" cellpadding="3" cellspacing="0" width="95%">
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;<a href="NxsAssumptionsBlock.html">NxsAssumptionsBlock</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="assumptions">*assumptions</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>pointer to NxsAssumptionsBlock object</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;<a href="NxsCharactersBlock.html">NxsCharactersBlock</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="characters">*characters</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>pointer to NxsCharactersBlock object</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;<a href="NxsDataBlock.html">NxsDataBlock</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="data">*data</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>pointer to NxsDataBlock object</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;<a href="NxsDistancesBlock.html">NxsDistancesBlock</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="distances">*distances</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>pointer to NxsDistancesBlock object</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="inf_open">inf_open</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>true if <span class="variablename">inf</span> is currently open</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;ofstream</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="logf">logf</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>the log file output stream</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="logf_open">logf_open</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>true if <span class="variablename">logf</span> is currently open</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;<a href="NxsString.html">NxsString</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="message">message</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>workspace for composing output strings</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;char</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="next_command">*next_command</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>workspace for processing next command entered interactively by user</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="quit_now">quit_now</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>set to false at beginning of Run and turns true only when QUIT command processed</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;<a href="NxsTaxaBlock.html">NxsTaxaBlock</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="taxa">*taxa</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>pointer to NxsTaxaBlock object</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;<a href="NxsTreesBlock.html">NxsTreesBlock</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="protected"><a name="trees">*trees</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>pointer to NxsTreesBlock object</dd></td>
+</tr>
+</table>
+</td></tr>
+</table>
+</center>
+<p>&nbsp;</p>
+<center>
+<table border="5" cellpadding="1" cellspacing="0" width="95%">
+<tr bgcolor="#CCCCFF">
+<td><span class="groupheading">Member Functions</span></td>
+</table>
+<table border="1" cellpadding="3" cellspacing="0" width="95%">
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>C</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="BASICCMDLINE49">BASICCMDLINE</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Initializes the <span class="variablename">id</span> data member to "BASICCMDLINE" and calls the FactoryDefaults member function to perform the  remaining initializations. The data member `'' is set to NULL so that memory will be allocated for it in FactoryDefaults.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>D</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="BASICCMDLINE71">~BASICCMDLINE</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Closes <span class="variablename">logf</span> if it is open and deletes memory allocated to <span class="variablename">next_command</span>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>unsigned</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="CharLabelToNumber88">CharLabelToNumber</a></code><code>(NxsString s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>The code here is identical to the base class version (simply returns 0), so the code here should either be  modified or this derived version eliminated altogether. Under what circumstances would you need to modify the  default code, you ask? This function should be modified to something meaningful if this derived class needs to  construct and run a <a href="NxsSetReader.html">NxsSetReader</a> object to read a set involving characters. The <a href="NxsSetReader.html">NxsSetReader</a> object may need to  use this function to look up a character label encountered in the set. A class that overrides this method should  return the character index in the range [1..<span class="variablename">nchar</span>]; i.e., add one to the 0-offset index.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="EnteringBlock100">EnteringBlock</a></code><code>(NxsString blockName)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Called by the <a href="NxsReader.html">NxsReader</a> object when a block named <span class="variablename">blockName</span> is entered. Allows program to notify user of  progress in parsing the NEXUS file. Also gives program the opportunity to ask user if it is ok to purge data  currently contained in this block. If user is asked whether existing data should be deleted, and the answer comes  back no, then then return false, otherwise return true. Overrides pure virtual function in class <a href="NxsReader.html">NxsReader</a>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ExitingBlock115">ExitingBlock</a></code><code>(NxsString blockName)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Called by the <a href="NxsReader.html">NxsReader</a> object when exiting a block named <span class="variablename">blockName</span>. Allows program to notify user of progress  in parsing the NEXUS file. Virtual function that overrides the pure virtual function in the base class <a href="NxsReader.html">NxsReader</a>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="FactoryDefaults126">FactoryDefaults</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Sets all data members to their factory default settings: <span class="variablename">inf_open</span>, <span class="variablename">logf_open</span> and <span class="variablename">quit_now</span> are set to false;  <span class="variablename">message</span> to the null string, and the pointers <span class="variablename">data</span>, <span class="variablename">characters</span>, <span class="variablename">assumptions</span>, <span class="variablename">taxa</span> and <span class="variablename">trees</span>  are all set to NULL. The C-string <span class="variablename">next_command</span> is allocated COMMAND_MAXLEN + 1 bytes if it is currently NULL,  and its first byte is set to the null character to create an empty <span class="variablename">next_command</span> string.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="FileExists184">FileExists</a></code><code>(const char *fn)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if file named <span class="variablename">fn</span> already exists, false otherwise.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code><a href="NxsString.html">NxsString</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetFileName209">GetFileName</a></code><code>(NxsToken &token)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Called whenever a file name needs to be read from either the command line or a file. Expects next token to be "="  followed by the token representing the file name. Call this function after, say, the keyword "file" has been read  in the following LOG command:<pre> log file=doofus.txt start replace;
+</pre> Note that this function will read only the "=doofus.txt " leaving "start replace;" in the stream for reading at  a later time.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="HandleEndblock235">HandleEndblock</a></code><code>(NxsToken &token)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Called when the END or ENDBLOCK command needs to be parsed from within the BASICCMDLINE block. Basically just  checks to make sure the next token in the data file is a semicolon.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="HandleExecute255">HandleExecute</a></code><code>(NxsToken &token)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Handles everything after the EXECUTE keyword and the terminating semicolon. Purges all blocks before executing  file specified, and no warning is given of this.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="HandleHelp331">HandleHelp</a></code><code>(NxsToken &token)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Called when the HELP command needs to be parsed from within the BASICCMDLINE block.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="HandleLog444">HandleLog</a></code><code>(NxsToken &token)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Called when the LOG command needs to be parsed from within the BASICCMDLINE block.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="HandleNextCommand596">HandleNextCommand</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Accepts a string in the form of a BASICCMDLINE block containing one command and processes it just like a real  BASICCMDLINE block in a NEXUS data file.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="HandleShow368">HandleShow</a></code><code>(NxsToken &token)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Called when the HELP command needs to be parsed from within the BASICCMDLINE block.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="NexusError615">NexusError</a></code><code>(NxsString &msg, file_pos pos, long line, long col)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Called when an error is encountered in a NEXUS file. Allows program to give user details of the error as well as  the precise location of the error.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="PreprocessNextCommand643">PreprocessNextCommand</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Begins with the command just entered by the user, which is stored in the data member <span class="variablename">next_command</span>, adds a  semicolon (if the user failed to supply one), and then adds the string "end;" so the whole bundle looks like a  very short BASICCMDLINE block. This is then passed to HandleNextCommand, which processes it just like a real  BASICCMDLINE block in a NEXUS data file.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="PrintMessage686">PrintMessage</a></code><code>(bool linefeed)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>All output is funneled through here. Writes string currently stored in <span class="variablename">message</span> (a <a href="NxsString.html">NxsString</a> data member) to the  output file stream, if open, and also to the console via cerr. Places a newline after the string if <span class="variablename">linefeed</span> is  true.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="PurgeBlocks705">PurgeBlocks</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Detaches all blocks, deletes them, creates new blocks, and finally adds the new blocks. Call this function if you want to be sure that there is no data currently stored in any blocks.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>V</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Read744">Read</a></code><code>(NxsToken &token)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>This function provides the ability to read everything following the block name (which is read by the <a href="NxsReader.html">NxsReader</a>  object) to the END or ENDBLOCK statement. Characters are read from the input stream <span class="variablename">in</span>. Overrides the virtual  function in the base class.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>V</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Report827">Report</a></code><code>(ostream &out)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>This function outputs a brief report of the contents of this BASICCMDLINE block. Overrides the virtual function  in the <a href="NxsBlock.html">NxsBlock</a> base class.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>V</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Reset819">Reset</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Overrides the <a href="NxsBlock.html">NxsBlock</a> virtual function. This function does nothing because the BASICCMDLINE block is simply a private command block and does not store any data.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Run843">Run</a></code><code>(char *infile_name)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Runs the command line interpreter, allowing BASICCMDLINE to interact with user. Typically, this is the only  function called in main after a BASICCMDLINE object is created. If <span class="variablename">infile_name</span> is non-NULL, the first command  executed by the command interpreter will be "EXECUTE <span class="variablename">infile_name</span>".</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="SkippingBlock900">SkippingBlock</a></code><code>(NxsString blockName)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Called when program does not recognize a block name encountered in a NEXUS file. Virtual function that overrides  the virtual function in the base class <a href="NxsReader.html">NxsReader</a>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="SkippingCommand915">SkippingCommand</a></code><code>(NxsString commandName)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>This function is called when an unknown command named <span class="variablename">commandName</span> is about to be skipped. This version of the  function (which is identical to the base class version) does nothing (i.e., no warning is issued that a command  was unrecognized). Modify this virtual function to provide such warnings to the user (or eliminate it altogether  since the base class version already does what this does).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="SkippingDisabledBlock929">SkippingDisabledBlock</a></code><code>(NxsString blockName)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Called by the <a href="NxsReader.html">NxsReader</a> object when skipping a block named blockName that has been disabled. Allows program to  notify user of progress in parsing the NEXUS file. Virtual function that overrides the virtual function in the  base class <a href="NxsReader.html">NxsReader</a>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>unsigned</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="TaxonLabelToNumber942">TaxonLabelToNumber</a></code><code>(NxsString s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>The code here is identical to the base class version (simply returns 0), so the code here should either be modified  or this derived version eliminated altogether. Under what circumstances would you need to modify the default code,  you ask? This function should be modified to something meaningful if this derived class needs to construct and run  a <a href="NxsSetReader.html">NxsSetReader</a> object to read a set involving taxa. The <a href="NxsSetReader.html">NxsSetReader</a> object may need to use this function to look  up a taxon label encountered in the set. A class that overrides this method should return the taxon index in the  range [1..ntax]; i.e., add one to the 0-offset index.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>V</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="UserQuery954">UserQuery</a></code><code>(NxsString mb_message, NxsString mb_title, BASICCMDLINE::UserQueryEnum mb_choices)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if response is either "ok" or "yes", and returns false if response is either "no" or "cancel". This is a general query function that can handle many situations. The possible responses are enumerated in  BASICCMDLINE::UserQueryEnum: uq_cancel, uq_ok, uq_yes, and uq_no. Not yet fully implemented: only handles uq_ok alone or the (uq_yes | uq_no) combination.</dd></td>
+</tr>
+</table>
+</td></tr>
+</table>
+</center>

@@ -1,0 +1,1191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head><title>NEXUS CLASS LIBRARY: NxsToken Class</title>
+
+<style type="text/css"> 
+<!--
+@import url(ncl.css);
+.quickref {font-family: Arial, sans-serif}
+.public {font-weight: bold; color: black; background: white;}
+.protected {font-weight: bold; color: teal; background: white;}
+.private {font-weight: bold; color: red; background: white;}
+.groupheading {font-size: large; font-weight: bold;}
+.classy {font-family: Arial, sans-serif; color: navy;}
+.variablename {font-weight: bold; color: maroon;}
+-->
+</style>
+</head>
+<body>
+
+<table border="1" width="100%">
+<tr><td>
+<table border="0" width="100%">
+<tr>
+<td align="left"><span class="classy">NEXUS CLASS LIBRARY</span></td>
+<td align="right"><span class="classy"><a href="index.html">home</a> | <a href="classes.html">classes</a> | <a href="functions.html">functions</a></span></td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+<h1>Class NxsToken</h1>
+
+<h2>Enums</h2>
+<a href="#NxsTokenFlags"><span class="quickref">NxsTokenFlags</span></a>
+<h2>Data Members</h2>
+<a href="#atEOF"><span class="quickref">atEOF</span></a>, <a href="#atEOL"><span class="quickref">atEOL</span></a>, <a href="#comment"><span class="quickref">comment</span></a>, <a href="#errormsg"><span class="quickref">errormsg</span></a>, <a href="#filecol"><span class="quickref">filecol</span></a>, <a href="#fileline"><span class="quickref">fileline</span></a>, <a href="#filepos"><span class="quickref">filepos</span></a>, <a href="#in"><span class="quickref">in</span></a>, <a href="#labileFlags"><span class="quickref">labileFlags</span></a>, <a href="#punctuation[21]"><span class="quickref">punctuation[21]</span></a>, <a href="#saved"><span class="quickref">saved</span></a>, <a href="#special"><span class="quickref">special</span></a>, <a href="#token"><span class="quickref">token</span></a>, <a href="#whitespace[4]"><span class="quickref">whitespace[4]</span></a>
+<h2>Member Functions</h2>
+<a href="#Abbreviation280"><span class="quickref">Abbreviation</span></a><a href="#AppendToComment144"><span class="quickref">, AppendToComment</span></a><a href="#AppendToToken153"><span class="quickref">, AppendToToken</span></a><a href="#AtEOF284"><span class="quickref">, AtEOF</span></a><a href="#AtEOL293"><span class="quickref">, AtEOL</span></a><a href="#Begins337"><span class="quickref">, Begins</span></a><a href="#BlanksToUnderscores302"><span class="quickref">, BlanksToUnderscores</span></a><a href="#Equals372"><span class="quickref">, Equals</span></a><a href="#GetComment81"><span class="quickref">, GetComment</span></a><a href="#GetCurlyBracketedToken151"><span class="quickref">, GetCurlyBracketedToken</span></a><a href="#GetDoubleQuotedToken185"><span class="quickref">, GetDoubleQuotedToken</span></a><a href="#GetFileColumn311"><span class="quickref">, GetFileColumn</span></a><a href="#GetFileLine330"><span class="quickref">, GetFileLine</span></a><a href="#GetFilePosition321"><span class="quickref">, GetFilePosition</span></a><a href="#GetNextChar179"><span class="quickref">, GetNextChar</span></a><a href="#GetNextToken426"><span class="quickref">, GetNextToken</span></a><a href="#GetParentheticalToken248"><span class="quickref">, GetParentheticalToken</span></a><a href="#GetQuoted208"><span class="quickref">, GetQuoted</span></a><a href="#GetToken340"><span class="quickref">, GetToken</span></a><a href="#GetTokenAsCStr354"><span class="quickref">, GetTokenAsCStr</span></a><a href="#GetTokenLength366"><span class="quickref">, GetTokenLength</span></a><a href="#GetTokenReference123"><span class="quickref">, GetTokenReference</span></a><a href="#IsPlusMinusToken374"><span class="quickref">, IsPlusMinusToken</span></a><a href="#IsPunctuation237"><span class="quickref">, IsPunctuation</span></a><a href="#IsPunctuationToken386"><span class="quickref">, IsPunctuationToken</span></a><a href="#IsWhitespace261"><span class="quickref">, IsWhitespace</span></a><a href="#IsWhitespaceToken398"><span class="quickref">, IsWhitespaceToken</span></a><a href="#NxsToken26"><span class="quickref">, NxsToken</span></a><a href="#NxsToken71"><span class="quickref">, ~NxsToken</span></a><a href="#OutputComment133"><span class="quickref">, OutputComment</span></a><a href="#ReplaceToken409"><span class="quickref">, ReplaceToken</span></a><a href="#ResetToken418"><span class="quickref">, ResetToken</span></a><a href="#SetLabileFlagBit438"><span class="quickref">, SetLabileFlagBit</span></a><a href="#SetSpecialPunctuationCharacter428"><span class="quickref">, SetSpecialPunctuationCharacter</span></a><a href="#StoppedOn456"><span class="quickref">, StoppedOn</span></a><a href="#StripWhitespace602"><span class="quickref">, StripWhitespace</span></a><a href="#ToUpper617"><span class="quickref">, ToUpper</span></a><a href="#Write469"><span class="quickref">, Write</span></a><a href="#Writeln479"><span class="quickref">, Writeln</span></a>
+<h2>Class Description</h2>
+
+<p>
+NxsToken objects are used by  <a href="NxsReader.html">NxsReader</a>  to extract words (tokens) from a NEXUS data file. NxsToken objects know to correctly skip NEXUS comments and understand NEXUS punctuation, making reading a NEXUS file as simple as repeatedly calling the GetNextToken() function and then interpreting the token returned. If the token object is not attached  to an input stream, calls to GetNextToken() will have no effect. If the token object is not attached to an output stream, output comments will be discarded (i.e., not output anywhere) and calls to Write or Writeln will be  ineffective. If input and output streams have been attached to the token object, however, tokens are read one at a time from the input stream, and comments are correctly read and either written to the output stream (if an output comment) or ignored (if not an output comment). Sequences of characters surrounded by single quotes are read in as single tokens. A pair of adjacent single quotes are stored as a single quote, and underscore characters are stored as blanks.
+
+
+<h3>Key to symbols and colors</h3>
+
+<p><span class="public">public</span>, <span class="protected">protected</span>, <span class="private">private</span>, <code>A</code> = abstract, <code>C</code> = constructor, <code>D</code> = destructor, <code>I</code> = inline, <code>S</code> = static, <code>V</code> = virtual, <code>F</code> = friend</p>
+<p>&nbsp;</p>
+<center>
+<table border="5" cellpadding="1" cellspacing="0" width="95%">
+<tr bgcolor="#CCCCFF">
+<td><span class="groupheading">Enums</span></td>
+</tr>
+</table>
+
+<table border="1" cellpadding="3" cellspacing="0" width="95%">
+  <tr><td>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td>
+        <table border="0" width="100%" cellpadding="1">
+          <tr>
+            <td align="left" width="25%"><code class="public"><a name="NxsTokenFlags">enum NxsTokenFlags</a></code></td>
+            <td></td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>saveCommandComments = 0x0001</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>if set, command comments of the form [&X] are not ignored but are instead saved as regular tokens (without the square brackets, however)</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>parentheticalToken = 0x0002</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>if set, and if next character encountered is a left parenthesis, token will include everything up to the matching right parenthesis</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>curlyBracketedToken = 0x0004</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>if set, and if next character encountered is a left curly bracket, token will include everything up to the matching right curly bracket</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>doubleQuotedToken = 0x0008</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>if set, grabs entire phrase surrounded by double quotes</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>singleCharacterToken = 0x0010</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>if set, next non-whitespace character returned as token</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>newlineIsToken = 0x0020</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>if set, newline character treated as a token and atEOL set if newline encountered</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>tildeIsPunctuation = 0x0040</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>if set, tilde character treated as punctuation and returned as a separate token</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>useSpecialPunctuation = 0x0080</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>if set, character specified by the data member special is treated as punctuation and returned as a separate token</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>hyphenNotPunctuation = 0x0100</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>if set, the hyphen character is not treated as punctutation (it is normally returned as a separate token)</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>preserveUnderscores = 0x0200</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>if set, underscore characters inside tokens are not converted to blank spaces (normally, all underscores are automatically converted to blanks)</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td align="left" colspan="2"><code>ignorePunctuation = 0x0400</code></td>
+          </tr>
+          <tr>
+            <td width="15%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td>if set, the normal punctuation symbols are treated the same as any other darkspace characters</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</center>
+<p>&nbsp;</p>
+<center>
+<table border="5" cellpadding="1" cellspacing="0" width="95%">
+<tr bgcolor="#CCCCFF">
+<td><span class="groupheading">Data Members</span></td>
+</table>
+<table border="1" cellpadding="3" cellspacing="0" width="95%">
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="atEOF">atEOF</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>true if end of file has been encountered</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="atEOL">atEOL</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>true if newline encountered while newlineIsToken labile flag set</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;<a href="NxsString.html">NxsString</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="comment">comment</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>temporary buffer used to store output comments while they are being built</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;<a href="NxsString.html">NxsString</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="errormsg">errormsg</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd></dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;long</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="filecol">filecol</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>current column in current line (refers to column immediately following token just read)</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;long</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="fileline">fileline</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>current file line</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;file_pos</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="filepos">filepos</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>current file position (for Metrowerks compiler, type is streampos rather than long)</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;istream</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="in">&in</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>reference to input stream from which tokens will be read</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;int</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="labileFlags">labileFlags</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>storage for flags in the NxsTokenFlags enum</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;char</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="punctuation[21]">punctuation[21]</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>stores the 20 NEXUS punctuation characters</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;char</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="saved">saved</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>either ' ' or is last character read from input stream</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;char</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="special">special</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>ad hoc punctuation character; default value is ' '</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;<a href="NxsString.html">NxsString</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="token">token</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>the character buffer used to store the current token</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table  width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>&nbsp;char</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="private"><a name="whitespace[4]">whitespace[4]</a></code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>stores the 3 whitespace characters: blank space, tab and newline</dd></td>
+</tr>
+</table>
+</td></tr>
+</table>
+</center>
+<p>&nbsp;</p>
+<center>
+<table border="5" cellpadding="1" cellspacing="0" width="95%">
+<tr bgcolor="#CCCCFF">
+<td><span class="groupheading">Member Functions</span></td>
+</table>
+<table border="1" cellpadding="3" cellspacing="0" width="95%">
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Abbreviation280">Abbreviation</a></code><code>(NxsString s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if token begins with the capitalized portion of <span class="variablename">s</span> and, if token is longer than <span class="variablename">s</span>, the remaining  characters match those in the lower-case portion of <span class="variablename">s</span>. The comparison is case insensitive. This function should be used instead of the Begins function if you wish to allow for abbreviations of commands and also want to ensure that  user does not type in a word that does not correspond to any command.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="AppendToComment144">AppendToComment</a></code><code>(char ch)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Adds <span class="variablename">ch</span> to end of comment <a href="NxsString.html">NxsString</a>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="AppendToToken153">AppendToToken</a></code><code>(char ch)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Adds <span class="variablename">ch</span> to end of current token.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="AtEOF284">AtEOF</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if and only if last call to GetNextToken encountered the end-of-file character (or for some reason the  input stream is now out of commission).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="AtEOL293">AtEOL</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if and only if last call to GetNextToken encountered the newline character while the newlineIsToken  labile flag was in effect.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Begins337">Begins</a></code><code>(NxsString s, bool respect_case)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if token <a href="NxsString.html">NxsString</a> begins with the <a href="NxsString.html">NxsString</a> <span class="variablename">s</span>. This function should be used instead of the Equals  function if you wish to allow for abbreviations of commands.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="BlanksToUnderscores302">BlanksToUnderscores</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Converts all blanks in token to underscore characters. Normally, underscores found in the tokens read from a NEXUS file are converted to blanks automatically as they are read; this function reverts the blanks back to underscores.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Equals372">Equals</a></code><code>(NxsString s, bool respect_case)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if token <a href="NxsString.html">NxsString</a> exactly equals <span class="variablename">s</span>. If abbreviations are to be allowed, either Begins or  Abbreviation should be used instead of Equals.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetComment81">GetComment</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Reads rest of comment (starting '[' already input) and acts accordingly. If comment is an output comment, and if  an output stream has been attached, writes the output comment to the output stream. Otherwise, output comments are  simply ignored like regular comments. If the labileFlag bit saveCommandComments is in effect, the comment (without  the square brackets) will be stored in token.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetCurlyBracketedToken151">GetCurlyBracketedToken</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Reads rest of a token surrounded with curly brackets (the starting '{' has already been input) up to and including the matching '}' character. All nested curly-bracketed phrases will be included.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetDoubleQuotedToken185">GetDoubleQuotedToken</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Gets remainder of a double-quoted NEXUS word (the first double quote character was read in already by GetNextToken). This function reads characters until the next double quote is encountered. Tandem double quotes within a  double-quoted NEXUS word are not allowed and will be treated as the end of the first word and the beginning of the  next double-quoted NEXUS word. Tandem single quotes inside a double-quoted NEXUS word are saved as two separate  single quote characters; to embed a single quote inside a double-quoted NEXUS word, simply use the single quote by  itself (not paired with another tandem single quote).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>long</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetFileColumn311">GetFileColumn</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns value stored in <span class="variablename">filecol</span>, which keeps track of the current column in the data file (i.e., number of  characters since the last new line was encountered).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>long</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetFileLine330">GetFileLine</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns value stored in <span class="variablename">fileline</span>, which keeps track of the current line in the data file (i.e., number of new  lines encountered thus far).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>file_pos</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetFilePosition321">GetFilePosition</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns value stored in filepos, which keeps track of the current position in the data file (i.e., number of  characters since the beginning of the file).  Note: for Metrowerks compiler, you must use the offset() method of  the streampos class to use the value returned.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>char</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetNextChar179">GetNextChar</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Reads next character from in and does all of the following before returning it to the calling function:<ul> <li>if character read is either a carriage return or line feed, the variable line is incremented by one and the</li>   variable col is reset to zero</li> <li>if character read is a carriage return, and a peek at the next character to be read reveals that it is a line</li>   feed, then the next (line feed) character is read</li> <li>if either a carriage return or line feed is read, the character returned to the calling function is '
+' if </li>   character read is neither a carriage return nor a line feed, col is incremented by one and the character is</li>   returned as is to the calling function</li> <li>in all cases, the variable filepos is updated using a call to the tellg function of istream.</li></ul></dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetNextToken426">GetNextToken</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Reads characters from in until a complete token has been read and stored in token. GetNextToken performs a number  of useful operations in the process of retrieving tokens:  o any underscore characters encountered are stored as blank spaces (unless the labile flag bit preserveUnderscores   is set) o if the first character of the next token is an isolated single quote, then the entire quoted <a href="NxsString.html">NxsString</a> is saved    as the next token o paired single quotes are automatically converted to single quotes before being stored o comments are handled automatically (normal comments are treated as whitespace and output comments are passed to    the function OutputComment which does nothing in the NxsToken class but can be overridden in a derived class to    handle these in an appropriate fashion) o leading whitespace (including comments) is automatically skipped o if the end of the file is reached on reading this token, the atEOF flag is set and may be queried using the AtEOF    member function o punctuation characters are always returned as individual tokens (see the Maddison, Swofford, and Maddison paper    for the definition of punctuation characters) unless the flag ignorePunctuation is set in labileFlags,   in which case the normal punctuation symbols are treated just like any other darkspace character.  The behavior of GetNextToken may be altered by using labile flags. For example, the labile flag saveCommandComments  can be set using the member function SetLabileFlagBit. This will cause comments of the form [&X] to be saved as  tokens (without the square brackets), but only for the aquisition of the next token. Labile flags are cleared after  each application.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetParentheticalToken248">GetParentheticalToken</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Reads rest of parenthetical token (starting '(' already input) up to and including the matching ')' character.  All nested parenthetical phrases will be included.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetQuoted208">GetQuoted</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Gets remainder of a quoted NEXUS word (the first single quote character was read in already by GetNextToken). This function reads characters until the next single quote is encountered. An exception occurs if two single quotes occur one after the other, in which case the function continues to gather characters until an isolated single quote is found. The tandem quotes are stored as a single quote character in the token <a href="NxsString.html">NxsString</a>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code><a href="NxsString.html">NxsString</a></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetToken340">GetToken</a></code><code>(bool respect_case)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns the data member <span class="variablename">token</span>. Specifying false for<span class="variablename">respect_case</span> parameter causes all characters in <span class="variablename">token</span> to be converted to upper case before <span class="variablename">token</span> is returned. Specifying true results in GetToken returning exactly  what it read from the file.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>const</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetTokenAsCStr354">*GetTokenAsCStr</a></code><code>(bool respect_case)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns the data member <span class="variablename">token</span> as a C-style string. Specifying false for<span class="variablename">respect_case</span> parameter causes all  characters in <span class="variablename">token</span> to be converted to upper case before the <span class="variablename">token</span> C-string is returned. Specifying true  results in GetTokenAsCStr returning exactly what it read from the file.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>int</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetTokenLength366">GetTokenLength</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns token.size().</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>const</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="GetTokenReference123">&GetTokenReference</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns the token for functions that only need read only access - faster than GetToken.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="IsPlusMinusToken374">IsPlusMinusToken</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if current token is a single character and this character is either '+' or '-'.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="IsPunctuation237">IsPunctuation</a></code><code>(char ch)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if character supplied is considered a punctuation character. The following twenty characters are  considered punctuation characters:<pre> ()[]{}/,;:=*'"`+-<>
+</pre> Exceptions:<ul> <li>The tilde character ('~') is also considered punctuation if the tildeIsPunctuation labile flag is set</li> <li>The special punctuation character (specified using the SetSpecialPunctuationCharacter) is also considered </li>   punctuation if the useSpecialPunctuation labile flag is set</li> <li>The hyphen (i.e., minus sign) character ('-') is not considered punctuation if the hyphenNotPunctuation </li>   labile flag is set</li></ul> Use the SetLabileFlagBit method to set one or more NxsLabileFlags flags in <span class="variablename">labileFlags</span></dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="IsPunctuationToken386">IsPunctuationToken</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if current token is a single character and this character is a punctuation character (as defined in  IsPunctuation function).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="IsWhitespace261">IsWhitespace</a></code><code>(char ch)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if character supplied is considered a whitespace character. Note: treats '
+' as darkspace if labile flag newlineIsToken is in effect.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="IsWhitespaceToken398">IsWhitespaceToken</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Returns true if current token is a single character and this character is a whitespace character (as defined in  IsWhitespace function).</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>C</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="NxsToken26">NxsToken</a></code><code>(istream &i)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Sets atEOF and atEOL to false, comment and token to the empty string, filecol and fileline to 1, filepos to 0,  labileFlags to 0 and saved and special to the null character. Initializes the istream reference data  member in to the supplied istream <span class="variablename">i</span>.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>D</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code></code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="NxsToken71">~NxsToken</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Nothing needs to be done; all objects take care of deleting themselves.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>IV</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="OutputComment133">OutputComment</a></code><code>(const NxsString &msg)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>This function is called whenever an output comment (i.e., a comment beginning with an exclamation point) is found  in the data file. This version of OutputComment does nothing; override this virtual function to display the output  comment in the most appropriate way for the platform you are supporting.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ReplaceToken409">ReplaceToken</a></code><code>(const NxsString s)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Replaces current token <a href="NxsString.html">NxsString</a> with s.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ResetToken418">ResetToken</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Sets token to the empty <a href="NxsString.html">NxsString</a> ("").</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="SetLabileFlagBit438">SetLabileFlagBit</a></code><code>(int bit)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Sets the bit specified in the variable <span class="variablename">labileFlags</span>. The available bits are specified in the NxsTokenFlags enum. All bits in <span class="variablename">labileFlags</span> are cleared after each token is read.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="SetSpecialPunctuationCharacter428">SetSpecialPunctuationCharacter</a></code><code>(char c)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Sets the special punctuation character to <span class="variablename">c</span>. If the labile bit useSpecialPunctuation is set, this character will  be added to the standard list of punctuation symbols, and will be returned as a separate token like the other  punctuation characters.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>bool</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="StoppedOn456">StoppedOn</a></code><code>(char ch)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Checks character stored in the variable saved to see if it matches supplied character <span class="variablename">ch</span>. Good for checking such  things as whether token stopped reading characters because it encountered a newline (and labileFlags bit  newlineIsToken was set):<pre> StoppedOn('
+');
+</pre> or whether token stopped reading characters because of a punctuation character such as a comma:<pre> StoppedOn(',');
+</pre></dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="StripWhitespace602">StripWhitespace</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Strips whitespace from currently-stored token. Removes leading, trailing, and embedded whitespace characters.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="ToUpper617">ToUpper</a></code><code>()</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Converts all alphabetical characters in token to upper case.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Write469">Write</a></code><code>(ostream &out)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Simply outputs the current <a href="NxsString.html">NxsString</a> stored in <span class="variablename">token</span> to the output stream <span class="variablename">out</span>. Does not send a newline to the  output stream afterwards.</dd></td>
+</tr>
+</table>
+</td></tr>
+<tr><td>
+<table width="100%" border="0" cellpadding="1">
+<tr>
+<td>I</td>
+<td>&nbsp;</td>
+<td align="right" valign="top" width="15%"><code>void</code></td>
+<td>&nbsp;</td>
+<td align="left" valign="top" width="82%"><code class="public"><a name="Writeln479">Writeln</a></code><code>(ostream &out)</code></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><dd>Simply outputs the current <a href="NxsString.html">NxsString</a> stored in <span class="variablename">token</span> to the output stream <span class="variablename">out</span>. Sends a newline to the output  stream afterwards.</dd></td>
+</tr>
+</table>
+</td></tr>
+</table>
+</center>

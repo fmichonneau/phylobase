@@ -1,0 +1,2 @@
+PKG_CXXFLAGS= -I../RcppSrc -I../../ncl/ncl
+PKG_LIBS= -L../RcppSrc -lRcpp  -L../../ncl/ncl/.libs -lncl
