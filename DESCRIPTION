@@ -9,4 +9,4 @@ Author: R Hackathon (Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vien
 Maintainer:  Ben Bolker <bolker@ufl.edu>
 Description: Provides a base S4 class for comparative methods, incorporating one or more trees and trait data
 License: GPL
-Collate: pdata.R checkdata.R phylo4.R subset.R prune.R plot.R identify.R treestruc.R treewalk.R 
+Collate: pdata.R checkdata.R phylo4.R subset.R prune.R plot.R identify.R treestruc.R treewalk.R zzz.R ReadWithNCLVersion.R ReadWithNCL.R RcppVersion.R
