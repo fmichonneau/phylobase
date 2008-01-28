@@ -1,2 +1,2 @@
-PKG_CXXFLAGS=@CPPFLAGS@ -I../../ncl/ncl
-PKG_LIBS=@LDFLAGS@  -L../../ncl/ncl/.libs -lncl
+PKG_CXXFLAGS=@CPPFLAGS@ -I ncl/ncl/
+PKG_LIBS=@LDFLAGS@ -L ncl/ncl/.libs/ -lncl
