@@ -276,29 +276,29 @@ setAs(from='phylo4',to='data.frame',
       def = function(from) {
       	x <- from
 	ancestor <- x@edge[,1]
-	descendant <- x@edge[,2]
-	root <- unique(ancestor[!ancestor %in% descendant])
-	int.node <- c(root, unique(ancestor[ancestor %in% descendant]))
-    tip <- descendant[!(descendant %in% ancestor)]
+	node <- x@edge[,2]
+	root <- unique(ancestor[!ancestor %in% node])
+	int.node <- c(root, unique(ancestor[ancestor %in% node]))
+    tip <- node[!(node %in% ancestor)]
 	n.tip <- length(tip)
     n.int <- length(int.node)
 
-    descendant <- c(root, descendant)
+    node <- c(root, node)
     ancestor <- c(NA, ancestor)
     branch.length <- c(0, x@edge.length)
     if (length(branch.length) == 1) branch.length <- rep("", n.tip+n.int)
-    if (print.taxon <- !(is.null(x@node.label) & is.null(x@tip.label)))
+    if (print.species <- !(is.null(x@node.label) & is.null(x@tip.label)))
     { 
     	nl <- x@node.label       
     	if (is.null(nl)) nl <-  rep("", n.int)   # phylo4 has a node.label for the root?
     	tl <- x@tip.label
     	if (is.null(tl)) tl <-  rep("", n.tip)
-        taxon <- c(nl, tl)
-	}
-    if (is.null(root)) type <- c(rep("node", n.int), rep("tip", n.tip))
-    else type <- c("root", rep("node", n.int-1), rep("tip", n.tip))
+        species.name <- c(nl, tl)
+	} else species.name <- NULL
+    if (is.null(root)) node.type <- c(rep("internal", n.int), rep("tip", n.tip))
+    else node.type <- c("root", rep("internal", n.int-1), rep("tip", n.tip))
 
-    return(data.frame(taxon, descendant, ancestor, branch.length, type))
+    return(data.frame(species.name, node, ancestor, branch.length, node.type))
 })
 
 printphylo4 <- function(x, printall = TRUE){
@@ -315,7 +315,7 @@ setAs(from='phylo4d', to='data.frame',
     tdata(from, "allnode") -> dat               # get data
     t_df$order <- rownames(t_df)     # save roworder of tree
 
-    merge(t_df, dat, by.x="taxon", by.y="row.names", all.x=TRUE, sort=FALSE) -> tdat
+    merge(t_df, dat, by.x="species.name", by.y="row.names", all.x=TRUE, sort=FALSE) -> tdat
                                      # merged tree, data, but mixed up
 
     order(tdat$order) -> o           # ordering to get back original roworder                              

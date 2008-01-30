@@ -62,7 +62,7 @@ plot(subset(p1,tips.include=c("fuliginosa","fortis","magnirostris",
 ## better error?
 ## Error in phy$edge[, 2] : incorrect number of dimensions
 
-x11()
+if(dev.cur() == 1) get(getOption("device"))()
 plot(subset(p2,tips.include=c("fuliginosa","fortis","magnirostris",
             "conirostris","scandens")))
 

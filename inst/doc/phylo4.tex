@@ -11,28 +11,34 @@
 \title{The \code{phylo4} S4 classes and methods}
 \author{Ben Bolker \& Peter Cowan}
 \date{\today}
-\usepackage{/usr/share/R/share/texmf/Sweave}
+\usepackage{/Library/Frameworks/R.framework/Resources/share/texmf/Sweave}
 \begin{document}
 \maketitle
 \tableofcontents
 
 \section{Introduction}
 
-This document describes the new \code{phylo4} S4 classes and methods, which are intended to provide a unifying standard for phylogenetic data in R.  The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple trees respectively.  In addition to describing the classes and methods this vignette gives examples of how they might be used.
+This document describes the new \code{phylo4} S4 classes and methods, which are intended to provide a unifying standard for the representation of phylogenetic trees and comparative data in R.  The \code{phylobase} package was developed to help both end users and package developers by providing a common suite of tools likely to be shared by all packages designed for phylogenetic analysis, facilities for data and tree manipulation, and standardization of formats. 
 
-Two motivations for the development of this package were better data checking and abstraction of the tree data formats.  Currently \code{phylobase} is capable of checking that data and trees are associated in the proper fashion, and protects users and developers from accidently reordering one, but not the other.  The \code{phylobase} package also seeks to abstract the data format so that commonly desired attributes can be accessed without knowing the underlying data structure.  This is achieved through generic functions which should ease development and protect functions from possible future changes in the data format.
+For \emph{end-users}, standardization will greatly simplify comparing analyses across different packages by easing data portability, as well as reducing the learning curve involved when using new packages. Users will also benefit by having a common repository of useful functions contained within one base package, for example tools for including or excluding subtrees (and associated phenotypic data) or improved tree and data plotting facilities. For \emph{developers}, the \code{phylobase} package allows programming efforts to be put directly into developing new solutions for new problems (i.e. new phylogenetic methods) rather than re-coding the same base tools that each package requires. It is hoped that standardization will also synergize the efforts of individual developers into a comparative method community (this sounds stupid-- please fix), as well as facilitating code validation by providing a repository for benchmark tests.
+
+On a more abstract level, two motivations for the development of this package were better data checking and abstraction of the tree data formats.  Currently \code{phylobase} is capable of checking that data and trees are associated in the proper fashion, and protects users and developers from accidently reordering one, but not the other.  The \code{phylobase} package also seeks to abstract the data format so that commonly used information (for example, branch length information or the ancestor of a particular node) can be accessed without knowing the underlying data structure (i.e., whether the tree is stored as a matrix, or a list, or a parenthesis-based format).  This is achieved through generic \code{phylobase} functions which which retrieve the relevant information from the data structures. The benefits of such abstraction are multiple: (1) \emph{easier access to the relevant information} via a simple function call (this frees both users and developers from learning details of complex data structures), (2) \emph{freedom to optimize data structures in the future without breaking code.}  Having the generic functions in place to "translate" between the data structures and the rest of the program code allows program and data structure development to proceed somewhat independently. The alternative is code written for specific data structures, in which modifications to the data structure requires rewriting the entire package code (often exacting too high a price, which results in the persistence of less-optimal data structures).  (3) \emph{providing broader access to the range of tools in \code{phylobase}}. Developers of specific packages can use these new tools based on S4 objects without knowing the details of S4 programming.
+
+The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple trees respectively.  In addition to describing the classes and methods this vignette gives examples of how they might be used.
+
 
 \section{Package Overview}
 
-The phylobase package currently implements functions and data structures that implement the following:
+The phylobase package currently implements the following functions and data structures:
 
 \begin{itemize}
-  \item Data structures for storing a tree and multiple trees
-  \item A data structure for storing a tree with associated tip and node data
-  \item A data structure for storing multiple trees with one set of tip data
+  \item Data structures for storing a single tree and multiple trees: \code{phylo4} and \code{multiPhylo4}?
+  \item A data structure for storing a tree with associated tip and node data: \code{phylo4d}
+  \item A data structure for storing multiple trees with one set of tip data: \code{multiPhylo4d}
   \item Functions for reading nexus files into the above data structures
   \item Functions for converting between the above data structures and \code{ape phylo} objects as well as \code{ade4 phylog} objects
-  \item Functions for subsetting, replacing, and plotting the above structures
+  \item Functions for editing trees and data (i.e., subsetting and replacing)
+  \item Functions for plotting trees and trees with data
 \end{itemize}
 
 \section{Using the S4 help system}
@@ -106,18 +112,34 @@ Convert the \code{S3} tree to a \code{S4 phylo4} object using the \code{as()} fu
 > g1
 \end{Sinput}
 \begin{Soutput}
-Phylogenetic tree with 14 tips and 13 internal nodes
-
-Tip labels:
-	fuliginosa, fortis, magnirostris, conirostris, scandens, difficilis, ...
-
-Node labels:
-	N01, N02, N03, N04, N05, N06, ...
-
-Edge labels:
-	E16, E17, E18, E19, E20, E21, ...
-
-Rooted; includes branch lengths
+   species.name node ancestor branch.length node.type
+1           N01   15       NA       0.00000      root
+2           N02   16       15       0.29744  internal
+3           N03   17       16       0.04924  internal
+4           N04   18       17       0.06859  internal
+5           N05   19       18       0.13404  internal
+6           N06   20       19       0.10346  internal
+7           N07   21       20       0.03550  internal
+8           N08   22       21       0.00917  internal
+9           N09   23       22       0.07333  internal
+10          N10   24       23       0.05500  internal
+11          N11    1       24       0.05500  internal
+12          N12    2       24       0.05500  internal
+13          N13    3       23       0.11000  internal
+14   fuliginosa    4       22       0.18333       tip
+15       fortis    5       21       0.19250       tip
+16 magnirostris    6       20       0.22800       tip
+17  conirostris   25       19       0.24479       tip
+18     scandens    7       25       0.08667       tip
+19   difficilis   26       25       0.05167       tip
+20      pallida   27       26       0.01500       tip
+21     parvulus    8       27       0.02000       tip
+22   psittacula    9       27       0.02000       tip
+23       pauper   10       26       0.03500       tip
+24   Platyspiza   11       18       0.46550       tip
+25        fusca   12       17       0.53409       tip
+26 Pinaroloxias   13       16       0.58333       tip
+27     olivacea   14       15       0.88077       tip
 \end{Soutput}
 \end{Schunk}
 
@@ -249,7 +271,7 @@ gives
 \begin{Soutput}
 Error in check_data(res, ...) : 
   Tip data names are a subset of tree tip labels 
-(missing data names: platyspiza,pinaroloxias) 
+(missing data names: platyspiza,pinaroloxias,olivacea) 
 (extra data names: Platyspiza,Pinaroloxias)
 \end{Soutput}
 \end{Schunk}
@@ -283,3 +305,176 @@ the offending tip from the tree first:
 \begin{Sinput}
 > g1B <- prune(g1, "olivacea")
 > phylo4d(g1B, gdata)
+\end{Sinput}
+\end{Schunk}
+
+You can summarize the new object:
+\begin{Schunk}
+\begin{Sinput}
+> summary(g2)
+\end{Sinput}
+\begin{Soutput}
+  No root edge.
+
+ Phylogenetic tree : as(object, "phylo4") 
+
+ Number of tips    : 14 
+ Number of nodes   : 13 
+ Branch lengths:
+        mean         : 0.1764008 
+        variance     : 0.04624379 
+        distribution :
+   Min. 1st Qu.  Median 3rd Qu.    Max. 
+0.00917 0.04985 0.08000 0.21910 0.88080 
+
+Comparative data:
+
+Tips: data.frame with 14 taxa and 5 variables 
+
+     wingL          tarsusL         culmenL          beakD      
+ Min.   :3.975   Min.   :2.807   Min.   :1.974   Min.   :1.191  
+ 1st Qu.:4.189   1st Qu.:2.929   1st Qu.:2.187   1st Qu.:1.941  
+ Median :4.235   Median :2.980   Median :2.311   Median :2.073  
+ Mean   :4.236   Mean   :2.991   Mean   :2.333   Mean   :2.083  
+ 3rd Qu.:4.265   3rd Qu.:3.039   3rd Qu.:2.430   3rd Qu.:2.347  
+ Max.   :4.420   Max.   :3.271   Max.   :2.725   Max.   :2.824  
+ NA's   :1.000   NA's   :1.000   NA's   :1.000   NA's   :1.000  
+     gonysW     
+ Min.   :1.401  
+ 1st Qu.:1.845  
+ Median :1.962  
+ Mean   :2.014  
+ 3rd Qu.:2.222  
+ Max.   :2.676  
+ NA's   :1.000  
+
+Object contains no node data.
+\end{Soutput}
+\end{Schunk}
+
+Or use \code{tdata()} to extract the data (i.e., \code{tdata(g2)}). By default, \code{tdata()} will retrieve tip data, but you can also get internal node data only (\code{tdata(tree,"node")}) or --- if the tip and node data have the same format --- all the data combined (\code{tdata(tree,"allnode")}).
+
+Plotting calls \code{plot.phylog} from the \code{ade4} package.
+
+If you want to plot the data (e.g. for checking the input), \code{plot(tdata(g2))} will create the default plot for the data --- in this case, since it is a data frame [\textbf{this may change in future versions but should remain transparent}] this will be a \code{pairs} plot of the data.
+
+\section{Subsetting}
+
+The \code{subset} command offers a variety of ways of extracting portions of a \code{phylo4} or \code{phylo4d} tree, keeping any tip/node data consistent.
+
+\begin{description}
+\item[tips.include]{give a vector of tips (names or numbers) to retain}
+\item[tips.exclude]{give a vector of tips (names or numbers) to drop}
+\item[mrca]{give a vector of node or tip names or numbers; extract the clade containing these taxa}
+\item[node.subtree]{give a node (name or number); extract the subtree starting from this node}
+\end{description}
+
+Different ways to extract the \emph{fuliginosa}-\emph{scandens}
+clade:
+\begin{Schunk}
+\begin{Sinput}
+> subset(g2, tips.include = c("fuliginosa", "fortis", "magnirostris", 
++     "conirostris", "scandens"))
+> subset(g2, node.subtree = "N07")
+> subset(g2, mrca = c("scandens", "fortis"))
+\end{Sinput}
+\end{Schunk}
+
+One could drop the clade by  doing
+\begin{Schunk}
+\begin{Sinput}
+> subset(g2, tips.exclude = c("fuliginosa", "fortis", "magnirostris", 
++     "conirostris", "scandens"))
+> subset(g2, tips.exclude = allDescend(g2, MRCA(g2, c("difficilis", 
++     "fortis"))))
+\end{Sinput}
+\end{Schunk}
+
+Another approach is to pick the subtree graphically, by plotting the tree and using \code{identify}, which returns the identify of the node you click on with the mouse.
+
+\begin{Schunk}
+\begin{Sinput}
+> plot(g1)
+> n1 <- identify(g1)
+> subset(g2, node.subtree = n1)
+\end{Sinput}
+\end{Schunk}
+
+\section{Tree-walking}
+
+\code{getDescend}, \code{getAncest},
+\code{allDescend}, \code{allAncest},
+\code{getNodeByLabel}, \code{getLabelByNode}:
+not sure about the names or functionality of these (how much do we work in terms of labels and how much in terms of internal numbers?)
+
+\section{multiPhylo classes}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Appendices %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+\section{Definitions/slots}
+
+\subsection{phylo4}
+Like \code{phylo}, the main components of
+the \code{phylo4} class are:
+\begin{description}
+\item[edge]{an $N \times 2$ matrix of integers,
+  where the first column \ldots}
+\item[edge.length]{numeric list of edge lengths
+(length $N$ or empty)}
+\item[Nnode]{integer, number of nodes}
+\item[tip.label]{character vector of tip labels (required)}
+\item[node.label]{character vector of node labels (maybe empty)}
+\item[root.edge]{integer defining root edge (maybe NA)}
+\end{description}
+
+We have defined basic methods for \code{phylo4}:\code{show}, \code{print} (copied from \code{print.phylo} in\code{ape}), and a variety of accessor functions (see help files). \code{summary} does not seem to be terribly useful in the context of a ``raw'' tree, because there is not much to compute: \textbf{end users?}
+
+Print method: add information about (ultrametric, scaled, polytomies (zero-length or structural))?
+
+\subsection{phylo4d}
+
+The \code{phylo4d} class extends \code{phylo4} with data.  Tip data, (internal) node data, and edge data are stored separately, but can be retrieved together or separately with \code{tdata(x,"tip")} or \code{tdata(x,"all")}.
+
+\textbf{edge data can also be included --- is this
+useful/worth keeping?}
+
+\subsection{multiphylo4}
+
+\section{Validity checking}
+
+\begin{itemize}
+\item number of rows of edge matrix ($N$) == length of edge-length vector (if $>0$)
+\item (number of tip labels)+(nNode)-1 == $N$
+\item data matrix must have row names
+\item row names must match tip labels (if not, spit out mismatches)
+\item 
+\end{itemize}
+ 
+Default node labels:
+
+\section{Hacks/backward compatibility}
+
+There is a way to hack the \verb+$+ operator so that it would provide backward compatibility with code that is extracting internal elements of a \code{phylo4}. The basic recipe is: 
+
+\begin{Schunk}
+\begin{Sinput}
+> setMethod("$", "phylo4", function(x, name) {
++     attr(x, name)
++ })
+\end{Sinput}
+\end{Schunk}
+
+but this has to be hacked slightly to intercept calls to elements that might be missing.  For example, \code{ape} detects whether log-likelihood, root edges, node labels, etc. are missing by testing whether they are \code{NULL}, whereas missing items are represented in \code{phylo4} by zero-length vectors in the slots (or \code{NA} for the root edge) --- so we need code like 
+\begin{Schunk}
+\begin{Sinput}
+> if (!hasNodeLabels(x)) NULL else x@node.label
+\end{Sinput}
+\end{Schunk}
+to handle these cases.
+
+
+\end{document}
