@@ -19,9 +19,9 @@ FOR VERSION 0.3
 
 ## Data classes
 ### Tree model:
-* assigning edge and node labels -- is there/should there be an option to turn this off?  assign empty ("") labels?
+* assigning edge and node labels -- is there/should there be an option to turn this off?  assign empty ("") labels? how about assigning the node number if there are no user-supplied labels?(mb)
 * should default node labels start at N(nTips+1), to match internal node numbers?
-* should coercing phylo4d to phylo4 give a warning message about losing data?   Should phylo4d to phylo4?
+* should coercing phylo4d to phylo4 give a warning message about losing data?   Should phylo4d to phylo4?  Yes(mb)
 * order: All phylo4 edge matrices are internally stored as "cladewise"/Newick traversal order.  Extend edges accessor method with optional argument that allows edges to be extracted in a different order (possibly with an attribute as in ape); need to steal 'reorder' from ape, extend for phylo4d keeping track of traits also see ape::ladderize
 * root node data characteristics (compare what OUCH does): root node doesn't have corresponding entry in the edge matrix:  ouch adds a row to the edge matrix (1-row data frame matching node column info). Not entirely clear how we should deal with this, MB has a proposal.
 * Data model: There seems to be consensus that the data model should be at least a little bit richer than a straight data frame, that we should create a new data class.  There's a draft standard in pdata.R in the current package.  
@@ -43,8 +43,8 @@ FOR VERSION 0.3
 
 ### Documentation
 * Complete full example in vignette
-* Does S4-style help access really work? FIXME: Be more specific
-* is the phylo4 constructor actually documented anywhere?
+* Does S4-style help access really work? FIXME: Be more specific. ?as(mytree,"phylo4) does not work. It is not clear how users will find the coercion methods page. methods?coerce brings up phylobase page, but this is pretty cryptic... At least we have linked coerce-methods page to the phylo4, phylo4d pages.
+* is the phylo4 constructor actually documented anywhere?  YES phylo4.Rd added.
 * phylo4 constructor should have its own method manpage (currently is inside the class doc)  FIXED (we think)
 
 FOR VERSION 0.4
@@ -94,9 +94,9 @@ FUTURE DISCUSSIONS
 
 ## Data checking
 * should `check_phylo4` check for cyclicity, or is this overkill?
-* what other checks should there be on a phylo4 tree?  right now we check for (1) right number of edge lengths (if >0), (2) right number of tip labels, (3) at most one root, (4) only one ancestor per node.
+* what other checks should there be on a phylo4 tree?  right now we check for (1) right number of edge lengths (if >0), (2) right number of tip labels, (3) at most one root, (4) only one ancestor per node.  NEED: (a) check for broken tree (= disconnected edge), (b) root != Ntips+1, (c) tip numbers > root number, etc. Necessary because we are allowing creation of trees "by hand" using the phylo4 constructor. 
 * information returned by `check_data` isn't quite the same format as geiger's matching function. Clear enough?
-* should there be an option for pruning tree to data? does this already exist?
+* should there be an option for pruning tree to data? does this already exist?  THIS would be great
 * option for fuzzy matching with `agrep()`?
     * ("fuzzywarn" for fuzzy matching with warning,
 * extend label-matching code to node labels
@@ -104,6 +104,7 @@ FUTURE DISCUSSIONS
 ## Discuss
 * Rewrite methods in native phylo4 as necessary/desirable [????]
     * Code from ape often calls some C code... so I would leave what calls ape as much as possible (T.J.)
+    * It would be nice to reduce the dependency on particular node numbers, so long as they are unique (i.e. root = Ntips+1, etc). We can validate for ape compatibility with check_data, but it would be nice to have phylobase code not be hard-coded with this dependence. (mb)
 * Figure out best way to deal with namespace/conflicts (overriding ape methods)
    * synch with newest ape release:
       * is `multi.tree` now `multiPhylo`?
@@ -113,7 +114,7 @@ FUTURE DISCUSSIONS
 * lapply/multiple-tree methods, or at least documentation on how to do it
 * compare Sidlauskas wiki documentation, how would one do it in phylo4?
 * synch with `ape` on name conflicts, multi.tree/multiPhylo
-* implement NAMESPACE?
+
 
 ## Testing
 * end users need to start reading documentation, testing ...

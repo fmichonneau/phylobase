@@ -1,6 +1,5 @@
 \name{phylo4-class}
 \docType{class}
-\alias{phylo4}
 \alias{phylo-class}
 \alias{phylo4-class}
 \alias{$,phylo4-method}
@@ -12,8 +11,8 @@
 \title{phylo4 and extended classes}
 \description{Classes for phylogenetic trees}
 \section{Objects from the Class}{
-  Objects can be created by calls of the form \code{new("phylo4", ...)}
-  Translation from other phylogenetic packages ...
+  Phylogenetic tree objects can be created by calls to the \code{\link{phylo4}} constructor function.
+  Translation functions from other phylogenetic packages are also available. See \code{\link{coerce-methods}}.
   }
 \section{Slots}{
   \describe{
@@ -59,7 +58,9 @@
    The \code{names} method returns a vector of characters corresponding
    to the names of the slots.
   }
-  \author{Ben Bolker, Thibaut Jombart}   
+\seealso{the \code{\link{phylo4}} constructor, the \code{\link{check_phylo4}}
+  function to check the validity of \code{phylo4} objects. See also the \code{\link{phylo4d}} constructor and the \linkS4class{phylo4d} class.}
+\author{Ben Bolker, Thibaut Jombart}   
 \examples{
   library(ape)
   example(read.tree)

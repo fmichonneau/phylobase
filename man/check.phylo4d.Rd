@@ -39,6 +39,7 @@ attach_data(object, use.tip.names = TRUE, use.node.names = FALSE,
   
   \code{attach_data} takes a phylo4d object that has been checked, and attaches the tipdata and nodedata to the object. This involves the data being subset to include only the taxa present in the tree, with missing data taxa assigned NA values. The data are sorted to match the order of the tip.labels of the tree to allow use with comparative analysis functions.
 }
+\seealso{the \code{\link{phylo4d}} constructor, the \linkS4class{phylo4d} class. See also the \code{\link{check_phylo4}}, the \code{\link{phylo4}} constructor and the \linkS4class{phylo4} class. See \code{\link{coerce-methods}} for translation functions.}
 \author{Steven Kembel \email{skembel@berkeley.edu}}
 \examples{
 require(ape)

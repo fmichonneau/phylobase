@@ -54,9 +54,9 @@
 }
 
 \author{Ben Bolker, Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}, Marguerite Butler}
-\seealso{ \code{phylo4}, \code{phylo4d}, \code{extract.tree}, the original \code{\link[pkg:ade4]{phylog}} from the
-  \code{ade4} package and \code{\link[pkg:ape]{phylo}} from the
-  \code{ape} package. }
+\seealso{ \code{\link{phylo4}}, \code{\link{phylo4d}}, \code{\link{extract.tree}}, the original \link[ade4]{phylog} from the
+  \code{ade4} package and \link[ape]{as.phylo} from the \code{ape} package. 
+}
 \examples{
     library(ape)
   example(read.tree)

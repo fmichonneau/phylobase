@@ -1,7 +1,6 @@
 \name{phylog-class}
 \docType{class}
 \alias{phylog-class}
-\alias{coerce,phylo4,phylog-method}
 
 \title{Class "phylog"}
 \description{S4 version of the class \code{phylog} from the \code{ade4} package.}
@@ -12,8 +11,7 @@ Class \code{"\linkS4class{oldClass}"}, directly.
 \section{Methods}{
   \describe{
     \item{coerce}{\code{signature(from = "phylo4", to = "phylog")}:
-      \code{phylog} object can be obtained from an object \code{x} of
-      the class \linkS4class{phylo4} using \code{as(x,"phylog")}. }
+      a \linkS4class{phylo4} object can be coerced to a \code{phylog} object using \code{as(object,"phylog")}. }
 	 }
 }
 \author{Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}}

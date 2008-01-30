@@ -14,7 +14,7 @@ extract.tree(from)
   \code{extract.tree} extracts just the phylogeny from a tree+data object. The phylogeny contains the topology (how the nodes are linked together), the branch lengths (if any), and any tip and/or node labels. This may be useful for extracting a tree from a \code{phylo4d} object, and associating with another phenotypic dataset, or to convert the tree to another format. 
 }
 \author{ Ben Bolker }
-\seealso{ \code{phylo4}, \code{phylo4d}, \code{methods?coerce} }
+\seealso{\code{\link{phylo4}}, \code{\link{phylo4d}}, \code{\link{coerce-methods}} for translation functions. }
 \examples{
 tree.phylo <- read.tree(text="((a,b),c);")
 tree <- as(tree.phylo, "phylo4")

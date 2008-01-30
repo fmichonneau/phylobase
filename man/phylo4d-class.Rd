@@ -54,7 +54,8 @@
    The \code{names} method returns a vector of characters corresponding
    to the names of the slots.
   }
-  \author{Ben Bolker, Thibaut Jombart}   
+\seealso{\code{\link{coerce-methods}} for translation functions. The \code{\link{phylo4d}} constructor and the \code{\link{check_data}} function to check the validity of trees and data. See also the \code{\link{phylo4}} constructor, the \linkS4class{phylo4} class, and the \code{\link{check_phylo4}} function to check the validity of \code{phylo4} trees. }
+\author{Ben Bolker, Thibaut Jombart}   
 \examples{
   library(ape)
   example(read.tree)
