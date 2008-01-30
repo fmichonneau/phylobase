@@ -14,6 +14,7 @@ phylo4(edge, edge.length = NULL, tip.label = NULL, node.label = NULL, edge.label
   \item{node.label}{A character vector of internal node names. (Optional)}
   \item{edge.label}{A character vector of edge (branch) names. (Optional)}
   \item{root.edge}{Edge (branch) length from the most basal node to it's ancestor. (Optional)}
+  \item{...}{Any additional arguments. (Optional)}
 }
 \details{
   The minimum information necessary to create a phylobase tree object is a valid edge matrix. The edge matrix describes the topology of the phylogeny. Each row describes a branch of the phylogeny, with the (descendant) node number in column 2 and it's ancestor's node number in column 1. These numbers are used internally and must be unique for each node.
@@ -27,7 +28,7 @@ phylo4(edge, edge.length = NULL, tip.label = NULL, node.label = NULL, edge.label
   function to check the validity of \code{phylo4} objects. See also the \code{\link{phylo4d}} constructor, and \linkS4class{phylo4d} class.}
 \examples{
 # a three species tree:
-mytree <- phylo4(edge=matrix(data=c(4,1, 4,5, 5,1, 5,2), ncol=2, byrow=TRUE), tip.label=c("speciesA", "speciesB", "speciesC"))
+mytree <- phylo4(edge=matrix(data=c(4,1, 4,5, 5,2, 5,3), ncol=2, byrow=TRUE), tip.label=c("speciesA", "speciesB", "speciesC"))
 mytree
 plot(mytree)
 

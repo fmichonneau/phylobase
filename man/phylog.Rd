@@ -1,7 +1,7 @@
 \name{phylog-class}
 \docType{class}
 \alias{phylog-class}
-
+\alias{coerce,phylo4,phylog-method}
 \title{Class "phylog"}
 \description{S4 version of the class \code{phylog} from the \code{ade4} package.}
 \section{Objects from the Class}{A virtual Class: No objects may be created from it.}
