@@ -26,7 +26,7 @@ setMethod("plot",signature(x="phylo4",y="missing"), function(x,...){
 ## plot phylo4d
 ################
 setMethod("plot", signature(x="phylo4d",y="missing"), 
-          function(x, treetype=c("phylogram","cladogram"), symbol=c("circles", "squares"), center=TRUE, scale=TRUE, legend=FALSE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=1, cex.legend=1, ...){
+          function(x, treetype=c("phylogram","cladogram"), symbol=c("circles", "squares"), center=TRUE, scale=TRUE, legend=TRUE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=1, cex.legend=1, ...){
 
               
     #### preliminary stuff and checks
