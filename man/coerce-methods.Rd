@@ -54,7 +54,7 @@
 }
 
 \author{Ben Bolker, Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}, Marguerite Butler}
-\seealso{ \code{\link{phylo4}}, \code{\link{phylo4d}}, \code{\link{extract.tree}}, the original \link[ade4]{phylog} from the
+\seealso{ generic \code{\link[methods]{as}}, \code{\link{phylo4}}, \code{\link{phylo4d}}, \code{\link{extract.tree}}, the original \link[ade4]{phylog} from the
   \code{ade4} package and \link[ape]{as.phylo} from the \code{ape} package. 
 }
 \examples{
@@ -72,4 +72,6 @@
   as(tree_in_phylo4, "phylo4d")    # conversion to phylo4d, but without data so data slots empty.
 }
 \keyword{methods}
-
+\concept{phylo4 tree formats}
+\concept{convert tree formats}
+\concept{conversion between tree formats}
