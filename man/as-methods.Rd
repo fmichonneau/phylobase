@@ -13,12 +13,16 @@
 \alias{as,phylo4d,data.frame-method}
 
 \title{Converting between phylo4 and other phylogenetic trees}
-\usage{
-as(tree, Class)
+
+\section{Usage}{
+\code{as(tree, Class)}
 }
-\arguments{
-  \item{tree}{a tree of class \code{phylo4}, \code{phylo} or \code{phylog}, or tree+data object of class \code{phylo4d}.}
-  \item{Class}{the name of the class to which \code{tree} should be coerced (e.g., \code{"phylo4"} or \code{"data.frame"}).}
+
+\section{Arguments}{
+\describe{
+  \item{\code{tree}}{a tree of class \code{phylo4}, \code{phylo} or \code{phylog}, or tree+data object of class \code{phylo4d}.}
+  \item{\code{Class}}{the name of the class to which \code{tree} should be coerced (e.g., \code{"phylo4"} or \code{"data.frame"}).}
+}
 }
 \description{
   Translation functions to convert between phylobase trees or trees+data objects (\code{phylo4}, \code{phylo4d}), and objects used by other comparative methods packages in R:  \code{ape} objects
