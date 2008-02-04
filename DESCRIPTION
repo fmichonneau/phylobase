@@ -1,7 +1,7 @@
 Package: phylobase
 Type: Package
 Title: Base package for phylogenetic structures and comparative data
-Version: 0.2.1
+Version: 0.3
 Date: 2007-12-18
 Depends: methods, ape(>= 2.1), MASS
 Suggests: ade4
