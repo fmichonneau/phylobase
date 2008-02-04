@@ -1,0 +1,6 @@
+echo "Building libRcpp.a in RcppSrc..."
+R_HOME=`R RHOME`
+cd src/RcppSrc
+make RHOME=$R_HOME -f Makefile.win
+cd ../ncl/ncl
+make -f Makefile.win

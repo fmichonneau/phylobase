@@ -1,0 +1,51 @@
+#nexus
+
+[!Output comment before first block]
+
+begin paup; [this is an unknown block]
+	lset nst=2 basefreq=empirical tratio=estimate rates=gamma shape=estimate;
+end;
+
+[!Let's see if we can deal with [nested] comments]
+
+[!
+What happens if we do this!
+]
+
+begin [comment at beginning of token]taxa;
+	dimensions[comment at end of token] ntax=11;
+	taxlabels  [comment between tokens]
+		P._fimbriata
+		'P. robusta'
+		'P. americana'
+		'P. myriophylla'
+		'P. articulata'
+		'P. parksii'
+		'P. gracilis'
+		'P. macrophylla'
+		'P. polygama'
+		'P. basiramia'
+		'P. ciliata'
+		[!output comment in TAXLABELS command]
+	;
+end;
+
+begin trees;
+	translate
+		1  P._fimbriata,
+		2  P._robusta,
+		3  P._americana,
+		4  P._myriophylla,
+		5  P._articulata,
+		6  P._parksii,
+		7  P._polygama,
+		8  P._macrophylla,
+		9  P._gracilis,
+		10  P._basiramia,
+		11  P._ciliata
+	;
+	utree unrooted =      (1,2,((4,3,(5,6)),((7,8),(9,(10,11)))));
+	tree  rooted   =      ((1,2),((4,3,(5,6)),(7,(8,(9,(10,11))))));
+	utree u_to_r   = [&R] ((1,2),((4,3,(5,6)),(7,(8,(9,(10,11))))));
+	tree  r_to_u   = [&U] (1,2,((4,3,(5,6)),((7,8),(9,(10,11)))));
+end;

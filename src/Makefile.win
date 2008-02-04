@@ -1,0 +1,29 @@
+# Project: RcppTemplate
+# Makefile created by Dev-C++ 4.9.9.2
+# modified bei UL in order to fit mingw and R requirements, 16.09.2005
+
+#This include causes many warnings and other issues, and doesn't seem to be needed!
+#include $(RHOME)/src/gnuwin32/MkRules
+
+OBJ = NCLInterface.o ReadWithNCL.o
+LINKOBJ  = NCLInterface.o ReadWithNCL.o $(RES)
+DLLLIBS = -s -L RcppSrc -lRcpp -L"$(RHOME)/bin" -lR -L ncl/ncl -lncl --no-export-all-symbols --add-stdcall-alias
+BIN  = phylobase.dll
+CXXFLAGS = -I RcppSrc -I ncl/ncl -I"$(RHOME)/include" -I"$(RHOME)/src/include" -Wall -O2 -DBUILDING_DLL=1
+RM = rm -f
+
+.PHONY: all clean
+
+all: phylobase.dll
+
+clean:
+	${RM} $(LINKOBJ) $(BIN)
+
+$(BIN): $(LINKOBJ)
+	$(CXX) -shared $(LINKOBJ) $(DLLLIBS) -o $(BIN)
+
+NCLInterface.o: NCLInterface.cpp
+	$(CXX) -c NCLInterface.cpp -o NCLInterface.o $(CXXFLAGS)
+    
+ReadWithNCL.o: ReadWithNCL.cpp
+	$(CXX) -c ReadWithNCL.cpp -o ReadWithNCL.o $(CXXFLAGS)
