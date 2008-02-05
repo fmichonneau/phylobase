@@ -285,7 +285,7 @@ setAs(from='phylo4',to='data.frame',
 
     node <- c(root, node)
     ancestor <- c(NA, ancestor)
-    branch.length <- c(0, x@edge.length)
+    branch.length <- c(x@root.edge, x@edge.length)
     if (length(branch.length) == 1) branch.length <- rep("", n.tip+n.int)
     if (print.species <- !(is.null(x@node.label) & is.null(x@tip.label)))
     { 
