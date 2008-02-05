@@ -12,7 +12,7 @@ setClass("phylo4",
                         node.label="character",
                         tip.label="character",
                         edge.label="character",
-                        root.edge="integer"),
+                        root.edge="numeric"),
          prototype=list(edge=matrix(nrow=0,ncol=2),
            edge.length=numeric(0),
            Nnode=as.integer(0),
@@ -21,7 +21,7 @@ setClass("phylo4",
            edge.label=as.character(0),
            ## check?
            ##           node.label = as.character(1:Nnode),
-           root.edge=as.integer(NA)),
+           root.edge=as.numeric(NA)),
          validity=check_phylo4)
          
 ###################################
@@ -617,14 +617,15 @@ phylo4 <- function(edge, edge.length=NULL, tip.label=NULL, node.label=NULL,
         if(length(edge.label) != nrow(edge)) stop("the edge labels are not consistent with the number of edges")
     } 
 
-    ## root.edge
-    if(!is.null(root.edge)) {
-        if(!round(root.edge)==root.edge) stop("root.edge must be an integer")
-        root.edge <- as.integer(root.edge)
-        if(root.edge > nrow(edge)) stop("indicated root.edge do not exist")
-    } else {
-        root.edge <- as.integer(NA)
-    }
+    ## root.edge - if no root edge lenth provided, set to a numeric NA
+    if(is.null(root.edge)) root.edge <- as.numeric(NA)
+    ##if(!is.null(root.edge)) {
+    ##    if(!round(root.edge)==root.edge) stop("root.edge must be an integer")
+    ##    root.edge <- as.integer(root.edge)
+    ##    if(root.edge > nrow(edge)) stop("indicated root.edge do not exist")
+    ##} else {
+    ##    root.edge <- as.integer(NA)
+    ##}
     
     ## fill in the result
     res <- new("phylo4")
