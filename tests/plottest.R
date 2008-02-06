@@ -9,7 +9,7 @@ par(mfrow=c(1,2))
 plot(g1,show.node.label=TRUE)
 ## be careful with this: works if par("fin")=c(5.56,6.77)
 ##                       fails if par("fin")=c(4.87,6.77)
-try(plot(g2,show.node.label=TRUE))
+try(plot(g2,show.node.label=TRUE),silent=TRUE)
 
 g2B <- as(g2,"phylog")
 ##  Note the numbering differences!

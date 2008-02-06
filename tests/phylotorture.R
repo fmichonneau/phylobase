@@ -30,6 +30,7 @@ if (any(OKvals)) {
         p3 <- p2[!has.sing]
         ## plot(p2[[13]])
     }
+}
 ## what SHOULD the rules for trees be?
 
 ## (a) reduce node numbers to 1 ... N ?
