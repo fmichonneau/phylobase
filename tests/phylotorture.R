@@ -52,7 +52,7 @@ broke1$edge[broke1$edge[,2] ==9, 1] <- 9  # disconnect the node, two subtrees, (
 
 as(broke1, "phylo4") -> tree   # makes a phylo4  object with no warning
 phylo4(broke1$edge)    # constructor makes a phylo4 object with no warning
-print(try(plot(tree), TRUE ))  # error message comes from ape, not phylo?
+print(try(plot(tree), silent=TRUE ))  # error message comes from ape, not phylo?
 
 # root node value != ntips + 1:
 
@@ -83,7 +83,7 @@ broke4$edge[broke4$edge==3] <- 13
 broke4$edge[broke4$edge==4] <- 14
 broke4$edge[broke4$edge==5] <- 15
 
-print(try(as(broke4, "phylo4"), TRUE) )  # error message saying tree has more than one root
-phylo4(broke4$edge)     # error message saying tree has more than one root
+print(try(as(broke4, "phylo4"), silent=TRUE) )  # error message saying tree has more than one root
+print(try(phylo4(broke4$edge),silent=TRUE))     # error message saying tree has more than one root
 # print(try(plot(broke4), TRUE))   ## CAUSES R TO HANG!
 

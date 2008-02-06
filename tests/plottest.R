@@ -1,5 +1,5 @@
 library(phylobase)
-library(ape)
+## library(ape)
 
 data(geospiza)
 g1 <- as(geospiza,"phylo4")
@@ -23,7 +23,7 @@ try(plot(g2C,show.node.label=TRUE))
 g3 = subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
                  "conirostris","scandens"))
 plot(extract.tree(g3))  ## phylo4
-t1 <- try(plot(g3))                 ## phylo4d -- error
+t1 <- try(plot(g3),silent=TRUE)                 ## phylo4d -- error
 
 ## Playing with new ways of plotting
 
