@@ -17,8 +17,8 @@ setClass("phylo4",
            edge.length=numeric(0),
            Nnode=as.integer(0),
            tip.label=character(0),
-           node.label=as.character(0),
-           edge.label=as.character(0),
+           node.label=character(0),
+           edge.label=character(0),
            ## check?
            ##           node.label = as.character(1:Nnode),
            root.edge=as.numeric(NA)),
@@ -279,27 +279,27 @@ setAs(from='phylo4',to='data.frame',
 	node <- x@edge[,2]
 	root <- unique(ancestor[!ancestor %in% node])
 	int.node <- c(root, unique(ancestor[ancestor %in% node]))
-    tip <- node[!(node %in% ancestor)]
+        tip <- node[!(node %in% ancestor)]
 	n.tip <- length(tip)
-    n.int <- length(int.node)
-
-    node <- c(root, node)
-    ancestor <- c(NA, ancestor)
-    branch.length <- c(x@root.edge, x@edge.length)
-    if (length(branch.length) == 1) branch.length <- rep("", n.tip+n.int)
-    if (print.species <- !(is.null(x@node.label) & is.null(x@tip.label)))
-    { 
-    	nl <- x@node.label       
-    	if (is.null(nl)) nl <-  rep("", n.int)   # phylo4 has a node.label for the root?
-    	tl <- x@tip.label
-    	if (is.null(tl)) tl <-  rep("", n.tip)
-        species.name <- c(nl, tl)
-	} else species.name <- NULL
-    if (is.null(root)) node.type <- c(rep("internal", n.int), rep("tip", n.tip))
-    else node.type <- c("root", rep("internal", n.int-1), rep("tip", n.tip))
-
-    return(data.frame(species.name, node, ancestor, branch.length, node.type))
-})
+        n.int <- length(int.node)
+        node <- c(root, node)
+        if (length(ancestor)>0) ancestor <- c(NA, ancestor)
+        branch.length <- c(x@root.edge, x@edge.length)
+        if (length(branch.length) == 1) branch.length <- rep("", n.tip+n.int)
+        if (print.species <- !(is.null(x@node.label) & is.null(x@tip.label)))
+          { 
+              nl <- x@node.label       
+              if (is.null(nl)) nl <-  rep("", n.int)   # phylo4 has a node.label for the root?
+              tl <- x@tip.label
+              if (is.null(tl)) tl <-  rep("", n.tip)
+              species.name <- c(nl, tl)
+          } else species.name <- NULL
+        if (length(root)==0) {
+            node.type <- c(rep("internal", n.int), rep("tip", n.tip))
+        }  else node.type <- c("root", rep("internal", n.int-1), rep("tip", n.tip))
+        
+        return(data.frame(species.name, node, ancestor, branch.length, node.type))
+    })
 
 printphylo4 <- function(x, printall = TRUE){
     if (printall)
@@ -553,6 +553,7 @@ setMethod("names", signature(x = "phylo4d"), function(x){
 ## recursive function to have labels of constant length
 ## base = a character string
 ## n = number of labels
+
 .genlab <- function(base, n) {
     f1 <- function(cha,n){
         if(nchar(cha)<n){
@@ -560,13 +561,20 @@ setMethod("names", signature(x = "phylo4d"), function(x){
             return(f1(cha,n))
         } else {return(cha)}
     }
-    w <- as.character(1:n)
-    max0 <- max(nchar(w))
+    w <- as.character(seq(1,length.out=n))
+    max0 <- if(length(w)==0) 0 else max(nchar(w))
     w <- sapply(w, function(cha) f1(cha,max0))
     return(paste(base,w,sep=""))
 }
 
-
+## a simpler version
+.genlab <- function(base,n) {
+    if (n<=0) return("")
+    s <- seq(length.out=n)
+    fw <- max(nchar(as.character(s)))
+    numstr <- formatC(s,flag="0",width=fw)
+    paste(base,numstr,sep="")
+}
 
 
 

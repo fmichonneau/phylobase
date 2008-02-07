@@ -53,16 +53,21 @@ broke1$edge[broke1$edge[,2] ==9, 1] <- 9  # disconnect the node, two subtrees, (
 
 as(broke1, "phylo4") -> tree   # makes a phylo4  object with no warning
 phylo4(broke1$edge)    # constructor makes a phylo4 object with no warning
-print(try(plot(tree), silent=TRUE ))  # error message comes from ape, not phylo?
+## error message comes from ape, not phylo? -- AND
+##   error is about singles, not disconnected nodes
+print(try(plot(tree), silent=TRUE ))  
 
 # root node value != ntips + 1:
 
 broke2 <- t1
 broke2$edge[broke2$edge==6] <- 10
 
-print(try(plot(broke2), TRUE ))  # does not cause an error in ape; plots two subtrees, (root missing)
-print(try(as(broke2, "phylo4"), TRUE)) # generates error, but it's about wrong number of tips, not wrong value at root.
-phylo4(broke2$edge)    # error regarding wrong number of tips and nodes
+## warning, but no error
+plot(broke2)
+## generates error, but it's about wrong number of tips, not wrong value at root.
+print(try(as(broke2, "phylo4"), silent=TRUE))
+## error regarding number of tip labels vs edges and nodes
+print(try(phylo4(broke2$edge), silent=TRUE))
 
 # switch root node value (6) with next internal node (7):
 
