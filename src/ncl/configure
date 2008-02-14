@@ -20560,6 +20560,7 @@ echo "$as_me: *** NOTE: debugging is enabled; optimization is suppressed!" >&6;}
 			CXXFLAGS_WARNINGS="$CXXFLAGS_WARNINGS"
 			CXXFLAGS_OPTIM_SPEED="-O3 -ffast-math"
 			CXXFLAGS_OPTIM_SIZE="-Os -ffast-math"
+                        CXXFLAGS_USE_FPIC = "-fPIC" ## T Jombart/phylobase hack 
 		fi
 		case "$build_os" in
 			darwin*) CXXFLAGS_WARNINGS="$CXXFLAGS_WARNINGS -Wno-long-double";;
@@ -20569,8 +20570,8 @@ echo "$as_me: *** NOTE: debugging is enabled; optimization is suppressed!" >&6;}
 	if test "x$CXXFLAGS_OPTIM_SIZE" = "x"; then
 		CXXFLAGS_OPTIM_SIZE=$CXXFLAGS_OPTIM_SPEED
 	fi
-
-	CXXFLAGS="$CXXFLAGS $CXXFLAGS_OPTIM_SPEED $CXXFLAGS_WARNINGS"
+ ## T Jombart/phylobase hack: add CXXFLAGS_USE_FPIC
+	CXXFLAGS="$CXXFLAGS $CXXFLAGS_OPTIM_SPEED $CXXFLAGS_WARNINGS $CXXFLAGS_USE_FPIC"
 
 
 
