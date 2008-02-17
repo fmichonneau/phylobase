@@ -13,7 +13,7 @@ setClass("phylo4",
                         tip.label="character",
                         edge.label="character",
                         root.edge="numeric"),
-         prototype=list(edge=matrix(nrow=0,ncol=2),
+         prototype=list(edge=matrix(nrow=0,ncol=2,dimname=list(NULL,c("ancestor","descendent"))),
            edge.length=numeric(0),
            Nnode=as.integer(0),
            tip.label=character(0),
@@ -591,6 +591,7 @@ phylo4 <- function(edge, edge.length=NULL, tip.label=NULL, node.label=NULL,
     if(any(is.na(edge))) stop("NA are not allowed in edge matrix")
     if(ncol(edge)>2) warning("the edge matrix has more than two columns")
     edge <- as.matrix(edge[,1:2])
+    colnames(edge) <- c("ancestor","desendent")
     
     ## edge.length
     if(!is.null(edge.length)) {
