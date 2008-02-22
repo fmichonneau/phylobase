@@ -9,7 +9,11 @@ par(mfrow=c(1,2))
 plot(g1,show.node.label=TRUE)
 ## be careful with this: works if par("fin")=c(5.56,6.77)
 ##                       fails if par("fin")=c(4.87,6.77)
-try(plot(g2,show.node.label=TRUE),silent=TRUE)
+##try(plot(g2,show.node.label=TRUE),silent=TRUE)
+## Here, R was complaining about a lack of room to plot data
+## so nothing abnormal. -- TJ
+plot(g2,show.node.label=TRUE,cex.lab=.5,cex.sym=.5,box=FALSE)
+
 
 g2B <- as(g2,"phylog")
 ##  Note the numbering differences!
@@ -23,7 +27,13 @@ try(plot(g2C,show.node.label=TRUE))
 g3 = subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
                  "conirostris","scandens"))
 plot(extract.tree(g3))  ## phylo4
-t1 <- try(plot(g3),silent=TRUE)                 ## phylo4d -- error
+t1 <- try(plot(g3),silent=TRUE)
+## no error but mistakes in node labels
+## because extract.tree has uncorrect @node.label (see below). -- TJ
+nNodes(g2)
+nNodes(g3)
+identical(g2@node.label,g3@node.label)
+
 
 ## Playing with new ways of plotting
 

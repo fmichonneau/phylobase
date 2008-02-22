@@ -4,7 +4,7 @@ setGeneric("identify")
 ##   (class definitions)
 setMethod("identify","phylo4",
            function(x,n=1,...) {
-               plot(x)
+               plot(x, ...)
                last <- .last_plot.phylo # information return from plot.phylo
                N.tip <- nTips(x)
                N.node <- nNodes(x)
