@@ -27,12 +27,7 @@ try(plot(g2C,show.node.label=TRUE))
 g3 = subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
                  "conirostris","scandens"))
 plot(extract.tree(g3))  ## phylo4
-t1 <- try(plot(g3),silent=TRUE)
-## no error but mistakes in node labels
-## because extract.tree has uncorrect @node.label (see below). -- TJ
-nNodes(g2)
-nNodes(g3)
-identical(g2@node.label,g3@node.label)
+plot(g3,ratio=.5)
 
 
 ## Playing with new ways of plotting

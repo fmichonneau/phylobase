@@ -37,7 +37,7 @@ setMethod("prune","phylo4d",
                    root.edge = 0,...) {
             oldnodelabels <- phy@node.label
             ## need unique labels to match data correctly
-            tags <- paste("N",1:nNodes(phy),sep="")
+            tags <- .genlab("N",nNodes(phy))
             phy@node.label <- tags
             if (hasNodeData(phy)) {
               rownames(phy@node.data) <- phy@node.label
@@ -51,7 +51,7 @@ setMethod("prune","phylo4d",
               phytr@node.data <- phy@node.data[m1,,drop=FALSE]
               rownames(phytr@node.data) <- phytr@node.label
             }
-            phytr@node.label <- oldnodelabels
+            ## phytr@node.label <- oldnodelabels
             phytr
           })
 
