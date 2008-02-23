@@ -15,7 +15,7 @@ FOR VERSION 0.3
   * modify phylo4 method to allow "Singles" (plot.phylo doesn't)? What are 'singles'? One single descendent for a node?
   * plotting with data and `show.node.label` scrambles order of node labels *this is really a problem with ade4 vs ape ordering of nodes* -- [fixed since we no longer use ade4 for plotting] TJ
   * multiPhylo4x plotting
-  * plot the tree when no data are stored in a phylo4d instead of throwing an error
+  * plot the tree when no data are stored in a phylo4d instead of throwing an error -- [done] TJ
 
 ## Data classes
 ### Tree model:

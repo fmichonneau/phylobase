@@ -31,7 +31,7 @@ setMethod("plot", signature(x="phylo4d",y="missing"),
               
     #### preliminary stuff and checks
     if(!require(ape)) stop("the ape package is required")   
-    if(ncol(tdata(x,which="tip")) == 0) stop("no data in this phylo4d object")
+    ## if(ncol(tdata(x,which="tip")) == 0) stop("no data in this phylo4d object")
     
     cex <- par("cex")
     symbol <- match.arg(symbol)
@@ -40,6 +40,13 @@ setMethod("plot", signature(x="phylo4d",y="missing"),
     ## convert the tree into phylo
     tre <- suppressWarnings(as(x,"phylo"))
     tre$node.label <- x@node.label # this should be done by the as(x,"phylo")
+    ## plot only tree if no tip data
+    if(ncol(tdata(x,which="tip")) == 0) {
+         plot.phylo(tre, type=treetype, direction="rightwards", show.tip.label=show.tip.label,
+                          show.node.label=show.node.label, cex=cex.label,
+                          no.margin=FALSE, x.lim=NULL, y.lim=NULL, ...)
+         return(invisible())
+     }   
 
     #### data handling
     ## retrieve data
