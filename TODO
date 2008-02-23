@@ -11,12 +11,11 @@ FOR VERSION 0.3
 ## Plotting
 ### phylo4d objects
   * verify that identify works with this version -- [yes] TJ
-  * error in plotting a subsetted tree: see tests/plottest.R -- [no error but mistake in @node.label returned by 'subset'] TJ.
-  * modify phylo4 method to allow "Singles" (plot.phylo doesn't)?
-  * plotting with data and `show.node.label` scrambles order of node
-   labels *this is really a problem with ade4 vs ape ordering of nodes* -- [fixed since we no longer use ade4 for plotting] TJ
-  * plotting with subsetted data can throw error (see tests/plottest.R) -- [comes from 'subset', see above] TJ
+  * error in plotting a subsetted tree: see tests/plottest.R -- [fixed] TJ.
+  * modify phylo4 method to allow "Singles" (plot.phylo doesn't)? What are 'singles'? One single descendent for a node?
+  * plotting with data and `show.node.label` scrambles order of node labels *this is really a problem with ade4 vs ape ordering of nodes* -- [fixed since we no longer use ade4 for plotting] TJ
   * multiPhylo4x plotting
+  * plot the tree when no data are stored in a phylo4d instead of throwing an error
 
 ## Data classes
 ### Tree model:
