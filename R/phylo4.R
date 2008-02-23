@@ -553,21 +553,6 @@ setMethod("names", signature(x = "phylo4d"), function(x){
 ## recursive function to have labels of constant length
 ## base = a character string
 ## n = number of labels
-
-.genlab <- function(base, n) {
-    f1 <- function(cha,n){
-        if(nchar(cha)<n){
-            cha <- paste("0",cha,sep="")
-            return(f1(cha,n))
-        } else {return(cha)}
-    }
-    w <- as.character(seq(1,length.out=n))
-    max0 <- if(length(w)==0) 0 else max(nchar(w))
-    w <- sapply(w, function(cha) f1(cha,max0))
-    return(paste(base,w,sep=""))
-}
-
-## a simpler version
 .genlab <- function(base,n) {
     if (n<=0) return("")
     s <- seq(length.out=n)
