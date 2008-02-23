@@ -46,3 +46,47 @@ setMethod("subset", "phylo", function(x,...) {
 })
 
 
+
+
+###############
+# '[' operator
+###############
+## phylo4
+setMethod("[","phylo4", 
+          function(x, i) {
+
+              if(missing(i)) i <- TRUE
+
+              oldlab <- labels(x)
+              newlab <- oldlab[i]
+              tip.include <- match(newlab, oldlab)
+              res <- subset(x, tips.include=tip.include)
+
+              return(res)
+          })
+
+
+
+
+## phylo4d
+setMethod("[","phylo4d", 
+          function(x, i, j, ..., drop=FALSE) {
+
+              if(missing(i)) i <- TRUE
+              if(missing(j)) j <- TRUE
+
+              #### data handling
+              ## for now handle only tip data
+              tab <- tdata(x, which="tip")[i, j, ...,drop=FALSE]
+              oldtabnames <- row.names(tdata(x,which="tip"))
+              
+              #### tree handling
+              tip.include <- match(row.names(tab), oldtabnames)
+              tre <- subset(as(x,"phylo4"), tips.include=tip.include)
+
+              ## result
+              res <- phylo4d(x=tre, tip.data=tab)
+              
+              return(res)
+          })
+

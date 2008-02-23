@@ -5,9 +5,22 @@
 \alias{subset,phylo-method}
 \alias{subset,phylo4-method}
 \alias{subset,phylo4d-method}
+\alias{[,phylo4-method}
+\alias{[,phylo4d-method}
 \title{Methods for creating subsets of phylogenies}
 \description{
-  Methods for creating subsets of phylogenies, based on pruning a tree to include or exclude a set of terminal taxa, to include all descendants of the MRCA of two taxa, or eventually to a subtree rooted at a given node.
+  Methods for creating subsets of phylogenies, based on pruning a tree
+  to include or exclude a set of terminal taxa, to include all
+  descendants of the MRCA of two taxa, or eventually to a subtree rooted
+  at a given node.\cr
+
+  The "[" operator can be used with \linkS4class{phylo4} and
+  \linkS4class{phylo4d} objects. With a \linkS4class{phylo4} object
+  'foo', \code{foo[i]} creates a subset of \code{foo} taking \code{i}
+  for a tip index. With a \linkS4class{phylo4d} object
+  'foo', \code{foo[i,j]} creates a subset of \code{foo} taking \code{i}
+  for a tip index and \code{j} for the index of tips variables (see
+  details).\cr 
 }
 \section{Methods}{
   \describe{
@@ -35,24 +48,41 @@
   \item{\dots}{further arguments to be passed to other methods}
 }
 \details{
-  To be described.
-
   The arguments \code{tip} can be either character or numeric. In the
   first case, it gives the labels of the tips to be deleted; in the
   second case the numbers of these labels in the vector
-  \code{phy\$tip.label} are given
+  \code{phy\$tip.label} are given.\cr
+
+  The indices used with the \code{[} operator can be characters, integers
+  or logical, just like with a vector or a matrix.\cr
+  If \code{foo} is a \linkS4class{phylo4d} object, the index of
+  variables ("j") is optional: \code{foo[i,j]} is the same as
+  \code{foo[i]}.\cr
+  
 }
 \value{
   an object of class \code{"phylo4"}
 }
-\author{Steven Kembel \email{skembel@berkeley.edu} and Damien de Vienne \email{damien.de-vienne@u-psud.fr}}
+\author{Steven Kembel \email{skembel@berkeley.edu}\cr
+  Damien de Vienne \email{damien.de-vienne@u-psud.fr}\cr
+  Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}
+}
 \examples{
-library(geiger)
 data(geospiza)
-g1 <- as(geospiza$geospiza.tree,"phylo4")
+
+## "subset" examples
+g1 <- as(geospiza,"phylo4")
 plot(subset(g1,tips.exclude="scandens"))
 plot(subset(g1,mrca=c("scandens","fortis","pauper")))
 plot(subset(g1,node.subtree=18))
+
+## "[" examples
+par(mfrow=c(1,2),mar=rep(.1,4))
+plot(g1,show.node=TRUE)
+plot(g1[c(1:6,14)],show.node=TRUE)
+
+plot(geospiza[c(1:6,14)],show.node=TRUE,cex.sym=.5,cex.label=.7)
+plot(geospiza[c(1:6,14),3:5],show.node=TRUE,cex.sym=.5,cex.label=.7)
 }
 \keyword{manip}
 \keyword{methods}
