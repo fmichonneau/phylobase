@@ -357,8 +357,19 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
         res$sumry.el <- NULL
     }
 
-    ##TODO: polytomies
-    ## I'll finish this - Tibo
+    ## polytomies
+    if(hasPoly(x)){ # if there are polytomies
+        E <- edges(x)
+        temp <- tabulate(E[,1])
+        degree <- temp[E[,1]] # contains the degree of the ancestor for all edges
+        endsAtATip <- !(E[,2] %in% E[,1])
+        terminPoly <- (degree>2) & endsAtATip
+        internPoly <- (degree>2) & !endsAtATip
+        res$degree <- degree
+        res$polytomy <- rep("no poly.",nrow(E))
+        res$polytomy[terminPoly] <- "terminal poly."
+        res$polytomy[internPoly] <- "internal poly."
+    }
     
     ## model info
     res$loglik <- attr(x, "loglik")
@@ -386,6 +397,10 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
         cat("        variance     :", res$var.el, "\n")
         cat("        distribution :\n")
         print(res$sumry.el)
+    }
+    if(hasPoly(x)){
+        cat("\nDegree of the nodes  :", res$degree, "\n")
+        cat("Polytomies at the nodes:", res$polytomy, "\n")
     }
     
     if (!is.null(attr(x, "loglik"))) {
