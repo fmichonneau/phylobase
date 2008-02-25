@@ -10,10 +10,6 @@ FOR VERSION 0.3
 
 ## Plotting
 ### phylo4d objects
-  * verify that identify works with this version -- [yes] TJ
-  * error in plotting a subsetted tree: see tests/plottest.R -- [fixed] TJ.
-  * modify phylo4 method to allow "Singles" (plot.phylo doesn't)? What are 'singles'? One single descendent for a node?
-  * plotting with data and `show.node.label` scrambles order of node labels *this is really a problem with ade4 vs ape ordering of nodes* -- [fixed since we no longer use ade4 for plotting] TJ
   * multiPhylo4x plotting
   * plot the tree when no data are stored in a phylo4d instead of throwing an error -- [done] TJ
 
@@ -32,6 +28,7 @@ FOR VERSION 0.3
         2. Doing it the second way makes handling genetic data harder (and wastes space etc.). It is possible to have a "raw" vector within a data frame (which is the base type for "DNAbin" objects in ape), but we can't have a DNAbin object itself.  We could either convert to/from DNAbin as we accessed slots from the data frame (ugh), or we could try to write the rich data frame.  
         3. **If we design the accessor functions really well, and people use them rather than digging into the guts, we can change things later.**  Do the people at the [R Genetics project](http://rgenetics.org/) have any ideas about this?  
     * do we want to allow an accessor method to do the equivalent of `tdata(object)[i,j] <- value` ? or should people mess with their data before they attach it to the tree? (is this harder once the data are packed inside an additional layer of structure?)
+* Allow for multifurcations in a tree.
 
 ### multiPhylo
 * extend classes: should we have both multiPhylo4 (no data) and multiPhylo4d (with data) [DONE]
