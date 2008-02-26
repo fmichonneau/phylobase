@@ -5,6 +5,7 @@
 \alias{print,phylo4d-method}
 \alias{summary,phylo4d-method}
 \alias{names,phylo4d-method}
+\alias{[,phylo4d,ANY,ANY,ANY-method}
 \title{phylo4d class}
 \description{S4 class for phylogenetic tree and data.}
 \section{Objects from the Class}{

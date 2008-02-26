@@ -4,6 +4,7 @@
 \alias{pdata-class}
 \alias{[<-,pdata-method}
 \alias{[,pdata-method}
+\alias{[,pdata,ANY,ANY,ANY-method}
 \alias{[[,pdata-method}
 \alias{[[<-,pdata-method}
 \alias{[[,pdata,ANY,ANY-method}
