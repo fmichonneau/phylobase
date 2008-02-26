@@ -5,13 +5,13 @@ FOR VERSION 0.3
 * Data classes: see below
 * multiPhylo: see below
 * Documentation: see below
-* data class: check and incorporate into phylo4d FIXME: what do we mean here?
-* incorporate ioNCL
+* data class: check and incorporate into phylo4d
+  (i.e., make tip.data and node.data be of type "pdata"
+   rather than "data.frame")
 
 ## Plotting
 ### phylo4d objects
   * multiPhylo4x plotting
-  * plot the tree when no data are stored in a phylo4d instead of throwing an error -- [done] TJ
 
 ## Data classes
 ### Tree model:
@@ -31,8 +31,6 @@ FOR VERSION 0.3
 * Allow for multifurcations in a tree.
 
 ### multiPhylo
-* extend classes: should we have both multiPhylo4 (no data) and multiPhylo4d (with data) [DONE]
-* Implement multiphylo tree names? [DONE]
 * need multiPhylo! "unpack"/"pack" methods (convert multiPhylo4x to list of phylo4x, convert list of phylo4x to multiPhylo4x)
 * `ctree()` method
 * Still need many basic methods
@@ -41,15 +39,12 @@ FOR VERSION 0.3
 ### Documentation
 * Complete full example in vignette
 * Does S4-style help access really work? FIXME: Be more specific. ?as(mytree,"phylo4) does not work. It is not clear how users will find the coercion methods page. methods?coerce brings up phylobase page, but this is pretty cryptic... At least we have linked coerce-methods page to the phylo4, phylo4d pages.
-* is the phylo4 constructor actually documented anywhere?  YES phylo4.Rd added.
-* phylo4 constructor should have its own method manpage (currently is inside the class doc)  FIXED (we think)
 
 FOR VERSION 0.4
 =======================================================
 ### Options
-* phylo.compat: default=TRUE, allows accessing internal phylo4 elements with $ and $<- FIXME: Is this different than the current implementation? 
-* check.data defaults FIXME: what does this mean?
-* cf implementations in other packages (e.g. bbmle) FIXME: what does "cf" and "bbmle" mean?
+* phylo.compat: default=TRUE, allows accessing internal phylo4 elements with $ and $<- (bb) in other words, allow the possibility of turning OFF this backward-compatibility ...
+* compare the way that options() is implemented in other packages (e.g. the bbmle package, on CRAN)
    
 ### Rooting
 * implement re-rooting
