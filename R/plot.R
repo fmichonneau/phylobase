@@ -171,9 +171,10 @@ setMethod("plot", signature(x="phylo4d",y="missing"),
                             adj=1, srt=90, cex=cex.label)
 
     #### plot tip labels
-    x.base <- xrange.data[2] + x.inset
-    text(x=rep(x.base,plotres$Ntip), y=1:plotres$Ntip, lab=tip.label, font=font, cex=cex.label, pos=4)
-
+    if(show.tip.label){
+        x.base <- xrange.data[2] + x.inset
+        text(x=rep(x.base,plotres$Ntip), y=1:plotres$Ntip, lab=tip.label, font=font, cex=cex.label, pos=4)
+    }
 
     #### add a legend for symbols
     if(legend){
