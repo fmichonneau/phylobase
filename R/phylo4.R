@@ -49,7 +49,10 @@ setGeneric("nTips", function(x,...) {
     standardGeneric("nTips")
 })
 setMethod("nTips","phylo4", function(x,...) {
-    length(x@tip.label)
+    ## length(x@tip.label)
+    E <- edges(x)
+    res <- sum(!E[,2] %in% E[,1])
+    return(res)
 })
 ## rm(nTips)
 
@@ -585,7 +588,7 @@ setMethod("names", signature(x = "phylo4d"), function(x){
 ## TEST ME . wait for validity check
 ##
 phylo4 <- function(edge, edge.length=NULL, tip.label=NULL, node.label=NULL,
-                   edge.label=NULL, root.edge=NULL,...){
+                   edge.label=NULL, root.edge=NULL, ...){
     ## edge
     mode(edge) <- "integer"
     if(any(is.na(edge))) stop("NA are not allowed in edge matrix")
@@ -624,7 +627,7 @@ phylo4 <- function(edge, edge.length=NULL, tip.label=NULL, node.label=NULL,
         edge.label <- paste("E", edge[,2], sep="")
     } else {
         if(length(edge.label) != nrow(edge)) stop("the edge labels are not consistent with the number of edges")
-    } 
+    }
 
     ## root.edge - if no root edge lenth provided, set to a numeric NA
     if(is.null(root.edge)) root.edge <- as.numeric(NA)
@@ -669,7 +672,7 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
 ## first arg is a phylo4
 setMethod("phylo4d", c("phylo4"), function(x, tip.data=NULL, node.data=NULL, all.data=NULL, ...){
 
-    if(!check_phylo4(x)) stop("invalid phylo4 object provided in x")
+    if(is.character(checkval <- check_phylo4(x))) stop(checkval)
     
     res <- new("phylo4d")
     res@edge <- x@edge
