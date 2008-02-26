@@ -38,7 +38,8 @@
 \item{node.data}{a data frame for nodes data}
 \item{all.data}{a data frame for all (i.e. tips and nodes) data. In such
   case, first rows should correspond to tips, last rows to nodes.}
-\item{\dots}{further arguments to be passed to other methods.}
+\item{\dots}{further arguments to be passed to other methods. Used to
+  control the validity checking of the created object (see \code{\link{check_data}}).}
 }
 \value{
   An object of class \linkS4class{phylo4d}.
