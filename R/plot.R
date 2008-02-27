@@ -12,7 +12,8 @@
 
 setGeneric("plot")
 setMethod("plot",signature(x="phylo4",y="missing"), function(x,...){
-    invisible(check_phylo4(x))
+    if (is.character(chk <- check_phylo4(x)))
+      stop("bad phylo4 object: ",chk)
     if(!require(ape)) stop("the ape package is required")
     x <- as(x, "phylo")
     plot(x, ...)
@@ -27,10 +28,13 @@ setMethod("plot",signature(x="phylo4",y="missing"), function(x,...){
 ## plot phylo4d
 ################
 setMethod("plot", signature(x="phylo4d",y="missing"), 
-          function(x, treetype=c("phylogram","cladogram"), symbol=c("circles", "squares"), center=TRUE, scale=TRUE, legend=TRUE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=1, cex.legend=1, ...){
+          function(x, treetype=c("phylogram","cladogram"), symbol=c("circles", "squares"), center=TRUE, scale=TRUE, legend=TRUE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=1, cex.legend=1, ...)
+          {
               
-    #### preliminary stuff and checks
-    invisible(check_phylo4(x))
+              ## preliminary stuff and checks
+              if (is.character(chk <- check_phylo4(x)))
+                stop("bad phylo4d object: ",chk)
+
     if(!require(ape)) stop("the ape package is required")
     ## if(ncol(tdata(x,which="tip")) == 0) stop("no data in this phylo4d object")
     

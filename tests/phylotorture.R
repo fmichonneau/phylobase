@@ -93,3 +93,9 @@ print(try(as(broke4, "phylo4"), silent=TRUE) )  # error message saying tree has 
 print(try(phylo4(broke4$edge),silent=TRUE))     # error message saying tree has more than one root
 # print(try(plot(broke4), TRUE))   ## CAUSES R TO HANG!
 
+###
+foo <- new('phylo4')
+set.seed(1001)
+foo@edge <- rcoal(10)$edge
+print(try(plot(foo)))
+
