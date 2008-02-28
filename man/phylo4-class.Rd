@@ -55,6 +55,12 @@
     - \code{var.el}: variance of edge lengths (estimate for population) \cr
     - \code{sumry.el}: summary (i.e. range and quartiles) of the edge
     lengths \cr
+    - \code{degree}: (optionnal) degree (i.e. number of descendents) of
+    each node; displayed only when there are polytomies \cr
+    - \code{polytomy}: (optionnal) type of polytomy for each node:
+    'node', 'terminal' (all descendents are tips) or internal (at least
+    one descendent is an internal node); displayed only when there are
+    polytomies \cr
 
    The \code{names} method returns a vector of characters corresponding
    to the names of the slots.
@@ -70,5 +76,12 @@
   P1
   sumryP1 = summary(P1)
   sumryP1
+
+  ## summary of a polytomic tree
+  E <- matrix(c(8,9,10,10,9,9,8,11,11,11,9,10,1,2,3,4,11,5,6,7),ncol=2)
+  P2 <- phylo4(E)
+  plot(P2,show.node=TRUE)
+  sumryP2 <- summary(P2)
+  sumryP2
 }
 \keyword{classes}

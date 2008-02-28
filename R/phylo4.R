@@ -369,9 +369,16 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
         terminPoly <- (degree>2) & endsAtATip
         internPoly <- (degree>2) & !endsAtATip
         res$degree <- degree
-        res$polytomy <- rep("no poly.",nrow(E))
-        res$polytomy[terminPoly] <- "terminal poly."
-        res$polytomy[internPoly] <- "internal poly."
+        res$polytomy <- rep("none",nrow(E))
+        res$polytomy[terminPoly] <- "terminal"
+        res$polytomy[internPoly] <- "internal"
+        ## now just keep information about nodes (not all edges)
+        nod <- unique(E[,1])
+        idx <- match(nod,E[,1])
+        res$degree <- res$degree[idx]
+        names(res$degree) <- NodeLabels(x)
+        res$polytomy <- res$polytomy[idx]
+        names(res$polytomy) <- NodeLabels(x)
     }
     
     ## model info
@@ -379,7 +386,7 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
     res$para <- attr(x, "para")
     res$xi <- attr(x, "xi")
     
-    ## if quiet, stop here                                        
+    ## if quiet, stop here
     if(quiet) return(invisible(res))
     
     if(!is.null(x$root.edge)){
@@ -393,7 +400,7 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
     cat(" Number of nodes   :", res$nb.nodes, "\n")
     ## cat("  ")
     if(is.null(x$edge.length)) {
-        cat(" Branch lengths      : No branch lengths.\n")
+        cat(" Branch lengths    : No branch lengths.\n")
     } else {
         cat(" Branch lengths:\n")
         cat("        mean         :", res$mean.el, "\n")
@@ -402,8 +409,12 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
         print(res$sumry.el)
     }
     if(hasPoly(x)){
-        cat("\nDegree of the nodes  :", res$degree, "\n")
-        cat("Polytomies at the nodes:", res$polytomy, "\n")
+        cat("\nDegree of the nodes  :\n")
+        print(res$degree)
+        cat("\n")
+        cat("Types of polytomy:\n")
+        print(res$polytomy)
+        cat("\n")
     }
     
     if (!is.null(attr(x, "loglik"))) {

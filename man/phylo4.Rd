@@ -2,7 +2,7 @@
 \alias{phylo4}
 \title{ create a phylogenetic tree object }
 \description{
-  The phylo4() function creates a phylogenetic tree object for use in phylobase methods. Phylobase contains functions for input of phylogenetic trees and data, manipulation of these objects including pruning and subsetting, and plotting. The phylobase package also contains translation functions to forms used in other comparative phylogenetic method packages.
+  The \code{phylo4} function creates a phylogenetic tree object for use in phylobase methods. Phylobase contains functions for input of phylogenetic trees and data, manipulation of these objects including pruning and subsetting, and plotting. The phylobase package also contains translation functions to forms used in other comparative phylogenetic method packages.
 }
 \usage{
 phylo4(edge, edge.length = NULL, tip.label = NULL, node.label = NULL, edge.label = NULL, root.edge = NULL, ...)
