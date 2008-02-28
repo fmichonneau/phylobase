@@ -4,6 +4,7 @@
 \title{Validity checking for phylo4d objects}
 \description{
   Basic checks on the validity of S4 phylogenetic plus data objects
+  (i.e. \linkS4class{phylo4d} objects).
 }
 \usage{
 check_data(object, use.tip.names=TRUE, missing.tip.data=c("fail","OK","warn"), extra.tip.data=c("fail","OK","warn"), default.tip.names=c("warn","OK","fail"), use.node.names=FALSE, missing.node.data=c("OK","warn","fail"), extra.node.data=c("OK","warn","fail"), default.node.names=c("warn","OK","fail"),\dots)
@@ -13,7 +14,7 @@ attach_data(object, use.tip.names = TRUE, use.node.names = FALSE,
 }
 
 \arguments{
-  \item{object}{A phylo4 object}
+  \item{object}{A phylo4d object}
   \item{use.tip.names}{Use tip data names if present (default=\code{TRUE})}
   \item{missing.tip.data}{Can tip data taxa be a subset of tree taxa? (default=\code{fail})}
   \item{extra.tip.data}{Can tip data taxa be a superset of tree taxa? (default=\code{fail})}
@@ -54,6 +55,7 @@ dat.subset <- dat[-1,]
 p4 <- as(p3,"phylo4")
 #create phylo4d objects with tip data
 p4d <- phylo4d(p4,dat)
+check_data(p4d)
 p4d.sorted <- phylo4d(p4,dat[5:1,])
 try(p4d.nonames <- phylo4d(p4,dat.defaultnames))
 p4d.nonames <- phylo4d(p4,dat.defaultnames,use.tip.names=FALSE)
