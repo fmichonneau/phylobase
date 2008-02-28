@@ -52,13 +52,17 @@ setMethod("subset", "phylo", function(x,...) {
 # '[' operator
 ###############
 ## phylo4
-setMethod("[","phylo4", 
+setMethod("[","phylo4",
           function(x, i) {
 
               if(missing(i)) i <- TRUE
 
               oldlab <- labels(x)
-              newlab <- oldlab[i]
+              if(is.character(i)){
+                  newlab <- i
+              } else {
+                  newlab <- oldlab[i]
+              }
               tip.include <- match(newlab, oldlab)
               res <- subset(x, tips.include=tip.include)
 
