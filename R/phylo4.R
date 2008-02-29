@@ -2,8 +2,6 @@ require(methods)
 require(ape)
 
 setOldClass("phylo")
-## setOldClass("multi.tree") ## obsolete
-setOldClass("multiPhylo")
 
 setClass("phylo4",
          representation(edge="matrix",
@@ -522,15 +520,6 @@ setMethod("summary", "phylo4d", function(object){
 
 
 
-setClass("multiPhylo4",
-         representation(phylolist="list",
-                        tree.names="character"),
-         prototype = list(phylolist=list(),
-           tree.names=character(0)))
-
-setClass("multiPhylo4d",
-         representation(tip.data="data.frame"),
-         contains="multiPhylo4")
 
 ################
 ## show phylo4d    ### no longer used  
@@ -778,28 +767,6 @@ setAs("phylo","phylo4d",
           phylo4d(as(from,"phylo4"),tip.data=data.frame())
       })
 
-setAs("multiPhylo4","multiPhylo",
-      function(from,to) {
-          newobj <- new("multiPhylo4",
-                        phylolist=lapply(from,as,to="phylo4"))
-      })
-
-setAs("multiPhylo4d","multiPhylo",
-      function(from,to) {
-          newobj <- new("multiPhylo4d",
-                        phylolist=lapply(from,as,to="phylo4"),
-                        tree.names=names(from),
-                        tip.data=data.frame())
-      })
-
-setAs("multiPhylo","multiPhylo4",
-      function(from,to) {
-          y <- lapply(as,from@phylolist,to="phylo")
-          names(y) <- from@tree.names
-          if (nrow(from@tip.data)>0) warning("discarded tip data")
-          class(y) <- "multiPhylo"
-          y
-      })
 
 setAs("phylo4","phylo",
       function(from,to) {

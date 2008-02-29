@@ -99,3 +99,5 @@ set.seed(1001)
 foo@edge <- rcoal(10)$edge
 print(try(plot(foo)))
 
+foo@tip.label <- rep('blah',10)
+foo@node.label <- rep("",9)
