@@ -277,31 +277,43 @@ printphylo <- function (x,printlen=6,...) {
 ##  Not sure if it works for unrooted trees
 setAs(from='phylo4',to='data.frame',
       def = function(from) {
+        if (is.character(checkval <- check_phylo4(from))) stop(checkval) # check the phylo4
       	x <- from
-	ancestor <- x@edge[,1]
-	node <- x@edge[,2]
+        E <- edges(x) # E: matrix of edges
+	ancestor <- E[,1]
+	node <- E[,2]
 	root <- unique(ancestor[!ancestor %in% node])
-	int.node <- c(root, unique(ancestor[ancestor %in% node]))
+	int.node <- c(root, unique(ancestor[ancestor %in% node])) # internal nodes (root first)
         tip <- node[!(node %in% ancestor)]
 	n.tip <- length(tip)
         n.int <- length(int.node)
-        node <- c(root, node)
-        if (length(ancestor)>0) ancestor <- c(NA, ancestor)
-        branch.length <- c(x@root.edge, x@edge.length)
-        if (length(branch.length) == 1) branch.length <- rep("", n.tip+n.int)
-        if (print.species <- !(is.null(x@node.label) & is.null(x@tip.label)))
-          { 
-              nl <- x@node.label       
-              if (is.null(nl)) nl <-  rep("", n.int)   # phylo4 has a node.label for the root?
-              tl <- x@tip.label
-              if (is.null(tl)) tl <-  rep("", n.tip)
-              species.name <- c(nl, tl)
-          } else species.name <- NULL
-        if (length(root)==0) {
+        # node <- c(root, node) # doesn't fit the ordering: root, other internal nodes, tips
+        node <- c(int.node,tip)
+        ## retrieve the ancestor of each node
+        idx <- match(node,E[,2]) # new ordering of the descendents/edges
+        # if (length(ancestor)>0) ancestor <- c(NA, ancestor)
+        ancestor <- E[idx,1]
+        # branch.length <- c(x@root.edge, x@edge.length) # root.edge is not an edge length
+        branch.length <- EdgeLength(x)[idx]
+        # if (length(branch.length) == 1) branch.length <- rep("", n.tip+n.int)
+        if(is.null(EdgeLength(x))) branch.length <- rep(NA, length(node))
+        ## node and tip labels ##
+        ## beware: they cannot be NULL
+        ## there are always tip labels (or check_phylo4 complains)
+        ## there may not be node labels (character(0))
+        if(hasNodeLabels(x)) {
+            nl <- x@node.label
+        } else {
+            nl <- rep(NA,nNodes(x))
+        }
+        
+        tl <- labels(x)
+        taxon.name <- c(nl, tl)
+        if (!isRooted(x)) {
             node.type <- c(rep("internal", n.int), rep("tip", n.tip))
         }  else node.type <- c("root", rep("internal", n.int-1), rep("tip", n.tip))
         
-        return(data.frame(species.name, node, ancestor, branch.length, node.type))
+        return(data.frame(taxon.name, node, ancestor, branch.length, node.type))
     })
 
 printphylo4 <- function(x, printall = TRUE){
@@ -318,7 +330,7 @@ setAs(from='phylo4d', to='data.frame',
     tdata(from, "allnode") -> dat               # get data
     t_df$order <- rownames(t_df)     # save roworder of tree
 
-    merge(t_df, dat, by.x="species.name", by.y="row.names", all.x=TRUE, sort=FALSE) -> tdat
+    merge(t_df, dat, by.x="taxon.name", by.y="row.names", all.x=TRUE, sort=FALSE) -> tdat
                                      # merged tree, data, but mixed up
 
     order(tdat$order) -> o           # ordering to get back original roworder                              
@@ -521,24 +533,24 @@ setClass("multiPhylo4d",
          contains="multiPhylo4")
 
 ################
-## show phylo4d
+## show phylo4d    ### no longer used  
 ################
 ##
-setMethod("show", "phylo4d", function(object){
-    x <- object
+## setMethod("show", "phylo4d", function(object){
+##     x <- object
 
-    cat("\n##Comparative data##\n")
-    ##  print tree
-    cat("\n#Tree#\n")
-    printphylo(x)
+##     cat("\n##Comparative data##\n")
+##     ##  print tree
+##     cat("\n#Tree#\n")
+##     printphylo(x)
 
-    ## print traits
-    cat("\n#Traits#\n")
-    cat("\ntip.data: data.frame containing", ncol(tdata(x,"tip")), "traits for", nrow(tdata(x,"tip")),"tips" )
-    cat("\nnode.data: data.frame containing", ncol(tdata(x,"node")), "traits for", nrow(tdata(x,"node")),"nodes" )
+##     ## print traits
+##     cat("\n#Traits#\n")
+##     cat("\ntip.data: data.frame containing", ncol(tdata(x,"tip")), "traits for", nrow(tdata(x,"tip")),"tips" )
+##     cat("\nnode.data: data.frame containing", ncol(tdata(x,"node")), "traits for", nrow(tdata(x,"node")),"nodes" )
 
-    cat("\n")
-}) # end summary phylo4d
+##     cat("\n")
+## })
 
 ## ?? setMethod("print", "phylo4", o)
 
