@@ -158,6 +158,12 @@ setMethod("labels","phylo4", function(object,...) {
     object@tip.label
 })
 
+setMethod("labels","phylo4", function(object,which=c("tip","node","allnode"),...) {
+    which <- match.arg(which)
+    switch(which,tip=object@tip.label,node=object@node.label,
+           allnode=c(object@tip.label,object@node.label))
+})
+
 setGeneric("labels<-",
            function(object,...,value) {
                standardGeneric("labels<-")
@@ -167,7 +173,6 @@ setMethod("labels<-","phylo4", function(object,...,value) {
     object@tip.label <- value
     object
 })
-
 
 setGeneric("NodeLabels", function(x) {
     standardGeneric("NodeLabels")

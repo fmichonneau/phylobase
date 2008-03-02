@@ -16,6 +16,7 @@ FOR VERSION 0.3
 ## Data classes
 ### Tree model:
 * assigning edge and node labels -- is there/should there be an option to turn this off?  assign empty ("") labels? how about assigning the node number if there are no user-supplied labels?(mb)
+* basic checks when assigning labels (do number of labels and number of nodes/tips match?)
 * should default node labels start at N(nTips+1), to match internal node numbers?
 * should coercing phylo4d to phylo4 give a warning message about losing data?   Should phylo4d to phylo4?  Yes(mb)
 * order: All phylo4 edge matrices are internally stored as "cladewise"/Newick traversal order.  Extend edges accessor method with optional argument that allows edges to be extracted in a different order (possibly with an attribute as in ape); need to steal 'reorder' from ape, extend for phylo4d keeping track of traits also see ape::ladderize
