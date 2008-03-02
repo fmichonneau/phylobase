@@ -157,7 +157,6 @@ setGeneric("labels")
 setMethod("labels","phylo4", function(object,...) {
     object@tip.label
 })
-
 setMethod("labels","phylo4", function(object,which=c("tip","node","allnode"),...) {
     which <- match.arg(which)
     switch(which,tip=object@tip.label,node=object@node.label,
@@ -168,8 +167,9 @@ setGeneric("labels<-",
            function(object,...,value) {
                standardGeneric("labels<-")
            })
-
 setMethod("labels<-","phylo4", function(object,...,value) {
+    if (length(value) != length(object@tip.label))
+        stop("Number of tip labels does not match number of tips.")
     object@tip.label <- value
     object
 })
