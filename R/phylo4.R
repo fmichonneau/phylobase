@@ -331,15 +331,16 @@ setAs(from='phylo4d', to='data.frame',
     as(from, "phylo4") -> tree  	 # get tree
     as(tree, "data.frame") -> t_df   # convert to data.frame
     tdata(from, "allnode") -> dat               # get data
-    t_df$order <- rownames(t_df)     # save roworder of tree
+    old.ord <- t_df$taxon.name     # save roworder of tree
 
-    merge(t_df, dat, by.x="taxon.name", by.y="row.names", all.x=TRUE, sort=FALSE) -> tdat
-                                     # merged tree, data, but mixed up
+    ## merge data.frames of tree and data
+    tdat <- merge(t_df, dat, by.x="taxon.name", by.y="row.names", all.x=TRUE, all.y=FALSE, sort=FALSE)
 
-    order(tdat$order) -> o           # ordering to get back original roworder                              
-    tdat[o,] -> tdat                 # original order of tree
-    rownames(tdat) <- tdat$order     # fix scrambled row numbers
-    return(tdat[,!colnames(tdat) %in% "order"]) # drop "order"
+    ## restore the correct order (i.e. the one of the tree data.frame)
+    idx <- match(old.ord,tdat$taxon.name)
+    res <- tdat[idx,]
+
+    return(res) # drop "order"
 })
     
 setGeneric("print")
