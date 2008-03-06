@@ -821,7 +821,7 @@ setAs("phylo4","phylog", function(from, to){
     if(!require(ade4)) stop("the ade4 package is required")
     x <- as(from,"phylo")
     x <- write.tree(x,file="")
-    x <- newick2phylog(x, add.tools=FALSE)
+    x <- newick2phylog(x)
     return(x)
 })
 
