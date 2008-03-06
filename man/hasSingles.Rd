@@ -24,7 +24,7 @@ hasPoly(object)
   We haven't bothered to check for zero branch lengths:
   the consensus is that it doesn't come up much,
   and that it's simple enough to
-  test \code{any(EdgeLength(x)==0)} in these cases.
+  test \code{any(edgeLength(x)==0)} in these cases.
   (Single-descendant nodes are used e.g. in OUCH, or in
   other cases to represent events occurring along a branch.)
 }

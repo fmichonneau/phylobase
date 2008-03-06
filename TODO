@@ -70,7 +70,7 @@ FUTURE DISCUSSIONS
 ### Some things to think about (re)naming:
 * tree walking: `getDescend`, `getAncest`, `allDescend`, `allAncest` -- sons and fathers, daughters and mothers, tips/leaves, ?
 * should `check_data` be `check_phylo4d` for consistency with `check_phylo4` (or should `check_phylo4` be `check_tree`?)
-* EdgeLength/BranchLength?
+* edgeLength/BranchLength?
 * root, Root, rootNode, RootNode?
 * `subset(phy,node.subtree= )` == `subset(phy,subtree= )` ?
 

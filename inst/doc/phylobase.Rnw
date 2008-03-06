@@ -115,12 +115,12 @@ labels(g1)
 
 Print internal node labels (R automatically assigns values):
 <<>>=
-NodeLabels(g1)
+nodeLabels(g1)
 @ 
 
 Print edge labels (also automatically assigned):
 <<>>=
-EdgeLabels(g1)
+edgeLabels(g1)
 @ 
 
 Is it rooted?

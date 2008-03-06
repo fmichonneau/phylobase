@@ -2,7 +2,7 @@
 ## not bothering to check for zero branch lengths:
 ##   consensus is that this isn't very important,
 ##  and that it's simple enough to do
-##   any(EdgeLength(x)==0) if necessary
+##   any(edgeLength(x)==0) if necessary
 hasPoly <- function(object) {
   if(!check_phylo4(object)) stop("to be used with a phylo4 object")
   degree <- tabulate(edges(object)[, 1])

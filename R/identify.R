@@ -11,7 +11,7 @@ setMethod("identify","phylo4",
                tips <- labels(x)
                if (!hasNodeLabels(x)) {
                    nodes <- (N.tip+1):(N.tip+N.node)
-               } else nodes <- NodeLabels(x)
+               } else nodes <- nodeLabels(x)
                labs<-c(rep("",N.tip), nodes)
                click <- identify(last$xx, last$yy, labels=labs, n=n)
                ##    if (click > N.tip) {

@@ -2,7 +2,7 @@
 ## matching node labels with node numbers ...
 ## e.g.
 ## 14 tips, 13 int nodes
-## N04 = NodeLabels[4]
+## N04 = nodeLabels[4]
 ##   <-> node 18
 ## x = n-nTips(phy)
 ## so:     n = x+nTips(phy)
@@ -18,7 +18,7 @@ getnodes <- function(phy,node) {
         vals <- ifelse(!is.na(tipmatch),
                        tipmatch,
                        if (!hasNodeLabels(phy)) { NA } else {
-                           nt+match(node,NodeLabels(phy))
+                           nt+match(node,nodeLabels(phy))
                        })
         names(vals) <- node
         return(vals)
@@ -30,7 +30,7 @@ getnodes <- function(phy,node) {
                        ifelse(node<=nt+nNodes(phy),
                               if (!hasNodeLabels(phy)) { NA }
                               else {
-                                  NodeLabels(phy)[pmax(0,node-nt)]
+                                  nodeLabels(phy)[pmax(0,node-nt)]
                               },NA))
         ## pmax above to avoid error from negative indices
         names(node) <- vals

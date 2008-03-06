@@ -84,10 +84,10 @@ setMethod("edges","phylo4", function(x,order,...) {
     x@edge
 })
 
-setGeneric("RootEdge", function(x,order,...) {
-    standardGeneric("RootEdge")
+setGeneric("rootEdge", function(x,order,...) {
+    standardGeneric("rootEdge")
 })
-setMethod("RootEdge","phylo4", function(x,order,...) {
+setMethod("rootEdge","phylo4", function(x,order,...) {
     x@root.edge
 })
 
@@ -131,10 +131,10 @@ setMethod("hasEdgeLength","phylo4", function(x) {
     length(x@edge.length)>0
 })
 
-setGeneric("EdgeLength", function(x) {
-    standardGeneric("EdgeLength")
+setGeneric("edgeLength", function(x) {
+    standardGeneric("edgeLength")
 })
-setMethod("EdgeLength","phylo4", function(x) {
+setMethod("edgeLength","phylo4", function(x) {
     if (!hasEdgeLength(x)) NULL else x@edge.length
 })
 
@@ -174,37 +174,37 @@ setMethod("labels<-","phylo4", function(object,...,value) {
     object
 })
 
-setGeneric("NodeLabels", function(x) {
-    standardGeneric("NodeLabels")
+setGeneric("nodeLabels", function(x) {
+    standardGeneric("nodeLabels")
 })
-setMethod("NodeLabels","phylo4", function(x) {
+setMethod("nodeLabels","phylo4", function(x) {
     x@node.label
 })
 
-setGeneric("NodeLabels<-",
+setGeneric("nodeLabels<-",
            function(object,...,value) {
-               standardGeneric("NodeLabels<-")
+               standardGeneric("nodeLabels<-")
            })
 
-setMethod("NodeLabels<-","phylo4", function(object,...,value) {
+setMethod("nodeLabels<-","phylo4", function(object,...,value) {
     object@node.label <- value
     object
 })
 
 
-setGeneric("EdgeLabels", function(x) {
-    standardGeneric("EdgeLabels")
+setGeneric("edgeLabels", function(x) {
+    standardGeneric("edgeLabels")
 })
-setMethod("EdgeLabels","phylo4", function(x) {
+setMethod("edgeLabels","phylo4", function(x) {
     x@edge.label
 })
 
-setGeneric("EdgeLabels<-",
+setGeneric("edgeLabels<-",
            function(object,...,value) {
-               standardGeneric("EdgeLabels<-")
+               standardGeneric("edgeLabels<-")
            })
 
-setMethod("EdgeLabels<-","phylo4", function(object,...,value) {
+setMethod("edgeLabels<-","phylo4", function(object,...,value) {
     object@edge.label <- value
     object
 })
@@ -297,9 +297,9 @@ setAs(from='phylo4',to='data.frame',
         # if (length(ancestor)>0) ancestor <- c(NA, ancestor)
         ancestor <- E[idx,1]
         # branch.length <- c(x@root.edge, x@edge.length) # root.edge is not an edge length
-        branch.length <- EdgeLength(x)[idx]
+        branch.length <- edgeLength(x)[idx]
         # if (length(branch.length) == 1) branch.length <- rep("", n.tip+n.int)
-        if(is.null(EdgeLength(x))) branch.length <- rep(NA, length(node))
+        if(is.null(edgeLength(x))) branch.length <- rep(NA, length(node))
         ## node and tip labels ##
         ## beware: they cannot be NULL
         ## there are always tip labels (or check_phylo4 complains)
@@ -392,9 +392,9 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
         nod <- unique(E[,1])
         idx <- match(nod,E[,1])
         res$degree <- res$degree[idx]
-        names(res$degree) <- NodeLabels(x)
+        names(res$degree) <- nodeLabels(x)
         res$polytomy <- res$polytomy[idx]
-        names(res$polytomy) <- NodeLabels(x)
+        names(res$polytomy) <- nodeLabels(x)
     }
     
     ## model info
@@ -476,7 +476,7 @@ setMethod("tdata","phylo4d", function(x,which=c("tip","node","allnode"),...) {
 ##   cat("  Tree plus data object of type:", class(x), "\n")
 ##   cat("  Species Names                :", labels(x), "\n")
 ##   if (hasEdgeLength(x)){ 
-##     cat("  Has Branch Lengths (first 10):", EdgeLength(x)[1:min(length(EdgeLength(x)),10)], "\n")
+##     cat("  Has Branch Lengths (first 10):", edgeLength(x)[1:min(length(edgeLength(x)),10)], "\n")
 ##   } 
 ##   cat("  Rooted                       :", isRooted(x), "\n\n\n")
 ##  
@@ -557,7 +557,7 @@ setMethod("hasNodeData","phylo4d", function(x) {
     nrow(x@node.data)>0
 })
 
-setMethod("NodeLabels<-","phylo4d", function(object,...,value) {
+setMethod("nodeLabels<-","phylo4d", function(object,...,value) {
     object@node.label <- value
     rownames(object@node.data) <- value
     object

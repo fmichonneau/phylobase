@@ -48,10 +48,10 @@ t1 <- try(q1 <- phylo4d(r1,tip.data=tipdat2))
 
 plot(q2)
 plot(q2,treetype="cladogram")
-## plot(p2,type="dotchart",labels.nodes=NodeLabels(p2))
+## plot(p2,type="dotchart",labels.nodes=nodeLabels(p2))
 ## trace("plot", browser, signature = c("phylo4d","missing"))
 labels(q1) <- paste("q",1:5,sep="")
-NodeLabels(q1) <- paste("n",1:4,sep="")
+nodeLabels(q1) <- paste("n",1:4,sep="")
 p3 <- phylo4d(r1,tip.data=tipdat,node.data=data.frame(b=6:9))
 summary(p3)
 
