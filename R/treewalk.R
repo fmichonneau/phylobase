@@ -54,10 +54,10 @@ children <- function(phy,node) {
 
 ## get descendants [recursively]
 descendants <- function (phy, node, which=c("tips","all"))
+##                         self=FALSE)
 {
-    ## FIXME: allow vector of nodes?
+    ## FIXME: allow vector of nodes? (or just let people lapply?)
     which <- match.arg(which)
-    if (which=="all") stop('which="all" not yet working')
     node <- getnodes(phy,node)
     if (is.na(node)) stop("node ",node," not found in tree")
     n <- nTips(phy)
@@ -67,16 +67,19 @@ descendants <- function (phy, node, which=c("tips","all"))
     for (j in d) {
         if (j <= n)
           l <- c(l,j)
-        else if (which=="all") l <- c(l,node,descendants(phy,j,which="all"))
-        else l <- c(l, descendants(phy,j))
-##           l <- c(l, labels(phy,"tips")[as.numeric(j)])
-##         else if (which=="all") l <- c(l, names(node),
-##                    names(descendants(phy, j, which="all")))
-##         else l <- c(l, names(descendants(phy, j)))
+        else if (which=="all") l <- c(l,j,
+                   descendants(phy,j,which="all"))
+        else l <- c(l, descendants(phy,j,which=which))
     }
     return(getnodes(phy,l))
 }
 
+siblings <- function(phy, node, include.self=FALSE) {
+    v <- children(phy,parent(phy,node))
+    if (!include.self) v <- v[v!=getnodes(phy,node)]
+    v
+}
+    
 ## get ancestors (all nodes)
 ancestors <- function (phy, node) 
 {

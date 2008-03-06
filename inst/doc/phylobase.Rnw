@@ -231,7 +231,7 @@ One could drop the clade by  doing
 <<results=hide>>=
 subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
             "conirostris","scandens"))
-subset(g2,tips.exclude=allDescend(g2,MRCA(g2,c("difficilis","fortis"))))
+subset(g2,tips.exclude=names(descendants(g2,MRCA(g2,c("difficilis","fortis")))))
 @ 
 
 Another approach is to pick the subtree graphically, by plotting the tree and using \code{identify}, which returns the identify of the node you click on with the mouse.
@@ -244,10 +244,14 @@ subset(g2,node.subtree=n1)
 
 \section{Tree-walking}
 
-\code{getDescend}, \code{getAncest},
-\code{allDescend}, \code{allAncest},
-\code{getNodeByLabel}, \code{getLabelByNode}:
-not sure about the names or functionality of these (how much do we work in terms of labels and how much in terms of internal numbers?)
+\code{getnodes},
+\code{children}, \code{parent},
+\code{descendants}, \code{ancestors},
+\code{siblings},
+\code{MRCA} \ldots
+generally take a \code{phylo4} object, a node
+(specified by number or name) and return a named
+vector of node numbers.
 
 \section{multiPhylo classes}
 
