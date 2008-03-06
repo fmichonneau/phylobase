@@ -63,7 +63,7 @@ broke2 <- t1
 broke2$edge[broke2$edge==6] <- 10
 
 ## warning, but no error
-plot(broke2)
+## plot(broke2)  ## seems to hang R CMD check??
 ## generates error, but it's about wrong number of tips, not wrong value at root.
 print(try(as(broke2, "phylo4"), silent=TRUE))
 ## error regarding number of tip labels vs edges and nodes
