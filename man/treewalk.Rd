@@ -4,15 +4,14 @@
 \alias{descendants}
 \alias{ancestors}
 \alias{MRCA}
-\alias{getNodeByLabel}
-\alias{getLabelByNode}
+\alias{getnodes}
 \title{tree traversal and utility functions}
 \description{
   Functions for describing relationships among
   phylogenetic nodes
 }
 \usage{
-getNodeByLabel(phy,lab)
+getnodes(phy,node)
 parent(phy, node)
 children(phy, node)
 descendants(phy, node, which=c("tips","all"))
@@ -23,7 +22,6 @@ MRCA(phy,\dots)
   \item{phy}{a \code{phylo4} object (or one inheriting from
     \code{phylo4}, e.g. a \code{phylo4d} object)
   }
-  \item{lab}{a character label}
   \item{node}{a node number (or name)}
   \item{which}{whether to return all descendant nodes, or just tips
     (which="all" is not yet implemented)}

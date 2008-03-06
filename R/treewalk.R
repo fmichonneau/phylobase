@@ -7,35 +7,35 @@
 ## x = n-nTips(phy)
 ## so:     n = x+nTips(phy)
 
-getnodes <- function(phy,x) {
-    if (is.numeric(x) && all(floor(x)==x)) {
-        x <- as.integer(x)
+getnodes <- function(phy,node) {
+    if (is.numeric(node) && all(floor(node)==node)) {
+        node <- as.integer(node)
     }
-    if (is.character(x)) {
+    if (is.character(node)) {
         ## old getNodeByLabel()
         nt <- nTips(phy)
-        tipmatch <- match(x,labels(phy,"all"))
+        tipmatch <- match(node,labels(phy,"all"))
         vals <- ifelse(!is.na(tipmatch),
                        tipmatch,
                        if (!hasNodeLabels(phy)) { NA } else {
-                           nt+match(x,NodeLabels(phy))
+                           nt+match(node,NodeLabels(phy))
                        })
-        names(vals) <- x
+        names(vals) <- node
         return(vals)
-    } else if (is.integer(x)) {
+    } else if (is.integer(node)) {
         ## old getLabelByNode
         nt <- nTips(phy)
-        vals <- ifelse(x<=nt,  ## tips
-                       labels(phy,"all")[x], 
-                       ifelse(x<=nt+nNodes(phy),
+        vals <- ifelse(node<=nt,  ## tips
+                       labels(phy,"all")[node], 
+                       ifelse(node<=nt+nNodes(phy),
                               if (!hasNodeLabels(phy)) { NA }
                               else {
-                                  NodeLabels(phy)[pmax(0,x-nt)]
+                                  NodeLabels(phy)[pmax(0,node-nt)]
                               },NA))
         ## pmax above to avoid error from negative indices
-        names(x) <- vals
-        return(x)
-    } else stop("x must be integer or character")
+        names(node) <- vals
+        return(node)
+    } else stop("node must be integer or character")
 }
 
 

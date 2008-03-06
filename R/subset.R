@@ -23,12 +23,12 @@ setMethod("subset", "phylo4",
               }
               
               if (!is.null(node.subtree)) {
-                  return(prune(x,x@tip.label[!(x@tip.label %in% allDescend(x,node.subtree))]))
+                  return(prune(x,x@tip.label[!(x@tip.label %in% names(descendants(x,node.subtree)))]))
               }
               
               if (!is.null(mrca)) {
                   mnode <- MRCA(x,mrca)
-                  return(prune(x,x@tip.label[!(x@tip.label %in% allDescend(x,mnode))]))
+                  return(prune(x,x@tip.label[!(x@tip.label %in% names(descendants(x,mnode)))]))
               }
               arglist <- list(...)
               if (length(arglist)>0) {
