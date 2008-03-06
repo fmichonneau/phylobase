@@ -36,7 +36,11 @@ setMethod("plot", signature(x="phylo4d",y="missing"),
         stop("bad phylo4d object: ",chk)
 
     if(!require(ape)) stop("the ape package is required")
-    ## if(ncol(tdata(x,which="tip")) == 0) stop("no data in this phylo4d object")
+    if(cex.label<0.1) {
+        show.tip.label <- FALSE
+        show.node.label <- FALSE
+        show.var.label <- FALSE
+    }
     
     cex <- par("cex")
     symbol <- match.arg(symbol)
