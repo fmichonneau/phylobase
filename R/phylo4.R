@@ -48,14 +48,10 @@ setGeneric("rootNode<-", function(x,value) {
 setGeneric("hasEdgeLength", function(x) {
     standardGeneric("hasEdgeLength")
 })
-setMethod("hasEdgeLength","phylo4", function(x) {
-    length(x@edge.length)>0
-})
 
 setGeneric("edgeLength", function(x) {
     standardGeneric("edgeLength")
 })
-
 
 setGeneric("hasNodeLabels", function(x) {
     standardGeneric("hasNodeLabels")
@@ -66,20 +62,11 @@ setGeneric("hasEdgeLabels", function(x) {
 })
 
 setGeneric("labels")
-setMethod("labels","phylo4", function(object,...) {
-    object@tip.label
-})
 
 setGeneric("labels<-",
            function(object,...,value) {
                standardGeneric("labels<-")
            })
-setMethod("labels<-","phylo4", function(object,...,value) {
-    if (length(value) != length(object@tip.label))
-        stop("Number of tip labels does not match number of tips.")
-    object@tip.label <- value
-    object
-})
 
 setGeneric("nodeLabels", function(x) {
     standardGeneric("nodeLabels")

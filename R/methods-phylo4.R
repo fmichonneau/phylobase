@@ -255,11 +255,23 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
     return(invisible(res))
 }) # end setMethod summary phylo4
 
-################
-## names methods
-################
 setMethod("names", signature(x = "phylo4"), function(x){
     temp <- rev(names(attributes(x)))[-1]
     return(rev(temp))
+})
+
+setMethod("hasEdgeLength","phylo4", function(x) {
+    length(x@edge.length)>0
+})
+
+setMethod("labels","phylo4", function(object,...) {
+    object@tip.label
+})
+
+setMethod("labels<-","phylo4", function(object,...,value) {
+    if (length(value) != length(object@tip.label))
+        stop("Number of tip labels does not match number of tips.")
+    object@tip.label <- value
+    object
 })
 
