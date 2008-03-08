@@ -111,12 +111,4 @@ setGeneric("na.omit")
     paste(base,numstr,sep="")
 }
 
-## convert from phylo to phylo4
-## coerce phylo4d to phylo4 -- on purpose, so no warning
-extract.tree <- function(from) {
-    phylo4(edge=from@edge,
-           edge.length=from@edge.length,
-           Nnode=from@Nnode,
-           tip.label=from@tip.label)
-}
 

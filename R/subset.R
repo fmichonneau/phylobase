@@ -1,9 +1,6 @@
 ################
 ## subset phylo4
 ################
-##
-
-## 
 
 setGeneric("subset")
 setMethod("subset", "phylo4",
@@ -94,3 +91,10 @@ setMethod("[","phylo4d",
               return(res)
           })
 
+
+## coerce phylo4d to phylo4 -- on purpose, so no warning
+
+extract.tree <- function(from) {
+    phylo4(edge = from@edge, edge.length = from@edge.length, 
+        Nnode = from@Nnode, tip.label = from@tip.label)
+}
