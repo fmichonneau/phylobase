@@ -1,6 +1,3 @@
-require(methods)
-require(ape)
-
 setGeneric("nNodes", function(x) {
     standardGeneric("nNodes")
 })
