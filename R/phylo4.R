@@ -1,21 +1,5 @@
 require(methods)
 require(ape)
-         
-## accessor functions for all internal bits
-## HORRIBLE KLUGE
-nTips <- function(x,...)  { }  ## mask ape::nTips
-setGeneric("nTips", function(x,...) {
-    standardGeneric("nTips")
-})
-
-## hack to ensure ape compatibility
-setMethod("nTips","ANY", function(x) {
-    if (class(x)=="phylo") {
-        Ntip(x)
-    } else stop(paste("no 'nTips' method available for",
-                      deparse(substitute(x)),
-                      "(class",class(x),")"))
-})
 
 setGeneric("nNodes", function(x) {
     standardGeneric("nNodes")

@@ -1,7 +1,23 @@
+## accessor functions for all internal bits
+## HORRIBLE KLUGE
+nTips <- function(x,...)  { }  ## mask ape::nTips
+setGeneric("nTips", function(x,...) {
+    standardGeneric("nTips")
+})
+
 setMethod("nTips", "phylo4", function(x, ...) {
     E <- edges(x)
     res <- sum(!E[, 2] %in% E[, 1])
     return(res)
+})
+
+## hack to ensure ape compatibility
+setMethod("nTips","ANY", function(x) {
+    if (class(x)=="phylo") {
+        Ntip(x)
+    } else stop(paste("no 'nTips' method available for",
+                      deparse(substitute(x)),
+                      "(class",class(x),")"))
 })
 
 setMethod("nNodes", "phylo4", function(x) {
@@ -100,6 +116,12 @@ setMethod("$<-", "phylo4", function(x, name, value) {
     return(x)
 })
 
+
+printphylo4 <- function(x, printall = TRUE){
+    if (printall)
+      print(as(x, 'data.frame'))
+    else print(head(as(x, 'data.frame')))
+}
 ## hack for print/show 
 ## from http://tolstoy.newcastle.edu.au/R/e2/devel/06/12/1363.html
 #setMethod("print", "phylo4", printphylo)
@@ -109,12 +131,6 @@ setMethod("show", "phylo4", function(object) printphylo4(object))
 ##
 # Alternative print method for phylo4, showing the contents of the tree data.
 ##  Not sure if it works for unrooted trees
-
-printphylo4 <- function(x, printall = TRUE){
-    if (printall)
-      print(as(x, 'data.frame'))
-    else print(head(as(x, 'data.frame')))
-}
 
 printphylo <- function (x,printlen=6,...) {
     printlen <- max(1,printlen)
