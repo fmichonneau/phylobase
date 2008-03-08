@@ -72,3 +72,17 @@ setMethod("phylo4d", c("phylo4"), function(x, tip.data=NULL, node.data=NULL, all
     res <- attach_data(res,...)
     return(res)  
 })
+
+## first arg is a matrix of edges
+setMethod("phylo4d", c("matrix"), function(x, tip.data=NULL, node.data=NULL, all.data=NULL, ...){
+    tree <- phylo4(edge=x,...)
+    res <- phylo4d(tree, tip.data, node.data, all.data, ...)
+    return(res)
+})
+
+## first arg is a phylo
+setMethod("phylo4d", c("phylo"), function(x, tip.data=NULL, node.data=NULL, all.data=NULL, ...){
+    tree <- as(x, "phylo4")
+    res <- phylo4d(tree, tip.data, node.data, all.data, ...)
+    return(res)
+})

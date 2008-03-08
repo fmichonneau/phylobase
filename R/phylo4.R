@@ -254,8 +254,6 @@ setGeneric("print")
 #setMethod("show", "phylo4", function(object) printphylo(object))
 setMethod("print", "phylo4", printphylo4)
 setMethod("show", "phylo4", function(object) printphylo4(object))
-setMethod("print", "phylo4d", printphylo4)
-setMethod("show", "phylo4d", function(object) printphylo4(object))
 
 
 #################
@@ -359,121 +357,11 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
 setGeneric("tdata", function(x,...) {
     standardGeneric("tdata")
 })
-setMethod("tdata","phylo4d", function(x,which=c("tip","node","allnode"),...) {
-    which <- match.arg(which)
-    if (which=="allnode") {
-        namesmatch <- all(colnames(x@tip.data)==colnames(x@node.data))
-        classmatch <- all(sapply(x@tip.data,class)==sapply(x@node.data,class))
-        if (!(classmatch && namesmatch)) stop("Node and tip columns do not match, access tip and node data separately")
-    }
-    switch(which,tip=x@tip.data,node=x@node.data,
-           allnode=rbind(x@tip.data,x@node.data))
-    ##         edge=x@edgedata)
-})
-
-
-
-## setMethod("summary", "phylo4d", function(object){
-##   x <- object
-##   tdata(x, "tip") -> tips
-##   tdata(x, "allnode") -> allnodes
-##   cat("Phylogenetic tree with", nTips(x), " species and", nNodes(x), "internal nodes\n\n")
-##   cat("  Tree plus data object of type:", class(x), "\n")
-##   cat("  Species Names                :", labels(x), "\n")
-##   if (hasEdgeLength(x)){ 
-##     cat("  Has Branch Lengths (first 10):", edgeLength(x)[1:min(length(edgeLength(x)),10)], "\n")
-##   } 
-##   cat("  Rooted                       :", isRooted(x), "\n\n\n")
-##  
-##   cat("\nComparative data\n")
-##   if (nrow(tips)>0) 
-##     {
-##       cat("\nTips: data.frame with", nTips(x), "species and", ncol(tips), "variables \n")
-##       print(summary(tips))
-##     }
-##   if (nrow(allnodes)>0) 
-##     {
-##       cat("\nNodes: data.frame with", nEdges(x), "species and internal nodes and", ncol(allnodes), "variables \n")                  ## May have to fix once  Node=Edge issue is settled
-##       print(summary(allnodes))
-##     }
-##   
-## }) # end summary phylo4d
-## 
-
-## Alternative phylo4d summary method, using phylo4 summary
-## Marguerite Butler & Peter Cowan
-setMethod("summary", "phylo4d", function(object){
-    x <- object
-
-    summary(as(object, "phylo4"))
-
-    tdata(object, "tip") -> tips
-    tdata(object, "node") -> nodes
-
-    cat("\nComparative data:\n")
-    if (nrow(tips) > 0) 
-      {
-          cat("\nTips: data.frame with", nTips(object), "taxa and", ncol(tips), "variables \n\n")
-          print(summary(tips))
-      }else {cat('\nObject contains no tip data.')}
-
-    if (nrow(nodes) > 0) 
-      {
-          cat("\nNodes: data.frame with", nNodes(object), "internal nodes and", ncol(nodes), "variables \n\n")                  ## May have to fix once  Node=Edge issue is settled
-          print(summary(nodes))
-      } else {cat('\nObject contains no node data.\n')}
-
-}) # end summary phylo4d
-
-## extend: phylo with model fit (???)
-## hacked with logLik attribute from ape, but otherwise not done
-
-
-
-
-
-################
-## show phylo4d    ### no longer used  
-################
-##
-## setMethod("show", "phylo4d", function(object){
-##     x <- object
-
-##     cat("\n##Comparative data##\n")
-##     ##  print tree
-##     cat("\n#Tree#\n")
-##     printphylo(x)
-
-##     ## print traits
-##     cat("\n#Traits#\n")
-##     cat("\ntip.data: data.frame containing", ncol(tdata(x,"tip")), "traits for", nrow(tdata(x,"tip")),"tips" )
-##     cat("\nnode.data: data.frame containing", ncol(tdata(x,"node")), "traits for", nrow(tdata(x,"node")),"nodes" )
-
-##     cat("\n")
-## })
-
-## ?? setMethod("print", "phylo4", o)
 
 
 setGeneric("hasNodeData", function(x) {
     standardGeneric("hasNodeData")
 })
-setMethod("hasNodeData","phylo4d", function(x) {
-    nrow(x@node.data)>0
-})
-
-setMethod("nodeLabels<-","phylo4d", function(object,...,value) {
-    object@node.label <- value
-    rownames(object@node.data) <- value
-    object
-})
-
-setMethod("labels<-","phylo4d", function(object,...,value) {
-    object@tip.label <- value
-    rownames(object@tip.data) <- value
-    object
-})
-
 
 ################
 ## names methods
@@ -483,10 +371,6 @@ setMethod("names", signature(x = "phylo4"), function(x){
     return(rev(temp))
 })
 
-setMethod("names", signature(x = "phylo4d"), function(x){
-    temp <- rev(names(attributes(x)))[-1]
-    return(rev(temp))
-})
 
 ###################
 ## Function .genlab
@@ -503,19 +387,6 @@ setMethod("names", signature(x = "phylo4d"), function(x){
 }
 
 
-## first arg is a matrix of edges
-setMethod("phylo4d", c("matrix"), function(x, tip.data=NULL, node.data=NULL, all.data=NULL, ...){
-    tree <- phylo4(edge=x,...)
-    res <- phylo4d(tree, tip.data, node.data, all.data, ...)
-    return(res)
-})
-
-## first arg is a phylo
-setMethod("phylo4d", c("phylo"), function(x, tip.data=NULL, node.data=NULL, all.data=NULL, ...){
-    tree <- as(x, "phylo4")
-    res <- phylo4d(tree, tip.data, node.data, all.data, ...)
-    return(res)
-})
 
 ## convert from phylo to phylo4
 ## coerce phylo4d to phylo4 -- on purpose, so no warning
@@ -527,12 +398,4 @@ extract.tree <- function(from) {
 }
 
 
-## FIXME: doesn't deal with missing node data
-##   (don't even know how that should be done in this case)
 setGeneric("na.omit")
-setMethod("na.omit", "phylo4d",
-          function(object, ...) {
-            tipdata <- tdata(object,"tip")
-            na.names <- rownames(tipdata)[!complete.cases(tipdata)]
-            prune(object,tip=na.names)
-          })
