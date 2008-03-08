@@ -3,7 +3,7 @@
 % \VignetteIndexEntry{phylo4: classes and methods for phylogenetic trees and data}
 \usepackage{graphicx}
 \usepackage[colorlinks=true,urlcolor=blue]{hyperref}
-
+\usepackage{array}
 \usepackage{color}
 
 \usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
@@ -21,7 +21,7 @@ This document describes the new \code{phylo4} S4 classes and methods, which are 
 
 For \emph{end-users}, standardization will greatly simplify comparing analyses across different packages by easing data portability, as well as reducing the learning curve involved when using new packages. Users will also benefit by having a common repository of useful functions contained within one base package, for example tools for including or excluding subtrees (and associated phenotypic data) or improved tree and data plotting facilities. For \emph{developers}, the \code{phylobase} package allows programming efforts to be put directly into developing new solutions for new problems (i.e. new phylogenetic methods) rather than re-coding the same base tools that each package requires. It is hoped that standardization will also synergize the efforts of individual developers into a comparative method community (this sounds stupid-- please fix), as well as facilitating code validation by providing a repository for benchmark tests.
 
-On a more abstract level, two motivations for the development of this package were better data checking and abstraction of the tree data formats.  Currently \code{phylobase} is capable of checking that data and trees are associated in the proper fashion, and protects users and developers from accidently reordering one, but not the other.  The \code{phylobase} package also seeks to abstract the data format so that commonly used information (for example, branch length information or the ancestor of a particular node) can be accessed without knowing the underlying data structure (i.e., whether the tree is stored as a matrix, or a list, or a parenthesis-based format).  This is achieved through generic \code{phylobase} functions which which retrieve the relevant information from the data structures. The benefits of such abstraction are multiple: (1) \emph{easier access to the relevant information} via a simple function call (this frees both users and developers from learning details of complex data structures), (2) \emph{freedom to optimize data structures in the future without breaking code.}  Having the generic functions in place to "translate" between the data structures and the rest of the program code allows program and data structure development to proceed somewhat independently. The alternative is code written for specific data structures, in which modifications to the data structure requires rewriting the entire package code (often exacting too high a price, which results in the persistence of less-optimal data structures).  (3) \emph{providing broader access to the range of tools in \code{phylobase}}. Developers of specific packages can use these new tools based on S4 objects without knowing the details of S4 programming.
+On a more abstract level, two motivations for the development of this package were better data checking and abstraction of the tree data formats.  Currently \code{phylobase} is capable of checking that data and trees are associated in the proper fashion, and protects users and developers from accidently reordering one, but not the other.  The \code{phylobase} package also seeks to abstract the data format so that commonly used information (for example, branch length information or the ancestor of a particular node) can be accessed without knowing the underlying data structure (i.e., whether the tree is stored as a matrix, or a list, or a parenthesis-based format).  This is achieved through generic \code{phylobase} functions which which retrieve the relevant information from the data structures. The benefits of such abstraction are multiple: (1) \emph{easier access to the relevant information} via a simple function call (this frees both users and developers from learning details of complex data structures), (2) \emph{freedom to optimize data structures in the future without breaking code.}  Having the generic functions in place to ``translate'' between the data structures and the rest of the program code allows program and data structure development to proceed somewhat independently. The alternative is code written for specific data structures, in which modifications to the data structure requires rewriting the entire package code (often exacting too high a price, which results in the persistence of less-optimal data structures).  (3) \emph{providing broader access to the range of tools in \code{phylobase}}. Developers of specific packages can use these new tools based on S4 objects without knowing the details of S4 programming.
 
 The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple trees respectively.  In addition to describing the classes and methods this vignette gives examples of how they might be used.
 
@@ -254,6 +254,20 @@ generally take a \code{phylo4} object, a node
 vector of node numbers.
 
 \section{multiPhylo classes}
+
+\section{Examples}
+
+% ========================================
+% = Table of commands, worth the effort? =
+% ========================================
+% \begin{tabular}{>{\tt}ll}
+% \hline
+% \rm Method & Description\\
+% \hline
+% tdata & Retrieve tip data\\
+% plot & plot tree with data if present\\
+% \hline
+% \end{tabular}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
