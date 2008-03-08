@@ -1,8 +1,6 @@
 require(methods)
 require(ape)
 
-setOldClass("phylo")
-
 setClass("phylo4",
          representation(edge="matrix",
                         edge.length="numeric",
@@ -278,46 +276,6 @@ printphylo <- function (x,printlen=6,...) {
 ##
 # Alternative print method for phylo4, showing the contents of the tree data.
 ##  Not sure if it works for unrooted trees
-setAs(from='phylo4',to='data.frame',
-      def = function(from) {
-        if (is.character(checkval <- check_phylo4(from))) stop(checkval) # check the phylo4
-      	x <- from
-        E <- edges(x) # E: matrix of edges
-	ancestor <- E[,1]
-	node <- E[,2]
-	root <- unique(ancestor[!ancestor %in% node])
-	int.node <- c(root, unique(ancestor[ancestor %in% node])) # internal nodes (root first)
-        tip <- node[!(node %in% ancestor)]
-	n.tip <- length(tip)
-        n.int <- length(int.node)
-        # node <- c(root, node) # doesn't fit the ordering: root, other internal nodes, tips
-        node <- c(int.node,tip)
-        ## retrieve the ancestor of each node
-        idx <- match(node,E[,2]) # new ordering of the descendents/edges
-        # if (length(ancestor)>0) ancestor <- c(NA, ancestor)
-        ancestor <- E[idx,1]
-        # branch.length <- c(x@root.edge, x@edge.length) # root.edge is not an edge length
-        branch.length <- edgeLength(x)[idx]
-        # if (length(branch.length) == 1) branch.length <- rep("", n.tip+n.int)
-        if(is.null(edgeLength(x))) branch.length <- rep(NA, length(node))
-        ## node and tip labels ##
-        ## beware: they cannot be NULL
-        ## there are always tip labels (or check_phylo4 complains)
-        ## there may not be node labels (character(0))
-        if(hasNodeLabels(x)) {
-            nl <- x@node.label
-        } else {
-            nl <- rep(NA,nNodes(x))
-        }
-        
-        tl <- labels(x)
-        taxon.name <- c(nl, tl)
-        if (!isRooted(x)) {
-            node.type <- c(rep("internal", n.int), rep("tip", n.tip))
-        }  else node.type <- c("root", rep("internal", n.int-1), rep("tip", n.tip))
-        
-        return(data.frame(taxon.name, node, ancestor, branch.length, node.type))
-    })
 
 printphylo4 <- function(x, printall = TRUE){
     if (printall)
@@ -325,23 +283,6 @@ printphylo4 <- function(x, printall = TRUE){
     else print(head(as(x, 'data.frame')))
 }
 
-setAs(from='phylo4d', to='data.frame',
-      function(from) {
-
-    as(from, "phylo4") -> tree  	 # get tree
-    as(tree, "data.frame") -> t_df   # convert to data.frame
-    tdata(from, "allnode") -> dat               # get data
-    old.ord <- t_df$taxon.name     # save roworder of tree
-
-    ## merge data.frames of tree and data
-    tdat <- merge(t_df, dat, by.x="taxon.name", by.y="row.names", all.x=TRUE, all.y=FALSE, sort=FALSE)
-
-    ## restore the correct order (i.e. the one of the tree data.frame)
-    idx <- match(old.ord,tdat$taxon.name)
-    res <- tdat[idx,]
-
-    return(res) # drop "order"
-})
     
 setGeneric("print")
 
@@ -749,45 +690,6 @@ setMethod("phylo4d", c("phylo"), function(x, tip.data=NULL, node.data=NULL, all.
 })
 
 ## convert from phylo to phylo4
-setAs("phylo","phylo4",
-      function(from,to) {
-          newobj <- phylo4(from$edge, from$edge.length,
-                           from$tip.label,
-                           node.label=from$node.label,
-                           edge.label=from$edge.label, ## ???
-                           root.edge=from$root.edge)
-          attribs = attributes(from)
-          attribs$names <- NULL
-          knownattr <- c("logLik","order","origin","para","xi")
-          known <- names(attribs)[names(attribs) %in% knownattr]
-          unknown <- names(attribs)[!names(attribs) %in% c(knownattr,"class","names")]
-          if (length(unknown)>0) {
-              warning(paste("unknown attributes ignored: ",unknown,collapse=" "))
-          }
-          for (i in known) attr(newobj,i) <- attr(from,i)
-          newobj
-      })
-
-setAs("phylo","phylo4d",
-      function(from,to) {
-          phylo4d(as(from,"phylo4"),tip.data=data.frame())
-      })
-
-
-setAs("phylo4","phylo",
-      function(from,to) {
-          y <- list(edge=from@edge,
-                    edge.length=from@edge.length,
-                    Nnode=from@Nnode,
-                    tip.label=from@tip.label,
-                    node.label=from@node.label)
-          class(y) <- "phylo"
-          if(length(y$edge.length) == 0) y$edge.length <- NULL
-          if(length(y$node.label) == 0) y$node.label <- NULL
-          if (!is.na(from@root.edge)) y$root.edge <- from@root.edge
-          y
-      })
-
 ## coerce phylo4d to phylo4 -- on purpose, so no warning
 extract.tree <- function(from) {
     phylo4(edge=from@edge,
@@ -796,34 +698,6 @@ extract.tree <- function(from) {
            tip.label=from@tip.label)
 }
 
-setAs("phylo4d","phylo",
-      function(from,to) {
-          y <- list(edge=from@edge,
-                    edge.length=from@edge.length,
-                    Nnode=from@Nnode,
-                    tip.label=from@tip.label)
-          class(y) <- "phylo"
-          if(length(y$edge.length) == 0) y$edge.length <- NULL
-          if(length(y$node.label) == 0) y$node.label <- NULL
-          if (!is.na(from@root.edge)) y$root.edge <- from@root.edge
-         
-          warning("losing data while coercing phylo4d to phylo")
-          y
-      })
-
-
-
-####################
-## as(phylo4,phylog)
-####################
-setOldClass("phylog")
-setAs("phylo4","phylog", function(from, to){
-    if(!require(ade4)) stop("the ade4 package is required")
-    x <- as(from,"phylo")
-    x <- write.tree(x,file="")
-    x <- newick2phylog(x)
-    return(x)
-})
 
 ## FIXME: doesn't deal with missing node data
 ##   (don't even know how that should be done in this case)
