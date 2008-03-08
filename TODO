@@ -38,7 +38,6 @@ FOR VERSION 0.3
 
 ### Documentation
 * Complete full example in vignette
-* Does S4-style help access really work? FIXME: Be more specific. ?as(mytree,"phylo4) does not work. It is not clear how users will find the coercion methods page. methods?coerce brings up phylobase page, but this is pretty cryptic... At least we have linked coerce-methods page to the phylo4, phylo4d pages.
 
 FOR VERSION 0.4
 =======================================================
