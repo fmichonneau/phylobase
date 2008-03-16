@@ -277,6 +277,9 @@ vector of node numbers.
 \appendix
 \section{Definitions/slots}
 
+This section details the internal structure of the \code{phylo4}, \code{multiphylo4}, \code{phylo4d}, and \code{multiphylo4d} classes.  The basic building blocks of these classes are the \code{phylo4} object and a dataframe.  The \code{phylo4} tree format is largely similar to the one used by \code{phylo} class in the package \code{ape} \footnote{}. % TODO compelet this footnote, ape site down?
+
+
 \subsection{phylo4}
 Like \code{phylo}, the main components of
 the \code{phylo4} class are:
@@ -311,7 +314,6 @@ useful/worth keeping?}
 \item (number of tip labels)+(nNode)-1 == $N$
 \item data matrix must have row names
 \item row names must match tip labels (if not, spit out mismatches)
-\item 
 \end{itemize}
  
 Default node labels:
