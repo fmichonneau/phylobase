@@ -92,7 +92,7 @@
 }
 }
 \section{usage}{
-  \S4method{tdata}{phylo4d}(x,which="tip",\dots)
+  \S4method{tdata}{phylo4d}(x, which = "tip", \dots)
 }
 \arguments{
   \item{which}{Which data to extract: "tip" (tips only), "node"

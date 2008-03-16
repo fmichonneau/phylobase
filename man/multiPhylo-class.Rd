@@ -59,7 +59,7 @@
   library(ape)
   example(read.tree)
   p1 = tree.owls
-  P1 = as(tree.owls,"phylo4")
+  P1 = as(tree.owls, "phylo4")
   P1
   sumryP1 = summary(P1)
   sumryP1

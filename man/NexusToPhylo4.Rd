@@ -12,7 +12,7 @@
    }
  }
  \usage{
-NexusToPhylo4(fileToRead,multi=FALSE)
+NexusToPhylo4(fileToRead, multi = FALSE)
 }
 \arguments{
   \item{fileToRead}{a Nexus file}

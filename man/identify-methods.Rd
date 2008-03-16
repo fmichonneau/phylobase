@@ -13,7 +13,7 @@
     (or extensions)}
 }}
 \usage{
-    \S4method{identify}{phylo4}(x,n=1,\dots)
+    \S4method{identify}{phylo4}(x, n=1, \dots)
 }
 \arguments{
   \item{x}{a phylo4 object}

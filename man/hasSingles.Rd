@@ -24,14 +24,14 @@ hasPoly(object)
   We haven't bothered to check for zero branch lengths:
   the consensus is that it doesn't come up much,
   and that it's simple enough to
-  test \code{any(edgeLength(x)==0)} in these cases.
+  test \code{any(edgeLength(x) == 0)} in these cases.
   (Single-descendant nodes are used e.g. in OUCH, or in
   other cases to represent events occurring along a branch.)
 }
 \examples{
 library(ape)
 example(read.tree)
-owls4 = as(tree.owls.bis,"phylo4")
+owls4 = as(tree.owls.bis, "phylo4")
 hasPoly(owls4)
 hasSingles(owls4)
 }

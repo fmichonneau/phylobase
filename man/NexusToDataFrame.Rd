@@ -12,7 +12,7 @@
    }
  }
  \usage{
-NexusToDataFrame(fileToRead,allchar=FALSE, polymorphictomissing=TRUE, levelsall=TRUE)
+NexusToDataFrame(fileToRead, allchar = FALSE, polymorphictomissing = TRUE, levelsall = TRUE)
 }
 \arguments{
   \item{fileToRead}{a Nexus file}
@@ -22,7 +22,7 @@ NexusToDataFrame(fileToRead,allchar=FALSE, polymorphictomissing=TRUE, levelsall=
   if one character is missing a state}
 }
 \value{
-  A data.frame suitable to use with \linkS4class{phylo4d}.
+  A dataframe suitable to use with \linkS4class{phylo4d}.
 }
 \seealso{the \linkS4class{phylo4d} class, the \linkS4class{phylo4} class}
 \author{Brian O'Meara, Derrick Zwickl}
