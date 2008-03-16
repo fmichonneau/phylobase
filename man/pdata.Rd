@@ -23,5 +23,5 @@ check_pdata(object)
   An object of class \code{pdata}
 }
 \author{Ben Bolker}
-\seealso{\S4class{pdata}}
+\seealso{\linkS4class{pdata}}
 \keyword{misc}
