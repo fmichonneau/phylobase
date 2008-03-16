@@ -5505,7 +5505,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f conftest*
+rm -rf conftest*
 
 fi
 
@@ -5526,7 +5526,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f conftest*
+rm -rf conftest*
 
 fi
 
@@ -6510,7 +6510,7 @@ for ac_symprfx in "" "_"; do
   # Check to see that the pipe works correctly.
   pipe_works=no
 
-  rm -f conftest*
+  rm -rf conftest*
   cat > conftest.$ac_ext <<EOF
 #ifdef __cplusplus
 extern "C" {
@@ -6607,7 +6607,7 @@ EOF
     echo "$progname: failed program was:" >&5
     cat conftest.$ac_ext >&5
   fi
-  rm -f conftest* conftst*
+  rm -rf conftest* conftst*
 
   # Do not use the global_symbol_pipe unless it works.
   if test "$pipe_works" = yes; then
@@ -6681,7 +6681,7 @@ delay_variable_subst='s/\\\\\\\\\\\$/\\\\\\$/g'
 no_glob_subst='s/\*/\\\*/g'
 
 # Constants:
-rm="rm -f"
+rm="rm -rf"
 
 # Global variables:
 default_ofile=libtool
@@ -20648,7 +20648,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f conftest*
+rm -rf conftest*
 
 fi
 
@@ -20669,7 +20669,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f conftest*
+rm -rf conftest*
 
 fi
 
