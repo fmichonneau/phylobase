@@ -8,7 +8,7 @@ setClass("phylo4",
                         root.edge = "numeric"), 
          prototype = list(
                         edge = matrix(nrow = 0, ncol = 2, 
-                            dimname = list(NULL, c("ancestor", "descendent"))), 
+                            dimname = list(NULL, c("ancestor", "descendant"))), 
                         edge.length = numeric(0), 
                         Nnode = as.integer(0), 
                         tip.label = character(0), 
