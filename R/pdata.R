@@ -82,3 +82,4 @@ setMethod("plot",signature(x="pdata",y="missing"), function(x,...){
 ## z[,"a"]
 ## z[[2]]
 
+## test conflict resolution error
