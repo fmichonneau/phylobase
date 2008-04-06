@@ -29,7 +29,7 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     if(any(is.na(edge))) stop("NA are not allowed in edge matrix")
     if(ncol(edge) > 2) warning("the edge matrix has more than two columns")
     edge <- as.matrix(edge[, 1:2])
-    colnames(edge) <- c("ancestor", "desendent")
+    colnames(edge) <- c("ancestor", "descendant")
 
     ## edge.length
     if(!is.null(edge.length)) {
