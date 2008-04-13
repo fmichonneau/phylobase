@@ -123,6 +123,11 @@ void NxsTreesBlock::HandleTreeDescription(
 			{
 			tree_is_unrooted = true;
 			}
+		else if (s[1] == 'W' || s[1] == 'w')
+		    {
+			/* silently ignoring weights because
+			   I don't know how to print them! */
+                    }
 		else
 			{
 			errormsg = "[";
