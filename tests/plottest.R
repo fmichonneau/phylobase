@@ -27,7 +27,7 @@ try(plot(g2C,show.node.label=TRUE))
 g3 = subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
                  "conirostris","scandens"))
 plot(extract.tree(g3))  ## phylo4
-plot(g3,ratio=.5,cex.sym=.7,cex.lab=.8)
+plot(g3,ratio=.3,cex.sym=.6,cex.lab=.6)
 
 
 ## Playing with new ways of plotting

@@ -27,8 +27,7 @@ setMethod("plot",signature(x="phylo4",y="missing"), function(x,...){
 ################
 ## plot phylo4d
 ################
-setMethod("plot", signature(x="phylo4d",y="missing"), 
-          function(x, treetype=c("phylogram","cladogram"), symbol=c("circles", "squares"), center=TRUE, scale=TRUE, legend=TRUE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=1, cex.legend=1, ...)
+setMethod("plot", signature(x="phylo4d",y="missing"), function(x, treetype=c("phylogram","cladogram"), symbol=c("circles", "squares"), center=TRUE, scale=TRUE, legend=TRUE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=1, cex.legend=1, coord.legend=NULL, ...)
       {
 
     ## preliminary stuff and checks
@@ -45,6 +44,8 @@ setMethod("plot", signature(x="phylo4d",y="missing"),
     cex <- par("cex")
     symbol <- match.arg(symbol)
     treetype <- match.arg(treetype)
+
+    SYMBSCALE <- 0.2 # i.e. max size of a plotted symbol is 0.2*cex.symbol inches
     
     ## convert the tree into phylo
     tre <- suppressWarnings(as(x,"phylo"))
@@ -92,7 +93,7 @@ setMethod("plot", signature(x="phylo4d",y="missing"),
     plotres <- plot.phylo(tre, type=treetype, direction="rightwards", show.tip.label=FALSE,
                           show.node.label=show.node.label, cex=cex.label,
                           no.margin=FALSE, x.lim=NULL, y.lim=NULL, ...)
-    
+
     #### plot the data
     par(plt=plotreg0)
     cur.usr.width <- par("usr")[2] - par("usr")[1] # beware: par("usr") does not adapt to the new plot region
@@ -100,8 +101,8 @@ setMethod("plot", signature(x="phylo4d",y="missing"),
     usr.height <- par("usr")[4] - par("usr")[3]
     
     ## x.inset is the space between tree/data and data/tip.labels (in usr units)
-    x.inset <- 0.2*cex.symbol * usr.width / par("pin")[1]
-    y.inset <- 0.2*cex.symbol * usr.height / par("pin")[2]
+    x.inset <- SYMBSCALE * cex.symbol * usr.width / par("pin")[1]
+    y.inset <- SYMBSCALE * cex.symbol * usr.height / par("pin")[2]
     x.base <- plotres$x.lim[2] + x.inset # start plotting from x.base rightwards
     temp <- x@tip.label[which.max(nchar(x@tip.label))] # longest tip label
     lab.width <- strwidth(temp, units="user", cex=cex.label) # compute the width to keep for tip labels
@@ -134,8 +135,7 @@ setMethod("plot", signature(x="phylo4d",y="missing"),
     }
 
     ## auxiliary function to plot a single variable
-    ## max size of a symbol is set to 0.2*cex inches
-    ## if changes here, beware to change the 0.15 in x.inset as well
+    ## max size of a symbol is set to SYMBSCALE*cex inches
     plotaux <- function(x,y,var,symbol,cex){
         if(any(var[!is.na(var)]<0)) {
             usebw <- TRUE
@@ -151,21 +151,21 @@ setMethod("plot", signature(x="phylo4d",y="missing"),
             bg.col[ispos] <- "black"
             
             if(symbol == "squares"){
-                symbols(x=x, y=y, squares=abs(var), inches=0.2*cex, fg=fg.col, bg=bg.col, add=TRUE)
+                symbols(x=x, y=y, squares=abs(var), inches=SYMBSCALE*cex, fg=fg.col, bg=bg.col, add=TRUE)
             } # end squares
             
             if(symbol == "circles"){
-                symbols(x=x, y=y, circles=abs(var), inches=0.2*cex, fg=fg.col, bg=bg.col, add=TRUE)
+                symbols(x=x, y=y, circles=abs(var), inches=SYMBSCALE*cex, fg=fg.col, bg=bg.col, add=TRUE)
             } # end circles
             
         } else {
 
             if(symbol == "squares"){
-                symbols(x=x, y=y, squares=var, inches=0.2*cex, fg="white", bg="black", add=TRUE)
+                symbols(x=x, y=y, squares=var, inches=SYMBSCALE*cex, fg="white", bg="black", add=TRUE)
             } # end squares
             
             if(symbol == "circles"){
-                symbols(x=x, y=y, circles=var, inches=0.2*cex, fg="white", bg="black", add=TRUE)
+                symbols(x=x, y=y, circles=var, inches=SYMBSCALE*cex, fg="white", bg="black", add=TRUE)
             } # end circles
         } # end else
         
@@ -191,37 +191,69 @@ setMethod("plot", signature(x="phylo4d",y="missing"),
 
     #### add a legend for symbols
     if(legend){
-        leg.var <- alldat[[1]][,3]
-        leg.values <- pretty(leg.var,n=4, min.n=1)
-        temp <- length(leg.values)
-        ## make sure to get maximum 4 symbols
-        if(temp>4) {
-            leg.values <- leg.values[c(1,2,temp-1,temp)]
+
+        ## Auxiliary function to add the legend
+        ## (x,y): coordinates of the lower-left annotation
+        ## z: a numeric vector whose values are being legended
+        addLegend <- function(x,y,z,cex.legend,cex.label,cex.symbol){
+            z <- z*cex.legend
+            leg.values <- pretty(z,n=4, min.n=1)
+            temp <- length(leg.values)
+            ## make sure to get maximum 4 symbols
+            if(temp>4) {
+                leg.values <- leg.values[c(1,2,temp-1,temp)]
+            }
+
+            leg.txt <- as.character(leg.values)
+
+            ## compute the maximum size taken by symbols in usr coordinates
+            usr.w <- (par("usr")[2]-par("usr")[1]) / ratio.tree # because par("usr") is the one of plot.phylo
+            usr.h <- par("usr")[4]-par("usr")[3]
+            sym.w <- usr.w *
+                ((abs(leg.values)/max(abs(leg.values))) * SYMBSCALE * cex.symbol * cex.legend) / par("pin")[1]
+            sym.h <- usr.h * (SYMBSCALE * cex.symbol * cex.legend) / par("pin")[2]
+
+            ## compute the maximum size taken by annotations in usr coordinates
+            ann.w <- strwidth(leg.txt,units="user",cex=cex.label*cex.legend)
+            ann.h <- strheight(leg.txt,units="user",cex=cex.label*cex.legend)
+
+            ## retain relevant spaces between symbols / annotations
+            space.w.sym <- sapply(1:(length(sym.w)-1),function(i)  sum(sym.w[c(i,i+1)]))
+            space.w.ann <- sapply(1:(length(ann.w)-1),function(i)  sum(ann.w[c(i,i+1)])) / 2
+            temp <- cbind(space.w.sym, space.w.ann)
+            space.w <- apply(temp,1,max)
+            space.w <- space.w + 0.01*usr.w
+            space.h <- sym.h + ann.h + 0.01*usr.h
+
+            ## define coordinates of annotations and symbols
+            ann.coordX <- c(x, x + cumsum(space.w)) + max(sym.w[1],ann.w[1]) + 0.01*usr.w
+            ann.coordY <- y
+            sym.coordX <- ann.coordX
+            sym.coordY <- y + space.h
+
+            ## plot annotations
+            text(ann.coordX, ann.coordY, leg.txt, cex=cex.label*cex.legend)
+
+            ## plot symbols
+            plotaux(sym.coordX, sym.coordY, leg.values, symbol, cex.symbol*cex.legend)
+        } # end addLegend
+
+        if(!is.null(coord.legend)){
+            x.leg <- coord.legend$x
+            y.leg <- coord.legend$y
+        } else {
+            usr.w <- (par("usr")[2]-par("usr")[1]) / ratio.tree
+            usr.h <- par("usr")[4]-par("usr")[3]
+
+            temp <- lab.height * usr.height / (1 - lab.height) ## need to substract temp from par("usr")[3]
+            y.base <- par("usr")[3] - temp - y.inset ## to get closer the actual par("usr")[3] !
+
+            x.leg <- par("usr")[1] + 0.01 * usr.w
+            y.leg <- y.base ## remember to use y.base instead of par("usr3")[3], which is wrong
         }
-        leg.txt <- as.character(leg.values)
 
-        ## temp is a matrix with two columns:
-        ## first contains widths of annotations
-        ## second contains maximum width of symbols
-        temp <- cbind(strwidth(leg.txt,units="user",cex=cex.label*cex.legend) , x.inset*2*cex.legend)
-        leg.widths <- apply(temp,1,max)*1.05
-        leg.height <- max(strheight(leg.txt, units="user",cex=cex.label*cex.legend))
-
-        ## find basic coordinates
-        x.base <- par("usr")[1]+ 0.01*usr.width
-        temp <- lab.height * usr.height / (1 - lab.height) ## need to substract temp from par("usr")[3]
-        y.base <- par("usr")[3] - temp - y.inset ## to get closer the actual par("usr")[3] !
-      
-        ## plot annotations
-        leg.x <- x.base + leg.widths
-        leg.x <- cumsum(leg.x)
-        text(leg.x, y.base, leg.txt, cex=cex.label*cex.legend)
-
-        ## plot symbols
-        leg.y <- y.base + 2*y.inset*cex.legend
-        leg.y <- rep(leg.y,length(leg.x))
-        plotaux(leg.x, leg.y, leg.values, symbol, cex.symbol*cex.legend)
-
+        addLegend(x=x.leg, y=y.leg, z=alldat[[1]][,3],
+                  cex.legend=cex.legend, cex.label=cex.label, cex.symbol=cex.symbol)
         ## FIXME ##
         ## draw a rectangle around the legend
         #rect.size <- c(diff(range(leg.x)) , diff(c(y.base, max(leg.y))) )
@@ -230,6 +262,6 @@ setMethod("plot", signature(x="phylo4d",y="missing"),
         #     max(leg.x) + rect.size[1]*0.05,
         #     max(y.base) + rect.size[2]*0.05)
     } ## end legend
-    
+
     return(invisible())
 }) # end plot phylo4d

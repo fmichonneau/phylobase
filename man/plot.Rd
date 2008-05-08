@@ -20,7 +20,12 @@
  }
  \usage{
 \S4method{plot}{phylo4,missing}(x, \dots)
-\S4method{plot}{phylo4d,missing}(x, treetype=c("phylogram","cladogram"), symbol=c("circles", "squares"), center=TRUE, scale=TRUE, legend=TRUE, grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE, show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label, var.label=colnames(x@tip.data), cex.symbol=1, cex.label=1, cex.legend=1, \dots)
+\S4method{plot}{phylo4d,missing}(x, treetype=c("phylogram","cladogram"),
+ symbol=c("circles", "squares"), center=TRUE, scale=TRUE, legend=TRUE,
+ grid=TRUE, box=TRUE, show.tip.label=TRUE, show.node.label=TRUE,
+ show.var.label=TRUE, ratio.tree=1/3, font=3, tip.label=x@tip.label,
+ var.label=colnames(x@tip.data), cex.symbol=1, cex.label=1,
+ cex.legend=1, coord.legend=NULL, \dots)
 
 }
 \arguments{
@@ -52,6 +57,9 @@
  \item{cex.symbol}{a numeric giving the factor scaling the symbols}
  \item{cex.label}{a numeric giving the factor scaling all labels}
  \item{cex.legend}{a numeric giving the factor scaling the legend}
+ \item{coord.legend}{an optional list with two components 'x' and 'y'
+   indicating the lower-left position of the legend. Can be set to
+   \code{locator(1) to position the legend interactively.}}
  \item{\dots}{further arguments to be passed to plot methods from \code{ape}}
 }
 \seealso{the  \linkS4class{phylo4} and \linkS4class{phylo4d} classes;
