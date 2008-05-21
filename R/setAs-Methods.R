@@ -96,7 +96,7 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
     ## node <- c(root, node) # doesn't fit the ordering: root, other internal nodes, tips
     node <- c(int.node, tip)
     ## retrieve the ancestor of each node
-    idx <- match(node, E[, 2]) # new ordering of the descendents/edges
+    idx <- match(node, E[, 2]) # new ordering of the descendants/edges
     ## if (length(ancestor)>0) ancestor <- c(NA, ancestor)
     ancestor <- E[idx, 1]
     ## branch.length <- c(x@root.edge, x@edge.length) # root.edge is not an edge length
