@@ -7,7 +7,10 @@ setGeneric("nTips", function(x,...) {
 
 setMethod("nTips", "phylo4", function(x, ...) {
     E <- edges(x)
-    res <- sum(!E[, 2] %in% E[, 1])
+#    res <- sum(!E[, 2] %in% E[, 1])
+## change suggested by Aaron Mackey, handles reticulated networks better
+##  sum(tabulate(E[,1]) == 0) would work too (which is faster??)
+    res <- sum(!(unique(E[,2]) %in% E[,1]))
     return(res)
 })
 
