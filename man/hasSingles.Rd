@@ -1,14 +1,18 @@
 \name{hasSingles}
 \alias{hasSingles}
 \alias{hasPoly}
-\title{Test trees for polytomies or inline nodes}
+\alias{hasRetic}
+\title{Test trees for polytomies, inline nodes,
+or reticulation}
 \description{checks to see whether trees have
-  (structural) polytomies or inline nodes (i.e.,
-  nodes with a single descendant)
+  (structural) polytomies, inline nodes (i.e.,
+  nodes with a single descendant), or reticulation
+  (i.e., nodes with more than one ancestor)
 }
 \usage{
 hasSingles(object)
 hasPoly(object)
+hasRetic(object)
 }
 \arguments{
   \item{object}{an object inheriting from class \code{phylo4}}
@@ -19,7 +23,8 @@ hasPoly(object)
 \author{Ben Bolker}
 \note{
   Some algorithms are unhappy with structural polytomies (i.e., >2
-  descendants from a node) or with single-descendant nodes; these
+  descendants from a node), with single-descendant nodes,
+  or with reticulation; these
   functions check those properties.
   We haven't bothered to check for zero branch lengths:
   the consensus is that it doesn't come up much,

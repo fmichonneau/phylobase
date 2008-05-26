@@ -1,19 +1,54 @@
 
 ## REQUIRED for all trees
 check_phylo4 <- function(object) {
+    check_tree(object)
+}
+
+check_tree <- function(object,warn="retic",err=NULL) {
     ## FIXME: check for cyclicity?
     N <- nrow(object@edge)  
     if (hasEdgeLength(object) && length(object@edge.length) != N)
       return("edge lengths do not match number of edges")
     ## if (length(object@tip.label)+object@Nnode-1 != N) # does not work with multifurcations
     ##  return("number of tip labels not consistent with number of edges and nodes")
-    if(length(object@tip.label) != nTips(object)) return("number of tip labels not consistent with number of tips")
-    nAncest <- tabulate(edges(object)[, 2])
+    ## check: internal node numbers = 1:m
+    
+    ## check: tip numbers = (m+1):(m+n)
+    ntips <- nTips(object)
+    if(length(object@tip.label) != ntips)
+      return("number of tip labels not consistent with number of tips")
+    E <- edges(object)
+    tips <- sort(E[,2][!E[,2] %in% E[,1]])
+    nodes <- unique(sort(c(E)))
+    intnodes <- nodes[!nodes %in% tips]
+    if (!(all(tips==1:ntips) && all(nodes=(ntips+1):(ntips+length(intnodes)))))
+      return("tips and nodes incorrectly numbered")
+    nAncest <- tabulate(E[, 2])
+    nDesc <- tabulate(E[,1])
+    nTips <- sum(nDesc==0)
+    if (!all(nDesc[1:nTips]==0))
+      return("nodes 1 to nTips must all be tips")
+    if (!all(nDesc[(nTips+1):(nTips+nNodes(object))]>0))
+      return("nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
+    if (any(nDesc>1)) {
+        if ("poly" %in% err)
+          return("tree includes polytomies")
+        if ("poly" %in% warn)
+          warning("tree includes polytomies")
+    }
     nRoots <- sum(nAncest==0)
+    msg <- character(0)
     if (nRoots>1)
-      return("tree has more than one root")
+      msg <- "tree has more than one root"
     if (any(nAncest>1))
-      return("some nodes have multiple ancestors")
+      msg <- c(msg,"some nodes have multiple ancestors")
+    msg <- paste(msg,collapse=", ")
+    if (nzchar(msg)) {
+        if ("retic" %in% err)
+          return(paste("tree is reticulated:",msg))
+        if ("retic" %in% warn)
+          warning("tree is reticulated:",msg)
+    }
     return(TRUE)
 }
 

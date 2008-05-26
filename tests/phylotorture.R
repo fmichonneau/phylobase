@@ -6,6 +6,8 @@ n <- 10
 ## don't want to slow down R CMD check by doing this every time:
 ## n <- 10000
 for (i in 1:n) {
+##    e2 <- c(sample(1:5,replace=FALSE,size=5),sample(6:10,replace=FALSE,size=5))
+##    e1 <- sample(6:10,replace=TRUE
     e <- matrix(sample(1:10,replace=TRUE,size=10),ncol=2)
     p1[[i]] <- try(phylo4(e),silent=TRUE)
 }
@@ -17,6 +19,7 @@ if (any(OKvals)) {
     length(p2)
     has.poly <- sapply(p2,hasPoly)
     has.sing <- sapply(p2,hasSingles)
+    has.retic <- sapply(p2,hasRetic)   
     ##
     if (any(has.sing)) {
         p4 <- p2[has.sing]
@@ -31,6 +34,8 @@ if (any(OKvals)) {
         ## plot(p2[[13]])
     }
 }
+
+## elements 8 and 34 are 
 ## what SHOULD the rules for trees be?
 
 ## (a) reduce node numbers to 1 ... N ?

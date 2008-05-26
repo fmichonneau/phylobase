@@ -18,6 +18,12 @@ hasSingles <- function(object) {
   any(degree == 1)
 }
 
+hasRetic <- function(object) {
+  if(!check_phylo4(object)) stop("to be used with a phylo4 object")
+  ancest <- tabulate(edges(object)[, 2])
+  any(ancest>1)
+}
+
 
 ### TO BE FINISHED - Thibaut
 
