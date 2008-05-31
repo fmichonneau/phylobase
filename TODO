@@ -10,14 +10,11 @@ FOR VERSION 0.3
    rather than "data.frame")
 
 ## Plotting
-### phylo4d objects
-  * multiPhylo4x plotting
 
 ## Data classes
 ### Tree model:
 * assigning edge and node labels -- is there/should there be an option to turn this off?  assign empty ("") labels? how about assigning the node number if there are no user-supplied labels?(mb)
 * should default node labels start at N(nTips+1), to match internal node numbers?
-* should coercing phylo4d to phylo4 give a warning message about losing data?   Should phylo4d to phylo4?  Yes(mb)
 * order: All phylo4 edge matrices are internally stored as "cladewise"/Newick traversal order.  Extend edges accessor method with optional argument that allows edges to be extracted in a different order (possibly with an attribute as in ape); need to steal 'reorder' from ape, extend for phylo4d keeping track of traits also see ape::ladderize
 * root node data characteristics (compare what OUCH does): root node doesn't have corresponding entry in the edge matrix:  ouch adds a row to the edge matrix (1-row data frame matching node column info). Not entirely clear how we should deal with this, MB has a proposal.
 * Data model: There seems to be consensus that the data model should be at least a little bit richer than a straight data frame, that we should create a new data class.  There's a draft standard in pdata.R in the current package.  
@@ -35,9 +32,6 @@ FOR VERSION 0.3
 * `ctree()` method
 * Still need many basic methods
 * `show()`, `summary()`, `plot()` methods can mimic `ape`'s new `multiphylo` class, though multiPhylo4d will need to match what we do for phylo4d
-
-### Documentation
-* Complete full example in vignette
 
 FOR VERSION 0.4
 =======================================================
@@ -59,9 +53,6 @@ FOR VERSION 0.4
     * Movement along branches, traversal, etc.: what operations are needed?
     * allDescend gets tips only -- option to get list including internal nodes?
     * time slices: prune back by time ?
-
-### Documentation
-* work through Sidlauskas wiki page
 
 FUTURE DISCUSSIONS
 ==================

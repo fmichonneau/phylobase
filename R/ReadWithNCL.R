@@ -82,22 +82,28 @@ read.nexustreestring <- function(X)
 #X<-c(X)
 #print(X)
 #print(mode(X))
+## speedier removal of comments pc 13 April 2008
+X <- lapply(X, gsub, pattern = "\\[[^\\]]*\\]", replacement = "")
+
 	X<-unlist(strsplit(unlist(X),c("\n")))
 #	print(X)
 #	print(mode(X))
-    LEFT <- grep("\\[", X)
-    RIGHT <- grep("\\]", X)
-    if (length(LEFT)) {
-        for (i in length(LEFT):1) {
-            if (LEFT[i] == RIGHT[i]) {
-                X[LEFT[i]] <- gsub("\\[.*\\]", "", X[LEFT[i]])
-            } else {
-                X[LEFT[i]] <- gsub("\\[.*", "", X[LEFT[i]])
-                X[RIGHT[i]] <- gsub(".*\\]", "", X[RIGHT[i]])
-                if (LEFT[i] < RIGHT[i] - 1) X <- X[-((LEFT[i] + 1):(RIGHT[i] - 1))]
-            }
-        }
-    }
+
+## Old comment removal code
+    ## LEFT <- grep("\\[", X)
+    ## RIGHT <- grep("\\]", X)
+    ## if (length(LEFT)) {
+    ##     for (i in length(LEFT):1) {
+    ##         if (LEFT[i] == RIGHT[i]) {
+    ##             X[LEFT[i]] <- gsub("\\[.*\\]", "", X[LEFT[i]])
+    ##         } else {
+    ##             X[LEFT[i]] <- gsub("\\[.*", "", X[LEFT[i]])
+    ##             X[RIGHT[i]] <- gsub(".*\\]", "", X[RIGHT[i]])
+    ##             if (LEFT[i] < RIGHT[i] - 1) X <- X[-((LEFT[i] + 1):(RIGHT[i] - 1))]
+    ##         }
+    ##     }
+    ## }
+
     X <- gsub("ENDBLOCK;", "END;", X, ignore.case = TRUE)
     endblock <- grep("END;", X, ignore.case = TRUE)
     semico <- grep(";", X)
@@ -127,6 +133,7 @@ read.nexustreestring <- function(X)
     STRING <- as.list(tree)
     trees <- list()
     for (i in 1:nb.tree) {
+        ## TODO tree.build and clado.build are ape functions
         obj <- if (length(grep(":", STRING[[i]]))) tree.build(STRING[[i]]) else clado.build(STRING[[i]])
         if (translation) {
             for (j in 1:length(obj$tip.label)) {
