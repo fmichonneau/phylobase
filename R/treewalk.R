@@ -75,7 +75,7 @@ descendants <- function (phy, node, which=c("tips","children","all"))
 }
 
 siblings <- function(phy, node, include.self=FALSE) {
-    v <- children(phy,parent(phy,node))
+    v <- children(phy,ancestor(phy,node))
     if (!include.self) v <- v[v!=getnodes(phy,node)]
     v
 }

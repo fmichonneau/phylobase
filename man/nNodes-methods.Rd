@@ -54,10 +54,11 @@
 \alias{edgeLabels-methods}
 \alias{edgeLabels,phylo4-method}
 \alias{edgeLabels<-,phylo4-method}
-
 \alias{tdata}
+\alias{tdata<-}
 \alias{tdata-methods}
 \alias{tdata,phylo4d-method}
+\alias{tdata<-,phylo4d-method}
 \title{Methods for S4 phylogeny classes}
 \description{
    Generic methods for phylogenetic trees represented as S4 classes
@@ -93,10 +94,14 @@
 }
 \section{usage}{
   \S4method{tdata}{phylo4d}(x, which = "tip", \dots)
+  \S4method{tdata<-}{phylo4d}(object, which = "tip", \dots, value)
 }
 \arguments{
   \item{which}{Which data to extract: "tip" (tips only), "node"
     (internal nodes only), "allnode" (tips and internal nodes), "edge"
     (edges) }
+  \item{x}{a phylo4d object}
+  \item{object}{a phylo4d object}
+  \item{value}{a data frame}
 }
 \keyword{methods}

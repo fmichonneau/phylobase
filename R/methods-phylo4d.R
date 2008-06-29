@@ -16,6 +16,27 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
         x@node.data))
 })
 
+setMethod("tdata<-", "phylo4d", function(object, which = c("tip", 
+    "node", "allnode"), ..., value) {
+    which <- match.arg(which)
+    if (which == "allnode") {
+        namesmatch <- all(colnames(object@tip.data) == colnames(object@node.data))
+        classmatch <- all(sapply(object@tip.data, class) == sapply(object@node.data, 
+            class))
+        if (!(classmatch && namesmatch)) 
+            stop("Node and tip columns do not match;",
+                 "you should access tip and node data separately")
+    }
+    switch(which,
+           ## FIXME: add checks for matching row names etc ...
+           tip = object@tip.data <- value,
+           node = object@node.data <- value,
+           allnode = stop("for now, must set tip and node data separately"))
+    object
+})
+
+
+
 ## Alternative phylo4d summary method, using phylo4 summary
 ## Marguerite Butler & Peter Cowan
 setMethod("summary", "phylo4d", function(object) {
