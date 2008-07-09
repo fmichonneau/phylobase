@@ -277,7 +277,7 @@ vector of node numbers.
 \appendix
 \section{Definitions/slots}
 
-This section details the internal structure of the \code{phylo4}, \code{multiphylo4}, \code{phylo4d}, and \code{multiphylo4d} classes.  The basic building blocks of these classes are the \code{phylo4} object and a dataframe.  The \code{phylo4} tree format is largely similar to the one used by \code{phylo} class in the package \code{ape} \footnote{}. % TODO compelet this footnote, ape site down?
+This section details the internal structure of the \code{phylo4}, \code{multiphylo4}, \code{phylo4d}, and \code{multiphylo4d} classes.  The basic building blocks of these classes are the \code{phylo4} object and a dataframe.  The \code{phylo4} tree format is largely similar to the one used by \code{phylo} class in the package \code{ape} \footnote{\url{http://ape.mpl.ird.fr/}}.
 
 
 \subsection{phylo4}
