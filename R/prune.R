@@ -35,23 +35,19 @@ setMethod("prune","phylo4",
 setMethod("prune","phylo4d",
           function(phy, tip, trim.internal = TRUE, subtree = FALSE,
                    root.edge = 0,...) {
-            oldnodelabels <- phy@node.label
             ## need unique labels to match data correctly
-            tags <- .genlab("N",nNodes(phy))
-            phy@node.label <- tags
-            if (hasNodeData(phy)) {
-              rownames(phy@node.data) <- phy@node.label
-            }
+            oldnodelabels <- phy@node.label
+            nodetags <- .genlab("N",nNodes(phy))
+            phy@node.label <- nodetags
+            oldtiplabels <- phy@tip.label
             phytr <- DropTip(phy,tip,trim.internal, subtree, root.edge)
             ## this DROPS data
-            phytr@tip.data <- phy@tip.data[phytr@tip.label,,drop=FALSE]
-            m1  = match(phytr@node.label,tags)
-            phytr@node.label <- oldnodelabels[m1]
-            if (hasNodeData(phy)) {
-              phytr@node.data <- phy@node.data[m1,,drop=FALSE]
-              rownames(phytr@node.data) <- phytr@node.label
-            }
-            ## phytr@node.label <- oldnodelabels
+            ntr = match(phytr@node.label,nodetags)
+            ttr = match(phytr@tip.label,oldtiplabels)
+            phytr@node.label <- oldnodelabels[ntr]
+            phytr@tip.label <- oldtiplabels[ttr]
+            phytr@node.data <- phy@node.data[ntr,,drop=FALSE]
+            phytr@tip.data <- phy@tip.data[ttr,,drop=FALSE]            
             phytr
           })
 

@@ -77,13 +77,11 @@ setMethod("[","phylo4d",
               if(missing(j)) j <- TRUE
 
               #### data handling
-              ## for now handle only tip data
-              ## FIXME update to remove dependency on row.names
-              tab <- tdata(x, which="tip")[i, j, ...,drop=FALSE]
-              oldtabnames <- row.names(tdata(x,which="tip"))
+              ## for now handle only tip data - assumes tip names are good row.names
+              tab <- tdata(x, which="tip")[i, j, ..., drop=FALSE]
               
               #### tree handling
-              tip.include <- match(row.names(tab), oldtabnames)
+              tip.include <- match(row.names(tab), x@tip.label)
               tre <- subset(as(x,"phylo4"), tips.include=tip.include)
 
               ## result
@@ -91,7 +89,6 @@ setMethod("[","phylo4d",
               
               return(res)
           })
-
 
 ## coerce phylo4d to phylo4 -- on purpose, so no warning
 
