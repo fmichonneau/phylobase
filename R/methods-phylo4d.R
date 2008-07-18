@@ -3,17 +3,81 @@ setMethod("print", "phylo4d", printphylo4)
 setMethod("show", "phylo4d", function(object) printphylo4(object))
 
 setMethod("tdata", "phylo4d", function(x, which = c("tip", 
-    "node", "allnode"), ...) {
+    "node", "allnode"), label.type=c("row.names","column"), ...) {
     which <- match.arg(which)
-    if (which == "allnode") {
-        namesmatch <- all(colnames(x@tip.data) == colnames(x@node.data))
-        classmatch <- all(sapply(x@tip.data, class) == sapply(x@node.data, 
-            class))
-        if (!(classmatch && namesmatch)) 
-            stop("Node and tip columns do not match, access tip and node data separately")
+    label.type <- match.arg(label.type)
+    if (which == "tip") {
+        if (all(dim(x@tip.data)==0)) {
+            return(x@tip.data)
+        }
+        tdata <- x@tip.data
+        data.names <- x@tip.label
+        if ( identical(label.type,"row.names") ) {
+            if ( identical(data.names,unique(data.names)) || !(any(is.na(data.names))) ) {
+                row.names(tdata) <- data.names
+            }
+            else {
+                warning("Non-unique or missing labels found, labels cannot be coerced to tdata row.names. Use the label.type argument to include labels as first column of data.")
+            }
+        }
+        if (identical(label.type,"column")) {
+            tdata <- data.frame(label=data.names,tdata)
+        }
+        return(tdata)
     }
-    switch(which, tip = x@tip.data, node = x@node.data, allnode = rbind(x@tip.data, 
-        x@node.data))
+    
+    if (which == "node") {
+        if (all(dim(x@node.data)==0)) {
+            return(x@node.data)
+        }    
+        tdata <- x@node.data
+        data.names <- x@node.label
+        if ( identical(label.type,"row.names") ) {
+            if ( identical(data.names,unique(data.names)) || !(any(is.na(data.names))) ) {
+                row.names(tdata) <- data.names
+            }
+            else {
+                warning("Non-unique or missing labels found, labels cannot be coerced to tdata row.names. Use the label.type argument to include labels as first column of data.")
+            }
+        }
+        if (identical(label.type,"column")) {
+            tdata <- data.frame(label=data.names,tdata)
+        }
+        return(tdata)
+    }
+    
+    if (which == "allnode") {
+        if (all(dim(x@node.data)==0)) {
+            nodedata <- data.frame(label=x@node.label)
+        }        
+        else {
+            nodedata <- tdata(x, "node", label.type="column")
+        }
+        if (all(dim(x@tip.data)==0)) {
+            tipdata <- data.frame(label=x@tip.label)
+        }        
+        else {
+            tipdata <- tdata(x, "tip", label.type="column")
+        }
+
+        data.names <- c(as.character(nodedata$label),as.character(tipdata$label))
+        tipdata$label <- (x@Nnode+1):(x@Nnode+length(x@tip.label))
+        nodedata$label <- 1:x@Nnode
+        ## FIXME - kludgy merge and subsequent cleanup - make robust
+        tdata <- merge(nodedata,tipdata, all=TRUE,sort=FALSE)[,-1,drop=FALSE]
+        tdata <- data.frame(label=data.names,tdata)
+        
+        if ( identical(label.type,"row.names") ) {
+            if ( identical(data.names,unique(data.names)) || !(any(is.na(data.names))) ) {
+                tdata <- data.frame(tdata[,-1,drop=FALSE])
+                row.names(tdata) <- data.names
+            }
+            else {
+                stop("Non-unique or missing labels found, labels cannot be coerced to tdata row.names. Use the label.type argument to include labels as first column of data.")
+            }
+        }
+        return(tdata)
+    }
 })
 
 setMethod("tdata<-", "phylo4d", function(object, which = c("tip", 
@@ -28,7 +92,7 @@ setMethod("tdata<-", "phylo4d", function(object, which = c("tip",
                  "you should access tip and node data separately")
     }
     switch(which,
-           ## FIXME: add checks for matching row names etc ...
+           ## FIXME: add checks for matching row names etc ... use check_data
            tip = object@tip.data <- value,
            node = object@node.data <- value,
            allnode = stop("for now, must set tip and node data separately"))
@@ -70,13 +134,13 @@ setMethod("hasNodeData", "phylo4d", function(x) {
 setMethod("nodeLabels<-", "phylo4d", function(object, ..., 
     value) {
     object@node.label <- value
-    rownames(object@node.data) <- value
+    #rownames(object@node.data) <- value
     object
 })
 
 setMethod("labels<-", "phylo4d", function(object, ..., value) {
     object@tip.label <- value
-    rownames(object@tip.data) <- value
+    #rownames(object@tip.data) <- value
     object
 })
 
@@ -84,8 +148,8 @@ setMethod("labels<-", "phylo4d", function(object, ..., value) {
 ##   (don't even know how that should be done in this case)
 setMethod("na.omit", "phylo4d", function(object, ...) {
     tipdata <- tdata(object, "tip")
-    na.names <- rownames(tipdata)[!complete.cases(tipdata)]
-    prune(object, tip = na.names)
+    na.index <- which(!complete.cases(tipdata))
+    prune(object, tip = na.index)
 })
 
 setMethod("names", signature(x = "phylo4d"), function(x) {

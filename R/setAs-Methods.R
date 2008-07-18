@@ -115,29 +115,22 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
         nl <- rep(NA, nNodes(x))
     }
     tl <- labels(x)
-    taxon.name <- c(nl, tl)
+    label <- c(nl, tl)
     if (!isRooted(x)) {
         node.type <- c(rep("internal", n.int), rep("tip", 
             n.tip))
     }
     else node.type <- c("root", rep("internal", n.int - 1), 
         rep("tip", n.tip))
-    return(data.frame(taxon.name, node, ancestor, branch.length, 
+    return(data.frame(label, node, ancestor, branch.length, 
         node.type))
 })
 
 setAs(from = "phylo4d", to = "data.frame", function(from) {
     tree <- as(from, "phylo4") # get tree
     t_df <- as(tree, "data.frame") # convert to data.frame
-    dat <- tdata(from, "allnode") # get data
-    old.ord <- t_df$taxon.name # save roworder of tree
-    
-    ## merge data.frames of tree and data
-    tdat <- merge(t_df, dat, by.x = "taxon.name", by.y = "row.names", 
-        all.x = TRUE, all.y = FALSE, sort = FALSE)
-
-    ## restore the correct order (i.e. the one of the tree data.frame)
-    idx <- match(old.ord, tdat$taxon.name)
-    res <- tdat[idx, ]
-    return(res) # drop "order"
+    dat <- tdata(from, "allnode", label.type="column") # get data
+    tdat <- cbind(t_df,dat[,-1,drop=FALSE])
+    #tdat <- dat[,-1,drop=FALSE]
+    return(tdat)
 })

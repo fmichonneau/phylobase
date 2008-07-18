@@ -7,14 +7,17 @@
   (i.e. \linkS4class{phylo4d} objects).
 }
 \usage{
-check_data(object, use.tip.names=TRUE, missing.tip.data=c("fail","OK","warn"), extra.tip.data=c("fail","OK","warn"), default.tip.names=c("warn","OK","fail"), use.node.names=FALSE, missing.node.data=c("OK","warn","fail"), extra.node.data=c("OK","warn","fail"), default.node.names=c("warn","OK","fail"),\dots)
+check_data(object, label.type = c("row.names", "column"), 
+label.column = 1, use.tip.names=TRUE, missing.tip.data=c("fail","OK","warn"), extra.tip.data=c("fail","OK","warn"), default.tip.names=c("warn","OK","fail"), use.node.names=FALSE, missing.node.data=c("OK","warn","fail"), extra.node.data=c("OK","warn","fail"), default.node.names=c("warn","OK","fail"),\dots)
 
-attach_data(object, use.tip.names = TRUE, use.node.names = FALSE,
-     \dots)
+attach_data(object, label.type = c("row.names", "column"), label.column = 1,
+use.tip.names = TRUE, use.node.names = FALSE,\dots)
 }
 
 \arguments{
   \item{object}{A phylo4d object}
+  \item{label.type}{Obtain labels for matching data to tree labels from the row.names or a column of the data? (default=\code{row.names})}
+  \item{label.column}{If label.type="column", number or name of column to use for matching data to tree labels (default=\code{1})}
   \item{use.tip.names}{Use tip data names if present (default=\code{TRUE})}
   \item{missing.tip.data}{Can tip data taxa be a subset of tree taxa? (default=\code{fail})}
   \item{extra.tip.data}{Can tip data taxa be a superset of tree taxa? (default=\code{fail})}

@@ -74,7 +74,7 @@
   }}
 }
 
-\author{Ben Bolker, Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}, Marguerite Butler}
+\author{Ben Bolker, Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}, Marguerite Butler, Steve Kembel}
 \seealso{ generic \code{\link[methods]{as}}, \code{\link{phylo4}}, \code{\link{phylo4d}}, \code{\link{extract.tree}}, the original \code{\link[ade4]{phylog}} from the
   \code{ade4} package and \code{\link[ape]{as.phylo}} from the \code{ape} package. 
 }

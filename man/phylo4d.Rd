@@ -47,7 +47,7 @@
 \seealso{
 \code{\link{coerce-methods}} for translation functions. The \linkS4class{phylo4d} class, the \code{\link{check_data}}
   function to check the validity of \code{phylo4d} objects; \linkS4class{phylo4} class and \link{phylo4} constructor.}
-\author{Ben Bolker, Thibaut Jombart}
+\author{Ben Bolker, Thibaut Jombart, Steve Kembel}
 \note{
   Checking on matches will be done by the validity checker
   (label matches between data and tree tips, number of rows

@@ -78,6 +78,7 @@ setMethod("[","phylo4d",
 
               #### data handling
               ## for now handle only tip data
+              ## FIXME update to remove dependency on row.names
               tab <- tdata(x, which="tip")[i, j, ...,drop=FALSE]
               oldtabnames <- row.names(tdata(x,which="tip"))
               

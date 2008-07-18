@@ -19,7 +19,7 @@ The topology is given by the pattern of links from each node to its ancestor. Al
   A data.frame with a row for each node (descendant), sorted as
   follows: root first, then other internal nodes, and finally tips.\cr
   The returned data.frame has the following columns:\cr
-  \item{taxon.name}{Label for the taxon at the node (usually species name).}
+  \item{label}{Label for the taxon at the node (usually species name).}
   \item{node}{Node number, i.e. the number identifying the node in \code{x@edge}.}
   \item{ancestor}{Node number of the node's ancestor.}
   \item{branch.length}{The branch length connecting the node to its
@@ -30,6 +30,7 @@ The topology is given by the pattern of links from each node to its ancestor. Al
 \author{
   Marguerite Butler
   Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}
+  Steve Kembel
 }
 \note{This is the default show() method for phylo4, phylo4d. It prints the user-supplied information for building a phylo4 object. For a full description of the phylo4 S4 object and slots, see \code{\link{phylo4}}. }
 \seealso{See Also as \code{\link{printphylo}} for an \code{ape}-like version of \code{print()}. }

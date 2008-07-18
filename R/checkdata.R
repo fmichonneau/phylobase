@@ -54,6 +54,8 @@ check_tree <- function(object,warn="retic",err=NULL) {
 
 
 check_data <- function(object,
+                       label.type=c("row.names","column"),
+                       label.column=1,
                        use.tip.names=TRUE,
                        missing.tip.data=c("fail","OK","warn"),
                        extra.tip.data=c("fail","OK","warn"),
@@ -65,6 +67,17 @@ check_data <- function(object,
 
 {
 
+    ## name matching default: use row.names of data frame
+    label.type = match.arg(label.type)
+    if (identical(label.type, "row.names")) {
+        tip.names <- row.names(object@tip.data)
+        node.names <- row.names(object@node.data)
+    }
+    else {
+        tip.names <- object@tip.data[,label.column]
+        node.names <- object@node.data[,label.column]        
+    }
+    
     ## tip default: use names, require names, must match exactly
     missing.tip.data <- match.arg(missing.tip.data)
     extra.tip.data <- match.arg(extra.tip.data)
@@ -84,7 +97,7 @@ check_data <- function(object,
         if (use.tip.names) {
             
             ## check for default names
-            if (all(row.names(object@tip.data) == 1:length(row.names(object@tip.data)))) {
+            if (all(tip.names == 1:length(tip.names))) {
                 ## no tip.names
                 if (default.tip.names == "fail") {
                     stop("Tip data have default names and may not match tree tip labels. ",
@@ -98,21 +111,21 @@ check_data <- function(object,
             
             ## check tip names
             ## check for missing or extra tip data (relative to tree taxa)
-            if (setequal(row.names(object@tip.data), object@tip.label)) {
+            if (setequal(tip.names, object@tip.label)) {
                 ## names are perfect match - ok
                 return(TRUE)
             }
             else {
                 ## we know the tree taxa and tip.data taxa are not a perfect match
                 ## if tip.data taxa are subset of tree taxa, check missing.tip.data arg and act accordingly
-                tips.in.rownames <- object@tip.label %in% row.names(object@tip.data)
-                rownames.in.tips <- row.names(object@tip.data) %in% object@tip.label 
+                tips.in.rownames <- object@tip.label %in% tip.names
+                rownames.in.tips <- tip.names %in% object@tip.label 
                 missing.data.names <- object@tip.label[!tips.in.rownames]
                 missing.data.name.msg <- if (length(missing.data.names)==0) "" else {
                     paste("\n(missing data names: ",
                           paste(missing.data.names,collapse=","),")",sep="")
                 }
-                extra.data.names <- row.names(object@tip.data)[!rownames.in.tips]
+                extra.data.names <- tip.names[!rownames.in.tips]
                 extra.data.name.msg <- if (length(extra.data.names)==0) "" else {
                     paste("\n(extra data names: ",
                           paste(extra.data.names,collapse=","),")",sep="")
@@ -146,7 +159,7 @@ check_data <- function(object,
                 }
                 
                 ##if tree taxa are subset of tip.data, check extra.tip arg and act accordingly
-                if (!all(row.names(object@tip.data) %in% object@tip.label)) {
+                if (!all(tip.names %in% object@tip.label)) {
                     ##we know it's not an exact match - we have extra.tip.data - take action
                     ##fail
                     errmsg <- paste("Tip data names are a superset of tree tip labels",
@@ -181,8 +194,8 @@ check_data <- function(object,
         if (use.node.names) {
             
             ## check for default names
-            if (all(row.names(object@node.data) == 1:length(row.names(object@node.data))) 
-                || all(row.names(object@node.data) == (nTips(object)+1):nEdges(object))) {
+            if (all(node.names == 1:length(node.names)) 
+                || all(node.names == (nTips(object)+1):nEdges(object))) {
                 ## no node.names
                 if (default.node.names == "fail") {
                     stop("Node data have default names and may not match tree node labels. ",
@@ -196,21 +209,21 @@ check_data <- function(object,
             
             ## check node names
             ## check for missing or extra node data (relative to tree taxa)
-            if (setequal(row.names(object@node.data), object@node.label)) {
+            if (setequal(node.names, object@node.label)) {
                 ## names are perfect match - ok
                 return(TRUE)
             }
             else {
                 ## we know the tree taxa and node.data taxa are not a perfect match
                 ## if node.data taxa are subset of tree taxa, check missing.node.data arg and act accordingly
-                nodes.in.rownames <- object@node.label %in% row.names(object@node.data)
-                rownames.in.nodes <- row.names(object@node.data) %in% object@node.label 
+                nodes.in.rownames <- object@node.label %in% node.names
+                rownames.in.nodes <- node.names %in% object@node.label 
                 missing.data.names <- object@node.label[!nodes.in.rownames]
                 missing.data.name.msg <- if (length(missing.data.names)==0) "" else {
                     paste("\n(missing data names: ",
                           paste(missing.data.names,collapse=","),")",sep="")
                 }
-                extra.data.names <- row.names(object@node.data)[!rownames.in.nodes]
+                extra.data.names <- node.names[!rownames.in.nodes]
                 extra.data.name.msg <- if (length(extra.data.names)==0) "" else {
                     paste("\n(extra data names: ",
                           paste(extra.data.names,collapse=","),")",sep="")
@@ -244,7 +257,7 @@ check_data <- function(object,
                 }
                 
                 ##if tree taxa are subset of node.data, check extra.node arg and act accordingly
-                if (!all(row.names(object@node.data) %in% object@node.label)) {
+                if (!all(node.names %in% object@node.label)) {
                     ##we know it's not an exact match - we have extra.node.data - take action
                     ##fail
                     errmsg <- paste("Node data names are a superset of tree node labels",
@@ -274,12 +287,25 @@ check_data <- function(object,
 }
 
 attach_data <- function(object,
+                        label.type=c("row.names","column"),
+                        label.column=1,
                         use.tip.names=TRUE,
                         use.node.names=FALSE,
                         ...)							 
 {
     
     ## assumes data have already been checked by check_data!
+    ## name matching default: use row.names of data frame
+    label.type = match.arg(label.type)
+    if (identical(label.type, "row.names")) {
+        tip.names <- row.names(object@tip.data)
+        node.names <- row.names(object@node.data)
+    }
+    else {
+        tip.names <- object@tip.data[,label.column]
+        node.names <- object@node.data[,label.column]        
+    }
+
 
     ## for each set of data, take appropriate actions
     
@@ -288,18 +314,18 @@ attach_data <- function(object,
     if (!all(dim(object@tip.data)==0)) {
         ## if we want to use tip.names
         if (use.tip.names) {
-            object@tip.data <- object@tip.data[match(object@tip.label,row.names(object@tip.data)),,drop=FALSE]
+            object@tip.data <- object@tip.data[match(object@tip.label,tip.names),,drop=FALSE]
         }
-        row.names(object@tip.data) <- object@tip.label
+        #tip.names <- object@tip.label
     }
     
     ## node data operations
     if (!all(dim(object@node.data)==0)) {
         ## if we want to use tip.names
         if (use.node.names) {
-            object@node.data <- object@node.data[match(object@node.label,row.names(object@node.data)),,drop=FALSE]
+            object@node.data <- object@node.data[match(object@node.label,node.names),,drop=FALSE]
         }
-        row.names(object@node.data) <- object@node.label
+        #node.names <- object@node.label
     }
     
     return(object)
