@@ -54,25 +54,28 @@ dat.defaultnames <- dat
 row.names(dat.defaultnames) <- NULL
 dat.superset <- rbind(dat, rnorm(2))
 dat.subset <- dat[-1, ]
+
 #create a phylo4 object from a phylo object
 p4 <- as(p3, "phylo4")
+
 #create phylo4d objects with tip data
 p4d <- phylo4d(p4, dat)
 check_data(p4d)
 p4d.sorted <- phylo4d(p4, dat[5:1, ])
 try(p4d.nonames <- phylo4d(p4, dat.defaultnames))
 p4d.nonames <- phylo4d(p4, dat.defaultnames, use.tip.names = FALSE)
+
 \dontrun{
 p4d.subset <- phylo4d(p4, dat.subset)
-}
-\dontrun{
 p4d.subset <- phylo4d(p4, dat.subset, missing.tip.data = "OK")
 try(p4d.superset <- phylo4d(p4, dat.superset))
 p4d.superset <- phylo4d(p4, dat.superset, extra.tip.data = "OK")
 }
+
 #create phylo4d objects with node data
 nod.dat <- data.frame(a = rnorm(4), b = rnorm(4))
 p4d.nod <- phylo4d(p4, node.data = nod.dat, which = "node")
+
 #create phylo4 objects with node and tip data
 p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat, 
   which = "all")
