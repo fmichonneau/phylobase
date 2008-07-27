@@ -1,8 +1,8 @@
 Package: phylobase
 Type: Package
 Title: Base package for phylogenetic structures and comparative data
-Version: 0.3
-Date: 2007-12-18
+Version: 0.3-1
+Date: 2008-07-27
 Depends: methods, ape(>= 2.1)
 Suggests: ade4, MASS
 Author: R Hackathon (Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vienne, Thibaut Jombart, Steve Kembel, David Orme, Brian O'Meara, Emmanuel Paradis, Derrick Zwickl)
