@@ -43,6 +43,7 @@
 #	include <math.h>
 #	include <stdarg.h>
 #	include <stdio.h>
+#	include <limits.h> //This line was added by BCO to deal with an error when doing a build on R-forge: UINT_MAX was not defined
 #	include <stdlib.h>
 #	include <time.h>
 #	include <float.h>
