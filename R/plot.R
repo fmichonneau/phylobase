@@ -119,8 +119,8 @@ setMethod("plot", signature(x="phylo4d",y="missing"), function(x, treetype=c("ph
     
     ## merge data and their coordinates
     alldat <- cbind.data.frame(xy.data, unlist(dat)) 
-    fac <- factor(rep(1:ncol(dat), rep(nrow(dat),ncol(dat))))
-    alldat <- split(alldat, fac)
+    ##    fac <- factor(rep(1:ncol(dat), rep(nrow(dat),ncol(dat))))
+    ##     alldat <- split(alldat, fac)
     
     ## need to "reboot" the plot region without changing coordinates
     ## seems that box does the job.
@@ -177,8 +177,11 @@ setMethod("plot", signature(x="phylo4d",y="missing"), function(x, treetype=c("ph
 
 
     ## finally plot the data
-    lapply(alldat, function(X) plotaux(X[,1],X[,2],X[,3],symbol,cex.symbol))
-
+    ## carefull : all variables must be plotted in as a single vector, so that
+    ## scaling is the same for all variables
+    ## lapply(alldat, function(X) plotaux(X[,1],X[,2],X[,3],symbol,cex.symbol)) 
+    plotaux(alldat[,1],alldat[,2],alldat[,3],symbol,cex.symbol)
+    
     #### plot labels for variables
     if(show.var.label) text(x=x.grid, y=rep(min(y.grid)-1.5*y.inset, ncol(dat)), lab=var.label,
                             adj=1, srt=90, cex=cex.label)
@@ -252,7 +255,7 @@ setMethod("plot", signature(x="phylo4d",y="missing"), function(x, treetype=c("ph
             y.leg <- y.base ## remember to use y.base instead of par("usr3")[3], which is wrong
         }
 
-        addLegend(x=x.leg, y=y.leg, z=alldat[[1]][,3],
+        addLegend(x=x.leg, y=y.leg, z=alldat[,3],
                   cex.legend=cex.legend, cex.label=cex.label, cex.symbol=cex.symbol)
         ## FIXME ##
         ## draw a rectangle around the legend
