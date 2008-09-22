@@ -2,7 +2,7 @@ setMethod("print", "phylo4d", printphylo4)
 
 setMethod("show", "phylo4d", function(object) printphylo4(object))
 
-setMethod("tdata", "phylo4d", function(x, which = c("tip", 
+setMethod("tdata", "phylo4d", function(x, which = c("tip",
     "node", "allnode"), label.type=c("row.names","column"), ...) {
     which <- match.arg(which)
     label.type <- match.arg(label.type)
@@ -25,11 +25,11 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
         }
         return(tdata)
     }
-    
+
     if (which == "node") {
         if (all(dim(x@node.data)==0)) {
             return(x@node.data)
-        }    
+        }
         tdata <- x@node.data
         data.names <- x@node.label
         if ( identical(label.type,"row.names") ) {
@@ -45,17 +45,17 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
         }
         return(tdata)
     }
-    
+
     if (which == "allnode") {
         if (all(dim(x@node.data)==0)) {
             nodedata <- data.frame(label=x@node.label)
-        }        
+        }
         else {
             nodedata <- tdata(x, "node", label.type="column")
         }
         if (all(dim(x@tip.data)==0)) {
             tipdata <- data.frame(label=x@tip.label)
-        }        
+        }
         else {
             tipdata <- tdata(x, "tip", label.type="column")
         }
@@ -66,7 +66,7 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
         ## FIXME - kludgy merge and subsequent cleanup - make robust
         tdata <- merge(nodedata,tipdata, all=TRUE,sort=FALSE)[,-1,drop=FALSE]
         tdata <- data.frame(label=data.names,tdata)
-        
+
         if ( identical(label.type,"row.names") ) {
             if ( identical(data.names,unique(data.names)) || !(any(is.na(data.names))) ) {
                 tdata <- data.frame(tdata[,-1,drop=FALSE])
@@ -80,22 +80,27 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
     }
 })
 
-setMethod("tdata<-", "phylo4d", function(object, which = c("tip", 
+setMethod("tdata<-", "phylo4d", function(object, which = c("tip",
     "node", "allnode"), ..., value) {
     which <- match.arg(which)
     if (which == "allnode") {
         namesmatch <- all(colnames(object@tip.data) == colnames(object@node.data))
-        classmatch <- all(sapply(object@tip.data, class) == sapply(object@node.data, 
+        classmatch <- all(sapply(object@tip.data, class) == sapply(object@node.data,
             class))
-        if (!(classmatch && namesmatch)) 
+        if (!(classmatch && namesmatch))
             stop("Node and tip columns do not match;",
                  "you should access tip and node data separately")
     }
+    if(is.matrix(value)) value <- as.data.frame(value)
+    if(!is.data.frame(value))
+        stop("For now, only data.frame or matrix can be provided")
     switch(which,
            ## FIXME: add checks for matching row names etc ... use check_data
+           ## FIXED with line added below?
            tip = object@tip.data <- value,
            node = object@node.data <- value,
            allnode = stop("for now, must set tip and node data separately"))
+    if(check_data(object, ...)) object <- attach_data(object, ...)
     object
 })
 
@@ -110,7 +115,7 @@ setMethod("summary", "phylo4d", function(object) {
     nodes <- tdata(object, "node")
     cat("\nComparative data:\n")
     if (nrow(tips) > 0) {
-        cat("\nTips: data.frame with", nTips(object), "taxa and", 
+        cat("\nTips: data.frame with", nTips(object), "taxa and",
             ncol(tips), "variables \n\n")
         print(summary(tips))
     }
@@ -118,7 +123,7 @@ setMethod("summary", "phylo4d", function(object) {
         cat("\nObject contains no tip data.")
     }
     if (nrow(nodes) > 0) {
-        cat("\nNodes: data.frame with", nNodes(object), "internal nodes and", 
+        cat("\nNodes: data.frame with", nNodes(object), "internal nodes and",
             ncol(nodes), "variables \n\n")
         print(summary(nodes))
     }
@@ -131,7 +136,7 @@ setMethod("hasNodeData", "phylo4d", function(x) {
     nrow(x@node.data) > 0
 })
 
-setMethod("nodeLabels<-", "phylo4d", function(object, ..., 
+setMethod("nodeLabels<-", "phylo4d", function(object, ...,
     value) {
     object@node.label <- value
     #rownames(object@node.data) <- value
