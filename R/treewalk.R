@@ -26,7 +26,7 @@ getnodes <- function(phy,node) {
         ## old getLabelByNode
         nt <- nTips(phy)
         vals <- ifelse(node<=nt,  ## tips
-                       labels(phy,"all")[node], 
+                       labels(phy,"all")[node],
                        ifelse(node<=nt+nNodes(phy),
                               if (!hasNodeLabels(phy)) { NA }
                               else {
@@ -79,9 +79,9 @@ siblings <- function(phy, node, include.self=FALSE) {
     if (!include.self) v <- v[v!=getnodes(phy,node)]
     v
 }
-    
+
 ## get ancestors (all nodes)
-ancestors <- function (phy, node, which=c("all","parent")) 
+ancestors <- function (phy, node, which=c("all","parent"))
 {
     which <- match.arg(which)
     if (which=="parent") return(ancestor(phy,node))
@@ -105,6 +105,14 @@ MRCA <- function(phy, ...) {
     if (length(nodes)==1 && length(nodes[[1]])>1) {
         nodes <- as.list(nodes[[1]])
     }
-    ancests <- lapply(nodes,ancestors,phy=phy)
-    getnodes(phy,max(Reduce(intersect,ancests)))
+    ## Correct behavior in case of MRCA of identical taxa
+    testNodes <- lapply(nodes, getnodes, phy=phy)
+    uniqueNodes <- unique(testNodes)
+    if(length(uniqueNodes) == 1) {
+        uniqueNodes[[1]]
+    }
+    else {
+        ancests <- lapply(nodes,ancestors,phy=phy)
+        getnodes(phy,max(Reduce(intersect,ancests)))
+    }
 }

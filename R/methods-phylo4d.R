@@ -80,7 +80,7 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
     }
 })
 
-setMethod("tdata<-", "phylo4d", function(object, which = c("tip",
+setReplaceMethod("tdata", "phylo4d", function(object, which = c("tip",
     "node", "allnode"), ..., value) {
     which <- match.arg(which)
     if (which == "allnode") {
@@ -95,15 +95,12 @@ setMethod("tdata<-", "phylo4d", function(object, which = c("tip",
     if(!is.data.frame(value))
         stop("For now, only data.frame or matrix can be provided")
     switch(which,
-           ## FIXME: add checks for matching row names etc ... use check_data
-           ## FIXED with line added below?
            tip = object@tip.data <- value,
            node = object@node.data <- value,
            allnode = stop("for now, must set tip and node data separately"))
     if(check_data(object, ...)) object <- attach_data(object, ...)
     object
 })
-
 
 
 ## Alternative phylo4d summary method, using phylo4 summary
@@ -136,14 +133,14 @@ setMethod("hasNodeData", "phylo4d", function(x) {
     nrow(x@node.data) > 0
 })
 
-setMethod("nodeLabels<-", "phylo4d", function(object, ...,
+setReplaceMethod("nodeLabels", "phylo4d", function(object, ...,
     value) {
     object@node.label <- value
     #rownames(object@node.data) <- value
     object
 })
 
-setMethod("labels<-", "phylo4d", function(object, ..., value) {
+setReplaceMethod("labels", "phylo4d", function(object, ..., value) {
     object@tip.label <- value
     #rownames(object@tip.data) <- value
     object

@@ -42,7 +42,7 @@ setMethod("rootEdge", "phylo4", function(x, order, ...) {
 
 setMethod("isRooted","phylo4", function(x) {
     ## hack to avoid failure on an empty object
-    if(nTips(x) == 0) return(FALSE)  
+    if(nTips(x) == 0) return(FALSE)
     !is.na(x@root.edge) ||  ## root edge explicitly defined
     ## HACK: make sure we find the right "nTips"
     tabulate(edges(x)[, 1])[nTips(x) + 1] <= 2
@@ -51,19 +51,19 @@ setMethod("isRooted","phylo4", function(x) {
 })
 
 setMethod("rootNode", "phylo4", function(x) {
-    if (!isRooted(x)) 
+    if (!isRooted(x))
         return(NA)
-    if (!is.na(x@root.edge)) 
+    if (!is.na(x@root.edge))
         stop("FIXME: don't know what to do in this case")
     return(nTips(x) + 1)
 })
 
-setMethod("rootNode<-", "phylo4", function(x, value) {
+setReplaceMethod("rootNode", "phylo4", function(x, value) {
     stop("not implemented yet")
 })
 
 setMethod("edgeLength", "phylo4", function(x) {
-    if (!hasEdgeLength(x)) 
+    if (!hasEdgeLength(x))
         NULL
     else x@edge.length
 })
@@ -76,10 +76,10 @@ setMethod("hasEdgeLabels", "phylo4", function(x) {
     length(x@edge.label) > 0
 })
 
-setMethod("labels", "phylo4", function(object, which = c("tip", 
+setMethod("labels", "phylo4", function(object, which = c("tip",
     "node", "allnode"), ...) {
     which <- match.arg(which)
-    switch(which, tip = object@tip.label, node = object@node.label, 
+    switch(which, tip = object@tip.label, node = object@node.label,
         allnode = c(object@tip.label, object@node.label))
 })
 
@@ -87,7 +87,7 @@ setMethod("nodeLabels", "phylo4", function(x) {
     x@node.label
 })
 
-setMethod("nodeLabels<-", "phylo4", function(object, ..., 
+setReplaceMethod("nodeLabels", "phylo4", function(object, ...,
     value) {
     object@node.label <- value
     object
@@ -97,7 +97,7 @@ setMethod("edgeLabels", "phylo4", function(x) {
     x@edge.label
 })
 
-setMethod("edgeLabels<-", "phylo4", function(object, ..., 
+setReplaceMethod("edgeLabels", "phylo4", function(object, ...,
     value) {
     object@edge.label <- value
     object
@@ -105,17 +105,17 @@ setMethod("edgeLabels<-", "phylo4", function(object, ...,
 
 ## hack to allow access with $
 setMethod("$", "phylo4", function(x, name) {
-    switch(name, edge.length = if (!hasEdgeLength(x)) 
+    switch(name, edge.length = if (!hasEdgeLength(x))
         NULL
-    else x@edge.length, node.label = if (!hasNodeLabels(x)) 
+    else x@edge.length, node.label = if (!hasNodeLabels(x))
         NULL
-    else x@node.label, root.edge = if (is.na(x@root.edge)) 
+    else x@node.label, root.edge = if (is.na(x@root.edge))
         NULL
     else x@root.edge, attr(x, name))
 })
 
 ## FIXME: implement more checks on this!!
-setMethod("$<-", "phylo4", function(x, name, value) {
+setReplaceMethod("$", "phylo4", function(x, name, value) {
     slot(x, name, check = TRUE) <- value
     return(x)
 })
@@ -126,7 +126,7 @@ printphylo4 <- function(x, printall = TRUE){
       print(as(x, 'data.frame'))
     else print(head(as(x, 'data.frame')))
 }
-## hack for print/show 
+## hack for print/show
 ## from http://tolstoy.newcastle.edu.au/R/e2/devel/06/12/1363.html
 #setMethod("print", "phylo4", printphylo)
 #setMethod("show", "phylo4", function(object) printphylo(object))
@@ -141,27 +141,27 @@ printphylo <- function (x,printlen=6,...) {
     nb.tip <- length(x$tip.label)
     nb.node <- x$Nnode
     nb.edge <- length(x$edge.label)
-    cat(paste("\nPhylogenetic tree with", nb.tip, "tips and", 
+    cat(paste("\nPhylogenetic tree with", nb.tip, "tips and",
               nb.node, "internal nodes\n"))
 
     ## print tip labels
     cat("\nTip labels:\n")
     if (nb.tip > printlen) {
-        cat(paste("\t", paste(x$tip.label[1:printlen], collapse = ", "), 
+        cat(paste("\t", paste(x$tip.label[1:printlen], collapse = ", "),
                   ", ...\n", sep = ""))
     } else print(x$tip.label)
-    
+
     ## print node labels
     cat("\nNode labels:\n")
     if (nb.node > printlen) {
-        cat(paste("\t", paste(x$node.label[1:printlen], collapse = ", "), 
+        cat(paste("\t", paste(x$node.label[1:printlen], collapse = ", "),
                   ", ...\n", sep = ""))
     } else print(x$node.label)
-    
+
     ## print edge labels
     cat("\nEdge labels:\n")
     if (nb.edge > printlen) {
-        cat(paste("\t", paste(x$edge.label[1:printlen], collapse = ", "), 
+        cat(paste("\t", paste(x$edge.label[1:printlen], collapse = ", "),
                   ", ...\n", sep = ""))
     } else print(x$edge.label)
 
@@ -171,7 +171,7 @@ printphylo <- function (x,printlen=6,...) {
     ##     cat("\n")
     ##     cat(paste("@", names(x)[5:7], sep=""),sep="\t")
     ##     cat("\n")
-    
+
     rlab <- if (isRooted(x)) "Rooted"  else "Unrooted"
     cat("\n", rlab, "; ", sep = "")
     blen <- if (hasEdgeLength(x))
@@ -187,12 +187,12 @@ printphylo <- function (x,printlen=6,...) {
 setMethod("summary","phylo4", function (object, quiet=FALSE) {
     x <- object
     res <- list()
-    
+
     ## build the result object
     res$name <- deparse(substitute(object, sys.frame(-1)))
     res$nb.tips <- length(x$tip.label)
     res$nb.nodes <- x$Nnode
-    
+
     if(!is.null(x$edge.length)){
         res$mean.el <- mean(x$edge.length, na.rm=TRUE)
         res$var.el <- var(x$edge.length, na.rm=TRUE)
@@ -223,15 +223,15 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
         res$polytomy <- res$polytomy[idx]
         names(res$polytomy) <- nodeLabels(x)
     }
-    
+
     ## model info
     res$loglik <- attr(x, "loglik")
     res$para <- attr(x, "para")
     res$xi <- attr(x, "xi")
-    
+
     ## if quiet, stop here
     if(quiet) return(invisible(res))
-    
+
     if(!is.null(x$root.edge)){
         cat("  Root edge:", x$root.edge, "\n")
     } else {
@@ -259,7 +259,7 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
         print(res$polytomy)
         cat("\n")
     }
-    
+
     if (!is.null(attr(x, "loglik"))) {
         cat("Phylogeny estimated by maximum likelihood.\n")
         cat("  log-likelihood:", attr(x, "loglik"), "\n\n")
@@ -288,7 +288,7 @@ setMethod("labels","phylo4", function(object,...) {
     object@tip.label
 })
 
-setMethod("labels<-","phylo4", function(object,...,value) {
+setReplaceMethod("labels","phylo4", function(object,...,value) {
     if (length(value) != length(object@tip.label))
         stop("Number of tip labels does not match number of tips.")
     object@tip.label <- value
