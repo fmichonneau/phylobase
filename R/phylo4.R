@@ -34,6 +34,10 @@ setGeneric("edgeLength", function(x) {
     standardGeneric("edgeLength")
 })
 
+setGeneric("sumEdgeLength", function(phy, node) {
+    standardGeneric("sumEdgeLength")
+})
+
 setGeneric("hasNodeLabels", function(x) {
     standardGeneric("hasNodeLabels")
 })

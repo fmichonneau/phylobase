@@ -68,6 +68,17 @@ setMethod("edgeLength", "phylo4", function(x) {
     else x@edge.length
 })
 
+setMethod("sumEdgeLength", "phylo4", function(phy, node) {
+    if(!hasEdgeLength(phy))
+        NULL
+    else {
+        nd <- getnodes(phy, node)
+        iEdges <- which(phy@edge[,2] %in% nd)
+        sumEdges <- sum(phy@edge.length[iEdges])
+        sumEdges
+    }
+})
+
 setMethod("hasNodeLabels", "phylo4", function(x) {
     length(x@node.label) > 0
 })
