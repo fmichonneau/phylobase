@@ -81,11 +81,11 @@ siblings <- function(phy, node, include.self=FALSE) {
 }
 
 ## get ancestors (all nodes)
-ancestors <- function (phy, node, which=c("all","parent"))
+ancestors <- function (phy, node, which=c("all","parent","ALL"))
 {
     which <- match.arg(which)
     if (which=="parent") return(ancestor(phy,node))
-    node <- getnodes(phy,node)
+    oNode <- node <- getnodes(phy,node)
     if (is.na(node)) stop("node ",node," not found in tree")
     res <- numeric(0)
     n <- nTips(phy)
@@ -95,6 +95,7 @@ ancestors <- function (phy, node, which=c("all","parent"))
         node <- anc
         if (anc==n+1) break
     }
+    if(which == "ALL") res <- c(oNode, res)
     return(getnodes(phy,res))
 }
 
@@ -112,7 +113,7 @@ MRCA <- function(phy, ...) {
         uniqueNodes[[1]]
     }
     else {
-        ancests <- lapply(nodes,ancestors,phy=phy)
-        getnodes(phy,max(Reduce(intersect,ancests)))
+        ancests <- lapply(nodes, ancestors, phy=phy, which="ALL")
+        getnodes(phy, max(Reduce(intersect, ancests)))
     }
 }
