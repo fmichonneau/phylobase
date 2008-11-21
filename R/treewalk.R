@@ -89,6 +89,10 @@ ancestors <- function (phy, node, which=c("all","parent","ALL"))
     if (is.na(node)) stop("node ",node," not found in tree")
     res <- numeric(0)
     n <- nTips(phy)
+
+    ## correct behavior when node==root
+    if(node == rootNode(phy)) return(NULL)
+
     repeat {
         anc <- ancestor(phy,node)
         res <- c(res,anc)
