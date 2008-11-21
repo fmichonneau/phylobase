@@ -139,7 +139,7 @@ MRCA <- function(phy, ...) {
 # shortestPath
 ###############
 shortestPath <- function(phy, node1, node2){
-    if(!require(phylobase)) stop("phylobase package is not installed")
+    ## if(!require(phylobase)) stop("phylobase package is not installed")
 
     ## conversion from phylo, phylo4 and phylo4d
     x <- as(phy, "phylo4")
@@ -170,3 +170,30 @@ shortestPath <- function(phy, node1, node2){
 
     return(res)
 } # end shortestPath
+
+
+
+
+
+###########
+# getedges
+###########
+getedges <- function(phy, node){
+
+    ## conversion from phylo, phylo4 and phylo4d
+    x <- as(phy, "phylo4")
+
+    ## come checks
+    if (is.character(checkval <- check_phylo4(x))) stop(checkval)
+    node <- getnodes(x, node)
+    if(any(is.na(node))) stop("wrong node specified")
+    root <- rootNode(x)
+    node[node==root] <- NA
+
+    ## main computations
+    E <- x@edge
+    res <- match(node, E[,2])
+    names(res) <- names(node)
+
+    return(res)
+} # end getedges
