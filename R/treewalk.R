@@ -106,17 +106,26 @@ MRCA <- function(phy, ...) {
     if (length(nodes)==1 && length(nodes[[1]])>1) {
         nodes <- as.list(nodes[[1]])
     }
-    ## Correct behavior in case of MRCA of identical taxa
+
+    ## Correct behavior when the root is part of the nodes
     testNodes <- lapply(nodes, getnodes, phy=phy)
     uniqueNodes <- unique(testNodes)
+    root <- nTips(phy)+1
+    if(root %in% uniqueNodes) {
+        res <- getnodes(phy, root)
+        return(res)
+    }
+    ## Correct behavior in case of MRCA of identical taxa
     if(length(uniqueNodes) == 1) {
-        uniqueNodes[[1]]
+        res <- uniqueNodes[[1]]
+        return(res)
     }
     else {
         ancests <- lapply(nodes, ancestors, phy=phy, which="ALL")
-        getnodes(phy, max(Reduce(intersect, ancests)))
+        res <- getnodes(phy, max(Reduce(intersect, ancests)))
+        return(res)
     }
-}
+} # end MRCA
 
 
 
