@@ -78,12 +78,15 @@ shortestPath(phy, node1, node2)
   ancestors(geospiza,"N11")
   MRCA(geospiza,"conirostris","difficilis","fuliginosa")
   MRCA(geospiza,"olivacea","conirostris")
+
   ## shortest path between 2 nodes
   shortestPath(geospiza, "fortis","fuliginosa")
   shortestPath(geospiza, "N02","N05")
+
   ## identifying an edge fron its terminal node
   getedges(geospiza,c("olivacea","N02","fortis"))
   getnodes(geospiza, c("olivacea","N02","fortis"))
   geospiza$edge[c(26,1,11),]
+  if(require(ape)){ edgelabels() }
 }
 \keyword{misc}
