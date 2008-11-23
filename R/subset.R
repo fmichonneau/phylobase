@@ -50,7 +50,7 @@ setMethod("subset", "phylo", function(x,...) {
 ###############
 ## phylo4
 setMethod("[","phylo4",
-          function(x, i) {
+          function(x, i, j, ..., drop=FALSE) {
 
               if(missing(i)) i <- TRUE
 
