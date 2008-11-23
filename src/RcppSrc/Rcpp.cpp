@@ -881,11 +881,12 @@ void RcppFunction::appendToRList(string name, RcppDate& date) {
 // a setjmp() call), and he suggested the following work-around.
 char *copyMessageToR(const char* const mesg) {
     char* Rmesg;
-    char* prefix = "Exception: ";
-    void* Rheap = R_alloc(std::strlen(prefix)+std::strlen(mesg)+1,sizeof(char));
+    const char* prefix = "Exception: ";
+    // BMB commented out "std::" prefix before strlen
+    void* Rheap = R_alloc(strlen(prefix)+strlen(mesg)+1,sizeof(char));
     Rmesg = static_cast<char*>(Rheap);
-    std::strcpy(Rmesg, prefix);
-    std::strcat(Rmesg, mesg);
+    strcpy(Rmesg, prefix);
+    strcat(Rmesg, mesg);
     return Rmesg;
 }
 

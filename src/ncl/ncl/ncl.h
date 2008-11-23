@@ -26,6 +26,8 @@
 #	define vsnprintf _vsnprintf
 #endif
 
+#	include <limits.h> // BMB: UINT_MAX also required outside conditional, at least on Linux bolker-lap2 2.6.27-8-generic #1 SMP Thu Nov 6 17:33:54 UTC 2008 i686 GNU/Linux; g++ (Ubuntu 4.3.2-1ubuntu11) 4.3.2
+
 #if !defined(__DECCXX)
 #	include <cassert>
 #	include <cctype>
