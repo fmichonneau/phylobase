@@ -30,18 +30,36 @@ check_tree <- function(object,warn="retic",err=NULL) {
       return("nodes 1 to nTips must all be tips")
     if (!all(nDesc[(nTips+1):(nTips+nNodes(object))]>0))
       return("nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
-    if (any(nDesc>1)) {
+    if (any(nDesc>2)) {
         if ("poly" %in% err)
           return("tree includes polytomies")
         if ("poly" %in% warn)
           warning("tree includes polytomies")
     }
     nRoots <- sum(nAncest==0)
+    if (which(nAncest==0)!=nTips+1) {
+      return("root node is not at position (nTips+1)")
+    }
+    if (any(nAncest==0) && E[1,1]!=nTips+1) {
+      return("root node must be first row of edge matrix")
+    }
+    ##
+    ## how do we identify loops???
+    ## EXPERIMENTAL: could be time-consuming for large trees?
+    if (FALSE) {
+      Emat <- matrix(0,nrow=max(E),ncol=max(E))
+      Emat[E] <- 1
+    }
+    ## all done with fatal errors.  Now construct a list
+    ##  of warnings and paste them together
     msg <- character(0)
     if (nRoots>1)
       msg <- "tree has more than one root"
+    ## BMB: should this be an error????
     if (any(nAncest>1))
       msg <- c(msg,"some nodes have multiple ancestors")
+    if (any(nDesc==1))
+      msg <- c("tree contains singleton nodes")
     msg <- paste(msg,collapse=", ")
     if (nzchar(msg)) {
         if ("retic" %in% err)

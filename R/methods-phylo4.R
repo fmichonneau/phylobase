@@ -55,6 +55,7 @@ setMethod("rootNode", "phylo4", function(x) {
         return(NA)
     if (!is.na(x@root.edge))
         stop("FIXME: don't know what to do in this case")
+    ## BMB: danger!  do we require this???
     return(nTips(x) + 1)
 })
 

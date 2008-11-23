@@ -80,9 +80,11 @@ broke3 <- broke2
 broke3$edge[broke3$edge==7] <- 6
 broke3$edge[broke3$edge==10] <- 7
 
-as(broke3,"phylo4") -> tree3  # works with no error message
-phylo4(broke3$edge)    # works with no error message
-plot(tree3)  # works, but tree is broken
+## both of the following now fail with
+## "root node is not at position (nTips+1)
+try(as(broke3,"phylo4") -> tree3)  # works with no error message
+try(phylo4(broke3$edge))    # works with no error message
+## plot(tree3)  # would work if we could create it?
 
 
 # tips have larger numbers than root node:

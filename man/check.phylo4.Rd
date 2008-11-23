@@ -20,7 +20,20 @@ check_tree(object,warn="retic",err=NULL)
   error string (describing problems) or TRUE if everything is OK
 }
 \note{\code{check_phylo4} is an (inflexible) wrapper for
-  \code{check_tree} that uses the default settings}
+  \code{check_tree}, which uses the default settings.
+  The rules for \code{phylo4} objects essentially follow
+  those for \code{phylo} objects from the \code{ape} package,
+  which are in turn defined in
+  \url{http://ape.mpl.ird.fr/misc/FormatTreeR_4Dec2006.pdf}.
+  These are essentially that:
+  \itemize{
+    \item if the tree has edge lengths defined, the number of edge lengths must match the number of edges;
+    \item the number of tip labels must match the number of tips;
+    \item in a tree with \code{ntips} tips and \code{nnodes} (total) nodes, nodes 1 to \code{ntips} must be tips
+    \item if the tree is rooted, the root must be node number
+    \code{ntips+1} and the root node must be the first row of the edge matrix
+  }
+}
 \seealso{
   the \code{\link{phylo4}} constructor and \linkS4class{phylo4} class;
   \code{\link{check_data}}, the \code{\link{phylo4d}} constructor and
