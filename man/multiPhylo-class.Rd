@@ -31,8 +31,9 @@
     \item{names}{\code{signature(x = "phylo4")}: gives the slots names}
 }
 }
-\usage{
-  }
+% commented to eliminate Note: on build
+%\usage{
+%  }
   \arguments{
     \item{x}{a phylo4 object}
     \item{printlen}{Maximum number of tip labels to print}

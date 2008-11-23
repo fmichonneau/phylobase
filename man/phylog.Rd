@@ -18,6 +18,7 @@ Class \code{"\linkS4class{oldClass}"}, directly.
 \seealso{The original \code{\link[pkg:ade4]{phylog}} from the
   \code{ade4} package. 
 }
-\examples{
-}
+% commented to eliminate Note: on build
+%\examples{
+%}
 \keyword{classes}

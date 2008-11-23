@@ -2,6 +2,7 @@
 \docType{methods}
 \alias{plot,phylo4,missing-method}
 \alias{plot,phylo4d,missing-method}
+\alias{plot,pdata,missing-method}
 \title{Plot a phylogenetic tree alone or with data}
 \description{
   These methods display graphics for objects of class \code{phylo4} and

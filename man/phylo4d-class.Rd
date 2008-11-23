@@ -4,6 +4,7 @@
 \alias{show,phylo4d-method}
 \alias{print,phylo4d-method}
 \alias{summary,phylo4d-method}
+\alias{phylo4d,phylo4d-method}
 \alias{names,phylo4d-method}
 \alias{[,phylo4d,ANY,ANY,ANY-method}
 \title{phylo4d class}

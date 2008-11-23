@@ -82,8 +82,8 @@
 library(ape)
 example(read.tree)
 ## round trip conversion 
-tree_in_phylo = tree.owls                # tree is a phylo object 
-tree_in_phylo4 = as(tree.owls,"phylo4")  # phylo converted to phylo4 
+tree_in_phylo <- tree.owls                # tree is a phylo object 
+tree_in_phylo4 <- as(tree.owls,"phylo4")  # phylo converted to phylo4 
 tree_in_phylo4
 identical(tree_in_phylo,as(tree_in_phylo4,"phylo")) # test if phylo, and phlyo4 converted to phylo are identical
 

@@ -36,8 +36,8 @@
     \item{\[\[<-}{\code{signature(x = "pdata")}: set data columns or elements}
     \item{\[\[}{\code{signature(x = "pdata", i = "ANY", j = "ANY")}: access data columns or elements }
     \item{\[\[}{\code{signature(x = "pdata", i = "ANY", j = "missing")}: set data columns or elements }}
-\author{Ben Bolker}
-\examples{
-
-}
+  \author{Ben Bolker}
+  % commented to eliminate Note: on build
+  %\examples{
+%}
 \keyword{classes}
