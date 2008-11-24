@@ -17,14 +17,14 @@
 }
 \usage{
 getnodes(phy,node)
-ancestors(phy, node, which=c("all","parent","ALL")) 
+ancestors(phy, node, which=c("all","parent","ALL"))
 ancestor(phy, node)
 siblings(phy,node,include.self=FALSE)
 children(phy, node)
 descendants(phy, node, which=c("tips","children","all"))
 MRCA(phy,\dots)
 shortestPath(phy, node1, node2)
-\S4method{sumEdgeLength}{phylo4}(x)
+\S4method{sumEdgeLength}{phylo4}(phy, node)
 }
 \arguments{
   \item{phy}{a \linkS4class{phylo4} object (or one inheriting from
@@ -35,7 +35,7 @@ shortestPath(phy, node1, node2)
   \item{which}{(\code{ancestors}) specify whether to return just direct
     ancestor ("parent"), all ancestor nodes ("all"), or all ancestor
     nodes including self ("ALL"); (\code{descendants})
-    specify whether to return 
+    specify whether to return
     just direct descendants ("children"), all extant descendants
     ("tips"), or all descendant nodes ("all")}
   \item{include.self}{whether to include self in list of siblings}
@@ -65,8 +65,8 @@ shortestPath(phy, node1, node2)
   more nodes}
   \item{\code{shortestPath}}{returns the nodes of the shortest path from one
   node to another (excluding \code{node1} and \code{node2})}
-  \item{\code{sumEdgeLength}}{gives the total branch length
-    between two nodes}
+  \item{\code{sumEdgeLength}}{returns the sum of branch length for branches
+    starting at nodes provided.}
 }
 \note{\code{MRCA} is uppercase to avoid conflict with \code{mrca}
   in ape}
@@ -95,5 +95,9 @@ shortestPath(phy, node1, node2)
   getnodes(geospiza, c("olivacea","N02","fortis"))
   geospiza$edge[c(26,1,11),]
   if(require(ape)){ edgelabels() }
+
+  ## branch length from a tip to the root
+  sumEdgeLength(geospiza, ancestors(geospiza, "fortis", which="ALL"))
+
 }
 \keyword{misc}
