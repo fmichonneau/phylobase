@@ -8,6 +8,8 @@
 \alias{getnodes}
 \alias{getedges}
 \alias{shortestPath}
+\alias{sumEdgeLength}
+\alias{sumEdgeLength,phylo4-method}
 \title{tree traversal and utility functions}
 \description{
   Functions for describing relationships among
@@ -15,21 +17,24 @@
 }
 \usage{
 getnodes(phy,node)
-ancestors(phy, node, which=c("all","parent")) 
+ancestors(phy, node, which=c("all","parent","ALL")) 
 ancestor(phy, node)
 siblings(phy,node,include.self=FALSE)
 children(phy, node)
 descendants(phy, node, which=c("tips","children","all"))
 MRCA(phy,\dots)
 shortestPath(phy, node1, node2)
+\S4method{sumEdgeLength}{phylo4}(x)
 }
 \arguments{
   \item{phy}{a \linkS4class{phylo4} object (or one inheriting from
     \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
   }
+  \item{x}{a \code{phylo4} object}
   \item{node}{a node number (or name)}
   \item{which}{(\code{ancestors}) specify whether to return just direct
-    ancestor ("parent") or all ancestor nodes; (\code{descendants})
+    ancestor ("parent"), all ancestor nodes ("all"), or all ancestor
+    nodes including self ("ALL"); (\code{descendants})
     specify whether to return 
     just direct descendants ("children"), all extant descendants
     ("tips"), or all descendant nodes ("all")}
@@ -40,26 +45,28 @@ shortestPath(phy, node1, node2)
   \item{node2}{a node number (or name)}
 }
 \value{
-  \code{getnodes} takes character strings corresponding to tip or
-  node labels, or node numbers; it returns a named
-  vector of node numbers.
-  \code{getedges} takes character strings naming terminal
-  node of edges, or the corresponding node numbers; it returns a named
-  vector of edge numbers.
-  \code{ancestors} and \code{descendants}
+  \item{\code{getnodes}}{takes character strings corresponding to tip
+    or node labels, or node numbers; it returns a named
+    vector of node numbers}
+  \item{\code{getedges}}{takes character strings naming terminal
+    node of edges, or the corresponding node numbers; it returns a named
+    vector of edge numbers.}
+  \item{\code{ancestors} and \code{descendants}}{
   return named vectors of the ancestors and descendants of
   a node; \code{ancestor} is a synonym for
-  \code{ancestors(\dots,which="parent")} (i.e. direct
+  \item \code{ancestors(\dots,which="parent")} (i.e. direct
   ancestor only), while
   \code{children} is a synonym for
   \code{descendants(\dots,which="children")} (i.e. direct
-  descendants only).
-  \code{siblings} returns sibling nodes (children
-  of the same parent).
-  \code{mrca} returns the most recent common ancestor of two or
-  more nodes.
-  \code{shortestPath} returns the nodes of the shortest path from one
-  node to another (excluding \code{node1} and \code{node2}).
+  descendants only)}
+  \item{\code{siblings}}{returns sibling nodes (children
+  of the same parent)}
+  \item{\code{mrca}}{returns the most recent common ancestor of two or
+  more nodes}
+  \item{\code{shortestPath}}{returns the nodes of the shortest path from one
+  node to another (excluding \code{node1} and \code{node2})}
+  \item{\code{sumEdgeLength}}{gives the total branch length
+    between two nodes}
 }
 \note{\code{MRCA} is uppercase to avoid conflict with \code{mrca}
   in ape}
