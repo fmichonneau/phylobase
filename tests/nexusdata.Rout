@@ -1,0 +1,152 @@
+
+R version 2.7.0 (2008-04-22)
+Copyright (C) 2008 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## try to read NEXUS files
+> library(phylobase)
+Loading required package: ape
+> fn <- system.file("nexusfiles/treepluscharV01.nex",package="phylobase")
+> td<-NexusToPhylo4D(fn)
+
+Opening /usr/local/lib/R/site-library/phylobase/nexusfiles/treepluscharV01.nex...
+Reading TAXA block...
+Reading CHARACTERS block...
+Skipping unknown block (CHARACTERS2)
+Reading TREES block...
+Reading ASSUMPTIONS block...
+Skipping unknown block (MESQUITECHARMODELS)
+Skipping unknown block (MESQUITE)
+Skipping unknown block (brownie)
+$charstring
+[1] "data.frame('eyewidth'=c(0.347,0.1622,0.2345,0.206,0.219,0.2721,0.4335,0.2197,0.2805,0.238,0.2805,0.229,0.2393,0.1626,0.16695,0.271,0.197,0.189),'eyelength'=c(0.433,0.20655,0.279,0.247,0.277,0.3336,0.5285,0.2733,0.3755,0.295,0.347,0.271,0.295,0.2052,0.2165,0.3475,0.259,0.237),'headlength'=c(1.338,0.82985,1.2125,1.1235,1.2115,1.558,1.602,1.141,1.0525,1.058,1.5425,1.164,1.3424,0.786,0.80965,1.0435,1.153,0.864),'headwidth'=c(1.052,0.71865,1.0218,0.951,1.075,1.4531,1.2705,1.036,0.795,1.118,1.4355,1.067,1.2826,0.69185,0.69565,0.8825,0.981,0.809),'mesosomaprofilehaircount'=c(39.0,0.0,24.0,19.5,27.5,85.0,26.5,30.0,18.5,49.0,39.5,27.0,69.0,17.0,15.5,23.5,32.0,10.0),'FLfemurlength'=c(1.434,0.8226,1.25183,1.35352,1.405,1.8742,2.242,1.23793,1.168535,1.51118,1.6688,1.31488,1.548,0.7471,0.82035,1.11074,1.34961,0.867184),'FLtibialength'=c(1.246,0.68895,1.085624,1.101125,1.176,1.6042,1.8555,1.027,1.018007,1.1793,1.474045,1.06962,1.3236,0.5778,0.79215,0.981997,1.11238,0.783),'MLfemurlength'=c(1.515,0.7854,1.31244,1.39927,1.4625,1.994,2.4795,1.26786,1.16102,1.60672,1.838315,1.369,1.626,0.71195,0.82915,1.145875,1.43273,0.878905),'MLtibialength'=c(1.409,0.7704,1.278025,1.29104,1.456,1.935,2.2075,1.1749,1.12958,1.41636,1.761365,1.278,1.611,0.68865,0.7881,1.10783,1.26582,0.757646),'HLfemurlength'=c(2.007,1.0457,1.70082,1.708335,1.8545,2.6013,3.0705,1.56482,1.634705,1.95228,2.349265,1.74,2.074,0.95225,1.02385,1.527625,1.62673,1.0528),'HLtibialength'=c(2.126,1.05835,1.77591,1.794895,1.9205,2.6829,3.089,1.63226,1.65155,1.96042,2.418685,1.78517,2.272,0.93645,1.0765,1.55838,1.75947,1.15593),'mesosomalength'=c(1.962,1.11875,1.774585,1.70561,1.8345,2.5963,2.597,1.67201,1.546225,2.01975,2.28195,1.72,2.0392,1.02635,1.0843,1.505275,1.77914,1.14947),'scapelength'=c(1.63,0.89955,1.335,1.379,1.4375,1.9381,2.211,1.264,1.3485,1.477,1.8045,1.346,1.572,0.83555,0.89445,1.329,1.427,0.932),'funiculuslength'=c(2.464,1.4073,2.049,2.04,2.1,2.9722,3.239,1.881,1.954,2.228,2.7645,2.081,2.3424,1.3684,1.37155,2.018,2.058,1.437),'mesosomamaxwidth'=c(0.836,0.4955,0.774123,0.731973,0.7655,1.0311,0.916,0.708,0.626397,0.84806,0.955494,0.797,0.8935,0.47505,0.5079,0.636015,0.732,0.549142),'mesosomaminwidth'=c(0.417,0.28995,0.438396,0.412214,0.455,0.5232,0.394,0.384,0.314671,0.486044,0.484641,0.421,0.4917,0.2805,0.2895,0.288181,0.394545,0.319),'lneyewidth'=c(-1.05843,-1.819995,-1.453769,-1.579985,-1.518694,-1.301586,-0.837335,-1.515492,-1.272519,-1.435485,-1.271539,-1.474033,-1.430037,-1.819869,-1.794141,-1.305643,-1.624552,-1.666008),'lneyelength'=c(-0.837018,-1.577954,-1.278403,-1.398769,-1.283738,-1.097813,-0.642863,-1.297185,-0.980051,-1.22078,-1.058497,-1.305636,-1.22078,-1.586743,-1.531128,-1.057224,-1.350927,-1.439695),'lnheadlength'=c(0.291176,-0.187439,0.18573,0.115861,0.191857,0.443403,0.466427,0.131905,0.050016,0.05638,0.43336,0.151862,0.294459,-0.244667,-0.212724,0.041499,0.142367,-0.146183),'lnheadwidth'=c(0.050693,-0.33299,0.015759,-0.050675,0.072286,0.373699,0.227429,0.035367,-0.230224,0.111541,0.360682,0.064851,0.248889,-0.374321,-0.364765,-0.1259,-0.019183,-0.211956),'lnmesosomaprofilehaircount'=c(3.663562,1.098612,3.163968,2.890372,3.314021,4.442651,3.27554,3.401197,2.908556,3.89182,3.675579,3.295837,4.234107,2.83148,2.714673,3.145785,3.465736,2.302585),'lnFLfemurlength'=c(0.360468,-0.198227,0.217906,0.299778,0.339155,0.628182,0.79675,0.213441,0.153683,0.412891,0.512103,0.273745,0.436964,-0.296209,-0.201043,0.102787,0.299816,-0.142504),'lnFLtibialength'=c(0.219938,-0.374806,0.073481,0.092763,0.161418,0.472625,0.61263,0.026642,0.016749,0.164921,0.387068,0.067303,0.280355,-0.554169,-0.233006,-0.021928,0.106502,-0.244623),'lnMLfemurlength'=c(0.415415,-0.242539,0.262245,0.334284,0.379143,0.690143,0.902886,0.23733,0.148878,0.474195,0.60635,0.314081,0.486123,-0.349126,-0.188003,0.135585,0.359582,-0.129078),'lnMLtibialength'=c(0.34288,-0.261554,0.238289,0.252849,0.373863,0.660107,0.785536,0.161183,0.12109,0.34809,0.563246,0.245296,0.476855,-0.380049,-0.240303,0.099369,0.23572,-0.277539),'lnHLfemurlength'=c(0.696641,0.041685,0.523667,0.529578,0.615804,0.956011,1.116397,0.447771,0.491448,0.668998,0.852964,0.553885,0.729479,-0.051855,0.023136,0.423311,0.486572,0.051453),'lnHLtibialength'=c(0.754242,0.053821,0.565923,0.581199,0.650805,0.986898,1.124535,0.489966,0.501634,0.673159,0.881291,0.579514,0.820661,-0.071457,0.071803,0.441301,0.565013,0.144905),'lnmesosomalength'=c(0.673964,0.109048,0.566419,0.532517,0.60666,0.954087,0.952839,0.514026,0.434956,0.702974,0.824899,0.542324,0.712558,0.020581,0.077801,0.408161,0.57613,0.139301),'lnscapelength'=c(0.48858,-0.106449,0.284386,0.319877,0.362132,0.661708,0.792757,0.234281,0.298626,0.390013,0.589937,0.297137,0.452349,-0.182377,-0.11213,0.283878,0.355574,-0.070422),'lnfuniculuslength'=c(0.901786,0.340232,0.712661,0.710946,0.741737,1.089302,1.172974,0.631804,0.669236,0.801104,1.015395,0.732849,0.851176,0.309479,0.313463,0.701812,0.721735,0.362558),'lnmesosomamaxwidth'=c(-0.179127,-0.702543,-0.266388,-0.315165,-0.267252,0.030626,-0.096394,-0.345311,-0.468766,-0.164804,-0.047279,-0.226901,-0.112609,-0.750826,-0.679349,-0.453369,-0.311975,-0.599398),'lnmesosomaminwidth'=c(-0.874669,-1.243483,-0.827758,-0.888025,-0.788425,-0.647791,-0.939522,-0.957113,-1.171359,-0.721456,-0.724537,-0.865122,-0.709887,-1.272023,-1.244819,-1.244254,-0.930022,-1.142564),row.names=c(\"Myrmecocystuscfnavajo\",\"Myrmecocystuscreightoni\",\"Myrmecocystusdepilis\",\"Myrmecocystuskathjuli\",\"Myrmecocystuskennedyi\",\"Myrmecocystusmendax\",\"Myrmecocystusmexicanus\",\"Myrmecocystusmimicus\",\"Myrmecocystusnavajo\",\"Myrmecocystusnequazcatl\",\"Myrmecocystusplacodops\",\"Myrmecocystusromainei\",\"Myrmecocystussemirufus\",\"Myrmecocystussnellingi\",\"Myrmecocystustenuinodis\",\"Myrmecocystustestaceus\",\"Myrmecocystuswheeleri\",\"Myrmecocystusyuma\"))"
+
+
+Opening /usr/local/lib/R/site-library/phylobase/nexusfiles/treepluscharV01.nex...
+Reading TAXA block...
+Reading CHARACTERS block...
+Skipping unknown block (CHARACTERS2)
+Reading TREES block...
+Reading ASSUMPTIONS block...
+Skipping unknown block (MESQUITECHARMODELS)
+Skipping unknown block (MESQUITE)
+Skipping unknown block (brownie)
+> summary(td)
+  No root edge.
+
+ Phylogenetic tree : as(object, "phylo4") 
+
+ Number of tips    : 18 
+ Number of nodes   : 17 
+ Branch lengths:
+        mean         : 3.297466 
+        variance     : 8.543673 
+        distribution :
+   Min. 1st Qu.  Median 3rd Qu.    Max. 
+ 0.1988  1.2380  2.7090  4.4030 12.3000 
+
+Comparative data:
+
+Tips: data.frame with 18 taxa and 32 variables 
+
+    eyewidth        eyelength        headlength      headwidth     
+ Min.   :0.1622   Min.   :0.2052   Min.   :0.786   Min.   :0.6918  
+ 1st Qu.:0.1993   1st Qu.:0.2500   1st Qu.:1.046   1st Qu.:0.8274  
+ Median :0.2318   Median :0.2780   Median :1.147   Median :1.0289  
+ Mean   :0.2415   Mean   :0.3015   Mean   :1.157   Mean   :1.0187  
+ 3rd Qu.:0.2718   3rd Qu.:0.3437   3rd Qu.:1.307   3rd Qu.:1.1073  
+ Max.   :0.4335   Max.   :0.5285   Max.   :1.602   Max.   :1.4531  
+ mesosomaprofilehaircount FLfemurlength    FLtibialength    MLfemurlength  
+ Min.   : 0.00            Min.   :0.7471   Min.   :0.5778   Min.   :0.712  
+ 1st Qu.:18.75            1st Qu.:1.1252   1st Qu.:0.9910   1st Qu.:1.150  
+ Median :26.75            Median :1.3322   Median :1.0934   Median :1.384  
+ Mean   :30.69            Mean   :1.3182   Mean   :1.1165   Mean   :1.379  
+ 3rd Qu.:37.25            3rd Qu.:1.4919   3rd Qu.:1.2293   3rd Qu.:1.584  
+ Max.   :85.00            Max.   :2.2420   Max.   :1.8555   Max.   :2.479  
+ MLtibialength    HLfemurlength    HLtibialength    mesosomalength 
+ Min.   :0.6886   Min.   :0.9523   Min.   :0.9365   Min.   :1.026  
+ 1st Qu.:1.1133   1st Qu.:1.5369   1st Qu.:1.5769   1st Qu.:1.516  
+ Median :1.2780   Median :1.7046   Median :1.7805   Median :1.747  
+ Mean   :1.2959   Mean   :1.7492   Mean   :1.8141   Mean   :1.745  
+ 3rd Qu.:1.4461   3rd Qu.:1.9933   3rd Qu.:2.0846   3rd Qu.:2.005  
+ Max.   :2.2075   Max.   :3.0705   Max.   :3.0890   Max.   :2.597  
+  scapelength     funiculuslength mesosomamaxwidth mesosomaminwidth
+ Min.   :0.8356   Min.   :1.368   Min.   :0.4750   Min.   :0.2805  
+ 1st Qu.:1.2803   1st Qu.:1.899   1st Qu.:0.6288   1st Qu.:0.3158  
+ Median :1.3638   Median :2.054   Median :0.7488   Median :0.4034  
+ Mean   :1.3922   Mean   :2.099   Mean   :0.7377   Mean   :0.3935  
+ 3rd Qu.:1.5482   3rd Qu.:2.314   3rd Qu.:0.8450   3rd Qu.:0.4508  
+ Max.   :2.2110   Max.   :3.239   Max.   :1.0311   Max.   :0.5232  
+   lneyewidth       lneyelength       lnheadlength       lnheadwidth       
+ Min.   :-1.8200   Min.   :-1.5867   Min.   :-0.24467   Min.   :-0.374321  
+ 1st Qu.:-1.6134   1st Qu.:-1.3868   1st Qu.: 0.04363   1st Qu.:-0.190442  
+ Median :-1.4639   Median :-1.2811   Median : 0.13714   Median : 0.025563  
+ Mean   :-1.4544   Mean   :-1.2314   Mean   : 0.12252   Mean   :-0.008268  
+ 3rd Qu.:-1.3026   3rd Qu.:-1.0683   3rd Qu.: 0.26635   3rd Qu.: 0.101727  
+ Max.   :-0.8373   Max.   :-0.6429   Max.   : 0.46643   Max.   : 0.373699  
+ lnmesosomaprofilehaircount lnFLfemurlength   lnFLtibialength   
+ Min.   :1.099              Min.   :-0.2962   Min.   :-0.55417  
+ 1st Qu.:2.895              1st Qu.: 0.1155   1st Qu.:-0.01226  
+ Median :3.286              Median : 0.2868   Median : 0.08312  
+ Mean   :3.206              Mean   : 0.2339   Mean   : 0.06966  
+ 3rd Qu.:3.614              3rd Qu.: 0.3998   3rd Qu.: 0.20618  
+ Max.   :4.443              Max.   : 0.7967   Max.   : 0.61263  
+ lnMLfemurlength   lnMLtibialength   lnHLfemurlength    lnHLtibialength   
+ Min.   :-0.3491   Min.   :-0.3800   Min.   :-0.05185   Min.   :-0.07146  
+ 1st Qu.: 0.1389   1st Qu.: 0.1048   1st Qu.: 0.42943   1st Qu.: 0.45347  
+ Median : 0.3242   Median : 0.2418   Median : 0.52662   Median : 0.57272  
+ Mean   : 0.2687   Mean   : 0.2081   Mean   : 0.50872   Mean   : 0.54529  
+ 3rd Qu.: 0.4595   3rd Qu.: 0.3674   3rd Qu.: 0.68973   3rd Qu.: 0.73397  
+ Max.   : 0.9029   Max.   : 0.7855   Max.   : 1.11640   Max.   : 1.12454  
+ lnmesosomalength  lnscapelength     lnfuniculuslength lnmesosomamaxwidth
+ Min.   :0.02058   Min.   :-0.1824   Min.   :0.3095    Min.   :-0.75083  
+ 1st Qu.:0.41486   1st Qu.: 0.2467   1st Qu.:0.6412    1st Qu.:-0.46492  
+ Median :0.55437   Median : 0.3093   Median :0.7172    Median :-0.28961  
+ Mean   :0.51940   Mean   : 0.2967   Mean   :0.7100    Mean   :-0.33093  
+ 3rd Qu.:0.69572   3rd Qu.: 0.4368   3rd Qu.:0.8387    3rd Qu.:-0.16838  
+ Max.   :0.95409   Max.   : 0.7928   Max.   :1.1730    Max.   : 0.03063  
+ lnmesosomaminwidth
+ Min.   :-1.2720   
+ 1st Qu.:-1.1642   
+ Median :-0.9090   
+ Mean   :-0.9552   
+ 3rd Qu.:-0.7983   
+ Max.   :-0.6478   
+
+Object contains no node data.
+> ## would try plotting, but typically don't have enough room
+> ## to plot data
+> ## Error in .local(x, ...) : 
+> ##    No room left to plot data; please try reducing ratio.tree or cex.label.
+> plot(as(td,"phylo4"))
+> 
+> ## try to read a nexus file where the newick string describing the tree is split
+> ## across several lines
+> multiLine <- system.file("nexusfiles/MultiLineTrees.nex",package="phylobase")
+> multiLineTrees <-NexusToPhylo4(multiLine)
+
+Opening /usr/local/lib/R/site-library/phylobase/nexusfiles/MultiLineTrees.nex...
+Reading TREES block...
+> summary(multiLineTrees)
+     Length Class  Mode
+[1,] 1      phylo4 S4  
+[2,] 1      phylo4 S4  
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  1.644   0.148   1.976 
