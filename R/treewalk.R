@@ -187,7 +187,7 @@ getedges <- function(phy, node){
     if (is.character(checkval <- check_phylo4(x))) stop(checkval)
     node <- getnodes(x, node)
     if(any(is.na(node))) stop("wrong node specified")
-    root <- rootNode(x)
+    root <- getnodes(x, nTips(x)+1)
     node[node==root] <- NA
 
     ## main computations
