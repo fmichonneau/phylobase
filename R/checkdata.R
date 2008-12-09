@@ -23,7 +23,7 @@ check_tree <- function(object,warn="retic",err=NULL) {
     intnodes <- nodes[!nodes %in% tips]
     if (!(all(tips==1:ntips) && all(nodes=(ntips+1):(ntips+length(intnodes)))))
       return("tips and nodes incorrectly numbered")
-    nAncest <- tabulate(E[, 2])
+    nAncest <- tabulate(E[, 2],nbins=max(nodes)) ## bug fix from Jim Regetz
     nDesc <- tabulate(E[,1])
     nTips <- sum(nDesc==0)
     if (!all(nDesc[1:nTips]==0))

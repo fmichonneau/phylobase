@@ -108,3 +108,11 @@ print(try(plot(foo)))
 
 foo@tip.label <- rep('blah',10)
 foo@node.label <- rep("",9)
+
+#####
+## tree with only 2 tips: will fail under previous versions
+## with "Error in if (which(nAncest == 0) != nTips + 1) { : 
+##  argument is of length zero"
+
+edge <- matrix(c(3,1,3,2),byrow=TRUE,ncol=2)
+p2 <- phylo4(edge)

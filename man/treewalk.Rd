@@ -30,7 +30,6 @@ shortestPath(phy, node1, node2)
   \item{phy}{a \linkS4class{phylo4} object (or one inheriting from
     \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
   }
-  \item{x}{a \code{phylo4} object}
   \item{node}{a node number (or name)}
   \item{which}{(\code{ancestors}) specify whether to return just direct
     ancestor ("parent"), all ancestor nodes ("all"), or all ancestor
