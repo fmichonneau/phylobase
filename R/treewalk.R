@@ -113,6 +113,11 @@ MRCA <- function(phy, ...) {
 
     ## Correct behavior when the root is part of the nodes
     testNodes <- lapply(nodes, getnodes, phy=phy)
+    ## BMB: why lapply, not sapply?
+    lNodes <- unlist(testNodes)
+    if (any(is.na(lNodes)))
+      stop("nodes not found in tree: ",paste(names(lNodes)[is.na(lNodes)],
+                                             collapse=", "))
     uniqueNodes <- unique(testNodes)
     root <- nTips(phy)+1
     if(root %in% uniqueNodes) {
