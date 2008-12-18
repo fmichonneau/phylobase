@@ -63,10 +63,14 @@ setReplaceMethod("rootNode", "phylo4", function(x, value) {
     stop("not implemented yet")
 })
 
-setMethod("edgeLength", "phylo4", function(x) {
+setMethod("edgeLength", "phylo4", function(x,which) {
     if (!hasEdgeLength(x))
         NULL
-    else x@edge.length
+    else {
+      if (missing(which)) return(x@edge.length)
+      n <- getnodes(x,which)
+      return(x@edge.length[n])
+    }
 })
 
 setMethod("sumEdgeLength", "phylo4", function(phy, node) {

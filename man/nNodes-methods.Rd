@@ -95,13 +95,21 @@
 \section{usage}{
   \S4method{tdata}{phylo4d}(x, which = "tip", \dots)
   \S4method{tdata<-}{phylo4d}(object, which = "tip", \dots, value)
+  \S4method{edgeLength}{phylo4}(x, which)
 }
 \arguments{
-  \item{which}{Which data to extract: "tip" (tips only), "node"
+  \item{which}{(tdata) which data to extract: "tip" (tips only), "node"
     (internal nodes only), "allnode" (tips and internal nodes), "edge"
-    (edges) }
+    (edges) (edgeLength) which edge lengths to extract (indexed by
+    descendant node)}
   \item{x}{a phylo4d object}
   \item{object}{a phylo4d object}
   \item{value}{a data frame}
+}
+\examples{
+data(geospiza)
+edgeLength(geospiza,5)
+edgeLength(geospiza,"olivacea")
+edgeLength(geospiza,5:7)
 }
 \keyword{methods}

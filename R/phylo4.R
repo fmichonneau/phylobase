@@ -30,7 +30,7 @@ setGeneric("hasEdgeLength", function(x) {
     standardGeneric("hasEdgeLength")
 })
 
-setGeneric("edgeLength", function(x) {
+setGeneric("edgeLength", function(x,...) {
     standardGeneric("edgeLength")
 })
 
