@@ -360,6 +360,7 @@ setMethod("reorder", signature(x = 'phylo4'), function(x, order = 'cladewise') {
         ##     root <- tips + 1
         ## }
         ## if(root <= tips) {return()}
+        edge  <- edge[!is.na(edge[,1]), ]
         index <- edge[, 1] == root
         nextr <- edge[index, 2]
         ## paths <- apply(as.matrix(nextr), 1, reorder, edge = edge, tips = tips)
@@ -372,9 +373,12 @@ setMethod("reorder", signature(x = 'phylo4'), function(x, order = 'cladewise') {
     }
     if(order == 'pruningwise') {
         index <- reorder.prune(x@edge, length(x@tip.label))
-    }
-    x@edge        <- x@edge[index, ]
-    x@edge.label  <- x@edge.label[index]
-    x@edge.length <- x@edge.length[index]
+        ## add the root node to the end, there may be more elegant ways to do this
+        index <- c(index, which(x@edge[,2] == rootNode(x)))
+    } else {stop(paste("Method for", order, "not implemented"))}
+    
+    x@edge <- x@edge[index, ]
+    if(hasEdgeLabels(x)) { x@edge.label  <- x@edge.label[index] }
+    if(hasEdgeLength(x)) { x@edge.length <- x@edge.length[index] }
     x
 })
