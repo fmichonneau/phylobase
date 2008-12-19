@@ -1,7 +1,5 @@
 setGeneric("identify")
-## FIXME: warning on install because
-##   "identify.node.R" is read before "phylo4.R"
-##   (class definitions)
+
 setMethod("identify","phylo4",
            function(x,n=1,...) {
                plot(x, ...)

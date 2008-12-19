@@ -198,8 +198,8 @@ plottemp <- function(x, treetype=c("phylogram","cladogram"), symbol=c("circles",
 
 obj1 <- obj2 <- obj3 <- phylo4d(as(tree.owls,"phylo4"),data.frame(wing=1:4,color=factor(c("b","w","b","b")), tail=runif(4)*10), use.tip.names=FALSE)
 
-obj2@tip.data <- as.data.frame(obj2@tip.data[,1])
-obj3@tip.data <- cbind(obj1@tip.data,obj2@tip.data)
+obj2@tip.data <- data.frame(d=obj2@tip.data[,1])
+obj3@tip.data <- data.frame(obj1@tip.data,d2=obj2@tip.data)
 
 plottemp(obj1)
 plottemp(obj2,box=FALSE)
@@ -222,3 +222,7 @@ temp <- as(read.tree(text=mjrochet$tre),"phylo4")
 obj <- phylo4d(x=temp,tip.data=mjrochet$tab)
 obj
 plottemp(obj)
+
+testt = "/usr/local/lib/R/site-library/laser/data/skinktree.tre"
+t2 = read.tree(testt)
+plot(as(t2,"phylo4"))

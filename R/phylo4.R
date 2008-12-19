@@ -86,6 +86,8 @@ setGeneric("hasNodeData", function(x) {
 
 setGeneric("na.omit")
 
+setGeneric("reorder")
+
 ###################
 ## Function .genlab
 ###################
