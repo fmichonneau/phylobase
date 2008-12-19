@@ -1,10 +1,10 @@
 
-`treePlot` <- function(x, 
+`treePlot` <- function(phy, 
                      type = c('phylogram', 'cladogram', 'fan'), 
                      show.tip.label = TRUE,
                      show.node.label = FALSE, 
                      tip.order = NULL,
-                     plot.data = is(x, 'phylo4d'),
+                     plot.data = is(phy, 'phylo4d'),
                      rot = 0,
                      tip.plot.fun = 'bubbles',
                      plot.at.tip = TRUE,
@@ -19,21 +19,22 @@
 {
     ## TODO three dimensional histogram as example, compute values on full dataset
     ## then generate phylo4d object with summary data and plot
-    if (!inherits(x, 'phylo4')) stop('treePlot requires a phylo4 or phylo4d object')
-    if (!isRooted(x)) stop("treePlot function requires a rooted tree.")
+    ## TODO factors not handled in data plots
+    if (!inherits(phy, 'phylo4')) stop('treePlot requires a phylo4 or phylo4d object')
+    if (!isRooted(phy)) stop("treePlot function requires a rooted tree.")
     width  <- height <- (1 - margin)  ## TODO: do these have to be hard-coded?
     type   <- match.arg(type)
-    Nedges <- nEdges(x)
-    Ntips  <- nTips(x)
+    Nedges <- nEdges(phy)
+    Ntips  <- nTips(phy)
     ## TODO remove the false cladogram option?
-    if(is.null(edgeLength(x)) || type == 'cladogram') {
-        x@edge.length <- rep(1, Nedges)
+    if(is.null(edgeLength(phy)) || type == 'cladogram') {
+        phy@edge.length <- rep(1, Nedges)
     }
-    xxyy   <- phyloXXYY(x, tip.order)
-    x    <- xxyy$x
-    tindex <- x@edge[x@edge[, 2] <= Ntips, 2]
+    xxyy   <- phyloXXYY(phy, tip.order)
+    phy    <- xxyy$phy
+    tindex <- phy@edge[phy@edge[, 2] <= Ntips, 2]
     if(type == 'cladogram') {
-        xxyy$xx[x@edge[, 2] <= Ntips] <- 1
+        xxyy$xx[phy@edge[, 2] <= Ntips] <- 1
     }
     
     ## general function for pushing tree subplots
@@ -69,13 +70,13 @@
         # TODO should return something useful
         return(invisible())
     } else {
-        tmin <- min(tdata(x, which = 'tip'), na.rm = TRUE)
-        tmax <- max(tdata(x, which = 'tip'), na.rm = TRUE)
+        tmin <- min(tdata(phy, which = 'tip'), na.rm = TRUE)
+        tmax <- max(tdata(phy, which = 'tip'), na.rm = TRUE)
         if(!is.function(tip.plot.fun)) {
             if(tip.plot.fun == "bubbles") {
                 # use phylobubbles as default
                 if(rot != 0) {stop("Rotation of bubble plots not yet implemented")}
-                dlabwdth <- max(stringWidth(colnames(x@tip.data))) * 1.2
+                dlabwdth <- max(stringWidth(colnames(phy@tip.data))) * 1.2
                 phyplotlayout <- grid.layout(nrow = 2, ncol = 2, 
                     heights = unit.c(unit(1, 'null'), dlabwdth), 
                     widths = unit(c(1, 1), c('null', 'null'), list(NULL, NULL)))
@@ -108,14 +109,14 @@
                             plot) you need install the "gridBase" package')
                 }
                 plot.new()
-                tmin <- min(tdata(x, which = 'tip'), na.rm = TRUE)
-                tmax <- max(tdata(x, which = 'tip'), na.rm = TRUE)
+                tmin <- min(tdata(phy, which = 'tip'), na.rm = TRUE)
+                tmax <- max(tdata(phy, which = 'tip'), na.rm = TRUE)
                 tip.plot.fun <- function(x,tmin,tmax,...) {
                     # par(omi = c(0,0,0,0))
                     suppressWarnings(par(plt = gridPLT(), new = TRUE))
-                    if(!all(is.na(x))) {
+                    if(!all(is.na(phy))) {
                         # hack, set the plotting region to the grid fig region
-                        dens <- density(x, na.rm = TRUE)
+                        dens <- density(phy, na.rm = TRUE)
                         plot.density(dens, xlim = c(tmin, tmax), axes = FALSE,      
                                      mar = c(0,0,0,0), main = "", xlab = "", ylab = "", ...)
                     }
@@ -140,7 +141,7 @@
             hc <- convertY(unit(1/Ntips, 'snpc'), 'npc')
             for(i in 1:Ntips) {
                 pushViewport(viewport(
-                    y = xxyy$yy[x@edge[, 2] == i],
+                    y = xxyy$yy[phy@edge[, 2] == i],
                     x = 1 + 1/(2 * Ntips), # xxyy$xx[phy@edge[, 2] == i], 
                     height = hc, 
                     width = hc, 
@@ -150,7 +151,7 @@
                     angle = -rot
                     ))
                     #grid.rect()
-                    vals = t(tdata(x, which = 'tip')[i, ])
+                    vals = t(tdata(phy, which = 'tip')[i, ])
                     if (!all(is.na(vals))) tip.plot.fun(vals,tmin,tmax,...)
                 upViewport()
             }
@@ -160,7 +161,7 @@
         } else { ## plot by data column
             ## !plot.at.tip
             ## stop("not implemented yet")
-            nvars <- length(x@tip.data) ## FIXME
+            nvars <- length(phy@tip.data) ## FIXME
             datalayout <- grid.layout(ncol = 2)  ## set default widths equal for this kind of plot
             ## width = unit(c(1, 1/Ntips), c('null', 'null'))
             # TODO this is done multiple times, 
@@ -186,7 +187,7 @@
                     angle = -rot
                     ))
                     #grid.rect()
-                    vals = tdata(x)[,i]
+                    vals = tdata(phy)[,i]
                     if (!all(is.na(vals))) tip.plot.fun(vals, tmin, tmax, ...)
                 upViewport()
             }
@@ -275,11 +276,11 @@ tree.plot <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
     }
     upViewport()
     if(show.tip.label) {
-        pushViewport(viewport(layout.pos.col = 2,
+        pushViewport(viewport(layout.pos.col = 1,
             name = 'tiplabelvp'))
         labtext <- grid.text(
             phy@tip.label[tindex], 
-            x = convertUnit(laboff[tindex], 'native', valueOnly = TRUE) + 0.02,
+            x = xxyy$xx[phy@edge[, 2] %in% tindex] + convertUnit(laboff[tindex], 'native', valueOnly = TRUE) + 0.02,
             y = xxyy$yy[phy@edge[, 2] %in% tindex], rot = lrot,
             default.units = 'native', name = 'tiplabels',
             just = 'center', gp = gpar(col = tip.color[tindex])
@@ -306,7 +307,7 @@ tree.plot <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
 
 phyloXXYY <- function(phy, tip.order = NULL) {
     ## initalize the output
-    Nedges <- nEdges(phy)
+    Nedges <- nrow(phy@edge) - 1 ## TODO switch to the accessor once stablized
     phy.orig <- phy
     Ntips  <- nTips(phy)
     xxyy = list(
@@ -340,7 +341,7 @@ phyloXXYY <- function(phy, tip.order = NULL) {
     calc.node.xy <- function(node, phy, xxyy, prevx = 0) {
         ## if node == root node, and there is no root edge set get descendants
         ## and set index to NULL index is used for indexing output
-        if(any(phy@edge[, 2] == node) == FALSE) {
+        if(node == rootNode(phy)) {
             decdex <- which(phy@edge[, 1] == node)
             index <- NULL
             ## if root node start at x = 0
@@ -378,35 +379,33 @@ phyloXXYY <- function(phy, tip.order = NULL) {
 
 segs <- function(XXYY) {
     phy <- XXYY$phy
-    treelen <- rep(NA, nEdges(phy) + 1)
+    treelen <- rep(NA, nEdges(phy))
     segs <- list(v0x = treelen, v0y = treelen, v1x = treelen, v1y = treelen,
                  h0x = treelen, h0y = treelen, h1x = treelen, h1y = treelen)
-    troot <- nTips(phy) + 1
+    troot <- rootNode(phy)
+    ntips <- nTips(phy)
 
     get.coor <- function(node, segs) {
-        if(any(phy@edge[, 2] == node) == FALSE) {
+        if(node == troot) {
             #root
             decdex <- which(phy@edge[, 1] == node)
-            index <- length(treelen)
+            index  <- length(treelen)
             segs$v0y[index] <- segs$v1y[index] <- NA
             segs$v0x[index] <- segs$v1x[index] <- NA
             segs$h0y[index] <- segs$h1y[index] <- NA
             segs$h0x[index] <- segs$h1x[index] <- NA
-            segs$v0x[decdex] <- segs$v1x[decdex] <- segs$h0x[decdex] <- 0            
-            segs$v0y[decdex] <- mean(XXYY$yy[decdex])            
+            segs$v0x[decdex] <- segs$v1x[decdex] <- segs$h0x[decdex] <- 0
+            segs$v0y[decdex] <- mean(XXYY$yy[decdex])
         } else {
             #not root
             index <- which(phy@edge[, 2] == node)
             segs$h1x[index] <- XXYY$xx[index]
             segs$h0y[index] <- segs$h1y[index] <- segs$v1y[index] <- XXYY$yy[index]
-            if(!any(phy@edge[, 1] == node)) {
-                return(segs)
-            }
+            if(node <= ntips) { return(segs) }
             decdex <- which(phy@edge[, 1] == phy@edge[index, 2])
             segs$v0x[decdex] <- segs$v1x[decdex] <- segs$h0x[decdex] <- XXYY$xx[index]            
             segs$v0y[decdex] <- mean(XXYY$yy[decdex])           
         }
-        
         for(i in phy@edge[decdex, 2]) {
             segs <- get.coor(i, segs)
         }
@@ -552,5 +551,8 @@ phylobubbles <- function(XXYY, square = FALSE, grid = TRUE) {
 #     }
 # }
 # 
-# setGeneric('plot', useAsDefault = treePlot)
-setMethod('treePlot', signature = c('phylo4', 'phylo4d'), treePlot)
+
+setGeneric('plot')
+setMethod('plot', signature(x='phylo4', y='missing'), function(x, y, ...) {
+    treePlot(x, ...)
+})
