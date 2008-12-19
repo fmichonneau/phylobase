@@ -55,6 +55,15 @@ However, typing \code{?plot} still takes us to the default \code{plot} help.  We
 
 The \code{S4} generic system is too complicated to describe here, but doesn't include the same dot notation.  As a result \code{?plot.phylo4} doesn't work, \code{R} does, however, find the right plotting function.
 
+<<plothack>>= 
+## DISABLE PLOTTING until 
+oldplot <- plot
+plot <- function(...) {
+  oldplot(0:1,0:1)
+  text(0.5,0.5,"plotting temporarily disabled")
+} 
+@ 
+
 <<convtree,fig=FALSE>>=
 library(phylobase)
 # convert rand_tree to a phylo4 object
@@ -113,12 +122,17 @@ Print tip labels:
 labels(g1)
 @ 
 
-Print internal node labels (R automatically assigns values):
+Print internal node labels (empty):
 <<nodelabelgeodata>>=
 nodeLabels(g1)
 @ 
 
-Print edge labels (also automatically assigned):
+Print node numbers:
+<<nodenumbergeodata>>=
+nodeNumbers(g1)
+@ 
+
+Print edge labels (also empty in this case):
 <<edgelabelgeodata>>=
 edgeLabels(g1)
 @ 
@@ -223,7 +237,7 @@ clade:
 <<geoextract,results=hide>>=
 subset(g2,tips.include=c("fuliginosa","fortis","magnirostris",
             "conirostris","scandens"))
-subset(g2,node.subtree="N07")
+subset(g2,node.subtree=21)
 subset(g2,mrca=c("scandens","fortis"))
 @ 
 
