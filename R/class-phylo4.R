@@ -1,28 +1,28 @@
-setClass("phylo4", 
-         representation(edge = "matrix", 
-                        edge.length = "numeric", 
-                        Nnode = "integer", 
-                        node.label = "character", 
-                        tip.label = "character", 
-                        edge.label = "character", 
-                        root.edge = "numeric"), 
+setClass("phylo4",
+         representation(edge = "matrix",
+                        edge.length = "numeric",
+                        Nnode = "integer",
+                        node.label = "character",
+                        tip.label = "character",
+                        edge.label = "character",
+                        root.edge = "numeric"),
          prototype = list(
-                        edge = matrix(nrow = 0, ncol = 2, 
-                            dimname = list(NULL, c("ancestor", "descendant"))), 
-                        edge.length = numeric(0), 
-                        Nnode = as.integer(0), 
-                        tip.label = character(0), 
-                        node.label = character(0), 
-                        edge.label = character(0), 
+                        edge = matrix(nrow = 0, ncol = 2,
+                            dimname = list(NULL, c("ancestor", "descendant"))),
+                        edge.length = numeric(0),
+                        Nnode = as.integer(0),
+                        tip.label = character(0),
+                        node.label = character(0),
+                        edge.label = character(0),
                         root.edge = as.numeric(NA)
-                       ), 
+                       ),
          validity = check_phylo4)
 
 #####################
 ## phylo4 constructor
 #####################
 
-phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL, 
+phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL,
                    edge.label = NULL, root.edge = NULL, ...){
     ## edge
     mode(edge) <- "integer"
@@ -46,7 +46,7 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     } else {
         if(length(tip.label) != ntips) stop("the tip labels are not consistent with the number of tips")
         tip.label <- as.character(tip.label)
-    } 
+    }
 
     ## node.label
     nnodes <- sum(tabulate(edge[, 1]) > 0)
@@ -54,7 +54,8 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     ##        node.label <- .genlab("N", nnodes)
     ## } else {
     if(is.null(node.label)) {
-      node.label <- character(0)
+      node.label <- character(nnodes)
+      is.na(node.label) <- TRUE
     } else if (length(node.label) != nnodes)
       stop("the node labels are not consistent with the number of nodes")
     ## edge.label
