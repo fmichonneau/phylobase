@@ -40,19 +40,14 @@ setMethod("edges", "phylo4", function(x, order, ...) {
     x@edge
 })
 
-setMethod("rootEdge", "phylo4", function(x, order, ...) {
-    x@root.edge
-})
-
 setMethod("isRooted","phylo4", function(x) {
 
     ## hack to avoid failure on an empty object
     if(nTips(x) == 0) return(FALSE)
-    !is.na(x@root.edge) ||  ## root edge explicitly defined
     ## HACK: make sure we find the right "nTips"
     ## fixme SWK maybe broken after explicit root node addition?
-    tabulate(na.omit(edges(x)[, 1]))[nTips(x) + 1] <= 2
-    ## root node (first node after last tip) has <= 2 descendants
+
+    any(is.na(edges(x)[,1]))
     ## fixme: fails with empty tree?
     ## fixme - may fail with explicit root node in edge matrix
 })
@@ -82,20 +77,11 @@ setMethod("nodeType", "phylo4", function(phy) {
 setMethod("rootNode", "phylo4", function(x) {
     if (!isRooted(x))
         return(NA)
-    #fixme SWK disabling check for root.edge for now until we fix
-    #if (!is.na(x@root.edge))
-    #    stop("FIXME: don't know what to do in this case")
-    ## BMB: danger!  do we require this??? fixme
-    ## return(nTips(x) + 1)
-    ## FM: alternative?
-    listNodes <- sort(unique(as.vector(edges(x))))
-    notRoot <- names(table(edges(x)[,2]))
-    iR <- listNodes[!listNodes %in% notRoot]
-    return(iR)
+    edges(x)[which(is.na(edges(x)[,1])),2]
 })
 
 setReplaceMethod("rootNode", "phylo4", function(x, value) {
-    stop("not implemented yet")
+    stop("Root node replacement not implemented yet")
 })
 
 setMethod("edgeLength", "phylo4", function(x,which) {
@@ -114,7 +100,7 @@ setMethod("sumEdgeLength", "phylo4", function(phy, node) {
     else {
         nd <- getnodes(phy, node)
         iEdges <- which(phy@edge[,2] %in% nd)
-        sumEdges <- sum(phy@edge.length[iEdges])
+        sumEdges <- sum(phy@edge.length[iEdges],na.rm=TRUE)
         sumEdges
     }
 })
@@ -239,7 +225,6 @@ printphylo <- function (x,printlen=6,...) {
 #################
 ## summary phylo4
 #################
-## have to check that x$root.edge is NULL if missing
 setMethod("summary","phylo4", function (object, quiet=FALSE) {
     x <- object
     res <- list()
@@ -288,11 +273,6 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
     ## if quiet, stop here
     if(quiet) return(invisible(res))
 
-    if(!is.null(x$root.edge)){
-        cat("  Root edge:", x$root.edge, "\n")
-    } else {
-        cat("  No root edge.\n")
-    }
     ## now, print to screen is !quiet
     cat("\n Phylogenetic tree :", res$name, "\n\n")
     cat(" Number of tips    :", res$nb.tips, "\n")

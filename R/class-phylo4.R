@@ -4,8 +4,7 @@ setClass("phylo4",
                         Nnode = "integer",
                         node.label = "character",
                         tip.label = "character",
-                        edge.label = "character",
-                        root.edge = "numeric"),
+                        edge.label = "character"),
          prototype = list(
                         edge = matrix(nrow = 0, ncol = 2,
                             dimname = list(NULL, c("ancestor", "descendant"))),
@@ -13,8 +12,7 @@ setClass("phylo4",
                         Nnode = as.integer(0),
                         tip.label = character(0),
                         node.label = character(0),
-                        edge.label = character(0),
-                        root.edge = as.numeric(NA)
+                        edge.label = character(0)
                        ),
          validity = check_phylo4)
 
@@ -22,7 +20,7 @@ setClass("phylo4",
 ## phylo4 constructor
 #####################
 
-phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL, edge.label = NULL, root.edge = NULL, ...){
+phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL, edge.label = NULL, ...){
 
     ## edge
     mode(edge) <- "integer"
@@ -66,19 +64,7 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     ##        edge.label <- paste("E", edge[, 2], sep = "")
     } else if (length(edge.label) != nrow(edge))
       stop("the edge labels are not consistent with the number of edges")
-    ## root.edge - if no root edge lenth provided, set to a numeric NA
-    if(is.null(root.edge)) {
-        root.edge <- as.numeric(NA)
-    }
-    
-    ##if(!is.null(root.edge)) {
-    ##    if(!round(root.edge)==root.edge) stop("root.edge must be an integer")
-    ##    root.edge <- as.integer(root.edge)
-    ##    if(root.edge > nrow(edge)) stop("indicated root.edge do not exist")
-    ##} else {
-    ##    root.edge <- as.integer(NA)
-    ##}
-
+      
     ## fill in the result
     res <- new("phylo4")
     res@edge <- edge
@@ -87,11 +73,9 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     res@tip.label <- tip.label
     res@node.label <- node.label
     res@edge.label <- edge.label
-    res@root.edge <- root.edge
 
     ## check_phylo4 will return a character string if object is
     ##  bad, otherwise TRUE
-    #fixme swk uncomment following once root node fixed
     if (is.character(checkval <- check_phylo4(res))) stop(checkval)
     return(res)
 }
