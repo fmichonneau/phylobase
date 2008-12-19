@@ -10,6 +10,8 @@
 \alias{shortestPath}
 \alias{sumEdgeLength}
 \alias{sumEdgeLength,phylo4-method}
+\alias{nodeId}
+\alias{nodeId,phylo4-method}
 \title{tree traversal and utility functions}
 \description{
   Functions for describing relationships among

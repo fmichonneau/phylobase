@@ -65,8 +65,8 @@ setGeneric("nodeLabels<-",
                standardGeneric("nodeLabels<-")
            })
 
-setGeneric("nodeNumbers", function(x) {
-    standardGeneric("nodeNumbers")
+setGeneric("nodeId", function(x,which) {
+    standardGeneric("nodeId")
 })
 
 setGeneric("edgeLabels", function(x) {

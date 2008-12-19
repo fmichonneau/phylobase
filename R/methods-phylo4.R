@@ -124,8 +124,12 @@ setMethod("nodeLabels", "phylo4", function(x) {
     x@node.label
 })
 
-setMethod("nodeNumbers", "phylo4", function(x) {
-    c(nTips(x)+1,x@edge[x@edge[,2]>nTips(x),2])
+setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","all")) {
+  which <- match.arg(which)
+  switch(which,
+         internal=x@edge[x@edge[,2]>nTips(x),2],
+         tip = x@edge[x@edge[,2]<=nTips(x),2],
+         all = x@edge[x@edge[,2]])
 })
 
 setReplaceMethod("nodeLabels", "phylo4",
