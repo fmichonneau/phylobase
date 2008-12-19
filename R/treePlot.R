@@ -19,7 +19,7 @@
 {
     ## TODO three dimensional histogram as example, compute values on full dataset
     ## then generate phylo4d object with summary data and plot
-    if (!inherits('phylo4')) stop('treePlot requires a phylo4 or phylo4d object')
+    if (!inherits(x, 'phylo4')) stop('treePlot requires a phylo4 or phylo4d object')
     if (!isRooted(x)) stop("treePlot function requires a rooted tree.")
     width  <- height <- (1 - margin)  ## TODO: do these have to be hard-coded?
     type   <- match.arg(type)
