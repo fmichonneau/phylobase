@@ -41,15 +41,9 @@ setMethod("edges", "phylo4", function(x, order, ...) {
 })
 
 setMethod("isRooted","phylo4", function(x) {
-
     ## hack to avoid failure on an empty object
     if(nTips(x) == 0) return(FALSE)
-    ## HACK: make sure we find the right "nTips"
-    ## fixme SWK maybe broken after explicit root node addition?
-
     any(is.na(edges(x)[,1]))
-    ## fixme: fails with empty tree?
-    ## fixme - may fail with explicit root node in edge matrix
 })
 
 setMethod("nodeType", "phylo4", function(phy) {
@@ -267,8 +261,8 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
         res$sumry.el <- NULL
     }
 
-    ## polytomies
-    if(hasPoly(x)){ # if there are polytomies
+    ## check for polytomies
+    if (any(tabulate(na.omit(edges(object)[,1]))>2)){ # if there are polytomies
         E <- edges(x)
         temp <- tabulate(na.omit(E[,1]))
         degree <- temp[na.omit(E[,1])] # contains the degree of the ancestor for all edges

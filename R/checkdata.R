@@ -10,9 +10,7 @@ check_tree <- function(object,warn="retic",err=NULL) {
     if (hasEdgeLength(object) && length(object@edge.length) != N)
       return("edge lengths do not match number of edges")
     ## if (length(object@tip.label)+object@Nnode-1 != N) # does not work with multifurcations
-    ##  return("number of tip labels not consistent with number of edges and nodes")
-    ## check: internal node numbers = 1:m
-    
+    ##  return("number of tip labels not consistent with number of edges and nodes")    
     ## check: tip numbers = (m+1):(m+n)
     ntips <- nTips(object)
     if(length(object@tip.label) != ntips)
@@ -24,12 +22,11 @@ check_tree <- function(object,warn="retic",err=NULL) {
     if (!(all(tips==1:ntips) && all(nodes=(ntips+1):(ntips+length(intnodes)))))
       return("tips and nodes incorrectly numbered")
     nAncest <- tabulate(E[, 2],nbins=max(nodes)) ## bug fix from Jim Regetz
-    ## fixme SWK the following all broke due to undoc'd edge matrix assumptions
-    ## fixme SWK commenting out most for now until we document these formally
     nDesc <- tabulate(na.omit(E[,1]))
     nTips <- sum(nDesc==0)
-    ##if (!all(nDesc[1:nTips]==0))
-    ##  return("nodes 1 to nTips must all be tips")
+    if (!all(nDesc[1:nTips]==0))
+      return("nodes 1 to nTips must all be tips")
+    ##fixme following check fails for unrooted trees
     ##if (!all(nDesc[(nTips+1):(nTips+nNodes(object))]>0))
     ##  return("nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
     if (any(nDesc>2)) {

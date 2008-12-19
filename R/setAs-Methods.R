@@ -1,10 +1,9 @@
 #######################################################
 ## Importing from ape
 setAs("phylo", "phylo4", function(from, to) {
-    #fixme SWK kludgy fix to add root to an ape edge matrix
+    #fixme SWK kludgy fix may not work well with unrooted trees
     if (is.rooted(from)) {
         root.edge <- as.numeric(setdiff(unique(from$edge[,1]), unique(from$edge[,2])))
-        #fix - figure out node id of edge
         from$edge <- rbind(from$edge,c(NA,root.edge))
         if (!is.null(from$edge.length)) {
             if (is.null(from$root.edge)) {
