@@ -12,7 +12,7 @@ setAs("phylo", "phylo4", function(from, to) {
         }
         if (!is.null(from$edge.label)) {
             from$edge.label <- c(from$edge.label,paste("E",from$root.edge,sep=""))
-        }   
+        }
     }
     newobj <- phylo4(from$edge, from$edge.length, from$tip.label,
         node.label = from$node.label, edge.label = from$edge.label,
@@ -129,7 +129,7 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
     }
     tl <- labels(x)
     label <- c(nl, tl)
-    node.type <- typeNode(x)[node]
+    node.type <- nodeType(x)[node]
     return(data.frame(label, node, ancestor, branch.length,
         node.type,stringsAsFactors=FALSE))
 })

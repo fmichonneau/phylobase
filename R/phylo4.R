@@ -14,8 +14,8 @@ setGeneric("rootEdge", function(x,order,...) {
     standardGeneric("rootEdge")
 })
 
-setGeneric("typeNode", function(x) {
-    standardGeneric("typeNode")
+setGeneric("nodeType", function(phy) {
+    standardGeneric("nodeType")
 })
 
 setGeneric("isRooted", function(x) {

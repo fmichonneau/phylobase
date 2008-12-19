@@ -57,22 +57,22 @@ setMethod("isRooted","phylo4", function(x) {
     ## fixme - may fail with explicit root node in edge matrix
 })
 
-setMethod("typeNode", "phylo4", function(x) {
-    if(nTips(x) == 0)
+setMethod("nodeType", "phylo4", function(phy) {
+    if(nTips(phy) == 0)
         return(NULL)
     else {
-        listNodes <- sort(unique(as.vector(edges(x))))
+        listNodes <- sort(unique(as.vector(edges(phy))))
         t <- rep("internal", length(listNodes)) # FM: internal is default (I think it's safer)
         names(t) <- listNodes
 
         ## node number of real internal nodes
-        iN <- names(table(edges(x)[,1]))
+        iN <- names(table(edges(phy)[,1]))
         ## node number that are not internal nodes (ie that are tips)
         tN <- names(t)[!names(t) %in% iN]
         t[tN] <- "tip"
 
         ## if the tree is rooted
-        if(isRooted(x)) t[rootNode(x)] <- "root"
+        if(isRooted(phy)) t[rootNode(phy)] <- "root"
 
         return(t)
     }
