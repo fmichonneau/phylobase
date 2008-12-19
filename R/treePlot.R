@@ -1,9 +1,10 @@
-`treePlot` <- function(phy, 
+
+`treePlot` <- function(x, 
                      type = c('phylogram', 'cladogram', 'fan'), 
                      show.tip.label = TRUE,
                      show.node.label = FALSE, 
                      tip.order = NULL,
-                     plot.data = is(phy, 'phylo4d'),
+                     plot.data = is(x, 'phylo4d'),
                      rot = 0,
                      tip.plot.fun = 'bubbles',
                      plot.at.tip = TRUE,
@@ -18,21 +19,21 @@
 {
     ## TODO three dimensional histogram as example, compute values on full dataset
     ## then generate phylo4d object with summary data and plot
-    if (!all(is(phy, 'phylo4'), is(phy, 'phylo4d'))) stop('treePlot requires a phylo4 or phylo4d object')
-    if (!isRooted(phy)) stop("treePlot function requires a rooted tree.")
+    if (!inherits('phylo4')) stop('treePlot requires a phylo4 or phylo4d object')
+    if (!isRooted(x)) stop("treePlot function requires a rooted tree.")
     width  <- height <- (1 - margin)  ## TODO: do these have to be hard-coded?
     type   <- match.arg(type)
-    Nedges <- nEdges(phy)
-    Ntips  <- nTips(phy)
+    Nedges <- nEdges(x)
+    Ntips  <- nTips(x)
     ## TODO remove the false cladogram option?
-    if(is.null(edgeLength(phy)) || type == 'cladogram') {
-        phy@edge.length <- rep(1, Nedges)
+    if(is.null(edgeLength(x)) || type == 'cladogram') {
+        x@edge.length <- rep(1, Nedges)
     }
-    xxyy   <- phyloXXYY(phy, tip.order)
-    phy    <- xxyy$phy
-    tindex <- phy@edge[phy@edge[, 2] <= Ntips, 2]
+    xxyy   <- phyloXXYY(x, tip.order)
+    x    <- xxyy$x
+    tindex <- x@edge[x@edge[, 2] <= Ntips, 2]
     if(type == 'cladogram') {
-        xxyy$xx[phy@edge[, 2] <= Ntips] <- 1
+        xxyy$xx[x@edge[, 2] <= Ntips] <- 1
     }
     
     ## general function for pushing tree subplots
@@ -68,13 +69,13 @@
         # TODO should return something useful
         return(invisible())
     } else {
-        tmin <- min(tdata(phy, which = 'tip'), na.rm = TRUE)
-        tmax <- max(tdata(phy, which = 'tip'), na.rm = TRUE)
+        tmin <- min(tdata(x, which = 'tip'), na.rm = TRUE)
+        tmax <- max(tdata(x, which = 'tip'), na.rm = TRUE)
         if(!is.function(tip.plot.fun)) {
             if(tip.plot.fun == "bubbles") {
                 # use phylobubbles as default
                 if(rot != 0) {stop("Rotation of bubble plots not yet implemented")}
-                dlabwdth <- max(stringWidth(colnames(phy@tip.data))) * 1.2
+                dlabwdth <- max(stringWidth(colnames(x@tip.data))) * 1.2
                 phyplotlayout <- grid.layout(nrow = 2, ncol = 2, 
                     heights = unit.c(unit(1, 'null'), dlabwdth), 
                     widths = unit(c(1, 1), c('null', 'null'), list(NULL, NULL)))
@@ -107,8 +108,8 @@
                             plot) you need install the "gridBase" package')
                 }
                 plot.new()
-                tmin <- min(tdata(phy, which = 'tip'), na.rm = TRUE)
-                tmax <- max(tdata(phy, which = 'tip'), na.rm = TRUE)
+                tmin <- min(tdata(x, which = 'tip'), na.rm = TRUE)
+                tmax <- max(tdata(x, which = 'tip'), na.rm = TRUE)
                 tip.plot.fun <- function(x,tmin,tmax,...) {
                     # par(omi = c(0,0,0,0))
                     suppressWarnings(par(plt = gridPLT(), new = TRUE))
@@ -139,7 +140,7 @@
             hc <- convertY(unit(1/Ntips, 'snpc'), 'npc')
             for(i in 1:Ntips) {
                 pushViewport(viewport(
-                    y = xxyy$yy[phy@edge[, 2] == i],
+                    y = xxyy$yy[x@edge[, 2] == i],
                     x = 1 + 1/(2 * Ntips), # xxyy$xx[phy@edge[, 2] == i], 
                     height = hc, 
                     width = hc, 
@@ -149,7 +150,7 @@
                     angle = -rot
                     ))
                     #grid.rect()
-                    vals = t(tdata(phy, which = 'tip')[i, ])
+                    vals = t(tdata(x, which = 'tip')[i, ])
                     if (!all(is.na(vals))) tip.plot.fun(vals,tmin,tmax,...)
                 upViewport()
             }
@@ -159,7 +160,7 @@
         } else { ## plot by data column
             ## !plot.at.tip
             ## stop("not implemented yet")
-            nvars <- length(phy@tip.data) ## FIXME
+            nvars <- length(x@tip.data) ## FIXME
             datalayout <- grid.layout(ncol = 2)  ## set default widths equal for this kind of plot
             ## width = unit(c(1, 1/Ntips), c('null', 'null'))
             # TODO this is done multiple times, 
@@ -185,7 +186,7 @@
                     angle = -rot
                     ))
                     #grid.rect()
-                    vals = tdata(phy)[,i]
+                    vals = tdata(x)[,i]
                     if (!all(is.na(vals))) tip.plot.fun(vals, tmin, tmax, ...)
                 upViewport()
             }
@@ -528,8 +529,8 @@ phylobubbles <- function(XXYY, square = FALSE, grid = TRUE) {
                 bubscale = bubscale))
 }
 
-setGeneric("treePlot", useAsDefault = treePlot)
-setMethod("treePlot", signature = c('phylo4', 'phylo4d'), treePlot)
+# setGeneric("treePlot", useAsDefault = treePlot)
+# setMethod("treePlot", signature = c('phylo4', 'phylo4d'), treePlot)
 
 # gridbasefun <- function(f, naked = TRUE, scale = TRUE) {
 #     function(x, tmin, tmax, ...) {
@@ -551,3 +552,5 @@ setMethod("treePlot", signature = c('phylo4', 'phylo4d'), treePlot)
 #     }
 # }
 # 
+# setGeneric('plot', useAsDefault = treePlot)
+setMethod('treePlot', signature = c('phylo4', 'phylo4d'), treeplot)
