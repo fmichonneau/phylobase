@@ -82,8 +82,9 @@ setMethod("typeNode", "phylo4", function(x) {
 setMethod("rootNode", "phylo4", function(x) {
     if (!isRooted(x))
         return(NA)
-    if (!is.na(x@root.edge))
-        stop("FIXME: don't know what to do in this case")
+    #fixme SWK disabling check for root.edge for now until we fix
+    #if (!is.na(x@root.edge))
+    #    stop("FIXME: don't know what to do in this case")
     ## BMB: danger!  do we require this??? fixme
     ## return(nTips(x) + 1)
     ## FM: alternative?
