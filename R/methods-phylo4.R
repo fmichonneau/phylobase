@@ -53,6 +53,27 @@ setMethod("isRooted","phylo4", function(x) {
     ## root node (first node after last tip) has <= 2 descendants
 })
 
+setMethod("typeNode", "phylo4", function(x) {
+    if(nTips(x) == 0)
+        return(NULL)
+    else {
+        listNodes <- sort(unique(as.vector(edges(x))))
+        t <- rep("internal", length(listNodes)) # FM: internal is default (I think it's safer)
+        names(t) <- listNodes
+
+        ## node number of real internal nodes
+        iN <- names(table(edges(x)[,1]))
+        ## node number that are not internal nodes (ie that are tips)
+        tN <- names(t)[!names(t) %in% iN]
+        t[tN] <- "tip"
+
+        ## if the tree is rooted
+        if(isRooted(x)) t[rootNode(x)] <- "root"
+
+        return(t)
+    }
+})
+
 
 setMethod("rootNode", "phylo4", function(x) {
     if (!isRooted(x))
@@ -60,7 +81,12 @@ setMethod("rootNode", "phylo4", function(x) {
     if (!is.na(x@root.edge))
         stop("FIXME: don't know what to do in this case")
     ## BMB: danger!  do we require this???
-    return(nTips(x) + 1)
+    ## return(nTips(x) + 1)
+    ## FM: alternative?
+    listNodes <- sort(unique(as.vector(edges(x))))
+    notRoot <- names(table(edges(x)[,2]))
+    iR <- listNodes[!listNodes %in% notRoot]
+    return(iR)
 })
 
 setReplaceMethod("rootNode", "phylo4", function(x, value) {
