@@ -129,7 +129,7 @@ setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","all")) {
   switch(which,
          internal=x@edge[x@edge[,2]>nTips(x),2],
          tip = x@edge[x@edge[,2]<=nTips(x),2],
-         all = x@edge[x@edge[,2]])
+         all = x@edge[,2])
 })
 
 setReplaceMethod("nodeLabels", "phylo4",
