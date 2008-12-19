@@ -110,17 +110,18 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
     n.tip <- length(tip)
     n.int <- length(int.node)
     ## node <- c(root, node) # doesn't fit the ordering: root, other internal nodes, tips
-    node <- c(int.node, tip)
+    #node <- c(int.node, tip)
     ## retrieve the ancestor of each node
-    idx <- match(node, E[, 2]) # new ordering of the descendants/edges
+    #idx <- match(node, E[, 2]) # new ordering of the descendants/edges
     ## if (length(ancestor)>0) ancestor <- c(NA, ancestor)
-    ancestor <- E[idx, 1]
+    #ancestor <- E[idx, 1]
     ## branch.length <- c(x@root.edge, x@edge.length) # root.edge is not an edge length
-    branch.length <- edgeLength(x)[idx]
+    branch.length <- edgeLength(x)#[idx]
     if (is.null(edgeLength(x))) {
         branch.length <- rep(NA, length(node))
     }
     ## node and tip labels ##
+    ## fixme this is broken! using old assumption of order of edge matrix
     ## beware: they cannot be NULL
     ## there are always tip labels (or check_phylo4 complains)
     ## there may not be node labels (character(0))
