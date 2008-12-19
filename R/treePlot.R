@@ -553,4 +553,4 @@ phylobubbles <- function(XXYY, square = FALSE, grid = TRUE) {
 # }
 # 
 # setGeneric('plot', useAsDefault = treePlot)
-setMethod('treePlot', signature = c('phylo4', 'phylo4d'), treeplot)
+setMethod('treePlot', signature = c('phylo4', 'phylo4d'), treePlot)
