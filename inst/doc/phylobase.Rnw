@@ -55,15 +55,6 @@ However, typing \code{?plot} still takes us to the default \code{plot} help.  We
 
 The \code{S4} generic system is too complicated to describe here, but doesn't include the same dot notation.  As a result \code{?plot.phylo4} doesn't work, \code{R} does, however, find the right plotting function.
 
-<<plothack>>= 
-## DISABLE PLOTTING until 
-oldplot <- plot
-plot <- function(...) {
-  oldplot(0:1,0:1)
-  text(0.5,0.5,"plotting temporarily disabled")
-} 
-@ 
-
 <<convtree,fig=FALSE>>=
 library(phylobase)
 # convert rand_tree to a phylo4 object
@@ -129,7 +120,7 @@ nodeLabels(g1)
 
 Print node numbers:
 <<nodenumbergeodata>>=
-nodeNumbers(g1)
+nodeId(g1, which = 'all')
 @ 
 
 Print edge labels (also empty in this case):
@@ -248,13 +239,14 @@ subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
 subset(g2,tips.exclude=names(descendants(g2,MRCA(g2,c("difficilis","fortis")))))
 @ 
 
-Another approach is to pick the subtree graphically, by plotting the tree and using \code{identify}, which returns the identify of the node you click on with the mouse.
-
-<<geoident,eval=FALSE>>=
-plot(g1)
-n1 <- identify(g1)
-subset(g2,node.subtree=n1)
-@ 
+% This isn't implemented yet
+% Another approach is to pick the subtree graphically, by plotting the tree and using \code{identify}, which returns the identify of the node you click on with the mouse.
+% 
+% <<geoident,eval=FALSE>>=
+% plot(g1)
+% n1 <- identify(g1)
+% subset(g2,node.subtree=n1)
+% @ 
 
 \section{Tree-walking}
 
