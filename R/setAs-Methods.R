@@ -48,31 +48,40 @@ setAs("multiPhylo", "multiPhylo4", function(from, to) {
 #######################################################
 ## Exporting to ape
 setAs("phylo4", "phylo", function(from, to) {
-    y <- list(edge = from@edge, edge.length = from@edge.length,
-        Nnode = from@Nnode, tip.label = from@tip.label, node.label = from@node.label)
-    class(y) <- "phylo"
-    if (length(y$edge.length) == 0)
-        y$edge.length <- NULL
-    if (length(y$node.label) == 0)
-        y$node.label <- NULL
-    #if (!is.na(from@root.edge))
-    #    y$root.edge <- from@root.edge
-    y
+  if (inherits(from,"phylo4d"))
+    warning("losing data while coercing phylo4d to phylo")
+  brlen <- from@edge.length
+  if (isRooted(from)) brlen <- brlen[nodeId(from,"all")!=rootNode(from)]
+  edgemat <- na.omit(from@edge)
+  y <- list(edge = na.omit(from@edge), edge.length = brlen,
+            Nnode = from@Nnode, tip.label = from@tip.label,
+            node.label = from@node.label)
+  class(y) <- "phylo"
+  if (length(y$edge.length) == 0)
+    y$edge.length <- NULL
+  if (length(y$node.label) == 0)
+    y$node.label <- NULL
+  if (isRooted(from)) {
+    root.edge <- brlen[nodeId(from,"all")==rootNode(from)]
+    if (!is.na(root.edge)) y$root.edge <- root.edge
+  }
+  y
 })
 
-setAs("phylo4d", "phylo", function(from, to) {
-    y <- list(edge = from@edge, edge.length = from@edge.length,
-        Nnode = from@Nnode, tip.label = from@tip.label)
-    class(y) <- "phylo"
-    if (length(y$edge.length) == 0)
-        y$edge.length <- NULL
-    if (length(y$node.label) == 0)
-        y$node.label <- NULL
-    #if (!is.na(from@root.edge))
-    #    y$root.edge <- from@root.edge
-    warning("losing data while coercing phylo4d to phylo")
-    y
-})
+## BMB: redundant????  
+## setAs("phylo4d", "phylo", function(from, to) {
+##     y <- list(edge = from@edge, edge.length = from@edge.length,
+##         Nnode = from@Nnode, tip.label = from@tip.label)
+##     class(y) <- "phylo"
+##     if (length(y$edge.length) == 0)
+##         y$edge.length <- NULL
+##     if (length(y$node.label) == 0)
+##         y$node.label <- NULL
+##     #if (!is.na(from@root.edge))
+##     #    y$root.edge <- from@root.edge
+##    warning("losing data while coercing phylo4d to phylo")
+##    y
+##})
 
 setAs("multiPhylo4", "multiPhylo", function(from, to) {
     newobj <- new("multiPhylo4", phylolist = lapply(from,
@@ -90,9 +99,8 @@ setAs("phylo4", "phylog", function(from, to) {
     if (!require(ade4))
         stop("the ade4 package is required")
     x <- as(from, "phylo")
-    x <- write.tree(x, file = "")
-    x <- newick2phylog(x)
-    return(x)
+    xstring <- write.tree(x, file = "")
+    newick2phylog(xstring)
 })
 
 #######################################################
