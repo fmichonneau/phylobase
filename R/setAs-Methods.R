@@ -1,6 +1,19 @@
 #######################################################
 ## Importing from ape
 setAs("phylo", "phylo4", function(from, to) {
+    #fixme SWK kludgy fix to add root to an ape edge matrix
+    if (is.rooted(from)) {
+        if (is.null(from$root.edge)) {
+            from$root.edge <- as.numeric(setdiff(unique(from$edge[,1]),unique(from$edge[,2])))
+        }
+        from$edge <- rbind(from$edge,c(NA,from$root.edge))
+        if (!is.null(from$edge.length)) {
+            from$edge.length <- c(from$edge.length,as.numeric(NA))
+        }
+        if (!is.null(from$edge.label)) {
+            from$edge.label <- c(from$edge.label,paste("E",from$root.edge,sep=""))
+        }   
+    }
     newobj <- phylo4(from$edge, from$edge.length, from$tip.label,
         node.label = from$node.label, edge.label = from$edge.label,
         root.edge = from$root.edge)
@@ -88,8 +101,8 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
     E <- edges(x) # E: matrix of edges
     ancestor <- E[, 1]
     node <- E[, 2]
-    root <- unique(ancestor[!ancestor %in% node])
-    int.node <- c(root, unique(ancestor[ancestor %in% node])) # internal nodes (root first)
+    root <- which(is.na(ancestor))
+    int.node <-  node[(node %in% ancestor)]
     tip <- node[!(node %in% ancestor)]
     n.tip <- length(tip)
     n.int <- length(int.node)

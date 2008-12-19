@@ -4,8 +4,9 @@
 ##  and that it's simple enough to do
 ##   any(edgeLength(x)==0) if necessary
 hasPoly <- function(object) {
-  if(!check_phylo4(object)) stop("to be used with a phylo4 object")
-  degree <- tabulate(edges(object)[, 1])
+  #fixme SWK why was this a call to check_phylo4 instead of just checking class?
+  #if(!check_phylo4(object)) stop("to be used with a phylo4 object")
+  degree <- tabulate(edges(object)[, 2])
   struc <- any(degree > 2)
   return(struc)
 }
@@ -14,7 +15,7 @@ hasPoly <- function(object) {
 
 hasSingles <- function(object) {
   if(!check_phylo4(object)) stop("to be used with a phylo4 object")
-  degree <- tabulate(edges(object)[, 1])
+  degree <- tabulate(na.omit(edges(object)[, 1]))
   any(degree == 1)
 }
 

@@ -22,11 +22,11 @@ setClass("phylo4",
 ## phylo4 constructor
 #####################
 
-phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL,
-                   edge.label = NULL, root.edge = NULL, ...){
+phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL, edge.label = NULL, root.edge = NULL, ...){
+
     ## edge
     mode(edge) <- "integer"
-    if(any(is.na(edge))) stop("NA are not allowed in edge matrix")
+    #if(any(is.na(edge))) stop("NA are not allowed in edge matrix")
     if(ncol(edge) > 2) warning("the edge matrix has more than two columns")
     edge <- as.matrix(edge[, 1:2])
     colnames(edge) <- c("ancestor", "descendant")
@@ -40,7 +40,7 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     }
 
     ## tip.label
-    ntips <- sum(tabulate(edge[, 1]) == 0)
+    ntips <- sum(tabulate(na.omit(edge[, 1])) == 0)
     if(is.null(tip.label)) {
         tip.label <- .genlab("T", ntips)
     } else {
@@ -48,8 +48,8 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
         tip.label <- as.character(tip.label)
     }
 
-    ## node.label
-    nnodes <- sum(tabulate(edge[, 1]) > 0)
+    ## node.label for internal nodes
+    nnodes <- sum(tabulate(edge[, 2]) > 0) - ntips
     ##    if(is.null(node.label)) {
     ##        node.label <- .genlab("N", nnodes)
     ## } else {
@@ -67,7 +67,10 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     } else if (length(edge.label) != nrow(edge))
       stop("the edge labels are not consistent with the number of edges")
     ## root.edge - if no root edge lenth provided, set to a numeric NA
-    if(is.null(root.edge)) root.edge <- as.numeric(NA)
+    if(is.null(root.edge)) {
+        root.edge <- as.numeric(NA)
+    }
+    
     ##if(!is.null(root.edge)) {
     ##    if(!round(root.edge)==root.edge) stop("root.edge must be an integer")
     ##    root.edge <- as.integer(root.edge)
@@ -88,6 +91,7 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
 
     ## check_phylo4 will return a character string if object is
     ##  bad, otherwise TRUE
+    #fixme swk uncomment following once root node fixed
     if (is.character(checkval <- check_phylo4(res))) stop(checkval)
     return(res)
 }

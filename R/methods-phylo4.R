@@ -12,7 +12,7 @@ setMethod("nTips", "phylo4", function(x, ...) {
     else {
         ## doesn't handle reticulated networks
         ##    res <- sum(!E[, 2] %in% E[, 1])
-        res <- sum(tabulate(E[,1]) == 0) ## twice as fast as ...
+        res <- sum(tabulate(na.omit(E[,1])) == 0) ## twice as fast as ...
         ## change suggested by Aaron Mackey, handles reticulated networks better
         ## res <- sum(!(unique(E[,2]) %in% E[,1]))
         return(res)
@@ -45,12 +45,16 @@ setMethod("rootEdge", "phylo4", function(x, order, ...) {
 })
 
 setMethod("isRooted","phylo4", function(x) {
+
     ## hack to avoid failure on an empty object
     if(nTips(x) == 0) return(FALSE)
     !is.na(x@root.edge) ||  ## root edge explicitly defined
     ## HACK: make sure we find the right "nTips"
-    tabulate(edges(x)[, 1])[nTips(x) + 1] <= 2
+    ## fixme SWK maybe broken after explicit root node addition?
+    tabulate(na.omit(edges(x)[, 1]))[nTips(x) + 1] <= 2
     ## root node (first node after last tip) has <= 2 descendants
+    ## fixme: fails with empty tree?
+    ## fixme - may fail with explicit root node in edge matrix
 })
 
 setMethod("typeNode", "phylo4", function(x) {
@@ -80,7 +84,7 @@ setMethod("rootNode", "phylo4", function(x) {
         return(NA)
     if (!is.na(x@root.edge))
         stop("FIXME: don't know what to do in this case")
-    ## BMB: danger!  do we require this???
+    ## BMB: danger!  do we require this??? fixme
     ## return(nTips(x) + 1)
     ## FM: alternative?
     listNodes <- sort(unique(as.vector(edges(x))))
@@ -257,8 +261,8 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
     ## polytomies
     if(hasPoly(x)){ # if there are polytomies
         E <- edges(x)
-        temp <- tabulate(E[,1])
-        degree <- temp[E[,1]] # contains the degree of the ancestor for all edges
+        temp <- tabulate(na.omit(E[,1]))
+        degree <- temp[na.omit(E[,1])] # contains the degree of the ancestor for all edges
         endsAtATip <- !(E[,2] %in% E[,1])
         terminPoly <- (degree>2) & endsAtATip
         internPoly <- (degree>2) & !endsAtATip

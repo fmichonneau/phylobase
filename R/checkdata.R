@@ -24,12 +24,14 @@ check_tree <- function(object,warn="retic",err=NULL) {
     if (!(all(tips==1:ntips) && all(nodes=(ntips+1):(ntips+length(intnodes)))))
       return("tips and nodes incorrectly numbered")
     nAncest <- tabulate(E[, 2],nbins=max(nodes)) ## bug fix from Jim Regetz
-    nDesc <- tabulate(E[,1])
+    ## fixme SWK the following all broke due to undoc'd edge matrix assumptions
+    ## fixme SWK commenting out most for now until we document these formally
+    nDesc <- tabulate(na.omit(E[,1]))
     nTips <- sum(nDesc==0)
-    if (!all(nDesc[1:nTips]==0))
-      return("nodes 1 to nTips must all be tips")
-    if (!all(nDesc[(nTips+1):(nTips+nNodes(object))]>0))
-      return("nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
+    ##if (!all(nDesc[1:nTips]==0))
+    ##  return("nodes 1 to nTips must all be tips")
+    ##if (!all(nDesc[(nTips+1):(nTips+nNodes(object))]>0))
+    ##  return("nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
     if (any(nDesc>2)) {
         if ("poly" %in% err)
           return("tree includes polytomies")
@@ -37,12 +39,13 @@ check_tree <- function(object,warn="retic",err=NULL) {
           warning("tree includes polytomies")
     }
     nRoots <- sum(nAncest==0)
-    if (which(nAncest==0)!=nTips+1) {
-      return("root node is not at position (nTips+1)")
-    }
-    if (any(nAncest==0) && E[1,1]!=nTips+1) {
-      return("root node must be first row of edge matrix")
-    }
+    ##if (which(nAncest==0)!=nTips+1) {
+    ##  return("root node is not at position (nTips+1)")
+    ##}
+    ##if (any(nAncest==0) && E[1,1]!=nTips+1) {
+    ##  return("root node must be first row of edge matrix")
+    ##}
+    
     ##
     ## how do we identify loops???
     ## EXPERIMENTAL: could be time-consuming for large trees?
