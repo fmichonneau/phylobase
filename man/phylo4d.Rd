@@ -105,8 +105,9 @@ exGeo1 <- phylo4d(geoTree, tip.data = geoData)
 geoTree <- as(geoTree, "phylo4")
 
 ## some random node data
-rNodeData <- data.frame(randomTrait = rnorm(nNodes(geoTree)),
-                        row.names = nodeLabels(geoTree))
+rNodeData <- data.frame(randomTrait = rnorm(nNodes(geoTree)))
+## comment out node labels for now (empty)
+##                        row.names = nodeLabels(geoTree))
 
 exGeo2 <- phylo4d(geoTree, tip.data = geoData, node.data = rNodeData)
 
@@ -121,7 +122,9 @@ rTipData <- data.frame(randomTrait = rnorm(nTips(geoTree)),
 
 ### Example with 'all.data'
 rAllData <- data.frame(randomTrait = rnorm(nTips(geoTree) + nNodes(geoTree)),
-                       row.names = c(labels(geoTree), nodeLabels(geoTree)))
+row.names = c(labels(geoTree),nodeNumbers(geoTree)))
+
+
 exGeo5 <- phylo4d(geoTree, all.data = rAllData)
        
 

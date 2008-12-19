@@ -90,7 +90,7 @@ identical(tree_in_phylo,as(tree_in_phylo4,"phylo")) # test if phylo, and phlyo4 
 as(tree_in_phylo4, "phylog")      # conversion to phylog (ade4)
 as(tree_in_phylo4, "data.frame")  # conversion to data.frame
 as(tree_in_phylo4, "phylo")       # conversion to phylo (ape)
-as(tree_in_phylo4, "phylo4d")     # conversion to phylo4d, but without data so data slots empty.
+as(tree_in_phylo4, "phylo4d")     # conversion to phylo4d, but with data slots empty
 }
 \keyword{methods}
 \concept{phylo4 tree formats}

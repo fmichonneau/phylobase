@@ -20,10 +20,9 @@ tree.phylo <- read.tree(text = "((a,b),c);")
 tree <- as(tree.phylo, "phylo4")
 plot(tree)
 tip.data <- data.frame(size = c(1, 2, 3), row.names = c("a", "b", "c"))
-treedata <- phylo4d(tree, tip.data)
-plot(treedata)
-print(treedata)
-tree1 <- extract.tree(treedata)
-print(tree1)
+(treedata <- phylo4d(tree, tip.data))
+## treePlot(treedata)  ## not yet -- wait for debugging
+(tree1 <- extract.tree(treedata))
+## treePlot(tree1)   ## not yet -- wait for debugging
 }
 \keyword{methods}
