@@ -125,16 +125,9 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
     ## beware: they cannot be NULL
     ## there are always tip labels (or check_phylo4 complains)
     ## there may not be node labels (character(0))
-    if (hasNodeLabels(x)) {
-        nl <- x@node.label
-    }
-    else {
-        nl <- rep(NA, nNodes(x))
-    }
-    tl <- labels(x)
-    label <- c(nl, tl)
+    label <- labels(x,which="all")[node]
     node.type <- nodeType(x)[node]
-    return(data.frame(FIXMElabel=label, node, ancestor, branch.length,
+    return(data.frame(label, node, ancestor, branch.length,
         node.type,stringsAsFactors=FALSE))
 })
 

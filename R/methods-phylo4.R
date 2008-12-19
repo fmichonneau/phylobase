@@ -116,8 +116,29 @@ setMethod("hasEdgeLabels", "phylo4", function(x) {
 setMethod("labels", "phylo4", function(object, which = c("tip",
     "node", "allnode"), ...) {
     which <- match.arg(which)
-    switch(which, tip = object@tip.label, node = object@node.label,
-        allnode = c(object@tip.label, object@node.label))
+    switch(which,
+            tip = object@tip.label,
+            node = {
+                if (hasNodeLabels(object)) {
+                    object@node.label
+                }
+                else
+                {
+                    return(character(0))
+                }
+            }
+            ,
+            allnode = {
+                if (hasNodeLabels(object)) {
+                    nl <- object@node.label
+                }
+                else
+                {
+                    nl <- rep(NA,nNodes(x))
+                }
+                c(object@tip.label,nl)
+            }
+            )
 })
 
 setMethod("nodeLabels", "phylo4", function(x) {
