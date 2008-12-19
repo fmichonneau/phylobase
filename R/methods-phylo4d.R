@@ -33,28 +33,36 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
         tdata <- x@node.data
         data.names <- x@node.label
         if ( identical(label.type,"row.names") ) {
-            if ( identical(data.names,unique(data.names)) || !(any(is.na(data.names))) ) {
-                row.names(tdata) <- data.names
-            }
-            else {
-                warning("Non-unique or missing labels found, labels cannot be coerced to tdata row.names. Use the label.type argument to include labels as first column of data.")
-            }
+          if ( length(data.names)>0 &&
+              !any(duplicated(data.names)) &&
+              !(any(is.na(data.names)))) {
+            row.names(tdata) <- data.names
+          } else {
+            warning("Non-unique or missing labels found,",
+                    "labels cannot be coerced to tdata row.names.",
+                    "Use the label.type argument to include labels",
+                    "as first column of data.")
+          }
         }
         if (identical(label.type,"column")) {
-            tdata <- data.frame(label=data.names,tdata)
+          if (!hasNodeLabels(x)) data.names <- rep("",nNodes(x))
+          tdata <- data.frame(label=data.names,tdata)
         }
         return(tdata)
     }
 
     if (which == "allnode") {
-        if (all(dim(x@node.data)==0)) {
-            nodedata <- data.frame(label=x@node.label)
-        }
+        if (all(dim(x@node.data)==0)) { ## empty data
+          if (!hasNodeLabels(x)) {
+            nodedata <- data.frame(label=rep("",nNodes(x)))
+          } else
+          nodedata <- data.frame(label=x@node.label)
+        } 
         else {
-            nodedata <- tdata(x, "node", label.type="column")
+          nodedata <- tdata(x, "node", label.type="column")
         }
         if (all(dim(x@tip.data)==0)) {
-            tipdata <- data.frame(label=x@tip.label)
+          tipdata <- data.frame(label=x@tip.label)
         }
         else {
             tipdata <- tdata(x, "tip", label.type="column")

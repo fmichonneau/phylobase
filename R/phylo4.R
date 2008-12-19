@@ -61,6 +61,10 @@ setGeneric("nodeLabels<-",
                standardGeneric("nodeLabels<-")
            })
 
+setGeneric("nodeNumbers", function(x) {
+    standardGeneric("nodeNumbers")
+})
+
 setGeneric("edgeLabels", function(x) {
     standardGeneric("edgeLabels")
 })

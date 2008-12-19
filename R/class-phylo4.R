@@ -50,20 +50,20 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
 
     ## node.label
     nnodes <- sum(tabulate(edge[, 1]) > 0)
+    ##    if(is.null(node.label)) {
+    ##        node.label <- .genlab("N", nnodes)
+    ## } else {
     if(is.null(node.label)) {
-        node.label <- .genlab("N", nnodes)
-    } else {
-        if(length(node.label) != nnodes) stop("the node labels are not consistent with the number of nodes")
-    } 
-
+      node.label <- character(0)
+    } else if (length(node.label) != nnodes)
+      stop("the node labels are not consistent with the number of nodes")
     ## edge.label
     ## an edge is named by the descendant
     if(is.null(edge.label)) {
-        edge.label <- paste("E", edge[, 2], sep = "")
-    } else {
-        if(length(edge.label) != nrow(edge)) stop("the edge labels are not consistent with the number of edges")
-    }
-
+      edge.label <- character(0)
+    ##        edge.label <- paste("E", edge[, 2], sep = "")
+    } else if (length(edge.label) != nrow(edge))
+      stop("the edge labels are not consistent with the number of edges")
     ## root.edge - if no root edge lenth provided, set to a numeric NA
     if(is.null(root.edge)) root.edge <- as.numeric(NA)
     ##if(!is.null(root.edge)) {

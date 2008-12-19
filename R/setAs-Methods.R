@@ -123,7 +123,7 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
     else node.type <- c("root", rep("internal", n.int - 1), 
         rep("tip", n.tip))
     return(data.frame(label, node, ancestor, branch.length, 
-        node.type))
+        node.type,stringsAsFactors=FALSE))
 })
 
 setAs(from = "phylo4d", to = "data.frame", function(from) {
