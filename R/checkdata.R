@@ -53,6 +53,11 @@ check_tree <- function(object,warn="retic",err=NULL) {
       Emat <- matrix(0,nrow=max(E),ncol=max(E))
       Emat[E] <- 1
     }
+    if (!object@order %in% phylo4_orderings) {
+      stop("unknown order: allowed values are ",
+           paste(phylo4_orderings,collapse=","))
+    }
+
     ## all done with fatal errors.  Now construct a list
     ##  of warnings and paste them together
     msg <- character(0)

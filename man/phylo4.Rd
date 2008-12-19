@@ -5,7 +5,8 @@
   The \code{phylo4} function creates a phylogenetic tree object for use in phylobase methods. Phylobase contains functions for input of phylogenetic trees and data, manipulation of these objects including pruning and subsetting, and plotting. The phylobase package also contains translation functions to forms used in other comparative phylogenetic method packages.
 }
 \usage{
-phylo4(edge, edge.length = NULL, tip.label = NULL, node.label = NULL, edge.label = NULL, root.edge = NULL, ...)
+phylo4(edge, edge.length = NULL, tip.label = NULL, node.label = NULL,
+edge.label = NULL, root.edge = NULL, order="unknown", ...)
 }
 \arguments{
   \item{edge}{A numeric, two-column matrix with as many rows as branches in the phylogeny.}
@@ -13,8 +14,11 @@ phylo4(edge, edge.length = NULL, tip.label = NULL, node.label = NULL, edge.label
   \item{tip.label}{A character vector of species names (names of "tip" nodes). (Optional)}
   \item{node.label}{A character vector of internal node names. (Optional)}
   \item{edge.label}{A character vector of edge (branch) names. (Optional)}
-  \item{root.edge}{Edge (branch) length from the most basal node to it's ancestor. (Optional)}
-  \item{...}{Any additional arguments. (Optional)}
+  \item{root.edge}{Edge (branch) length from the most basal node to it's
+    ancestor. (Optional)}
+  \item{order}{character: tree ordering (allowable values are
+      listed in \code{phylo4_ordering}, currently "unknown", "reorder"
+      (="pruningwise" in \code{ape}), "postorder" (="cladewise" in \code{ape}))}
 }
 \details{
   The minimum information necessary to create a phylobase tree object is a valid edge matrix. The edge matrix describes the topology of the phylogeny. Each row describes a branch of the phylogeny, with the (descendant) node number in column 2 and it's ancestor's node number in column 1. These numbers are used internally and must be unique for each node.

@@ -1,5 +1,6 @@
 \name{phylo4-class}
 \docType{class}
+\alias{phylo4_orderings}
 \alias{phylo-class}
 \alias{phylo4-class}
 \alias{$,phylo4-method}
@@ -17,21 +18,24 @@
   }
 \section{Slots}{
   \describe{
-    \item{\code{edge}:}{Matrix of edges}
-    \item{\code{edge.length}:}{Numeric vector of edge lengths}
-    \item{\code{Nnode}:}{Integer: number of nodes}
-    \item{\code{tip.label}:}{Character vector of tip labels}
-    \item{\code{root.edge}:}{Integer: root edge (NA if none)}
-    }
-}
+    \item{\code{edge}:}{matrix of edges}
+    \item{\code{edge.length}:}{numeric vector of edge lengths}
+    \item{\code{Nnode}:}{integer: number of nodes}
+    \item{\code{tip.label}:}{character vector of tip labels}
+    \item{\code{root.edge}:}{integer: root edge (NA if none)}
+    \item{\code{order}:}{character: tree ordering (allowable values are
+      listed in \code{phylo4_ordering}, currently "unknown", "reorder"
+      (="pruningwise" in \code{ape}), "postorder" (="cladewise" in \code{ape}))}
+  }
+  }
 \section{Methods}{
   \describe{
     \item{\$}{\code{signature(x = "phylo4")}: extract a slot}
     \item{print}{\code{signature(x = "phylo4")}: print method}
     \item{show}{\code{signature(object = "phylo4")}: show method }
     \item{summary}{\code{signature(object = "phylo4")}: summary method}
-    \item{names}{\code{signature(x = "phylo4")}: gives the slots names}
-}
+    \item{names}{\code{signature(x = "phylo4")}: gives the slot names}
+  }
 }
 \usage{
     \S4method{print}{phylo4}(x,printlen,\dots)
@@ -55,11 +59,11 @@
     - \code{var.el}: variance of edge lengths (estimate for population) \cr
     - \code{sumry.el}: summary (i.e. range and quartiles) of the edge
     lengths \cr
-    - \code{degree}: (optionnal) degree (i.e. number of descendents) of
+    - \code{degree}: (optional) degree (i.e. number of descendants) of
     each node; displayed only when there are polytomies \cr
-    - \code{polytomy}: (optionnal) type of polytomy for each node:
-    'node', 'terminal' (all descendents are tips) or internal (at least
-    one descendent is an internal node); displayed only when there are
+    - \code{polytomy}: (optional) type of polytomy for each node:
+    'node', 'terminal' (all descendants are tips) or internal (at least
+    one descendant is an internal node); displayed only when there are
     polytomies \cr
 
    The \code{names} method returns a vector of characters corresponding
@@ -77,7 +81,7 @@
   sumryP1 = summary(P1)
   sumryP1
 
-  ## summary of a polytomic tree
+  ## summary of a polytomous tree
   E <- matrix(c(8,9,10,10,9,9,8,11,11,11,9,10,1,2,3,4,11,5,6,7),ncol=2)
   P2 <- phylo4(E)
   plot(P2,show.node=TRUE)
