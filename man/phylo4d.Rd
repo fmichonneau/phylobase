@@ -120,7 +120,8 @@ rTipData <- data.frame(randomTrait = rnorm(nTips(geoTree)),
 (exGeo4 <- phylo4d(geoTree, tip.data = rTipData, node.data = rNodeData,
                     merge.tip.node = FALSE))
 
-### Example with 'all.data'
+		    ### Example with 'all.data'
+nodeLabels(geoTree) <- as.character(nodeNumbers(geoTree))
 rAllData <- data.frame(randomTrait = rnorm(nTips(geoTree) + nNodes(geoTree)),
 row.names = c(labels(geoTree),nodeNumbers(geoTree)))
 

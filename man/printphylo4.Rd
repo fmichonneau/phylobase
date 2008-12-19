@@ -38,7 +38,7 @@ The topology is given by the pattern of links from each node to its ancestor. Al
 
 tree.phylo <- read.tree(text="((a,b),c);")
 tree <- as(tree.phylo, "phylo4")
-plot(tree,show.node=TRUE)
+##plot(tree,show.node=TRUE) ## plotting broken with empty node labels: FIXME
 tip.data <- data.frame(size=c(1,2,3), row.names=c("a", "b", "c"))
 treedata <- phylo4d(tree, tip.data)
 plot(treedata,ratio=.7,cent=FALSE,scale=FALSE)

@@ -54,8 +54,9 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     ##        node.label <- .genlab("N", nnodes)
     ## } else {
     if(is.null(node.label)) {
-      node.label <- character(nnodes)
-      is.na(node.label) <- TRUE
+      node.label <- character(0) ## empty node labels
+      ## node.label <- character(nnodes)
+      ## is.na(node.label) <- TRUE ## ???
     } else if (length(node.label) != nnodes)
       stop("the node labels are not consistent with the number of nodes")
     ## edge.label

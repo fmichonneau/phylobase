@@ -83,9 +83,10 @@ library(ape)
 example(read.tree)
 ## round trip conversion 
 tree_in_phylo <- tree.owls                # tree is a phylo object 
-tree_in_phylo4 <- as(tree.owls,"phylo4")  # phylo converted to phylo4 
-tree_in_phylo4
-identical(tree_in_phylo,as(tree_in_phylo4,"phylo")) # test if phylo, and phlyo4 converted to phylo are identical
+(tree_in_phylo4 <- as(tree.owls,"phylo4"))  # phylo converted to phylo4 
+identical(tree_in_phylo,as(tree_in_phylo4,"phylo"))
+## test if phylo, and phlyo4 converted to phylo are identical
+## (no, because of dimnames)
 
 as(tree_in_phylo4, "phylog")      # conversion to phylog (ade4)
 as(tree_in_phylo4, "data.frame")  # conversion to data.frame

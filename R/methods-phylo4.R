@@ -133,11 +133,16 @@ setMethod("nodeLabels", "phylo4", function(x) {
     x@node.label
 })
 
-setReplaceMethod("nodeLabels", "phylo4", function(object, ...,
-    value) {
-    object@node.label <- value
-    object
+setMethod("nodeNumbers", "phylo4", function(x) {
+    c(nTips(x)+1,x@edge[x@edge[,2]>nTips(x),2])
 })
+
+setReplaceMethod("nodeLabels", "phylo4",
+                 function(object, ..., value) {
+                   ## FIXME: test length!
+                   object@node.label <- value
+                   object
+                 })
 
 setMethod("edgeLabels", "phylo4", function(x) {
     x@edge.label
