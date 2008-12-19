@@ -5,7 +5,7 @@ Version: 0.4
 Date: 2008-07-27
 Depends: methods, grid, ape(>= 2.1)
 Suggests: ade4, MASS, gridBase
-Author: R Hackathon (Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vienne, Thibaut Jombart, Steve Kembel, David Orme, Brian O'Meara, Emmanuel Paradis, Derrick Zwickl)
+Author: R Hackathon (Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vienne, Thibaut Jombart, Steve Kembel, Francois Michonneau, David Orme, Brian O'Meara, Emmanuel Paradis, Derrick Zwickl)
 Maintainer:  Ben Bolker <bolker@ufl.edu>
 Description: Provides a base S4 class for comparative methods, incorporating one or more trees and trait data
 License: GPL
