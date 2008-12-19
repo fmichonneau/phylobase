@@ -6,7 +6,7 @@
 }
 \usage{
 phylo4(edge, edge.length = NULL, tip.label = NULL, node.label = NULL,
-edge.label = NULL, root.edge = NULL, order="unknown", ...)
+edge.label = NULL,  order="unknown", ...)
 }
 \arguments{
   \item{edge}{A numeric, two-column matrix with as many rows as branches in the phylogeny.}
@@ -14,18 +14,17 @@ edge.label = NULL, root.edge = NULL, order="unknown", ...)
   \item{tip.label}{A character vector of species names (names of "tip" nodes). (Optional)}
   \item{node.label}{A character vector of internal node names. (Optional)}
   \item{edge.label}{A character vector of edge (branch) names. (Optional)}
-  \item{root.edge}{Edge (branch) length from the most basal node to it's
-    ancestor. (Optional)}
   \item{order}{character: tree ordering (allowable values are
       listed in \code{phylo4_ordering}, currently "unknown", "reorder"
-      (="pruningwise" in \code{ape}), "postorder" (="cladewise" in \code{ape}))}
+      (="pruningwise" in \code{ape}), "postorder" (="cladewise" in
+      \code{ape}))}
+    \item{\dots}{fixme?}
 }
 \details{
   The minimum information necessary to create a phylobase tree object is a valid edge matrix. The edge matrix describes the topology of the phylogeny. Each row describes a branch of the phylogeny, with the (descendant) node number in column 2 and it's ancestor's node number in column 1. These numbers are used internally and must be unique for each node.
   The labels designate either nodes or edges. The vector \code{node.label} names internal nodes, and together with \code{tip.label}, name all nodes in the tree. The vector \code{edge.label} names all branches in the tree. All label vectors are optional, and if they are not given, internally-generated labels will be assigned. The labels, whether user-specified or internally generated, must be unique as they are used to join species data with phylogenetic trees.
-  The \code{root.edge} is optional and generally not used, but provided for consistency in format (providing slots for each node in the phylogeny).   
 }
-\author{Ben Bolker, Thibaut Jombart}
+\author{phylobase team}
 \note{Translation functions are available from many valid tree formats. See \link{coerce-methods}.  
 }
 \seealso{\code{\link{coerce-methods}} for translation functions. The \linkS4class{phylo4} class, the \code{\link{check_data}}
