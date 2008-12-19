@@ -3,20 +3,23 @@
 setAs("phylo", "phylo4", function(from, to) {
     #fixme SWK kludgy fix to add root to an ape edge matrix
     if (is.rooted(from)) {
-        if (is.null(from$root.edge)) {
-            from$root.edge <- as.numeric(setdiff(unique(from$edge[,1]),unique(from$edge[,2])))
-        }
-        from$edge <- rbind(from$edge,c(NA,from$root.edge))
+        root.edge <- as.numeric(setdiff(unique(from$edge[,1]), unique(from$edge[,2])))
+        #fix - figure out node id of edge
+        from$edge <- rbind(from$edge,c(NA,root.edge))
         if (!is.null(from$edge.length)) {
-            from$edge.length <- c(from$edge.length,as.numeric(NA))
+            if (is.null(from$root.edge)) {
+                from$edge.length <- c(from$edge.length,as.numeric(NA))
+            }
+            else {
+                from$edge.length <- c(from$edge.length,from$root.edge)
+            }
         }
         if (!is.null(from$edge.label)) {
-            from$edge.label <- c(from$edge.label,paste("E",from$root.edge,sep=""))
+            from$edge.label <- c(from$edge.label,paste("E",root.edge,sep=""))
         }
     }
     newobj <- phylo4(from$edge, from$edge.length, from$tip.label,
-        node.label = from$node.label, edge.label = from$edge.label,
-        root.edge = from$root.edge)
+        node.label = from$node.label, edge.label = from$edge.label)
     attribs = attributes(from)
     attribs$names <- NULL
     knownattr <- c("logLik", "order", "origin", "para", "xi")
@@ -52,8 +55,8 @@ setAs("phylo4", "phylo", function(from, to) {
         y$edge.length <- NULL
     if (length(y$node.label) == 0)
         y$node.label <- NULL
-    if (!is.na(from@root.edge))
-        y$root.edge <- from@root.edge
+    #if (!is.na(from@root.edge))
+    #    y$root.edge <- from@root.edge
     y
 })
 
@@ -65,8 +68,8 @@ setAs("phylo4d", "phylo", function(from, to) {
         y$edge.length <- NULL
     if (length(y$node.label) == 0)
         y$node.label <- NULL
-    if (!is.na(from@root.edge))
-        y$root.edge <- from@root.edge
+    #if (!is.na(from@root.edge))
+    #    y$root.edge <- from@root.edge
     warning("losing data while coercing phylo4d to phylo")
     y
 })

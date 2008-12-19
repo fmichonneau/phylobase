@@ -77,7 +77,7 @@ setMethod("nodeType", "phylo4", function(phy) {
 setMethod("rootNode", "phylo4", function(x) {
     if (!isRooted(x))
         return(NA)
-    edges(x)[which(is.na(edges(x)[,1])),2]
+    unname(edges(x)[which(is.na(edges(x)[,1])),2])
 })
 
 setReplaceMethod("rootNode", "phylo4", function(x, value) {
@@ -155,9 +155,7 @@ setMethod("$", "phylo4", function(x, name) {
         NULL
     else x@edge.length, node.label = if (!hasNodeLabels(x))
         NULL
-    else x@node.label, root.edge = if (is.na(x@root.edge))
-        NULL
-    else x@root.edge, attr(x, name))
+    else x@node.label, attr(x, name))
 })
 
 ## FIXME: implement more checks on this!!

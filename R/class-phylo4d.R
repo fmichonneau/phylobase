@@ -56,7 +56,6 @@ setMethod("phylo4d", c("phylo4"),
        res@tip.label <- x@tip.label
        res@node.label <- x@node.label
        res@edge.label <- x@edge.label
-       res@root.edge <- x@root.edge
 
        if(!is.null(all.data)) {
            tmpData <- all.data

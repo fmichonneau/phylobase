@@ -26,21 +26,21 @@ DropTip <- function(phy,tip,...) {
 
 setMethod("prune","phylo4",
           function(phy, tip, trim.internal = TRUE, subtree = FALSE,
-                   root.edge = 0,...) {
-            DropTip(phy,tip,trim.internal, subtree, root.edge)
+                   ...) {
+            DropTip(phy,tip,trim.internal, subtree)
           })
 
 ## trace("prune", browser, signature = "phylo4d")
 ## untrace("prune", signature = "phylo4d")
 setMethod("prune","phylo4d",
           function(phy, tip, trim.internal = TRUE, subtree = FALSE,
-                   root.edge = 0,...) {
+                   ...) {
             ## need unique labels to match data correctly
             oldnodelabels <- phy@node.label
             nodetags <- .genlab("N",nNodes(phy))
             phy@node.label <- nodetags
             oldtiplabels <- phy@tip.label
-            phytr <- DropTip(phy,tip,trim.internal, subtree, root.edge)
+            phytr <- DropTip(phy,tip,trim.internal, subtree)
             ## this DROPS data
             ntr = match(phytr@node.label,nodetags)
             ttr = match(phytr@tip.label,oldtiplabels)
@@ -53,8 +53,8 @@ setMethod("prune","phylo4d",
 
 setMethod("prune","phylo",
           function(phy, tip, trim.internal = TRUE, subtree = FALSE,
-                   root.edge = 0,...) {
-            DropTip(phy,tip,trim.internal, subtree, root.edge)
+                   ...) {
+            DropTip(phy,tip,trim.internal, subtree)
           })
 
 ## setMethod("prune","ANY",
