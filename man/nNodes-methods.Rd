@@ -23,7 +23,7 @@
 \alias{edgeLength}
 \alias{edgeLength-methods}
 \alias{edgeLength,phylo4-method}
-\alias{typeNode}
+\alias{nodeType}
 \alias{isRooted}
 \alias{isRooted-methods}
 \alias{isRooted,phylo4-method}
@@ -85,7 +85,7 @@
     tree has (internal) edge labels}
   \item{edgeLabels}{\code{signature(object = "phylo4")}: internal
     edge labels}
-  \item{typeNode}{\code{signature(object = "phylo4")}: named vector
+  \item{nodeType}{\code{signature(object = "phylo4")}: named vector
     which has the type of node (internal, tip, root) for value, and the
     node number for name}
 
