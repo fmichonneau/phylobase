@@ -14,6 +14,10 @@ setGeneric("rootEdge", function(x,order,...) {
     standardGeneric("rootEdge")
 })
 
+setGeneric("typeNode", function(x) {
+    standardGeneric("typeNode")
+})
+
 setGeneric("isRooted", function(x) {
     standardGeneric("isRooted")
 })
