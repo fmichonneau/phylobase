@@ -65,7 +65,7 @@ setGeneric("nodeLabels<-",
                standardGeneric("nodeLabels<-")
            })
 
-setGeneric("nodeId", function(x,which) {
+setGeneric("nodeId", function(x,which=c("internal","tip","all")) {
     standardGeneric("nodeId")
 })
 
