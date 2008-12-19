@@ -1,8 +1,8 @@
 #######################################################
 ## Importing from ape
 setAs("phylo", "phylo4", function(from, to) {
-    newobj <- phylo4(from$edge, from$edge.length, from$tip.label, 
-        node.label = from$node.label, edge.label = from$edge.label, 
+    newobj <- phylo4(from$edge, from$edge.length, from$tip.label,
+        node.label = from$node.label, edge.label = from$edge.label,
         root.edge = from$root.edge)
     attribs = attributes(from)
     attribs$names <- NULL
@@ -23,7 +23,7 @@ setAs("phylo", "phylo4d", function(from, to) {
 setAs("multiPhylo", "multiPhylo4", function(from, to) {
     y <- lapply(as, from@phylolist, to = "phylo")
     names(y) <- from@tree.names
-    if (nrow(from@tip.data) > 0) 
+    if (nrow(from@tip.data) > 0)
         warning("discarded tip data")
     class(y) <- "multiPhylo"
     y
@@ -32,46 +32,46 @@ setAs("multiPhylo", "multiPhylo4", function(from, to) {
 #######################################################
 ## Exporting to ape
 setAs("phylo4", "phylo", function(from, to) {
-    y <- list(edge = from@edge, edge.length = from@edge.length, 
+    y <- list(edge = from@edge, edge.length = from@edge.length,
         Nnode = from@Nnode, tip.label = from@tip.label, node.label = from@node.label)
     class(y) <- "phylo"
-    if (length(y$edge.length) == 0) 
+    if (length(y$edge.length) == 0)
         y$edge.length <- NULL
-    if (length(y$node.label) == 0) 
+    if (length(y$node.label) == 0)
         y$node.label <- NULL
-    if (!is.na(from@root.edge)) 
+    if (!is.na(from@root.edge))
         y$root.edge <- from@root.edge
     y
 })
 
 setAs("phylo4d", "phylo", function(from, to) {
-    y <- list(edge = from@edge, edge.length = from@edge.length, 
+    y <- list(edge = from@edge, edge.length = from@edge.length,
         Nnode = from@Nnode, tip.label = from@tip.label)
     class(y) <- "phylo"
-    if (length(y$edge.length) == 0) 
+    if (length(y$edge.length) == 0)
         y$edge.length <- NULL
-    if (length(y$node.label) == 0) 
+    if (length(y$node.label) == 0)
         y$node.label <- NULL
-    if (!is.na(from@root.edge)) 
+    if (!is.na(from@root.edge))
         y$root.edge <- from@root.edge
     warning("losing data while coercing phylo4d to phylo")
     y
 })
 
 setAs("multiPhylo4", "multiPhylo", function(from, to) {
-    newobj <- new("multiPhylo4", phylolist = lapply(from, 
+    newobj <- new("multiPhylo4", phylolist = lapply(from,
         as, to = "phylo4"))
 })
 
 setAs("multiPhylo4d", "multiPhylo", function(from, to) {
-    newobj <- new("multiPhylo4d", phylolist = lapply(from, 
+    newobj <- new("multiPhylo4d", phylolist = lapply(from,
         as, to = "phylo4"), tree.names = names(from), tip.data = data.frame())
 })
 
 #######################################################
 ## Exporting to ade4
 setAs("phylo4", "phylog", function(from, to) {
-    if (!require(ade4)) 
+    if (!require(ade4))
         stop("the ade4 package is required")
     x <- as(from, "phylo")
     x <- write.tree(x, file = "")
@@ -116,13 +116,8 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
     }
     tl <- labels(x)
     label <- c(nl, tl)
-    if (!isRooted(x)) {
-        node.type <- c(rep("internal", n.int), rep("tip", 
-            n.tip))
-    }
-    else node.type <- c("root", rep("internal", n.int - 1), 
-        rep("tip", n.tip))
-    return(data.frame(label, node, ancestor, branch.length, 
+    node.type <- typeNode(x)[node]
+    return(data.frame(label, node, ancestor, branch.length,
         node.type,stringsAsFactors=FALSE))
 })
 
