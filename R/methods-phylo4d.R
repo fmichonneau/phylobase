@@ -168,26 +168,12 @@ setMethod("names", signature(x = "phylo4d"), function(x) {
 })
 
 setMethod("reorder", signature(x = 'phylo4d'), function(x, order = 'cladewise') {
-    reorder.prune <- function(edge, tips, root = tips + 1) {
-        ## if(is.null(root)) {
-        ##     root <- tips + 1
-        ## }
-        ## if(root <= tips) {return()}
-        index <- edge[, 1] == root
-        nextr <- edge[index, 2]
-        ## paths <- apply(as.matrix(nextr), 1, reorder, edge = edge, tips = tips)
-        nord <- NULL
-        for(i in nextr) {
-            if(i <= tips) {next()}
-            nord <- c(nord, reorder.prune(edge, tips, root = i))
-        }
-        c(nord, which(index))
-    }
-    if(order == 'pruningwise') {
-        index <- reorder.prune(x@edge, length(x@tip.label))
-    }
-    x@edge        <- x@edge[index, ]
-    x@edge.label  <- x@edge.label[index]
-    x@edge.length <- x@edge.length[index]
-    x
-})
+        index <- orderIndex(x, order)
+        test <<- index
+        x@edge      <- x@edge[index, ]
+        x@tip.data  <- x@tip.data[index[index <= nTips(x)], , drop = FALSE]
+        x@node.data <- x@node.data[index[index > nTips(x)], , drop = FALSE]
+        if(hasEdgeLabels(x)) { x@edge.label  <- x@edge.label[index] }
+        if(hasEdgeLength(x)) { x@edge.length <- x@edge.length[index] }
+        x
+    })

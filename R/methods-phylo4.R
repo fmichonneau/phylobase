@@ -337,10 +337,6 @@ setMethod("hasEdgeLength","phylo4", function(x) {
     length(x@edge.length)>0
 })
 
-setMethod("labels","phylo4", function(object,...) {
-    object@tip.label
-})
-
 setReplaceMethod("labels","phylo4", function(object,...,value) {
     if (length(value) != length(object@tip.label))
         stop("Number of tip labels does not match number of tips.")
@@ -348,7 +344,7 @@ setReplaceMethod("labels","phylo4", function(object,...,value) {
     object
 })
 
-setMethod("reorder", signature(x = 'phylo4'), function(x, order = 'cladewise') {
+orderIndex <- function(phy, order = 'cladewise') {
     reorder.prune <- function(edge, tips, root = tips + 1) {
         ## if(is.null(root)) {
         ##     root <- tips + 1
@@ -366,11 +362,14 @@ setMethod("reorder", signature(x = 'phylo4'), function(x, order = 'cladewise') {
         c(nord, which(index))
     }
     if(order == 'pruningwise') {
-        index <- reorder.prune(x@edge, length(x@tip.label))
+        index <- reorder.prune(phy@edge, length(phy@tip.label))
         ## add the root node to the end, there may be more elegant ways to do this
-        index <- c(index, which(x@edge[,2] == rootNode(x)))
+        index <- c(index, which(phy@edge[,2] == rootNode(phy)))
     } else {stop(paste("Method for", order, "not implemented"))}
-    
+}
+
+setMethod("reorder", signature(x = 'phylo4'), function(x, order = 'cladewise') {
+    index <- orderIndex(x, order)
     x@edge <- x@edge[index, ]
     if(hasEdgeLabels(x)) { x@edge.label  <- x@edge.label[index] }
     if(hasEdgeLength(x)) { x@edge.length <- x@edge.length[index] }
