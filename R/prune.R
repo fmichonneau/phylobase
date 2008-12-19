@@ -59,9 +59,9 @@ setMethod("prune","phylo",
 
 ## setMethod("prune","ANY",
 ##           function(phy, tip, trim.internal = TRUE, subtree = FALSE,
-##                    root.edge = 0,...) {
+##                    ,...) {
 ##             if (class(phy)=="phylo") {
-##               ape::prune(phy, tip, trim.internal, subtree, root.edge)
+##               ape::prune(phy, tip, trim.internal, subtree)
 ##               } else stop("no prune method available for",
 ##                     deparse(substitute(phy)),
 ##                     "(class",class(phy),")")

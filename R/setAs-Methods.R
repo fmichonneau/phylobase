@@ -134,7 +134,7 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
     tl <- labels(x)
     label <- c(nl, tl)
     node.type <- nodeType(x)[node]
-    return(data.frame(label, node, ancestor, branch.length,
+    return(data.frame(FIXMElabel=label, node, ancestor, branch.length,
         node.type,stringsAsFactors=FALSE))
 })
 
