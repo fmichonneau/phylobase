@@ -7,12 +7,16 @@ setGeneric("nTips", function(x,...) {
 
 setMethod("nTips", "phylo4", function(x, ...) {
     E <- edges(x)
-    ## doesn't handle reticulated networks
-    ##    res <- sum(!E[, 2] %in% E[, 1])
-    res <- sum(tabulate(E[,1]) == 0) ## twice as fast as ...
-    ## change suggested by Aaron Mackey, handles reticulated networks better
-    ## res <- sum(!(unique(E[,2]) %in% E[,1]))
-    return(res)
+    if(nrow(E) == 0)
+        return(0)
+    else {
+        ## doesn't handle reticulated networks
+        ##    res <- sum(!E[, 2] %in% E[, 1])
+        res <- sum(tabulate(E[,1]) == 0) ## twice as fast as ...
+        ## change suggested by Aaron Mackey, handles reticulated networks better
+        ## res <- sum(!(unique(E[,2]) %in% E[,1]))
+        return(res)
+    }
 })
 
 ## hack to ensure ape compatibility
@@ -47,8 +51,8 @@ setMethod("isRooted","phylo4", function(x) {
     ## HACK: make sure we find the right "nTips"
     tabulate(edges(x)[, 1])[nTips(x) + 1] <= 2
     ## root node (first node after last tip) has <= 2 descendants
-    ## FIXME (?): fails with empty tree
 })
+
 
 setMethod("rootNode", "phylo4", function(x) {
     if (!isRooted(x))
