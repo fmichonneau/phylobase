@@ -128,7 +128,7 @@ setMethod("labels", "phylo4", function(object, which = c("tip",
                 }
                 else
                 {
-                    nl <- rep(NA,nNodes(x))
+                    nl <- rep(NA,nNodes(object))
                 }
                 c(object@tip.label,nl)
             }
