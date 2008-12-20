@@ -1,13 +1,11 @@
 \name{phyloXXYY}
 \alias{phyloXXYY}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Calculate node x and y coordinates }
 \description{
 Calculates the node x and y locations for plotting a phylogenetic tree.}
 \usage{
 phyloXXYY(phy, tip.order = NULL)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{phy}{ A \code{phylo4} or \code{phylo4d} object. }
   \item{tip.order}{ Unused. A character vector indicating the ordering of tip nodes}
@@ -23,7 +21,6 @@ The y coordinates of the tips are evenly spaced from 0 to 1 in pruningwise order
   \item{phy.orig}{The original \code{phylo4} or \code{phylo4d} object}
 }
 
-% \references{ ~put references to the literature/web site here ~ }
 \author{Peter Cowan \email{pdc@berkeley.edu}}
 
 \seealso{\code{\link{segs}}, \code{treePlot}, \code{\link{tree.plot}}}
@@ -31,7 +28,8 @@ The y coordinates of the tips are evenly spaced from 0 to 1 in pruningwise order
 
 data(geospiza)
 coor <- phyloXXYY(geospiza)
-plot(coor$xx, coor$yy, pch = 20)
+## na.omit is temporary hack
+plot(coor$xx, na.omit(coor$yy), pch = 20)
 
 }
 \keyword{methods}

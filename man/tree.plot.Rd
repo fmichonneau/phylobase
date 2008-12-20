@@ -1,6 +1,5 @@
 \name{tree.plot}
 \alias{tree.plot}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Plot a phylo4 object }
 \description{
  Plots the phylogenetic tree contained in a \code{phylo4} or \code{phylo4d} object.

@@ -24,6 +24,7 @@
 \alias{edgeLength-methods}
 \alias{edgeLength,phylo4-method}
 \alias{nodeType}
+\alias{nodeType,phylo4-method}
 \alias{isRooted}
 \alias{isRooted-methods}
 \alias{isRooted,phylo4-method}
