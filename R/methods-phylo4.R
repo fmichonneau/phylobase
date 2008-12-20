@@ -150,6 +150,8 @@ setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","all")) {
 setReplaceMethod("nodeLabels", "phylo4",
                  function(object, ..., value) {
                    ## FIXME: test length!
+                   if (length(value)!=nNodes(object))
+                     stop("label vector must have as many elements as number of internal nodes")
                    object@node.label <- value
                    object
                  })

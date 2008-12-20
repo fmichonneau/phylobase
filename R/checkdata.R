@@ -26,6 +26,21 @@ check_tree <- function(object,warn="retic",err=NULL) {
     nTips <- sum(nDesc==0)
     if (!all(nDesc[1:nTips]==0))
       return("nodes 1 to nTips must all be tips")
+    nRoots <- sum(nAncest==0)
+    ## no longer 
+    ##if (which(nAncest==0)!=nTips+1) {
+    ##  return("root node is not at position (nTips+1)")
+    ##}
+    
+    if (nRoots>0) {
+      if (sum(is.na(E[,1]))!=1) {
+        return("for a rooted tree, edge matrix must contain (exactly one) explicit root edge with ancestor==NA")
+      }
+      root.node <- unname(E[which(is.na(E[,1])),2])
+      if (!root.node==nTips+1)
+        return("root node must be first row of edge matrix")
+    }
+
     ##fixme following check fails for unrooted trees
     ##if (!all(nDesc[(nTips+1):(nTips+nNodes(object))]>0))
     ##  return("nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
@@ -35,13 +50,6 @@ check_tree <- function(object,warn="retic",err=NULL) {
         if ("poly" %in% warn)
           warning("tree includes polytomies")
     }
-    nRoots <- sum(nAncest==0)
-    ##if (which(nAncest==0)!=nTips+1) {
-    ##  return("root node is not at position (nTips+1)")
-    ##}
-    ##if (any(nAncest==0) && E[1,1]!=nTips+1) {
-    ##  return("root node must be first row of edge matrix")
-    ##}
 
     ##
     ## how do we identify loops???
