@@ -43,7 +43,7 @@
   \item{x}{an object of class \code{"phylo4"}, \code{"phylo"} or \code{"phylo4d"}}
   \item{tips.include}{A vector containing tips to include in the pruned tree}
   \item{tips.exclude}{A vector containing tips to exclude from the pruned tree}
-  \item{mrca}{Prune tree to include all descendents of the most recent common ancestor of the specified taxa}
+  \item{mrca}{Prune tree to include all descendants of the most recent common ancestor of the specified taxa}
   \item{node.subtree}{Prune to all descendants of a specified node}
   \item{\dots}{further arguments to be passed to other methods}
 }
