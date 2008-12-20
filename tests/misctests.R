@@ -88,3 +88,18 @@ obj5 <- obj1
 tdata(obj4) <- subset(tdata(obj4),select=sapply(tdata(obj4),class)=="numeric")
 
 treePlot(obj4)
+
+E <- matrix(c(
+    8,  9, 
+    9, 10, 
+   10,  1, 
+   10,  2, 
+    9,  3, 
+    9,  4, 
+    8, 11, 
+   11,  5, 
+   11,  6, 
+   11,  7, 
+   NA,  8), ncol=2,byrow=TRUE) 
+
+P2 <- phylo4(E)
