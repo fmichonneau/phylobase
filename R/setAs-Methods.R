@@ -108,34 +108,53 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
     if (is.character(checkval <- check_phylo4(from))) # check the phylo4
         stop(checkval)
     x <- from
-    E <- edges(x) # E: matrix of edges
-    ancestor <- E[, 1]
-    node <- E[, 2]
-    root <- which(is.na(ancestor))
-    int.node <-  node[(node %in% ancestor)]
-    tip <- node[!(node %in% ancestor)]
-    n.tip <- length(tip)
-    n.int <- length(int.node)
-    ## node <- c(root, node) # doesn't fit the ordering: root, other internal nodes, tips
-    #node <- c(int.node, tip)
-    ## retrieve the ancestor of each node
-    #idx <- match(node, E[, 2]) # new ordering of the descendants/edges
-    ## if (length(ancestor)>0) ancestor <- c(NA, ancestor)
-    #ancestor <- E[idx, 1]
-    ## branch.length <- c(x@root.edge, x@edge.length) # root.edge is not an edge length
-    branch.length <- edgeLength(x)#[idx]
-    if (is.null(edgeLength(x))) {
-        branch.length <- rep(NA, length(node))
+    if (isRooted(x)) {
+        E <- edges(x) # E: matrix of edges
+        ancestor <- E[, 1]
+        node <- E[, 2]
+        root <- which(is.na(ancestor))
+        int.node <-  node[(node %in% ancestor)]
+        tip <- node[!(node %in% ancestor)]
+        n.tip <- length(tip)
+        n.int <- length(int.node)
+        ## node <- c(root, node) # doesn't fit the ordering: root, other internal nodes, tips
+        #node <- c(int.node, tip)
+        ## retrieve the ancestor of each node
+        #idx <- match(node, E[, 2]) # new ordering of the descendants/edges
+        ## if (length(ancestor)>0) ancestor <- c(NA, ancestor)
+        #ancestor <- E[idx, 1]
+        ## branch.length <- c(x@root.edge, x@edge.length) # root.edge is not an edge length
+        branch.length <- edgeLength(x)#[idx]
+        if (is.null(edgeLength(x))) {
+            branch.length <- rep(NA, length(node))
+        }
+        ## node and tip labels ##
+        ## beware: they cannot be NULL
+        ## there are always tip labels (or check_phylo4 complains)
+        ## there may not be node labels (character(0))
+        label <- labels(x,which="all")[node]
+        node.type <- nodeType(x)[node]
+        return(data.frame(label, node, ancestor, branch.length,
+            node.type,stringsAsFactors=FALSE))
     }
-    ## node and tip labels ##
-    ## fixme this is broken! using old assumption of order of edge matrix
-    ## beware: they cannot be NULL
-    ## there are always tip labels (or check_phylo4 complains)
-    ## there may not be node labels (character(0))
-    label <- labels(x,which="all")[node]
-    node.type <- nodeType(x)[node]
-    return(data.frame(label, node, ancestor, branch.length,
-        node.type,stringsAsFactors=FALSE))
+    else {
+        E <- edges(x) # E: matrix of edges
+        node <- unique(c(E))
+        ancestor <- E[, 1][node]
+        #orphan <- setdiff(E[,1],E[,2])
+        branch.length <- edgeLength(x)[node]
+        if (is.null(edgeLength(x))) {
+            branch.length <- rep(NA, length(node))
+        }
+        ## node and tip labels ##
+        ## beware: they cannot be NULL
+        ## there are always tip labels (or check_phylo4 complains)
+        ## there may not be node labels (character(0))
+        label <- labels(x,which="all")[node]
+        node.type <- nodeType(x)[node]
+        return(data.frame(label, node, ancestor, branch.length,
+            node.type,stringsAsFactors=FALSE))        
+    }
 })
 
 setAs(from = "phylo4d", to = "data.frame", function(from) {

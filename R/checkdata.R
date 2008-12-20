@@ -6,8 +6,8 @@ check_phylo4 <- function(object) {
 
 check_tree <- function(object,warn="retic",err=NULL) {
     ## FIXME: check for cyclicity?
-    N <- nrow(object@edge)
-    if (hasEdgeLength(object) && length(object@edge.length) != N)
+    nedges <- nrow(object@edge)
+    if (hasEdgeLength(object) && length(object@edge.length) != nedges)
       return("edge lengths do not match number of edges")
     ## if (length(object@tip.label)+object@Nnode-1 != N) # does not work with multifurcations
     ##  return("number of tip labels not consistent with number of edges and nodes")
@@ -19,14 +19,17 @@ check_tree <- function(object,warn="retic",err=NULL) {
     tips <- sort(E[,2][!E[,2] %in% E[,1]])
     nodes <- unique(sort(c(E)))
     intnodes <- nodes[!nodes %in% tips]
+    roots <- E[which(is.na(E[,1])),2]
+    nRoots <- length(roots)
     if (!(all(tips==1:ntips) && all(nodes=(ntips+1):(ntips+length(intnodes)))))
       return("tips and nodes incorrectly numbered")
-    nAncest <- tabulate(E[, 2],nbins=max(nodes)) ## bug fix from Jim Regetz
+    ##careful - nAncest does not work for counting nRoots in unrooted trees
+    nAncest <- tabulate(na.omit(E)[, 2],nbins=max(nodes)) ## bug fix from Jim Regetz
     nDesc <- tabulate(na.omit(E[,1]))
     nTips <- sum(nDesc==0)
     if (!all(nDesc[1:nTips]==0))
       return("nodes 1 to nTips must all be tips")
-    nRoots <- sum(nAncest==0)
+    #nRoots <- sum(nAncest==0)
     ## no longer 
     ##if (which(nAncest==0)!=nTips+1) {
     ##  return("root node is not at position (nTips+1)")

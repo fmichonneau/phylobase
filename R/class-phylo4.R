@@ -51,7 +51,7 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     }
 
     ## node.label for internal nodes
-    nnodes <- sum(tabulate(edge[, 2]) > 0) - ntips
+    nnodes <- length(unique(c(edge))) - ntips
     ##    if(is.null(node.label)) {
     ##        node.label <- .genlab("N", nnodes)
     ## } else {
