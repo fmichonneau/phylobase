@@ -27,7 +27,7 @@ try(plot(g2C,show.node.label=TRUE))
 g3 = subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
                  "conirostris","scandens"))
 plot(extract.tree(g3))  ## phylo4
-plot(g3,ratio=.3,cex.sym=.6,cex.lab=.6)
+plot(g3)
 
 
 ## Playing with new ways of plotting
@@ -37,11 +37,11 @@ if(require(MASS)){
     mdspos <- isoMDS(dist1)$points
     par(mfrow=c(2,2))
     plot(g1)
-    plot(mdspos,type="n")
-    text(mdspos[,1],mdspos[,2],abbreviate(rownames(mdspos)))
-    cmdpos <- cmdscale(dist1)
-    plot(cmdpos,type="n")
-    text(cmdpos[,1],cmdpos[,2],abbreviate(rownames(mdspos)))
+    ## plot(mdspos,type="n")
+    ## text(mdspos[,1],mdspos[,2],abbreviate(rownames(mdspos)))
+    ## cmdpos <- cmdscale(dist1)
+    ## plot(cmdpos,type="n")
+    ## text(cmdpos[,1],cmdpos[,2],abbreviate(rownames(mdspos)))
 }
 ## never mind, I don't know how to construct a useful
 ##  2D color space anyway ...

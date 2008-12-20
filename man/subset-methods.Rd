@@ -77,12 +77,11 @@ plot(subset(g1,mrca=c("scandens","fortis","pauper")))
 plot(subset(g1,node.subtree=18))
 
 ## "[" examples
-par(mfrow=c(1,2),mar=rep(.1,4))
-plot(g1,show.node=TRUE)
-plot(g1[c(1:6,14)],show.node=TRUE)
+plot(g1,show.node.label=TRUE)
+plot(g1[c(1:6,14)],show.node.label=TRUE)
 
-plot(geospiza[c(1:6,14)],show.node=TRUE,cex.sym=.5,cex.label=.7)
-plot(geospiza[c(1:6,14),3:5],show.node=TRUE,cex.sym=.5,cex.label=.7)
+plot(geospiza[c(1:6,14)],show.node.label=TRUE)
+plot(geospiza[c(1:6,14),3:5],show.node.label=TRUE)
 }
 \keyword{manip}
 \keyword{methods}

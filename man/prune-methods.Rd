@@ -89,8 +89,8 @@ tip <- c(
 plot(as(prune(bird.families, tip),"phylo"))
 plot(as(prune(bird.families, tip, trim.internal = FALSE),"phylo"))
 data(bird.orders)
-plot(as(prune(bird.orders, 6:23, subtree = TRUE),"phylo"), font = 1)
-plot(as(prune(bird.orders, c(1:5, 20:23), subtree = TRUE), "phylo"), font = 1)
+plot(as(prune(bird.orders, 6:23, subtree = TRUE),"phylo"))
+plot(as(prune(bird.orders, c(1:5, 20:23), subtree = TRUE), "phylo"))
 
 ### Examples of the use of `root.edge'
 tr <- as(ape::read.tree(text = "(A:1,(B:1,(C:1,(D:1,E:1):1):1):1):1;"),"phylo4")

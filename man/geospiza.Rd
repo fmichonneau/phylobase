@@ -26,6 +26,6 @@ object (the tree), \code{data}, and a data frame with the data
 }
 \examples{
 data(geospiza)
-plot(geospiza, adj = 0.4, cex.lab = 0.7, cex.sym = 0.8)
+plot(geospiza)
 }
 \keyword{datasets}

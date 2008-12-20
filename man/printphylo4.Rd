@@ -41,7 +41,7 @@ tree <- as(tree.phylo, "phylo4")
 ##plot(tree,show.node=TRUE) ## plotting broken with empty node labels: FIXME
 tip.data <- data.frame(size=c(1,2,3), row.names=c("a", "b", "c"))
 treedata <- phylo4d(tree, tip.data)
-plot(treedata,ratio=.7,cent=FALSE,scale=FALSE)
+plot(treedata)
 print(treedata)
 
 }

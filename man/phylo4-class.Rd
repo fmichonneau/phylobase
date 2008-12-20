@@ -82,9 +82,21 @@
   sumryP1
 
   ## summary of a polytomous tree
-  E <- matrix(c(8,9,10,10,9,9,8,11,11,11,9,10,1,2,3,4,11,5,6,7),ncol=2)
+  E <- matrix(c(
+      8,  9, 
+      9, 10, 
+     10,  1, 
+     10,  2, 
+      9,  3, 
+      9,  4, 
+      8, 11, 
+     11,  5, 
+     11,  6, 
+     11,  7, 
+     NA,  8), ncol=2, byrow=TRUE) 
+  
   P2 <- phylo4(E)
-  plot(P2,show.node=TRUE)
+  plot(P2, show.node.label=TRUE)
   sumryP2 <- summary(P2)
   sumryP2
 }
