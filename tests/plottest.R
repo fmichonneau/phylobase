@@ -6,26 +6,26 @@ g1 <- as(geospiza,"phylo4")
 g2 <- geospiza
 
 par(mfrow=c(1,2))
-plot(g1,show.node.label=TRUE)
+plot(g1, show.node.label=TRUE)
 ## be careful with this: works if par("fin")=c(5.56,6.77)
 ##                       fails if par("fin")=c(4.87,6.77)
 ##try(plot(g2,show.node.label=TRUE),silent=TRUE)
 ## Here, R was complaining about a lack of room to plot data
 ## so nothing abnormal. -- TJ
-plot(g2,show.node.label=TRUE,cex.lab=.5,cex.sym=.5,box=FALSE)
+plot(g2, show.node.label=TRUE)
 
 
-g2B <- as(g2,"phylog")
+g2B <- as(g2, "phylog")
 ##  Note the numbering differences!
 
 ## round trip 
-g2C <- as(read.tree(text=write.tree(as(g1,"phylo"))),"phylo4")
+g2C <- as(read.tree(text=write.tree(as(g1, "phylo"))), "phylo4")
 ## comes back in same order
-try(plot(g1,show.node.label=TRUE))
-try(plot(g2C,show.node.label=TRUE))
+try(plot(g1, show.node.label=TRUE))
+try(plot(g2C, show.node.label=TRUE))
 
-g3 = subset(g2,tips.exclude=c("fuliginosa","fortis","magnirostris",
-                 "conirostris","scandens"))
+g3 = subset(g2, tips.exclude=c("fuliginosa", "fortis", "magnirostris", 
+                 "conirostris", "scandens"))
 plot(extract.tree(g3))  ## phylo4
 plot(g3)
 
@@ -33,9 +33,9 @@ plot(g3)
 ## Playing with new ways of plotting
 
 if(require(MASS)){
-    dist1 <- cophenetic.phylo(as(g2,"phylo"))
+    dist1 <- cophenetic.phylo(as(g2, "phylo"))
     mdspos <- isoMDS(dist1)$points
-    par(mfrow=c(2,2))
+    par(mfrow=c(2, 2))
     plot(g1)
     ## plot(mdspos,type="n")
     ## text(mdspos[,1],mdspos[,2],abbreviate(rownames(mdspos)))
