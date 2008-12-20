@@ -75,26 +75,28 @@ shortestPath(phy, node1, node2)
   a list of all subtrees}
 \examples{
   data(geospiza)
-  getnodes(geospiza,18)
-  getnodes(geospiza,"N04")
+  nodeLabels(geospiza) <- LETTERS[1:nNodes(geospiza)]
   plot(as(geospiza,"phylo4"), show.node.label=TRUE)
-  ancestor(geospiza,"N11")
-  children(geospiza,"N05")
-  descendants(geospiza,"N11",which="tips")
-  descendants(geospiza,"N11",which="all")
-  ancestors(geospiza,"N11")
+  getnodes(geospiza,18)
+  getnodes(geospiza,"D")
+  ancestor(geospiza,"E")
+  children(geospiza,"C")
+  descendants(geospiza,"D",which="tips")
+  descendants(geospiza,"D",which="all")
+  ancestors(geospiza,"D")
   MRCA(geospiza,"conirostris","difficilis","fuliginosa")
   MRCA(geospiza,"olivacea","conirostris")
 
   ## shortest path between 2 nodes
   shortestPath(geospiza, "fortis","fuliginosa")
-  shortestPath(geospiza, "N02","N05")
+  shortestPath(geospiza, "F","L")
 
   ## identifying an edge fron its terminal node
-  getedges(geospiza,c("olivacea","N02","fortis"))
-  getnodes(geospiza, c("olivacea","N02","fortis"))
+  getedges(geospiza,c("olivacea","B","fortis"))
+  getnodes(geospiza, c("olivacea","B","fortis"))
   geospiza$edge[c(26,1,11),]
-  if(require(ape)){ edgelabels() }
+  ## FIXME
+  ## if(require(ape)){ edgelabels() }
 
   ## branch length from a tip to the root
   sumEdgeLength(geospiza, ancestors(geospiza, "fortis", which="ALL"))

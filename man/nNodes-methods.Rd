@@ -97,9 +97,11 @@
   \item{tdata}{\code{signature(object = "phylo4d")}: trait data}
 }
 }
-\section{usage}{
+\usage{
   \S4method{tdata}{phylo4d}(x, which = "tip", \dots)
-  \S4method{tdata<-}{phylo4d}(object, which = "tip", \dots, value)
+% what a pain: see
+% https://stat.ethz.ch/pipermail/r-devel/2008-May/049653.html
+ \S4method{tdata}{phylo4d}(object, which = "tip", \dots) <- value
   \S4method{edgeLength}{phylo4}(x, which)
 }
 \arguments{
@@ -110,6 +112,7 @@
   \item{x}{a phylo4d object}
   \item{object}{a phylo4d object}
   \item{value}{a data frame}
+  \item{\dots}{for future development compatibility}
 }
 \examples{
 data(geospiza)

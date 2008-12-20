@@ -4,7 +4,8 @@
 \alias{reorder,phylo-method}
 \alias{reorder,phylo4-method}
 \alias{reorder,phylo4d-method}
-\title{ ~~ Methods for Function reorder in Package `stats' ~~}
+\alias{orderIndex}
+\title{reordering trees within phylobase objects}
 \description{
  ~~ Methods for function \code{reorder} in Package `stats' ~~
 }
@@ -17,6 +18,7 @@
 }
 
 \usage{
+orderIndex(phy, order = 'cladewise')
 \S4method{reorder}{phylo}(x, ...)
 \S4method{reorder}{phylo4}(x, ...)
 \S4method{reorder}{phylo4d}(x, ...)
@@ -24,6 +26,8 @@
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
+  \item{phy}{a \code{phylo4} or \code{phylo4d} object}
+  \item{order}{(character)}
   \item{x}{ ~~Describe \code{x} here~~ }
   \item{\dots}{ ~~Describe \code{\dots} here~~ }
 }

@@ -131,6 +131,6 @@ setMethod("phylo4d", c("phylo"), function(x, tip.data=NULL, node.data=NULL, all.
 
 ### first arg is a phylo4d
 setMethod("phylo4d", c("phylo4d"), function(x, ...) {
-          stop("Your object is already a phylo4d object. If you want to modify the data attached to it look help for tdata()<-")
+          stop("Your object is already a phylo4d object. If you want to modify the data attached to it look at the help for tdata()<-")
       })
 
