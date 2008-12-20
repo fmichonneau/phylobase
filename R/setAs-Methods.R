@@ -158,10 +158,11 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
 })
 
 setAs(from = "phylo4d", to = "data.frame", function(from) {
+    ## TODO we need some test to ensure data and tree are in the right order
     tree <- as(from, "phylo4") # get tree
     t_df <- as(tree, "data.frame") # convert to data.frame
     dat <- tdata(from, "allnode", label.type="column") # get data
-    tdat <- cbind(t_df,dat[,-1,drop=FALSE])
+    tdat <- cbind(t_df, dat[ ,-1 , drop=FALSE])
     #tdat <- dat[,-1,drop=FALSE]
     return(tdat)
 })
