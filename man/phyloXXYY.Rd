@@ -28,8 +28,7 @@ The y coordinates of the tips are evenly spaced from 0 to 1 in pruningwise order
 
 data(geospiza)
 coor <- phyloXXYY(geospiza)
-## na.omit is temporary hack
-plot(coor$xx, na.omit(coor$yy), pch = 20)
+plot(coor$xx, coor$yy, pch = 20)
 
 }
 \keyword{methods}

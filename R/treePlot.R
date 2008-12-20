@@ -307,7 +307,7 @@ tree.plot <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
 
 phyloXXYY <- function(phy, tip.order = NULL) {
     ## initalize the output
-    Nedges <- nrow(phy@edge) - 1 ## TODO switch to the accessor once stablized
+    Nedges <- nrow(phy@edge) ## TODO switch to the accessor once stablized
     phy.orig <- phy
     Ntips  <- nTips(phy)
     xxyy = list(
