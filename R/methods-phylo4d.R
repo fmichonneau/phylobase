@@ -82,12 +82,15 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
         tdata <- data.frame(label=data.names,tdata)
 
         if ( identical(label.type,"row.names") ) {
-            if ( identical(data.names,unique(data.names)) || !(any(is.na(data.names))) ) {
+            if ( identical(data.names,unique(data.names)) || 
+                !(any(is.na(data.names))) ) {
                 tdata <- data.frame(tdata[,-1,drop=FALSE])
                 row.names(tdata) <- data.names
             }
             else {
-                stop("Non-unique or missing labels found, labels cannot be coerced to tdata row.names. Use the label.type argument to include labels as first column of data.")
+                stop("Non-unique or missing labels found, labels cannot be 
+                    coerced to tdata row.names. Use the label.type argument to 
+                    include labels as first column of data.")
             }
         }
         return(tdata)
