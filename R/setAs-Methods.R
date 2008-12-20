@@ -50,10 +50,13 @@ setAs("phylo4", "phylo", function(from, to) {
   if (inherits(from,"phylo4d"))
     warning("losing data while coercing phylo4d to phylo")
   brlen <- from@edge.length
-  if (isRooted(from)) brlen <- brlen[nodeId(from,"all")!=rootNode(from)]
-  edgemat <- na.omit(from@edge)
-  y <- list(edge = na.omit(from@edge), edge.length = brlen,
-            Nnode = from@Nnode, tip.label = from@tip.label,
+  rootpos <- which(nodeId(from,"all")==rootNode(from))
+  if (isRooted(from)) brlen <- brlen[-rootpos]
+  edgemat <- unname(from@edge[-rootpos,])
+  y <- list(edge = edgemat,
+            Nnode = from@Nnode,
+            tip.label = from@tip.label,
+            edge.length = brlen,
             node.label = from@node.label)
   class(y) <- "phylo"
   if (length(y$edge.length) == 0)
