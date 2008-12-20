@@ -5,6 +5,8 @@ setMethod("show", "phylo4d", function(object) printphylo4(object))
 setMethod("tdata", "phylo4d", function(x, which = c("tip",
     "node", "allnode"), label.type=c("row.names","column"), ...) {
     which <- match.arg(which)
+    ## FIXME: should have no labels in this case?
+    if (!hasNodeLabels(x) && which=="node" && missing(label.type)) { }
     label.type <- match.arg(label.type)
     if (which == "tip") {
         if (all(dim(x@tip.data)==0)) {
@@ -13,11 +15,15 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
         tdata <- x@tip.data
         data.names <- x@tip.label
         if ( identical(label.type,"row.names") ) {
-            if ( identical(data.names,unique(data.names)) || !(any(is.na(data.names))) ) {
-                row.names(tdata) <- data.names
+            if ( identical(data.names,unique(data.names)) ||
+                !(any(is.na(data.names))) ) {
+              row.names(tdata) <- data.names
             }
             else {
-                warning("Non-unique or missing labels found, labels cannot be coerced to tdata row.names. Use the label.type argument to include labels as first column of data.")
+                warning("Non-unique or missing labels found, ",
+                        "labels cannot be coerced to tdata row.names. ",
+                        "Use the label.type argument to include labels ",
+                        "as first column of data.")
             }
         }
         if (identical(label.type,"column")) {
@@ -38,9 +44,9 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
               !(any(is.na(data.names)))) {
             row.names(tdata) <- data.names
           } else {
-            warning("Non-unique or missing labels found,",
-                    "labels cannot be coerced to tdata row.names.",
-                    "Use the label.type argument to include labels",
+            warning("Non-unique or missing labels found, ",
+                    "labels cannot be coerced to tdata row.names. ",
+                    "Use the label.type argument to include labels ",
                     "as first column of data.")
           }
         }
@@ -121,7 +127,7 @@ setMethod("summary", "phylo4d", function(object) {
     cat("\nComparative data:\n")
     if (nrow(tips) > 0) {
         cat("\nTips: data.frame with", nTips(object), "taxa and",
-            ncol(tips), "variables \n\n")
+            ncol(tips), "variable(s) \n\n")
         print(summary(tips))
     }
     else {
