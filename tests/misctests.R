@@ -47,7 +47,7 @@ row.names(tipdat2)[1] <- "s1"
 t1 <- try(q1 <- phylo4d(r1,tip.data=tipdat2))
 
 plot(q2)
-plot(q2,treetype="cladogram")
+plot(q2,type="cladogram")
 ## plot(p2,type="dotchart",labels.nodes=nodeLabels(p2))
 ## trace("plot", browser, signature = c("phylo4d","missing"))
 labels(q1) <- paste("q",1:5,sep="")
