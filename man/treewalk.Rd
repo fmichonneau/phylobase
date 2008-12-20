@@ -5,7 +5,7 @@
 \alias{ancestors}
 \alias{siblings}
 \alias{MRCA}
-\alias{getnodes}
+\alias{getNode}
 \alias{getedges}
 \alias{shortestPath}
 \alias{sumEdgeLength}
@@ -18,7 +18,7 @@
   phylogenetic nodes (i.e. internal nodes or tips).
 }
 \usage{
-getnodes(phy,node)
+getNode(phy,node,missing=c("warn","OK","fail"))
 ancestors(phy, node, which=c("all","parent","ALL"))
 ancestor(phy, node)
 siblings(phy,node,include.self=FALSE)
@@ -32,7 +32,7 @@ shortestPath(phy, node1, node2)
   \item{phy}{a \linkS4class{phylo4} object (or one inheriting from
     \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
   }
-  \item{node}{a node number (or name)}
+  \item{node}{a node ID number (or name)}
   \item{which}{(\code{ancestors}) specify whether to return just direct
     ancestor ("parent"), all ancestor nodes ("all"), or all ancestor
     nodes including self ("ALL"); (\code{descendants})
@@ -44,9 +44,11 @@ shortestPath(phy, node1, node2)
     or a vector of node numbers or names}
   \item{node1}{a node number (or name)}
   \item{node2}{a node number (or name)}
+  \item{missing}{what to do if some requested node IDs or names are not
+    in the tree: warn, do nothing, or stop with an error}
 }
 \value{
-  \item{\code{getnodes}}{takes character strings corresponding to tip
+  \item{\code{getNode}}{takes character strings corresponding to tip
     or node labels, or node numbers; it returns a named
     vector of node numbers}
   \item{\code{getedges}}{takes character strings naming terminal
@@ -77,8 +79,8 @@ shortestPath(phy, node1, node2)
   data(geospiza)
   nodeLabels(geospiza) <- LETTERS[1:nNodes(geospiza)]
   plot(as(geospiza,"phylo4"), show.node.label=TRUE)
-  getnodes(geospiza,18)
-  getnodes(geospiza,"D")
+  getNode(geospiza,18)
+  getNode(geospiza,"D")
   ancestor(geospiza,"E")
   children(geospiza,"C")
   descendants(geospiza,"D",which="tips")
@@ -91,9 +93,9 @@ shortestPath(phy, node1, node2)
   shortestPath(geospiza, "fortis","fuliginosa")
   shortestPath(geospiza, "F","L")
 
-  ## identifying an edge fron its terminal node
+  ## identifying an edge from its terminal node
   getedges(geospiza,c("olivacea","B","fortis"))
-  getnodes(geospiza, c("olivacea","B","fortis"))
+  getNode(geospiza, c("olivacea","B","fortis"))
   geospiza$edge[c(26,1,11),]
   ## FIXME
   ## if(require(ape)){ edgelabels() }

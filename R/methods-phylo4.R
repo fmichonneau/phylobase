@@ -83,7 +83,7 @@ setMethod("edgeLength", "phylo4", function(x,which) {
         NULL
     else {
       if (missing(which)) return(x@edge.length)
-      n <- getnodes(x,which)
+      n <- getNode(x,which)
       return(x@edge.length[n])
     }
 })
@@ -92,7 +92,7 @@ setMethod("sumEdgeLength", "phylo4", function(phy, node) {
     if(!hasEdgeLength(phy))
         NULL
     else {
-        nd <- getnodes(phy, node)
+        nd <- getNode(phy, node)
         iEdges <- which(phy@edge[,2] %in% nd)
         sumEdges <- sum(phy@edge.length[iEdges],na.rm=TRUE)
         sumEdges
