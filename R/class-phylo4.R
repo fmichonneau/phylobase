@@ -51,7 +51,7 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     }
 
     ## node.label for internal nodes
-    nnodes <- length(unique(c(edge))) - ntips
+    nnodes <- length(unique(na.omit(c(edge)))) - ntips
     ##    if(is.null(node.label)) {
     ##        node.label <- .genlab("N", nnodes)
     ## } else {
