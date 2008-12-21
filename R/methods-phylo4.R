@@ -380,7 +380,8 @@ orderIndex <- function(phy, order = c('preorder', 'postorder')) {
     } else {stop(paste("Method for", order, "not implemented"))}
 }
 
-setMethod("reorder", signature(x = 'phylo4'), function(x, order = 'preorder') {
+setMethod("reorder", signature(x = 'phylo4'), 
+    function(x, order = c('preorder', 'postorder')) {
     ## call orderIndex and use that index to order edges, labels and lengths
     order   <- match.arg(order)
     index   <- orderIndex(x, order)
