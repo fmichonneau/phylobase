@@ -46,6 +46,19 @@ setAs("multiPhylo", "multiPhylo4", function(from, to) {
 
 #######################################################
 ## Exporting to ape
+
+
+## BMB: adding an explicit as method, and the warning,
+##  here is a very bad idea, because
+##   even implicit conversions from phylo4d to phylo4 (e.g.
+##  to use inhertied methods) will produce the warning
+
+## setAs("phylo4d", "phylo4",function(from,to) {
+##   warning("losing data while coercing phylo4d to phylo")
+##   phylo4(from@edge, from@edge.length, from@tip.label,
+##         from@node.label,from@edge.label,from@order)
+## })
+
 setAs("phylo4", "phylo", function(from, to) {
   if (inherits(from,"phylo4d"))
     warning("losing data while coercing phylo4d to phylo")
@@ -137,8 +150,10 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
         ## there may not be node labels (character(0))
         label <- labels(x,which="all")[node]
         node.type <- nodeType(x)[node]
-        return(data.frame(label, node, ancestor, branch.length,
-            node.type,stringsAsFactors=FALSE))
+        d <- data.frame(label, node, ancestor, branch.length,
+            node.type)
+        d$label <- as.character(d$label)
+        return(d)
     }
     else {
         E <- edges(x) # E: matrix of edges
@@ -146,8 +161,8 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
         ancestor <- E[, 1][node]
         #orphan <- setdiff(E[,1],E[,2])
         branch.length <- edgeLength(x)[node]
-        if (is.null(edgeLength(x))) {
-            branch.length <- rep(NA, length(node))
+        if (!hasEdgeLength(x)) {
+          branch.length <- rep(NA, length(node))
         }
         ## node and tip labels ##
         ## beware: they cannot be NULL
@@ -155,14 +170,16 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
         ## there may not be node labels (character(0))
         label <- labels(x,which="all")[node]
         node.type <- nodeType(x)[node]
-        return(data.frame(label, node, ancestor, branch.length,
-            node.type,stringsAsFactors=FALSE))        
+        d <- data.frame(label, node, ancestor, branch.length,
+            node.type)
+        d$label <- as.character(d$label)
+        return(d)
     }
 })
 
 setAs(from = "phylo4d", to = "data.frame", function(from) {
     ## TODO we need some test to ensure data and tree are in the right order
-    tree <- as(from, "phylo4") # get tree
+    tree <- extractTree(from) ## as(from, "phylo4") # get tree
     t_df <- as(tree, "data.frame") # convert to data.frame
     dat <- tdata(from, "allnode", label.type="column") # get data
     tdat <- cbind(t_df, dat[ ,-1 , drop=FALSE])

@@ -157,8 +157,9 @@ shortestPath <- function(phy, node1, node2){
 
     ## conversion from phylo, phylo4 and phylo4d
     x <- as(phy, "phylo4")
+    ## FIXME: use extractTree if coming from phylo4d
 
-    ## come checks
+    ## some checks
     if (is.character(checkval <- check_phylo4(x))) stop(checkval)
     t1 <- getNode(x, node1)
     t2 <- getNode(x, node2)

@@ -124,7 +124,7 @@ setReplaceMethod("tdata", "phylo4d", function(object, which = c("tip",
 ## Marguerite Butler & Peter Cowan
 setMethod("summary", "phylo4d", function(object) {
     x <- object
-    summary(as(object, "phylo4"))
+    summary(extractTree(object))
     tips <- tdata(object, "tip")
     nodes <- tdata(object, "node")
     cat("\nComparative data:\n")

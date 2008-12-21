@@ -19,7 +19,7 @@ DropTip <- function(phy,tip,...) {
       phy
   } else if (is(phy,"phylo4d")) {
       ## use extract.tree instead of as() to avoid warning
-      as(ape::drop.tip(as(extract.tree(phy),"phylo"),tip,...),"phylo4d")
+      as(ape::drop.tip(as(extractTree(phy),"phylo"),tip,...),"phylo4d")
   } else as(ape::drop.tip(as(phy,"phylo"),tip,...),class(phy))
 }
 

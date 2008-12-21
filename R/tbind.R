@@ -22,7 +22,7 @@ tbind <- function(...,check_data=TRUE) {
     xfun <- function(x) {
         switch(class(x),
                phylo4=x,
-               phylo4d=extract.tree(x),
+               phylo4d=extractTree(x),
                multiPhylo4=x@phylolist,
                multiPhylo4d=suppressWarnings(as("multiPhylo4",x)@phylolist))}
     ## decompose multi-trees into lists

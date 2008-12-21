@@ -59,15 +59,15 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
       node.label <- character(0) ## empty node labels
       ## node.label <- character(nnodes)
       ## is.na(node.label) <- TRUE ## ???
-    } else if (length(node.label) != nnodes)
-      stop("the node labels are not consistent with the number of nodes")
+    } else if (length(node.label)>0 && length(node.label) != nnodes)
+      stop("number of node labels is not consistent with the number of nodes")
     ## edge.label
     ## an edge is named by the descendant
     if(is.null(edge.label)) {
       edge.label <- character(0)
     ##        edge.label <- paste("E", edge[, 2], sep = "")
-    } else if (length(edge.label) != nrow(edge))
-      stop("the edge labels are not consistent with the number of edges")
+    } else if (length(edge.label)>0 && length(edge.label) != nrow(edge))
+      stop("number of edge labels is not consistent with the number of edges")
     ## fill in the result
     res <- new("phylo4")
     res@edge <- edge

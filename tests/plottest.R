@@ -26,7 +26,7 @@ try(plot(g2C, show.node.label=TRUE))
 
 g3 = subset(g2, tips.exclude=c("fuliginosa", "fortis", "magnirostris", 
                  "conirostris", "scandens"))
-plot(extract.tree(g3))  ## phylo4
+plot(extractTree(g3))  ## phylo4
 plot(g3)
 
 
