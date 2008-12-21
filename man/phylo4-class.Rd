@@ -24,7 +24,7 @@
     \item{\code{tip.label}:}{character vector of tip labels}
     \item{\code{root.edge}:}{integer: root edge (NA if none)}
     \item{\code{order}:}{character: tree ordering (allowable values are
-      listed in \code{phylo4_ordering}, currently "unknown", "reorder"
+      listed in \code{phylo4_orderings}, currently "unknown", "preorder"
       (="pruningwise" in \code{ape}), "postorder" (="cladewise" in \code{ape}))}
   }
   }
