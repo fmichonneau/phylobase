@@ -21,7 +21,7 @@
 }
 
 \section{MoreInfo}{
-See the help index and run \code{vignette("phylobase", "phylobase")} -- also available at \url{../inst/doc/phylobase.pdf} for further details.
+See the help index and run \code{vignette("phylobase", "phylobase")} -- also available at \url{../doc/phylobase.pdf} for further details.
 }
 
 \keyword{package}
