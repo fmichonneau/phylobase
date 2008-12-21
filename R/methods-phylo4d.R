@@ -177,12 +177,14 @@ setMethod("names", signature(x = "phylo4d"), function(x) {
 })
 
 setMethod("reorder", signature(x = 'phylo4d'), function(x, order = 'cladewise') {
-        index <- orderIndex(x, order)
-        test <<- index
-        x@edge      <- x@edge[index, ]
-        x@tip.data  <- x@tip.data[index[index <= nTips(x)], , drop = FALSE]
-        x@node.data <- x@node.data[index[index > nTips(x)], , drop = FALSE]
-        if(hasEdgeLabels(x)) { x@edge.label  <- x@edge.label[index] }
-        if(hasEdgeLength(x)) { x@edge.length <- x@edge.length[index] }
-        x
-    })
+    ## call orderIndex and use that index to order edges, labels and lengths
+    order       <- match.arg(order)
+    index       <- orderIndex(x, order)
+    x@order     <- order
+    x@edge      <- x@edge[index, ]
+    x@tip.data  <- x@tip.data[index[index <= nTips(x)], , drop = FALSE]
+    x@node.data <- x@node.data[index[index > nTips(x)], , drop = FALSE]
+    if(hasEdgeLabels(x)) { x@edge.label  <- x@edge.label[index] }
+    if(hasEdgeLength(x)) { x@edge.length <- x@edge.length[index] }
+    x
+})
