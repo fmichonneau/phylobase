@@ -1,7 +1,8 @@
 #######################################################
 ## Importing from ape
 setAs("phylo", "phylo4", function(from, to) {
-    #fixme SWK kludgy fix may not work well with unrooted trees
+    ## fixme SWK kludgy fix may not work well with unrooted trees
+    ## TODO should we also attempt to get order information?
     if (is.rooted(from)) {
         root.edge <- as.numeric(setdiff(unique(from$edge[,1]), unique(from$edge[,2])))
         from$edge <- rbind(from$edge,c(NA,root.edge))
@@ -60,27 +61,32 @@ setAs("multiPhylo", "multiPhylo4", function(from, to) {
 ## })
 
 setAs("phylo4", "phylo", function(from, to) {
-  if (inherits(from,"phylo4d"))
-    warning("losing data while coercing phylo4d to phylo")
-  brlen <- from@edge.length
-  rootpos <- which(nodeId(from,"all")==rootNode(from))
-  if (isRooted(from)) brlen <- brlen[-rootpos]
-  edgemat <- unname(from@edge[-rootpos,])
-  y <- list(edge = edgemat,
-            Nnode = from@Nnode,
-            tip.label = from@tip.label,
-            edge.length = brlen,
-            node.label = from@node.label)
-  class(y) <- "phylo"
-  if (length(y$edge.length) == 0)
-    y$edge.length <- NULL
-  if (length(y$node.label) == 0)
-    y$node.label <- NULL
-  if (isRooted(from)) {
-    root.edge <- brlen[nodeId(from,"all")==rootNode(from)]
-    if (!is.na(root.edge)) y$root.edge <- root.edge
-  }
-  y
+    if (inherits(from, "phylo4d"))
+        warning("losing data while coercing phylo4d to phylo")
+    brlen <- from@edge.length
+    rootpos <- which(nodeId(from, "all") == rootNode(from))
+    if (isRooted(from)) brlen <- brlen[-rootpos]
+    edgemat <- unname(from@edge[-rootpos, ])
+    y <- list(edge = edgemat, 
+            Nnode = from@Nnode, 
+            tip.label = from@tip.label, 
+            edge.length = brlen, 
+            node.label = from@node.label) 
+    class(y) <- "phylo"
+    if (from@order != 'unknown') {
+        ## TODO postorder != pruningwise -- though quite similar
+        attr(y, 'order') <- switch(from@order, postorder = 'pruningwise', 
+                                      preorder  = 'cladewise')
+    }
+    if (length(y$edge.length) == 0)
+        y$edge.length <- NULL
+    if (length(y$node.label) == 0)
+        y$node.label <- NULL
+    if (isRooted(from)) {
+        root.edge <- brlen[nodeId(from, "all") == rootNode(from)]
+        if (!is.na(root.edge)) y$root.edge <- root.edge
+    }
+    y
 })
 
 ## BMB: redundant????  
