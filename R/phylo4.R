@@ -80,6 +80,10 @@ setGeneric("edgeLabels<-",
 
 setGeneric("print")
 
+setGeneric("head")
+
+setGeneric("tail")
+
 setGeneric("tdata", function(x, ...) {
     standardGeneric("tdata")
 })

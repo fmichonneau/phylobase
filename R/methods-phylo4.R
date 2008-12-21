@@ -391,3 +391,13 @@ setMethod("reorder", signature(x = 'phylo4'),
     if(hasEdgeLength(x)) { x@edge.length <- x@edge.length[index] }
     x
 })
+
+setMethod("head",signature(x = 'phylo4'),
+          function(x,n=20) {
+            head(as(x,"data.frame"),n=n)
+          })
+
+setMethod("tail",signature(x = 'phylo4'),
+          function(x,n=20) {
+            tail(as(x,"data.frame"),n=n)
+          })

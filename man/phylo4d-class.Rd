@@ -3,6 +3,8 @@
 \alias{phylo4d-class}
 \alias{show,phylo4d-method}
 \alias{print,phylo4d-method}
+\alias{head,phylo4d-method}
+\alias{tail,phylo4d-method}
 \alias{summary,phylo4d-method}
 \alias{phylo4d,phylo4d-method}
 \alias{names,phylo4d-method}
@@ -34,6 +36,9 @@
     \item{show}{\code{signature(object = "phylo4d")}: show method }
     \item{summary}{\code{signature(object = "phylo4d")}: summary method}
     \item{names}{\code{signature(x = "phylo4d")}: gives the slots names}
+    \item{head}{\code{signature(object = "phylo4d")}: show first few
+nodes}
+    \item{tail}{\code{signature(object = "phylo4d")}: show last few nodes}
 }
 }
 \usage{

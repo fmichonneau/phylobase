@@ -8,6 +8,8 @@
 \alias{[,phylo4,ANY,missing,missing-method}
 \alias{print,phylo4-method}
 \alias{show,phylo4-method}
+\alias{head,phylo4-method}
+\alias{tail,phylo4-method}
 \alias{summary,phylo4-method}
 \alias{names,phylo4-method}
 \title{phylo4 and extended classes}
@@ -35,7 +37,9 @@
     \item{show}{\code{signature(object = "phylo4")}: show method }
     \item{summary}{\code{signature(object = "phylo4")}: summary method}
     \item{names}{\code{signature(x = "phylo4")}: gives the slot names}
-  }
+    \item{head}{\code{signature(object = "phylo4")}: show first few
+nodes}
+    \item{tail}{\code{signature(object = "phylo4")}: show last few nodes}  }
 }
 \usage{
     \S4method{print}{phylo4}(x,printlen,\dots)
