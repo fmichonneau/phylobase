@@ -18,7 +18,7 @@
 }
 
 \usage{
-orderIndex(phy, order = 'cladewise')
+orderIndex(phy, order = c('preorder','postorder'))
 \S4method{reorder}{phylo}(x, ...)
 \S4method{reorder}{phylo4}(x, ...)
 \S4method{reorder}{phylo4d}(x, ...)
@@ -27,8 +27,8 @@ orderIndex(phy, order = 'cladewise')
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{phy}{a \code{phylo4} or \code{phylo4d} object}
-  \item{order}{(character)}
-  \item{x}{ ~~Describe \code{x} here~~ }
+  \item{x}{a \code{phylo4} or \code{phylo4d} object}
+  \item{order}{'preorder' or 'postorder' for preferred order}
   \item{\dots}{ ~~Describe \code{\dots} here~~ }
 }
 \details{
@@ -42,10 +42,11 @@ orderIndex(phy, order = 'cladewise')
   ...
 }
 \references{ ~put references to the literature/web site here ~ }
-\author{ ~~who you are~~ }
-\note{ ~~further notes~~ 
-
- ~Make other sections like Warning with \section{Warning }{....} ~
+\author{Peter Cowan}
+\note{
+  preorder corresponds to 'cladewise' in the ape package,
+  postorder corresponds (almost but close enough?) to 'pruningwise'
+  see ...
 }
 \seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

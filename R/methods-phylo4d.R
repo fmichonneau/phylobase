@@ -176,7 +176,8 @@ setMethod("names", signature(x = "phylo4d"), function(x) {
     return(rev(temp))
 })
 
-setMethod("reorder", signature(x = 'phylo4d'), function(x, order = 'cladewise') {
+setMethod("reorder", signature(x = 'phylo4d'),
+          function(x, order = c('preorder','postorder')) {
     ## call orderIndex and use that index to order edges, labels and lengths
     order       <- match.arg(order)
     index       <- orderIndex(x, order)
