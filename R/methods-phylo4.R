@@ -346,33 +346,46 @@ setReplaceMethod("labels","phylo4", function(object,...,value) {
     object
 })
 
-orderIndex <- function(phy, order = 'cladewise') {
-    reorder.prune <- function(edge, tips, root = tips + 1) {
-        ## if(is.null(root)) {
-        ##     root <- tips + 1
-        ## }
-        ## if(root <= tips) {return()}
-        edge  <- edge[!is.na(edge[,1]), ]
-        index <- edge[, 1] == root
-        nextr <- edge[index, 2]
-        ## paths <- apply(as.matrix(nextr), 1, reorder, edge = edge, tips = tips)
-        nord <- NULL
-        for(i in nextr) {
-            if(i <= tips) {next()}
-            nord <- c(nord, reorder.prune(edge, tips, root = i))
-        }
-        c(nord, which(index))
+orderIndex <- function(phy, order = c('preorder', 'postorder')) {
+    ## recursive functions are placed first and calls to those functions below
+    postOrder <- function(node) {
+        ## this function returns a list of nodes in the post order traversal
+        ## get the descendants 
+        ## dec <- edge[, 1] == node
+        ## print(dec)
+        ## recursive call to get the descendants of the descendants
+        ## out <- mapply(postie, edge[dec, 2])
+        ## return the descendants with the node after
+        ## return(c(unlist(out), node))
+        ## slight performance benefit to the one liner
+        return(c(unlist(mapply(postOrder, edge[edge[, 1] == node, 2])), node))
     }
-    if(order == 'pruningwise') {
-        index <- reorder.prune(phy@edge, length(phy@tip.label))
-        ## add the root node to the end, there may be more elegant ways to do this
-        index <- c(index, which(phy@edge[,2] == rootNode(phy)))
+    preOrder  <- function(node) {
+        ## see expanded code in comments of postOrder
+        ## only difference here is that we record current node, then descendants
+        return(c(node, unlist(mapply(preOrder, edge[edge[, 1] == node, 2]))))
+    }
+    
+    if(order == 'postorder') {
+        ## get an root node free edge matrix 
+        edge <- phy@edge[!is.na(phy@edge[, 1]), ]
+        ## match the new node order to the old order to get an index
+        index <- match(postOrder(rootNode(phy)), phy@edge[, 2])
+    
+    } else if(order == 'preorder') {
+        ## get an root node free edge matrix 
+        edge <- phy@edge[!is.na(phy@edge[, 1]), ]
+        ## match the new node order to the old order to get an index
+        index <- match(preOrder(rootNode(phy)), phy@edge[, 2])
     } else {stop(paste("Method for", order, "not implemented"))}
 }
 
-setMethod("reorder", signature(x = 'phylo4'), function(x, order = 'cladewise') {
-    index <- orderIndex(x, order)
-    x@edge <- x@edge[index, ]
+setMethod("reorder", signature(x = 'phylo4'), function(x, order = 'preorder') {
+    ## call orderIndex and use that index to order edges, labels and lengths
+    order   <- match.arg(order)
+    index   <- orderIndex(x, order)
+    x@order <- order
+    x@edge  <- x@edge[index, ]
     if(hasEdgeLabels(x)) { x@edge.label  <- x@edge.label[index] }
     if(hasEdgeLength(x)) { x@edge.length <- x@edge.length[index] }
     x
