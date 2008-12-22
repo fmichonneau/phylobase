@@ -19,14 +19,35 @@
 
 This document describes the new \code{phylo4} S4 classes and methods, which are intended to provide a unifying standard for the representation of phylogenetic trees and comparative data in R.  The \code{phylobase} package was developed to help both end users and package developers by providing a common suite of tools likely to be shared by all packages designed for phylogenetic analysis, facilities for data and tree manipulation, and standardization of formats. 
 
-For \emph{end-users}, standardization will greatly simplify comparing analyses across different packages by easing data portability, as well as reducing the learning curve involved when using new packages. Users will also benefit by having a common repository of useful functions contained within one base package, for example tools for including or excluding subtrees (and associated phenotypic data) or improved tree and data plotting facilities. For \emph{developers}, the \code{phylobase} package allows programming efforts to be put directly into developing new solutions for new problems (i.e. new phylogenetic methods) rather than re-coding the same base tools that each package requires. It is hoped that standardization will also synergize the efforts of individual developers into a comparative method community (this sounds stupid-- please fix), as well as facilitating code validation by providing a repository for benchmark tests.
+This standardization will benefit \emph{end-users}
+by making it easier to move data and compare analyses 
+across packages, and to keep comparative data synchronized with
+phylogenetic trees.
+Users will also benefit from 
+a repository of functions 
+for tree manipulation, 
+for example tools for including or excluding subtrees (and associated phenotypic data) or improved tree and data plotting facilities. 
+\code{phylobase} will benefit \emph{developers}
+by freeing them to put their programming effort into
+developing new methods rather than into re-coding base tools.
+We (the \code{phylobase} developers)
+hope \code{phylobase} will also 
+facilitate code validation by providing a repository
+for benchmark tests, and more generally
+that it will help catalyze community development
+of comparative methods in R.
 
-On a more abstract level, two motivations for the development of this package were better data checking and abstraction of the tree data formats.  Currently \code{phylobase} is capable of checking that data and trees are associated in the proper fashion, and protects users and developers from accidently reordering one, but not the other.  The \code{phylobase} package also seeks to abstract the data format so that commonly used information (for example, branch length information or the ancestor of a particular node) can be accessed without knowing the underlying data structure (i.e., whether the tree is stored as a matrix, or a list, or a parenthesis-based format).  This is achieved through generic \code{phylobase} functions which which retrieve the relevant information from the data structures. The benefits of such abstraction are multiple: (1) \emph{easier access to the relevant information} via a simple function call (this frees both users and developers from learning details of complex data structures), (2) \emph{freedom to optimize data structures in the future without breaking code.}  Having the generic functions in place to ``translate'' between the data structures and the rest of the program code allows program and data structure development to proceed somewhat independently. The alternative is code written for specific data structures, in which modifications to the data structure requires rewriting the entire package code (often exacting too high a price, which results in the persistence of less-optimal data structures).  (3) \emph{providing broader access to the range of tools in \code{phylobase}}. Developers of specific packages can use these new tools based on S4 objects without knowing the details of S4 programming.
+A more abstract motivation for
+developing \code{phylobase} was to improve
+data checking and abstraction of the tree data formats.  
+\code{phylobase} can check that data and trees are associated in the proper fashion, and protects users and developers from accidently reordering one, but not the other.  It
+also seeks to abstract the data format so that commonly used information (for example, branch length information or the ancestor of a particular node) can be accessed without knowledge of
+the underlying data structure (i.e., whether the tree is stored as a matrix, or a list, or a parenthesis-based format).  This is achieved through generic \code{phylobase} functions which which retrieve the relevant information from the data structures. The benefits of such abstraction are multiple: (1) \emph{easier access to the relevant information} via a simple function call (this frees both users and developers from learning details of complex data structures), (2) \emph{freedom to optimize data structures in the future without breaking code.}  Having the generic functions in place to ``translate'' between the data structures and the rest of the program code allows program and data structure development to proceed somewhat independently. The alternative is code written for specific data structures, in which modifications to the data structure requires rewriting the entire package code (often exacting too high a price, which results in the persistence of less-optimal data structures).  (3) \emph{providing broader access to the range of tools in \code{phylobase}}. Developers of specific packages can use these new tools based on S4 objects without knowing the details of S4 programming.
 
-The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple trees respectively.  In addition to describing the classes and methods this vignette gives examples of how they might be used.
+The base \code{phylo4} class is modeled on the the \code{phylo} class in \code{ape}.  \code{phylo4d} and \code{multiphylo4} extend the \code{phylo4} class to include data or multiple trees respectively.  In addition to describing the classes and methods, this vignette gives examples of how they might be used.
 
 
-\section{Package Overview}
+\section{Package overview}
 
 The phylobase package currently implements the following functions and data structures:
 
@@ -90,18 +111,24 @@ functions), and convert it to a \code{phylo4} object.
 
 For example, load the raw \emph{Geospiza} data:
 <<geodata>>=
+library(phylobase)
 data(geospiza_raw)
 names(geospiza_raw)
 @ 
 
 Convert the \code{S3} tree to a \code{S4 phylo4} object using the \code{as()} function:
 <<convgeodata>>=
-library(phylobase)
-g1 <- as(geospiza_raw$tree,"phylo4")
-g1
+(g1 <- as(geospiza_raw$tree,"phylo4"))
 @ 
 
-Note that the nodes and edges are given default names if the tree contains no node or edge names.
+The nodes appear with labels \verb+<NA>+ because their labels
+are missing.  A simple way to assign the node numbers as
+labels (useful for various checks) is
+<<>>= 
+nodeLabels(g1) <- as.character(nodeId(g1))
+head(g1,5)
+@ 
+
 
 The \code{summary} method gives a little extra information, including information on branch lengths:
 <<sumgeodata>>=
@@ -156,9 +183,8 @@ labels(g1) <- tolower(labels(g1))
 
 \section{Trees with data}
 
-The \code{phylo4d} class matches trees with data.
-(\textbf{fixme: need to be able to use ioNCL!})
-or combine it with a data frame to make a \code{phylo4d} (tree-with-data)
+The \code{phylo4d} class matches trees with data,
+or combines them with a data frame to make a \code{phylo4d} (tree-with-data)
 object.
 
 Now we'll take the \emph{Geospiza} data from \verb+geospiza_raw$data+
@@ -261,6 +287,7 @@ vector of node numbers.
 
 \section{multiPhylo classes}
 
+Fix me!
 \section{Examples}
 
 \subsection{Constructing a Brownian motion trait simulator}
@@ -339,44 +366,91 @@ Find root, traverse tree:
 
 This section details the internal structure of the \code{phylo4}, \code{multiphylo4}, \code{phylo4d}, and \code{multiphylo4d} classes.  The basic building blocks of these classes are the \code{phylo4} object and a dataframe.  The \code{phylo4} tree format is largely similar to the one used by \code{phylo} class in the package \code{ape} \footnote{\url{http://ape.mpl.ird.fr/}}.
 
+We use ``edge'' for ancestor-descendant relationships
+in the phylogeny (sometimes
+called ``branches'') and ``edge lengths'' for their
+lengths (``branch lengths'').  Most generally,
+``nodes'' are all species in the tree;
+species with descendants are ``internal nodes'' (we
+often refer to these just as ``nodes'', meaning clear
+from context); ``tips'' are species with
+no descendants. The ``root node'' is the node
+with no ancestor (if one exists).
 
 \subsection{phylo4}
 Like \code{phylo}, the main components of
 the \code{phylo4} class are:
 \begin{description}
-\item[edge]{an $N \times 2$ matrix of integers,
-  where the first column \ldots}
+\item[edge]{a 2-column matrix of integers,
+    with $N$ rows for a rooted tree or
+    $N-1$ rows for an unrooted tree and
+    column names \code{ancestor} and \code{descendant}.
+    Each row contains information on one edge in the tree.
+    See below for further constraints on the edge matrix.}
 \item[edge.length]{numeric list of edge lengths
-(length $N$ or empty)}
-\item[Nnode]{integer, number of nodes}
-\item[tip.label]{character vector of tip labels (required)}
-\item[node.label]{character vector of node labels (maybe empty)}
-\item[root.edge]{integer defining root edge (maybe NA)}
+    (length $N$ (rooted) or $N-1$ (unrooted) or empty (length 0))}
+\item[Nnode]{integer, number of (internal) nodes}
+\item[tip.label]{character vector of tip labels (required), with     length=\# of tips. Tip labels need not be unique, but data-tree     matching with non-unique labels will cause an error}
+\item[node.label]{character vector of node labels, length=\# of
+    internal nodes or 0 (if empty).  Node labels need not be unique, but data-tree matching with non-unique labels will cause an error}
+\item[order]{character: ``preorder'', ``postorder'', or ``unknown''
+    (default), describing the order of rows in the edge matrix}
 \end{description}
 
-We have defined basic methods for \code{phylo4}:\code{show}, \code{print} (copied from \code{print.phylo} in\code{ape}), and a variety of accessor functions (see help files). \code{summary} does not seem to be terribly useful in the context of a ``raw'' tree, because there is not much to compute: \textbf{end users?}
+The edge matrix must not contain \code{NA}s, with the exception
+of the root node, which has an \code{NA} for \code{ancestor}.
+\code{phylobase} does not enforce an order on the rows of the
+edge matrix, but it stores information on the current ordering
+in the \code{@order} slot --- current allowable values are
+``unknown'' (the default), ``preorder'' (equivalent to ``cladewise''
+in \code{ape}) or ``postorder'': see
+\url{http://en.wikipedia.org/wiki/Tree_traversal} for
+more information on orderings.  (\code{ape}'s ``pruningwise''
+is ``bottom-up'' ordering.)
 
-Print method: add information about (ultrametric, scaled, polytomies (zero-length or structural))?
+The basic criteria for the edge matrix are taken from
+\code{ape}, as documented in \url{http://ape.mpl.ird.fr/misc/FormatTreeR_4Dec2006.pdf}.
+This is a modified version of those rules, for 
+a tree with $n$ tips and $m$ internal nodes:
+\begin{itemize}
+\item Tips (no descendants) are coded $1,\ldots, n$, 
+  and internal nodes ($\ge 1 descendant$)
+  are coded $n + 1, \ldots , n + m$ 
+  ($n + 1$ is the root). 
+  Both series are numbered with no gaps.
+\item The first (ancestor)
+  column has only values $> n$ (internal nodes): thus, values $\le n$
+  (tips) appear only in the second (descendant) column)
+\item all internal nodes [not including the root] 
+  must appear in the first (ancestor) column
+  at least once [unlike \code{ape}, which nominally requires each internal node to have at least two descendants (although it doesn't
+absolutely prohibit them and has a \code{collapse.singles} function to get rid of them), \code{phylobase} does allow these ``singleton nodes'' and has a method \code{hasSingles} for detecting them].
+Singleton nodes can be useful as a way of representing changes
+along a lineage; they are used this way in the \code{ouch} package.
+\item the number of occurrences of a node in the first column is related to the nature of the node: once if it is a singleton,
+twice if it is dichotomous (i.e., of degree 3 [counting
+ancestor as well as descendants]), three times if it is trichotomous (degree 4), and so on.
+\end{itemize}
+
+\code{phylobase} does not technically prohibit reticulations
+(nodes or tips that appear more than once in the descendant
+column), but they will probably break most of the methods.
+Disconnected trees, cycles, and other exotica are not tested for,
+but will certainly break the methods.
+
+We have defined basic methods for \code{phylo4}:\code{show}, \code{print}, and a variety of accessor functions (see help files). \code{summary} does not seem to be terribly useful in the context of a ``raw'' tree, because there is not much to compute.
 
 \subsection{phylo4d}
 
-The \code{phylo4d} class extends \code{phylo4} with data.  Tip data, (internal) node data, and edge data are stored separately, but can be retrieved together or separately with \code{tdata(x,"tip")} or \code{tdata(x,"all")}.
+The \code{phylo4d} class extends \code{phylo4} with data.  Tip data, and (internal) node data are stored separately, but can be retrieved together or separately with \code{tdata(x,"tip")},
+\code{tdata(x,"node")} or \code{tdata(x,"all")}.
+There is no separate slot for edge data, but these
+can be stored as node data associated with the
+descendant node.
 
-\textbf{edge data can also be included --- is this
-useful/worth keeping?}
 
 \subsection{multiphylo4}
 
-\section{Validity checking}
-
-\begin{itemize}
-\item number of rows of edge matrix ($N$) == length of edge-length vector (if $>0$)
-\item (number of tip labels)+(nNode)-1 == $N$
-\item data matrix must have row names
-\item row names must match tip labels (if not, spit out mismatches)
-\end{itemize}
- 
-Default node labels:
 
 \section{Hacks/backward compatibility}
 
