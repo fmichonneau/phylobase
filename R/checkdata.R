@@ -8,9 +8,15 @@ check_tree <- function(object,warn="retic",err=NULL) {
     ## FIXME: check for cyclicity?
     nedges <- nrow(object@edge)
     if (hasEdgeLength(object)) {
+        print(object@edge.length)
       if (length(object@edge.length) != nedges)
         return("edge lengths do not match number of edges")
-      if (any(object@edge.length<0))
+      ## presumably we shouldn't allow NAs mixed 
+      ## with numeric branch lengths except at the root
+      if (sum(is.na(object@edge.length)) > 1)
+        return("NAs in edge lenghts")
+      ## Strip root edge branch lenght (if set to NA)
+      if (any(object@edge.length[!is.na(object@edge.length)] < 0))
         return("edge lengths must be non-negative")
     }
     ## if (length(object@tip.label)+object@Nnode-1 != N) # does not work with multifurcations
