@@ -50,6 +50,10 @@ setGeneric("hasEdgeLabels", function(x) {
     standardGeneric("hasEdgeLabels")
 })
 
+setGeneric("edgeOrder", function(x) {
+  standardGeneric("edgeOrder")
+})
+
 setGeneric("labels")
 
 setGeneric("labels<-", 

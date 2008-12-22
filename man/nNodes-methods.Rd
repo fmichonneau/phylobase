@@ -17,6 +17,8 @@
 \alias{nEdges}
 \alias{nEdges-methods}
 \alias{nEdges,phylo4-method}
+\alias{edgeOrder}
+\alias{edgeOrder,phylo4-method}
 \alias{hasEdgeLength}
 \alias{hasEdgeLength-methods}
 \alias{hasEdgeLength,phylo4-method}

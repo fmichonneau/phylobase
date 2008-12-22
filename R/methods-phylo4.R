@@ -40,6 +40,11 @@ setMethod("edges", "phylo4", function(x, order, ...) {
     x@edge
 })
 
+setMethod("edgeOrder", "phylo4", function(x, ...) {
+    x@order
+})
+
+
 setMethod("isRooted","phylo4", function(x) {
     ## hack to avoid failure on an empty object
     if(nTips(x) == 0) return(FALSE)
