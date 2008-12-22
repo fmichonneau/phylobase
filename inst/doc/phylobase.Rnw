@@ -409,7 +409,8 @@ more information on orderings.  (\code{ape}'s ``pruningwise''
 is ``bottom-up'' ordering.)
 
 The basic criteria for the edge matrix are taken from
-\code{ape}, as documented in \url{http://ape.mpl.ird.fr/misc/FormatTreeR_4Dec2006.pdf}.
+\code{ape}, as documented in
+\url{ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf}.
 This is a modified version of those rules, for 
 a tree with $n$ tips and $m$ internal nodes:
 \begin{itemize}
