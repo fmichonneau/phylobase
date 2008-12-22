@@ -116,10 +116,10 @@ setMethod("labels", "phylo4", function(object, which = c("tip",
     "node", "allnode"), ...) {
     which <- match.arg(which)
     switch(which,
-            tip = object@tip.label,
+            tip = object@tip.label[order(nodeId(object,"tip"))],
             node = {
                 if (hasNodeLabels(object)) {
-                    object@node.label
+                    object@node.label[order(nodeId(object))]
                 }
                 else
                 {
@@ -135,8 +135,11 @@ setMethod("labels", "phylo4", function(object, which = c("tip",
                 {
                     nl <- rep(NA,nNodes(object))
                 }
-                c(object@tip.label,nl)
-            }
+                ## lorder <- match(object@edge[,2],
+                ## c(nodeId(object,"tip"),nodeId(object)))
+                lorder <- order(c(nodeId(object,"tip"),nodeId(object)))
+                c(object@tip.label,nl)[lorder]
+              }
             )
 })
 
