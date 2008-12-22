@@ -1,6 +1,7 @@
 \name{treePlot-methods}
 \docType{methods}
 \alias{treePlot}
+\alias{plot,ANY,ANY-method}
 \alias{plot,pdata,missing-method}
 \alias{plot,phylo4,missing-method}
 \alias{treePlot-method}
