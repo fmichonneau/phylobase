@@ -7,8 +7,12 @@ check_phylo4 <- function(object) {
 check_tree <- function(object,warn="retic",err=NULL) {
     ## FIXME: check for cyclicity?
     nedges <- nrow(object@edge)
-    if (hasEdgeLength(object) && length(object@edge.length) != nedges)
-      return("edge lengths do not match number of edges")
+    if (hasEdgeLength(object)) {
+      if (length(object@edge.length) != nedges)
+        return("edge lengths do not match number of edges")
+      if (any(object@edge.length<0))
+        return("edge lengths must be non-negative")
+    }
     ## if (length(object@tip.label)+object@Nnode-1 != N) # does not work with multifurcations
     ##  return("number of tip labels not consistent with number of edges and nodes")
     ## check: tip numbers = (m+1):(m+n)
