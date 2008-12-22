@@ -15,7 +15,7 @@ Class \code{"\linkS4class{oldClass}"}, directly.
 	 }
 }
 \author{Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}}
-\seealso{The original \code{\link[pkg:ade4]{phylog}} from the
+\seealso{The original \code{\link[ade4]{phylog}} from the
   \code{ade4} package. 
 }
 % commented to eliminate Note: on build

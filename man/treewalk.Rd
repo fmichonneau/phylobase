@@ -73,7 +73,7 @@ shortestPath(phy, node1, node2)
 }
 \note{\code{MRCA} is uppercase to avoid conflict with \code{mrca}
   in ape}
-\seealso{\code{\link[pkg:ape]{mrca}}, in the ape package, gives
+\seealso{\code{\link[ape]{mrca}}, in the ape package, gives
   a list of all subtrees}
 \examples{
   data(geospiza)
