@@ -143,8 +143,9 @@ setMethod("labels", "phylo4", function(object, which = c("tip",
             )
 })
 
-setMethod("nodeLabels", "phylo4", function(x) {
-    x@node.label
+setMethod("nodeLabels", "phylo4", function(phy) {
+    #x@node.label
+    labels(phy, which="node")
 })
 
 setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","all")) {
@@ -157,11 +158,8 @@ setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","all")) {
 
 setReplaceMethod("nodeLabels", "phylo4",
                  function(object, ..., value) {
-                   ## FIXME: test length!
-                   if (length(value)!=nNodes(object))
-                     stop("label vector must have as many elements as number of internal nodes")
-                   object@node.label <- value
-                   object
+                     labels(object, "node") <- value
+                     return(object)
                  })
 
 setMethod("edgeLabels", "phylo4", function(x) {
@@ -347,18 +345,46 @@ setMethod("hasEdgeLength","phylo4", function(x) {
     length(x@edge.length)>0
 })
 
-setReplaceMethod("labels","phylo4", function(object,...,value) {
-    if (length(value) != length(object@tip.label))
-        stop("Number of tip labels does not match number of tips.")
-    object@tip.label <- value
-    object
-})
+setReplaceMethod("labels", "phylo4",
+   function(object, which = c("tip", "node", "allnode"), ..., value) {
+       which <- match.arg(which)
+       switch(which,
+              ## If 'tip'
+              tip = {
+                  if(length(value) != nTips(object))
+                      stop("Number of tip labels does not match number of tips.")
+                  else {
+                      object@tip.label[order(nodeId(object, "tip"))] <- value
+                      return(object)
+                  }
+              },
+              ## If 'node'
+              node = {
+                  if(length(value) != nNodes(object))
+                      stop("Number of node labels does not match number of internal nodes.")
+                  else {
+                      #object@node.label <- character(nNodes(object))
+                      object@node.label[order(nodeId(object, "internal"))] <- value
+                      return(object)
+                  }
+              },
+              ## If 'allnode'
+              allnode = {
+                  if(length(value) != nEdges(object))
+                      stop("Number of labels does not match total number of nodes.")
+                  else {
+                      object@tip.label[order(nodeId(object, "tip"))] <- value[1:nTips(object)]
+                      object@node.label[order(nodeId(object, "internal"))] <- value[-(1:nTips(object))]
+                      return(object)
+                  }
+              })
+   })
 
 orderIndex <- function(phy, order = c('preorder', 'postorder')) {
     ## recursive functions are placed first and calls to those functions below
     postOrder <- function(node) {
         ## this function returns a list of nodes in the post order traversal
-        ## get the descendants 
+        ## get the descendants
         ## dec <- edge[, 1] == node
         ## print(dec)
         ## recursive call to get the descendants of the descendants
@@ -373,22 +399,22 @@ orderIndex <- function(phy, order = c('preorder', 'postorder')) {
         ## only difference here is that we record current node, then descendants
         return(c(node, unlist(mapply(preOrder, edge[edge[, 1] == node, 2]))))
     }
-    
+
     if(order == 'postorder') {
-        ## get an root node free edge matrix 
+        ## get an root node free edge matrix
         edge <- phy@edge[!is.na(phy@edge[, 1]), ]
         ## match the new node order to the old order to get an index
         index <- match(postOrder(rootNode(phy)), phy@edge[, 2])
-    
+
     } else if(order == 'preorder') {
-        ## get an root node free edge matrix 
+        ## get an root node free edge matrix
         edge <- phy@edge[!is.na(phy@edge[, 1]), ]
         ## match the new node order to the old order to get an index
         index <- match(preOrder(rootNode(phy)), phy@edge[, 2])
     } else {stop(paste("Method for", order, "not implemented"))}
 }
 
-setMethod("reorder", signature(x = 'phylo4'), 
+setMethod("reorder", signature(x = 'phylo4'),
     function(x, order = c('preorder', 'postorder')) {
     ## call orderIndex and use that index to order edges, labels and lengths
     order   <- match.arg(order)

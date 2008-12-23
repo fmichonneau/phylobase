@@ -56,15 +56,15 @@ setGeneric("edgeOrder", function(x, ...) {
 
 setGeneric("labels")
 
-setGeneric("labels<-", 
-           function(object, ..., value) {
+setGeneric("labels<-",
+           function(object, which, ..., value) {
                standardGeneric("labels<-")
            })
 
-setGeneric("nodeLabels", function(x) {
+setGeneric("nodeLabels", function(phy) {
     standardGeneric("nodeLabels")
 })
-setGeneric("nodeLabels<-", 
+setGeneric("nodeLabels<-",
            function(object, ..., value) {
                standardGeneric("nodeLabels<-")
            })
@@ -77,7 +77,7 @@ setGeneric("edgeLabels", function(x) {
     standardGeneric("edgeLabels")
 })
 
-setGeneric("edgeLabels<-", 
+setGeneric("edgeLabels<-",
            function(object, ..., value) {
                standardGeneric("edgeLabels<-")
            })
