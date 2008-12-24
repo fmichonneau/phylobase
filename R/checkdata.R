@@ -8,7 +8,6 @@ check_tree <- function(object,warn="retic",err=NULL) {
     ## FIXME: check for cyclicity?
     nedges <- nrow(object@edge)
     if (hasEdgeLength(object)) {
-        print(object@edge.length)
       if (length(object@edge.length) != nedges)
         return("edge lengths do not match number of edges")
       ## presumably we shouldn't allow NAs mixed 
