@@ -20,9 +20,9 @@
        data.frame into a \code{phylo4d} object}
 
      \item{x = "phylo"}{merges a tree of class \code{phylo} with a
-       data.frame into a \code{phylo4d} object }    
+       data.frame into a \code{phylo4d} object }
    }}
- 
+
 \usage{
      \S4method{phylo4d}{phylo4}(x, tip.data = NULL, node.data = NULL,
         all.data = NULL, merge.tip.node = TRUE, ...)
@@ -52,7 +52,7 @@
   tips and/or nodes. If you provide \code{all.data} and \code{tip.data}
   or \code{node.data}, row names of the data frames will be matched
   (\code{all.data} names are matched against \code{tip.data} and/or
-  \code{node.data}). This is done independently of the labels of the tree 
+  \code{node.data}). This is done independently of the labels of the tree
   (and also of the value of the arguments \code{use.tip.names} and
   \code{use.node.names}). This means that you need to be consistent
   with the row names of your data frames. It is good practice to use tip
@@ -68,7 +68,7 @@
 
 \seealso{
 \code{\link{coerce-methods}} for translation functions. The
-  \linkS4class{phylo4d} class, the \code{\link{check_data}} 
+  \linkS4class{phylo4d} class, the \code{\link{check_data}}
   function to check the validity of \code{phylo4d} objects;
   \linkS4class{phylo4} class and \link{phylo4} constructor.}
 
@@ -120,14 +120,14 @@ rTipData <- data.frame(randomTrait = rnorm(nTips(geoTree)),
 (exGeo4 <- phylo4d(geoTree, tip.data = rTipData, node.data = rNodeData,
                     merge.tip.node = FALSE))
 
-		    ### Example with 'all.data'
+                    ### Example with 'all.data'x
 nodeLabels(geoTree) <- as.character(nodeId(geoTree))
 rAllData <- data.frame(randomTrait = rnorm(nTips(geoTree) + nNodes(geoTree)),
-row.names = c(labels(geoTree),nodeId(geoTree)))
+row.names = labels(geoTree, 'all'))
 
 
 exGeo5 <- phylo4d(geoTree, all.data = rAllData)
-       
+
 
 }
 \keyword{misc}

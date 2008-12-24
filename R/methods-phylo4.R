@@ -154,10 +154,12 @@ setMethod("tipLabels", "phylo4", function(object) {
 
 setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","all")) {
   which <- match.arg(which)
-  switch(which,
-         internal=x@edge[x@edge[,2]>nTips(x),2],
-         tip = x@edge[x@edge[,2]<=nTips(x),2],
-         all = x@edge[,2])
+  nid <- switch(which,
+                internal=x@edge[x@edge[,2]>nTips(x),2],
+                tip = x@edge[x@edge[,2]<=nTips(x),2],
+                all = x@edge[,2])
+  #sort(nid)
+  return(nid)
 })
 
 setReplaceMethod("nodeLabels", signature(object="phylo4", value="character"),
@@ -340,7 +342,8 @@ setMethod("hasEdgeLength","phylo4", function(x) {
     length(x@edge.length)>0
 })
 
-setReplaceMethod("labels", signature(object="phylo4", value="character"),
+setReplaceMethod("labels",
+                 signature(object="phylo4", value="character"),
    function(object, which = c("tip", "node", "allnode"), ..., value) {
        which <- match.arg(which)
        switch(which,
