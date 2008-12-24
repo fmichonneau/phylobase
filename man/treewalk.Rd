@@ -96,7 +96,7 @@ shortestPath(phy, node1, node2)
   ## identifying an edge from its terminal node
   getedges(geospiza,c("olivacea","B","fortis"))
   getNode(geospiza, c("olivacea","B","fortis"))
-  geospiza$edge[c(26,1,11),]
+  geospiza@edge[c(26,1,11),]
   ## FIXME
   ## if(require(ape)){ edgelabels() }
 

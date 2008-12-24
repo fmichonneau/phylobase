@@ -9,8 +9,8 @@
 \alias{nTips,ANY-method}
 \alias{labels<-}
 \alias{labels,phylo4-method}
-\alias{labels<-,phylo4-method}
-\alias{labels<-,phylo4d-method}
+\alias{labels<-,phylo4,ANY,character-method}
+\alias{labels<-,phylo4d,missing,ANY-method}
 \alias{edges}
 \alias{edges-methods}
 \alias{edges,phylo4-method}
@@ -48,8 +48,14 @@
 \alias{nodeLabels-methods}
 \alias{nodeLabels,phylo4-method}
 \alias{nodeLabels<-}
-\alias{nodeLabels<-,phylo4-method}
-\alias{nodeLabels<-,phylo4d-method}
+\alias{nodeLabels<-,phylo4,character-method}
+\alias{nodeLabels<-,phylo4d,ANY-method}
+\alias{tipLabels}
+\alias{tipLabels-methods}
+\alias{tipLabels,phylo4-method}
+\alias{tipLabels<-}
+\alias{tipLabels<-,phylo4,character-method}
+\alias{tipLabels<-,phylo4d,character-method}
 \alias{hasEdgeLabels}
 \alias{hasEdgeLabels-methods}
 \alias{hasEdgeLabels,phylo4-method}
@@ -57,7 +63,7 @@
 \alias{edgeLabels<-}
 \alias{edgeLabels-methods}
 \alias{edgeLabels,phylo4-method}
-\alias{edgeLabels<-,phylo4-method}
+\alias{edgeLabels<-,phylo4,character-method}
 \alias{tdata}
 \alias{tdata<-}
 \alias{tdata-methods}
@@ -78,6 +84,7 @@
     tree has (internal) node data}
   \item{nodeLabels}{\code{signature(object = "phylo4")}: internal
     node labels}
+  \item{tipLabels}{\code{signature(object = "phylo4")}: tip labels}
   \item{nEdges}{\code{signature(object = "phylo4")}: number of edges}
   \item{edges}{\code{signature(object = "phylo4")}: edge matrix}
   \item{hasEdgeLength}{\code{signature(object = "phylo4")}: whether

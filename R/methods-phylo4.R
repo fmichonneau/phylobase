@@ -143,10 +143,14 @@ setMethod("labels", "phylo4", function(object, which = c("tip",
             )
 })
 
-setMethod("nodeLabels", "phylo4", function(phy) {
+setMethod("nodeLabels", "phylo4", function(object) {
     #x@node.label
-    labels(phy, which="node")
+    labels(object, which="node")
 })
+
+setMethod("tipLabels", "phylo4", function(object) {
+    labels(object, which="tip")
+    })
 
 setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","all")) {
   which <- match.arg(which)
@@ -156,36 +160,27 @@ setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","all")) {
          all = x@edge[,2])
 })
 
-setReplaceMethod("nodeLabels", "phylo4",
-                 function(object, ..., value) {
-                     labels(object, "node") <- value
-                     return(object)
-                 })
+setReplaceMethod("nodeLabels", signature(object="phylo4", value="character"),
+  function(object, ..., value) {
+      labels(object, which="node", ...) <- value
+      return(object)
+  })
 
-setMethod("edgeLabels", "phylo4", function(x) {
+setReplaceMethod("tipLabels", signature(object="phylo4", value="character"),
+  function(object, ...,  value) {
+      labels(object, which="tip", ...) <- value
+      return(object)
+  })
+
+setMethod("edgeLabels", signature(x = "phylo4"), function(x) {
     x@edge.label
 })
 
-setReplaceMethod("edgeLabels", "phylo4", function(object, ...,
-    value) {
-    object@edge.label <- value
-    object
-})
-
-## hack to allow access with $
-setMethod("$", "phylo4", function(x, name) {
-    switch(name, edge.length = if (!hasEdgeLength(x))
-        NULL
-    else x@edge.length, node.label = if (!hasNodeLabels(x))
-        NULL
-    else x@node.label, attr(x, name))
-})
-
-## FIXME: implement more checks on this!!
-setReplaceMethod("$", "phylo4", function(x, name, value) {
-    slot(x, name, check = TRUE) <- value
-    return(x)
-})
+setReplaceMethod("edgeLabels", signature(object="phylo4", value="character"),
+  function(object, ..., value) {
+      object@edge.label <- value
+      object
+  })
 
 
 printphylo4 <- function(x, printall = TRUE){
@@ -256,13 +251,13 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
 
     ## build the result object
     res$name <- deparse(substitute(object, sys.frame(-1)))
-    res$nb.tips <- length(x$tip.label)
-    res$nb.nodes <- x$Nnode
+    res$nb.tips <- length(x@tip.label)
+    res$nb.nodes <- x@Nnode
 
-    if(!is.null(x$edge.length)){
-        res$mean.el <- mean(x$edge.length, na.rm=TRUE)
-        res$var.el <- var(x$edge.length, na.rm=TRUE)
-        res$sumry.el <- summary(x$edge.length)[-4]
+    if(!is.null(x@edge.length)){
+        res$mean.el <- mean(x@edge.length, na.rm=TRUE)
+        res$var.el <- var(x@edge.length, na.rm=TRUE)
+        res$sumry.el <- summary(x@edge.length)[-4]
     } else {
         res$mean.el <- NULL
         res$var.el <- NULL
@@ -303,7 +298,7 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
     cat(" Number of tips    :", res$nb.tips, "\n")
     cat(" Number of nodes   :", res$nb.nodes, "\n")
     ## cat("  ")
-    if(is.null(x$edge.length)) {
+    if(is.null(x@edge.length)) {
         cat(" Branch lengths    : No branch lengths.\n")
     } else {
         cat(" Branch lengths:\n")
@@ -345,7 +340,7 @@ setMethod("hasEdgeLength","phylo4", function(x) {
     length(x@edge.length)>0
 })
 
-setReplaceMethod("labels", "phylo4",
+setReplaceMethod("labels", signature(object="phylo4", value="character"),
    function(object, which = c("tip", "node", "allnode"), ..., value) {
        which <- match.arg(which)
        switch(which,

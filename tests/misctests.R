@@ -7,7 +7,7 @@ geospiza0 <-
 ## push data back into list form as in geiger
 
 t1 <-  try(p1 <- phylo4d(geospiza0$geospiza.tree,geospiza0$geospiza.data))
-## Error in check_data(res, ...) : 
+## Error in check_data(res, ...) :
 ##   Tip data names are a subset of tree tip labels.
 
 p2 <- as(geospiza0$geospiza.tree,"phylo4")
@@ -79,8 +79,8 @@ obj1 <- obj2 <- obj3 <- phylo4d(as(tree.owls,"phylo4"),data.frame(wing=1:4,color
 obj2@tip.data <- as.data.frame(obj2@tip.data[,1])
 obj3@tip.data <- cbind(obj1@tip.data,obj2@tip.data)
 obj4 <- obj1
-obj4$tip.data[2,3] <- NA
-obj4$tip.data[1,1] <- NA
+obj4@tip.data[2,3] <- NA
+obj4@tip.data[1,1] <- NA
 
 obj4@node.label <- character(0)
 
@@ -90,16 +90,16 @@ tdata(obj4) <- subset(tdata(obj4),select=sapply(tdata(obj4),class)=="numeric")
 treePlot(obj4)
 
 E <- matrix(c(
-    8,  9, 
-    9, 10, 
-   10,  1, 
-   10,  2, 
-    9,  3, 
-    9,  4, 
-    8, 11, 
-   11,  5, 
-   11,  6, 
-   11,  7, 
-   NA,  8), ncol=2,byrow=TRUE) 
+    8,  9,
+    9, 10,
+   10,  1,
+   10,  2,
+    9,  3,
+    9,  4,
+    8, 11,
+   11,  5,
+   11,  6,
+   11,  7,
+   NA,  8), ncol=2,byrow=TRUE)
 
 P2 <- phylo4(E)

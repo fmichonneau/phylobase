@@ -61,13 +61,23 @@ setGeneric("labels<-",
                standardGeneric("labels<-")
            })
 
-setGeneric("nodeLabels", function(phy) {
+setGeneric("nodeLabels", function(object) {
     standardGeneric("nodeLabels")
 })
+
 setGeneric("nodeLabels<-",
            function(object, ..., value) {
                standardGeneric("nodeLabels<-")
            })
+
+setGeneric("tipLabels", function(object) {
+    standardGeneric("tipLabels")
+})
+
+setGeneric("tipLabels<-",
+   function(object, ..., value) {
+       standardGeneric("tipLabels<-")
+   })
 
 setGeneric("nodeId", function(x, which=c("internal", "tip", "all")) {
     standardGeneric("nodeId")
