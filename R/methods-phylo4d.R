@@ -63,7 +63,7 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
             nodedata <- data.frame(label=rep("",nNodes(x)))
           } else
           nodedata <- data.frame(label=x@node.label)
-        } 
+        }
         else {
           nodedata <- tdata(x, "node", label.type="column")
         }
@@ -82,14 +82,14 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
         tdata <- data.frame(label=data.names,tdata)
 
         if ( identical(label.type,"row.names") ) {
-            if ( identical(data.names,unique(data.names)) || 
+            if ( identical(data.names,unique(data.names)) ||
                 !(any(is.na(data.names))) ) {
                 tdata <- data.frame(tdata[,-1,drop=FALSE])
                 row.names(tdata) <- data.names
             }
             else {
-                stop("Non-unique or missing labels found, labels cannot be 
-                    coerced to tdata row.names. Use the label.type argument to 
+                stop("Non-unique or missing labels found, labels cannot be
+                    coerced to tdata row.names. Use the label.type argument to
                     include labels as first column of data.")
             }
         }
@@ -124,7 +124,7 @@ setReplaceMethod("tdata", "phylo4d", function(object, which = c("tip",
 ## Marguerite Butler & Peter Cowan
 setMethod("summary", "phylo4d", function(object) {
     x <- object
-    summary(extractTree(object))
+    summary(as(x, "phylo4"))
     tips <- tdata(object, "tip")
     nodes <- tdata(object, "node")
     cat("\nComparative data:\n")
