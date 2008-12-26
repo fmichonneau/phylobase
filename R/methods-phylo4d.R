@@ -60,9 +60,11 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
     if (which == "allnode") {
         if (all(dim(x@node.data)==0)) { ## empty data
           if (!hasNodeLabels(x)) {
-            nodedata <- data.frame(label=rep("",nNodes(x)))
+              nd <- character(nNodes(x))
+              is.na(nd) <- TRUE
+              nodedata <- data.frame(label=nd)
           } else
-          nodedata <- data.frame(label=x@node.label)
+          nodedata <- data.frame(label=nodeLabels(x))
         }
         else {
           nodedata <- tdata(x, "node", label.type="column")

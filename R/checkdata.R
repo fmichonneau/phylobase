@@ -10,7 +10,7 @@ check_tree <- function(object,warn="retic",err=NULL) {
     if (hasEdgeLength(object)) {
       if (length(object@edge.length) != nedges)
         return("edge lengths do not match number of edges")
-      ## presumably we shouldn't allow NAs mixed 
+      ## presumably we shouldn't allow NAs mixed
       ## with numeric branch lengths except at the root
       if (sum(is.na(object@edge.length)) > 1)
         return("NAs in edge lenghts")
@@ -39,11 +39,11 @@ check_tree <- function(object,warn="retic",err=NULL) {
     if (!all(nDesc[1:nTips]==0))
       return("nodes 1 to nTips must all be tips")
     #nRoots <- sum(nAncest==0)
-    ## no longer 
+    ## no longer
     ##if (which(nAncest==0)!=nTips+1) {
     ##  return("root node is not at position (nTips+1)")
     ##}
-    
+
     if (nRoots>0) {
       if (sum(is.na(E[,1]))!=1) {
         return("for a rooted tree, edge matrix must contain (exactly one) explicit root edge with ancestor==NA")
@@ -74,6 +74,13 @@ check_tree <- function(object,warn="retic",err=NULL) {
       stop("unknown order: allowed values are ",
            paste(phylo4_orderings,collapse=","))
     }
+
+    ## make sure that tip and node labels are unique
+    lb <- labels(object, "all")
+    lb <- lb[nchar(lb) > 0]
+    lb <- na.omit(lb)
+    if(any(table(lb) > 1))
+        stop("All labels must be unique")
 
     ## all done with fatal errors.  Now construct a list
     ##  of warnings and paste them together
@@ -171,10 +178,12 @@ check_data <- function(object,
                     if(any(nU <- tipsTable > 1)) {
                         nonUnique <- paste(names(tipsTable[nU]), collapse=", ")
                         nonUniqueMsg <- paste("Tip \'", nonUnique, "\' not unique", sep = "")
-                        if(non.unique.tips == "fail")
+                        ## TODO - When labels will be matched on node numbers
+                        ## then we will be able to allow non-unique labels
+                        ## if(non.unique.tips == "fail")
                             stop(nonUniqueMsg)
-                        if(non.unique.tips == "warn")
-                            warning(nonUniqueMsg)
+                        ## if(non.unique.tips == "warn")
+                            ## warning(nonUniqueMsg)
                     }
                 }
             }
@@ -283,9 +292,11 @@ check_data <- function(object,
                     if(any(nU <- nodesTable > 1)) {
                         nonUnique <- paste(names(nodesTable[nU]), collapse=", ")
                         nonUniqueMsg <- paste("Node \'", nonUnique, "\' not unique", sep = "")
-                        if(non.unique.nodes == "fail")
+                        ## TODO - When labels will be matched on node numbers
+                        ## then we will be able to allow non-unique labels
+                        ## if(non.unique.nodes == "fail")
                             stop(nonUniqueMsg)
-                        if(non.unique.nodes == "warn")
+                        ## if(non.unique.nodes == "warn")
                             warning(nonUniqueMsg)
                     }
                 }

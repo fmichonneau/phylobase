@@ -67,15 +67,15 @@ setAs("phylo4", "phylo", function(from, to) {
     rootpos <- which(nodeId(from, "all") == rootNode(from))
     if (isRooted(from)) brlen <- brlen[-rootpos]
     edgemat <- unname(from@edge[-rootpos, ])
-    y <- list(edge = edgemat, 
-            Nnode = from@Nnode, 
-            tip.label = from@tip.label, 
-            edge.length = brlen, 
-            node.label = from@node.label) 
+    y <- list(edge = edgemat,
+            Nnode = from@Nnode,
+            tip.label = from@tip.label,
+            edge.length = brlen,
+            node.label = from@node.label)
     class(y) <- "phylo"
     if (from@order != 'unknown') {
         ## TODO postorder != pruningwise -- though quite similar
-        attr(y, 'order') <- switch(from@order, postorder = 'pruningwise', 
+        attr(y, 'order') <- switch(from@order, postorder = 'pruningwise',
                                       preorder  = 'cladewise')
     }
     if (length(y$edge.length) == 0)
@@ -89,7 +89,7 @@ setAs("phylo4", "phylo", function(from, to) {
     y
 })
 
-## BMB: redundant????  
+## BMB: redundant????
 ## setAs("phylo4d", "phylo", function(from, to) {
 ##     y <- list(edge = from@edge, edge.length = from@edge.length,
 ##         Nnode = from@Nnode, tip.label = from@tip.label)
@@ -184,11 +184,19 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
 })
 
 setAs(from = "phylo4d", to = "data.frame", function(from) {
-    ## TODO we need some test to ensure data and tree are in the right order
+
     tree <- extractTree(from) ## as(from, "phylo4") # get tree
     t_df <- as(tree, "data.frame") # convert to data.frame
+
     dat <- tdata(from, "allnode", label.type="column") # get data
-    tdat <- cbind(t_df, dat[ ,-1 , drop=FALSE])
-    #tdat <- dat[,-1,drop=FALSE]
+    if(nrow(dat) > 0 && ncol(dat) > 1) {
+        dat <- dat[match(t_df$label, dat$label), ]
+        tdat <- cbind(t_df, dat[ ,-1 , drop=FALSE])
+    }
+    else {
+        tdat <- t_df
+        cat("No data associated with the tree\n")
+    }
+
     return(tdat)
 })
