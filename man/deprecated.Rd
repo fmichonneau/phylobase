@@ -1,8 +1,8 @@
 \name{printphylo}
 \alias{printphylo}
-\title{print a phylogeny}
+\title{Deprecated functions}
 \description{
-  Prints a short description of a phylo4 object
+  Functions which are no longer used (or suggested)
 }
 \usage{
 printphylo(x, printlen = 6, ...)
@@ -13,7 +13,7 @@ printphylo(x, printlen = 6, ...)
   \item{\dots}{Included for consistency}
 }
 \value{
-  Prints a short description of the object
+  \code{printphylo} prints a short description of the object
 }
 \author{Ben Bolker (copied from print.phylo in ape package)}
 \keyword{misc}
