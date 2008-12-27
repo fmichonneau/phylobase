@@ -33,7 +33,6 @@ The topology is given by the pattern of links from each node to its ancestor. Al
   Steve Kembel
 }
 \note{This is the default show() method for phylo4, phylo4d. It prints the user-supplied information for building a phylo4 object. For a full description of the phylo4 S4 object and slots, see \code{\link{phylo4}}. }
-\seealso{See Also as \code{\link{printphylo}} for an \code{ape}-like version of \code{print()}. }
 \examples{
 
 tree.phylo <- read.tree(text="((a,b),c);")
