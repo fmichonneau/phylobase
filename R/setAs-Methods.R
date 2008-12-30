@@ -15,7 +15,7 @@ setAs("phylo", "phylo4", function(from, to) {
             }
         }
         if (!is.null(from$edge.label)) {
-            from$edge.label <- c(from$edge.label,paste("E",root.edge,sep=""))
+            from$edge.label <- c(from$edge.label,NA)
         }
     }
     newobj <- phylo4(from$edge, from$edge.length, from$tip.label,
