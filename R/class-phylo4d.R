@@ -69,7 +69,7 @@ setMethod("phylo4d", c("phylo4"),
            }
            if(!is.null(node.data)) {
                emptyTipData <- array(, dim = c(nTips(x), ncol(node.data)),
-                                     dimnames = list(labels(x), colnames(node.data)))
+                                     dimnames = list(tipLabels(x), colnames(node.data)))
                tmpNodeData <- rbind(emptyTipData, node.data)
                ## TODO? - add test
                tmpNodeData <- tmpNodeData[match(rownames(all.data), rownames(tmpNodeData)) ,, drop = FALSE]
@@ -89,7 +89,7 @@ setMethod("phylo4d", c("phylo4"),
                }
                else {
                    emptyTipData <- array(, dim = c(nTips(x), ncol(node.data)),
-                                           dimnames = list(labels(x), colnames(node.data)))
+                                           dimnames = list(tipLabels(x), colnames(node.data)))
                    emptyNodeData <- array(, dim = c(nNodes(x), ncol(tip.data)),
                                             dimnames = list(nodeLabels(x), colnames(tip.data)))
                    tmpTipData <- rbind(tip.data, emptyNodeData)

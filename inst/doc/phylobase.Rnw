@@ -147,7 +147,7 @@ labels(g1)
 
 Print node numbers:
 <<nodenumbergeodata>>=
-nodeId(g1, which = 'all')
+nodeId(g1, which = 'allnode')
 @
 
 Print edge labels (also empty in this case):
@@ -232,7 +232,7 @@ You can summarize the new object:
 summary(g2)
 @
 
-Or use \code{tdata()} to extract the data (i.e., \code{tdata(g2)}). By default, \code{tdata()} will retrieve tip data, but you can also get internal node data only (\code{tdata(tree,"node")}) or --- if the tip and node data have the same format --- all the data combined (\code{tdata(tree,"allnode")}).
+Or use \code{tdata()} to extract the data (i.e., \code{tdata(g2)}). By default, \code{tdata()} will retrieve tip data, but you can also get internal node data only (\code{tdata(tree,"internal")}) or --- if the tip and node data have the same format --- all the data combined (\code{tdata(tree,"allnode")}).
 
 Plotting calls \code{plot.phylog} from the \code{ade4} package.
 
@@ -444,7 +444,7 @@ We have defined basic methods for \code{phylo4}:\code{show}, \code{print}, and a
 \subsection{phylo4d}
 
 The \code{phylo4d} class extends \code{phylo4} with data.  Tip data, and (internal) node data are stored separately, but can be retrieved together or separately with \code{tdata(x,"tip")},
-\code{tdata(x,"node")} or \code{tdata(x,"all")}.
+\code{tdata(x,"internal")} or \code{tdata(x,"all")}.
 There is no separate slot for edge data, but these
 can be stored as node data associated with the
 descendant node.

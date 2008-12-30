@@ -87,7 +87,7 @@ p4d.superset <- phylo4d(p4, dat.superset, extra.tip.data = "OK")
 
 #create phylo4d objects with node data
 nod.dat <- data.frame(a = rnorm(4), b = rnorm(4))
-p4d.nod <- phylo4d(p4, node.data = nod.dat, which = "node")
+p4d.nod <- phylo4d(p4, node.data = nod.dat, which = "internal")
 
 #create phylo4 objects with node and tip data
 p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat,

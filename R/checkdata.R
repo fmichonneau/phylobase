@@ -76,7 +76,7 @@ check_tree <- function(object,warn="retic",err=NULL) {
     }
 
     ## make sure that tip and node labels are unique
-    lb <- labels(object, "all")
+    lb <- labels(object, "allnode")
     lb <- lb[nchar(lb) > 0]
     lb <- na.omit(lb)
     if(any(table(lb) > 1))
@@ -174,7 +174,7 @@ check_data <- function(object,
                 }
                 else {
                     ## Some tips are non-unique
-                    tipsTable <- table(labels(object))
+                    tipsTable <- table(tipLabels(object))
                     if(any(nU <- tipsTable > 1)) {
                         nonUnique <- paste(names(tipsTable[nU]), collapse=", ")
                         nonUniqueMsg <- paste("Tip \'", nonUnique, "\' not unique", sep = "")

@@ -113,11 +113,11 @@ setMethod("hasEdgeLabels", "phylo4", function(x) {
 })
 
 setMethod("labels", "phylo4", function(object, which = c("tip",
-    "node", "allnode"), ...) {
+    "internal", "allnode"), ...) {
     which <- match.arg(which)
     switch(which,
             tip = object@tip.label[order(nodeId(object,"tip"))],
-            node = {
+            internal = {
                 if (hasNodeLabels(object)) {
                     object@node.label[order(nodeId(object))]
                 }
@@ -145,7 +145,7 @@ setMethod("labels", "phylo4", function(object, which = c("tip",
 
 setReplaceMethod("labels",
                  signature(object="phylo4", value="character"),
-   function(object, which = c("tip", "node", "allnode"), ..., value) {
+   function(object, which = c("tip", "internal", "allnode"), ..., value) {
        which <- match.arg(which)
        tipOrder <- order(nodeId(object, "tip"))
        intOrder <- order(nodeId(object, "internal"))
@@ -162,8 +162,8 @@ setReplaceMethod("labels",
                       object
                   }
               },
-              ## If 'node'
-              node = {
+              ## If 'internal'
+              internal = {
                   if(length(value) != nNodes(object))
                       stop("Number of node labels does not match number of internal nodes.")
                   else {
@@ -201,26 +201,26 @@ setReplaceMethod("labels",
 
 setMethod("nodeLabels", "phylo4", function(object) {
     #x@node.label
-    labels(object, which="node")
+    labels(object, which="internal")
 })
 
 setMethod("tipLabels", "phylo4", function(object) {
     labels(object, which="tip")
     })
 
-setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","all")) {
+setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","allnode")) {
   which <- match.arg(which)
   nid <- switch(which,
                 internal=x@edge[x@edge[,2]>nTips(x),2],
                 tip = x@edge[x@edge[,2]<=nTips(x),2],
-                all = x@edge[,2])
+                allnode = x@edge[,2])
   #sort(nid)
   return(nid)
 })
 
 setReplaceMethod("nodeLabels", signature(object="phylo4", value="character"),
   function(object, ..., value) {
-      labels(object, which="node", ...) <- value
+      labels(object, which="internal", ...) <- value
       return(object)
   })
 

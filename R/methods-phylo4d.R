@@ -3,10 +3,10 @@ setMethod("print", "phylo4d", printphylo4)
 setMethod("show", "phylo4d", function(object) printphylo4(object))
 
 setMethod("tdata", "phylo4d", function(x, which = c("tip",
-    "node", "allnode"), label.type=c("row.names","column"), ...) {
+    "internal", "allnode"), label.type=c("row.names","column"), ...) {
     which <- match.arg(which)
     ## FIXME: should have no labels in this case?
-    if (!hasNodeLabels(x) && which=="node" && missing(label.type)) { }
+    if (!hasNodeLabels(x) && which=="internal" && missing(label.type)) { }
     label.type <- match.arg(label.type)
     if (which == "tip") {
         if (all(dim(x@tip.data)==0)) {
@@ -32,7 +32,7 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
         return(tdata)
     }
 
-    if (which == "node") {
+    if (which == "internal") {
         if (all(dim(x@node.data)==0)) {
             return(x@node.data)
         }
@@ -67,7 +67,7 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
           nodedata <- data.frame(label=nodeLabels(x))
         }
         else {
-          nodedata <- tdata(x, "node", label.type="column")
+          nodedata <- tdata(x, "internal", label.type="column")
         }
         if (all(dim(x@tip.data)==0)) {
           tipdata <- data.frame(label=x@tip.label)
@@ -100,7 +100,7 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
 })
 
 setReplaceMethod("tdata", "phylo4d", function(object, which = c("tip",
-    "node", "allnode"), ..., value) {
+    "internal", "allnode"), ..., value) {
     which <- match.arg(which)
     if (which == "allnode") {
         namesmatch <- all(colnames(object@tip.data) == colnames(object@node.data))
@@ -115,7 +115,7 @@ setReplaceMethod("tdata", "phylo4d", function(object, which = c("tip",
         stop("For now, only data.frame or matrix can be provided")
     switch(which,
            tip = object@tip.data <- value,
-           node = object@node.data <- value,
+           internal = object@node.data <- value,
            allnode = stop("for now, must set tip and node data separately"))
     if(check_data(object, ...)) object <- attach_data(object, ...)
     object
@@ -128,7 +128,7 @@ setMethod("summary", "phylo4d", function(object) {
     x <- object
     summary(as(x, "phylo4"))
     tips <- tdata(object, "tip")
-    nodes <- tdata(object, "node")
+    nodes <- tdata(object, "internal")
     cat("\nComparative data:\n")
     if (nrow(tips) > 0) {
         cat("\nTips: data.frame with", nTips(object), "taxa and",

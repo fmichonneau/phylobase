@@ -16,7 +16,7 @@ getNode <- function(phy,node,missing=c("warn","OK","fail")) {
     if (is.character(node)) {
         ## old getNodeByLabel()
         nt <- nTips(phy)
-        tipmatch <- match(node,labels(phy,"all"))
+        tipmatch <- match(node,labels(phy,"allnode"))
         vals <- ifelse(!is.na(tipmatch),
                        tipmatch,
                        ifelse(nolabs,NA,nt+match(node,nodeLabels(phy))))
@@ -26,7 +26,7 @@ getNode <- function(phy,node,missing=c("warn","OK","fail")) {
         ## old getLabelByNode
         nt <- nTips(phy)
         vals <- ifelse(node<=nt,  ## tips
-                       labels(phy,"all")[node],
+                       labels(phy,"allnode")[node],
                        ifelse(node<=nt+nNodes(phy),
                               ifelse(nolabs,NA,
                                      nodeLabels(phy)[pmax(0,node-nt)]),
@@ -70,7 +70,7 @@ descendants <- function (phy, node, which=c("tips","children","all"))
     node <- getNode(phy,node)
     if (is.na(node)) stop("node ",node," not found in tree")
     n <- nTips(phy)
-    if (node <= n) return(labels(phy,"all")[node])
+    if (node <= n) return(labels(phy,"allnode")[node])
     l <- numeric()
     d <- children(phy, node)
     for (j in d) {
