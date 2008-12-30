@@ -4,18 +4,21 @@ setAs("phylo", "phylo4", function(from, to) {
     ## fixme SWK kludgy fix may not work well with unrooted trees
     ## TODO should we also attempt to get order information?
     if (is.rooted(from)) {
-        root.edge <- as.numeric(setdiff(unique(from$edge[,1]), unique(from$edge[,2])))
-        from$edge <- rbind(from$edge,c(NA,root.edge))
+        tip.idx <- 1:nTips(from)
+        int.idx <- (nTips(from)+1):dim(from$edge)[1]
+        root.node <- as.numeric(setdiff(unique(from$edge[,1]), unique(from$edge[,2])))
+        #from$edge <- rbind(from$edge,c(NA,root.edge))
+        from$edge <- rbind(from$edge[tip.idx,],c(NA,root.node),from$edge[int.idx,])        
         if (!is.null(from$edge.length)) {
             if (is.null(from$root.edge)) {
-                from$edge.length <- c(from$edge.length,as.numeric(NA))
+                from$edge.length <- c(from$edge.length[tip.idx],as.numeric(NA),from$edge.length[int.idx])
             }
             else {
-                from$edge.length <- c(from$edge.length,from$root.edge)
+                from$edge.length <- c(from$edge.length[tip.idx],from$root.edge,from$edge.length[int.idx])
             }
         }
         if (!is.null(from$edge.label)) {
-            from$edge.label <- c(from$edge.label,NA)
+            from$edge.label <- c(from$edge.label[tip.idx],NA,from$edge.label[int.idx])
         }
     }
     newobj <- phylo4(from$edge, from$edge.length, from$tip.label,
