@@ -117,7 +117,7 @@ setGeneric("reorder")
 ###################
 ## Function .genlab
 ###################
-## recursive function to have labels of constant length
+## (formerly) recursive function to have labels of constant length
 ## base = a character string
 ## n = number of labels
 .genlab <- function(base, n) {
