@@ -360,7 +360,7 @@ setMethod("hasEdgeLength","phylo4", function(x) {
 
 setReplaceMethod("labels",
                  signature(object="phylo4", value="character"),
-   function(object, which = c("tip", "node", "allnode"), ..., value) {
+   function(object, which = c("tip", "internal", "allnode"), ..., value) {
        which <- match.arg(which)
        switch(which,
               ## If 'tip'
@@ -372,8 +372,8 @@ setReplaceMethod("labels",
                       return(object)
                   }
               },
-              ## If 'node'
-              node = {
+              ## If 'internal'
+              internal = {
                   if(length(value) != nNodes(object))
                       stop("Number of node labels does not match number of internal nodes.")
                   else {
