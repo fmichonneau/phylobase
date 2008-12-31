@@ -126,11 +126,13 @@ are missing:
 <<nodelabelgeodata>>=
 nodeLabels(g1)
 @
+(you can also retrieve the node labels with
+\code{labels(g1,"internal")}).
 
 A simple way to assign the node numbers as
 labels (useful for various checks) is
 <<>>=
-nodeLabels(g1) <- as.character(nodeId(g1))
+nodeLabels(g1) <- as.character(sort(nodeId(g1)))
 head(g1,5)
 @
 
@@ -142,10 +144,12 @@ summary(g1)
 
 Print tip labels:
 <<tiplabelgeodata>>=
-labels(g1)
+tipLabels(g1)
 @
+(\code{labels(g1)} or \code{labels(g1,"tip")} would also work.)
 
-Print node numbers:
+
+Print node numbers (in edge matrix order):
 <<nodenumbergeodata>>=
 nodeId(g1, which = 'allnode')
 @
@@ -176,9 +180,17 @@ hasEdgeLength(g1)
 @
 
 You can modify labels and other aspects
-of the tree --- for example,
+of the tree --- for example, to convert
+all the labels to lower case:
 <<modlabelsgeodata>>=
-tipLabels(g1) <- tolower(labels(g1))
+tipLabels(g1) <- tolower(tipLabels(g1))
+@
+
+You could also modify selected labels, e.g.
+to modify the labels in positions 11 and 13
+(which happen to be the only labels with uppercase letters):
+<<eval=FALSE>>=
+tipLabels(g1)[c(11,13)] <- c("platyspiza","pinaroloxias")
 @
 
 \section{Trees with data}
@@ -234,7 +246,7 @@ summary(g2)
 
 Or use \code{tdata()} to extract the data (i.e., \code{tdata(g2)}). By default, \code{tdata()} will retrieve tip data, but you can also get internal node data only (\code{tdata(tree,"internal")}) or --- if the tip and node data have the same format --- all the data combined (\code{tdata(tree,"allnode")}).
 
-Plotting calls \code{plot.phylog} from the \code{ade4} package.
+%Plotting calls \code{plot.phylog} from the \code{ade4} package.
 
 If you want to plot the data (e.g. for checking the input), \code{plot(tdata(g2))} will create the default plot for the data --- in this case, since it is a data frame [\textbf{this may change in future versions but should remain transparent}] this will be a \code{pairs} plot of the data.
 
@@ -453,19 +465,21 @@ descendant node.
 \subsection{multiphylo4}
 
 
-\section{Hacks/backward compatibility}
+% hack removed ...
+%
+%\section{Hacks/backward compatibility}
+%
+%There is a way to hack the \verb+$+ operator so that it would provide %backward compatibility with code that is extracting internal elements %of a \code{phylo4}. The basic recipe is:
 
-There is a way to hack the \verb+$+ operator so that it would provide backward compatibility with code that is extracting internal elements of a \code{phylo4}. The basic recipe is:
-
-<<eval=FALSE>>=
+<<echo=FALSE,eval=FALSE>>=
 setMethod("$","phylo4",function(x,name) { attr(x,name)})
 @
 
-but this has to be hacked slightly to intercept calls to elements that might be missing.  For example, \code{ape} detects whether log-likelihood, root edges, node labels, etc. are missing by testing whether they are \code{NULL}, whereas missing items are represented in \code{phylo4} by zero-length vectors in the slots (or \code{NA} for the root edge) --- so we need code like
-<<eval=FALSE>>=
+%but this has to be hacked slightly to intercept calls to elements %that might be missing.  For example, \code{ape} detects whether %log-likelihood, root edges, node labels, etc. are missing by testing %whether they are \code{NULL}, whereas missing items are represented %in \code{phylo4} by zero-length vectors in the slots (or \code{NA} %for the root edge) --- so we need code like
+<<echo=FALSE,eval=FALSE>>=
 if(!hasNodeLabels(x)) NULL else x@node.label
 @
-to handle these cases.
+%to handle these cases.
 
 
 \end{document}
