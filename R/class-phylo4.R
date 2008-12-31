@@ -49,7 +49,7 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
         if(length(tip.label) != ntips) stop("the tip labels are not consistent with the number of tips")
         tip.label <- as.character(tip.label)
     }
-
+    names(tip.label) <- seq(along=tip.label)
     ## node.label for internal nodes
     nnodes <- length(unique(na.omit(c(edge)))) - ntips
     ##    if(is.null(node.label)) {
@@ -61,6 +61,7 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
       ## is.na(node.label) <- TRUE ## ???
     } else if (length(node.label)>0 && length(node.label) != nnodes)
       stop("number of node labels is not consistent with the number of nodes")
+    names(node.label) <- seq(along=node.label)
     ## edge.label
     ## an edge is named by the descendant
     if(is.null(edge.label)) {

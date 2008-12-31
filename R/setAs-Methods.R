@@ -157,7 +157,7 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
         ## beware: they cannot be NULL
         ## there are always tip labels (or check_phylo4 complains)
         ## there may not be node labels (character(0))
-        label <- labels(x,which="all")[node]
+        label <- labels(x,which="all")[nodeId(x,"all")]
         node.type <- nodeType(x)[node]
         d <- data.frame(label, node, ancestor, branch.length,
             node.type)
@@ -192,14 +192,16 @@ setAs(from = "phylo4d", to = "data.frame", function(from) {
     t_df <- as(tree, "data.frame") # convert to data.frame
 
     dat <- tdata(from, "allnode", label.type="column") # get data
-    if(nrow(dat) > 0 && ncol(dat) > 1) {
-        dat <- dat[match(t_df$label, dat$label), ]
-        tdat <- cbind(t_df, dat[ ,-1 , drop=FALSE])
-    }
-    else {
-        tdat <- t_df
-        cat("No data associated with the tree\n")
-    }
-
+    ## reorder data to edge matrix order, drop labels (first column)
+    dat2 <- dat[nodeId(from,"all"),-1,drop=FALSE] 
+    tdat <- cbind(t_df, dat2)
+##     if(nrow(dat) > 0 && ncol(dat) > 1) {
+##         dat <- dat[match(t_df$label, dat$label), ]
+##         tdat <- cbind(t_df, dat[ ,-1 , drop=FALSE])
+##     }
+##     else {
+##         tdat <- t_df
+##         cat("No data associated with the tree\n")
+##     }
     return(tdat)
 })

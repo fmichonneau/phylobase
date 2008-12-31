@@ -76,11 +76,12 @@ setMethod("tdata", "phylo4d", function(x, which = c("tip",
             tipdata <- tdata(x, "tip", label.type="column")
         }
 
-        data.names <- c(as.character(nodedata$label),as.character(tipdata$label))
-        tipdata$label <- (x@Nnode+1):(x@Nnode+length(x@tip.label))
-        nodedata$label <- 1:x@Nnode
+        data.names <- c(as.character(tipdata$label),
+                        as.character(nodedata$label))
+        tipdata$label <- sort(nodeId(x,"tip"))
+        nodedata$label <- sort(nodeId(x,"internal"))
         ## FIXME - kludgy merge and subsequent cleanup - make robust
-        tdata <- merge(nodedata,tipdata, all=TRUE,sort=FALSE)[,-1,drop=FALSE]
+        tdata <- merge(tipdata, nodedata, all=TRUE,sort=FALSE)[,-1,drop=FALSE]
         tdata <- data.frame(label=data.names,tdata)
 
         if ( identical(label.type,"row.names") ) {
@@ -185,8 +186,9 @@ setMethod("reorder", signature(x = 'phylo4d'),
     index       <- orderIndex(x, order)
     x@order     <- order
     x@edge      <- x@edge[index, ]
-    x@tip.data  <- x@tip.data[index[index <= nTips(x)], , drop = FALSE]
-    x@node.data <- x@node.data[index[index > nTips(x)], , drop = FALSE]
+    ## don't reorder data!
+    ## x@tip.data  <- x@tip.data[index[index <= nTips(x)], , drop = FALSE]
+    ## x@node.data <- x@node.data[index[index > nTips(x)], , drop = FALSE]
     if(hasEdgeLabels(x)) { x@edge.label  <- x@edge.label[index] }
     if(hasEdgeLength(x)) { x@edge.length <- x@edge.length[index] }
     x

@@ -151,7 +151,8 @@
                     angle = -rot
                     ))
                     #grid.rect()
-                    vals = t(tdata(phy, which = 'tip')[i, ])
+                    tvals <- tdata(phy, which = 'tip')[nodeId(phy,'tip'),,drop=FALSE]
+                    vals = t(tvals[i, ])
                     if (!all(is.na(vals))) tip.plot.fun(vals,tmin,tmax,...)
                 upViewport()
             }
@@ -187,7 +188,7 @@
                     angle = -rot
                     ))
                     #grid.rect()
-                    vals = tdata(phy)[,i]
+                    vals = tdata(phy)[nodeId(phy,'tip'),i,drop=FALSE]
                     if (!all(is.na(vals))) tip.plot.fun(vals, tmin, tmax, ...)
                 upViewport()
             }
@@ -326,14 +327,14 @@ phyloXXYY <- function(phy, tip.order = NULL) {
         ## TODO perhaps we want to use match here?
         ## 0, 1, length.out = Ntips) 
     # } else {
-        ## reoder the phylo and assign even y spacing to the tips
+        ## reorder the phylo and assign even y spacing to the tips
         phy <- reorder(phy, 'postorder')
         xxyy$yy[phy@edge[, 2] <= Ntips] <- seq(
             0, 1, length.out = Ntips
         )
     # }
     
-    ## a recurvise preorder traversal 
+    ## a recursive preorder traversal 
     ## node  -- initalized to be root, is the starting point for the traversal
     ## phy   -- the phylogeny
     ## xxyy  -- the list initalized below that holds the output
@@ -425,7 +426,7 @@ phylobubbles <- function(XXYY, square = FALSE, grid = TRUE) {
     # tip y coordinates
     tys <- XXYY$yy[phy@edge[, 2] <= nTips(phy)]
     
-    tipdata <- tdata(phy, which = "tip")
+    tipdata <- tdata(phy, which = "tip")[nodeId(phy,"tip"),,drop=FALSE]
     nVars <- ncol(tipdata) # number of bubble columns
     
     maxr <- ifelse(ncol(tipdata) > nTips(phy), 1 / ncol(tipdata), 1 / nTips(phy))

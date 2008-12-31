@@ -72,6 +72,7 @@ data(geospiza)
 
 ## "subset" examples
 g1 <- as(geospiza,"phylo4")
+nodeLabels(g1) <- as.character(sort(nodeId(g1)))
 plot(subset(g1,tips.exclude="scandens"))
 plot(subset(g1,mrca=c("scandens","fortis","pauper")))
 plot(subset(g1,node.subtree=18))
@@ -79,7 +80,7 @@ plot(subset(g1,node.subtree=18))
 ## "[" examples
 plot(g1,show.node.label=TRUE)
 plot(g1[c(1:6,14)],show.node.label=TRUE)
-
+nodeLabels(geospiza) <- as.character(sort(nodeId(geospiza)))
 plot(geospiza[c(1:6,14)],show.node.label=TRUE)
 plot(geospiza[c(1:6,14),3:5],show.node.label=TRUE)
 }

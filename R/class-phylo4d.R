@@ -27,7 +27,7 @@ setClass("phylo4d",
 setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
 
 ## first arg is a phylo4
-setMethod("phylo4d", c("phylo4"),
+setMethod("phylo4d", "phylo4",
    function(x, tip.data = NULL, node.data = NULL, all.data = NULL,
             merge.tip.node = TRUE, ...) {
 

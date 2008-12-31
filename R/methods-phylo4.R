@@ -116,10 +116,10 @@ setMethod("labels", "phylo4", function(object, which = c("tip",
     "internal", "allnode"), ...) {
     which <- match.arg(which)
     switch(which,
-            tip = object@tip.label[order(nodeId(object,"tip"))],
+            tip = object@tip.label, ## [order(nodeId(object,"tip"))],
             internal = {
                 if (hasNodeLabels(object)) {
-                    object@node.label[order(nodeId(object))]
+                    object@node.label ## [order(nodeId(object))]
                 }
                 else
                 {
@@ -137,8 +137,8 @@ setMethod("labels", "phylo4", function(object, which = c("tip",
                 }
                 ## lorder <- match(object@edge[,2],
                 ## c(nodeId(object,"tip"),nodeId(object)))
-                lorder <- order(c(nodeId(object,"tip"),nodeId(object)))
-                c(object@tip.label,nl)[lorder]
+                ## lorder <- order(c(nodeId(object,"tip"),nodeId(object)))
+                c(object@tip.label,nl) ## [lorder]
               }
             )
 })
@@ -260,7 +260,6 @@ setMethod("print", "phylo4", printphylo4)
 setMethod("show", "phylo4", function(object) printphylo4(object))
 ##
 
-
 #################
 ## summary phylo4
 #################
@@ -359,7 +358,45 @@ setMethod("hasEdgeLength","phylo4", function(x) {
     length(x@edge.length)>0
 })
 
+setReplaceMethod("labels",
+                 signature(object="phylo4", value="character"),
+   function(object, which = c("tip", "node", "allnode"), ..., value) {
+       which <- match.arg(which)
+       switch(which,
+              ## If 'tip'
+              tip = {
+                  if(length(value) != nTips(object))
+                      stop("Number of tip labels does not match number of tips.")
+                  else {
+                      object@tip.label[order(nodeId(object, "tip"))] <- value
+                      return(object)
+                  }
+              },
+              ## If 'node'
+              node = {
+                  if(length(value) != nNodes(object))
+                      stop("Number of node labels does not match number of internal nodes.")
+                  else {
+                      #object@node.label <- character(nNodes(object))
+                      #object@node.label[order(nodeId(object, "internal"))] <- value
+                    object@node.label <- value
+                      return(object)
+                  }
+              },
+              ## If 'allnode'
+              allnode = {
+                  if(length(value) != nNodes(object)+nTips(object))
+                      stop("Number of labels does not match total number of nodes.")
+                  else {
+                    # object@tip.label[order(nodeId(object, "tip"))] <- value[1:nTips(object)]
+                    # object@node.label[order(nodeId(object, "internal"))] <- value[-(1:nTips(object))]
+                    object@tip.label <- value[1:nTips(object)]
+                    object@node.label <- value[-(1:nTips(object))]
 
+                      return(object)
+                  }
+              })
+   })
 
 orderIndex <- function(phy, order = c('preorder', 'postorder')) {
     ## recursive functions are placed first and calls to those functions below

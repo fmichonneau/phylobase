@@ -50,9 +50,9 @@ DropTip(phy, tip, \dots)
   The argument \code{tip} can be either character or numeric. In the
   first case, it gives the labels of the tips to be deleted; in the
   second case the numbers of these labels in the vector
-  \code{phy$tip.label} are given
+  \code{tipLabels(phy)} are given
 
-  If \code{trim.internal = FALSE}, the new tips are given \code{"NA"} as
+  If \code{trim.internal = FALSE}, the new tips are given \code{NA} as
   labels, unless there are node labels in the tree in which case they
   are used
 
@@ -69,7 +69,8 @@ DropTip(phy, tip, \dots)
 \value{
   an object of class \code{"phylo4"}
 }
-\author{Emmanuel Paradis \email{Emmanuel.Paradis@mpl.ird.fr}}
+\author{Emmanuel Paradis \email{Emmanuel.Paradis@mpl.ird.fr}
+(original ape version)}
 \examples{
 require(ape)
 data(bird.families)
@@ -86,11 +87,11 @@ tip <- c(
 "Pycnonotidae", "Hypocoliidae", "Cisticolidae", "Zosteropidae",
 "Sylviidae", "Alaudidae", "Nectariniidae", "Melanocharitidae",
 "Paramythiidae","Passeridae", "Fringillidae")
-plot(as(prune(bird.families, tip),"phylo"))
-plot(as(prune(bird.families, tip, trim.internal = FALSE),"phylo"))
+plot(prune(bird.families, tip),cex=0.5)
+plot(prune(bird.families, tip, trim.internal = FALSE),cex=0.5)
 data(bird.orders)
-plot(as(prune(bird.orders, 6:23, subtree = TRUE),"phylo"))
-plot(as(prune(bird.orders, c(1:5, 20:23), subtree = TRUE), "phylo"))
+plot(prune(bird.orders, 6:23, subtree = TRUE))
+plot(prune(bird.orders, c(1:5, 20:23), subtree = TRUE))
 
 ### Examples of the use of `root.edge'
 tr <- as(ape::read.tree(text = "(A:1,(B:1,(C:1,(D:1,E:1):1):1):1):1;"),"phylo4")
@@ -102,8 +103,10 @@ prune(tr, c("A", "B"), root.edge = 3) # = (C:1,(D:1,E:1):1):3;
 ## Dropping tips on phylo4d objects
 r1 <- rcoal(5)
 d <- data.frame(a=1:5,row.names=paste("t",1:5,sep=""))
-phylo4d(r1,tip.data=d,node.data=data.frame(a=6:9))
-prune(r1,1)
+r2 <- phylo4d(r1,tip.data=d,node.data=data.frame(a=6:9))
+r2 <- phylo4d(as(r1,"phylo4"),tip.data=d,node.data=data.frame(a=6:9))
+nodeLabels(r2) <- as.character(sort(nodeId(r2)))
+r3 <- prune(r2,1)
 }
 \keyword{manip}
 \keyword{methods}
