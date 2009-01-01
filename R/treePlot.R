@@ -307,78 +307,40 @@ tree.plot <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
 
 
 phyloXXYY <- function(phy, tip.order = NULL) {
-    ## initalize the output
-    Nedges <- nrow(phy@edge) ## TODO switch to the accessor once stablized
     phy.orig <- phy
+    ## initalize the output
+    phy <- reorder(phy, 'preorder')
+    edge   <- phy@edge ## TODO switch to the accessor
+    edge[is.na(edge[,1]), 1] <- -1
+    Nedges <- nrow(phy@edge) ## TODO switch to the accessor once stablized
     Ntips  <- nTips(phy)
-    xxyy = list(
-        yy = rep(NA, Nedges), 
-        xx = numeric(Nedges), 
-        ## record the order that nodes are visited in
-        traverse = NULL) 
-    if(is.null(edgeLength(phy))) {
-        # TODO there should be an abstraction for assigning branch lengths
-        stop('Phylogeny has no branch lengths, cannot calculate x coordinates')
+    tips <- edge[, 2] <= Ntips
+    
+    xx <- numeric(nrow(edge))
+    yy <- numeric(nrow(edge))
+
+    xx[1] <- 0
+
+    for (i in edge[, 2]) {
+        dex <- edge[, 1] == i
+        xx[dex] <- phy@edge.length[dex] + xx[which(edge[,2] == i)]
+    }
+
+    yy[tips] <- seq(0, 1, length = Ntips)
+
+    for(i in rev((Ntips + 1):nEdges(phy))) {
+        dex <- edge[, 1] == i
+        yy[edge[, 2] == i] <- mean(yy[dex])
     }
     
-    # TODO tip ordering should be dealt with at a higher level
-    # if(!is.null(tip.order)) { 
-    #     yy[which(phy@edge[, 2] == tip.order)] <- seq(
-        ## TODO perhaps we want to use match here?
-        ## 0, 1, length.out = Ntips) 
-    # } else {
-        ## reorder the phylo and assign even y spacing to the tips
-        phy <- reorder(phy, 'postorder')
-        xxyy$yy[phy@edge[, 2] <= Ntips] <- seq(
-            0, 1, length.out = Ntips
-        )
-    # }
-    
-    ## a recursive preorder traversal 
-    ## node  -- initalized to be root, is the starting point for the traversal
-    ## phy   -- the phylogeny
-    ## xxyy  -- the list initalized below that holds the output
-    ## prevx -- the sum of ancestral branch lengths
-    calc.node.xy <- function(node, phy, xxyy, prevx = 0) {
-        ## if node == root node, and there is no root edge set get descendants
-        ## and set index to NULL index is used for indexing output
-        if(node == rootNode(phy)) {
-            decdex <- which(phy@edge[, 1] == node)
-            index <- NULL
-            ## if root node start at x = 0
-            newx <- 0
-        } else {
-            ## non-root node behavior
-            ## get row in edge matrix corresponding to node, get descendants
-            index <- which(phy@edge[, 2] == node)
-            decdex <- which(phy@edge[, 1] == phy@edge[index, 2])
-            ## non-root node x location 
-            newx <- xxyy$xx[index] <- phy@edge.length[index] + prevx
-            ## if the x value is already set we are at a tip and we return
-            if(!is.na(xxyy$yy[index])) { return(xxyy) }
-        }
-        for(i in phy@edge[decdex, 2]) {
-            ## for each decendant call the function again
-            xxyy <- calc.node.xy(i, phy, xxyy, newx)
-        }
-        if(!is.null(index)) {
-            ## set y value by averaging the decendants
-            xxyy$yy[index] <- mean(xxyy$yy[decdex])
-        }
-        ## TODO performance improvement here? rely on above ordering?
-        ## keep track of the nodes and order we visited them
-        xxyy$traverse <- c(xxyy$traverse, phy@edge[decdex, 2]) 
-        xxyy
-    }
-    ## call function for the first time
-    xxyy <- calc.node.xy(Ntips + 1, phy, xxyy)
     ## scale the x values
-    xxyy$xx <- xxyy$xx / max(xxyy$xx)
+    xx <- xx / max(xx)
     # TODO return an index vector instead of a second phy object
-    c(xxyy, phy = list(phy), phy.orig = list(phy.orig))
+    list(xx = xx, yy = yy, phy = phy, phy.orig = phy.orig)
 }
 
 segs <- function(XXYY) {
+    ## TODO probably a performance benefit to following the phyloXXYY model
     phy <- XXYY$phy
     treelen <- rep(NA, nEdges(phy))
     segs <- list(v0x = treelen, v0y = treelen, v1x = treelen, v1y = treelen,
