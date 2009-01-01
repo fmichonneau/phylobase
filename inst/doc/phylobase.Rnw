@@ -329,31 +329,55 @@ We start with a randomly generated tree using
 tree topology and branch lengths:
 <<rtree2>>=
 set.seed(1001)
-tree <- rcoal(12)
+tree <- as(rcoal(12),"phylo4")
 @
 
+
 Next we generate the phylogenetic variance-covariance
-matrix (\code{ape::vcv.phylo}) and pick a single set
-of traits (\code{MASS:mvrnorm}).  Conveniently, the
-tip names of the original tree
-are inherited consistently by the variance-covariance
-matrix and the trait matrix:
+matrix (by coercing the tree to 
+a \code{phylo4vcov} object and pick a single set
+of traits (\code{MASS:mvrnorm}).
 <<vcvphylo>>=
-vmat <- vcv.phylo(tree,cor=TRUE)
+vmat <- as(tree,"phylo4vcov")
+vmat <- cov2cor(vmat)
 library(MASS)
 trvec <- mvrnorm(1,mu=rep(0,12),Sigma=vmat)
 @
 
-The last step (easy) is to create the \code{phylo4d}
-object and plot it:
+The last step (easy) is to 
+convert the \code{phylo4vcov} object
+back to a \code{phylo4d} object:
 <<plotvcvphylo,fig=TRUE>>=
 treed <- phylo4d(tree,tip.data=as.data.frame(trvec))
 plot(treed)
 @
 
-\subsubsection{The hard way?}
+\subsubsection{The hard way}
 
-Find root, traverse tree:
+<<keep.source=TRUE>>=
+## add node labels so we can match to data
+nodeLabels(tree) <- as.character(sort(nodeId(tree)))
+## ordering will make sure that we have ancestor value 
+## defined before descendant
+tree <- reorder(tree,"preorder")
+edgemat <- edges(tree)
+## set aside space for values
+nodevals <- numeric(nrow(edgemat))
+## label data in edge matrix order
+names(nodevals) <- labels(tree,"all")[nodeId(tree,"all")]
+## variance is proportional to edge length; drop first
+## element of edge length, which is NA
+dvals <- rnorm(nrow(edgemat)-1,sd=edgeLength(tree)[-1]^2)
+## indexing: ind[node number] gives position in edge matrix
+ind <- order(nodeId(tree,"all"))
+for (i in 2:nrow(edgemat)) {
+  ## value of ancestor node plus change
+  nodevals[i] <- nodevals[ind[edgemat[i,1]]]+dvals[i-1]
+  }
+nodevals <- data.frame(nodevals)
+treed2 <- phylo4d(tree,all.data=nodevals)
+}
+@ 
 
 
 % ========================================

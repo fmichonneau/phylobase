@@ -11,6 +11,8 @@
 \alias{as,phylo4d,phylo-method}
 \alias{as,phylo4,data.frame-method}
 \alias{as,phylo4d,data.frame-method}
+\alias{as,phylo4vcov,phylo4-method}
+\alias{as,phylo4,phylo4vcov-method}
 \alias{coerce-methods}
 \alias{coerce,phylo,phylo4-method}
 \alias{coerce,phylo,phylo4d-method}
@@ -21,6 +23,8 @@
 \alias{coerce,phylo4d,phylo-method}
 \alias{coerce,phylo4,data.frame-method}
 \alias{coerce,phylo4d,data.frame-method}
+\alias{coerce,phylo4vcov,phylo4-method}
+\alias{coerce,phylo4,phylo4vcov-method}
 %\alias{coerce,phylo4d,phylo4-method}
 
 
