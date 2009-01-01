@@ -76,8 +76,9 @@ setMethod("phylo4d", "phylo4",
                tmpData <- cbind(tmpData, tmpNodeData)
 
            }
-           res@tip.data <- tmpData[1:nTips(x) ,, drop = FALSE]
-           res@node.data <- tmpData[-(1:nTips(x)) ,, drop = FALSE]
+           if (!hasNodeLabels(x)) stop("can't match node data to labels without node labels")
+           res@tip.data <- tmpData[rownames(tmpData) %in% tipLabels(x) ,, drop = FALSE]
+           res@node.data <- tmpData[rownames(tmpData) %in% nodeLabels(x) ,, drop = FALSE]
        }
 
        else {
