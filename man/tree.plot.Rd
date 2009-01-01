@@ -20,9 +20,6 @@ tree.plot(xxyy, type, show.tip.label, show.node.label,
   \item{edge.width}{ A vector in the order of \code{edges(phy)} indicating the widths of edge lines}
   \item{rot}{ Numeric indicating the rotation of the plot in degrees }
 }
-% \details{
-%   ~~ If necessary, more details than the description above ~~
-% }
 \value{
 Returns no values, function invoked for the plotting side effect.}
 
@@ -48,6 +45,19 @@ tree.plot(xxyy, type = 'phylogram',
 )
 popViewport()
 
+## example of plotting two grid plots on the same page
+geotree <- extractTree(geospiza)
+geotree2 <-
+prune(geotree,descendants(geotree,MRCA(geotree,c("difficilis","scandens"))),
+subtree=TRUE)
+  grid.newpage()
+  pushViewport(viewport(layout=grid.layout(nrow=1,ncol=2),name="base"))
+  pushViewport(viewport(layout.pos.col=1,name="plot1"))
+  plot(geotree,newpage=FALSE)
+  popViewport()
+  pushViewport(viewport(layout.pos.col=2,name="plot2"))
+  plot(geotree2,newpage=FALSE,rot=180)
+  popViewport()
 }
 
 \keyword{methods}
