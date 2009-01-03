@@ -376,7 +376,6 @@ for (i in 2:nrow(edgemat)) {
   }
 nodevals <- data.frame(nodevals)
 treed2 <- phylo4d(tree,all.data=nodevals)
-}
 @ 
 
 

@@ -92,6 +92,7 @@ p4d.nod <- phylo4d(p4, node.data = nod.dat, which = "internal")
 #create phylo4 objects with node and tip data
 p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat,
   which = "all")
+nodeLabels(p4) <- as.character(sort(nodeId(p4)))
 p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat), which = "all")
 }
 \keyword{misc}
