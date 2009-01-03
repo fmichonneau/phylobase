@@ -3,8 +3,6 @@
 \alias{phylo4_orderings}
 \alias{phylo-class}
 \alias{phylo4-class}
-\alias{$,phylo4-method}
-\alias{$<-,phylo4-method}
 \alias{[,phylo4,ANY,missing,missing-method}
 \alias{print,phylo4-method}
 \alias{show,phylo4-method}
@@ -100,6 +98,7 @@ nodes}
      NA,  8), ncol=2, byrow=TRUE) 
   
   P2 <- phylo4(E)
+  nodeLabels(P2) <- as.character(sort(nodeId(P2)))
   plot(P2, show.node.label=TRUE)
   sumryP2 <- summary(P2)
   sumryP2

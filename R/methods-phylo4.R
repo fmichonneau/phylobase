@@ -36,9 +36,10 @@ setMethod("nEdges", "phylo4", function(x) {
     nrow(x@edge)
 })
 
-setMethod("edges", "phylo4", function(x, order, ...) {
-    x@edge
-})
+setMethod("edges", "phylo4", function(x, order, drop.root=FALSE, ...) {
+  e <- x@edge
+  if (drop.root) e <- e[!is.na(e[,1]),]
+}
 
 setMethod("edgeOrder", "phylo4", function(x, ...) {
     x@order

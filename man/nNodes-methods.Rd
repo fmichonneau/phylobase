@@ -112,6 +112,7 @@
 % https://stat.ethz.ch/pipermail/r-devel/2008-May/049653.html
  \S4method{tdata}{phylo4d}(object, which = "tip", \dots) <- value
   \S4method{edgeLength}{phylo4}(x, which)
+\S4method{edges}{phylo4}(x, order, drop.root=FALSE, \dots)
 }
 \arguments{
   \item{which}{(tdata) which data to extract: "tip" (tips only), "node"
@@ -121,6 +122,8 @@
   \item{x}{a phylo4d object}
   \item{object}{a phylo4d object}
   \item{value}{a data frame}
+  \item{order}{(not yet implemented)}
+  \item{drop.root}{logical: drop root row from edge matrix?}
   \item{\dots}{for future development compatibility}
 }
 \examples{

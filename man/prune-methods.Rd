@@ -23,7 +23,7 @@
 }
 \note{At the moment, this simply wraps \code{ape::drop.tip}.
     Renamed from \code{drop.tip} to \code{prune} in order to
-    avoid conflicts with ape.}
+    avoid conflicts with \code{ape}.}
   \usage{
 \S4method{prune}{phylo4}(phy, tip, trim.internal = TRUE, subtree = FALSE,
                    root.edge = 0, \dots)

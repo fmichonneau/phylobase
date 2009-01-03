@@ -24,7 +24,6 @@
 orderIndex(phy, order = c('preorder','postorder'))
 }
 
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{phy}{a \code{phylo4} or \code{phylo4d} object}
   \item{x}{a \code{phylo4} or \code{phylo4d} object}
@@ -49,6 +48,4 @@ A \code{phylo4} or \code{phylo4d} object with the edge, label, lenght and data s
  \code{\link{ancestors}} \code{\link{ancestor}} \code{\link{siblings}}
  \code{\link{children}} \code{\link{descendants}}
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{methods}
