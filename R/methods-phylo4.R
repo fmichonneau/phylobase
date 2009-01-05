@@ -401,36 +401,44 @@ setReplaceMethod("labels",
    })
 
 orderIndex <- function(phy, order = c('preorder', 'postorder')) {
+    ## get an root node free edge matrix
+    ## R scoping allows us to call this variable in
+    ## the postOrder() func defined above
+    edge <- phy@edge[!is.na(phy@edge[, 1]), ]
+    ## Sort edges -- ensures that starting order of edge matrix doesn't
+    ## affect the order of reordered trees
+    edge <- edge[order(edge[, 2]), ]
+
     ## recursive functions are placed first and calls to those functions below
     postOrder <- function(node) {
-        ## this function returns a list of nodes in the post order traversal
+        ## this function returns a vector of nodes in the post order traversal
         ## get the descendants
-        ## dec <- edge[, 1] == node
-        ## print(dec)
-        ## recursive call to get the descendants of the descendants
-        ## out <- mapply(postie, edge[dec, 2])
-        ## return the descendants with the node after
-        ## return(c(unlist(out), node))
-        ## slight performance benefit to the one liner
-        return(c(unlist(mapply(postOrder, edge[edge[, 1] == node, 2])), node))
+        traversal <- NULL
+        ## edge -- defined above, outside this function
+        ## extensive testing found this loop to be faster than apply() etc.
+        for(i in edge[edge[, 1] == node, 2]) {
+            traversal <- c(traversal, postOrder(i))
+        }
+        c(traversal, node)
     }
     preOrder  <- function(node) {
-        ## see expanded code in comments of postOrder
+        ## see expanded code in comments of postOrder()
         ## only difference here is that we record current node, then descendants
-        return(c(node, unlist(mapply(preOrder, edge[edge[, 1] == node, 2]))))
+        traversal <- NULL
+        for(i in edge[edge[, 1] == node, 2]) {
+            traversal <- c(traversal, preOrder(i))
+        }
+        c(node, traversal)
     }
 
     if(order == 'postorder') {
-        ## get an root node free edge matrix
-        edge <- phy@edge[!is.na(phy@edge[, 1]), ]
         ## match the new node order to the old order to get an index
         index <- match(postOrder(rootNode(phy)), phy@edge[, 2])
 
     } else if(order == 'preorder') {
-        ## get an root node free edge matrix
-        edge <- phy@edge[!is.na(phy@edge[, 1]), ]
         ## match the new node order to the old order to get an index
         index <- match(preOrder(rootNode(phy)), phy@edge[, 2])
+
     } else {stop(paste("Method for", order, "not implemented"))}
 }
 
