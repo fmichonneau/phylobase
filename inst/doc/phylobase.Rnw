@@ -311,10 +311,10 @@ of Brownian motion.
 
 \subsubsection{the easy way}
 
-We can use the \code{vcv.phylo()} command from
-\code{ape} to construct the variance-covariance
-matrix of the tip traits, after which it's easy
-to use \code{mvrnorm} from the \code{MASS} package
+We can use \code{as(tree,"phylo4vcov")} to
+coerce the tree into a variance-covariance matrix
+form, and then 
+use \code{mvrnorm} from the \code{MASS} package
 to generate a set of multivariate normally distributed
 values for the tips. (A benefit of this approach is
 that we can very quickly generate a very large
@@ -332,11 +332,13 @@ set.seed(1001)
 tree <- as(rcoal(12),"phylo4")
 @
 
-
 Next we generate the phylogenetic variance-covariance
 matrix (by coercing the tree to 
-a \code{phylo4vcov} object and pick a single set
-of traits (\code{MASS:mvrnorm}).
+a \code{phylo4vcov} object) and pick a single set
+of normally distributed traits (using \code{MASS:mvrnorm}
+to pick a multivariate normal deviate with a
+variance-covariance matrix that matches the 
+structure of the tree).
 <<vcvphylo>>=
 vmat <- as(tree,"phylo4vcov")
 vmat <- cov2cor(vmat)
