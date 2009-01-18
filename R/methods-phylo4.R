@@ -195,7 +195,7 @@ setReplaceMethod("labels",
                       object
                   }
               })
-       if(is.character(checkval <- check_phylo4(ob)))
+       if(is.character(checkval <- checkPhylo4(ob)))
            stop(checkval)
        else
            return(ob)

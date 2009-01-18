@@ -2,13 +2,13 @@
 
 ## IF all missing data -- create multiPhylo4
 ## IF some have data -- create multiPhylo4d (user can coerce to multiPhylo4)
-## IF (check_data) then stop if all data not identical to first data
+## IF (checkData) then stop if all data not identical to first data
 ##
 ## need constructors for multiPhylo4, multiPhylo4d!!
 ## FIXME: need code to construct tree.names ...
 
 ## function to bind trees together into a multi-tree object
-tbind <- function(...,check_data=TRUE) {
+tbind <- function(...,checkData=TRUE) {
     L <- as.list(...)
     namevec <- names(L)
     treeclasses <- c("multiPhylo4d","multiPhylo4","phylo4","phylo4d")
@@ -33,7 +33,7 @@ tbind <- function(...,check_data=TRUE) {
     hasNodeData <- sapply(L[classes %in% tdataclasses],
                           function(x) {!is.null(x@node.data)})
     if (any(hasNodeData)) warning("internal node data discarded")
-    if (check_data) {
+    if (checkData) {
         ident <- sapply(alldat[-1],identical,y=alldat[[1]])
         if (!all(ident)) stop(paste("tip data sets differ"))
     } ## ?? implement code to check which ones differ (taking

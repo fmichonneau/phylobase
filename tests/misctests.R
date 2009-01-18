@@ -7,7 +7,7 @@ geospiza0 <-
 ## push data back into list form as in geiger
 
 t1 <-  try(p1 <- phylo4d(geospiza0$geospiza.tree,geospiza0$geospiza.data))
-## Error in check_data(res, ...) :
+## Error in checkData(res, ...) :
 ##   Tip data names are a subset of tree tip labels.
 
 p2 <- as(geospiza0$geospiza.tree,"phylo4")

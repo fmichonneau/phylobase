@@ -6,7 +6,7 @@
 \alias{siblings}
 \alias{MRCA}
 \alias{getNode}
-\alias{getedges}
+\alias{getEdge}
 \alias{shortestPath}
 \alias{sumEdgeLength}
 \alias{sumEdgeLength,phylo4-method}
@@ -51,7 +51,7 @@ shortestPath(phy, node1, node2)
   \item{\code{getNode}}{takes character strings corresponding to tip
     or node labels, or node numbers; it returns a named
     vector of node numbers}
-  \item{\code{getedges}}{takes character strings naming terminal
+  \item{\code{getEdge}}{takes character strings naming terminal
     node of edges, or the corresponding node numbers; it returns a named
     vector of edge numbers.}
   \item{\code{ancestors} and \code{descendants}}{
@@ -94,7 +94,7 @@ shortestPath(phy, node1, node2)
   shortestPath(geospiza, "F","L")
 
   ## identifying an edge from its terminal node
-  getedges(geospiza,c("olivacea","B","fortis"))
+  getEdge(geospiza,c("olivacea","B","fortis"))
   getNode(geospiza, c("olivacea","B","fortis"))
   geospiza@edge[c(26,1,11),]
   ## FIXME

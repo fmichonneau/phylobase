@@ -10,21 +10,21 @@ printphylo <- function (x,printlen=6,...) {
               nb.node, "internal nodes\n"))
 
     ## print tip labels
-    cat("\nTip labels:\n")
+    cat("\nTips labels:\n")
     if (nb.tip > printlen) {
         cat(paste("\t", paste(x@tip.label[1:printlen], collapse = ", "),
                   ", ...\n", sep = ""))
     } else print(x@tip.label)
 
     ## print node labels
-    cat("\nNode labels:\n")
+    cat("\nNodes labels:\n")
     if (nb.node > printlen) {
         cat(paste("\t", paste(x@node.label[1:printlen], collapse = ", "),
                   ", ...\n", sep = ""))
     } else print(x@node.label)
 
     ## print edge labels
-    cat("\nEdge labels:\n")
+    cat("\nEdges labels:\n")
     if (nb.edge > printlen) {
         cat(paste("\t", paste(x@edge.label[1:printlen], collapse = ", "),
                   ", ...\n", sep = ""))

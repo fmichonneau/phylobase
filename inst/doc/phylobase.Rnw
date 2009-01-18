@@ -462,7 +462,7 @@ a tree with $n$ tips and $m$ internal nodes:
 \item all internal nodes [not including the root]
   must appear in the first (ancestor) column
   at least once [unlike \code{ape}, which nominally requires each internal node to have at least two descendants (although it doesn't
-absolutely prohibit them and has a \code{collapse.singles} function to get rid of them), \code{phylobase} does allow these ``singleton nodes'' and has a method \code{hasSingles} for detecting them].
+absolutely prohibit them and has a \code{collapse.singles} function to get rid of them), \code{phylobase} does allow these ``singleton nodes'' and has a method \code{hasSingle} for detecting them].
 Singleton nodes can be useful as a way of representing changes
 along a lineage; they are used this way in the \code{ouch} package.
 \item the number of occurrences of a node in the first column is related to the nature of the node: once if it is a singleton,

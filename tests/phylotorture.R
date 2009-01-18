@@ -18,7 +18,7 @@ if (any(OKvals)) {
     p2 <- p1[OKvals]
     length(p2)
     has.poly <- sapply(p2,hasPoly)
-    has.sing <- sapply(p2,hasSingles)
+    has.sing <- sapply(p2,hasSingle)
     has.retic <- sapply(p2,hasRetic)   
     ##
     if (any(has.sing)) {

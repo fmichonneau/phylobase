@@ -160,7 +160,7 @@ shortestPath <- function(phy, node1, node2){
     ## FIXME: use extractTree if coming from phylo4d
 
     ## some checks
-    if (is.character(checkval <- check_phylo4(x))) stop(checkval)
+    if (is.character(checkval <- checkPhylo4(x))) stop(checkval)
     t1 <- getNode(x, node1)
     t2 <- getNode(x, node2)
     if(any(is.na(c(t1,t2)))) stop("wrong node specified")
@@ -191,15 +191,15 @@ shortestPath <- function(phy, node1, node2){
 
 
 ###########
-# getedges
+# getEdge
 ###########
-getedges <- function(phy, node){
+getEdge <- function(phy, node){
 
     ## conversion from phylo, phylo4 and phylo4d
     x <- as(phy, "phylo4")
 
     ## come checks
-    if (is.character(checkval <- check_phylo4(x))) stop(checkval)
+    if (is.character(checkval <- checkPhylo4(x))) stop(checkval)
     node <- getNode(x, node)
     if(any(is.na(node))) stop("wrong node specified")
     root <- getNode(x, nTips(x)+1)
@@ -211,4 +211,4 @@ getedges <- function(phy, node){
     names(res) <- names(node)
 
     return(res)
-} # end getedges
+} # end getEdge

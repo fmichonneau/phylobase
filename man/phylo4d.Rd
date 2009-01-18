@@ -44,7 +44,7 @@
     trait. This argument is evaluated only if both \code{tip.data} and
     \code{node.data} have identical column names.}
   \item{\dots}{further arguments to be passed to other methods. Used to
-    control the validity checking of the created object (see \code{\link{check_data}}).}
+    control the validity checking of the created object (see \code{\link{checkData}}).}
 }
 
 \details{
@@ -68,7 +68,7 @@
 
 \seealso{
 \code{\link{coerce-methods}} for translation functions. The
-  \linkS4class{phylo4d} class, the \code{\link{check_data}}
+  \linkS4class{phylo4d} class, the \code{\link{checkData}}
   function to check the validity of \code{phylo4d} objects;
   \linkS4class{phylo4} class and \link{phylo4} constructor.}
 

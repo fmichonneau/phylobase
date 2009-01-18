@@ -16,7 +16,7 @@ setClass("phylo4",
                         edge.label = character(0),
                         order = "unknown"
                        ),
-         validity = check_phylo4)
+         validity = checkPhylo4)
 
 #####################
 ## phylo4 constructor
@@ -79,9 +79,9 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     res@edge.label <- edge.label
     res@order <- order
 
-    ## check_phylo4 will return a character string if object is
+    ## checkPhylo4 will return a character string if object is
     ##  bad, otherwise TRUE
-    if (is.character(checkval <- check_phylo4(res))) stop(checkval)
+    if (is.character(checkval <- checkPhylo4(res))) stop(checkval)
     return(res)
 }
 

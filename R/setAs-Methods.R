@@ -130,7 +130,7 @@ setAs("phylo4", "phylog", function(from, to) {
 #######################################################
 ## Exporting to dataframe
 setAs(from = "phylo4", to = "data.frame", def = function(from) {
-    if (is.character(checkval <- check_phylo4(from))) # check the phylo4
+    if (is.character(checkval <- checkPhylo4(from))) # check the phylo4
         stop(checkval)
     x <- from
     if (isRooted(x)) {
@@ -155,7 +155,7 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
         }
         ## node and tip labels ##
         ## beware: they cannot be NULL
-        ## there are always tip labels (or check_phylo4 complains)
+        ## there are always tip labels (or checkPhylo4 complains)
         ## there may not be node labels (character(0))
         label <- labels(x,which="all")[nodeId(x,"all")]
         node.type <- nodeType(x)[node]
@@ -175,7 +175,7 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
         }
         ## node and tip labels ##
         ## beware: they cannot be NULL
-        ## there are always tip labels (or check_phylo4 complains)
+        ## there are always tip labels (or checkPhylo4 complains)
         ## there may not be node labels (character(0))
         label <- labels(x,which="all")[node]
         node.type <- nodeType(x)[node]

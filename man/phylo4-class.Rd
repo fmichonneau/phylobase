@@ -71,7 +71,7 @@ nodes}
    The \code{names} method returns a vector of characters corresponding
    to the names of the slots.
   }
-\seealso{the \code{\link{phylo4}} constructor, the \code{\link{check_phylo4}}
+\seealso{the \code{\link{phylo4}} constructor, the \code{\link{checkPhylo4}}
   function to check the validity of \code{phylo4} objects. See also the \code{\link{phylo4d}} constructor and the \linkS4class{phylo4d} class.}
 \author{Ben Bolker, Thibaut Jombart}   
 \examples{

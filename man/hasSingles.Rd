@@ -1,5 +1,5 @@
-\name{hasSingles}
-\alias{hasSingles}
+\name{hasSingle}
+\alias{hasSingle}
 \alias{hasPoly}
 \alias{hasRetic}
 \title{Test trees for polytomies, inline nodes,
@@ -10,7 +10,7 @@ or reticulation}
   (i.e., nodes with more than one ancestor)
 }
 \usage{
-hasSingles(object)
+hasSingle(object)
 hasPoly(object)
 hasRetic(object)
 }
@@ -38,6 +38,6 @@ library(ape)
 example(read.tree)
 owls4 = as(tree.owls.bis, "phylo4")
 hasPoly(owls4)
-hasSingles(owls4)
+hasSingle(owls4)
 }
 \keyword{misc}

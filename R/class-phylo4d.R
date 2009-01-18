@@ -10,8 +10,8 @@ setClass("phylo4d",
          ##all.data = data.frame(NULL) ),
          validity = function(object) {
              ## FIXME: finish this by intercepting FALSE, char string, etc.
-             check1 <- check_data(object)
-             check2 <- check_phylo4(object)
+             check1 <- checkData(object)
+             check2 <- checkPhylo4(object)
          },
          contains="phylo4")
 
@@ -43,7 +43,7 @@ setMethod("phylo4d", "phylo4",
            else return(TRUE)
        }
 
-       if(is.character(checkval <- check_phylo4(x))) stop(checkval)
+       if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
 
        if(is.character(checkClass <- classData(all.data))) stop(checkClass)
        if(is.character(checkClass <- classData(tip.data))) stop(checkClass)
@@ -110,8 +110,8 @@ setMethod("phylo4d", "phylo4",
            }
        }
 
-       check_data(res, ...)
-       res <- attach_data(res,...)
+       checkData(res, ...)
+       res <- attachData(res,...)
        return(res)
 
 })

@@ -1,10 +1,10 @@
 
 ## REQUIRED for all trees
-check_phylo4 <- function(object) {
-    check_tree(object)
+checkPhylo4 <- function(object) {
+    checkTree(object)
 }
 
-check_tree <- function(object,warn="retic",err=NULL) {
+checkTree <- function(object,warn="retic",err=NULL) {
     ## FIXME: check for cyclicity?
     nedges <- nrow(object@edge)
     if (hasEdgeLength(object)) {
@@ -102,7 +102,7 @@ check_tree <- function(object,warn="retic",err=NULL) {
     return(TRUE)
 }
 
-check_data <- function(object,
+checkData <- function(object,
                        label.type=c("row.names","column"),
                        label.column=1,
                        use.tip.names=TRUE,
@@ -374,7 +374,7 @@ check_data <- function(object,
     }
 }
 
-attach_data <- function(object,
+attachData <- function(object,
                         label.type=c("row.names","column"),
                         label.column=1,
                         use.tip.names=TRUE,
@@ -382,7 +382,7 @@ attach_data <- function(object,
                         ...)
 {
 
-    ## assumes data have already been checked by check_data!
+    ## assumes data have already been checked by checkData!
     ## name matching default: use row.names of data frame
     label.type = match.arg(label.type)
     if (identical(label.type, "row.names")) {

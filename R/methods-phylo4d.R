@@ -118,7 +118,7 @@ setReplaceMethod("tdata", "phylo4d", function(object, which = c("tip",
            tip = object@tip.data <- value,
            internal = object@node.data <- value,
            allnode = stop("for now, must set tip and node data separately"))
-    if(check_data(object, ...)) object <- attach_data(object, ...)
+    if(checkData(object, ...)) object <- attachData(object, ...)
     object
 })
 

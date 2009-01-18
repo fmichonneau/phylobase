@@ -1,13 +1,13 @@
-\name{check_phylo4}
-\alias{check_phylo4}
-\alias{check_tree}
+\name{checkPhylo4}
+\alias{checkPhylo4}
+\alias{checkTree}
 \title{Validity checking for phylo4 objects}
 \description{
   Basic checks on the validity of S4 phylogenetic objects
 }
 \usage{
-check_phylo4(object)
-check_tree(object,warn="retic",err=NULL)
+checkPhylo4(object)
+checkTree(object,warn="retic",err=NULL)
 }
 \arguments{
   \item{object}{A prospective S4 object}
@@ -19,8 +19,8 @@ check_tree(object,warn="retic",err=NULL)
   As required by \code{\link{validObject}}, returns an
   error string (describing problems) or TRUE if everything is OK
 }
-\note{\code{check_phylo4} is an (inflexible) wrapper for
-  \code{check_tree}, which uses the default settings.
+\note{\code{checkPhylo4} is an (inflexible) wrapper for
+  \code{checkTree}, which uses the default settings.
   The rules for \code{phylo4} objects essentially follow
   those for \code{phylo} objects from the \code{ape} package,
   which are in turn defined in
@@ -36,7 +36,7 @@ check_tree(object,warn="retic",err=NULL)
 }
 \seealso{
   the \code{\link{phylo4}} constructor and \linkS4class{phylo4} class;
-  \code{\link{check_data}}, the \code{\link{phylo4d}} constructor and
+  \code{\link{checkData}}, the \code{\link{phylo4d}} constructor and
   the \linkS4class{phylo4d}
   class do checks for the data associated with trees.
   See \code{\link{coerce-methods}} for translation functions.
