@@ -89,9 +89,12 @@ setMethod("edgeLength", "phylo4", function(x,which) {
     if (!hasEdgeLength(x))
         NULL
     else {
-      if (missing(which)) return(x@edge.length)
-      n <- getNode(x,which)
-      return(x@edge.length[n])
+      if (missing(which))
+          return(x@edge.length)
+      else {
+          n <- getNode(x,which)
+          return(x@edge.length[n])
+      }
     }
 })
 
@@ -212,12 +215,14 @@ setMethod("tipLabels", "phylo4", function(object) {
 
 setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","allnode")) {
   which <- match.arg(which)
+  tipNid <- x@edge[x@edge[,2]<=nTips(x),2]
+  allNid <- unique(as.vector(x@edge))
+  intNid <- allNid[! allNid %in% tipNid]
   nid <- switch(which,
-                internal=x@edge[x@edge[,2]>nTips(x),2],
-                tip = x@edge[x@edge[,2]<=nTips(x),2],
-                allnode = x@edge[,2])
-  #sort(nid)
-  return(nid)
+                internal = intNid,
+                tip = tipNid,
+                allnode = allNid)
+  return(nid[!is.na(nid)])
 })
 
 setReplaceMethod("nodeLabels", signature(object="phylo4", value="character"),

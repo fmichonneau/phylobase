@@ -2,7 +2,7 @@ Package: phylobase
 Type: Package
 Title: Base package for phylogenetic structures and comparative data
 Version: 0.4
-Date: 2008-07-27
+Date: 2009-04-21
 Depends: methods, grid, ape(>= 2.1)
 Suggests: ade4, MASS, gridBase
 Author: R Hackathon (Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vienne, Thibaut Jombart, Steve Kembel, Francois Michonneau, David Orme, Brian O'Meara, Emmanuel Paradis, Derrick Zwickl)

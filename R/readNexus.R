@@ -1,43 +1,43 @@
 readNexus <- function (file, simplify=TRUE, which=c("all","tree","data"), char.all=FALSE, polymorphic.convert=TRUE, levels.uniform=TRUE) {
 #file = input nexus file
-#simplify = 
-#which = specify whether to return trees+data as phylo4d object ("all") if 
+#simplify =
+#which = specify whether to return trees+data as phylo4d object ("all") if
 #        both are found, returning a data.frame or phylo4 object if only one
-#        is found, "tree": return a phylo4 object only, regardless of 
+#        is found, "tree": return a phylo4 object only, regardless of
 #        whether there are data, "data": return a data.frame (no tree), even
 #        if a tree is present
 #char.all = if TRUE, includes even excluded chars in the nexus file
-#polymorphic.convert = if TRUE, convert polymorphic characters to missing 
+#polymorphic.convert = if TRUE, convert polymorphic characters to missing
 #                      characters
-#levels.uniform = if TRUE, categorical data are loaded with the same levels, 
+#levels.uniform = if TRUE, categorical data are loaded with the same levels,
 #             even if one character is missing a state
-	output<-c("Failure")
-	if (which=="all" || which=="data") {
+        output<-c("Failure")
+        if (which=="all" || which=="data") {
         params <- list(filename=file, allchar=char.all, polymorphictomissing=polymorphic.convert, levelsall=levels.uniform)
-        
+
 # Check that params is properly formatted.
         if(!is.list(params) || length(params) == 0) {
             stop("The params parameter must be a non-empty list")
         }
-        
+
         incharsstring <- .Call("ReadCharsWithNCL",params,
                                PACKAGE="phylobase")
 #print(incharsstring)
-        tipdata<-eval(parse(text=incharsstring))	
+        tipdata<-eval(parse(text=incharsstring))
     }
     if (which=="all" || which=="tree") {
         trees<-c("Failure");
         params <- list(filename=file)
-        
+
 # Check that params is properly formatted.
         if(!is.list(params) || length(params) == 0) {
             stop("The params parameter must be a non-empty list");
         }
-        
+
 # Finally ready to make the call...
         intreesstring <- .Call("ReadTreesWithNCL", params,
                                PACKAGE="phylobase")
-        
+        print(intreesstring)
         intreesphylolist <- read.nexustreestring(intreesstring);
         if (length(intreesphylolist)>1 || !simplify) {
             trees<-list()
@@ -49,7 +49,7 @@ readNexus <- function (file, simplify=TRUE, which=c("all","tree","data"), char.a
             trees<-as(intreesphylolist[[1]], "phylo4");
         }
     }
-    if (which=="tree" || length(tipdata) == 0 ) { 
+    if (which=="tree" || length(tipdata) == 0 ) {
         output<-trees;
     }
     else if (which=="data") {
@@ -64,10 +64,10 @@ readNexus <- function (file, simplify=TRUE, which=c("all","tree","data"), char.a
         }
         else {
             output<-phylo4d(as(intreesphylolist[[1]], "phylo4"), tip.data = tipdata)
-        }        
+        }
     }
-    
-	output
+
+        output
 }
 
 read.nexustreestring <- function(X)
@@ -75,15 +75,15 @@ read.nexustreestring <- function(X)
 #Returns list of phylo objects (not multi.phylo, and always a list, even if there is only one element
 #X is a character vector, each element is one line from a treefile
 #This is based almost entirely on read.nexus from APE (Emmanuel Paradis).
-	
+
     X<-unlist(strsplit(unlist(X),c("\n")))
-    
+
 ## first remove all the comments
-    
+
 ## BCO took out the "speedier removal of comments" code -- it keeps [&R] as a node label, replaced it with original APE code
 ## speedier removal of comments pc 13 April 2008
 ##X <- lapply(X, gsub, pattern = "\\[[^\\]]*\\]", replacement = "")
-    
+
     LEFT <- grep("\\[", X)
     RIGHT <- grep("\\]", X)
     if (length(LEFT)) { # in case there are no comments at all
@@ -148,7 +148,7 @@ read.nexustreestring <- function(X)
     STRING <- gsub(" ", "", STRING)
     colon <- grep(":", STRING)
     if (!length(colon)) {
-#TODO: recode clado.build & .treeBuildWithTokens from ape to phylobase
+#TODO: recode clado.build, tree.build & .treeBuildWithTokens from ape to phylobase
         trees <- lapply(STRING, clado.build)
     } else if (length(colon) == Ntree) {
         trees <-

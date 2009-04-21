@@ -8,7 +8,7 @@ setAs("phylo", "phylo4", function(from, to) {
         int.idx <- (nTips(from)+1):dim(from$edge)[1]
         root.node <- as.numeric(setdiff(unique(from$edge[,1]), unique(from$edge[,2])))
         #from$edge <- rbind(from$edge,c(NA,root.edge))
-        from$edge <- rbind(from$edge[tip.idx,],c(NA,root.node),from$edge[int.idx,])        
+        from$edge <- rbind(from$edge[tip.idx,],c(NA,root.node),from$edge[int.idx,])
         if (!is.null(from$edge.length)) {
             if (is.null(from$root.edge)) {
                 from$edge.length <- c(from$edge.length[tip.idx],as.numeric(NA),from$edge.length[int.idx])
@@ -130,78 +130,54 @@ setAs("phylo4", "phylog", function(from, to) {
 #######################################################
 ## Exporting to dataframe
 setAs(from = "phylo4", to = "data.frame", def = function(from) {
-    if (is.character(checkval <- checkPhylo4(from))) # check the phylo4
+
+    ## Check the phylo4
+    if (is.character(checkval <- checkPhylo4(from)))
         stop(checkval)
     x <- from
-    if (isRooted(x)) {
-        E <- edges(x) # E: matrix of edges
-        ancestor <- E[, 1]
-        node <- E[, 2]
-        root <- which(is.na(ancestor))
-        int.node <-  node[(node %in% ancestor)]
-        tip <- node[!(node %in% ancestor)]
-        n.tip <- length(tip)
-        n.int <- length(int.node)
-        ## node <- c(root, node) # doesn't fit the ordering: root, other internal nodes, tips
-        #node <- c(int.node, tip)
-        ## retrieve the ancestor of each node
-        #idx <- match(node, E[, 2]) # new ordering of the descendants/edges
-        ## if (length(ancestor)>0) ancestor <- c(NA, ancestor)
-        #ancestor <- E[idx, 1]
-        ## branch.length <- c(x@root.edge, x@edge.length) # root.edge is not an edge length
-        branch.length <- edgeLength(x)#[idx]
-        if (is.null(edgeLength(x))) {
-            branch.length <- rep(NA, length(node))
-        }
-        ## node and tip labels ##
-        ## beware: they cannot be NULL
-        ## there are always tip labels (or checkPhylo4 complains)
-        ## there may not be node labels (character(0))
-        label <- labels(x,which="all")[nodeId(x,"all")]
-        node.type <- nodeType(x)[node]
-        d <- data.frame(label, node, ancestor, branch.length,
-            node.type)
-        d$label <- as.character(d$label)
-        return(d)
+
+    node <- nodeId(x, "all")
+    ancestr <- ancestor(x, node)
+    ndType <- nodeType(x)
+    intNode <- names(ndType[ndType == "internal"])
+    tip <- names(ndType[ndType == "tip"])
+
+    E <- data.frame(node, ancestr)
+    ## !! in phylobase, the order is node-ancestors whereas in ape it's
+    ## ancestor-node
+    nmE <- paste(E[,2], E[,1], sep="-")
+
+    if (hasEdgeLength(x)) {
+        edge.length <- edgeLength(x)[match(nmE, names(x@edge.length))]
     }
     else {
-        E <- edges(x) # E: matrix of edges
-        node <- unique(c(E))
-        ancestor <- E[, 1][node]
-        #orphan <- setdiff(E[,1],E[,2])
-        branch.length <- edgeLength(x)[node]
-        if (!hasEdgeLength(x)) {
-          branch.length <- rep(NA, length(node))
-        }
-        ## node and tip labels ##
-        ## beware: they cannot be NULL
-        ## there are always tip labels (or checkPhylo4 complains)
-        ## there may not be node labels (character(0))
-        label <- labels(x,which="all")[node]
-        node.type <- nodeType(x)[node]
-        d <- data.frame(label, node, ancestor, branch.length,
-            node.type)
-        d$label <- as.character(d$label)
-        return(d)
+        edge.length <- rep(NA, nNodes(x))
     }
+
+    label <- labels(x,which="all")[node]
+
+    d <- data.frame(label, node, ancestr, edge.length, node.type=ndType[node],
+                    row.names=node)
+    d$label <- as.character(d$label)
+    d
 })
 
 setAs(from = "phylo4d", to = "data.frame", function(from) {
 
-    tree <- extractTree(from) ## as(from, "phylo4") # get tree
-    t_df <- as(tree, "data.frame") # convert to data.frame
+    tree <- extractTree(from)
+    ## Convert to data.frame
+    tDf <- as(tree, "data.frame")
 
     dat <- tdata(from, "allnode", label.type="column") # get data
+
     ## reorder data to edge matrix order, drop labels (first column)
-    dat2 <- dat[nodeId(from,"all"),-1,drop=FALSE] 
-    tdat <- cbind(t_df, dat2)
-##     if(nrow(dat) > 0 && ncol(dat) > 1) {
-##         dat <- dat[match(t_df$label, dat$label), ]
-##         tdat <- cbind(t_df, dat[ ,-1 , drop=FALSE])
-##     }
-##     else {
-##         tdat <- t_df
-##         cat("No data associated with the tree\n")
-##     }
-    return(tdat)
+    if(nrow(dat) > 0 && ncol(dat) > 1) {
+         dat <- dat[match(rownames(tDf), rownames(dat)), ]
+         tdat <- cbind(tDf, dat[ ,-1 , drop=FALSE])
+     }
+     else {
+        tdat <- tDf
+        cat("No data associated with the tree\n")
+     }
+    tdat
 })

@@ -38,11 +38,6 @@ checkTree <- function(object,warn="retic",err=NULL) {
     nTips <- sum(nDesc==0)
     if (!all(nDesc[1:nTips]==0))
       return("nodes 1 to nTips must all be tips")
-    #nRoots <- sum(nAncest==0)
-    ## no longer
-    ##if (which(nAncest==0)!=nTips+1) {
-    ##  return("root node is not at position (nTips+1)")
-    ##}
 
     if (nRoots>0) {
       if (sum(is.na(E[,1]))!=1) {
