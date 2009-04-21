@@ -67,7 +67,8 @@ setAs("phylo4", "phylo", function(from, to) {
     if (inherits(from, "phylo4d"))
         warning("losing data while coercing phylo4d to phylo")
     brlen <- from@edge.length
-    rootpos <- which(nodeId(from, "all") == rootNode(from))
+    ## rootnode is only node with no ancestor
+    rootpos <- which(is.na(from@edge[, 1]))
     if (isRooted(from)) brlen <- brlen[-rootpos]
     edgemat <- unname(from@edge[-rootpos, ])
     y <- list(edge = edgemat,
@@ -78,7 +79,7 @@ setAs("phylo4", "phylo", function(from, to) {
     class(y) <- "phylo"
     if (from@order != 'unknown') {
         ## TODO postorder != pruningwise -- though quite similar
-        attr(y, 'order') <- switch(from@order, postorder = 'pruningwise',
+        attr(y, 'order') <- switch(from@order, postorder = 'unknown',
                                       preorder  = 'cladewise')
     }
     if (length(y$edge.length) == 0)

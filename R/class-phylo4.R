@@ -22,7 +22,8 @@ setClass("phylo4",
 ## phylo4 constructor
 #####################
 
-phylo4_orderings <- c("unknown","preorder","postorder")
+# ape orderings should be allowed for so we can import trees from ape e.g. during subsetting
+phylo4_orderings <- c("unknown", "preorder", "postorder", "pruningwise", "cladewise")
 
 phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL, edge.label = NULL, order="unknown", ...){
 
