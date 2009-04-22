@@ -20,7 +20,7 @@
   for a tip index. With a \linkS4class{phylo4d} object
   'foo', \code{foo[i,j]} creates a subset of \code{foo} taking \code{i}
   for a tip index and \code{j} for the index of tips variables (see
-  details).\cr 
+  details).\cr
 }
 \section{Methods}{
   \describe{
@@ -58,7 +58,7 @@
   If \code{foo} is a \linkS4class{phylo4d} object, the index of
   variables ("j") is optional: \code{foo[i,j]} is the same as
   \code{foo[i]}.\cr
-  
+
 }
 \value{
   an object of class \code{"phylo4"}
@@ -72,7 +72,7 @@ data(geospiza)
 
 ## "subset" examples
 g1 <- as(geospiza,"phylo4")
-nodeLabels(g1) <- as.character(sort(nodeId(g1)))
+nodeLabels(g1) <- paste("N", nodeId(g1), sep="")
 plot(subset(g1,tips.exclude="scandens"))
 plot(subset(g1,mrca=c("scandens","fortis","pauper")))
 plot(subset(g1,node.subtree=18))
@@ -80,7 +80,7 @@ plot(subset(g1,node.subtree=18))
 ## "[" examples
 plot(g1,show.node.label=TRUE)
 plot(g1[c(1:6,14)],show.node.label=TRUE)
-nodeLabels(geospiza) <- as.character(sort(nodeId(geospiza)))
+nodeLabels(geospiza) <- paste("N", nodeId(geospiza))
 plot(geospiza[c(1:6,14)],show.node.label=TRUE)
 plot(geospiza[c(1:6,14),3:5],show.node.label=TRUE)
 }

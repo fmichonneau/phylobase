@@ -35,8 +35,8 @@ hasRetic(object)
 }
 \examples{
 library(ape)
-example(read.tree)
-owls4 = as(tree.owls.bis, "phylo4")
+tree.owls.bis <- read.tree(text = "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);")
+owls4 <- as(tree.owls.bis, "phylo4")
 hasPoly(owls4)
 hasSingle(owls4)
 }

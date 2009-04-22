@@ -110,7 +110,7 @@ nodeLabels(g1)
 A simple way to assign the node numbers as labels (useful for various checks) is
 
 <<>>=
-nodeLabels(g1) <- as.character(sort(nodeId(g1)))
+nodeLabels(g1) <- paste("N", nodeId(g1), sep="")
 head(g1, 5)
 @
 
@@ -305,7 +305,7 @@ plot(treed)
 <<keep.source=TRUE>>=
 ## add node labels so we can match to data
 nodeLabels(tree) <- as.character(sort(nodeId(tree)))
-## ordering will make sure that we have ancestor value 
+## ordering will make sure that we have ancestor value
 ## defined before descendant
 tree <- reorder(tree, "preorder")
 edgemat <- edges(tree)
@@ -324,7 +324,7 @@ for (i in 2:nrow(edgemat)) {
   }
 nodevals <- data.frame(nodevals)
 treed2 <- phylo4d(tree, all.data=nodevals)
-@ 
+@
 
 
 % ========================================

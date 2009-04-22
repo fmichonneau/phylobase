@@ -42,7 +42,7 @@
 }
 \description{
   Translation functions to convert between phylobase trees or trees+data objects (\code{phylo4}, \code{phylo4d}), and objects used by other comparative methods packages in R:  \code{ape} objects
-  (\code{phylo}, \code{multiPhylo}) \code{ade4} objects (\code{phylog}), and to \code{data.frame} respresentation. 
+  (\code{phylo}, \code{multiPhylo}) \code{ade4} objects (\code{phylog}), and to \code{data.frame} respresentation.
 }
 \section{Methods}{
   \item{coerce}{from one object class to another using \code{as(object,"Class")}, where the \code{object} is of the old class and the returned object is of the new class \code{"Class"}. The \code{as} function examines the class of \code{object} and the new \code{"Class"} specified to choose the proper conversion without additional information from the user. Conversions exist for combinations:
@@ -82,14 +82,14 @@
 
 \author{Ben Bolker, Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}, Marguerite Butler, Steve Kembel}
 \seealso{ generic \code{\link[methods]{as}}, \code{\link{phylo4}}, \code{\link{phylo4d}}, \code{\link{extractTree}}, the original \code{\link[ade4]{phylog}} from the
-  \code{ade4} package and \code{\link[ape]{as.phylo}} from the \code{ape} package. 
+  \code{ade4} package and \code{\link[ape]{as.phylo}} from the \code{ape} package.
 }
 \examples{
-library(ape)
-example(read.tree)
-## round trip conversion 
-tree_in_phylo <- tree.owls                # tree is a phylo object 
-(tree_in_phylo4 <- as(tree.owls,"phylo4"))  # phylo converted to phylo4 
+
+tree.owls <- read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
+## round trip conversion
+tree_in_phylo <- tree.owls                # tree is a phylo object
+(tree_in_phylo4 <- as(tree.owls,"phylo4"))  # phylo converted to phylo4
 identical(tree_in_phylo,as(tree_in_phylo4,"phylo"))
 ## test if phylo, and phlyo4 converted to phylo are identical
 ## (no, because of dimnames)

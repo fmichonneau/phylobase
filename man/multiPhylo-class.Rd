@@ -57,12 +57,10 @@
   }
   \author{Ben Bolker, Thibaut Jombart}   
 \examples{
-  library(ape)
-  example(read.tree)
-  p1 = tree.owls
-  P1 = as(tree.owls, "phylo4")
-  P1
-  sumryP1 = summary(P1)
-  sumryP1
+### An extract from Sibley and Ahlquist (1990)
+cat("(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);", file = "ex.tre", sep = "\n")
+tree.owls <- read.tree("ex.tre", keep.multi = TRUE)
+tree.owls
+(as(tree.owls, "multiPhylo4"))
 }
 \keyword{classes}

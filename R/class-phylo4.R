@@ -39,15 +39,18 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
         if(!is.numeric(edge.length)) stop("edge.length is not numeric")
         edge.length <- edge.length
     } else {
-        edge.length <- as.numeric(NULL)
+        edge.length <- numeric(0)
     }
-    if(length(edge.length) != nrow(edge))
-        stop("The number of edge length is different from the number of edges.")
-    ## FM - 2009-04-19
-    ## edge.length is named according to the nodes the edge links together
-    ## (ancestor-descendant). This should allow more robust edge/edge.length
-    ## association and limit the problems associated with reordering trees.
-    names(edge.length) <- paste(edge[,1], edge[,2], sep="-")
+
+    if(length(edge.length) > 0) {
+        if(length(edge.length) != nrow(edge))
+            stop("The number of edge lengths is different from the number of edges.")
+        ## FM - 2009-04-19
+        ## edge.length is named according to the nodes the edge links together
+        ## (ancestor-descendant). This should allow more robust edge/edge.length
+        ## association and limit the problems associated with reordering trees.
+        names(edge.length) <- paste(edge[,1], edge[,2], sep="-")
+    }
 
     ## tip.label
     ntips <- sum(tabulate(na.omit(edge[, 1])) == 0)
@@ -104,7 +107,7 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
         node.data <- data.frame(labelValues=as.numeric(node.data))
         res@node.label <- node.label
 
-        res <- phylo4d(res, node.data=node.data, use.node.names=F)
+        res <- phylo4d(res, node.data=node.data, use.node.names=FALSE)
         if(is.character(checkval <- checkPhylo4(res))) stop(checkval)
 
         return(res)

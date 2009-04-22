@@ -68,13 +68,12 @@ plot(subset(p2,tips.include=c("fuliginosa","fortis","magnirostris",
 
 plot(p2,show.node.label=TRUE)
 
-library(ape)
-example(read.tree)
+tree.owls <- read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
 
 z <- as(tree.owls,"phylo4")
 
 example("phylo4d")
-obj1 <- obj2 <- obj3 <- phylo4d(as(tree.owls,"phylo4"),data.frame(wing=1:4,color=factor(c("b","w","b","b")), tail=runif(4)*10), use.tip.names=FALSE)
+obj1 <- obj2 <- obj3 <- phylo4d(z, data.frame(wing=1:4,color=factor(c("b","w","b","b")), tail=runif(4)*10), use.tip.names=FALSE)
 
 obj2@tip.data <- as.data.frame(obj2@tip.data[,1])
 obj3@tip.data <- cbind(obj1@tip.data,obj2@tip.data)

@@ -80,8 +80,7 @@
   rows of data vs. number of nodes/tips/etc.)
 }
 \examples{
-library(ape)
-example(read.tree)
+tree.owls.bis <- read.tree(text = "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);")
 try(phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3)), silent=TRUE)
 obj <- phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3),
 use.tip.names=FALSE)

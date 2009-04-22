@@ -7,7 +7,7 @@ setAs("phylo", "phylo4", function(from, to) {
         tip.idx <- 1:nTips(from)
         int.idx <- (nTips(from)+1):dim(from$edge)[1]
         root.node <- as.numeric(setdiff(unique(from$edge[,1]), unique(from$edge[,2])))
-        #from$edge <- rbind(from$edge,c(NA,root.edge))
+
         from$edge <- rbind(from$edge[tip.idx,],c(NA,root.node),from$edge[int.idx,])
         if (!is.null(from$edge.length)) {
             if (is.null(from$root.edge)) {
@@ -22,8 +22,8 @@ setAs("phylo", "phylo4", function(from, to) {
         }
     }
     newobj <- phylo4(from$edge, from$edge.length, from$tip.label,
-        node.label = from$node.label, edge.label = from$edge.label)
-    attribs = attributes(from)
+                     node.label = from$node.label, edge.label = from$edge.label)
+    attribs <- attributes(from)
     attribs$names <- NULL
     knownattr <- c("logLik", "order", "origin", "para", "xi")
     known <- names(attribs)[names(attribs) %in% knownattr]
@@ -39,13 +39,14 @@ setAs("phylo", "phylo4d", function(from, to) {
     phylo4d(as(from, "phylo4"), tip.data = data.frame())
 })
 
+
 setAs("multiPhylo", "multiPhylo4", function(from, to) {
-    y <- lapply(as, from@phylolist, to = "phylo")
-    names(y) <- from@tree.names
-    if (nrow(from@tip.data) > 0)
-        warning("discarded tip data")
-    class(y) <- "multiPhylo"
-    y
+    trNm <- names(from)
+    if(is.null(trNm)) trNm <- character(0)
+    newobj <- new("multiPhylo4", phylolist = lapply(from, function(x)
+                                 as(x, "phylo4")),
+                  tree.names = trNm)
+    newobj
 })
 
 #######################################################
@@ -109,13 +110,12 @@ setAs("phylo4", "phylo", function(from, to) {
 ##})
 
 setAs("multiPhylo4", "multiPhylo", function(from, to) {
-    newobj <- new("multiPhylo4", phylolist = lapply(from,
-        as, to = "phylo4"))
-})
-
-setAs("multiPhylo4d", "multiPhylo", function(from, to) {
-    newobj <- new("multiPhylo4d", phylolist = lapply(from,
-        as, to = "phylo4"), tree.names = names(from), tip.data = data.frame())
+    y <- lapply(from@phylolist, function(x) as(x, "phylo"))
+    names(y) <- from@tree.names
+    if (nrow(from@tip.data) > 0)
+        warning("discarded tip data")
+    class(y) <- "multiPhylo"
+    y
 })
 
 #######################################################
@@ -152,7 +152,7 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
         edge.length <- edgeLength(x)[match(nmE, names(x@edge.length))]
     }
     else {
-        edge.length <- rep(NA, nNodes(x))
+        edge.length <- rep(NA, nEdges(x))
     }
 
     label <- labels(x,which="all")[node]

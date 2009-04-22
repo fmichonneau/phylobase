@@ -151,6 +151,11 @@ setMethod("labels", "phylo4", function(object, which = c("tip",
 setReplaceMethod("labels",
                  signature(object="phylo4", value="character"),
    function(object, which = c("tip", "internal", "allnode"), ..., value) {
+
+       tLbl <- as.numeric(value)
+       if(length(grep("[a-zA-Z]", value)) == 0)
+           stop("Labels need to contain characters")
+
        which <- match.arg(which)
        tipOrder <- order(nodeId(object, "tip"))
        intOrder <- order(nodeId(object, "internal"))
