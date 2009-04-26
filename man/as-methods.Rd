@@ -45,7 +45,8 @@
   (\code{phylo}, \code{multiPhylo}) \code{ade4} objects (\code{phylog}), and to \code{data.frame} respresentation.
 }
 \section{Methods}{
-  \item{coerce}{from one object class to another using \code{as(object,"Class")}, where the \code{object} is of the old class and the returned object is of the new class \code{"Class"}. The \code{as} function examines the class of \code{object} and the new \code{"Class"} specified to choose the proper conversion without additional information from the user. Conversions exist for combinations:
+\describe{
+  \item{coerce}{from one object class to another using \code{as(object,"Class")}, where the \code{object} is of the old class and the returned object is of the new class \code{"Class"}. The \code{as} function examines the class of \code{object} and the new \code{"Class"} specified to choose the proper conversion without additional information from the user. Conversions exist for combinations:}
   \describe{
 
     \item{\code{phylobase} to \code{phylobase} formats:}{

@@ -13,7 +13,7 @@ check_pdata(object)
 }
 \arguments{
   \item{data}{a data frame}
-  \item{type}{a factor with levels as specified by \S4class{pdata},
+  \item{type}{a factor with levels as specified by \linkS4class{pdata},
   the same length as \code{ncol(data)}}
   \item{comment}{a character vector, the same length as \code{ncol(data)}}
   \item{metadata}{an arbitrary list}
