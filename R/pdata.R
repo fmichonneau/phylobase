@@ -58,16 +58,6 @@ setMethod("[[<-","pdata",
             "[[<-"(x@data,i,j,...,exact=exact,value)
           })
 
-setMethod("$","pdata",function(x,name) {
-  x@data[[name]]
-})
-
-
-setMethod("$<-","pdata",function(x,name,value) {
-  x@data[[name]] <- value
-  x
-})
-
 setMethod("plot",signature(x="pdata",y="missing"), function(x,...){
     return(plot(x@data, ...))
 }) # end plot phylo4
