@@ -33,7 +33,7 @@
   \item{plot.data}{ Logical indicating whether \code{phylo4d} data should be plotted }
   \item{rot}{ Numeric indicating the rotation of the plot in degrees }
   \item{tip.plot.fun}{ A function used to generate plot at the each tip of the phylogenetic trees }
-  \item{plot_by_tip} {TODO} % TODO what does the plot_by_tip argument do
+  \item{plot_by_tip}{TODO} % TODO what does the plot_by_tip argument do
   \item{edge.color}{ A vector of colors in the order of \code{edges(phy)} }
   \item{node.color}{ A vector of colors indicating the colors of the node labels }
   \item{tip.color}{ A vector of colors indicating the colors of the tip labels }
