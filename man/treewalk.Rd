@@ -48,28 +48,25 @@ shortestPath(phy, node1, node2)
     in the tree: warn, do nothing, or stop with an error}
 }
 \value{
-  \item{\code{getNode}}{takes character strings corresponding to tip
-    or node labels, or node numbers; it returns a named
+  \item{\code{getNode}}{
+    takes character strings corresponding to tip or node labels, or node numbers; it returns a named
     vector of node numbers}
-  \item{\code{getEdge}}{takes character strings naming terminal
-    node of edges, or the corresponding node numbers; it returns a named
-    vector of edge numbers.}
+  \item{\code{getEdge}}{
+    takes character strings naming terminal node of edges, or the corresponding node numbers; it 
+    returns a named vector of edge numbers}
   \item{\code{ancestors} and \code{descendants}}{
-  return named vectors of the ancestors and descendants of
-  a node; \code{ancestor} is a synonym for
-  \item \code{ancestors(\dots,which="parent")} (i.e. direct
-  ancestor only), while
-  \code{children} is a synonym for
-  \code{descendants(\dots,which="children")} (i.e. direct
-  descendants only)}
-  \item{\code{siblings}}{returns sibling nodes (children
-  of the same parent)}
-  \item{\code{mrca}}{returns the most recent common ancestor of two or
-  more nodes}
-  \item{\code{shortestPath}}{returns the nodes of the shortest path from one
-  node to another (excluding \code{node1} and \code{node2})}
-  \item{\code{sumEdgeLength}}{returns the sum of branch length for branches
-    starting at nodes provided.}
+    return named vectors of the ancestors and descendants of a node; \code{ancestor} is a synonym 
+    for \code{ancestors(\dots, which="parent")} (i.e. direct ancestor only), while \code{children} 
+    is a synonym for \code{descendants(\dots, which="children")} (i.e. direct descendants only)}
+  \item{\code{siblings}}{
+    returns sibling nodes (children of the same parent)}
+  \item{\code{mrca}}{
+    returns the most recent common ancestor of two or more nodes}
+  \item{\code{shortestPath}}{
+    returns the nodes of the shortest path from one node to another (excluding \code{node1} and 
+    \code{node2})}
+  \item{\code{sumEdgeLength}}{
+    returns the sum of branch length for branches starting at nodes provided}
 }
 \note{\code{MRCA} is uppercase to avoid conflict with \code{mrca}
   in ape}
