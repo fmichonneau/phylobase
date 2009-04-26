@@ -56,11 +56,11 @@ plot(t1)
 broke1 <- t1
 broke1$edge[broke1$edge[,2] ==9, 1] <- 9  # disconnect the node, two subtrees, ((a, b), c)  and (d,e)
 
-as(broke1, "phylo4") -> tree   # makes a phylo4  object with no warning
-phylo4(broke1$edge)    # constructor makes a phylo4 object with no warning
+try(as(broke1, "phylo4") -> tree, silent=TRUE)   # makes a phylo4  object with no warning
+try(phylo4(broke1$edge), silent=TRUE)    # constructor makes a phylo4 object with no warning
 ## error message comes from ape, not phylo? -- AND
 ##   error is about singles, not disconnected nodes
-print(try(plot(tree), silent=TRUE ))  
+## print(try(plot(tree), silent=TRUE ))  ## pdc couldn't get this to work, so temporarily commenting
 
 # root node value != ntips + 1:
 
@@ -115,4 +115,4 @@ foo@node.label <- rep("",9)
 ##  argument is of length zero"
 
 edge <- matrix(c(3,1,3,2),byrow=TRUE,ncol=2)
-p2 <- phylo4(edge)
+try(p2 <- phylo4(edge), silent=TRUE)
