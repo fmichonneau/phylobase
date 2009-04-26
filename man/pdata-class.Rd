@@ -9,8 +9,8 @@
 \alias{[[<-,pdata-method}
 \alias{[[,pdata,ANY,ANY-method}
 \alias{[[,pdata,ANY,missing-method}
-\alias{$,pdata-method}
-\alias{$<-,pdata-method}
+\alias{\$,pdata-method}
+\alias{\$<-,pdata-method}
 
 \title{Class "pdata"}
 \description{Data class for phylo4d objects}
@@ -29,16 +29,16 @@
 }
 \section{Methods}{
   \describe{
-    \item{\[}{\code{signature(x = "pdata")}: access data rows, columns or elements}
-    \item{\[<-}{\code{signature(x = "pdata")}: set data rows, columns or elements} }
+    \item{[}{\code{signature(x = "pdata")}: access data rows, columns or elements}
+    \item{[<-}{\code{signature(x = "pdata")}: set data rows, columns or elements}
     \item{\$}{\code{signature(x = "pdata")}: access data rows, columns or elements}
-    \item{\[\$<-}{\code{signature(x = "pdata")}: set data rows, columns or elements}
-    \item{\[\[<-}{\code{signature(x = "pdata")}: set data columns or elements}
-    \item{\[\[}{\code{signature(x = "pdata", i = "ANY", j = "ANY")}: access data columns or elements }
-    \item{\[\[}{\code{signature(x = "pdata", i = "ANY", j = "missing")}: set data columns
+    \item{[\$<-}{\code{signature(x = "pdata")}: set data rows, columns or elements}
+    \item{[[<-}{\code{signature(x = "pdata")}: set data columns or elements}
+    \item{[[}{\code{signature(x = "pdata", i = "ANY", j = "ANY")}: access data columns or elements }
+    \item{[[}{\code{signature(x = "pdata", i = "ANY", j = "missing")}: set data columns
     or elements }
     }
-
+}
 \author{Ben Bolker}
   % commented to eliminate Note: on build
   %\examples{
