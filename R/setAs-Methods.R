@@ -5,7 +5,11 @@ setAs("phylo", "phylo4", function(from, to) {
     ## TODO should we also attempt to get order information?
     if (is.rooted(from)) {
         tip.idx <- 1:nTips(from)
-        int.idx <- (nTips(from)+1):dim(from$edge)[1]
+        if (nTips(from) < nrow(from$edge)) {
+            int.idx <- (nTips(from)+1):dim(from$edge)[1]
+        } else {
+            int.idx <- NULL
+        }
         root.node <- as.numeric(setdiff(unique(from$edge[,1]), unique(from$edge[,2])))
 
         from$edge <- rbind(from$edge[tip.idx,],c(NA,root.node),from$edge[int.idx,])
