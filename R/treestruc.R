@@ -5,7 +5,7 @@
 ##   any(edgeLength(x)==0) if necessary
 hasPoly <- function(object) {
   if(!checkPhylo4(object)) stop("to be used with a phylo4 object")
-  degree <- tabulate(edges(object)[, 2])
+  degree <- tabulate(na.omit(edges(object)[, 1]))
   struc <- any(degree > 2)
   return(struc)
 }
