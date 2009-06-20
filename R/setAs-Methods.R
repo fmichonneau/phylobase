@@ -156,7 +156,7 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
         edge.length <- edgeLength(x)[match(nmE, names(x@edge.length))]
     }
     else {
-        edge.length <- rep(NA, nEdges(x))
+        edge.length <- rep(NA, nrow(E))
     }
 
     label <- labels(x,which="all")[node]
