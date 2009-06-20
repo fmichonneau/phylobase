@@ -93,7 +93,7 @@ setMethod("edgeLength", "phylo4", function(x,which) {
           return(x@edge.length)
       else {
           n <- getNode(x,which)
-          return(x@edge.length[n])
+          return(x@edge.length[match(n, x@edge[,2])])
       }
     }
 })
