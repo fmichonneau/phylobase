@@ -12,31 +12,17 @@ getNode <- function(phy,node,missing=c("warn","OK","fail")) {
     if (is.numeric(node) && all(floor(node)==node,na.rm=TRUE)) {
         node <- as.integer(node)
     }
-  nolabs <- rep(!hasNodeLabels(phy),length(node))
     if (is.character(node)) {
-        ## old getNodeByLabel()
-        nt <- nTips(phy)
-        tipmatch <- match(node,labels(phy,"allnode"))
-        vals <- ifelse(!is.na(tipmatch),
-                       tipmatch,
-                       ifelse(nolabs,NA,nt+match(node,nodeLabels(phy))))
-        names(vals) <- node
-        rval <- vals
+        rval <- match(node, labels(phy, "allnode"))
+        # return NA for any NA_character_ inputs
+        rval[is.na(node)] <- NA
+        names(rval) <- node
     } else if (is.integer(node)) {
-        ## old getLabelByNode
-        nt <- nTips(phy)
-        vals <- ifelse(node<=nt,  ## tips
-                       labels(phy,"allnode")[node],
-                       ifelse(node<=nt+nNodes(phy),
-                              ifelse(nolabs,NA,
-                                     nodeLabels(phy)[pmax(0,node-nt)]),
-                              NA))
-        ## pmax above to avoid error from negative indices
-        names(node) <- vals
-        rval <- node
+        rval <- match(node, seq_len(nTips(phy) + nNodes(phy)))
+        names(rval) <- labels(phy,"allnode")[rval]
     } else stop("node must be integer or character")
   if (any(is.na(rval))) {
-    missnodes <- names(rval)[is.na(rval)]
+    missnodes <- node[is.na(rval)]
     msg <- paste("some nodes missing from tree: ",paste(missnodes,collapse=","))
     switch(missing,
            fail=stop(msg),
