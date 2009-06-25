@@ -118,7 +118,7 @@ setMethod("phylo4d", "phylo4",
 
 ## first arg is a matrix of edges
 setMethod("phylo4d", c("matrix"), function(x, tip.data=NULL, node.data=NULL, all.data=NULL, ...){
-    tree <- phylo4(edge=x,...)
+    tree <- phylo4(x, ...)
     res <- phylo4d(tree, tip.data, node.data, all.data, ...)
     return(res)
 })

@@ -93,7 +93,7 @@ setMethod("[","phylo4d",
 ## coerce phylo4d to phylo4 -- on purpose, so no warning
 
 extractTree <- function(from) {
-    phylo4(edge = from@edge, edge.length = from@edge.length,
+    phylo4(from@edge, edge.length = from@edge.length,
            tip.label = from@tip.label,
            node.label = from@node.label, edge.label = from@edge.label)
   }

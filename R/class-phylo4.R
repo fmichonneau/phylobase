@@ -22,12 +22,19 @@ setClass("phylo4",
 ## phylo4 constructor
 #####################
 
+## generic
+setGeneric("phylo4", function(x, ...) { standardGeneric("phylo4")} )
+
 # ape orderings should be allowed for so we can import trees from ape e.g. during subsetting
 phylo4_orderings <- c("unknown", "preorder", "postorder", "pruningwise", "cladewise")
 
-phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL, edge.label = NULL, order="unknown", ...){
+## first arg is a matrix
+setMethod("phylo4", "matrix",
+    function(x, edge.length = NULL, tip.label = NULL, node.label = NULL,
+             edge.label = NULL, order="unknown", ...) {
 
     ## edge
+    edge <- x
     mode(edge) <- "integer"
     #if(any(is.na(edge))) stop("NA are not allowed in edge matrix")
     if(ncol(edge) > 2) warning("the edge matrix has more than two columns")
@@ -121,5 +128,5 @@ phylo4 <- function(edge, edge.length = NULL, tip.label = NULL, node.label = NULL
     }
 
     return(res)
-}
+})
 
