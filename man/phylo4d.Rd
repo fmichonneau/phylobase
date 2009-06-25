@@ -27,7 +27,8 @@
      \S4method{phylo4d}{phylo4}(x, tip.data = NULL, node.data = NULL,
         all.data = NULL, merge.tip.node = TRUE, ...)
      \S4method{phylo4d}{phylo}(x, tip.data = NULL, node.data = NULL,
-        all.data = NULL, merge.tip.node = TRUE, ...)
+        all.data = NULL, merge.tip.node = TRUE,
+        check.node.labels = c("keep", "drop", "asdata"), ...)
      \S4method{phylo4d}{matrix}(x, tip.data = NULL, node.data = NULL,
         all.data = NULL, merge.tip.node = TRUE, ...)
 }
@@ -43,6 +44,12 @@
     provided, it determines if they should be merged as a single
     trait. This argument is evaluated only if both \code{tip.data} and
     \code{node.data} have identical column names.}
+  \item{check.node.labels}{if \code{x} is of class \code{phylo}, use
+    either "keep" (the default) to retain internal node labels, "drop"
+    to drop them, or "asdata" to convert them to numeric tree data. This
+    argument is useful if the \code{phylo} object has non-unique node
+    labels or node labels with informative data (e.g., posterior
+    probabilities).}
   \item{\dots}{further arguments to be passed to other methods. Used to
     control the validity checking of the created object (see \code{\link{checkData}}).}
 }

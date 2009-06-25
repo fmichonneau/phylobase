@@ -124,8 +124,29 @@ setMethod("phylo4d", c("matrix"), function(x, tip.data=NULL, node.data=NULL, all
 })
 
 ## first arg is a phylo
-setMethod("phylo4d", c("phylo"), function(x, tip.data=NULL, node.data=NULL, all.data=NULL, ...){
-    tree <- as(x, "phylo4")
+setMethod("phylo4d", c("phylo"), function(x, tip.data=NULL,
+    node.data=NULL, all.data=NULL, check.node.labels=c("keep", "drop",
+    "asdata"), ...) {
+
+    check.node.labels <- match.arg(check.node.labels)
+    if (check.node.labels == "asdata") {
+        # FIXME? use.node.names=TRUE won't work with this option b/c
+        # node labels are dropped; assumes node.data (if any), phylo
+        # node.label, and phylo4 internal nodes are in the same order?
+        nlab.data <- x$node.label
+        x$node.label <- NULL
+        nlab.data[!nzchar(nlab.data)] <- NA
+        # TODO only convert to numeric if values are number-like?
+        nlab.data <- data.frame(labelValues=as.numeric(nlab.data))
+        if (is.null(node.data)) {
+            node.data <- nlab.data
+        } else {
+            node.data <- cbind(nlab.data, node.data)
+        }
+        tree <- phylo4(x, check.node.labels="drop")
+    } else {
+        tree <- phylo4(x, check.node.labels=check.node.labels)
+    }
     res <- phylo4d(tree, tip.data, node.data, all.data, ...)
     return(res)
 })
