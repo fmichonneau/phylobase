@@ -96,37 +96,24 @@ setMethod("phylo4", "matrix",
     res@edge.length <- edge.length
     res@Nnode <- nnodes
     res@tip.label <- tip.label
+    res@node.label <- node.label
     res@edge.label <- edge.label
     res@order <- order
 
-    ## Tweak to deal with numerical values returned as node labels (ie. MrBayes)
-    if(!all(is.na(node.label)) && any(nchar(node.label) > 0) &&
-            !length(grep("[a-zA-Z]", node.label))) {
-        warning("All node labels are numeric values and converted as data.")
-        res@node.label <- character(0)
-        node.data <- node.label
-
-        node.data[!nzchar(node.data)] <- NA
-
-        node.label <- character(nnodes)
-        is.na(node.label) <- TRUE
-
-        node.data <- data.frame(labelValues=as.numeric(node.data))
-        res@node.label <- node.label
-
-        res <- phylo4d(res, node.data=node.data, use.node.names=FALSE)
-        if(is.character(checkval <- checkPhylo4(res))) stop(checkval)
-
-        return(res)
-
-    }
-    else {
-        res@node.label <- node.label
-        ## checkPhylo4 will return a character string if object is
-        ##  bad, otherwise TRUE
-        if (is.character(checkval <- checkPhylo4(res))) stop(checkval)
-    }
+    ## checkPhylo4 will return a character string if object is
+    ##  bad, otherwise TRUE
+    if (is.character(checkval <- checkPhylo4(res))) stop(checkval)
 
     return(res)
 })
 
+## first arg is a phylo
+setMethod("phylo4", c("phylo"), function(x, check.node.labels=c("keep",
+  "drop")){
+
+  check.node.labels <- match.arg(check.node.labels)
+  if (check.node.labels == "drop") x$node.label <- NULL
+  res <- as(x, "phylo4")
+
+  return(res)
+})

@@ -3,6 +3,7 @@
 \alias{phylo4}
 \alias{phylo4-methods}
 \alias{phylo4,matrix-method}
+\alias{phylo4,phylo-method}
 \title{Create a phylogenetic tree}
 \description{
   \code{phylo4} is a generic constructor that creates a phylogenetic tree object for use in phylobase methods. Phylobase contains functions for input of phylogenetic trees and data, manipulation of these objects including pruning and subsetting, and plotting. The phylobase package also contains translation functions to forms used in other comparative phylogenetic method packages.
@@ -11,13 +12,18 @@
   \describe{
      \item{x = "matrix"}{creates a phylobase tree from a matrix of
        edges}
+
+     \item{x = "phylo"}{creates a phylobase tree from an object of class
+       \code{phylo}}
    }}
 \usage{
      \S4method{phylo4}{matrix}(x, edge.length = NULL, tip.label = NULL, node.label = NULL,
         edge.label = NULL,  order="unknown", ...)
+     \S4method{phylo4}{phylo}(x, check.node.labels = c("keep", "drop"), ...)
 }
 \arguments{
-  \item{x}{a matrix of edges}
+  \item{x}{a matrix of edges or an object of class \code{phylo} (see
+    above)}
   \item{edge}{A numeric, two-column matrix with as many rows as branches in the phylogeny.}
   \item{edge.length}{Edge (branch) length. (Optional)}
   \item{tip.label}{A character vector of species names (names of "tip" nodes). (Optional)}
@@ -27,6 +33,9 @@
       listed in \code{phylo4_ordering}, currently "unknown", "reorder"
       (="pruningwise" in \code{ape}), "postorder" (="cladewise" in
       \code{ape}))}
+  \item{check.node.labels}{if \code{x} is of class \code{phylo}, either
+    "keep" (the default) or "drop" node labels. This argument is useful
+    if the \code{phylo} object has non-unique node labels.}
   \item{\dots}{fixme?}
 }
 \details{
