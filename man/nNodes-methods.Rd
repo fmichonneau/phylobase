@@ -110,20 +110,21 @@
 }
 }
 \usage{
-  \S4method{tdata}{phylo4d}(x, type = "tip", \dots)
+  \S4method{tdata}{phylo4d}(x, type=c("tip", "internal", "allnode"), label.type=c("row.names", "column"), empty.columns=TRUE, \dots)
 % what a pain: see
 % https://stat.ethz.ch/pipermail/r-devel/2008-May/049653.html
- \S4method{tdata}{phylo4d}(object, type = "tip", \dots) <- value
-  \S4method{edgeLength}{phylo4}(x, type)
-\S4method{edges}{phylo4}(x, order, drop.root=FALSE, \dots)
+  \S4method{tdata}{phylo4d}(object, type = "tip", \dots) <- value
+  \S4method{edgeLength}{phylo4}(x, node)
+  \S4method{edges}{phylo4}(x, order, drop.root=FALSE, \dots)
 }
 \arguments{
-  \item{type}{(tdata) which data to extract: "tip" (tips only), "node"
-    (internal nodes only), "allnode" (tips and internal nodes), "edge"
-    (edges) (edgeLength) which edge lengths to extract (indexed by
-    descendant node)}
   \item{x}{a phylo4d object}
   \item{object}{a phylo4d object}
+  \item{type}{which data to extract: "tip" (tips only), "node"
+    (internal nodes only), "allnode" (tips and internal nodes), "edge".}
+  \item{node}{which edge lengths to extract (indexed by descendant node)}
+  \item{label.type}{Where labels should be stored in the resulting data frame, "row.names" for using the row names of a data frame or "column" for a new column of labels to be generated. }
+  \item{empty.columns}{Logical. If TRUE data is exported as is. If FALSE, filled entirely with NAs are removed.}
   \item{value}{a data frame}
   \item{order}{(not yet implemented)}
   \item{drop.root}{logical: drop root row from edge matrix?}
