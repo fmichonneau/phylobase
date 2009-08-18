@@ -61,7 +61,7 @@ setGeneric("edgeOrder", function(x, ...) {
 setGeneric("labels")
 
 setGeneric("labels<-",
-           function(object, which, ..., value) {
+           function(object, type, ..., value) {
                standardGeneric("labels<-")
            })
 
@@ -83,7 +83,7 @@ setGeneric("tipLabels<-",
        standardGeneric("tipLabels<-")
    })
 
-setGeneric("nodeId", function(x, which=c("internal", "tip", "all")) {
+setGeneric("nodeId", function(x, type=c("internal", "tip", "all")) {
     standardGeneric("nodeId")
 })
 

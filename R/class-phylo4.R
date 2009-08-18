@@ -23,19 +23,19 @@ setClass("phylo4",
 #####################
 
 .createLabels <- function(value, ntips, nnodes, use.names = TRUE,
-                          which = c("tip", "internal", "allnode")) {
+                          type = c("tip", "internal", "allnode")) {
 
-    which <- match.arg(which)
+    type <- match.arg(type)
 
     ## set up final length of object to return
-    lgthRes <- switch(which, tip=ntips, internal=nnodes, allnode=ntips+nnodes)
+    lgthRes <- switch(type, tip=ntips, internal=nnodes, allnode=ntips+nnodes)
 
     ## create NA character vector of node labels
     res <- character(lgthRes)
     is.na(res) <- TRUE
 
     ## create internal names
-    names(res) <- switch(which,
+    names(res) <- switch(type,
                          tip = 1:ntips,
                          internal = seq(from=ntips+1, length=lgthRes),
                          allnode = 1:(ntips+nnodes))
@@ -44,7 +44,7 @@ setClass("phylo4",
     ## if no values are provided
     if(missing(value) || is.null(value) || all(is.na(value))) {
         ## tip labels can't be NULL
-        if(!identical(which, "internal")) {
+        if(!identical(type, "internal")) {
             tipLbl <- .genlab("T", ntips)
             res[1:ntips] <- tipLbl
         }
@@ -128,11 +128,11 @@ setMethod("phylo4", "matrix",
 
     ## tip.label
     tip.label <- .createLabels(value=tip.label, ntips=ntips, nnodes=nnodes,
-                               which="tip")
+                               type="tip")
 
     ## node.label
     node.label <- .createLabels(node.label, ntips=ntips, nnodes=nnodes,
-                                which="internal")
+                                type="internal")
 
     ## fill in the result
     res <- new("phylo4")

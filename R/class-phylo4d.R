@@ -54,15 +54,15 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
     ## Replacing node labels by node numbers and formatting the data to make sure
     ## they have the correct dimensions
     if(!is.null(all.data) && all(dim(all.data) > 0))
-        all.data <- formatData(x, all.data, which="all",
+        all.data <- formatData(x, all.data, type="all",
                                match.data=match.data, ...)
 
     if(!is.null(tip.data) && all(dim(tip.data) > 0))
-        tip.data <- formatData(x, tip.data, which="tip",
+        tip.data <- formatData(x, tip.data, type="tip",
                                match.data=match.data, ...)
 
     if(!is.null(node.data) && all(dim(node.data) > 0))
-        node.data <- formatData(x, node.data, which="internal",
+        node.data <- formatData(x, node.data, type="internal",
                                 match.data=match.data, ...)
 
     ## Merging dataset

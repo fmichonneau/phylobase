@@ -131,7 +131,7 @@ tipLabels(g1)
 
 Print node numbers (in edge matrix order):
 <<nodenumbergeodata>>=
-nodeId(g1, which='allnode')
+nodeId(g1, type='allnode')
 @
 
 Print edge labels (also empty in this case --- therefore

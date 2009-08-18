@@ -166,7 +166,7 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
         edge.length <- rep(NA, nrow(E))
     }
 
-    label <- labels(x,which="all")
+    label <- labels(x,type="all")
     label <- label[match(node, names(label))]
 
     d <- data.frame(label, node, ancestor=ancestr, edge.length,

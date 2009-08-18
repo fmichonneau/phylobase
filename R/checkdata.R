@@ -147,25 +147,25 @@ checkTree <- function(object,warn="retic",err=NULL) {
     return(TRUE)
 }
 
-formatData <- function(phy, dt, which=c("tip", "internal", "all"),
+formatData <- function(phy, dt, type=c("tip", "internal", "all"),
                        match.data=TRUE, label.type=c("rownames", "column"),
                        label.column=1, missing.data=c("fail", "warn", "OK"),
                        extra.data=c("warn", "OK", "fail")
                        ) {
 
-    which <- match.arg(which)
+    type <- match.arg(type)
     label.type <- match.arg(label.type)
     stopifnot(label.column %in% 1:ncol(dt))
     missing.data <- match.arg(missing.data)
     extra.data <- match.arg(extra.data)
 
-    nr <- switch(which,
+    nr <- switch(type,
                  tip = nTips(phy),
                  internal = nNodes(phy),
                  all = nTips(phy)+nNodes(phy))
 
     tmpDt <- array(, dim=c(nr, ncol(dt)),
-                   dimnames=list(nodeId(phy, which), colnames(dt)))
+                   dimnames=list(nodeId(phy, type), colnames(dt)))
     tmpDt <- data.frame(tmpDt)
 
     if(match.data) {
@@ -181,8 +181,8 @@ formatData <- function(phy, dt, which=c("tip", "internal", "all"),
         ndDt <- unlist(ndDt)
 
         ## Make sure that data are matched to appropriate nodes
-        if(which != "all") {
-            switch(which,
+        if(type != "all") {
+            switch(type,
                    tip = {
                        if(any(names(ndDt) %in% labels(phy, "internal")))
                            stop("You are trying to match tip data to internal ",
@@ -199,7 +199,7 @@ formatData <- function(phy, dt, which=c("tip", "internal", "all"),
 
         ## Check differences
         extra <- names(ndDt[is.na(ndDt)])
-        mssng <- nodeId(phy, which)[! nodeId(phy, which) %in% ndDt]
+        mssng <- nodeId(phy, type)[! nodeId(phy, type) %in% ndDt]
 
         if(length(mssng) > 0 && missing.data != "OK") {
             msg <- "The following nodes are not found in the dataset: "

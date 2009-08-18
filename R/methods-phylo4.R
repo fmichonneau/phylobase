@@ -109,12 +109,12 @@ setMethod("nodeType", "phylo4", function(phy) {
     }
 })
 
-setMethod("nodeId", "phylo4", function(x, which=c("internal","tip","allnode")) {
-  which <- match.arg(which)
+setMethod("nodeId", "phylo4", function(x, type=c("internal","tip","allnode")) {
+  type <- match.arg(type)
   tipNid <- x@edge[x@edge[,2]<=nTips(x),2]
   allNid <- unique(as.vector(x@edge))
   intNid <- allNid[! allNid %in% tipNid]
-  nid <- switch(which,
+  nid <- switch(type,
                 internal = intNid,
                 tip = tipNid,
                 allnode = allNid)
@@ -145,14 +145,14 @@ setMethod("hasEdgeLength","phylo4", function(x) {
     !all(is.na(x@edge.length))
 })
 
-setMethod("edgeLength", "phylo4", function(x, which) {
+setMethod("edgeLength", "phylo4", function(x, node) {
     if (!hasEdgeLength(x))
         NULL
     else {
-      if (missing(which))
+      if (missing(node))
           return(x@edge.length)
       else {
-          n <- getNode(x, which)
+          n <- getNode(x, node)
           return(x@edge.length[match(n, x@edge[,2])])
       }
     }
@@ -205,10 +205,10 @@ setReplaceMethod("rootNode", "phylo4", function(x, value) {
 ### Label accessors
 #########################################################
 
-setMethod("labels", "phylo4", function(object, which = c("tip",
+setMethod("labels", "phylo4", function(object, type = c("tip",
     "internal", "allnode"), ...) {
-    which <- match.arg(which)
-    switch(which,
+    type <- match.arg(type)
+    switch(type,
             tip = object@tip.label[as.character(nodeId(object, "tip"))],
             internal = {
                 if (hasNodeLabels(object)) {
@@ -228,24 +228,24 @@ setMethod("labels", "phylo4", function(object, which = c("tip",
 
 setReplaceMethod("labels",
                  signature(object="phylo4", value="character"),
-   function(object, which = c("tip", "internal", "allnode"),
+   function(object, type = c("tip", "internal", "allnode"),
             use.names=FALSE, ..., value) {
 
-       which <- match.arg(which)
+       type <- match.arg(type)
 
-       ob <- switch(which,
+       ob <- switch(type,
               ## If 'tip'
               tip = {
                   object@tip.label <- .createLabels(value, nTips(object),
                                                     nNodes(object), use.names,
-                                                    which="tip")
+                                                    type="tip")
                   object
               },
               ## If 'internal'
               internal = {
                   object@node.label <- .createLabels(value, nTips(object),
                                                      nNodes(object), use.names,
-                                                     which="internal")
+                                                     type="internal")
                   object
               },
               ## If 'allnode'
@@ -255,21 +255,21 @@ setReplaceMethod("labels",
                       nodVal <- value[names(value) %in% nodeId(object, "internal")]
                       object@tip.label <- .createLabels(tipVal, nTips(object),
                                                         nNodes(object), use.names,
-                                                        which="tip")
+                                                        type="tip")
                       object@node.label <- .createLabels(nodVal, nTips(object),
                                                          nNodes(object), use.names,
-                                                         which="internal")
+                                                         type="internal")
                   }
                   else {
                       ntips <- nTips(object)
                       nedges <- nTips(object) + nNodes(object)
                       object@tip.label <- .createLabels(value[1:ntips], nTips(object),
                                                         nNodes(object), use.names,
-                                                        which="tip")
+                                                        type="tip")
                       object@node.label <- .createLabels(value[(ntips+1):nedges],
                                                          nTips(object),
                                                          nNodes(object), use.names,
-                                                         which="internal")
+                                                         type="internal")
                   }
                   object
               })
@@ -287,23 +287,23 @@ setMethod("hasNodeLabels", "phylo4", function(x) {
 })
 
 setMethod("nodeLabels", "phylo4", function(object) {
-    labels(object, which="internal")
+    labels(object, type="internal")
 })
 
 setReplaceMethod("nodeLabels", signature(object="phylo4", value="character"),
   function(object, ..., value) {
-      labels(object, which="internal", ...) <- value
+      labels(object, type="internal", ...) <- value
       object
   })
 
 ### Tip labels
 setMethod("tipLabels", "phylo4", function(object) {
-    labels(object, which="tip")
+    labels(object, type="tip")
     })
 
 setReplaceMethod("tipLabels", signature(object="phylo4", value="character"),
   function(object, ...,  value) {
-      labels(object, which="tip", ...) <- value
+      labels(object, type="tip", ...) <- value
       return(object)
   })
 

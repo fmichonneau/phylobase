@@ -3,7 +3,7 @@ setMethod("print", "phylo4d", printphylo4)
 setMethod("show", "phylo4d", function(object) printphylo4(object))
 
 setMethod("tdata", "phylo4d",
-  function(x, which=c("tip", "internal", "allnode"),
+  function(x, type=c("tip", "internal", "allnode"),
            label.type=c("row.names","column"),
            empty.columns=TRUE, ...) {
 
@@ -11,10 +11,10 @@ setMethod("tdata", "phylo4d",
       ## Note: the function checks for unique labels. It's currently unecessary
       ## but could be useful in the future if non-unique labels are allowed.
 
-      which <- match.arg(which)
+      type <- match.arg(type)
       label.type <- match.arg(label.type)
 
-      if (which == "tip") {
+      if (type == "tip") {
           if (all(dim(x@tip.data) == 0)) {
               return(x@tip.data)
           }
@@ -37,7 +37,7 @@ setMethod("tdata", "phylo4d",
           }
       }
 
-      if (which == "internal") {
+      if (type == "internal") {
           if (all(dim(x@node.data)==0)) {
               return(x@node.data)
           }
@@ -65,7 +65,7 @@ setMethod("tdata", "phylo4d",
           }
       }
 
-      if (which == "allnode") {
+      if (type == "allnode") {
           ## node data
           if (all(dim(x@node.data) == 0)) { # empty data
               if (!hasNodeLabels(x)) {
@@ -119,11 +119,11 @@ setMethod("tdata", "phylo4d",
   })
 
 setReplaceMethod("tdata", "phylo4d",
-                 function(object, which = c("tip", "internal", "allnode"), ...,
+                 function(object, type = c("tip", "internal", "allnode"), ...,
                           value) {
-    which <- match.arg(which)
+    type <- match.arg(type)
 
-    tmpData <- switch(which,
+    tmpData <- switch(type,
                       tip = .phylo4Data(object, tip.data=value, ...),
                       internal = .phylo4Data(object, node.data=value, ...),
                       allnode = .phylo4Data(object, all.data=value, ...))
