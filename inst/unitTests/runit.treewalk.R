@@ -28,7 +28,7 @@ test.getNode.valid.integer <- function() {
 test.getNode.missing.character <- function() {
     # node includes only missing characters (names), but missing=OK
     ans <- rep(NA_integer_, 2)  # return values should be NA
-    names(ans) <- c("xxx", "yyy")
+    names(ans) <- rep(NA, 2)  # return values should have NA names
     checkEquals(getNode(phy, c("xxx", "yyy"), missing="OK"), ans)
     # now missing = "fail"
     checkException(getNode(phy, c("xxx", "yyy"), missing="fail"))
@@ -37,7 +37,7 @@ test.getNode.missing.character <- function() {
 test.getNode.missing.integer <- function() {
     # node includes only missing numbers (IDs), but missing=OK
     ans <- rep(NA_integer_, 3)  # return values should be NA
-    names(ans) <- rep(NA, 3)
+    names(ans) <- rep(NA, 3)  # return values should have NA names
     checkEquals(getNode(phy, c(-9, 0, 50), missing="OK"), ans)
     # now missing = "fail"
     checkException(getNode(phy, c(-9, 0, 50), missing="fail"), ans)
