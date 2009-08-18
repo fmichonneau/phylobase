@@ -184,7 +184,8 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
         if(type != "all") {
             switch(type,
                    tip = {
-                       if(any(names(ndDt) %in% labels(phy, "internal")))
+                     ## BMB: don't bother trying to match NAs
+                       if(any(na.omit(names(ndDt)) %in% labels(phy, "internal")))
                            stop("You are trying to match tip data to internal ",
                                 "nodes. Make sure that your data identifiers ",
                                 "are correct.")
