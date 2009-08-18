@@ -9,6 +9,13 @@ rm -rf inst/doc/auto
 rm -rf autom4te.cache
 cd src/ncl
 make clean
-cd ../..
+rm -f stamp-h1
+rm -f libtool
+rm -f configure.lineno
+rm -f Makefile
+rm -rf ncl/.deps
+cd ncl
+rm -f Makefile
+cd ../../..
 find . -name \*~ -exec rm {} \;
 find . -name \*.flc -exec rm {} \;
