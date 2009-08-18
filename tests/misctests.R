@@ -1,6 +1,8 @@
 library(phylobase)
 library(ape)
 
+set.seed(1)
+
 data(geospiza)
 geospiza0 <-
   list(geospiza.tree=as(geospiza,"phylo"),geospiza.data=tdata(geospiza))

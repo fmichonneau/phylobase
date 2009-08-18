@@ -21,6 +21,8 @@ Type 'q()' to quit R.
 Loading required package: grid
 Loading required package: ape
 > library(ape)
+> 
+> set.seed(1)
 > r1 <- rcoal(5)
 > 
 > ## trace("phylo4d", browser, signature = "phylo")
@@ -35,11 +37,11 @@ Loading required package: ape
  Number of tips    : 4 
  Number of nodes   : 3 
  Branch lengths:
-        mean         : 0.2089533 
-        variance     : 0.03350737 
+        mean         : 0.2116037 
+        variance     : 0.01503145 
         distribution :
    Min. 1st Qu.  Median 3rd Qu.    Max.    NA's 
-0.00795 0.04813 0.23180 0.30080 0.47150 1.00000 
+0.07552 0.10370 0.23040 0.27250 0.38530 1.00000 
 
 Comparative data:
 
@@ -75,4 +77,4 @@ In asMethod(object) : losing data while coercing phylo4d to phylo
 > 
 > proc.time()
    user  system elapsed 
-  1.568   0.076   1.635 
+  1.162   0.047   1.203 

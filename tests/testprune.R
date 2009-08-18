@@ -1,5 +1,7 @@
 library(phylobase)
 library(ape)
+
+set.seed(1)
 r1 <- rcoal(5)
 
 ## trace("phylo4d", browser, signature = "phylo")
