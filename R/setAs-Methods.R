@@ -25,15 +25,24 @@ setAs("phylo", "phylo4", function(from, to) {
             from$edge.label <- c(from$edge.label[tip.idx],NA,from$edge.label[int.idx])
         }
     }
+    oldorder <- attr(from,"order")
+    neworder <- if (is.null(oldorder)) { "unknown" } else {
+      switch(oldorder,
+             pruningwise="pruningwise",
+             cladewise="preorder")
+    }
+    attr(from,"order") <- NULL
     newobj <- phylo4(from$edge, from$edge.length, from$tip.label,
-                     node.label = from$node.label, edge.label = from$edge.label)
+                     node.label = from$node.label,
+                     edge.label = from$edge.label,
+                     order = neworder)
     attribs <- attributes(from)
     attribs$names <- NULL
-    knownattr <- c("logLik", "order", "origin", "para", "xi")
+    knownattr <- c("logLik", "origin", "para", "xi")
     known <- names(attribs)[names(attribs) %in% knownattr]
     unknown <- names(attribs)[!names(attribs) %in% c(knownattr, "class", "names")]
     if (length(unknown) > 0) {
-        warning(paste("unknown attributes ignored: ", unknown, collapse = " "))
+      warning(paste("unknown attributes ignored: ", unknown, collapse = " "))
     }
     for (i in known) attr(newobj, i) <- attr(from, i)
     newobj
@@ -75,32 +84,35 @@ setAs("phylo4", "phylo", function(from, to) {
     
     if (inherits(from, "phylo4d"))
         warning("losing data while coercing phylo4d to phylo")
-    brlen <- unname(from@edge.length)
+    brlen0 <- brlen <- unname(from@edge.length)
     ## rootnode is only node with no ancestor
     rootpos <- which(is.na(from@edge[, 1]))
     if (isRooted(from)) brlen <- brlen[-rootpos]
-    if(hasNodeLabels(from))
+    if(hasNodeLabels(from)) {
         nodLbl <- unname(from@node.label)
-    else
+      }  else {
         nodLbl <- character(0)
+      }
     edgemat <- unname(from@edge[-rootpos, ])
     y <- list(edge = edgemat,
-            Nnode = from@Nnode,
-            tip.label = unname(from@tip.label),
-            edge.length = brlen,
-            node.label = nodLbl)
+              edge.length = brlen,
+              tip.label = unname(from@tip.label),
+              Nnode = from@Nnode,
+              node.label = nodLbl)
     class(y) <- "phylo"
     if (from@order != 'unknown') {
         ## TODO postorder != pruningwise -- though quite similar
         attr(y, 'order') <- switch(from@order, postorder = 'unknown',
-                                      preorder  = 'cladewise')
+                                   preorder  = 'cladewise',
+                                   unknown = 'unknown',
+                                   pruningwise = 'pruningwise')
     }
     if (length(y$edge.length) == 0)
         y$edge.length <- NULL
     if (length(y$node.label) == 0)
         y$node.label <- NULL
     if (isRooted(from)) {
-        root.edge <- brlen[nodeId(from, "all") == rootNode(from)]
+        root.edge <- brlen0[rootNode(from)]
         if (!is.na(root.edge)) y$root.edge <- root.edge
     }
     y
