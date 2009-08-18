@@ -85,15 +85,20 @@ setAs("phylo4", "phylo", function(from, to) {
     if (inherits(from, "phylo4d"))
         warning("losing data while coercing phylo4d to phylo")
     brlen0 <- brlen <- unname(from@edge.length)
-    ## rootnode is only node with no ancestor
-    rootpos <- which(is.na(from@edge[, 1]))
-    if (isRooted(from)) brlen <- brlen[-rootpos]
+    if (isRooted(from)) {
+        ## rootnode is only node with no ancestor
+        rootpos <- which(is.na(from@edge[, 1]))    
+        brlen <- brlen[-rootpos]
+        edgemat <- unname(from@edge[-rootpos, ])    
+      } else {
+        edgemat <- from@edge
+    }
     if(hasNodeLabels(from)) {
         nodLbl <- unname(from@node.label)
-      }  else {
+      } else {
         nodLbl <- character(0)
-      }
-    edgemat <- unname(from@edge[-rootpos, ])
+    }
+
     y <- list(edge = edgemat,
               edge.length = brlen,
               tip.label = unname(from@tip.label),
