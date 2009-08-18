@@ -35,6 +35,7 @@ p1C <- na.omit(p1)
 labels(p1C) <- tolower(labels(p1C))
 
 ## trace("prune",browser,signature="phylo4d")
+set.seed(1)
 r1 <- rcoal(5)
 
 ## trace("phylo4d", browser, signature = "phylo")
