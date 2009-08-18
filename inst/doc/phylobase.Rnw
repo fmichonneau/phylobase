@@ -99,13 +99,15 @@ Convert the \code{S3} tree to a \code{S4 phylo4} object using the \code{as()} fu
 (g1 <- as(geospiza_raw$tree, "phylo4"))
 @
 
-The nodes appear with labels \verb+<NA>+ because their labels are missing:
+The (internal) nodes appear with labels \verb+<NA>+ because
+they are not defined:
 
 <<nodelabelgeodata>>=
 nodeLabels(g1)
 @
 
-(you can also retrieve the node labels with \code{labels(g1,"internal")}).
+(this means ``a character vector of length 0'';
+you can also retrieve the node labels with \code{labels(g1,"internal")}).
 
 A simple way to assign the node numbers as labels (useful for various checks) is
 
@@ -132,7 +134,8 @@ Print node numbers (in edge matrix order):
 nodeId(g1, which='allnode')
 @
 
-Print edge labels (also empty in this case):
+Print edge labels (also empty in this case --- therefore
+all \code{NA}):
 <<edgelabelgeodata>>=
 edgeLabels(g1)
 @
@@ -147,7 +150,7 @@ Which node is the root?
 rootNode(g1)
 @
 
-Does it have any polytomies?
+Does it contain any polytomies?
 <<polygeodata>>=
 hasPoly(g1)
 @
@@ -179,10 +182,9 @@ Now we'll take the \emph{Geospiza} data from \verb+geospiza_raw$data+ and merge 
 g2 <- phylo4d(g1, geospiza_raw$data)
 @
 
-gives
 <<geomergeerr1,echo=FALSE>>=
-err1 <- try(g2 <- phylo4d(g1, geospiza_raw$data), silent=TRUE)
-cat(as.character(err1))
+g2 <- try(phylo4d(g1, geospiza_raw$data),silent=TRUE)
+cat(as.character(g2))
 @
 
 We have two problems --- the first is that we forgot to lowercase the labels on the data to match the tip labels:
@@ -194,11 +196,11 @@ row.names(gdata) <- tolower(row.names(gdata))
 
 To deal with the second problem (missing data for \emph{G. olivacea}), we have a few choices. The easiest is to use \code{missing.tip.data="OK"} to allow R to create the new object:
 
-<<geomerge2>>=
-g2 <- phylo4d(g1, gdata,missing.tip.data="OK")
+<<geomerge2,keep.source=TRUE>>=
+g2 <- phylo4d(g1, gdata, missing.data="warn")
 @
 
-(setting \code{missing.tip.data} to \code{"warn"} would create the new object but print a warning).
+(setting \code{missing.data} to \code{"warn"} would create the new object but print a warning).
 
 Another way to deal with this would be to use \code{prune()} to drop the offending tip from the tree first:
 

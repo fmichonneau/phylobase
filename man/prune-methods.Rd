@@ -101,12 +101,11 @@ prune(tr, c("A", "B"), root.edge = 2) # = (C:1,(D:1,E:1):1):2;
 prune(tr, c("A", "B"), root.edge = 3) # = (C:1,(D:1,E:1):1):3;
 
 ## Dropping tips on phylo4d objects
-r1 <- rcoal(5)
-d <- data.frame(a=1:5,row.names=paste("t",1:5,sep=""))
-r2 <- phylo4d(r1,tip.data=d,node.data=data.frame(a=6:9))
-r2 <- phylo4d(as(r1,"phylo4"),tip.data=d,node.data=data.frame(a=6:9))
-nodeLabels(r2) <- as.character(sort(nodeId(r2)))
-r3 <- prune(r2,1)
+r1 <- as(rcoal(5), "phylo4")
+td <- data.frame(a=1:5, row.names=paste("t", 1:5, sep=""))
+nd <- data.frame(a=6:9, row.names=nodeId(r1, "internal"))
+r2 <- phylo4d(r1, tip.data=td, node.data=nd)
+r3 <- prune(r2, "t1")
 }
 \keyword{manip}
 \keyword{methods}

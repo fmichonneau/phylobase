@@ -80,7 +80,7 @@ plot(subset(g1,node.subtree=18))
 ## "[" examples
 plot(g1,show.node.label=TRUE)
 plot(g1[c(1:6,14)],show.node.label=TRUE)
-nodeLabels(geospiza) <- paste("N", nodeId(geospiza))
+nodeLabels(geospiza) <- paste("N", nodeId(geospiza), sep="")
 plot(geospiza[c(1:6,14)],show.node.label=TRUE)
 plot(geospiza[c(1:6,14),3:5],show.node.label=TRUE)
 }

@@ -73,26 +73,26 @@ p4 <- as(p3, "phylo4")
 
 #create phylo4d objects with tip data
 p4d <- phylo4d(p4, dat)
-checkData(p4d)
+###checkData(p4d)
 p4d.sorted <- phylo4d(p4, dat[5:1, ])
 try(p4d.nonames <- phylo4d(p4, dat.defaultnames))
-p4d.nonames <- phylo4d(p4, dat.defaultnames, use.tip.names = FALSE)
+p4d.nonames <- phylo4d(p4, dat.defaultnames, match.data=FALSE)
 
 \dontrun{
 p4d.subset <- phylo4d(p4, dat.subset)
-p4d.subset <- phylo4d(p4, dat.subset, missing.tip.data = "OK")
+p4d.subset <- phylo4d(p4, dat.subset)
 try(p4d.superset <- phylo4d(p4, dat.superset))
-p4d.superset <- phylo4d(p4, dat.superset, extra.tip.data = "OK")
+p4d.superset <- phylo4d(p4, dat.superset)
 }
 
 #create phylo4d objects with node data
 nod.dat <- data.frame(a = rnorm(4), b = rnorm(4))
-p4d.nod <- phylo4d(p4, node.data = nod.dat, which = "internal")
+p4d.nod <- phylo4d(p4, node.data = nod.dat, match.data=FALSE)
+
 
 #create phylo4 objects with node and tip data
-p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat,
-  which = "all")
+p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat, match.data=FALSE)
 nodeLabels(p4) <- as.character(sort(nodeId(p4)))
-p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat), which = "all")
+p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat, match.data=FALSE))
 }
 \keyword{misc}

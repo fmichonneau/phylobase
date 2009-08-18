@@ -24,7 +24,7 @@ checkTree(object,warn="retic",err=NULL)
   The rules for \code{phylo4} objects essentially follow
   those for \code{phylo} objects from the \code{ape} package,
   which are in turn defined in
-  \url{http://ape.mpl.ird.fr/misc/FormatTreeR_4Dec2006.pdf}.
+  http://ape.mpl.ird.fr/misc/FormatTreeR_4Dec2006.pdf.
   These are essentially that:
   \itemize{
     \item if the tree has edge lengths defined, the number of edge lengths must match the number of edges;

@@ -66,7 +66,7 @@ nodes}
 \examples{
   library(ape)
   example(read.tree)
-  obj <- phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3), use.tip.names=FALSE)
+  obj <- phylo4d(as(tree.owls.bis,"phylo4"), data.frame(wing=1:3))
   obj
   names(obj)
   summary(obj)

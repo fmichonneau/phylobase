@@ -70,6 +70,56 @@ checkTree <- function(object,warn="retic",err=NULL) {
            paste(phylo4_orderings,collapse=","))
     }
 
+    ## make sure that nodes and edges have internal names
+    ## and that they match the nodes
+    if(is.null(names(object@tip.label))) {
+        if(length(object@tip.label) == nTips(object)) {
+            stop("It seems that you have an old version of a phylo4 object. ",
+                  "Try to use the function updatePhylo4().")
+        }
+        else
+            stop("Your object doesn't have internal node names and the number of ",
+                 "tip labels doesn't match the number tips.")
+    }
+    else {
+        if(!all(names(object@tip.label) %in%  nodeId(object, "tip")))
+            stop("Internal names for tips don't match tip ID numbers")
+    }
+
+    if(is.null(names(object@node.label))) {
+        if(length(object@node.label) == nNodes(object)) {
+            stop("It seems that you have an old version of a phylo4 object. ",
+                 "Try to use the function updatePhylo4().")
+        }
+        else
+            stop("Your object doesn't have internal node names and the number of ",
+                 "node labels doesn't match the number nodes.")
+    }
+    else {
+        if(!all(names(object@node.label) %in%  nodeId(object, "internal")))
+            stop("Internal names for tips don't match tip ID numbers")
+    }
+
+    if(hasEdgeLength(object)) {
+        if(is.null(names(object@edge.length))) {
+            warning("It seems that you have an old version of a phylo4 object. ",
+                    "Try to use the function updatePhylo4().")
+        }
+        else {
+            tEdgLbl <- paste(object@edge[,1], object@edge[,2], sep="-")
+            if(!all(names(object@edge.length) %in% tEdgLbl))
+                stop("There is something wrong with your internal edge length ",
+                     "labels.")
+        }
+    }
+
+    ## make sure that edgeLength has correct length and is numerical
+    if(hasEdgeLength(object)) {
+        if(length(object@edge.length) != nedges)
+            stop("The number of edge lengths is different from the number of edges.")
+        if(!is.numeric(object@edge.length)) stop("Edge lengths are not numeric.")
+    }
+
     ## make sure that tip and node labels are unique
     lb <- labels(object, "allnode")
     lb <- lb[nchar(lb) > 0]
@@ -97,320 +147,112 @@ checkTree <- function(object,warn="retic",err=NULL) {
     return(TRUE)
 }
 
-checkData <- function(object,
-                       label.type=c("row.names","column"),
-                       label.column=1,
-                       use.tip.names=TRUE,
-                       missing.tip.data=c("fail","OK","warn"),
-                       extra.tip.data=c("fail","OK","warn"),
-                       default.tip.names=c("warn","OK","fail"),
-                       use.node.names=FALSE,
-                       missing.node.data=c("OK","warn","fail"),
-                       extra.node.data=c("OK","warn","fail"),
-                       default.node.names=c("warn","OK","fail"),
-                       non.unique.tips=c("warn", "OK", "fail"),
-                       non.unique.nodes=c("warn", "OK", "fail"),
-                       ...)
-{
+formatData <- function(phy, dt, which=c("tip", "internal", "all"),
+                       match.data=TRUE, label.type=c("rownames", "column"),
+                       label.column=1, missing.data=c("fail", "warn", "OK"),
+                       extra.data=c("warn", "OK", "fail")
+                       ) {
 
-    ## name matching default: use row.names of data frame
+    which <- match.arg(which)
     label.type <- match.arg(label.type)
-    if (identical(label.type, "row.names")) {
-        tip.names <- row.names(object@tip.data)
-        node.names <- row.names(object@node.data)
+    stopifnot(label.column %in% 1:ncol(dt))
+    missing.data <- match.arg(missing.data)
+    extra.data <- match.arg(extra.data)
+
+    nr <- switch(which,
+                 tip = nTips(phy),
+                 internal = nNodes(phy),
+                 all = nTips(phy)+nNodes(phy))
+
+    tmpDt <- array(, dim=c(nr, ncol(dt)),
+                   dimnames=list(nodeId(phy, which), colnames(dt)))
+    tmpDt <- data.frame(tmpDt)
+
+    if(match.data) {
+        ## Replace node labels by node numbers
+        ndNames <- switch(label.type,
+                          rownames = rownames(dt),
+                          column = dt[,label.column])
+        ndDt <- lapply(ndNames, function(nd) {
+            if(nchar(gsub("[0-9]", "", nd)) == 0)
+                getNode(phy, as.integer(nd), missing="OK")
+            else getNode(phy, nd, missing="OK")
+        })
+        ndDt <- unlist(ndDt)
+
+        ## Make sure that data are matched to appropriate nodes
+        if(which != "all") {
+            switch(which,
+                   tip = {
+                       if(any(names(ndDt) %in% labels(phy, "internal")))
+                           stop("You are trying to match tip data to internal ",
+                                "nodes. Make sure that your data identifiers ",
+                                "are correct.")
+                   },
+                   internal = {
+                       if(any(names(ndDt) %in% labels(phy, "tip")))
+                           stop("You are trying to match node data to tip ",
+                                "nodes. Make sure that your data identifiers ",
+                                "are correct.")
+                   })
+        }
+
+        ## Check differences
+        extra <- names(ndDt[is.na(ndDt)])
+        mssng <- nodeId(phy, which)[! nodeId(phy, which) %in% ndDt]
+
+        if(length(mssng) > 0 && missing.data != "OK") {
+            msg <- "The following nodes are not found in the dataset: "
+
+            ## provides label if it exists and node number otherwise
+            mssng <- sapply(mssng, function(m) {
+                m <- getNode(phy, m)
+                if (is.na(names(m)) || is.null(names(m)))
+                    m
+                else
+                    names(m)
+            })
+
+            msg <- paste(msg, paste(mssng, collapse=", "))
+            switch(missing.data,
+                   warn = warning(msg),
+                   fail = stop(msg))
+        }
+
+        if(length(extra) > 0 && extra.data != "OK") {
+            msg <- "The following names are not found in the tree: "
+            msg <- paste(msg, paste(extra, collapse=", "))
+            switch(extra.data,
+                   warn = warning(msg),
+                   fail = stop(msg))
+
+        }
+        ## Format data to have correct dimensions
+        dt <- dt[!is.na(ndDt) ,, drop=FALSE]
+        rownames(dt) <- ndDt[!is.na(ndDt)]
+        if(label.type == "column") dt <- dt[, -label.column]
+        tmpDt[match(rownames(dt), rownames(tmpDt)), ] <- dt
     }
     else {
-        tip.names <- object@tip.data[,label.column]
-        node.names <- object@node.data[,label.column]
-    }
+        ## Remove rownames in data provided
+        rownames(dt) <- NULL
 
-    ## tip default: use names, require names, must match exactly
-    missing.tip.data <- match.arg(missing.tip.data)
-    extra.tip.data <- match.arg(extra.tip.data)
-    default.tip.names <- match.arg(default.tip.names)
-
-    ## node default: don't use node names, don't require names, do not need to match exactly
-    missing.node.data <- match.arg(missing.node.data)
-    extra.node.data <- match.arg(extra.node.data)
-    default.node.names <- match.arg(default.node.names)
-
-    ## non unique tip default: by default if some tip names are non-unique they
-    ## all get associated the same value and this is done with a warning. Other
-    ## options are: association of data without warning and require uniqueness of tips.
-    non.unique.tips <- match.arg(non.unique.tips)
-
-    ## for each set of data, check for names, missing and extra data and take appropriate actions
-
-    ## tip data checks
-    ## if tip.data exist
-    if (!all(dim(object@tip.data)==0)) {
-        ## if we want to use tip.names
-        if (use.tip.names) {
-
-            ## check for default names
-            if (all(tip.names == 1:length(tip.names))) {
-                ## no tip.names
-                if (default.tip.names == "fail") {
-                    stop("Tip data have default names and may not match tree tip labels. ",
-                         "Consider using the use.tip.names=FALSE option.")
-                }
-                else if (default.tip.names == "warn") {
-                    warning("Tip data have default names and may not match tree tip labels. ",
-                            "Consider using the use.tip.names=FALSE option.")
-                }
-            }
-
-            ## check tip names
-            ## check for missing or extra tip data (relative to tree taxa)
-            if (setequal(tip.names, object@tip.label)) {
-                if(length(tip.names) == nTips(object)) {
-                    ## names are perfect match - ok
-                    return(TRUE)
-                }
-                else {
-                    ## Some tips are non-unique
-                    tipsTable <- table(tipLabels(object))
-                    if(any(nU <- tipsTable > 1)) {
-                        nonUnique <- paste(names(tipsTable[nU]), collapse=", ")
-                        nonUniqueMsg <- paste("Tip \'", nonUnique, "\' not unique", sep = "")
-                        ## TODO - When labels will be matched on node numbers
-                        ## then we will be able to allow non-unique labels
-                        ## if(non.unique.tips == "fail")
-                            stop(nonUniqueMsg)
-                        ## if(non.unique.tips == "warn")
-                            ## warning(nonUniqueMsg)
-                    }
-                }
-            }
-            else {
-                ## we know the tree taxa and tip.data taxa are not a perfect match
-                ## if tip.data taxa are subset of tree taxa, check missing.tip.data arg and act accordingly
-                tips.in.rownames <- object@tip.label %in% tip.names
-                rownames.in.tips <- tip.names %in% object@tip.label
-                missing.data.names <- object@tip.label[!tips.in.rownames]
-                missing.data.name.msg <- if (length(missing.data.names)==0) "" else {
-                    paste("\n(missing data names: ",
-                          paste(missing.data.names,collapse=","),")",sep="")
-                }
-                extra.data.names <- tip.names[!rownames.in.tips]
-                extra.data.name.msg <- if (length(extra.data.names)==0) "" else {
-                    paste("\n(extra data names: ",
-                          paste(extra.data.names,collapse=","),")",sep="")
-                }
-                if (!all(tips.in.rownames)) {
-                    ## we know it's not an exact match - we have missing.tip.data - take action
-                    if (!any(tips.in.rownames)) {
-                        errmsg <- paste("No matches between tip data names and tree tip labels.",
-                                        missing.data.name.msg,extra.data.name.msg)
-                        if (missing.tip.data == "fail") {
-                            stop(errmsg)
-                        }
-                        else if (missing.tip.data == "warn") {
-                            warning(errmsg)
-                        }
-                    }
-                    else
-                      {
-                          errmsg <- paste("Tip data names are a subset of tree tip labels",
-                                          missing.data.name.msg,
-                                          extra.data.name.msg)
-                          if (missing.tip.data == "fail") {
-                              stop(errmsg)
-                          }
-
-                          else if (missing.tip.data == "warn") {
-                              warning(errmsg)
-                          }
-                      }
-                    ##else ok
-                }
-
-                ##if tree taxa are subset of tip.data, check extra.tip arg and act accordingly
-                if (!all(tip.names %in% object@tip.label)) {
-                    ##we know it's not an exact match - we have extra.tip.data - take action
-                    ##fail
-                    errmsg <- paste("Tip data names are a superset of tree tip labels",
-                                    missing.data.name.msg,
-                                    extra.data.name.msg)
-                    if (extra.tip.data == "fail") {
-                        stop(errmsg)
-                    }
-                    ##warn
-                    else if (extra.tip.data == "warn") {
-                        warning(errmsg)
-                    }
-                    ##else ok
-                }
-
-                return(TRUE)
-            }
+        ## Check differences between dataset and tree
+        diffNr <- nrow(dt) - nr
+        if(diffNr > 0 && extra.data != "OK") {
+            msg <- paste("There are", diffNr, "extra rows.")
+            switch(extra.data,
+                   warn = warning(msg),
+                   fail = stop(msg))
         }
-        else
-          {
-              ##don't use tip names or attempt to sort - but check to make sure dimensions match
-              if (!(nTips(object)==dim(object@tip.data)[1])) {
-                  stop("Ignoring tip data names. Number of tip data do not match number of tree tips.")
-              }
-          }
-    }
-
-    ## node data checks
-    ## if node.data exist
-    if (!all(dim(object@node.data)==0)) {
-        ## if we want to use node.names
-        if (use.node.names) {
-
-            ## check for default names
-            if (all(node.names == 1:length(node.names))
-                || all(node.names == (nTips(object)+1):nEdges(object))) {
-                ## no node.names
-                if (default.node.names == "fail") {
-                    stop("Node data have default names and may not match tree node labels. ",
-                         "Consider using the use.node.names=FALSE option.")
-                }
-                else if (default.node.names == "warn") {
-                    warning("Node data have default names and may not match tree node labels. ",
-                            "Consider using the use.node.names=FALSE option.")
-                }
-            }
-
-            ## check node names
-            ## check for missing or extra node data (relative to tree taxa)
-            if (setequal(node.names, object@node.label)) {
-                if(length(node.names) == nNodes(object)) {
-                    ## names are perfect match - ok
-                    return(TRUE)
-                }
-                else {
-                    ## Some nodes are non-unique
-                    nodesTable <- table(nodeLabels(object))
-                    if(any(nU <- nodesTable > 1)) {
-                        nonUnique <- paste(names(nodesTable[nU]), collapse=", ")
-                        nonUniqueMsg <- paste("Node \'", nonUnique, "\' not unique", sep = "")
-                        ## TODO - When labels will be matched on node numbers
-                        ## then we will be able to allow non-unique labels
-                        ## if(non.unique.nodes == "fail")
-                            stop(nonUniqueMsg)
-                        ## if(non.unique.nodes == "warn")
-                            warning(nonUniqueMsg)
-                    }
-                }
-            }
-            else {
-                ## we know the tree taxa and node.data taxa are not a perfect match
-                ## if node.data taxa are subset of tree taxa, check missing.node.data arg and act accordingly
-                nodes.in.rownames <- object@node.label %in% node.names
-                rownames.in.nodes <- node.names %in% object@node.label
-                missing.data.names <- object@node.label[!nodes.in.rownames]
-                missing.data.name.msg <- if (length(missing.data.names)==0) "" else {
-                    paste("\n(missing data names: ",
-                          paste(missing.data.names,collapse=","),")",sep="")
-                }
-                extra.data.names <- node.names[!rownames.in.nodes]
-                extra.data.name.msg <- if (length(extra.data.names)==0) "" else {
-                    paste("\n(extra data names: ",
-                          paste(extra.data.names,collapse=","),")",sep="")
-                }
-                if (!all(nodes.in.rownames)) {
-                    ## we know it's not an exact match - we have missing.node.data - take action
-                    if (!any(nodes.in.rownames)) {
-                        errmsg <- paste("No matches between node data names and tree node labels.",
-                                        missing.data.name.msg,extra.data.name.msg)
-                        if (missing.node.data == "fail") {
-                            stop(errmsg)
-                        }
-                        else if (missing.node.data == "warn") {
-                            warning(errmsg)
-                        }
-                    }
-                    else
-                      {
-                          errmsg <- paste("Node data names are a subset of tree node labels",
-                                          missing.data.name.msg,
-                                          extra.data.name.msg)
-                          if (missing.node.data == "fail") {
-                              stop(errmsg)
-                          }
-
-                          else if (missing.node.data == "warn") {
-                              warning(errmsg)
-                          }
-                      }
-                    ##else ok
-                }
-
-                ##if tree taxa are subset of node.data, check extra.node arg and act accordingly
-                if (!all(node.names %in% object@node.label)) {
-                    ##we know it's not an exact match - we have extra.node.data - take action
-                    ##fail
-                    errmsg <- paste("Node data names are a superset of tree node labels",
-                                    missing.data.name.msg,
-                                    extra.data.name.msg)
-                    if (extra.node.data == "fail") {
-                        stop(errmsg)
-                    }
-                    ##warn
-                    else if (extra.node.data == "warn") {
-                        warning(errmsg)
-                    }
-                    ##else ok
-                }
-
-                return(TRUE)
-            }
+        if(diffNr < 0 && missing.data != "OK") {
+            msg <- paste("There are", abs(diffNr), "missing rows.")
+            switch(missing.data,
+                   warn = warning(msg),
+                   fail = stop(msg))
         }
-        else
-          {
-              ##don't use node names or attempt to sort - but check to make sure dimensions match
-              if (!(nNodes(object)==dim(object@node.data)[1])) {
-                  stop("Ignoring node data names. Number of node data do not match number of tree nodes.")
-              }
-          }
-    }
-}
-
-attachData <- function(object,
-                        label.type=c("row.names","column"),
-                        label.column=1,
-                        use.tip.names=TRUE,
-                        use.node.names=FALSE,
-                        ...)
-{
-
-    ## assumes data have already been checked by checkData!
-    ## name matching default: use row.names of data frame
-    label.type = match.arg(label.type)
-    if (identical(label.type, "row.names")) {
-        tip.names <- row.names(object@tip.data)
-        node.names <- row.names(object@node.data)
-    }
-    else {
-        tip.names <- object@tip.data[,label.column]
-        node.names <- object@node.data[,label.column]
+        tmpDt <- dt[1:min(nrow(dt), nr) ,, drop = FALSE]
     }
 
-
-    ## for each set of data, take appropriate actions
-
-    ## tip data operations:
-    ## if tip.data exist
-    if (!all(dim(object@tip.data)==0)) {
-        ## if we want to use tip.names
-        if (use.tip.names) {
-            object@tip.data <- object@tip.data[match(object@tip.label,tip.names),,drop=FALSE]
-        }
-        #tip.names <- object@tip.label
-    }
-
-    ## node data operations
-    if (!all(dim(object@node.data)==0)) {
-        ## if we want to use tip.names
-        if (use.node.names) {
-            object@node.data <- object@node.data[match(object@node.label,node.names),,drop=FALSE]
-        }
-        #node.names <- object@node.label
-    }
-
-    return(object)
-
+    tmpDt
 }

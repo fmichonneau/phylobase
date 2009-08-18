@@ -7,29 +7,43 @@
 ## x = n-nTips(phy)
 ## so:     n = x+nTips(phy)
 
-getNode <- function(phy,node,missing=c("warn","OK","fail")) {
-  missing <- match.arg(missing)
-    if (is.numeric(node) && all(floor(node)==node,na.rm=TRUE)) {
+getNode <- function(phy, node, missing=c("warn","OK","fail")) {
+    missing <- match.arg(missing)
+
+    if (is.numeric(node) && all(floor(node) == node, na.rm=TRUE)) {
         node <- as.integer(node)
     }
+
     if (is.character(node)) {
-        rval <- match(node, labels(phy, "allnode"))
-        # return NA for any NA_character_ inputs
-        rval[is.na(node)] <- NA
-        names(rval) <- node
-    } else if (is.integer(node)) {
-        rval <- match(node, seq_len(nTips(phy) + nNodes(phy)))
-        names(rval) <- labels(phy,"allnode")[rval]
-    } else stop("node must be integer or character")
-  if (any(is.na(rval))) {
-    missnodes <- node[is.na(rval)]
-    msg <- paste("some nodes missing from tree: ",paste(missnodes,collapse=","))
-    switch(missing,
-           fail=stop(msg),
-           warn=warning(msg),
-           OK={})
-  }
-  return(rval)
+        irval <- match(node, labels(phy, "allnode"))
+
+    }
+    else {
+        if (is.integer(node)) {
+            irval <- match(as.character(node), names(labels(phy, "allnode")))
+        }
+        else stop("Node must be a vector of class \'integer\' or \'character\'.")
+    }
+
+    ## node numbers
+    rval <- names(labels(phy, "allnode"))[irval]
+    rval <- as.integer(rval)
+    rval[is.na(node)] <- NA # return NA for any NA_character_ inputs
+
+    ## node labels
+    nmNd <- labels(phy, "allnode")[irval]
+    names(rval) <- nmNd
+
+    ## deal with nodes that don't match
+    if (any(is.na(rval))) {
+        missnodes <- node[is.na(rval)]
+        msg <- paste("Some nodes are missing from tree: ", paste(missnodes,collapse=", "))
+        switch(missing,
+               fail=stop(msg),
+               warn=warning(msg),
+               OK={})
+    }
+    return(rval)
 }
 
 
@@ -132,9 +146,6 @@ MRCA <- function(phy, ...) {
 } # end MRCA
 
 
-
-
-
 ###############
 # shortestPath
 ###############
@@ -174,27 +185,53 @@ shortestPath <- function(phy, node1, node2){
 
 
 
-
-
 ###########
 # getEdge
 ###########
-getEdge <- function(phy, node){
+getEdge <- function(phy, node, type=c("node", "ancestor", "all"),
+                    output=c("otherEnd", "allEdge"),
+                    missing=c("warn", "OK", "fail")) {
 
-    ## conversion from phylo, phylo4 and phylo4d
-    x <- as(phy, "phylo4")
+    type <- match.arg(type)
+    missing <- match.arg(missing)
+    output <- match.arg(output)
+    res <- character(0)
 
-    ## come checks
-    if (is.character(checkval <- checkPhylo4(x))) stop(checkval)
-    node <- getNode(x, node)
-    if(any(is.na(node))) stop("wrong node specified")
-    root <- getNode(x, nTips(x)+1)
-    node[node==root] <- NA
+    if(!identical(class(phy), "phylo4")) phy <- as(phy, "phylo4")
 
-    ## main computations
-    E <- x@edge
-    res <- match(node, E[,2])
-    names(res) <- names(node)
+    if(identical(type, "all")) {
+        if(!missing(node))
+            warning("Argument \'node\' is ignored if type=\"all\".")
+        if(!missing(output))
+            warning("Argument \'output\' is ignored if type=\"all\".")
+        res <- names(phy@edge.length)
+    }
+    else {
+        node <- getNode(phy, node, missing)
 
-    return(res)
-} # end getEdge
+        nd <- lapply(node, function(x) {
+            if(is.na(x))
+                res <- NA
+            else {
+                ndTmp <- switch(type,
+                                node = paste("-", x, sep=""),
+                                ancestor = paste(x, "-", sep=""))
+                res <- grep(ndTmp, names(phy@edge.length), value=TRUE)
+            }
+        })
+        nd <- unlist(nd)
+        if(identical(output, "allEdge"))
+            res <- nd
+        else {
+            nd <- strsplit(nd, "-")
+            res <- switch(type,
+                          node = sapply(nd, function(x) x[2]),
+                          ancestor = sapply(nd, function(x) x[1]))
+            res <- as.integer(res)
+        }
+    }
+    ## if we return names, then it gets confusing if it's not unique
+    ## for instance for edge 17 in geospiza, the names would be:
+    ## 171 172 173
+    unname(res)
+}

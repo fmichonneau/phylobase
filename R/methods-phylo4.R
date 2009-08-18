@@ -1,5 +1,57 @@
-## accessor functions for all internal bits
-## HORRIBLE KLUGE
+### This file contains the methods and accessors for phylo4(d) objects
+### The file is organized in sections:
+
+### 1. Tip accessors
+###  1.1. nTips()
+
+### 2. Node accessors
+###  2.1. nNodes()
+###  2.2. nodeType()
+###  2.3. nodeId()
+
+### 3. Edge accessors
+###  3.1. nEdges()
+###  3.2. edges()
+###  3.3. edgeOrder()
+###  3.4. hasEdgeLength()
+###  3.5. edgeLength()
+###  3.6. edgeLength() <-
+###  3.7. sumEdgeLength()
+
+### 4. Root accessors
+###  4.1. isRooted()
+###  4.2. rootNode()
+
+### 5. Label accessors
+###  5.1. labels()
+###  5.2. labels() <-
+###  5.3. hasNodeLabels()
+###  5.4. nodeLabels()
+###  5.5. nodeLabels() <-
+###  5.6. tipLabels()
+###  5.7. tipLabels() <-
+###  5.8. hasEdgeLabels()
+###  5.9. edgeLabels()
+###  5.10. edgeLabels() <-
+
+### 6. Displaying functions
+###  6.1. printphylo4()
+###  6.2. print()
+###  6.3  show()
+###  6.4. names()
+###  6.5. head()
+###  6.6. tail()
+###  6.7. summary()
+
+### 7. Ordering
+###  7.1. orderIndex()
+###  7.2. reorder()
+
+
+#########################################################
+### Tip accessors
+#########################################################
+
 nTips <- function(x,...)  { }  ## mask ape::nTips
 setGeneric("nTips", function(x,...) {
     standardGeneric("nTips")
@@ -28,29 +80,12 @@ setMethod("nTips","ANY", function(x) {
                       "(class",class(x),")"))
 })
 
+#########################################################
+### Node accessors
+#########################################################
+
 setMethod("nNodes", "phylo4", function(x) {
     x@Nnode
-})
-
-setMethod("nEdges", "phylo4", function(x) {
-    nrow(x@edge)
-})
-
-setMethod("edges", "phylo4", function(x, order, drop.root=FALSE, ...) {
-  e <- x@edge
-  if (drop.root) e <- e[!is.na(e[,1]),]
-  e
-})
-
-setMethod("edgeOrder", "phylo4", function(x, ...) {
-    x@order
-})
-
-
-setMethod("isRooted","phylo4", function(x) {
-    ## hack to avoid failure on an empty object
-    if(nTips(x) == 0) return(FALSE)
-    any(is.na(edges(x)[,1]))
 })
 
 setMethod("nodeType", "phylo4", function(phy) {
@@ -74,28 +109,65 @@ setMethod("nodeType", "phylo4", function(phy) {
     }
 })
 
-
-setMethod("rootNode", "phylo4", function(x) {
-    if (!isRooted(x))
-        return(NA)
-    unname(edges(x)[which(is.na(edges(x)[,1])),2])
+setMethod("nodeId", "phylo4", function(x, which=c("internal","tip","allnode")) {
+  which <- match.arg(which)
+  tipNid <- x@edge[x@edge[,2]<=nTips(x),2]
+  allNid <- unique(as.vector(x@edge))
+  intNid <- allNid[! allNid %in% tipNid]
+  nid <- switch(which,
+                internal = intNid,
+                tip = tipNid,
+                allnode = allNid)
+  return(nid[!is.na(nid)])
 })
 
-setReplaceMethod("rootNode", "phylo4", function(x, value) {
-    stop("Root node replacement not implemented yet")
+
+
+#########################################################
+### Edge accessors
+#########################################################
+
+setMethod("nEdges", "phylo4", function(x) {
+    nrow(x@edge)
 })
 
-setMethod("edgeLength", "phylo4", function(x,which) {
+setMethod("edges", "phylo4", function(x, order, drop.root=FALSE, ...) {
+  e <- x@edge
+  if (drop.root) e <- e[!is.na(e[,1]),]
+  e
+})
+
+setMethod("edgeOrder", "phylo4", function(x, ...) {
+    x@order
+})
+
+setMethod("hasEdgeLength","phylo4", function(x) {
+    !all(is.na(x@edge.length))
+})
+
+setMethod("edgeLength", "phylo4", function(x, which) {
     if (!hasEdgeLength(x))
         NULL
     else {
       if (missing(which))
           return(x@edge.length)
       else {
-          n <- getNode(x,which)
+          n <- getNode(x, which)
           return(x@edge.length[match(n, x@edge[,2])])
       }
     }
+})
+
+setReplaceMethod("edgeLength", "phylo4", function(x, use.names=TRUE, ..., value) {
+    if(use.names && !is.null(names(value))) {
+        if(!all(names(value) %in% names(x@edge.length)))
+            stop("Names provided don't match internal edge labels")
+        x@edge.length[match(names(value), names(x@edge.length))] <- value
+    }
+    else
+        x@edge.length[1:nEdges(x)] <- value
+    if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
+    x
 })
 
 setMethod("sumEdgeLength", "phylo4", function(phy, node) {
@@ -109,138 +181,137 @@ setMethod("sumEdgeLength", "phylo4", function(phy, node) {
     }
 })
 
-setMethod("hasNodeLabels", "phylo4", function(x) {
-    length(x@node.label) > 0
+#########################################################
+### Root accessors
+#########################################################
+
+setMethod("isRooted","phylo4", function(x) {
+    ## hack to avoid failure on an empty object
+    if(nTips(x) == 0) return(FALSE)
+    any(is.na(edges(x)[,1]))
 })
 
-setMethod("hasEdgeLabels", "phylo4", function(x) {
-    length(x@edge.label) > 0
+setMethod("rootNode", "phylo4", function(x) {
+    if (!isRooted(x))
+        return(NA)
+    unname(edges(x)[which(is.na(edges(x)[,1])),2])
 })
+
+setReplaceMethod("rootNode", "phylo4", function(x, value) {
+    stop("Root node replacement not implemented yet")
+})
+
+#########################################################
+### Label accessors
+#########################################################
 
 setMethod("labels", "phylo4", function(object, which = c("tip",
     "internal", "allnode"), ...) {
     which <- match.arg(which)
     switch(which,
-            tip = object@tip.label, ## [order(nodeId(object,"tip"))],
+            tip = object@tip.label[as.character(nodeId(object, "tip"))],
             internal = {
                 if (hasNodeLabels(object)) {
-                    object@node.label ## [order(nodeId(object))]
+                    object@node.label
                 }
                 else
                 {
+                    ## FIXME? should this return object@node.label
                     return(character(0))
                 }
-            }
-            ,
+            },
             allnode = {
-                if (hasNodeLabels(object)) {
-                    nl <- object@node.label
-                }
-                else
-                {
-                    nl <- rep(NA,nNodes(object))
-                }
-                ## lorder <- match(object@edge[,2],
-                ## c(nodeId(object,"tip"),nodeId(object)))
-                ## lorder <- order(c(nodeId(object,"tip"),nodeId(object)))
-                c(object@tip.label,nl) ## [lorder]
+                c(object@tip.label, object@node.label)
               }
             )
 })
 
 setReplaceMethod("labels",
                  signature(object="phylo4", value="character"),
-   function(object, which = c("tip", "internal", "allnode"), ..., value) {
-
-       tLbl <- as.numeric(value)
-       if(length(grep("[a-zA-Z]", value)) == 0)
-           stop("Labels need to contain characters")
+   function(object, which = c("tip", "internal", "allnode"),
+            use.names=FALSE, ..., value) {
 
        which <- match.arg(which)
-       tipOrder <- order(nodeId(object, "tip"))
-       intOrder <- order(nodeId(object, "internal"))
+
        ob <- switch(which,
               ## If 'tip'
               tip = {
-                  if(length(value) != nTips(object))
-                      stop("Number of tip labels does not match number of tips.")
-                  else {
-                      object@tip.label[tipOrder] <- value
-                      if(identical(class(object), "phylo4d") &&
-                         nrow(object@tip.data) > 0)
-                          rownames(object@tip.data)[tipOrder] <- value
-                      object
-                  }
+                  object@tip.label <- .createLabels(value, nTips(object),
+                                                    nNodes(object), use.names,
+                                                    which="tip")
+                  object
               },
               ## If 'internal'
               internal = {
-                  if(length(value) != nNodes(object))
-                      stop("Number of node labels does not match number of internal nodes.")
-                  else {
-                      object@node.label[intOrder] <- value
-                      if(identical(class(object), "phylo4d") &&
-                         nrow(object@node.data) > 0) {
-                          rownames(object@node.data)[intOrder] <- value
-                      }
-                      object
-                  }
+                  object@node.label <- .createLabels(value, nTips(object),
+                                                     nNodes(object), use.names,
+                                                     which="internal")
+                  object
               },
               ## If 'allnode'
               allnode = {
-                  if(length(value) != nEdges(object))
-                      stop("Number of labels does not match total number of nodes.")
-                  else {
-                      object@tip.label[tipOrder] <- value[1:nTips(object)]
-                      if(identical(class(object), "phylo4d") &&
-                         nrow(object@tip.data) > 0)
-                          rownames(object@tip.data)[tipOrder] <-
-                              value[1:nTips(object)]
-                      object@node.label[intOrder] <- value[-(1:nTips(object))]
-                      if(identical(class(object), "phylo4d") &&
-                         nrow(object@node.data) > 0)
-                          rownames(object@node.data)[intOrder] <-
-                              value[-(1:nTips(object))]
-                      object
+                  if(use.names) {
+                      tipVal <- value[names(value) %in% nodeId(object, "tip")]
+                      nodVal <- value[names(value) %in% nodeId(object, "internal")]
+                      object@tip.label <- .createLabels(tipVal, nTips(object),
+                                                        nNodes(object), use.names,
+                                                        which="tip")
+                      object@node.label <- .createLabels(nodVal, nTips(object),
+                                                         nNodes(object), use.names,
+                                                         which="internal")
                   }
+                  else {
+                      ntips <- nTips(object)
+                      nedges <- nTips(object) + nNodes(object)
+                      object@tip.label <- .createLabels(value[1:ntips], nTips(object),
+                                                        nNodes(object), use.names,
+                                                        which="tip")
+                      object@node.label <- .createLabels(value[(ntips+1):nedges],
+                                                         nTips(object),
+                                                         nNodes(object), use.names,
+                                                         which="internal")
+                  }
+                  object
               })
+
        if(is.character(checkval <- checkPhylo4(ob)))
            stop(checkval)
        else
            return(ob)
    })
 
-setMethod("nodeLabels", "phylo4", function(object) {
-    #x@node.label
-    labels(object, which="internal")
+
+### Node Labels
+setMethod("hasNodeLabels", "phylo4", function(x) {
+    !all(is.na(x@node.label))
 })
 
-setMethod("tipLabels", "phylo4", function(object) {
-    labels(object, which="tip")
-    })
-
-setMethod("nodeId", "phylo4", function(x,which=c("internal","tip","allnode")) {
-  which <- match.arg(which)
-  tipNid <- x@edge[x@edge[,2]<=nTips(x),2]
-  allNid <- unique(as.vector(x@edge))
-  intNid <- allNid[! allNid %in% tipNid]
-  nid <- switch(which,
-                internal = intNid,
-                tip = tipNid,
-                allnode = allNid)
-  return(nid[!is.na(nid)])
+setMethod("nodeLabels", "phylo4", function(object) {
+    labels(object, which="internal")
 })
 
 setReplaceMethod("nodeLabels", signature(object="phylo4", value="character"),
   function(object, ..., value) {
       labels(object, which="internal", ...) <- value
-      return(object)
+      object
   })
+
+### Tip labels
+setMethod("tipLabels", "phylo4", function(object) {
+    labels(object, which="tip")
+    })
 
 setReplaceMethod("tipLabels", signature(object="phylo4", value="character"),
   function(object, ...,  value) {
       labels(object, which="tip", ...) <- value
       return(object)
   })
+
+
+### Edge labels
+setMethod("hasEdgeLabels", "phylo4", function(x) {
+    length(x@edge.label) > 0
+})
 
 setMethod("edgeLabels", signature(x = "phylo4"), function(x) {
     x@edge.label
@@ -249,10 +320,16 @@ setMethod("edgeLabels", signature(x = "phylo4"), function(x) {
 setReplaceMethod("edgeLabels", signature(object="phylo4", value="character"),
   function(object, ..., value) {
       object@edge.label <- value
+      if(is.character(checkval <- checkPhylo4(object))) stop(checkval)
       object
   })
 
 
+#########################################################
+### Displaying phylo4: print, show, head, tail and summary
+#########################################################
+
+### print
 printphylo4 <- function(x, printall=TRUE) {
     if(!nrow(x@edge)) {
         msg <- paste("Empty \'", class(x), "\' object\n", sep="")
@@ -264,17 +341,30 @@ printphylo4 <- function(x, printall=TRUE) {
         else print(head(as(x, 'data.frame')))
     }
 }
-## hack for print/show
-## from http://tolstoy.newcastle.edu.au/R/e2/devel/06/12/1363.html
-#setMethod("print", "phylo4", printphylo)
-#setMethod("show", "phylo4", function(object) printphylo(object))
+
+### Hack for print/show
+### from http://tolstoy.newcastle.edu.au/R/e2/devel/06/12/1363.html
 setMethod("print", "phylo4", printphylo4)
 setMethod("show", "phylo4", function(object) printphylo4(object))
-##
 
-#################
-## summary phylo4
-#################
+### names
+setMethod("names", signature(x = "phylo4"), function(x){
+    temp <- rev(names(attributes(x)))[-1]
+    return(rev(temp))
+})
+
+### Head and Tail
+setMethod("head",signature(x = 'phylo4'),
+          function(x,n=20) {
+            head(as(x,"data.frame"),n=n)
+          })
+
+setMethod("tail",signature(x = 'phylo4'),
+          function(x,n=20) {
+            tail(as(x,"data.frame"),n=n)
+          })
+
+### summary
 setMethod("summary","phylo4", function (object, quiet=FALSE) {
     x <- object
     res <- list()
@@ -361,54 +451,12 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
     return(invisible(res))
 }) # end setMethod summary phylo4
 
-setMethod("names", signature(x = "phylo4"), function(x){
-    temp <- rev(names(attributes(x)))[-1]
-    return(rev(temp))
-})
 
-setMethod("hasEdgeLength","phylo4", function(x) {
-    length(x@edge.length)>0
-})
 
-setReplaceMethod("labels",
-                 signature(object="phylo4", value="character"),
-   function(object, which = c("tip", "internal", "allnode"), ..., value) {
-       which <- match.arg(which)
-       switch(which,
-              ## If 'tip'
-              tip = {
-                  if(length(value) != nTips(object))
-                      stop("Number of tip labels does not match number of tips.")
-                  else {
-                      object@tip.label[order(nodeId(object, "tip"))] <- value
-                      return(object)
-                  }
-              },
-              ## If 'internal'
-              internal = {
-                  if(length(value) != nNodes(object))
-                      stop("Number of node labels does not match number of internal nodes.")
-                  else {
-                      #object@node.label <- character(nNodes(object))
-                      #object@node.label[order(nodeId(object, "internal"))] <- value
-                    object@node.label <- value
-                      return(object)
-                  }
-              },
-              ## If 'allnode'
-              allnode = {
-                  if(length(value) != nNodes(object)+nTips(object))
-                      stop("Number of labels does not match total number of nodes.")
-                  else {
-                    # object@tip.label[order(nodeId(object, "tip"))] <- value[1:nTips(object)]
-                    # object@node.label[order(nodeId(object, "internal"))] <- value[-(1:nTips(object))]
-                    object@tip.label <- value[1:nTips(object)]
-                    object@node.label <- value[-(1:nTips(object))]
 
-                      return(object)
-                  }
-              })
-   })
+#########################################################
+### Ordering
+#########################################################
 
 orderIndex <- function(phy, order = c('preorder', 'postorder')) {
     ## get an root node free edge matrix
@@ -464,12 +512,4 @@ setMethod("reorder", signature(x = 'phylo4'),
     x
 })
 
-setMethod("head",signature(x = 'phylo4'),
-          function(x,n=20) {
-            head(as(x,"data.frame"),n=n)
-          })
 
-setMethod("tail",signature(x = 'phylo4'),
-          function(x,n=20) {
-            tail(as(x,"data.frame"),n=n)
-          })

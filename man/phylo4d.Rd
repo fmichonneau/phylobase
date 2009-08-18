@@ -89,8 +89,7 @@
 \examples{
 tree.owls.bis <- read.tree(text = "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);")
 try(phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3)), silent=TRUE)
-obj <- phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3),
-use.tip.names=FALSE)
+obj <- phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3), match.data=FALSE)
 obj
 print(obj)
 
@@ -111,9 +110,8 @@ exGeo1 <- phylo4d(geoTree, tip.data = geoData)
 geoTree <- as(geoTree, "phylo4")
 
 ## some random node data
-rNodeData <- data.frame(randomTrait = rnorm(nNodes(geoTree)))
-## comment out node labels for now (empty)
-##                        row.names = nodeLabels(geoTree))
+rNodeData <- data.frame(randomTrait = rnorm(nNodes(geoTree)),
+                        row.names = nodeId(geoTree, "internal"))
 
 exGeo2 <- phylo4d(geoTree, tip.data = geoData, node.data = rNodeData)
 
@@ -124,7 +122,7 @@ rTipData <- data.frame(randomTrait = rnorm(nTips(geoTree)),
 
 (exGeo3 <- phylo4d(geoTree, tip.data = rTipData, node.data = rNodeData))
 (exGeo4 <- phylo4d(geoTree, tip.data = rTipData, node.data = rNodeData,
-                    merge.tip.node = FALSE))
+                    merge.data = FALSE))
 
                     ### Example with 'all.data'x
 nodeLabels(geoTree) <- as.character(nodeId(geoTree))

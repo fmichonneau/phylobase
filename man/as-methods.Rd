@@ -86,7 +86,7 @@
   \code{ade4} package and \code{\link[ape]{as.phylo}} from the \code{ape} package.
 }
 \examples{
-
+	
 tree.owls <- read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
 ## round trip conversion
 tree_in_phylo <- tree.owls                # tree is a phylo object

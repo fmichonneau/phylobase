@@ -38,6 +38,10 @@ setGeneric("edgeLength", function(x, ...) {
     standardGeneric("edgeLength")
 })
 
+setGeneric("edgeLength<-", function(x, ..., value) {
+    standardGeneric("edgeLength<-")
+})
+
 setGeneric("sumEdgeLength", function(phy, node) {
     standardGeneric("sumEdgeLength")
 })
@@ -104,6 +108,10 @@ setGeneric("tdata", function(x, ...) {
 
 setGeneric("tdata<-", function(object, ..., value) {
     standardGeneric("tdata<-")
+})
+
+setGeneric("addData", function(x, ...) {
+    standardGeneric("addData")
 })
 
 setGeneric("hasNodeData", function(x) {

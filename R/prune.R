@@ -12,7 +12,7 @@ setGeneric("prune",function(phy, ...) {
 })
 
 ## setGeneric("drop.tip") ## if ape has already been loaded
-           
+
 
 DropTip <- function(phy,tip,...) {
   if (length(tip)==0) {
@@ -32,29 +32,49 @@ setMethod("prune","phylo4",
 
 ## trace("prune", browser, signature = "phylo4d")
 ## untrace("prune", signature = "phylo4d")
-setMethod("prune","phylo4d",
-          function(phy, tip, trim.internal = TRUE, subtree = FALSE,
-                   ...) {
-            ## need unique labels to match data correctly
-            oldnodelabels <- phy@node.label
-            nodetags <- .genlab("N",nNodes(phy))
-            phy@node.label <- nodetags
-            oldtiplabels <- phy@tip.label
-            phytr <- DropTip(phy,tip,trim.internal, subtree)
-            ## this DROPS data
-            ntr = match(phytr@node.label,nodetags)
-            ttr = match(phytr@tip.label,oldtiplabels)
-            phytr@node.label <- oldnodelabels[ntr]
-            phytr@tip.label <- oldtiplabels[ttr]
-            phytr@node.data <- phy@node.data[ntr,,drop=FALSE]
-            phytr@tip.data <- phy@tip.data[ttr,,drop=FALSE]            
-            phytr
-          })
+setMethod("prune", "phylo4d", function(phy, tip, trim.internal=TRUE,
+                                       subtree=FALSE, ...) {
+    tree <- extractTree(phy)
+    phytr <- DropTip(tree, tip, trim.internal, subtree)
 
-setMethod("prune","phylo",
+    ## create temporary phylo4 object with unique labels
+    tmpLbl <- .genlab("n", nTips(phy)+nNodes(phy))
+    tmpPhy <- tree
+    labels(tmpPhy, "all") <- tmpLbl
+    tmpPhytr <- DropTip(tmpPhy, getNode(phy, tip), trim.internal, subtree)
+
+    ## get node numbers to keep
+    oldLbl <- labels(tmpPhy, "all")
+    newLbl <- labels(tmpPhytr, "all")
+    toKeep <- as.numeric(names(oldLbl[oldLbl %in% newLbl]))
+    tipToKeep <- toKeep[toKeep %in% nodeId(phy, "tip")]
+    nodToKeep <- toKeep[toKeep %in% nodeId(phy, "internal")]
+
+    if(!all(dim(phy@tip.data) == 0)) {
+        tipDt <- phy@tip.data[match(tipToKeep, rownames(phy@tip.data)) ,, drop=FALSE]
+        tipDt <- tipDt[sort(rownames(tipDt)) ,, drop=FALSE]
+        rownames(tipDt) <- 1:nTips(phytr)
+    }
+    else
+        tipDt <- data.frame(NULL)
+
+    if(!all(dim(phy@node.data) == 0)) {
+        nodDt <- phy@node.data[match(nodToKeep, rownames(phy@node.data)) ,, drop=FALSE]
+        nodDt <- nodDt[sort(rownames(nodDt)) ,, drop=FALSE]
+        rownames(nodDt) <- 1:nNodes(phytr)
+    }
+    else
+        nodDt <- data.frame(NULL)
+
+    phytr <- phylo4d(phytr, tip.data=tipDt, node.data=nodDt, match.data=FALSE)
+
+    phytr
+})
+
+setMethod("prune", "phylo",
           function(phy, tip, trim.internal = TRUE, subtree = FALSE,
                    ...) {
-            DropTip(phy,tip,trim.internal, subtree)
+            DropTip(phy, tip, trim.internal, subtree)
           })
 
 ## setMethod("prune","ANY",

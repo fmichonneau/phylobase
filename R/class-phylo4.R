@@ -19,6 +19,79 @@ setClass("phylo4",
          validity = checkPhylo4)
 
 #####################
+## Labels constructor
+#####################
+
+.createLabels <- function(value, ntips, nnodes, use.names = TRUE,
+                          which = c("tip", "internal", "allnode")) {
+
+    which <- match.arg(which)
+
+    ## set up final length of object to return
+    lgthRes <- switch(which, tip=ntips, internal=nnodes, allnode=ntips+nnodes)
+
+    ## create NA character vector of node labels
+    res <- character(lgthRes)
+    is.na(res) <- TRUE
+
+    ## create internal names
+    names(res) <- switch(which,
+                         tip = 1:ntips,
+                         internal = seq(from=ntips+1, length=lgthRes),
+                         allnode = 1:(ntips+nnodes))
+
+
+    ## if no values are provided
+    if(missing(value) || is.null(value) || all(is.na(value))) {
+        ## tip labels can't be NULL
+        if(!identical(which, "internal")) {
+            tipLbl <- .genlab("T", ntips)
+            res[1:ntips] <- tipLbl
+        }
+    }
+
+    ## if labels are provided
+    else {
+        ## check that lengths match
+        if(length(value) != lgthRes)
+            stop("Number of labels does not match number of nodes.")
+
+        ## check if vector 'value' has name, and if so match with node.label names
+        if(use.names && !is.null(names(value))) {
+            if(!all(names(value) %in% names(res)))
+                stop("Names provided don't match internal labels names.")
+            res[match(names(value), names(res))] <- value
+        }
+        else
+            res[1:lgthRes] <- value
+    }
+
+    res
+}
+
+
+.createEdge <- function(value, edgeMat, type=c("lengths", "labels"), use.names=TRUE) {
+    type <- match.arg(type)
+
+    lgthRes <- nrow(edgeMat)
+    res <- switch(type, lengths=numeric(lgthRes), labels=character(lgthRes))
+    is.na(res) <- TRUE
+    names(res) <- paste(edgeMat[,1], edgeMat[,2], sep="-")
+
+    if(!(missing(value) || is.null(value) || all(is.na(value)))) {
+        if(use.names && !is.null(names(value))) {
+            if(!all(names(value) %in% names(res)))
+                stop("Names provided don't match internal edge labels names.")
+            res[match(names(value), names(res))] <- value
+        }
+        else
+            res[1:lgthRes] <- value
+    }
+
+    res
+}
+
+#####################
 ## phylo4 constructor
 #####################
 
@@ -37,58 +110,29 @@ setMethod("phylo4", "matrix",
     edge <- x
     mode(edge) <- "integer"
     #if(any(is.na(edge))) stop("NA are not allowed in edge matrix")
-    if(ncol(edge) > 2) warning("the edge matrix has more than two columns")
+    if(ncol(edge) > 2)
+        warning("The edge matrix has more than two columns, ",
+                "only the first two columns are considered.")
     edge <- as.matrix(edge[, 1:2])
     colnames(edge) <- c("ancestor", "descendant")
 
-    ## edge.length
-    if(!is.null(edge.length)) {
-        if(!is.numeric(edge.length)) stop("edge.length is not numeric")
-        edge.length <- edge.length
-    } else {
-        edge.length <- numeric(0)
-    }
-
-    if(length(edge.length) > 0) {
-        if(length(edge.length) != nrow(edge))
-            stop("The number of edge lengths is different from the number of edges.")
-        ## FM - 2009-04-19
-        ## edge.length is named according to the nodes the edge links together
-        ## (ancestor-descendant). This should allow more robust edge/edge.length
-        ## association and limit the problems associated with reordering trees.
-        names(edge.length) <- paste(edge[,1], edge[,2], sep="-")
-    }
-
-    ## tip.label
+    ## number of tips and number of nodes
     ntips <- sum(tabulate(na.omit(edge[, 1])) == 0)
-    if(is.null(tip.label)) {
-        tip.label <- .genlab("T", ntips)
-    } else {
-        if(length(tip.label) != ntips)
-            stop("the tip labels are not consistent with the number of tips")
-        tip.label <- as.character(tip.label)
-    }
-    names(tip.label) <- seq(along=tip.label)
-
-    ## node.label for internal nodes
     nnodes <- length(unique(na.omit(c(edge)))) - ntips
 
-    if(is.null(node.label)) {
-      node.label <- character(0) ## empty node labels
-    }
-    else {
-        if(length(node.label)>0 && length(node.label) != nnodes)
-            stop("number of node labels is not consistent with the number of nodes")
-    }
-    names(node.label) <- seq(from=ntips+1, along=node.label)
-
+    ## edge.length
+    edge.length <- .createEdge(value=edge.length, edgeMat=edge, type="lengths", use.names=FALSE)
 
     ## edge.label
-    if(is.null(edge.label)) {
-      edge.label <- character(0)
-    } else if (length(edge.label)>0 && length(edge.label) != nrow(edge))
-      stop("number of edge labels is not consistent with the number of edges")
+    edge.label <- .createEdge(value=edge.label, edgeMat=edge, type="labels", use.names=FALSE)
 
+    ## tip.label
+    tip.label <- .createLabels(value=tip.label, ntips=ntips, nnodes=nnodes,
+                               which="tip")
+
+    ## node.label
+    node.label <- .createLabels(node.label, ntips=ntips, nnodes=nnodes,
+                                which="internal")
 
     ## fill in the result
     res <- new("phylo4")
@@ -103,7 +147,6 @@ setMethod("phylo4", "matrix",
     ## checkPhylo4 will return a character string if object is
     ##  bad, otherwise TRUE
     if (is.character(checkval <- checkPhylo4(res))) stop(checkval)
-
     return(res)
 })
 

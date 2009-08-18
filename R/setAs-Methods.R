@@ -69,18 +69,26 @@ setAs("multiPhylo", "multiPhylo4", function(from, to) {
 ## })
 
 setAs("phylo4", "phylo", function(from, to) {
+
+    if(is.character(checkval <- checkPhylo4(from)))
+        stop(checkval)
+    
     if (inherits(from, "phylo4d"))
         warning("losing data while coercing phylo4d to phylo")
-    brlen <- from@edge.length
+    brlen <- unname(from@edge.length)
     ## rootnode is only node with no ancestor
     rootpos <- which(is.na(from@edge[, 1]))
     if (isRooted(from)) brlen <- brlen[-rootpos]
+    if(hasNodeLabels(from))
+        nodLbl <- unname(from@node.label)
+    else
+        nodLbl <- character(0)
     edgemat <- unname(from@edge[-rootpos, ])
     y <- list(edge = edgemat,
             Nnode = from@Nnode,
-            tip.label = from@tip.label,
+            tip.label = unname(from@tip.label),
             edge.length = brlen,
-            node.label = from@node.label)
+            node.label = nodLbl)
     class(y) <- "phylo"
     if (from@order != 'unknown') {
         ## TODO postorder != pruningwise -- though quite similar
@@ -141,6 +149,7 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
         stop(checkval)
     x <- from
 
+    ## The order of 'node' defines the order of all other elements
     node <- nodeId(x, "all")
     ancestr <- ancestor(x, node)
     ndType <- nodeType(x)
@@ -148,26 +157,28 @@ setAs(from = "phylo4", to = "data.frame", def = function(from) {
     tip <- names(ndType[ndType == "tip"])
 
     E <- data.frame(node, ancestr)
-    ## !! in phylobase, the order is node-ancestors whereas in ape it's
-    ## ancestor-node
-    nmE <- paste(E[,2], E[,1], sep="-")
 
     if (hasEdgeLength(x)) {
+        nmE <- paste(E[,2], E[,1], sep="-")
         edge.length <- edgeLength(x)[match(nmE, names(x@edge.length))]
     }
     else {
         edge.length <- rep(NA, nrow(E))
     }
 
-    label <- labels(x,which="all")[node]
+    label <- labels(x,which="all")
+    label <- label[match(node, names(label))]
 
-    d <- data.frame(label, node, ancestr, edge.length, node.type=ndType[node],
-                    row.names=node)
+    d <- data.frame(label, node, ancestor=ancestr, edge.length,
+                    node.type=ndType[node], row.names=node)
     d$label <- as.character(d$label)
     d
 })
 
 setAs(from = "phylo4d", to = "data.frame", function(from) {
+
+    if(is.character(checkval <- checkPhylo4(from)))
+        stop(checkval)
 
     tree <- extractTree(from)
     ## Convert to data.frame
