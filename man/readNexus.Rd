@@ -12,7 +12,8 @@
    }
  }
  \usage{
-readNexus(file, simplify=TRUE, type=c("all","tree","data"), char.all=FALSE, polymorphic.convert=TRUE, levels.uniform=TRUE)
+readNexus(file, simplify=TRUE, type=c("all","tree","data"), char.all=FALSE,
+ polymorphic.convert=TRUE, levels.uniform=TRUE, check.node.labels=c("keep", "drop", "asdata"))
 }
 \arguments{
   \item{file}{a Nexus file}
@@ -21,6 +22,18 @@ readNexus(file, simplify=TRUE, type=c("all","tree","data"), char.all=FALSE, poly
   \item{char.all}{If TRUE, returns all characters, even those excluded in the NEXUS file}
   \item{polymorphic.convert}{If TRUE, converts polymorphic DNA characters to missing data}
   \item{levels.uniform}{If TRUE, uses the same levels for all characters}
+  \item{check.node.labels}{Determines how the node labels in the Nexus files should be
+ treated in the phylo4 object, see Details for more information.}
+}
+\details{
+  The options for \code{check.node.labels} can take the values:
+  \item{keep}{the node labels of the Nexus file will be passed as node labels
+ in the phylo4 object}
+ \item{drop}{the node labels of the Nexus file will be ignored in the phylo4
+ object}
+ \item{asdata}{the node labels will passed to the phylo4 object as data.}
+ If you use the option \code{asdata} on a file with no node labels, a warning message is
+ issued and by default \code{check.node.labels} takes the value \code{drop}.
 }
 \value{
   A \linkS4class{phylo4} tree, \linkS4class{phylo4d} object, or a list of trees if simplify=FALSE or there is more than one tree, or a data.frame.
