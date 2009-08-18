@@ -9,6 +9,6 @@ Author: R Hackathon (Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vien
 Maintainer:  Ben Bolker <bolker@ufl.edu>
 Description: Provides a base S4 class for comparative methods, incorporating one or more trees and trait data
 License: GPL
-Collate: phylo4.R checkData-deprecated.R checkdata.R class-multiphylo4.R class-oldclasses.R class-phylo4.R class-phylo4d.R  class-phylomats.R methods-multiphylo4.R methods-oldclasses.R methods-phylo4.R methods-phylo4d.R setAs-Methods.R pdata.R subset.R prune.R treePlot.R identify.R treestruc.R treewalk.R readNexus.R tbind.R zzz.R printphylo-deprecated.R updatePhylo4.R 
+Collate: phylo4.R checkdata.R class-multiphylo4.R class-oldclasses.R class-phylo4.R class-phylo4d.R  class-phylomats.R methods-multiphylo4.R methods-oldclasses.R methods-phylo4.R methods-phylo4d.R setAs-Methods.R pdata.R subset.R prune.R treePlot.R identify.R treestruc.R treewalk.R readNexus.R tbind.R zzz.R printphylo-deprecated.R updatePhylo4.R 
 Encoding: UTF-8
 URL: http://phylobase.R-forge.R-project.org

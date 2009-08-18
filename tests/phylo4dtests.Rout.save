@@ -1,0 +1,84 @@
+
+R version 2.9.1 (2009-06-26)
+Copyright (C) 2009 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(phylobase)
+Loading required package: grid
+Loading required package: ape
+> require(ape)
+> tree.phylo <- read.tree(text="(((A,B)C,D),E);")  #only one node is labelled
+> tree <- as(tree.phylo, "phylo4")
+> 
+> tree.phylo2 <- read.tree(text="(((A,B)C,D)F,E)G;")  # all nodes labelled
+> tree2 <- as(tree.phylo2, "phylo4")
+> 
+> tip.data <- data.frame(size=c(1, 2, 3, 4))
+> rownames(tip.data) <- c("A", "B", "E", "D")
+> 
+> treed <- phylo4d(tree, tip.data)
+> dat2 <- data.frame(size=c(0,1,2), row.names=c("G", "F", "C"))
+> 
+> try(phylo4d(tree, node.data=dat2), silent = TRUE)  # error, cannot match data because no node labels on tree
+> phylo4d(tree2, node.data=dat2) -> treed2  # OK tree labelled; has node data, no tip data 
+> 
+> try(plot(treed2), silent = TRUE)  #causes problems with plot() no output
+> tdata(treed2) #returns null unless "allnode" or "node" is specified
+data frame with 0 columns and 0 rows
+> 
+> phylo4d(tree2, tip.data=tip.data, node.data=dat2) -> treed3 #node+tip data
+> 
+> plot(treed3)  # works
+> tdata(treed3)  #works, but returns tips only
+  size
+A    1
+B    2
+D    4
+E    3
+> tdata(treed3, "allnode")
+  size
+A    1
+B    2
+D    4
+E    3
+G    0
+F    1
+C    2
+> 
+> print(tree)
+  label node ancestor edge.length node.type
+5          5       NA          NA      root
+6          6        5          NA  internal
+7     C    7        6          NA  internal
+1     A    1        7          NA       tip
+2     B    2        7          NA       tip
+3     D    3        6          NA       tip
+4     E    4        5          NA       tip
+> print(treed)
+  label node ancestor edge.length node.type size
+5          5       NA          NA      root   NA
+6          6        5          NA  internal   NA
+7     C    7        6          NA  internal   NA
+1     A    1        7          NA       tip    1
+2     B    2        7          NA       tip    2
+3     D    3        6          NA       tip    4
+4     E    4        5          NA       tip    3
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  1.800   0.044   1.836 

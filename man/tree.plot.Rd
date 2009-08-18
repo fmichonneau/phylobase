@@ -8,7 +8,6 @@
 tree.plot(xxyy, type, show.tip.label, show.node.label, 
   edge.color, node.color, tip.color, edge.width, rot)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{xxyy}{ A list created by the  \code{\link{phyloXXYY}} function }
   \item{type}{ A character string indicating the shape of plotted tree }

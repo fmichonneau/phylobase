@@ -15,7 +15,7 @@ plot(g1, show.node.label=TRUE)
 plot(g2, show.node.label=TRUE)
 
 
-g2B <- as(g2, "phylog")
+g2B <- as(extractTree(g2), "phylog")
 ##  Note the numbering differences!
 
 ## round trip 
@@ -45,3 +45,8 @@ if(require(MASS)){
 }
 ## never mind, I don't know how to construct a useful
 ##  2D color space anyway ...
+
+
+treePlot(g2,plot.at.tip=TRUE,tip.plot.fun=
+         function(x,...) {
+           grid.points(seq(along=x),x)})

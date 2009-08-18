@@ -120,8 +120,11 @@
                         plot.density(dens, xlim = c(tmin, tmax), axes = FALSE,      
                                      mar = c(0,0,0,0), main = "", xlab = "", ylab = "", ...)
                     }
-                }
-            }
+                  }
+                mc <- match.call()
+                mc$tip.plot.fun <- tip.plot.fun
+                eval(mc)
+              }
         } else { ## if (is.function(tip.plot.fun))
             ## plot.at.tip <- TRUE
             if (plot.at.tip) {
@@ -177,6 +180,7 @@
             ## TODO should plots float at tips, or only along edge?
             hc <- convertY(unit(1/nvars, 'snpc'), 'npc')
             for(i in 1:nvars) {
+              vals = tdata(phy)[nodeId(phy,'tip'),i,drop=FALSE]
                 pushViewport(viewport(
                     x = i/nvars,   ## xxyy$yy[phy@edge[, 2] == i],
                     y =  0.5, ## 1 + 1/(2 * Ntips), # xxyy$xx[phy@edge[, 2] == i], 
@@ -188,7 +192,6 @@
                     angle = -rot
                     ))
                     #grid.rect()
-                    vals = tdata(phy)[nodeId(phy,'tip'),i,drop=FALSE]
                     if (!all(is.na(vals))) tip.plot.fun(vals, tmin, tmax, ...)
                 upViewport()
             }

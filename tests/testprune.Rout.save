@@ -1,0 +1,78 @@
+
+R version 2.9.1 (2009-06-26)
+Copyright (C) 2009 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(phylobase)
+Loading required package: grid
+Loading required package: ape
+> library(ape)
+> r1 <- rcoal(5)
+> 
+> ## trace("phylo4d", browser, signature = "phylo")
+> ## untrace("phylo4d", signature = "phylo")
+> tipdat <- data.frame(a=1:5,row.names=r1$tip.label)
+> p1 <- phylo4d(r1,tip.data=tipdat,node.data=data.frame(a=6:9), match.data=FALSE)
+> p2 <- prune(p1,1)
+> summary(p2)
+
+ Phylogenetic tree : as(x, "phylo4") 
+
+ Number of tips    : 4 
+ Number of nodes   : 3 
+ Branch lengths:
+        mean         : 0.2089533 
+        variance     : 0.03350737 
+        distribution :
+   Min. 1st Qu.  Median 3rd Qu.    Max.    NA's 
+0.00795 0.04813 0.23180 0.30080 0.47150 1.00000 
+
+Comparative data:
+
+Tips: data.frame with 4 taxa and 1 variable(s) 
+
+       a       
+ Min.   :2.00  
+ 1st Qu.:2.75  
+ Median :3.50  
+ Mean   :3.50  
+ 3rd Qu.:4.25  
+ Max.   :5.00  
+
+Nodes: data.frame with 3 internal nodes and 1 variables 
+
+       a        
+ Min.   :6.000  
+ 1st Qu.:7.000  
+ Median :8.000  
+ Mean   :7.667  
+ 3rd Qu.:8.500  
+ Max.   :9.000  
+> 
+> ## from picante
+> `phylo2phylog` <-
++ function(phy, ...) {
++     newick2phylog(write.tree(phy, multi.line = FALSE),...)
++ }
+> 
+> plot.phylo(as(p2,"phylo"))
+Warning message:
+In asMethod(object) : losing data while coercing phylo4d to phylo
+> 
+> proc.time()
+   user  system elapsed 
+  1.568   0.076   1.635 
