@@ -62,11 +62,11 @@ children <- function(phy,node) {
 }
 
 ## get descendants [recursively]
-descendants <- function (phy, node, which=c("tips","children","all"))
+descendants <- function (phy, node, type=c("tips","children","all"))
 {
     ## FIXME: allow vector of nodes? (or just let people lapply?)
-    which <- match.arg(which)
-    if (which=="children") return(children(phy,node))
+    type <- match.arg(type)
+    if (type=="children") return(children(phy,node))
     node <- getNode(phy,node)
     if (is.na(node)) stop("node ",node," not found in tree")
     n <- nTips(phy)
@@ -76,9 +76,9 @@ descendants <- function (phy, node, which=c("tips","children","all"))
     for (j in d) {
         if (j <= n)
           l <- c(l,j)
-        else if (which=="all") l <- c(l,j,
-                   descendants(phy,j,which="all"))
-        else l <- c(l, descendants(phy,j,which=which))
+        else if (type=="all") l <- c(l,j,
+                   descendants(phy,j,type="all"))
+        else l <- c(l, descendants(phy,j,type=type))
     }
     return(getNode(phy,l))
 }
@@ -90,10 +90,10 @@ siblings <- function(phy, node, include.self=FALSE) {
 }
 
 ## get ancestors (all nodes)
-ancestors <- function (phy, node, which=c("all","parent","ALL"))
+ancestors <- function (phy, node, type=c("all","parent","ALL"))
 {
-    which <- match.arg(which)
-    if (which=="parent") return(ancestor(phy,node))
+    type <- match.arg(type)
+    if (type=="parent") return(ancestor(phy,node))
     oNode <- node <- getNode(phy,node)
     if (is.na(node)) stop("node ",node," not found in tree")
     res <- numeric(0)
@@ -108,7 +108,7 @@ ancestors <- function (phy, node, which=c("all","parent","ALL"))
         node <- anc
         if (anc==n+1) break
     }
-    if(which == "ALL") res <- c(oNode, res)
+    if(type == "ALL") res <- c(oNode, res)
     return(getNode(phy,res))
 }
 
@@ -139,7 +139,7 @@ MRCA <- function(phy, ...) {
         return(res)
     }
     else {
-        ancests <- lapply(nodes, ancestors, phy=phy, which="ALL")
+        ancests <- lapply(nodes, ancestors, phy=phy, type="ALL")
         res <- getNode(phy, max(Reduce(intersect, ancests)))
         return(res)
     }
@@ -165,11 +165,11 @@ shortestPath <- function(phy, node1, node2){
 
     ## main computations
     comAnc <- MRCA(x, t1, t2) # common ancestor
-    desComAnc <- descendants(x, comAnc, which="all")
-    ancT1 <- ancestors(x, t1, which="all")
+    desComAnc <- descendants(x, comAnc, type="all")
+    ancT1 <- ancestors(x, t1, type="all")
     path1 <- intersect(desComAnc, ancT1) # path: common anc -> t1
 
-    ancT2 <- ancestors(x, t2, which="all")
+    ancT2 <- ancestors(x, t2, type="all")
     path2 <- intersect(desComAnc, ancT2) # path: common anc -> t2
 
     res <- union(path1, path2) # union of the path

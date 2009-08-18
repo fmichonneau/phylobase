@@ -110,15 +110,15 @@
 }
 }
 \usage{
-  \S4method{tdata}{phylo4d}(x, which = "tip", \dots)
+  \S4method{tdata}{phylo4d}(x, type = "tip", \dots)
 % what a pain: see
 % https://stat.ethz.ch/pipermail/r-devel/2008-May/049653.html
- \S4method{tdata}{phylo4d}(object, which = "tip", \dots) <- value
-  \S4method{edgeLength}{phylo4}(x, which)
+ \S4method{tdata}{phylo4d}(object, type = "tip", \dots) <- value
+  \S4method{edgeLength}{phylo4}(x, type)
 \S4method{edges}{phylo4}(x, order, drop.root=FALSE, \dots)
 }
 \arguments{
-  \item{which}{(tdata) which data to extract: "tip" (tips only), "node"
+  \item{type}{(tdata) which data to extract: "tip" (tips only), "node"
     (internal nodes only), "allnode" (tips and internal nodes), "edge"
     (edges) (edgeLength) which edge lengths to extract (indexed by
     descendant node)}

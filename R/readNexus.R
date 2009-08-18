@@ -1,7 +1,7 @@
-readNexus <- function (file, simplify=TRUE, which=c("all","tree","data"), char.all=FALSE, polymorphic.convert=TRUE, levels.uniform=TRUE) {
+readNexus <- function (file, simplify=TRUE, type=c("all","tree","data"), char.all=FALSE, polymorphic.convert=TRUE, levels.uniform=TRUE) {
 #file = input nexus file
 #simplify =
-#which = specify whether to return trees+data as phylo4d object ("all") if
+#type = specify whether to return trees+data as phylo4d object ("all") if
 #        both are found, returning a data.frame or phylo4 object if only one
 #        is found, "tree": return a phylo4 object only, regardless of
 #        whether there are data, "data": return a data.frame (no tree), even
@@ -12,7 +12,7 @@ readNexus <- function (file, simplify=TRUE, which=c("all","tree","data"), char.a
 #levels.uniform = if TRUE, categorical data are loaded with the same levels,
 #             even if one character is missing a state
         output<-c("Failure")
-        if (which=="all" || which=="data") {
+        if (type=="all" || type=="data") {
         params <- list(filename=file, allchar=char.all, polymorphictomissing=polymorphic.convert, levelsall=levels.uniform)
 
 # Check that params is properly formatted.
@@ -25,7 +25,7 @@ readNexus <- function (file, simplify=TRUE, which=c("all","tree","data"), char.a
 #print(incharsstring)
         tipdata<-eval(parse(text=incharsstring))
     }
-    if (which=="all" || which=="tree") {
+    if (type=="all" || type=="tree") {
         trees<-c("Failure");
         params <- list(filename=file)
 
@@ -49,10 +49,10 @@ readNexus <- function (file, simplify=TRUE, which=c("all","tree","data"), char.a
             trees<-as(intreesphylolist[[1]], "phylo4");
         }
     }
-    if (which=="tree" || length(tipdata) == 0 ) {
+    if (type=="tree" || length(tipdata) == 0 ) {
         output<-trees;
     }
-    else if (which=="data") {
+    else if (type=="data") {
         output<-tipdata
     }
     else {

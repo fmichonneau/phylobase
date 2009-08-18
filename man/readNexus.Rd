@@ -12,12 +12,12 @@
    }
  }
  \usage{
-readNexus(file, simplify=TRUE, which=c("all","tree","data"), char.all=FALSE, polymorphic.convert=TRUE, levels.uniform=TRUE)
+readNexus(file, simplify=TRUE, type=c("all","tree","data"), char.all=FALSE, polymorphic.convert=TRUE, levels.uniform=TRUE)
 }
 \arguments{
   \item{file}{a Nexus file}
   \item{simplify}{If FALSE, returns a list. If TRUE, returns a list if there are multiple trees, a single object otherwise}
-  \item{which}{Determines which objects to return, if present}
+  \item{type}{Determines which type of objects to return, if present}
   \item{char.all}{If TRUE, returns all characters, even those excluded in the NEXUS file}
   \item{polymorphic.convert}{If TRUE, converts polymorphic DNA characters to missing data}
   \item{levels.uniform}{If TRUE, uses the same levels for all characters}

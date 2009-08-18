@@ -78,7 +78,7 @@ setMethod("[","phylo4d",
 
               #### data handling
               ## for now handle only tip data - assumes tip names are good row.names
-              tab <- tdata(x, which="tip")[i, j, ..., drop=FALSE]
+              tab <- tdata(x, type="tip")[i, j, ..., drop=FALSE]
               
               #### tree handling
               tip.include <- match(row.names(tab), x@tip.label)

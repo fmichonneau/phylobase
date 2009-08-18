@@ -19,11 +19,11 @@
 }
 \usage{
 getNode(phy,node,missing=c("warn","OK","fail"))
-ancestors(phy, node, which=c("all","parent","ALL"))
+ancestors(phy, node, type=c("all","parent","ALL"))
 ancestor(phy, node)
 siblings(phy,node,include.self=FALSE)
 children(phy, node)
-descendants(phy, node, which=c("tips","children","all"))
+descendants(phy, node, type=c("tips","children","all"))
 MRCA(phy,\dots)
 shortestPath(phy, node1, node2)
 \S4method{sumEdgeLength}{phylo4}(phy, node)
@@ -33,7 +33,7 @@ shortestPath(phy, node1, node2)
     \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
   }
   \item{node}{a node ID number (or name)}
-  \item{which}{(\code{ancestors}) specify whether to return just direct
+  \item{type}{(\code{ancestors}) specify whether to return just direct
     ancestor ("parent"), all ancestor nodes ("all"), or all ancestor
     nodes including self ("ALL"); (\code{descendants})
     specify whether to return
@@ -56,8 +56,8 @@ shortestPath(phy, node1, node2)
     returns a named vector of edge numbers}
   \item{\code{ancestors} and \code{descendants}}{
     return named vectors of the ancestors and descendants of a node; \code{ancestor} is a synonym 
-    for \code{ancestors(\dots, which="parent")} (i.e. direct ancestor only), while \code{children} 
-    is a synonym for \code{descendants(\dots, which="children")} (i.e. direct descendants only)}
+    for \code{ancestors(\dots, type="parent")} (i.e. direct ancestor only), while \code{children} 
+    is a synonym for \code{descendants(\dots, type="children")} (i.e. direct descendants only)}
   \item{\code{siblings}}{
     returns sibling nodes (children of the same parent)}
   \item{\code{mrca}}{
@@ -80,8 +80,8 @@ shortestPath(phy, node1, node2)
   getNode(geospiza,"D")
   ancestor(geospiza,"E")
   children(geospiza,"C")
-  descendants(geospiza,"D",which="tips")
-  descendants(geospiza,"D",which="all")
+  descendants(geospiza,"D",type="tips")
+  descendants(geospiza,"D",type="all")
   ancestors(geospiza,"D")
   MRCA(geospiza,"conirostris","difficilis","fuliginosa")
   MRCA(geospiza,"olivacea","conirostris")
@@ -98,7 +98,7 @@ shortestPath(phy, node1, node2)
   ## if(require(ape)){ edgelabels() }
 
   ## branch length from a tip to the root
-  sumEdgeLength(geospiza, ancestors(geospiza, "fortis", which="ALL"))
+  sumEdgeLength(geospiza, ancestors(geospiza, "fortis", type="ALL"))
 
 }
 \keyword{misc}
