@@ -1,13 +1,14 @@
-\name{tree.plot}
-\alias{tree.plot}
+\name{plotOneTree}
+\alias{plotOneTree}
 \title{ Plot a phylo4 object }
 \description{
  Plots the phylogenetic tree contained in a \code{phylo4} or \code{phylo4d} object.
 }
 \usage{
-tree.plot(xxyy, type, show.tip.label, show.node.label, 
+plotOneTree(xxyy, type, show.tip.label, show.node.label, 
   edge.color, node.color, tip.color, edge.width, rot)
 }
+%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{xxyy}{ A list created by the  \code{\link{phyloXXYY}} function }
   \item{type}{ A character string indicating the shape of plotted tree }
@@ -29,7 +30,7 @@ Returns no values, function invoked for the plotting side effect.}
 
 data(geospiza)
 xxyy <- phyloXXYY(geospiza)
-tree.plot(xxyy, type = 'phylogram', 
+plotOneTree(xxyy, type = 'phylogram', 
   show.tip.label = TRUE, show.node.label = TRUE,
   edge.color = 'black', node.color = 'orange', tip.color = 'blue',
   edge.width = 1, rot = 0
@@ -37,7 +38,7 @@ tree.plot(xxyy, type = 'phylogram',
 
 grid.newpage()
 pushViewport(viewport(w = 0.8, h = 0.8))
-tree.plot(xxyy, type = 'phylogram', 
+plotOneTree(xxyy, type = 'phylogram', 
   show.tip.label = TRUE, show.node.label = TRUE,
   edge.color = 'black', node.color = 'orange', tip.color = 'blue',
   edge.width = 1, rot = 0

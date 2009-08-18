@@ -23,7 +23,7 @@ The y coordinates of the tips are evenly spaced from 0 to 1 in pruningwise order
 
 \author{Peter Cowan \email{pdc@berkeley.edu}}
 
-\seealso{\code{\link{segs}}, \code{treePlot}, \code{\link{tree.plot}}}
+\seealso{\code{treePlot}, \code{\link{plotOneTree}}}
 \examples{
 
 data(geospiza)
