@@ -20,6 +20,7 @@ phylobubbles(type, show.tip.label, show.node.label, tip.order, rot, edge.color, 
   \item{tip.color}{A vector of colors for the coloring the tip labels}
   \item{edge.width}{A vector of line widths for the tree edges}
   \item{newpage}{Logical to control whether the device is cleared before plotting, useful for adding plot inside other plots}
+  \item{\dots}{Additional parameters passed to the bubble plotting functions}
   \item{XXYY}{The out put from the phyloXXYY function}
   \item{square}{Logical indicating whether the plot 'bubbles' should be squares}
   \item{grid}{A logical indicating whether a grey grid should be plotted behind the bubbles}
