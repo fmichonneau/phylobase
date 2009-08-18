@@ -1,5 +1,6 @@
 \name{checkPhylo4d}
 \alias{formatData}
+\alias{addData}
 \alias{addData,phylo4d-method}
 \title{Data addition and validity checking for phylo4d objects}
 \description{

@@ -45,7 +45,7 @@
 \author{phylobase team}
 \note{Translation functions are available from many valid tree formats. See \link{coerce-methods}.  
 }
-\seealso{\code{\link{coerce-methods}} for translation functions. The \linkS4class{phylo4} class, the \code{\link{checkData}}
+\seealso{\code{\link{coerce-methods}} for translation functions. The \linkS4class{phylo4} class, the \code{\link{formatData}}
   function to check the validity of \code{phylo4} objects. See also the \code{\link{phylo4d}} constructor, and \linkS4class{phylo4d} class.}
 \examples{
 # a three species tree:

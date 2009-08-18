@@ -51,7 +51,7 @@
     labels or node labels with informative data (e.g., posterior
     probabilities).}
   \item{\dots}{further arguments to be passed to other methods. Used to
-    control the validity checking of the created object (see \code{\link{checkData}}).}
+    control the validity checking of the created object (see \code{\link{formatData}}).}
 }
 
 \details{
@@ -75,7 +75,7 @@
 
 \seealso{
 \code{\link{coerce-methods}} for translation functions. The
-  \linkS4class{phylo4d} class, the \code{\link{checkData}}
+  \linkS4class{phylo4d} class, the \code{\link{formatData}}
   function to check the validity of \code{phylo4d} objects;
   \linkS4class{phylo4} class and \link{phylo4} constructor.}
 

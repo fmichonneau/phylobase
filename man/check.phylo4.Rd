@@ -36,9 +36,8 @@ checkTree(object,warn="retic",err=NULL)
 }
 \seealso{
   the \code{\link{phylo4}} constructor and \linkS4class{phylo4} class;
-  \code{\link{checkData}}, the \code{\link{phylo4d}} constructor and
-  the \linkS4class{phylo4d}
-  class do checks for the data associated with trees.
+  \code{\link{formatData}},  the \code{\link{phylo4d}} constructor and
+  the \linkS4class{phylo4d} class do checks for the data associated with trees.
   See \code{\link{coerce-methods}} for translation functions.
 }
 \author{Ben Bolker}
