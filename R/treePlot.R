@@ -63,7 +63,6 @@
             if(tip.plot.fun == "bubbles") {
                 phylobubbles(
                     type = type, 
-                    show.tip.label = show.tip.label, 
                     show.node.label = show.node.label, 
                     tip.order = tip.order, 
                     rot = 0, 
@@ -296,7 +295,7 @@ drawDetails.bubLegend <- function(x, ...) {
 }
 
 phylobubbles <- function(type = type,
-                        show.tip.label = show.tip.label, 
+                        place.tip.label = "right", 
                         show.node.label = show.node.label, 
                         tip.order = tip.order,
                         rot = 0,
@@ -313,10 +312,16 @@ phylobubbles <- function(type = type,
     ## nVars -- number of traits/characters
     ## maxr  -- maximum circle radius, based on nVars or nTips
     if(rot != 0) {stop("Rotation of bubble plots not yet implemented")}
+    lab.right <- ifelse(place.tip.label %in% c("right", "both"), TRUE, FALSE)
+    lab.left  <- ifelse(place.tip.label %in% c("left", "both"), TRUE, FALSE)
+
+
     phy  <- XXYY$phy
-    tmin <- min(tdata(phy, which = 'tip'), na.rm = TRUE)
-    tmax <- max(tdata(phy, which = 'tip'), na.rm = TRUE)
-            # use phylobubbles as default
+    tmin <- min(tdata(phy, type = 'tip'), na.rm = TRUE)
+    tmax <- max(tdata(phy, type = 'tip'), na.rm = TRUE)
+    tipdata <- tdata(phy, type = "tip")[nodeId(phy,"tip"),,drop=FALSE]
+    nVars <- ncol(tipdata) # number of bubble columns
+
     dlabwdth <- max(stringWidth(colnames(phy@tip.data))) * 1.2
     phyplotlayout <- grid.layout(nrow = 2, ncol = 2, 
         heights = unit.c(unit(1, 'null'), dlabwdth), 
@@ -329,9 +334,6 @@ phylobubbles <- function(type = type,
 
     # tip y coordinates
     tys <- XXYY$yy[phy@edge[, 2] <= nTips(phy)]
-    
-    tipdata <- tdata(phy, which = "tip")[nodeId(phy,"tip"),,drop=FALSE]
-    nVars <- ncol(tipdata) # number of bubble columns
     
     maxr <- ifelse(ncol(tipdata) > nTips(phy), 1 / ncol(tipdata), 1 / nTips(phy))
     tipdataS <- apply(tipdata, 2, 
@@ -359,7 +361,9 @@ phylobubbles <- function(type = type,
     tipdataS[is.na(tipdataS)] <- 0
     
     ## get label widths
-    tiplabwidth  <- max(stringWidth(phy@tip.label))
+    if(lab.right) {
+        tiplabwidth  <- max(stringWidth(phy@tip.label))
+    } else {tiplabwidth <- unit(0, 'null', NULL)}
     datalabwidth <- max(stringWidth(colnames(tipdata)))
     
     ## 2x2 layout -- room at the bottom for data labels, and legend
@@ -403,21 +407,27 @@ phylobubbles <- function(type = type,
     upViewport()
     
     ## push view ports for tip and data labels fixed locations
-    pushViewport(viewport( 
-        name = 'bubble_tip_labels', 
-        layout = bublayout, 
-        layout.pos.col = 2, 
-        layout.pos.row = 1
-    ))
-    grid.text(phy@tip.label, 0.1, tys, just = 'left')
-    upViewport()
+    if(lab.right) {
+        pushViewport(viewport( 
+            name = 'bubble_tip_labels', 
+            layout = bublayout, 
+            layout.pos.col = 2, 
+            layout.pos.row = 1
+        ))
+        grid.text(phy@tip.label, 0.1, tys, just = 'left')
+        upViewport()
+    }
     pushViewport(viewport( 
         name = 'bubble_data_labels', 
         layout = bublayout, 
         layout.pos.col = 1, 
         layout.pos.row = 2
     ))
-    grid.text(colnames(tipdata), xpos, .65, rot = 90, just = 'right')
+    ## ideas, for nicer sizing of the data labels
+    ## data.label.space <- convertX(unit(1, 'npc'), "points", valueOnly = TRUE)
+    ## data.label.fontsize <- data.label.space / ncol(tipdata)
+    ## , gp=gpar(fontsize=data.label.fontsize))
+    grid.text(colnames(tipdata), xpos, .9, rot = 90, just = 'right')
 
     upViewport(3)
     pushViewport(viewport(layout.pos.row=2, layout.pos.col=1,
@@ -428,7 +438,7 @@ phylobubbles <- function(type = type,
     
     pushViewport(viewport(layout.pos.row = 1, layout.pos.col = 1,
                 name = 'tree'))
-        plotOneTree(XXYY, type, show.tip.label, show.node.label, edge.color, 
+        plotOneTree(XXYY, type, show.tip.label=lab.left, show.node.label, edge.color, 
                                 node.color, tip.color, edge.width, rot)
     upViewport(2)
     
@@ -481,7 +491,7 @@ tip.data.plot <- function(
             angle = -rot
             ))
             #grid.rect()
-            tvals <- tdata(phy, which = 'tip')[nodeId(phy,'tip'), , drop=FALSE]
+            tvals <- tdata(phy, type = 'tip')[nodeId(phy,'tip'), , drop=FALSE]
             vals = t(tvals[i, ])
             if (!all(is.na(vals))) tip.plot.fun(vals, ...)
         upViewport()
