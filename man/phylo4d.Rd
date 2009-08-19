@@ -25,12 +25,11 @@
 
 \usage{
      \S4method{phylo4d}{phylo4}(x, tip.data = NULL, node.data = NULL,
-        all.data = NULL, merge.tip.node = TRUE, ...)
+        all.data = NULL, match.data = TRUE, merge.data = TRUE, ...)
      \S4method{phylo4d}{phylo}(x, tip.data = NULL, node.data = NULL,
-        all.data = NULL, merge.tip.node = TRUE,
-        check.node.labels = c("keep", "drop", "asdata"), ...)
+        all.data = NULL, check.node.labels = c("keep", "drop", "asdata"), ...)
      \S4method{phylo4d}{matrix}(x, tip.data = NULL, node.data = NULL,
-        all.data = NULL, merge.tip.node = TRUE, ...)
+        all.data = NULL, ...)
 }
 
 \arguments{
@@ -40,7 +39,8 @@
   \item{node.data}{a data frame for nodes data}
   \item{all.data}{a data frame for all (i.e. tips and nodes) data. In such
     case, first rows should correspond to tips, last rows to nodes.}
-  \item{merge.tip.node}{if both \code{tip.data} and \code{node.data} are
+  \item{match.data}{FIXME}
+  \item{merge.data}{if both \code{tip.data} and \code{node.data} are
     provided, it determines if they should be merged as a single
     trait. This argument is evaluated only if both \code{tip.data} and
     \code{node.data} have identical column names.}

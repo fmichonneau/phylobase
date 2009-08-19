@@ -19,7 +19,7 @@
 \usage{
      \S4method{phylo4}{matrix}(x, edge.length = NULL, tip.label = NULL, node.label = NULL,
         edge.label = NULL,  order="unknown", ...)
-     \S4method{phylo4}{phylo}(x, check.node.labels = c("keep", "drop"), ...)
+     \S4method{phylo4}{phylo}(x, check.node.labels = c("keep", "drop"))
 }
 \arguments{
   \item{x}{a matrix of edges or an object of class \code{phylo} (see
@@ -36,7 +36,6 @@
   \item{check.node.labels}{if \code{x} is of class \code{phylo}, either
     "keep" (the default) or "drop" node labels. This argument is useful
     if the \code{phylo} object has non-unique node labels.}
-  \item{\dots}{fixme?}
 }
 \details{
   The minimum information necessary to create a phylobase tree object is a valid edge matrix. The edge matrix describes the topology of the phylogeny. Each row describes a branch of the phylogeny, with the (descendant) node number in column 2 and its ancestor's node number in column 1. These numbers are used internally and must be unique for each node.
