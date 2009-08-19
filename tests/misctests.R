@@ -4,6 +4,12 @@ library(ape)
 set.seed(1)
 
 data(geospiza)
+
+## make sure geospiza is properly formatted
+if(is.character(checkval <- checkPhylo4(geospiza)))
+  stop(checkval)
+  
+
 geospiza0 <-
   list(geospiza.tree=as(geospiza,"phylo"),geospiza.data=tdata(geospiza))
 ## push data back into list form as in geiger
