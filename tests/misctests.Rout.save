@@ -63,7 +63,7 @@ Note: Method with signature "phylo4d#missing#ANY" chosen for function "labels<-"
  "phylo4#ANY#character" would also be valid
 > 
 > ## trace("prune",browser,signature="phylo4d")
-> r1 <- rcoal(5)
+> r1 <- read.tree(text="((t4:0.3210275554,(t2:0.2724586465,t3:0.2724586465):0.0485689089):0.1397952619,(t5:0.07551818331,t1:0.07551818331):0.385304634);")
 > 
 > ## trace("phylo4d", browser, signature = "phylo")
 > ## untrace("phylo4d", signature = "phylo")
@@ -80,8 +80,8 @@ Note: Method with signature "phylo4d#missing#ANY" chosen for function "labels<-"
         mean         : 0.2116037 
         variance     : 0.01503145 
         distribution :
-   Min. 1st Qu.  Median 3rd Qu.    Max.    NA's 
-0.07552 0.10370 0.23040 0.27250 0.38530 1.00000 
+   Min. 1st Qu.  Median 3rd Qu.    Max. 
+0.07552 0.10370 0.23040 0.27250 0.38530 
 
 Comparative data:
 
@@ -109,7 +109,7 @@ Nodes: data.frame with 3 internal nodes and 1 variables
 > row.names(tipdat2)[1] <- "s1"
 > t1 <- try(q1 <- phylo4d(r1,tip.data=tipdat2))
 Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
-  The following nodes are not found in the dataset:  t2
+  The following nodes are not found in the dataset:  t4
 > 
 > plot(q2)
 > plot(q2,type="cladogram")
@@ -131,8 +131,8 @@ Note: Method with signature "phylo4#character" chosen for function "nodeLabels<-
         mean         : 0.1988313 
         variance     : 0.0167175 
         distribution :
-   Min. 1st Qu.  Median 3rd Qu.    Max.    NA's 
-0.04857 0.07552 0.20610 0.28460 0.38530 1.00000 
+   Min. 1st Qu.  Median 3rd Qu.    Max. 
+0.04857 0.07552 0.20610 0.28460 0.38530 
 
 Comparative data:
 
@@ -236,64 +236,64 @@ phyl4d+                        row.names = labels(geoTree))
 
 phyl4d> (exGeo3 <- phylo4d(geoTree, tip.data = rTipData, node.data = rNodeData))
           label node ancestor edge.length node.type randomTrait
-15         <NA>   15       NA          NA      root  0.73832471
-16         <NA>   16       15     0.29744  internal  0.57578135
-17         <NA>   17       16     0.04924  internal -0.30538839
-18         <NA>   18       17     0.06859  internal  1.51178117
-19         <NA>   19       18     0.13404  internal  0.38984324
-20         <NA>   20       19     0.10346  internal -0.62124058
-21         <NA>   21       20     0.03550  internal -2.21469989
-22         <NA>   22       21     0.00917  internal  1.12493092
-23         <NA>   23       22     0.07333  internal -0.04493361
-24         <NA>   24       23     0.05500  internal -0.01619026
-25         <NA>   25       19     0.24479  internal  0.94383621
-26         <NA>   26       25     0.05167  internal  0.82122120
-27         <NA>   27       26     0.01500  internal  0.59390132
-1    fuliginosa    1       24     0.05500       tip  0.91897737
-2        fortis    2       24     0.05500       tip  0.78213630
-3  magnirostris    3       23     0.11000       tip  0.07456498
-4   conirostris    4       22     0.18333       tip -1.98935170
-5      scandens    5       21     0.19250       tip  0.61982575
-6    difficilis    6       20     0.22800       tip -0.05612874
-7       pallida    7       25     0.08667       tip -0.15579551
-8      parvulus    8       27     0.02000       tip -1.47075238
-9    psittacula    9       27     0.02000       tip -0.47815006
-10       pauper   10       26     0.03500       tip  0.41794156
-11   Platyspiza   11       18     0.46550       tip  1.35867955
-12        fusca   12       17     0.53409       tip -0.10278773
-13 Pinaroloxias   13       16     0.58333       tip  0.38767161
-14     olivacea   14       15     0.88077       tip -0.05380504
+15         <NA>   15       NA          NA      root -0.62645381
+16         <NA>   16       15     0.29744  internal  0.18364332
+17         <NA>   17       16     0.04924  internal -0.83562861
+18         <NA>   18       17     0.06859  internal  1.59528080
+19         <NA>   19       18     0.13404  internal  0.32950777
+20         <NA>   20       19     0.10346  internal -0.82046838
+21         <NA>   21       20     0.03550  internal  0.48742905
+22         <NA>   22       21     0.00917  internal  0.73832471
+23         <NA>   23       22     0.07333  internal  0.57578135
+24         <NA>   24       23     0.05500  internal -0.30538839
+25         <NA>   25       19     0.24479  internal  1.51178117
+26         <NA>   26       25     0.05167  internal  0.38984324
+27         <NA>   27       26     0.01500  internal -0.62124058
+1    fuliginosa    1       24     0.05500       tip -2.21469989
+2        fortis    2       24     0.05500       tip  1.12493092
+3  magnirostris    3       23     0.11000       tip -0.04493361
+4   conirostris    4       22     0.18333       tip -0.01619026
+5      scandens    5       21     0.19250       tip  0.94383621
+6    difficilis    6       20     0.22800       tip  0.82122120
+7       pallida    7       25     0.08667       tip  0.59390132
+8      parvulus    8       27     0.02000       tip  0.91897737
+9    psittacula    9       27     0.02000       tip  0.78213630
+10       pauper   10       26     0.03500       tip  0.07456498
+11   Platyspiza   11       18     0.46550       tip -1.98935170
+12        fusca   12       17     0.53409       tip  0.61982575
+13 Pinaroloxias   13       16     0.58333       tip -0.05612874
+14     olivacea   14       15     0.88077       tip -0.15579551
 
 phyl4d> (exGeo4 <- phylo4d(geoTree, tip.data = rTipData, node.data = rNodeData,
 phyl4d+                     merge.data = FALSE))
           label node ancestor edge.length node.type randomTrait randomTrait.1
-15         <NA>   15       NA          NA      root          NA    0.73832471
-16         <NA>   16       15     0.29744  internal          NA    0.57578135
-17         <NA>   17       16     0.04924  internal          NA   -0.30538839
-18         <NA>   18       17     0.06859  internal          NA    1.51178117
-19         <NA>   19       18     0.13404  internal          NA    0.38984324
-20         <NA>   20       19     0.10346  internal          NA   -0.62124058
-21         <NA>   21       20     0.03550  internal          NA   -2.21469989
-22         <NA>   22       21     0.00917  internal          NA    1.12493092
-23         <NA>   23       22     0.07333  internal          NA   -0.04493361
-24         <NA>   24       23     0.05500  internal          NA   -0.01619026
-25         <NA>   25       19     0.24479  internal          NA    0.94383621
-26         <NA>   26       25     0.05167  internal          NA    0.82122120
-27         <NA>   27       26     0.01500  internal          NA    0.59390132
-1    fuliginosa    1       24     0.05500       tip  0.91897737            NA
-2        fortis    2       24     0.05500       tip  0.78213630            NA
-3  magnirostris    3       23     0.11000       tip  0.07456498            NA
-4   conirostris    4       22     0.18333       tip -1.98935170            NA
-5      scandens    5       21     0.19250       tip  0.61982575            NA
-6    difficilis    6       20     0.22800       tip -0.05612874            NA
-7       pallida    7       25     0.08667       tip -0.15579551            NA
-8      parvulus    8       27     0.02000       tip -1.47075238            NA
-9    psittacula    9       27     0.02000       tip -0.47815006            NA
-10       pauper   10       26     0.03500       tip  0.41794156            NA
-11   Platyspiza   11       18     0.46550       tip  1.35867955            NA
-12        fusca   12       17     0.53409       tip -0.10278773            NA
-13 Pinaroloxias   13       16     0.58333       tip  0.38767161            NA
-14     olivacea   14       15     0.88077       tip -0.05380504            NA
+15         <NA>   15       NA          NA      root          NA    -0.6264538
+16         <NA>   16       15     0.29744  internal          NA     0.1836433
+17         <NA>   17       16     0.04924  internal          NA    -0.8356286
+18         <NA>   18       17     0.06859  internal          NA     1.5952808
+19         <NA>   19       18     0.13404  internal          NA     0.3295078
+20         <NA>   20       19     0.10346  internal          NA    -0.8204684
+21         <NA>   21       20     0.03550  internal          NA     0.4874291
+22         <NA>   22       21     0.00917  internal          NA     0.7383247
+23         <NA>   23       22     0.07333  internal          NA     0.5757814
+24         <NA>   24       23     0.05500  internal          NA    -0.3053884
+25         <NA>   25       19     0.24479  internal          NA     1.5117812
+26         <NA>   26       25     0.05167  internal          NA     0.3898432
+27         <NA>   27       26     0.01500  internal          NA    -0.6212406
+1    fuliginosa    1       24     0.05500       tip -2.21469989            NA
+2        fortis    2       24     0.05500       tip  1.12493092            NA
+3  magnirostris    3       23     0.11000       tip -0.04493361            NA
+4   conirostris    4       22     0.18333       tip -0.01619026            NA
+5      scandens    5       21     0.19250       tip  0.94383621            NA
+6    difficilis    6       20     0.22800       tip  0.82122120            NA
+7       pallida    7       25     0.08667       tip  0.59390132            NA
+8      parvulus    8       27     0.02000       tip  0.91897737            NA
+9    psittacula    9       27     0.02000       tip  0.78213630            NA
+10       pauper   10       26     0.03500       tip  0.07456498            NA
+11   Platyspiza   11       18     0.46550       tip -1.98935170            NA
+12        fusca   12       17     0.53409       tip  0.61982575            NA
+13 Pinaroloxias   13       16     0.58333       tip -0.05612874            NA
+14     olivacea   14       15     0.88077       tip -0.15579551            NA
 
 phyl4d>                     ### Example with 'all.data'x
 phyl4d> nodeLabels(geoTree) <- as.character(nodeId(geoTree))
@@ -334,4 +334,4 @@ phyl4d> exGeo5 <- phylo4d(geoTree, all.data = rAllData)
 > 
 > proc.time()
    user  system elapsed 
-  2.444   0.065   2.625 
+  2.467   0.066   3.153 
