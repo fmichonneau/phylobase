@@ -20,9 +20,9 @@ setMethod("tdata", "phylo4d",
           }
           tdata <- x@tip.data
           data.names <- tipLabels(x)
-          if ( identical(label.type, "row.names") ) {
-              if ( identical(data.names, unique(data.names)) &&
-                  !(any(is.na(data.names))) ) {
+          if ( label.type ==  "row.names" ) {
+              if (!any(duplicated(data.names)) &&
+                  !any(is.na(data.names)) ) {
                   row.names(tdata) <- data.names
               }
               else {
