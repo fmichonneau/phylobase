@@ -21,7 +21,7 @@ setMethod("tdata", "phylo4d",
           tdata <- x@tip.data
           data.names <- tipLabels(x)
           if ( identical(label.type, "row.names") ) {
-              if ( identical(data.names, unique(data.names)) ||
+              if ( identical(data.names, unique(data.names)) &&
                   !(any(is.na(data.names))) ) {
                   row.names(tdata) <- data.names
               }
@@ -209,18 +209,6 @@ setMethod("hasNodeData", "phylo4d", function(x) {
     nrow(x@node.data) > 0
 })
 
-setReplaceMethod("nodeLabels", "phylo4d", function(object, ...,
-    value) {
-    object@node.label <- value
-    #rownames(object@node.data) <- value
-    object
-})
-
-setReplaceMethod("labels", "phylo4d", function(object, ..., value) {
-    object@tip.label <- value
-    #rownames(object@tip.data) <- value
-    object
-})
 
 ## FIXME: doesn't deal with missing node data
 ##   (don't even know how that should be done in this case)

@@ -227,6 +227,7 @@ setReplaceMethod("labels",
    function(object, type = c("tip", "internal", "allnode"),
             use.names=FALSE, ..., value) {
 
+       if(missing(type)) type <- "tip"
        type <- match.arg(type)
 
        ob <- switch(type,
