@@ -81,15 +81,15 @@ setAs("phylo4", "phylo", function(from, to) {
 
     if(is.character(checkval <- checkPhylo4(from)))
         stop(checkval)
-    
+
     if (inherits(from, "phylo4d"))
         warning("losing data while coercing phylo4d to phylo")
     brlen0 <- brlen <- unname(from@edge.length)
     if (isRooted(from)) {
         ## rootnode is only node with no ancestor
-        rootpos <- which(is.na(from@edge[, 1]))    
+        rootpos <- which(is.na(from@edge[, 1]))
         brlen <- brlen[-rootpos]
-        edgemat <- unname(from@edge[-rootpos, ])    
+        edgemat <- unname(from@edge[-rootpos, ])
       } else {
         edgemat <- from@edge
     }
@@ -159,58 +159,60 @@ setAs("phylo4", "phylog", function(from, to) {
 
 #######################################################
 ## Exporting to dataframe
-setAs(from = "phylo4", to = "data.frame", def = function(from) {
+
+.phylo4ToDataFrame <- function(from, edgeOrder=c("pretty", "real")) {
+
+    edgeOrder <- match.arg(edgeOrder)
 
     ## Check the phylo4
     if (is.character(checkval <- checkPhylo4(from)))
         stop(checkval)
-    x <- from
 
     ## The order of 'node' defines the order of all other elements
-    node <- nodeId(x, "all")
-    ancestr <- ancestor(x, node)
-    ndType <- nodeType(x)
-    intNode <- names(ndType[ndType == "internal"])
-    tip <- names(ndType[ndType == "tip"])
+    if (edgeOrder == "pretty") {
+        node <- nodeId(from, "all")
+        ancestr <- ancestor(from, node)
+        E <- data.frame(node, ancestr)
+    }
+    else {
+        E <- edges(from)
+        node <- E[, 2]
+        ancestr <- E[, 1]
+    }
 
-    E <- data.frame(node, ancestr)
-
-    if (hasEdgeLength(x)) {
+    if (hasEdgeLength(from)) {
         nmE <- paste(E[,2], E[,1], sep="-")
-        edge.length <- edgeLength(x)[match(nmE, names(x@edge.length))]
+        edge.length <- edgeLength(from)[match(nmE, names(from@edge.length))]
     }
     else {
         edge.length <- rep(NA, nrow(E))
     }
 
-    label <- labels(x,type="all")
+
+    ndType <- nodeType(from)
+    label <- labels(from,type="all")
     label <- label[match(node, names(label))]
 
-    d <- data.frame(label, node, ancestor=ancestr, edge.length,
+    tDf <- data.frame(label, node, ancestor=ancestr, edge.length,
                     node.type=ndType[node], row.names=node)
-    d$label <- as.character(d$label)
+    tDf$label <- as.character(tDf$label)
+
+    if (class(from) == "phylo4d") {
+        dat <- tdata(from, "allnode", label.type="column") # get data
+
+        ## reorder data to edge matrix order, drop labels (first column)
+        if(nrow(dat) > 0 && ncol(dat) > 1) {
+            dat <- dat[match(rownames(tDf), rownames(dat)), ]
+            tDf <- cbind(tDf, dat[ ,-1 , drop=FALSE])
+        }
+        else {
+            cat("No data associated with the tree\n")
+       }
+    }
+    tDf
+}
+
+setAs(from = "phylo4", to = "data.frame", def=function(from) {
+    d <- .phylo4ToDataFrame(from, edgeOrder="pretty")
     d
-})
-
-setAs(from = "phylo4d", to = "data.frame", function(from) {
-
-    if(is.character(checkval <- checkPhylo4(from)))
-        stop(checkval)
-
-    tree <- extractTree(from)
-    ## Convert to data.frame
-    tDf <- as(tree, "data.frame")
-
-    dat <- tdata(from, "allnode", label.type="column") # get data
-
-    ## reorder data to edge matrix order, drop labels (first column)
-    if(nrow(dat) > 0 && ncol(dat) > 1) {
-         dat <- dat[match(rownames(tDf), rownames(dat)), ]
-         tdat <- cbind(tDf, dat[ ,-1 , drop=FALSE])
-     }
-     else {
-        tdat <- tDf
-        cat("No data associated with the tree\n")
-     }
-    tdat
 })

@@ -228,7 +228,7 @@ setReplaceMethod("labels",
    function(object, type = c("tip", "internal", "allnode"),
             use.names, ..., value) {
 
-       ## default options
+       ## Default options
        if(missing(type))
            type <- "tip"
        if (missing(use.names))
@@ -334,15 +334,19 @@ setReplaceMethod("edgeLabels", signature(object="phylo4", value="character"),
 #########################################################
 
 ### print
-printphylo4 <- function(x, printall=TRUE) {
+printphylo4 <- function(x, edgeOrder=c("pretty", "real"), printall=TRUE) {
     if(!nrow(x@edge)) {
         msg <- paste("Empty \'", class(x), "\' object\n", sep="")
         cat(msg)
     }
     else {
-        if (printall)
-            print(as(x, 'data.frame'))
-        else print(head(as(x, 'data.frame')))
+        toRet <- .phylo4ToDataFrame(x, edgeOrder)
+        if (printall) {
+            print(toRet)
+        }
+        else {
+            print(head(toRet))
+        }
     }
 }
 
