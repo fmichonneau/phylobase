@@ -414,7 +414,8 @@ phylobubbles <- function(type = type,
             layout.pos.col = 2, 
             layout.pos.row = 1
         ))
-        grid.text(phy@tip.label, 0.1, tys, just = 'left')
+        tt <- tipLabels(phy)
+        grid.text(tt, 0.1, tys, just = 'left')
         upViewport()
     }
     pushViewport(viewport( 
