@@ -1,7 +1,3 @@
-setMethod("print", "phylo4d", printphylo4)
-
-setMethod("show", "phylo4d", function(object) printphylo4(object))
-
 setMethod("tdata", "phylo4d",
   function(x, type=c("tip", "internal", "allnode"),
            label.type=c("row.names","column"),
