@@ -51,24 +51,25 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
     tip.data <- classData(tip.data)
     node.data <- classData(node.data)
 
+     is.empty <- function(x) { is.null(x) || all(dim(x)==0) }
     ## Replacing node labels by node numbers and formatting the data to make sure
     ## they have the correct dimensions
-    if(!is.null(all.data) && all(dim(all.data) > 0))
+    if(!is.empty(all.data))
         all.data <- formatData(x, all.data, type="all",
                                match.data=match.data, ...)
 
-    if(!is.null(tip.data) && all(dim(tip.data) > 0))
+    if(!is.empty(tip.data))
         tip.data <- formatData(x, tip.data, type="tip",
                                match.data=match.data, ...)
 
-    if(!is.null(node.data) && all(dim(node.data) > 0))
+    if(!is.empty(node.data))
         node.data <- formatData(x, node.data, type="internal",
                                 match.data=match.data, ...)
 
     ## Merging dataset
-    if(!is.null(all.data)) {
+    if(!is.empty(all.data)) {
         tmpData <- all.data
-        if(!is.null(tip.data)) {
+        if(!is.empty(tip.data)) {
             emptyNodeData <- array(, dim = c(nNodes(x), ncol(tip.data)),
                                    dimnames = list(nodeId(x, "internal"),
                                    colnames(tip.data)))
@@ -79,7 +80,7 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
                                      drop = FALSE]
             tmpData <- cbind(all.data, tmpTipData)
         }
-        if(!is.null(node.data)) {
+        if(!is.empty(node.data)) {
             emptyTipData <- array(, dim = c(nTips(x), ncol(node.data)),
                                   dimnames = list(nodeId(x, "tip"),
                                   colnames(node.data)))
@@ -104,7 +105,7 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
     }
 
     else {
-        if(!is.null(tip.data) && !is.null(node.data)) {
+        if(!is.empty(tip.data) && !is.empty(node.data)) {
             if(identical(colnames(tip.data), colnames(node.data)) && merge.data) {
                 tmpAllData <- rbind(tip.data, node.data)
                 tip.data <- tmpAllData[rownames(tmpAllData) %in%
@@ -139,8 +140,8 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
         }
         else {
             ## at this point provide NULL data frame for empty arguments
-            if(is.null(tip.data)) tip.data <- data.frame(NULL)
-            if(is.null(node.data)) node.data <- data.frame(NULL)
+            if(is.empty(tip.data)) tip.data <- data.frame(NULL)
+            if(is.empty(node.data)) node.data <- data.frame(NULL)
 
             tip.data <- tip.data
             node.data <- node.data
