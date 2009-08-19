@@ -1,7 +1,13 @@
 
 ## REQUIRED for all trees
 checkPhylo4 <- function(object) {
-    checkTree(object)
+    ct <- checkTree(object)
+
+    if (class(object) == "phylo4d")
+        ## checkPhyo4Data returns TRUE or fail
+        cd <- checkPhylo4Data(object)
+
+    return(ct)
 }
 
 checkTree <- function(object,warn="retic",err=NULL) {
@@ -147,6 +153,35 @@ checkTree <- function(object,warn="retic",err=NULL) {
     return(TRUE)
 }
 
+checkPhylo4Data <- function(phy) {
+
+    ## These are just some basic tests to make sure that the user does not
+    ## alter the object in a significant way
+
+    ntips <- nTips(phy)
+    nnodes <- nNodes(phy)
+
+    ## Check dimensions
+    if (nrow(phy@tip.data) > 0 && nrow(phy@tip.data) != ntips)
+        stop("The number of tip data does not match the number ",
+             "of tips in the tree")
+    if (nrow(phy@node.data) > 0 && nrow(phy@node.data) != nnodes)
+        stop("The number of node data does not match the number ",
+             "of internal nodes in the tree")
+
+    ## Check rownames
+    if (nrow(phy@tip.data) > 0 &&
+       !all(rownames(phy@tip.data) %in% nodeId(phy, "tip")))
+        stop("The row names of tip data do not match the tip numbers")
+    if (nrow(phy@node.data) > 0 &&
+        !all(rownames(phy@node.data) %in% nodeId(phy, "internal")))
+        stop("The row names of node data do not match the node numbers")
+
+    return(TRUE)
+}
+
+
+
 formatData <- function(phy, dt, type=c("tip", "internal", "all"),
                        match.data=TRUE, label.type=c("rownames", "column"),
                        label.column=1, missing.data=c("fail", "warn", "OK"),
@@ -191,7 +226,7 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
                                 "are correct.")
                    },
                    internal = {
-                       if(any(names(ndDt) %in% labels(phy, "tip")))
+                       if(any(na.omit(names(ndDt)) %in% labels(phy, "tip")))
                            stop("You are trying to match node data to tip ",
                                 "nodes. Make sure that your data identifiers ",
                                 "are correct.")
