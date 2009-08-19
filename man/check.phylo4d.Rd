@@ -40,8 +40,8 @@ formatData(phy, dt, type=c("tip", "internal", "all"),
   \item{node.data}{a data frame, matching tree internal nodes}
   \item{all.data}{a data frame, matching all tree nodes (tips and internal nodes)}
   \item{pos}{add data columns before or after existing data?}
-  \item{merge.data}{(logical) merge data with any existing tip/node data
-    (if TRUE), or replace existing data (if FALSE)?}
+  \item{merge.data}{(logical) merge data if the name of the data match any existing
+    tip/node data (if TRUE), or create an additional column data (if FALSE)}
   \item{\dots}{extra arguments, passed to \code{formatData}}
 }
 \value{
