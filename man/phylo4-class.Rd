@@ -39,16 +39,16 @@ nodes}
     \item{tail}{\code{signature(object = "phylo4")}: show last few nodes}  }
 }
 \usage{
-    \S4method{print}{phylo4}(x,printlen,\dots)
-    \S4method{summary}{phylo4}(x,quiet=FALSE,\dots)
+    \S4method{print}{phylo4}(x, printall)
+    \S4method{summary}{phylo4}(object, quiet=FALSE)
     \S4method{names}{phylo4}(x)
   }
   \arguments{
     \item{x}{a phylo4 object}
-    \item{printlen}{Maximum number of tip labels to print}
+    \item{object}{a phylo4 object}
+    \item{printall}{If TRUE all tip labels are printed}
     \item{quiet}{a logical stating whether the results of the summary
       should be printed to the screen (FALSE, default) or not (TRUE)}
-    \item{\dots}{additional arguments (for generic consistency)}
   }
   \value{
     The \code{summary} method invisibly returns a list with the

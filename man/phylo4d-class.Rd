@@ -42,14 +42,14 @@ nodes}
 }
 }
 \usage{
-    \S4method{print}{phylo4d}(x,printlen,\dots)
-    \S4method{summary}{phylo4d}(x,\dots)
+    \S4method{print}{phylo4d}(x, printall=TRUE)
+    \S4method{summary}{phylo4d}(object)
     \S4method{names}{phylo4d}(x)
   }
   \arguments{
     \item{x}{a phylo4d object}
-    \item{printlen}{maximum number of tip labels to print}
-    \item{\dots}{additional arguments (for generic consistency)}
+    \item{object}{a phylo4d object}
+    \item{printall}{If TRUE all tip labels are printed}
   }
   \value{
     The \code{summary} method invisibly returns a list with the
