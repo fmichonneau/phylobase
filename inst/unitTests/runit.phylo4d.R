@@ -1,4 +1,4 @@
-testPhylo4d.bruteforce <- function() {
+test.Phylo4d.bruteforce <- function() {
     data(geospiza_raw)
     ## using the raw data
     tr <- geospiza_raw$tree
@@ -51,7 +51,7 @@ testPhylo4d.bruteforce <- function() {
 
 }
 
-testPhylo4d.withNb <- function() {
+test.Phylo4d.withNb <- function() {
     data(geospiza_raw)
     ## using the raw data
     tr <- geospiza_raw$tree
@@ -107,7 +107,7 @@ testPhylo4d.withNb <- function() {
     checkEquals(tdata(xx, "all")[,1], 1:(nTips(tr)+nNodes(tr)))
 }
 
-testPhylo4d.withNames <- function() {
+test.Phylo4d.withNames <- function() {
     data(geospiza_raw)
     ## using the raw data
     tr <- geospiza_raw$tree
