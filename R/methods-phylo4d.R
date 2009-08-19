@@ -217,18 +217,3 @@ setMethod("na.omit", "phylo4d", function(object, ...) {
     na.index <- which(!complete.cases(tipdata))
     prune(object, tip = na.index)
 })
-
-setMethod("names", signature(x = "phylo4d"), function(x) {
-    temp <- rev(names(attributes(x)))[-1]
-    return(rev(temp))
-})
-
-setMethod("head",signature(x = 'phylo4d'),
-          function(x,n=20) {
-            head(as(x,"data.frame"),n=n)
-          })
-
-setMethod("tail",signature(x = 'phylo4d'),
-          function(x,n=20) {
-            tail(as(x,"data.frame"),n=n)
-          })
