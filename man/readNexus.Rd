@@ -27,11 +27,11 @@ readNexus(file, simplify=TRUE, type=c("all","tree","data"), char.all=FALSE,
 }
 \details{
   The options for \code{check.node.labels} can take the values:
-  \item{keep}{the node labels of the Nexus file will be passed as node labels
- in the phylo4 object}
- \item{drop}{the node labels of the Nexus file will be ignored in the phylo4
- object}
- \item{asdata}{the node labels will passed to the phylo4 object as data.}
+  \itemize{
+     \item{keep}{the node labels of the Nexus file will be passed as node labels in the phylo4 object}
+     \item{drop}{the node labels of the Nexus file will be ignored in the phylo4 object}
+     \item{asdata}{the node labels will passed to the phylo4 object as data.}
+ }
  If you use the option \code{asdata} on a file with no node labels, a warning message is
  issued and by default \code{check.node.labels} takes the value \code{drop}.
 }
