@@ -18,17 +18,15 @@
 }
 
 \usage{
-\S4method{reorder}{phylo}(x, ...)
-\S4method{reorder}{phylo4}(x, ...)
-\S4method{reorder}{phylo4d}(x, ...)
+\S4method{reorder}{phylo}(x, order = "cladewise")
+\S4method{reorder}{phylo4}(x, order = c("preorder", "postorder"))
 orderIndex(phy, order = c('preorder','postorder'))
 }
 
 \arguments{
   \item{phy}{a \code{phylo4} or \code{phylo4d} object}
   \item{x}{a \code{phylo4} or \code{phylo4d} object}
-  \item{order}{The desired traversal order currently only 'preorder' and 'postorder' are allowed}
-  \item{\dots}{ A required order agrument (see above) is the only additional argument accepted. }
+  \item{order}{The desired traversal order currently only 'preorder' and 'postorder' are allowed for \code{phylo4} and \code{phylo4d} objects, while only 'cladewise' is accepted for \code{phylo} objects}
 }
 \details{
 The \code{reorder} method takes \code{phylo4} or \code{phylo4d} tree and orders the edge matrix (e.g. \code{edges(phy)}) in the requested traversal order.  Currently only two orderings are permitted and both require rooted trees.  In "postorder" a nodes descendants come before that node, thus the root, being ancestral to all nodes, comes last.  "Preorder" is the converse, a node is visited before it's descendants, thus the root comes first.
