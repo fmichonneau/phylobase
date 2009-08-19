@@ -192,7 +192,7 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
         pushViewport(viewport(layout = treelayout, layout.pos.col = 1))
             rty <- mean(xxyy$yy[phy@edge[, 1] == Ntips + 1], name = 'nodelabelvp')
         labtext <- grid.text(
-            phy@node.label, 
+            tipLabels(phy), 
             x = c(0, xxyy$xx[phy@edge[, 2] > Ntips][nindex]), 
             y = c(rty, xxyy$yy[phy@edge[, 2] > Ntips][nindex]), 
             default.units = 'npc', name = 'nodelabels', rot = -rot,
@@ -362,7 +362,7 @@ phylobubbles <- function(type = type,
     
     ## get label widths
     if(lab.right) {
-        tiplabwidth  <- max(stringWidth(phy@tip.label))
+        tiplabwidth  <- max(stringWidth(tipLabels(phy)))
     } else {tiplabwidth <- unit(0, 'null', NULL)}
     datalabwidth <- max(stringWidth(colnames(tipdata)))
     
