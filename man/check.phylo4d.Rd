@@ -28,22 +28,26 @@ formatData(phy, dt, type=c("tip", "internal", "all"),
   \item{phy}{A phylo4 object}
   \item{dt}{a data frame or matrix}
   \item{type}{type of data to attach}
-  \item{label.type}{stuff}
-  \item{label.column}{stuff}
+  \item{match.data}{(logical) check data labels against tree labels?}
+  \item{label.type}{character, "rownames" or "column": should
+    the labels be taken from the row names of \code{dt} or from
+    the \code{label.column} column of \code{dt}?}
+  \item{label.column}{if \code{label.type=="column"}, column specifier
+  (number or name) of the column containing tip labels}
   \item{missing.data}{action to take if there are missing data/labels don't match}
   \item{extra.data}{action to take if there are extra data/labels don't match}
   \item{tip.data}{a data frame, matching tree tips}
   \item{node.data}{a data frame, matching tree internal nodes}
   \item{all.data}{a data frame, matching all tree nodes (tips and internal nodes)}
   \item{pos}{add data columns before or after existing data?}
-  \item{merge.data}{stuff}
-  \item{match.data}{stuff}
-  \item{\dots}{stuff}
+  \item{merge.data}{(logical) merge data with any existing tip/node data
+    (if TRUE), or replace existing data (if FALSE)?}
+  \item{\dots}{extra arguments, passed to \code{formatData}}
 }
 \value{
-  By default, tip data names are used to attach the tip data to the tree, must be present, and must match the set of tree taxa exactly. By default node data names are not used to attach the data to the tree, and thus node data names are not required.
+By default, tip data names are used to attach the tip data to the tree, must be present, and must match the set of tree taxa exactly. By default node data names are not used to attach the data to the tree, and thus node data names are not required.
 
-  \code{addData} returns the phylo4 object with tipdata and nodedata (if present) attached to the phylo4 tree.
+\code{addData} returns the phylo4 object with tipdata and nodedata (if present) attached to the phylo4 tree.
 }
 \details{
   \code{formatData} checks validity of a phylo4d object. For tipdata and nodedata, checks
