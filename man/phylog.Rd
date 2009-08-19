@@ -6,7 +6,7 @@
 \description{S4 version of the class \code{phylog} from the \code{ade4} package.}
 \section{Objects from the Class}{A virtual Class: No objects may be created from it.}
 \section{Extends}{
-Class \code{"\linkS4class{oldClass}"}, directly.
+Class \code{\link[ade4]{phylog}}, directly.
 }
 \section{Methods}{
   \describe{
