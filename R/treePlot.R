@@ -323,6 +323,7 @@ phylobubbles <- function(type = type,
     nVars <- ncol(tipdata) # number of bubble columns
 
     dlabwdth <- max(stringWidth(colnames(phy@tip.data))) * 1.2
+    if(convertWidth(dlabwdth, 'cm', valueOnly=TRUE) < 2) {dlabwdth <- unit(2, 'cm')}
     phyplotlayout <- grid.layout(nrow = 2, ncol = 2, 
         heights = unit.c(unit(1, 'null'), dlabwdth), 
         widths = unit(c(1, 1), c('null', 'null'), list(NULL, NULL)))
@@ -364,12 +365,11 @@ phylobubbles <- function(type = type,
     if(lab.right) {
         tiplabwidth  <- max(stringWidth(tipLabels(phy)))
     } else {tiplabwidth <- unit(0, 'null', NULL)}
-    datalabwidth <- max(stringWidth(colnames(tipdata)))
-    
+
     ## 2x2 layout -- room at the bottom for data labels, and legend
     bublayout <- grid.layout(nrow = 2, ncol = 2,
         widths  = unit.c(unit(1, 'null', NULL), tiplabwidth), 
-        heights = unit.c(unit(1, 'null', NULL), datalabwidth * 1.2))
+        heights = unit.c(unit(1, 'null', NULL), dlabwdth))
     pushViewport(viewport(
         x = 0.5, y = 0.5, 
         width = 0.95, height = 1, 
@@ -392,6 +392,7 @@ phylobubbles <- function(type = type,
         ## if ther are missing values plot Xs
         grid.points(naxs, nays, pch = 4)
     }
+    
     if(square) {
         ## alternative to circles
         ## to keep the squares square, yet resize nicely use the square npc
@@ -428,7 +429,9 @@ phylobubbles <- function(type = type,
     ## data.label.space <- convertX(unit(1, 'npc'), "points", valueOnly = TRUE)
     ## data.label.fontsize <- data.label.space / ncol(tipdata)
     ## , gp=gpar(fontsize=data.label.fontsize))
-    grid.text(colnames(tipdata), xpos, .9, rot = 90, just = 'right')
+    ## offset the data labels from the bottom bubble
+    datalaboffset <- convertUnit(unit(15, "mm"), 'npc', valueOnly=TRUE)
+    grid.text(colnames(tipdata), xpos, 1-datalaboffset, rot = 90, just = 'right')
 
     upViewport(3)
     pushViewport(viewport(layout.pos.row=2, layout.pos.col=1,
