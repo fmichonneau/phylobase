@@ -16,7 +16,7 @@ checkTree(object,warn="retic",err=NULL)
   \item{err}{a character vector listing phenomena to trigger errors}
 }
 \value{
-  As required by \code{\link{validObject}}, returns an
+  As required by \code{\link[methods]{validObject}}, returns an
   error string (describing problems) or TRUE if everything is OK
 }
 \note{\code{checkPhylo4} is an (inflexible) wrapper for

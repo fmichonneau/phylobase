@@ -14,11 +14,9 @@
   \describe{
      \item{x = "phylo4"}{merges a tree of class \code{phylo4} with a
        data.frame into a \code{phylo4d} object}
-
      \item{x = "matrix"}{merges a matrix of tree edges similar to the edge
        slot of a \code{phylo4} object (or to \$edge of a \code{phylo} object) with a
        data.frame into a \code{phylo4d} object}
-
      \item{x = "phylo"}{merges a tree of class \code{phylo} with a
        data.frame into a \code{phylo4d} object }
    }}
