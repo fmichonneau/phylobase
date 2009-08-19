@@ -32,8 +32,7 @@
   }
 }
 \section{Methods}{
-  \describe{
-    \item{\$}{\code{signature(x = "phylo4d")}: extract a slot}
+  \describe{    
     \item{print}{\code{signature(x = "phylo4d")}: print method}
     \item{show}{\code{signature(object = "phylo4d")}: show method }
     \item{summary}{\code{signature(object = "phylo4d")}: summary method}

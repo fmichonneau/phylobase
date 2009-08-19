@@ -9,8 +9,8 @@
 \alias{nTips,ANY-method}
 \alias{labels<-}
 \alias{labels,phylo4-method}
-\alias{labels<-,phylo4,ANY,character-method}
-\alias{labels<-,phylo4d,missing,ANY-method}
+\alias{labels<-,phylo4,ANY,ANY,character-method}
+\alias{labels<-,phylo4d,ANY,ANY,character-method}
 \alias{edges}
 \alias{edges-methods}
 \alias{edges,phylo4-method}
