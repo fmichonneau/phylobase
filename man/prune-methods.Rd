@@ -25,12 +25,9 @@
     Renamed from \code{drop.tip} to \code{prune} in order to
     avoid conflicts with \code{ape}.}
   \usage{
-\S4method{prune}{phylo4}(phy, tip, trim.internal = TRUE, subtree = FALSE,
-                   root.edge = 0, \dots)
-\S4method{prune}{phylo4d}(phy, tip, trim.internal = TRUE, subtree = FALSE,
-                   root.edge = 0, \dots)
-\S4method{prune}{phylo}(phy, tip, trim.internal = TRUE, subtree = FALSE,
-                   root.edge = 0, \dots)
+\S4method{prune}{phylo4}(phy, tip, trim.internal = TRUE, subtree = FALSE, \dots)
+\S4method{prune}{phylo4d}(phy, tip, trim.internal = TRUE, subtree = FALSE, \dots)
+\S4method{prune}{phylo}(phy, tip, trim.internal = TRUE, subtree = FALSE, \dots)
 DropTip(phy, tip, \dots)
 }
 \arguments{
@@ -41,9 +38,6 @@ DropTip(phy, tip, \dots)
     corresponding internal branches}
   \item{subtree}{a logical specifying whether to output in the tree how
     many tips have been deleted and where}
-  \item{root.edge}{an integer giving the number of internal branches to
-    be used to build the new root edge. This has no effect if
-    \code{trim.internal = FALSE}}
   \item{\dots}{additional arguments}
 }
 \details{
