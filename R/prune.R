@@ -24,6 +24,11 @@ DropTip <- function(phy,tip,...) {
 }
 
 
+## return characters, sorted in NUMERIC order
+.chnumsort <- function(x) {
+  as.character(sort(as.numeric(x)))
+}
+
 setMethod("prune","phylo4",
           function(phy, tip, trim.internal = TRUE, subtree = FALSE,
                    ...) {
@@ -52,7 +57,7 @@ setMethod("prune", "phylo4d", function(phy, tip, trim.internal=TRUE,
 
     if(!all(dim(phy@tip.data) == 0)) {
         tipDt <- phy@tip.data[match(tipToKeep, rownames(phy@tip.data)) ,, drop=FALSE]
-        tipDt <- tipDt[sort(rownames(tipDt)) ,, drop=FALSE]
+        tipDt <- tipDt[.chnumsort(rownames(tipDt)) ,, drop=FALSE]
         rownames(tipDt) <- 1:nTips(phytr)
     }
     else
@@ -60,7 +65,7 @@ setMethod("prune", "phylo4d", function(phy, tip, trim.internal=TRUE,
 
     if(!all(dim(phy@node.data) == 0)) {
         nodDt <- phy@node.data[match(nodToKeep, rownames(phy@node.data)) ,, drop=FALSE]
-        nodDt <- nodDt[sort(rownames(nodDt)) ,, drop=FALSE]
+        nodDt <- nodDt[.chnumsort(rownames(nodDt)) ,, drop=FALSE]
         rownames(nodDt) <- 1:nNodes(phytr)
     }
     else
