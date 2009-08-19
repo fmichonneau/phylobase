@@ -61,7 +61,7 @@ setGeneric("edgeOrder", function(x, ...) {
 setGeneric("labels")
 
 setGeneric("labels<-",
-           function(object, type, ..., value) {
+           function(object, type, use.names, ..., value) {
                standardGeneric("labels<-")
            })
 

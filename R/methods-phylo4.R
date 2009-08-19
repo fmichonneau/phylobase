@@ -223,12 +223,19 @@ setMethod("labels", "phylo4", function(object, type = c("tip",
 })
 
 setReplaceMethod("labels",
-                 signature(object="phylo4", value="character"),
+                 signature(object="phylo4", type="ANY",
+                           use.names="ANY", value="character"),
    function(object, type = c("tip", "internal", "allnode"),
-            use.names=FALSE, ..., value) {
+            use.names, ..., value) {
 
-       if(missing(type)) type <- "tip"
+       ## default options
+       if(missing(type))
+           type <- "tip"
+       if (missing(use.names))
+           use.names <- FALSE
+
        type <- match.arg(type)
+
 
        ob <- switch(type,
               ## If 'tip'
