@@ -1,0 +1,105 @@
+#----------------------------------------------------------------------
+
+useDynLib(phylobase)
+
+#----------------------------------------------------------------------
+
+import(methods)
+importFrom(graphics, plot)
+importFrom(stats, na.omit, reorder)
+importFrom(utils, head, tail)
+
+#----------------------------------------------------------------------
+
+exportClasses(phylo4, phylo4d, multiPhylo4, multiPhylo4d)
+
+#----------------------------------------------------------------------
+
+# utility methods
+exportMethods("[", "[<-", "[[", "[[<-", print, head, tail, na.omit,
+    reorder, subset, plot, summary)
+
+# tree constructor methods
+exportMethods(phylo4, phylo4d)
+
+# counting methods
+exportMethods(nTips, nNodes, nEdges)
+
+# edge methods
+exportMethods(edges, hasEdgeLength, edgeLength, "edgeLength<-",
+    sumEdgeLength, edgeOrder)
+
+# root methods
+exportMethods(isRooted, rootNode, "rootNode<-")
+export(rootEdge)  # no methods defined yet?
+
+# node methods
+exportMethods(nodeId, nodeType)
+
+# tree data methods
+exportMethods(tdata, "tdata<-", hasNodeData)
+
+# prune methods
+exportMethods(prune)
+
+# label methods
+exportMethods(labels, "labels<-", nodeLabels, "nodeLabels<-",
+    tipLabels, "tipLabels<-", edgeLabels, "edgeLabels<-",
+    hasNodeLabels, hasEdgeLabels)
+
+#----------------------------------------------------------------------
+
+# tree structure functions
+export(hasPoly, hasSingle, hasRetic)
+
+# treewalk functions
+export(getNode, ancestor, children, descendants, siblings, ancestors,
+    MRCA, shortestPath, getEdge)
+
+# Nexus functions
+export(readNexus, read.nexustreestring)
+
+# pdata functions
+export(pdata, check_pdata)
+
+# prune functions --> maybe don't export?
+export(DropTip)
+
+# plotting functions
+export(treePlot, plotOneTree, tip.data.plot)
+export(phyloXXYY, phylobubbles, drawDetails.bubLegend)
+
+# misc functions
+export(extractTree, tbind)
+export(checkPhylo4, checkTree, checkPhylo4Data, formatData)
+export(as_phylo4vcov)
+export(printphylo4)
+
+## deprecated?
+export(printphylo)
+
+## commented out in source code, probably should be omitted here
+#export(phyloStripchart)
+#export(internEdges, terminEdges, isPoly)
+
+## presumably these should remain hidden
+#export(.createLabels, .createEdge, .phylo4Data, .orderIndex, .genlab,
+#    .chnumsort, .phylo4ToDataFrame, .bubLegendGrob)
+
+## recently removed:
+##  tree.plot
+##  segs
+##  checkData
+##  attachData
+##  orderIndex
+
+## not actually needed?
+#nTips ## mask ape::nTips
+
+#----------------------------------------------------------------------
+## For reference, quick & dirty UNIX-y commandline statements to pull
+## out methods and functions from package code; use in pkg/R/ dir:
+# grep "^ *setMethod" *.R | sed 's/setMethod(//' | sed 's/.*:["]\([^,]*\)["].*/\1/' | sort | uniq
+# grep "^ *setReplaceMethod" *.R | sed 's/setReplaceMethod(//' | sed 's/.*:["]\([^,]*\)["].*/\1/' | sort | uniq
+# grep "^[^ ].*<- *function *(" *.R | sed 's/.*R://'
+
