@@ -385,10 +385,10 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
     if(!is.null(x@edge.length)){
         res$mean.el <- mean(x@edge.length, na.rm=TRUE)
         res$var.el <- var(x@edge.length, na.rm=TRUE)
-        if (isRooted(x)) {
-            res$sumry.el <- summary(x@edge.length[-rootNode(x)])[-4]
+        if (isRooted(x) && is.na(x@edge.length[rootNode(x)])) {
+            res$sumry.el <- summary(x@edge.length[-rootNode(x)])
         } else {
-            res$sumry.el <- summary(x@edge.length)[-4]
+            res$sumry.el <- summary(x@edge.length)
         }
     } else {
         res$mean.el <- NULL
