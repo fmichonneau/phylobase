@@ -83,7 +83,7 @@ export(printphylo)
 #export(internEdges, terminEdges, isPoly)
 
 ## presumably these should remain hidden
-#export(.createLabels, .createEdge, .phylo4Data, .orderIndex, .genlab,
+#export(.createLabels, .createEdge, .phylo4Data, orderIndex, .genlab,
 #    .chnumsort, .phylo4ToDataFrame, .bubLegendGrob)
 
 ## recently removed:
