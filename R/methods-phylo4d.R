@@ -119,6 +119,10 @@ setReplaceMethod("tdata", "phylo4d",
                           value) {
     type <- match.arg(type)
 
+    ## Removes existing data, just keeps the tree (as a phylo4d)
+    object <- extractTree(object)
+    object <- as(object, "phylo4d")
+
     tmpData <- switch(type,
                       tip = .phylo4Data(object, tip.data=value, ...),
                       internal = .phylo4Data(object, node.data=value, ...),
