@@ -5,13 +5,13 @@
 Prints a phylo4 or phylo4d object in data.frame format with user-friendly column names
 }
 \usage{
-printphylo4(x, printall = TRUE)
+printphylo4(x, edgeOrder=c("pretty","real"), printall = TRUE)
 }
 \arguments{
-  \item{x}{a phylo4 tree or phylo4d tree+data object}
+  \item{x}{a \code{phylo4} tree or \code{phylo4d} tree+data object}
   \item{edgeOrder}{in the data frame returned, the option 'pretty' returns the internal nodes
-  followed by the tips, the option 'real' returns the nodes in the order they are stored
-  in the edge matrix.}
+    followed by the tips, the option 'real' returns the nodes in the order they are stored
+    in the edge matrix.}
   \item{printall}{default prints entire tree. printall=FALSE returns the first 6 rows}
 }
 \details{

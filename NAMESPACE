@@ -67,7 +67,7 @@ export(DropTip)
 
 # plotting functions
 export(treePlot, plotOneTree, tip.data.plot)
-export(phyloXXYY, phylobubbles, drawDetails.bubLegend)
+export(phyloXXYY, phylobubbles)
 
 # misc functions
 export(extractTree, tbind)
@@ -85,6 +85,7 @@ export(printphylo)
 ## presumably these should remain hidden
 #export(.createLabels, .createEdge, .phylo4Data, orderIndex, .genlab,
 #    .chnumsort, .phylo4ToDataFrame, .bubLegendGrob)
+## hidden: drawDetails.bubLegend)
 
 ## recently removed:
 ##  tree.plot
