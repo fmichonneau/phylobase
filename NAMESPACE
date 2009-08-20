@@ -37,7 +37,7 @@ export(rootEdge)  # no methods defined yet?
 exportMethods(nodeId, nodeType)
 
 # tree data methods
-exportMethods(tdata, "tdata<-", hasNodeData)
+exportMethods(tdata, "tdata<-", addData, hasNodeData)
 
 # prune methods
 exportMethods(prune)
