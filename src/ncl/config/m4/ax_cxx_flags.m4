@@ -64,7 +64,7 @@ AC_DEFUN([AX_CXXFLAGS],
 			CXXFLAGS_OPTIM_SIZE="-Os -ffast-math"
 		fi
 		case "$build_os" in
-			darwin*) CXXFLAGS_WARNINGS="$CXXFLAGS_WARNINGS -Wno-long-double";;
+			darwin*) ## no-op; hack for GCC 4.2.1 compat ## CXXFLAGS_WARNINGS="$CXXFLAGS_WARNINGS" -Wno-long-double";;
 			*);;
 		esac	
 	fi
