@@ -175,6 +175,14 @@ setMethod("addData", "phylo4d", function(x, tip.data=NULL, node.data=NULL,
     x
 })
 
+setMethod("addData", "phylo4", function(x, tip.data=NULL, node.data=NULL,
+                                        all.data=NULL, pos=c("after", "before"),
+                                        merge.data=TRUE, match.data=TRUE,
+                                        ...) {
+    phylo4d(x, tip.data=tip.data, node.data=node.data, all.data=all.data,
+            merge.data=merge.data, match.data=match.data, ...)
+})
+
 ## Alternative phylo4d summary method, using phylo4 summary
 ## Marguerite Butler & Peter Cowan
 setMethod("summary", "phylo4d", function(object) {
