@@ -1,0 +1,103 @@
+\documentclass{article}
+%\VignettePackage{phylo4}
+%\VignetteIndexEntry{tech_notes: technical notes and minutiae on phylobase}
+
+\usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{color}
+\usepackage[colorlinks=true,urlcolor=blue,bookmarks=true]{hyperref}
+\usepackage{url}
+
+\newcommand{\code}[1]{{{\tt #1}}}
+
+\title{Technical notes on the phylobase package}
+\author{Ben Bolker \& other phylobase authors}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+This vignette is intended as a depository for
+technical notes of primary interest to phylobase
+developers and others interested in gory details/what's going 
+on under the hood --- by contrast with the other
+phylobase vignette, which is more of an introduction
+\& user's manual.
+
+\section{Notes on other formats and ``round-trip'' issues}
+
+We should in principle be able to convert from other formats
+to \code{phylo4}(\code{d})
+and (\code{ape::phylo}, \code{ouch::ouch} etc.) and back without
+losing any information.  The two classes of exceptions would
+be (1) where \code{phylo4} stores \emph{less} information than
+the other formats (we would try to avoid this), and (2) where
+there are ambiguities etc. in the other formats (we would try
+to avoid this, too, but it may be difficult; ideally we would
+consult the package maintainers and try to get them to eliminate
+the ambiguities in their formats).
+
+Ideally we would be able to use \code{identical()} to
+test equality --- this tests ``bit-by-bit'' equality,
+and is intolerant of \emph{any} differences in format.
+More loosely, \code{all.equal()} allows for numeric
+variation below a certain tolerance, etc. (these
+correspond to \code{RUnit::checkEquals()} and \code{RUnit::checkIdentical()}).
+
+
+
+Case in point: \code{ape} is not entirely consistent in
+its internal representations, which causes some difficulty
+in creating perfect round trips
+(see \code{tests/roundtrip.R} for workarounds).  In particular,
+\begin{itemize}
+  \item \code{unroot()} contains several statements that subtract 1 from
+  components of the data structure that were previously stored
+  as \code{integer}.  Because 1 is subtracted an not \code{1L}
+  (an explicitly integer constant), this coerces those elements
+  to be \code{numeric} instead.
+  \item different ways of creating trees in \code{ape}
+    (\code{read.tree()}, \code{rcoal()})
+    generate structures with the internal elements in different orders.
+    When \code{phylobase} re-exports them, it always uses the order
+    \{\code{edge}, \code{edge.length}, \code{tip.label},
+    \code{Nnode}, [\code{node.label}], [\code{root.edge}]\},
+    which matches the trees produced by \code{rcoal} but not
+    those produced by \code{read.tree}
+  \item because of differences in ordering standards, it's not
+    clear that we can always preserve ordering information through
+    non-trivial manipulations in phylobase
+  \end{itemize}
+
+\section{phylobase tools, coding standards, etc.}
+
+We use \code{camelCase};
+try to indent our code according to the
+rules in the R extensions manual; and use
+\code{<-} for assignment.
+
+We are in the process of moving our testing infrastructure
+to the \code{RUnit} framework.
+
+Our development infrastructure hosted by r-forge,
+\url{http://phylobase.r-forge.r-project.org}:
+\begin{itemize}
+  \item SVN repository
+  \item mailing list (\code{phylobase-devl@lists.r-forge.r-project.org})
+  \item bug \& feature tracking
+  \item to install the development version:
+<<eval=FALSE>>=
+install.packages("phylobase",repos="http://r-forge.r-project.org")
+@ 
+\end{itemize}
+  
+Production version of the package (will soon be) hosted at CRAN:
+you can install it via
+<<eval=FALSE>>=
+install.packages("phylobase")
+@ 
+  
+\end{document}
