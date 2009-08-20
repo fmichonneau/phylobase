@@ -185,7 +185,8 @@ checkPhylo4Data <- function(phy) {
 formatData <- function(phy, dt, type=c("tip", "internal", "all"),
                        match.data=TRUE, label.type=c("rownames", "column"),
                        label.column=1, missing.data=c("fail", "warn", "OK"),
-                       extra.data=c("warn", "OK", "fail")
+                       extra.data=c("warn", "OK", "fail"),
+                       rownamesAsLabels=FALSE
                        ) {
 
     type <- match.arg(type)
@@ -209,7 +210,7 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
                           rownames = rownames(dt),
                           column = dt[,label.column])
         ndDt <- lapply(ndNames, function(nd) {
-            if(nchar(gsub("[0-9]", "", nd)) == 0)
+            if(nchar(gsub("[0-9]", "", nd)) == 0 && !rownamesAsLabels)
                 getNode(phy, as.integer(nd), missing="OK")
             else getNode(phy, nd, missing="OK")
         })

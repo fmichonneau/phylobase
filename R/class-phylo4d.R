@@ -28,7 +28,8 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
 
 ## Core part that takes care of the data
 .phylo4Data <- function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
-                        match.data=TRUE, merge.data=TRUE, ...) {
+                        match.data=TRUE, merge.data=TRUE, rownamesAsLabels=FALSE,
+                        ...) {
 
     ## Make sure that data provided are a data frame
     classData <- function(someData) {
@@ -51,20 +52,24 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
     tip.data <- classData(tip.data)
     node.data <- classData(node.data)
 
-     is.empty <- function(x) { is.null(x) || all(dim(x)==0) }
+    is.empty <- function(x) { is.null(x) || all(dim(x)==0) }
+
     ## Replacing node labels by node numbers and formatting the data to make sure
     ## they have the correct dimensions
     if(!is.empty(all.data))
-        all.data <- formatData(x, all.data, type="all",
-                               match.data=match.data, ...)
+        all.data <- formatData(phy=x, dt=all.data, type="all",
+                               match.data=match.data,
+                               rownamesAsLabels=rownamesAsLabels, ...)
 
     if(!is.empty(tip.data))
-        tip.data <- formatData(x, tip.data, type="tip",
-                               match.data=match.data, ...)
+        tip.data <- formatData(phy=x, dt=tip.data, type="tip",
+                               match.data=match.data,
+                               rownamesAsLabels=rownamesAsLabels, ...)
 
     if(!is.empty(node.data))
-        node.data <- formatData(x, node.data, type="internal",
-                                match.data=match.data, ...)
+        node.data <- formatData(phy=x, dt=node.data, type="internal",
+                                match.data=match.data,
+                                rownamesAsLabels=rownamesAsLabels, ...)
 
     ## Merging dataset
     if(!is.empty(all.data)) {
@@ -156,7 +161,8 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
 ### phylo4d class rewrite
 setMethod("phylo4d", "phylo4",
           function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
-                   match.data=TRUE, merge.data=TRUE, ...) {
+                   match.data=TRUE, merge.data=TRUE, rownamesAsLabels=FALSE,
+                   ...) {
 
     ## Creating new phylo4d object
     res <- new("phylo4d")
@@ -168,8 +174,10 @@ setMethod("phylo4d", "phylo4",
     res@edge.label <- x@edge.label
 
     ## taking care of the data
-    tmpData <- .phylo4Data(x, tip.data, node.data, all.data, match.data,
-                           merge.data, ...)
+    tmpData <- .phylo4Data(x=x, tip.data=tip.data, node.data=node.data,
+                           all.data=all.data, match.data=match.data,
+                           merge.data=merge.data,
+                           rownamesAsLabels=rownamesAsLabels, ...)
 
     res@tip.data <- tmpData$tip.data
     res@node.data <- tmpData$node.data

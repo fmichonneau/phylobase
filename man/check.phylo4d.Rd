@@ -17,7 +17,8 @@
 formatData(phy, dt, type=c("tip", "internal", "all"),
                        match.data=TRUE, label.type=c("rownames", "column"),
                        label.column=1, missing.data=c("fail", "warn", "OK"),
-                       extra.data=c("warn", "OK", "fail"))
+                       extra.data=c("warn", "OK", "fail"),
+                       rownamesAsLabels=FALSE)
 \S4method{addData}{phylo4d}(x, tip.data=NULL, node.data=NULL,
                                          all.data=NULL, pos=c("after", "before"),
                                          merge.data=TRUE, match.data=TRUE,
@@ -42,6 +43,8 @@ formatData(phy, dt, type=c("tip", "internal", "all"),
   \item{pos}{add data columns before or after existing data?}
   \item{merge.data}{(logical) merge data if the name of the data match any existing
     tip/node data (if TRUE), or create an additional column data (if FALSE)}
+  \item{rownamesAsLabels}{(logical), in the case of number-like labels should the row
+  names of the data provided be considered as labels (TRUE) or node numbers (FALSE and default)}
   \item{\dots}{extra arguments, passed to \code{formatData}}
 }
 \value{
