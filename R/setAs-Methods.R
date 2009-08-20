@@ -79,20 +79,22 @@ setAs("multiPhylo", "multiPhylo4", function(from, to) {
 
 setAs("phylo4", "phylo", function(from, to) {
 
-    if(is.character(checkval <- checkPhylo4(from)))
-        stop(checkval)
+    if(is.character(checkval <- checkPhylo4(from))) {
+      stop(checkval)
+    }
 
     if (inherits(from, "phylo4d"))
         warning("losing data while coercing phylo4d to phylo")
-    brlen0 <- brlen <- unname(from@edge.length)
+    brlen <- unname(from@edge.length)
     if (isRooted(from)) {
         ## rootnode is only node with no ancestor
         rootpos <- which(is.na(from@edge[, 1]))
         brlen <- brlen[-rootpos]
         edgemat <- unname(from@edge[-rootpos, ])
       } else {
-        edgemat <- from@edge
+        edgemat <- unname(from@edge)
     }
+    storage.mode(edgemat) <- "integer"
     if(hasNodeLabels(from)) {
         nodLbl <- unname(from@node.label)
       } else {
@@ -102,7 +104,7 @@ setAs("phylo4", "phylo", function(from, to) {
     y <- list(edge = edgemat,
               edge.length = brlen,
               tip.label = unname(from@tip.label),
-              Nnode = from@Nnode,
+              Nnode = as.integer(from@Nnode),
               node.label = nodLbl)
     class(y) <- "phylo"
     if (from@order != 'unknown') {
@@ -111,6 +113,8 @@ setAs("phylo4", "phylo", function(from, to) {
                                    preorder  = 'cladewise',
                                    unknown = 'unknown',
                                    pruningwise = 'pruningwise')
+    } else {
+      ## warning ??
     }
     if (length(y$edge.length) == 0)
         y$edge.length <- NULL
@@ -118,7 +122,7 @@ setAs("phylo4", "phylo", function(from, to) {
         y$node.label <- NULL
     ## how do we tell if there is an explicit root edge?
     if (isRooted(from)) {
-        root.edge <- edgeLength(from,rootNode(from))## brlen0[rootNode(from)]
+        root.edge <- unname(edgeLength(from,rootNode(from)))
         if (!is.na(root.edge)) y$root.edge <- root.edge
     }
     y
