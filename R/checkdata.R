@@ -148,7 +148,8 @@ checkTree <- function(object,warn="retic",err=NULL) {
         if ("retic" %in% err)
           return(paste("tree is reticulated:",msg))
         if ("retic" %in% warn)
-          warning("tree is reticulated:",msg)
+          warning("tree is reticulated, most functions in phylobase haven't ",
+                  "been tested with reticulated trees: ", msg)
     }
     return(TRUE)
 }
@@ -183,10 +184,10 @@ checkPhylo4Data <- function(phy) {
 
 
 formatData <- function(phy, dt, type=c("tip", "internal", "all"),
-                       match.data=TRUE, label.type=c("rownames", "column"),
+                       match.data=TRUE, rownamesAsLabels=FALSE,
+                       label.type=c("rownames", "column"),
                        label.column=1, missing.data=c("fail", "warn", "OK"),
-                       extra.data=c("warn", "OK", "fail"),
-                       rownamesAsLabels=FALSE
+                       extra.data=c("warn", "OK", "fail")
                        ) {
 
     type <- match.arg(type)
