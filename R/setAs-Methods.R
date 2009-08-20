@@ -118,7 +118,7 @@ setAs("phylo4", "phylo", function(from, to) {
         y$node.label <- NULL
     ## how do we tell if there is an explicit root edge?
     if (isRooted(from)) {
-        root.edge <- brlen0[rootNode(from)]
+        root.edge <- edgeLength(from,rootNode(from))## brlen0[rootNode(from)]
         if (!is.na(root.edge)) y$root.edge <- root.edge
     }
     y
