@@ -25,6 +25,12 @@ Loading required package: ape
 > set.seed(1)
 > 
 > data(geospiza)
+> 
+> ## make sure geospiza is properly formatted
+> if(is.character(checkval <- checkPhylo4(geospiza)))
++   stop(checkval)
+>   
+> 
 > geospiza0 <-
 +   list(geospiza.tree=as(geospiza,"phylo"),geospiza.data=tdata(geospiza))
 Warning message:
@@ -58,9 +64,6 @@ character(0)
 > p1C <- na.omit(p1)
 > 
 > labels(p1C) <- tolower(labels(p1C))
-Note: Method with signature "phylo4d#missing#ANY" chosen for function "labels<-",
- target signature "phylo4d#missing#character".
- "phylo4#ANY#character" would also be valid
 > 
 > ## trace("prune",browser,signature="phylo4d")
 > r1 <- read.tree(text="((t4:0.3210275554,(t2:0.2724586465,t3:0.2724586465):0.0485689089):0.1397952619,(t5:0.07551818331,t1:0.07551818331):0.385304634);")
@@ -117,9 +120,6 @@ Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) :
 > ## trace("plot", browser, signature = c("phylo4d","missing"))
 > tipLabels(q1) <- paste("q",1:5,sep="")
 > nodeLabels(q1) <- paste("n",1:4,sep="")
-Note: Method with signature "phylo4#character" chosen for function "nodeLabels<-",
- target signature "phylo4d#character".
- "phylo4d#ANY" would also be valid
 > p3 <- phylo4d(r1,tip.data=tipdat,node.data=data.frame(b=6:9), match.data=FALSE)
 > summary(p3)
 
@@ -334,4 +334,4 @@ phyl4d> exGeo5 <- phylo4d(geoTree, all.data = rAllData)
 > 
 > proc.time()
    user  system elapsed 
-  2.467   0.066   3.153 
+  3.464   0.076   3.520 
