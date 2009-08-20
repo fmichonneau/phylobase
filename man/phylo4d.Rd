@@ -77,7 +77,7 @@
   function to check the validity of \code{phylo4d} objects;
   \linkS4class{phylo4} class and \link{phylo4} constructor.}
 
-\author{Ben Bolker, Thibaut Jombart, Steve Kembel, \enc{François}{Francois} Michonneau}
+\author{Ben Bolker, Thibaut Jombart, Steve Kembel, Francois Michonneau}
 
 \note{
   Checking on matches between the tree and the data will be done by the
