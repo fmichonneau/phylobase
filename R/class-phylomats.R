@@ -79,9 +79,10 @@ setAs("phylo4vcov","phylo4",
         ## add root node to edge matrix and branch lengths
         temptree$edgemat <- rbind(temptree$edgemat,c(NA,rootnode))
         temptree$edgelens <- c(temptree$edgelens,NA)
-        phylo4(temptree$edgemat,edge.length=temptree$edgelens,
+        reorder(phylo4(temptree$edgemat,edge.length=temptree$edgelens,
                tip.label=rownames(from),
-               edge.label=from@edge.label,order=from@order)
+               edge.label=from@edge.label,order="unknown"),
+                "preorder")
       })
 
 

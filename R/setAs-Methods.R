@@ -69,7 +69,7 @@ setAs("multiPhylo", "multiPhylo4", function(from, to) {
 ## BMB: adding an explicit as method, and the warning,
 ##  here is a very bad idea, because
 ##   even implicit conversions from phylo4d to phylo4 (e.g.
-##  to use inhertied methods) will produce the warning
+##  to use inherited methods) will produce the warning
 
 ## setAs("phylo4d", "phylo4",function(from,to) {
 ##   warning("losing data while coercing phylo4d to phylo")
@@ -116,6 +116,7 @@ setAs("phylo4", "phylo", function(from, to) {
         y$edge.length <- NULL
     if (length(y$node.label) == 0)
         y$node.label <- NULL
+    ## how do we tell if there is an explicit root edge?
     if (isRooted(from)) {
         root.edge <- brlen0[rootNode(from)]
         if (!is.na(root.edge)) y$root.edge <- root.edge
