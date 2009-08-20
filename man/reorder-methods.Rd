@@ -4,7 +4,7 @@
 \alias{reorder,phylo-method}
 \alias{reorder,phylo4-method}
 \alias{reorder,phylo4d-method}
-\alias{orderIndex}
+\alias{.orderIndex}
 \title{reordering trees within phylobase objects}
 \description{
  Methods for reordering trees into various traversal orders
@@ -20,7 +20,7 @@
 \usage{
 \S4method{reorder}{phylo}(x, order = "cladewise")
 \S4method{reorder}{phylo4}(x, order = c("preorder", "postorder"))
-orderIndex(phy, order = c('preorder','postorder'))
+.orderIndex(phy, order = c('preorder','postorder'))
 }
 
 \arguments{

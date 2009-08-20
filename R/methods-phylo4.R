@@ -44,7 +44,7 @@
 ###  6.7. summary()
 
 ### 7. Ordering
-###  7.1. orderIndex()
+###  7.1. .orderIndex()
 ###  7.2. reorder()
 
 
@@ -470,7 +470,7 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
 ### Ordering
 #########################################################
 
-orderIndex <- function(phy, order = c('preorder', 'postorder')) {
+.orderIndex <- function(phy, order = c('preorder', 'postorder')) {
     ## get an root node free edge matrix
     ## R scoping allows us to call this variable in
     ## the postOrder() func defined above
@@ -516,7 +516,7 @@ setMethod("reorder", signature(x = 'phylo4'),
     function(x, order = c('preorder', 'postorder')) {
     ## call orderIndex and use that index to order edges, labels and lengths
     order   <- match.arg(order)
-    index   <- orderIndex(x, order)
+    index   <- .orderIndex(x, order)
     x@order <- order
     x@edge  <- x@edge[index, ]
     if(hasEdgeLabels(x)) { x@edge.label  <- x@edge.label[index] }
