@@ -1,5 +1,5 @@
 #
-# --- Test treestruc functions ---
+# --- Test treestruc.R functions ---
 #
  
 test.hasPoly <- function() {
@@ -11,5 +11,11 @@ test.hasPoly <- function() {
     owls$edge.length <- owls$edge.length[-4]
     tr <- as(owls, "phylo4")
     checkTrue(hasPoly(tr))
+}
+
+test.hasSingle <- function() {
+}
+
+test.hasRetic <- function() {
 }
 

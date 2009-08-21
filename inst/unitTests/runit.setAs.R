@@ -1,10 +1,28 @@
 #
-# --- Test setAs methods ---
+# --- Test setAs-Methods.R ---
 #
  
 # Create sample tree for testing (ape::phylo object)
 tr <- read.tree(text="(((spA:0.2,(spB:0.1,spC:0.1):0.15):0.5,spD:0.7):0.2,spE:1):0.4;") 
 phy <- as(tr, "phylo4")
+
+test.phylo.As.phylo4 <- function() {
+}
+
+test.phylo.As.phylo4d <- function() {
+}
+
+test.multiPhylo.As.multiPhylo4 <- function() {
+}
+
+test.multiPhylo4.As.multiPhylo <- function() {
+}
+
+test.phylo4.As.phylo <- function() {
+}
+
+test.phylo4.As.phylog <- function() {
+}
 
 test.phylo4.As.data.frame <- function() {
 

@@ -1,5 +1,5 @@
 #
-# --- Test subset methods ---
+# --- Test subset.R ---
 #
  
 # Create sample tree for testing (ape::phylo object)
@@ -39,3 +39,8 @@ test.subset.phylo4d <- function() {
     checkEquals(phyd, phyd[seq_len(nTips(phyd))])
 }
 
+test.extractTree <- function() {
+    phyd <- as(tr, "phylo4d")
+    phy <- as(tr, "phylo4")
+    checkEquals(phy, extractTree(phyd))
+}

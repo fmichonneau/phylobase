@@ -1,5 +1,5 @@
 #
-# --- Test phylo4 methods ---
+# --- Test methods-phylo4.R ---
 #
  
 # Create sample tree for testing (ape::phylo object)
