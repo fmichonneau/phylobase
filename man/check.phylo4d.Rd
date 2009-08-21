@@ -16,10 +16,11 @@
 
   \usage{
 formatData(phy, dt, type=c("tip", "internal", "all"),
-                       match.data=TRUE, label.type=c("rownames", "column"),
+                       match.data=TRUE, rownamesAsLabels=FALSE,
+		       label.type=c("rownames", "column"),
                        label.column=1, missing.data=c("fail", "warn", "OK"),
-                       extra.data=c("warn", "OK", "fail"),
-                       rownamesAsLabels=FALSE)
+                       extra.data=c("warn", "OK", "fail"))
+                       
 \S4method{addData}{phylo4}(x, tip.data=NULL, node.data=NULL, all.data=NULL, 
                        pos=c("after", "before"), merge.data=TRUE, match.data=TRUE, \dots)
 \S4method{addData}{phylo4d}(x, tip.data=NULL, node.data=NULL, all.data=NULL, 
@@ -76,10 +77,10 @@ row.names(dat.defaultnames) <- NULL
 dat.superset <- rbind(dat, rnorm(2))
 dat.subset <- dat[-1, ]
 
-#create a phylo4 object from a phylo object
+## create a phylo4 object from a phylo object
 p4 <- as(p3, "phylo4")
 
-#create phylo4d objects with tip data
+## create phylo4d objects with tip data
 p4d <- phylo4d(p4, dat)
 ###checkData(p4d)
 p4d.sorted <- phylo4d(p4, dat[5:1, ])
@@ -93,14 +94,24 @@ try(p4d.superset <- phylo4d(p4, dat.superset))
 p4d.superset <- phylo4d(p4, dat.superset)
 }
 
-#create phylo4d objects with node data
+## create phylo4d objects with node data
 nod.dat <- data.frame(a = rnorm(4), b = rnorm(4))
 p4d.nod <- phylo4d(p4, node.data = nod.dat, match.data=FALSE)
 
 
-#create phylo4 objects with node and tip data
+## create phylo4 objects with node and tip data
 p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat, match.data=FALSE)
 nodeLabels(p4) <- as.character(sort(nodeId(p4)))
 p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat, match.data=FALSE))
+
+## examples of merge.data
+data(geospiza)
+trGeo <- extractTree(geospiza)
+tDt <- data.frame(a=rnorm(nTips(trGeo)), row.names=nodeId(trGeo, "tip"))
+nDt <- data.frame(a=rnorm(nNodes(trGeo)), row.names=nodeId(trGeo, "internal"))
+
+(matchData1 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=FALSE))
+(matchData2 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=TRUE))
+
 }
 \keyword{misc}
