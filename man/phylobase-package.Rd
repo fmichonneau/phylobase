@@ -13,9 +13,9 @@
         Type:       \tab Package\cr
         Date:       \tab 2009\cr
         Depends:    \tab methods, grid, ape(>= 2.1)\cr
-        Suggests:   \tab ade4, MASS, gridBase\cr
+        Suggests:   \tab ade4, MASS\cr
         License:    \tab GPL Version 2 or later\cr
-        Authors:    \tab R Hackathon (Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vienne, Thibaut Jombart, Steve Kembel, Francois Michonneau, David Orme, Brian O'Meara, Emmanuel Paradis, Derrick Zwickl) \cr        
+        Authors:    \tab R Hackathon et al. (alphabetically: Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vienne, Thibaut Jombart, Steve Kembel, Francois Michonneau, David Orme, Brian O'Meara, Emmanuel Paradis, Jim Regetz, Derrick Zwickl) \cr        
         URL:        \tab \url{http://phylobase.r-forge.r-project.org/}
     }
 }
