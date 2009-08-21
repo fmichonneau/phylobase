@@ -91,9 +91,6 @@ export(printphylo4)
 ##  attachData
 ##  orderIndex
 
-## not actually needed?
-#nTips ## mask ape::nTips
-
 #----------------------------------------------------------------------
 ## For reference, quick & dirty UNIX-y commandline statements to pull
 ## out methods and functions from package code; use in pkg/R/ dir:

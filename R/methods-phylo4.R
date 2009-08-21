@@ -52,7 +52,6 @@
 ### Tip accessors
 #########################################################
 
-nTips <- function(x,...)  { }  ## mask ape::nTips
 setGeneric("nTips", function(x,...) {
     standardGeneric("nTips")
 })
