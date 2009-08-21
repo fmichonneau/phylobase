@@ -8,9 +8,7 @@ setClass("phylo4d",
          prototype = list( tip.data = data.frame(NULL),
            node.data = data.frame(NULL) ),
 
-         validity = function(object) {
-             checkPhylo4(object)
-         },
+         validity = checkPhylo4,
          contains="phylo4")
 
 ######################

@@ -11,11 +11,21 @@ checkPhylo4 <- function(object) {
 }
 
 checkTree <- function(object,warn="retic",err=NULL) {
+
+    ## case of empty phylo4 object
+    if(nrow(object@edge) == 0 && length(object@edge.length) == 0 &&
+       object@Nnode == 0 && length(object@node.label) == 0 &&
+       length(object@tip.label) == 0 && length(object@edge.label) == 0)
+        return(TRUE)
+
     ## FIXME: check for cyclicity?
     nedges <- nrow(object@edge)
+
     if (hasEdgeLength(object)) {
       if (length(object@edge.length) != nedges)
         return("edge lengths do not match number of edges")
+      if(!is.numeric(object@edge.length))
+          stop("Edge lengths are not numeric.")
       ## presumably we shouldn't allow NAs mixed
       ## with numeric branch lengths except at the root
       if (sum(is.na(object@edge.length)) > 1)
@@ -36,8 +46,10 @@ checkTree <- function(object,warn="retic",err=NULL) {
     intnodes <- nodes[!nodes %in% tips]
     roots <- E[which(is.na(E[,1])),2]
     nRoots <- length(roots)
+
     if (!(all(tips==1:ntips) && all(nodes=(ntips+1):(ntips+length(intnodes)))))
       return("tips and nodes incorrectly numbered")
+
     ##careful - nAncest does not work for counting nRoots in unrooted trees
     nAncest <- tabulate(na.omit(E)[, 2],nbins=max(nodes)) ## bug fix from Jim Regetz
     nDesc <- tabulate(na.omit(E[,1]))
@@ -78,10 +90,10 @@ checkTree <- function(object,warn="retic",err=NULL) {
 
     ## make sure that nodes and edges have internal names
     ## and that they match the nodes
-    if(is.null(names(object@tip.label))) {
+    if (is.null(names(object@tip.label))) {
         if(length(object@tip.label) == nTips(object)) {
-            stop("It seems that you have an old version of a phylo4 object. ",
-                  "Try to use the function updatePhylo4().")
+            stop("There is no internal name associated with your tips. Use the ",
+                 "function tipLabels <- to change your tip labels.")
         }
         else
             stop("Your object doesn't have internal node names and the number of ",
@@ -92,10 +104,11 @@ checkTree <- function(object,warn="retic",err=NULL) {
             stop("Internal names for tips don't match tip ID numbers")
     }
 
-    if(is.null(names(object@node.label))) {
+    if (is.null(names(object@node.label))) {
         if(length(object@node.label) == nNodes(object)) {
-            stop("It seems that you have an old version of a phylo4 object. ",
-                 "Try to use the function updatePhylo4().")
+            stop("There is no internal names associated with internal ",
+                 "nodes. Use the function nodeLabels <- to create or ",
+                 "change your internal node labels.")
         }
         else
             stop("Your object doesn't have internal node names and the number of ",
@@ -108,22 +121,17 @@ checkTree <- function(object,warn="retic",err=NULL) {
 
     if(hasEdgeLength(object)) {
         if(is.null(names(object@edge.length))) {
-            warning("It seems that you have an old version of a phylo4 object. ",
-                    "Try to use the function updatePhylo4().")
+            warning("Your edges don't have internal names. Use the function ",
+                    "edgeLength <- to update the the branch lengths of your ",
+                    "tree.")
         }
         else {
             tEdgLbl <- paste(object@edge[,1], object@edge[,2], sep="-")
             if(!all(names(object@edge.length) %in% tEdgLbl))
                 stop("There is something wrong with your internal edge length ",
-                     "labels.")
+                     "labels. Use the function edgeLength <- to update the the ",
+                     "branch lengths of your tree.")
         }
-    }
-
-    ## make sure that edgeLength has correct length and is numerical
-    if(hasEdgeLength(object)) {
-        if(length(object@edge.length) != nedges)
-            stop("The number of edge lengths is different from the number of edges.")
-        if(!is.numeric(object@edge.length)) stop("Edge lengths are not numeric.")
     }
 
     ## make sure that tip and node labels are unique
