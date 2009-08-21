@@ -75,9 +75,6 @@ export(checkPhylo4, checkTree, checkPhylo4Data, formatData)
 export(as_phylo4vcov)
 export(printphylo4)
 
-## deprecated?
-export(printphylo)
-
 ## commented out in source code, probably should be omitted here
 #export(phyloStripchart)
 #export(internEdges, terminEdges, isPoly)
