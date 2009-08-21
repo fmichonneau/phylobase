@@ -72,6 +72,9 @@
 \alias{tdata-methods}
 \alias{tdata,phylo4d-method}
 \alias{tdata<-,phylo4d-method}
+\alias{addData}
+\alias{addData,phylo4-method}
+\alias{addData,phylo4d-method}
 \title{Methods for S4 phylogeny classes}
 \description{
    Generic methods for phylogenetic trees represented as S4 classes
@@ -107,6 +110,8 @@
     <= 2 descendants)}
   \item{rootEdge}{\code{signature(object = "phylo4")}: root edge}
   \item{tdata}{\code{signature(object = "phylo4d")}: trait data}
+  \item{addData}{\code{signature(x = "phylo4d")}: add data} 
+
 }
 }
 \usage{
@@ -116,6 +121,13 @@
   \S4method{tdata}{phylo4d}(object, type = "tip", \dots) <- value
   \S4method{edgeLength}{phylo4}(x, node)
   \S4method{edges}{phylo4}(x, order, drop.root=FALSE, \dots)
+
+  \S4method{addData}{phylo4}(x, tip.data=NULL, node.data=NULL, all.data=NULL, 
+                       pos=c("after", "before"), merge.data=TRUE, match.data=TRUE, \dots)
+
+  \S4method{addData}{phylo4d}(x, tip.data=NULL, node.data=NULL, all.data=NULL, 
+                       pos=c("after", "before"), merge.data=TRUE, match.data=TRUE, \dots)
+
 }
 \arguments{
   \item{x}{a phylo4d object}
@@ -128,6 +140,17 @@
   \item{value}{a data frame}
   \item{order}{(not yet implemented)}
   \item{drop.root}{logical: drop root row from edge matrix?}
+  \item{tip.data}{a data frame for tips data}
+  \item{node.data}{a data frame for nodes data}
+  \item{all.data}{a data frame for all (i.e. tips and nodes) data.}
+  \item{match.data}{(logical) should the rownames of the data frame provided in
+  \code{tip.data}, \code{node.data} and/or \code{all.data} be used to be matched against
+  tip and node labels?}
+\item{merge.data}{if both \code{tip.data} and \code{node.data} are
+    provided, it determines if they should be merged as a single
+    trait (if TRUE). This argument is evaluated only if both \code{tip.data} and
+    \code{node.data} have identical column names.}  
+  \item{pos}{add data columns before or after existing data?}
   \item{\dots}{for future development compatibility}
 }
 \examples{

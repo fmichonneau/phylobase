@@ -37,7 +37,9 @@
   \item{node.data}{a data frame for nodes data}
   \item{all.data}{a data frame for all (i.e. tips and nodes) data. In such
     case, first rows should correspond to tips, last rows to nodes.}
-  \item{match.data}{FIXME}
+  \item{match.data}{(logical) should the rownames of the data frame provided in
+  \code{tip.data}, \code{node.data} and/or \code{all.data} be used to be matched against
+  tip and node labels?}
   \item{merge.data}{if both \code{tip.data} and \code{node.data} are
     provided, it determines if they should be merged as a single
     trait. This argument is evaluated only if both \code{tip.data} and

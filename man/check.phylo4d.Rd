@@ -1,8 +1,7 @@
 \name{checkPhylo4d}
 \alias{formatData}
-\alias{addData}
-\alias{addData,phylo4-method}
-\alias{addData,phylo4d-method}
+
+\alias{checkPhylo4Data}
 \title{Data addition and validity checking for phylo4d objects}
 \description{
   Basic checks on the validity of S4 phylogenetic plus data objects
@@ -10,7 +9,8 @@
 }
 \section{Methods}{
   \describe{
-    \item{addData}{\code{signature(x = "phylo4d")}: add data}
+	\item{formatData}{\code{signature(phy="phylo4d")}} 
+	\item{checkPhylo4Data}{\code{signature(phy="phylo4d")}}
   }
   }
 
@@ -20,15 +20,11 @@ formatData(phy, dt, type=c("tip", "internal", "all"),
 		       label.type=c("rownames", "column"),
                        label.column=1, missing.data=c("fail", "warn", "OK"),
                        extra.data=c("warn", "OK", "fail"))
+checkPhylo4Data(phy)
                        
-\S4method{addData}{phylo4}(x, tip.data=NULL, node.data=NULL, all.data=NULL, 
-                       pos=c("after", "before"), merge.data=TRUE, match.data=TRUE, \dots)
-\S4method{addData}{phylo4d}(x, tip.data=NULL, node.data=NULL, all.data=NULL, 
-                       pos=c("after", "before"), merge.data=TRUE, match.data=TRUE, \dots)
 
 }
 \arguments{
-  \item{x}{A phylo4d object}
   \item{phy}{A phylo4 object}
   \item{dt}{a data frame or matrix}
   \item{type}{type of data to attach}
@@ -39,30 +35,27 @@ formatData(phy, dt, type=c("tip", "internal", "all"),
   \item{label.column}{if \code{label.type=="column"}, column specifier
   (number or name) of the column containing tip labels}
   \item{missing.data}{action to take if there are missing data/labels don't match}
-  \item{extra.data}{action to take if there are extra data/labels don't match}
-  \item{tip.data}{a data frame, matching tree tips}
-  \item{node.data}{a data frame, matching tree internal nodes}
-  \item{all.data}{a data frame, matching all tree nodes (tips and internal nodes)}
-  \item{pos}{add data columns before or after existing data?}
-  \item{merge.data}{(logical) merge data if the name of the data match any existing
-    tip/node data (if TRUE), or create an additional column data (if FALSE)}
+  \item{extra.data}{action to take if there are extra data/labels don't match} 
   \item{rownamesAsLabels}{(logical), in the case of number-like labels should the row
   names of the data provided be considered as labels (TRUE) or node numbers (FALSE and default)}
-  \item{\dots}{extra arguments, passed to \code{formatData}}
+  
 }
 \value{
 By default, tip data names are used to attach the tip data to the tree, must be present, and must match the set of tree taxa exactly. By default node data names are not used to attach the data to the tree, and thus node data names are not required.
 
-\code{addData} returns the phylo4 object with tipdata and nodedata (if present) attached to the phylo4 tree.
+
 }
 \details{
-  \code{formatData} checks validity of a phylo4d object. For tipdata and nodedata, checks
-  for presence of tip and node names, whether tip or node data taxa and tree taxa are an
-  exact match, and whether tip or node data taxa are a superset or subset of the tree
-  taxa. By default, if several tip or node labels are non-unique, they all receive the same
-  value. This is only true if you use names to attach data to your tree. You can prevent
-  this behavior by changing the value of the arguments \code{non.unique.tips} and
-  \code{non.unique.nodes} to \code{fail}.
+  \code{formatData} is an internal function that should not be called by the user. It
+  formats properly the data provided by the 
+  user before being attached to a tree. The function (1) converts labels provided in the
+  data into node numbers, (2) makes sure that the data are appropriately matched against
+  tip or nodes, (3) checks for differences between data and tree, (4) creates a data frame
+  with the correct dimensions given a tree. \code{formatData} returns a data frame. 
+  
+  \code{checkPhylo4Data} checks the validity of a \code{phylo4d} object. It ensures that
+  (1) the data associated with the tree have the correct dimensions, (2) that the row
+  names for the data are correct.
 }
 \seealso{the \code{\link{phylo4d}} constructor, the \linkS4class{phylo4d} class. See also the \code{\link{checkPhylo4}}, the \code{\link{phylo4}} constructor and the \linkS4class{phylo4} class. See \code{\link{coerce-methods}} for translation functions.}
 \author{Steven Kembel \email{skembel@berkeley.edu}}
