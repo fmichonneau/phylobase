@@ -40,8 +40,8 @@ Loading required package: ape
         mean         : 0.2116037 
         variance     : 0.01503145 
         distribution :
-   Min. 1st Qu.  Median 3rd Qu.    Max.    NA's 
-0.07552 0.10370 0.23040 0.27250 0.38530 1.00000 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.07552 0.10370 0.23040 0.21160 0.27250 0.38530 
 
 Comparative data:
 
@@ -77,4 +77,4 @@ In asMethod(object) : losing data while coercing phylo4d to phylo
 > 
 > proc.time()
    user  system elapsed 
-  1.162   0.047   1.203 
+  1.700   0.068   1.744 

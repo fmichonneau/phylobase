@@ -7,13 +7,20 @@
 }
 \usage{
 checkPhylo4(object)
-checkTree(object,warn="retic",err=NULL)
+checkTree(object,
+             warn=c("retic","singleton","multiroot"),
+             err=NULL)
 }
 \arguments{
   \item{object}{A prospective S4 object}
   \item{warn}{a character vector listing phenomena to warn about:
-    current options are "poly" and "retic"}
-  \item{err}{a character vector listing phenomena to trigger errors}
+    current options are [\code{"poly"} (polytomies),
+    \code{"retic"} (reticulations),
+    \code{"singleton"} ("singleton" nodes, i.e.
+    nodes with a single descendant), \code{"multiroot"}
+    (multiple roots) ]}
+  \item{err}{a character vector listing phenomena to trigger errors:
+    choices as above}
 }
 \value{
   As required by \code{\link[methods]{validObject}}, returns an

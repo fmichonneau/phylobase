@@ -40,8 +40,6 @@ Warning messages:
   longer object length is not a multiple of shorter object length
 3: In tips == 1:ntips :
   longer object length is not a multiple of shorter object length
-4: In tips == 1:ntips :
-  longer object length is not a multiple of shorter object length
 > OKvals <- sapply(p1,class)!="try-error"
 > table(sapply(p1[!OKvals],as.character))
 
@@ -94,7 +92,7 @@ Error in vector("character", length) : invalid 'length' argument\n
 > 
 > try(as(broke1, "phylo4") -> tree, silent=TRUE)   # makes a phylo4  object with no warning
 Warning message:
-In checkTree(object) : tree is reticulated:tree contains singleton nodes
+In checkTree(object) : tree contains singleton nodes
 > try(phylo4(broke1$edge), silent=TRUE)    # constructor makes a phylo4 object with no warning
   label node ancestor edge.length node.type
 6  <NA>    6       NA          NA  internal
@@ -107,10 +105,8 @@ In checkTree(object) : tree is reticulated:tree contains singleton nodes
 4    T4    4        9          NA       tip
 5    T5    5        9          NA       tip
 Warning messages:
-1: In checkTree(object) :
-  tree is reticulated:tree contains singleton nodes
-2: In checkTree(object) :
-  tree is reticulated:tree contains singleton nodes
+1: In checkTree(object) : tree contains singleton nodes
+2: In checkTree(object) : tree contains singleton nodes
 > ## error message comes from ape, not phylo? -- AND
 > ##   error is about singles, not disconnected nodes
 > ## print(try(plot(tree), silent=TRUE ))  ## pdc couldn't get this to work, so temporarily commenting
@@ -202,4 +198,4 @@ attr(,"class")
 > 
 > proc.time()
    user  system elapsed 
-  1.680   0.064   1.733 
+  1.744   0.044   1.807 

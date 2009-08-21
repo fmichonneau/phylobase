@@ -83,8 +83,8 @@ character(0)
         mean         : 0.2116037 
         variance     : 0.01503145 
         distribution :
-   Min. 1st Qu.  Median 3rd Qu.    Max. 
-0.07552 0.10370 0.23040 0.27250 0.38530 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.07552 0.10370 0.23040 0.21160 0.27250 0.38530 
 
 Comparative data:
 
@@ -131,8 +131,8 @@ Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) :
         mean         : 0.1988313 
         variance     : 0.0167175 
         distribution :
-   Min. 1st Qu.  Median 3rd Qu.    Max. 
-0.04857 0.07552 0.20610 0.28460 0.38530 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.04857 0.07552 0.20610 0.19880 0.28460 0.38530 
 
 Comparative data:
 
@@ -334,4 +334,4 @@ phyl4d> exGeo5 <- phylo4d(geoTree, all.data = rAllData)
 > 
 > proc.time()
    user  system elapsed 
-  3.464   0.076   3.520 
+  3.396   0.064   3.490 

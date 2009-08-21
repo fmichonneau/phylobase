@@ -11,7 +11,7 @@ checkPhylo4 <- function(object) {
 }
 
 checkTree <- function(object,
-                      warn=c("retic","singleton","multroot"),
+                      warn=c("retic","singleton","multiroot"),
                       err=NULL) {
 
     ## case of empty phylo4 object
@@ -43,7 +43,7 @@ checkTree <- function(object,
     if(length(object@tip.label) != ntips)
       return("number of tip labels not consistent with number of tips")
     E <- edges(object)
-    tips <- sort(E[,2][!E[,2] %in% E[,1]])
+    tips <- unique(sort(E[,2][!E[,2] %in% E[,1]]))
     nodes <- unique(sort(c(E)))
     intnodes <- nodes[!nodes %in% tips]
     roots <- E[which(is.na(E[,1])),2]
@@ -150,9 +150,9 @@ checkTree <- function(object,
 
     if (nRoots>1) {
         currmsg <- "tree has more than one root"
-        if ("multroot" %in% err)
+        if ("multiroot" %in% err)
           return(currmsg)
-        if ("multroot" %in% warn)
+        if ("multiroot" %in% warn)
           msg <- c(msg,currmsg)
       }
     if (any(nDesc==1)) {
