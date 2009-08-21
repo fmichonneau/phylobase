@@ -98,13 +98,7 @@ nodeLabels(p4) <- as.character(sort(nodeId(p4)))
 p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat, match.data=FALSE))
 
 ## examples of merge.data
-data(geospiza)
-trGeo <- extractTree(geospiza)
-tDt <- data.frame(a=rnorm(nTips(trGeo)), row.names=nodeId(trGeo, "tip"))
-nDt <- data.frame(a=rnorm(nNodes(trGeo)), row.names=nodeId(trGeo, "internal"))
 
-(matchData1 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=FALSE))
-(matchData2 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=TRUE))
 
 }
 \keyword{misc}

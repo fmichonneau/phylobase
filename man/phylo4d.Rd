@@ -42,7 +42,7 @@
   tip and node labels?}
   \item{merge.data}{if both \code{tip.data} and \code{node.data} are
     provided, it determines if they should be merged as a single
-    trait. This argument is evaluated only if both \code{tip.data} and
+    trait (if TRUE). This argument is evaluated only if both \code{tip.data} and
     \code{node.data} have identical column names.}
   \item{check.node.labels}{if \code{x} is of class \code{phylo}, use
     either "keep" (the default) to retain internal node labels, "drop"
@@ -118,23 +118,29 @@ rNodeData <- data.frame(randomTrait = rnorm(nNodes(geoTree)),
 
 exGeo2 <- phylo4d(geoTree, tip.data = geoData, node.data = rNodeData)
 
-### Example using 'merge.tip.node'
-## some random tip data
-rTipData <- data.frame(randomTrait = rnorm(nTips(geoTree)),
-                       row.names = labels(geoTree))
+### Example using 'merge.data'
+data(geospiza)
+trGeo <- extractTree(geospiza)
+tDt <- data.frame(a=rnorm(nTips(trGeo)), row.names=nodeId(trGeo, "tip"))
+nDt <- data.frame(a=rnorm(nNodes(trGeo)), row.names=nodeId(trGeo, "internal"))
 
-(exGeo3 <- phylo4d(geoTree, tip.data = rTipData, node.data = rNodeData))
-(exGeo4 <- phylo4d(geoTree, tip.data = rTipData, node.data = rNodeData,
-                    merge.data = FALSE))
+(matchData1 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=FALSE))
+(matchData2 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=TRUE))
 
-                    ### Example with 'all.data'x
+## Example with 'all.data'
 nodeLabels(geoTree) <- as.character(nodeId(geoTree))
 rAllData <- data.frame(randomTrait = rnorm(nTips(geoTree) + nNodes(geoTree)),
 row.names = labels(geoTree, 'all'))
 
-
 exGeo5 <- phylo4d(geoTree, all.data = rAllData)
 
+## Examples using 'rownamesAsLabels' and comparing with match.data=FALSE
+tDt <- data.frame(x=letters[1:nTips(trGeo)],
+                  row.names=sample(nodeId(trGeo, "tip")))
+tipLabels(trGeo) <- as.character(sample(1:nTips(trGeo)))
+(exGeo6 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=TRUE))
+(exGeo7 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE))
+(exGeo8 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE, match.data=FALSE))
 
 }
 \keyword{misc}
