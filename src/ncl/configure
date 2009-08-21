@@ -20562,10 +20562,12 @@ echo "$as_me: *** NOTE: debugging is enabled; optimization is suppressed!" >&6;}
 			CXXFLAGS_OPTIM_SIZE="-Os -ffast-math"
 			CXXFLAGS_USE_FPIC="-fPIC" ## T Jombart/phylobase hack 
 		fi
-		case "$build_os" in
-			darwin*) CXXFLAGS_WARNINGS="$CXXFLAGS_WARNINGS -Wno-long-double";;
-			*);;
-		esac
+		# The following lines (case statement) have been commented 
+		# out in an attempted fix for R-Forge build pdc 
+        # case "$build_os" in
+        #   darwin*) CXXFLAGS_WARNINGS="$CXXFLAGS_WARNINGS -Wno-long-double";;
+        #   *);;
+        # esac
 	fi
 	if test "x$CXXFLAGS_OPTIM_SIZE" = "x"; then
 		CXXFLAGS_OPTIM_SIZE=$CXXFLAGS_OPTIM_SPEED
