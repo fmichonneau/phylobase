@@ -4,14 +4,12 @@
 setClass("phylo4d",
          representation(tip.data="data.frame",
                         node.data="data.frame"),
-         ##                        edgedata="data.frame"),
+
          prototype = list( tip.data = data.frame(NULL),
            node.data = data.frame(NULL) ),
-         ##all.data = data.frame(NULL) ),
+
          validity = function(object) {
-             ## FIXME: finish this by intercepting FALSE, char string, etc.
-             check1 <- checkData(object)
-             check2 <- checkPhylo4(object)
+             checkPhylo4(object)
          },
          contains="phylo4")
 
