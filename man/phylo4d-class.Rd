@@ -43,13 +43,16 @@ nodes}
   }
 }
 \usage{
-    \S4method{print}{phylo4d}(x, printall=TRUE)
+    \S4method{print}{phylo4d}(x, edgeOrder = c("pretty", "real"), printall=TRUE)
     \S4method{summary}{phylo4d}(object)
     \S4method{names}{phylo4d}(x)
   }
   \arguments{
     \item{x}{a phylo4d object}
     \item{object}{a phylo4d object}
+    \item{edgeOrder}{Character string indicating whether the edges should be printed
+      as ordered in the tree "real" (e.g. preoder or postorder), or "pretty" printed 
+      with tips collated together}
     \item{printall}{If TRUE all tip labels are printed}
   }
   \value{
