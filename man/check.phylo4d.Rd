@@ -1,6 +1,7 @@
 \name{checkPhylo4d}
 \alias{formatData}
 \alias{addData}
+\alias{addData,phylo4-method}
 \alias{addData,phylo4d-method}
 \title{Data addition and validity checking for phylo4d objects}
 \description{
@@ -19,10 +20,11 @@ formatData(phy, dt, type=c("tip", "internal", "all"),
                        label.column=1, missing.data=c("fail", "warn", "OK"),
                        extra.data=c("warn", "OK", "fail"),
                        rownamesAsLabels=FALSE)
-\S4method{addData}{phylo4d}(x, tip.data=NULL, node.data=NULL,
-                                         all.data=NULL, pos=c("after", "before"),
-                                         merge.data=TRUE, match.data=TRUE,
-                                         \dots)
+\S4method{addData}{phylo4}(x, tip.data=NULL, node.data=NULL, all.data=NULL, 
+                       pos=c("after", "before"), merge.data=TRUE, match.data=TRUE, \dots)
+\S4method{addData}{phylo4d}(x, tip.data=NULL, node.data=NULL, all.data=NULL, 
+                       pos=c("after", "before"), merge.data=TRUE, match.data=TRUE, \dots)
+
 }
 \arguments{
   \item{x}{A phylo4d object}
