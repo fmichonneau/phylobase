@@ -21,6 +21,9 @@ test.subset.phylo4 <- function() {
     checkEquals(phy, subset(phy, seq_len(nTips(phy))))
     checkEquals(phy, phy[tipLabels(phy)])
     checkEquals(phy, phy[seq_len(nTips(phy))])
+    checkException(subset(phy,"spA"))
+    checkException(subset(phy,c("spA","spZ")))
+    checkException(subset(phy,c("spZ")))
 }
 
 test.subset.phylo4d <- function() {
@@ -30,9 +33,8 @@ test.subset.phylo4d <- function() {
     print(subset(phyd, 1:2))
     # check variants that should all return the original object
     checkEquals(phyd, subset(phyd))
-## TODO: These should ideally work. Bug #586
-#    checkEquals(phyd, subset(phyd, tipLabels(phyd)))
-#    checkEquals(phyd, subset(phyd, seq_len(nTips(phyd))))
+    checkEquals(phyd, subset(phyd, tipLabels(phyd)))
+    checkEquals(phyd, subset(phyd, seq_len(nTips(phyd))))
     checkEquals(phyd, phyd[tipLabels(phyd)])
     checkEquals(phyd, phyd[seq_len(nTips(phyd))])
 }

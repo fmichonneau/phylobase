@@ -6,33 +6,60 @@ setGeneric("subset")
 setMethod("subset", "phylo4",
           function(x,tips.include=NULL,tips.exclude=NULL,
                    mrca=NULL,node.subtree=NULL,...) {
-              ##  FIXME: could do eliminate NULL and make the test
+              ##  FIXME: could eliminate NULL and make the test
               ## if (!missing) rather than if (!is.null)
-              if (!is.null(tips.include)) {
-                  if (is.numeric(tips.include)) {
-                      tips.include <- x@tip.label[tips.include]
-                  }
-                  return(prune(x,x@tip.label[!(x@tip.label %in% tips.include)]))
+            ## (might have to change next line?)
+            if (sum(!sapply(list(tips.include,tips.exclude,
+                                 mrca,node.subtree),is.null))>1) {
+              stop("must specify at most one criterion for subsetting")
+            }
+            arglist <- list(...)
+            if (length(arglist)>0) {
+              warning("unused arguments: ",
+                      paste(names(arglist),collapse=","))
+            }
+            kept <- x@tip.label
+            dropped <- character(0)
+            if (!is.null(tips.include)) {
+              if (is.numeric(tips.include)) {
+                tips.include <- x@tip.label[tips.include]
               }
-              
-              if (!is.null(tips.exclude)) {
-                  return(prune(x,tips.exclude))
+              unknown <- setdiff(tips.include,x@tip.label)
+              if (length(unknown)>0) {
+                warning("unknown tip labels ignored:",
+                        paste(unknown,collapse=", "))
+                tips.include <- intersect(tips.include,x@tip.label)
               }
-              
-              if (!is.null(node.subtree)) {
-                  return(prune(x,x@tip.label[!(x@tip.label %in% names(descendants(x,node.subtree)))]))
+              kept <- tips.include
+              dropped <- setdiff(x@tip.label,tips.include)
+            }
+            if (!is.null(tips.exclude)) {
+              if (is.numeric(tips.exclude)) {
+                tips.exclude <- x@tip.label[tips.exclude]
               }
-              
-              if (!is.null(mrca)) {
-                  mnode <- MRCA(x,mrca)
-                  return(prune(x,x@tip.label[!(x@tip.label %in% names(descendants(x,mnode)))]))
+              unknown <- setdiff(tips.exclude,x@tip.label)
+              if (length(unknown)>0) {
+                warning("unknown tip labels ignored:",
+                        paste(unknown,collapse=", "))
+                tips.exclude <- intersect(tips.exclude,x@tip.label)
               }
-              arglist <- list(...)
-              if (length(arglist)>0) {
-                  warning("unused arguments: ",
-                          paste(names(arglist),collapse=","))
-              }
-              return(x)
+              dropped <- tips.exclude
+              kept <- setdiff(x@tip.label,tips.exclude)
+            }
+            if (!is.null(node.subtree)) {
+              kept <- intersect(x@tip.label,names(descendants(x,node.subtree)))
+              dropped <- setdiff(x@tip.label,kept)
+            }
+            if (!is.null(mrca)) {
+              mnode <- MRCA(x,mrca)
+              kept <- intersect(x@tip.label,names(descendants(x,mnode)))
+              dropped <- setdiff(x@tip.label,kept)
+            }
+            if (length(kept)<2) {
+              stop("0 or 1 tips would remain after subsetting")
+            }
+            if (length(dropped)==0) return(x)
+            return(prune(x,dropped))
           })
 
 
