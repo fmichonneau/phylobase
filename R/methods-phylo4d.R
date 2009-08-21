@@ -15,7 +15,7 @@ setMethod("tdata", "phylo4d",
               return(x@tip.data)
           }
           tdata <- x@tip.data
-          data.names <- tipLabels(x)
+          data.names <- tipLabels(x)[match(names(tipLabels(x)), rownames(tdata))]
           if ( label.type ==  "row.names" ) {
               if (!any(duplicated(data.names)) &&
                   !any(is.na(data.names)) ) {
@@ -39,7 +39,7 @@ setMethod("tdata", "phylo4d",
           }
           tdata <- x@node.data
           if(hasNodeLabels(x))
-              data.names <- nodeLabels(x)
+              data.names <- nodeLabels(x)[match(names(nodeLabels(x)), rownames(tdata))]
           else
               data.names <- nodeId(x, "internal")
 
@@ -65,7 +65,7 @@ setMethod("tdata", "phylo4d",
           ## node data
           if (all(dim(x@node.data) == 0)) { # empty data
               if (!hasNodeLabels(x)) {
-                  nodedata <- data.frame(label=x@node.label)
+                  nodedata <- data.frame(label=nodeId(x, "internal"))
               }
               else
                   nodedata <- data.frame(label=nodeLabels(x))
