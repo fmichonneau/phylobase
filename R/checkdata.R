@@ -10,7 +10,9 @@ checkPhylo4 <- function(object) {
     return(ct)
 }
 
-checkTree <- function(object,warn="retic",err=NULL) {
+checkTree <- function(object,
+                      warn=c("retic","singleton","multroot"),
+                      err=NULL) {
 
     ## case of empty phylo4 object
     if(nrow(object@edge) == 0 && length(object@edge.length) == 0 &&
@@ -64,16 +66,6 @@ checkTree <- function(object,warn="retic",err=NULL) {
       root.node <- unname(E[which(is.na(E[,1])),2])
       if (!root.node==nTips+1)
         return("root node must be first row of edge matrix")
-    }
-
-    ##fixme following check fails for unrooted trees
-    ##if (!all(nDesc[(nTips+1):(nTips+nNodes(object))]>0))
-    ##  return("nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
-    if (any(nDesc>2)) {
-        if ("poly" %in% err)
-          return("tree includes polytomies")
-        if ("poly" %in% warn)
-          warning("tree includes polytomies")
     }
 
     ##
@@ -144,23 +136,46 @@ checkTree <- function(object,warn="retic",err=NULL) {
     ## all done with fatal errors.  Now construct a list
     ##  of warnings and paste them together
     msg <- character(0)
-    if (nRoots>1)
-      msg <- "tree has more than one root"
-    ## BMB: should this be an error????
-    if (any(nAncest>1))
-      msg <- c(msg,"some nodes have multiple ancestors")
-    if (any(nDesc==1))
-      msg <- c("tree contains singleton nodes")
-    msg <- paste(msg,collapse=", ")
-    if (nzchar(msg)) {
-        if ("retic" %in% err)
-          return(paste("tree is reticulated:",msg))
-        if ("retic" %in% warn)
-          warning("tree is reticulated, most functions in phylobase haven't ",
-                  "been tested with reticulated trees: ", msg)
+
+    ##fixme following check fails for unrooted trees
+    ##if (!all(nDesc[(nTips+1):(nTips+nNodes(object))]>0))
+    ##  return("nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
+    if (any(nDesc>2)) {
+        currmsg <- "tree includes polytomies"
+        if ("poly" %in% err)
+          return(currmsg)
+        if ("poly" %in% warn)
+          msg <- c(msg,currmsg)
+      }
+
+    if (nRoots>1) {
+        currmsg <- "tree has more than one root"
+        if ("multroot" %in% err)
+          return(currmsg)
+        if ("multroot" %in% warn)
+          msg <- c(msg,currmsg)
+      }
+    if (any(nDesc==1)) {
+        currmsg <- "tree contains singleton nodes"
+          if ("singleton" %in% err)
+            return(currmsg)
+          if ("singleton" %in% warn)
+            msg <- c(msg,currmsg)
+      }
+    if (any(nAncest>1)) {
+      currmsg <- paste("tree is reticulated [most functions in phylobase haven't",
+                       "been tested with reticulated trees]")
+      if ("retic" %in% err)
+        return(currmsg)
+      if ("retic" %in% warn)
+        msg <- c(msg,currmsg)
+    }
+    if (length(msg)>0) {
+      msg <- paste(msg,collapse=", ")
+      warning(msg)
     }
     return(TRUE)
-}
+  }
 
 checkPhylo4Data <- function(phy) {
 
