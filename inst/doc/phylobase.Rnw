@@ -239,9 +239,13 @@ subset(g2, mrca=c("scandens", "fortis"))
 
 One could drop the clade by  doing
 <<geodrop,results=hide>>=
+try(
 subset(g2, tips.exclude=c("fuliginosa", "fortis", "magnirostris",
             "conirostris", "scandens"))
+    , silent=TRUE)
+try(
 subset(g2, tips.exclude=names(descendants(g2 ,MRCA(g2, c("difficilis", "fortis")))))
+    , silent=TRUE)
 @
 
 % This isn't implemented yet
