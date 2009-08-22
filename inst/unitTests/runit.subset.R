@@ -37,6 +37,13 @@ test.subset.phylo4d <- function() {
     checkEquals(phyd, subset(phyd, seq_len(nTips(phyd))))
     checkEquals(phyd, phyd[tipLabels(phyd)])
     checkEquals(phyd, phyd[seq_len(nTips(phyd))])
+    set.seed(1)
+    z1 = rcoal(5)
+    zdat = data.frame(1:4)
+    rownames(zdat) <- paste("t",1:4,sep="")
+    z2 = phylo4d(z1,zdat,missing="OK")
+    subset(z2,tips.exclude="t1")
+    subset(z2,tips.include=c("t4","t5"))
 }
 
 test.extractTree <- function() {
