@@ -292,7 +292,7 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
         dt <- dt[!is.na(ndDt) ,, drop=FALSE]
         rownames(dt) <- ndDt[!is.na(ndDt)]
         if(label.type == "column") dt <- dt[, -label.column]
-        tmpDt <- dt[match(rownames(tmpDt), rownames(dt)) ,, drop=FALSE]
+        tmpDt[,] <- dt[match(rownames(tmpDt), rownames(dt)) ,, drop=FALSE]
     }
     else {
         ## Remove rownames in data provided
