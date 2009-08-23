@@ -27,7 +27,7 @@ readNexus(file, simplify=TRUE, type=c("all","tree","data"), char.all=FALSE,
 }
 \details{
   The options for \code{check.node.labels} can take the values:
-  \itemize{
+  \describe{
      \item{keep}{the node labels of the Nexus file will be passed as node labels in the phylo4 object}
      \item{drop}{the node labels of the Nexus file will be ignored in the phylo4 object}
      \item{asdata}{the node labels will passed to the phylo4 object as data.}
@@ -41,10 +41,9 @@ readNexus(file, simplify=TRUE, type=c("all","tree","data"), char.all=FALSE,
 \seealso{the \linkS4class{phylo4d} class, the \linkS4class{phylo4} class}
 \author{Brian O'Meara, Derrick Zwickl}
 \note{
-  This relies on Version 2.0 of the Nexus Class Library by Paul Lewis and Mark Holder.
-  Tree reading is done initially using a function from APE; this function can be 
-  confused if the tree name has the word (\dQuote{tree}) in it. Also note that edge
-  and node labels (except for terminal nodes) are NOT yet loaded into the \code{phylo4}
-  object.
+  This relies on Version 2.0 of the Nexus Class Library by Paul Lewis and Mark Holder. Tree reading
+  is done initially using the \code{APE} function \link[ape]{read.nexus}; this function can be
+  confused if the tree name has the word (\dQuote{tree}) in it. Also note that edge and node labels
+  (except for terminal nodes) are NOT yet loaded into the \code{phylo4} object.
 }
 \keyword{misc}
