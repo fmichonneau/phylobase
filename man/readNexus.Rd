@@ -1,20 +1,20 @@
 \name{readNexus}
 \docType{methods}
 \alias{readNexus}
-\title{Parse a Nexus file for one or more tree(s) and/or tip data}
+\title{Create a phylo4 or a phylo4d object from a Nexus file}
 \description{
-  \code{readNexus} reads a Nexus file and outputs a \code{data.frame}, \code{phylo4}, or \code{phylo4d} object.
+  \code{readNexus} reads a Nexus file and outputs a \code{phylo4} or \code{phylo4d} object.
 }
 \section{Methods}{
   \describe{
-\item{x = "readNexus"}{creates a \code{data.frame}, \code{phylo4}, or \code{phylo4d} object from a Nexus file}
-
+	\item{x = "readNexus"}{creates a \linkS4class{phylo4} or \linkS4class{phylo4d} object from a Nexus file}
    }
  }
  \usage{
-readNexus(file, simplify=TRUE, type=c("all","tree","data"), char.all=FALSE,
- polymorphic.convert=TRUE, levels.uniform=TRUE, check.node.labels=c("keep", "drop", "asdata"))
-}
+	readNexus(file, simplify=TRUE, type=c("all","tree","data"),
+		   char.all=FALSE, polymorphic.convert=TRUE, levels.uniform=TRUE,
+                   check.node.labels=c("keep", "drop", "asdata"))
+ }
 \arguments{
   \item{file}{a Nexus file}
   \item{simplify}{If FALSE, returns a list. If TRUE, returns a list if there are multiple trees, a single object otherwise}
@@ -36,14 +36,18 @@ readNexus(file, simplify=TRUE, type=c("all","tree","data"), char.all=FALSE,
  issued and by default \code{check.node.labels} takes the value \code{drop}.
 }
 \value{
-  A \linkS4class{phylo4} tree, \linkS4class{phylo4d} object, or a list of trees if simplify=FALSE or there is more than one tree, or a data.frame.
+  A \linkS4class{phylo4} object if there is no data in the Nexus file
+  and if the option \code{check.node.labels} is \dQuote{keep} or
+  \dQuote{drop}, or a \linkS4class{phylo4d} object otherwise.
+  If several trees are included in the Nexus file and the option
+  \code{simplify=FALSE} a list of \linkS4class{phylo4} or
+  \linkS4class{phylo4d} objects is returned.
 }
 \seealso{the \linkS4class{phylo4d} class, the \linkS4class{phylo4} class}
 \author{Brian O'Meara, Derrick Zwickl}
 \note{
   This relies on Version 2.0 of the Nexus Class Library by Paul Lewis and Mark Holder. Tree reading
-  is done initially using the \code{APE} function \link[ape]{read.nexus}; this function can be
-  confused if the tree name has the word (\dQuote{tree}) in it. Also note that edge and node labels
-  (except for terminal nodes) are NOT yet loaded into the \code{phylo4} object.
+  is done initially using internal \code{APE} functions; these functions can be
+  confused if tree names include the word (\dQuote{tree}) in them. 
 }
 \keyword{misc}
