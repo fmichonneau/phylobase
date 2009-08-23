@@ -19,7 +19,7 @@ readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
     ##                     constructor
 
     type <- match.arg(type)
-    check.node.label <- match.arg(check.node.labels)
+    check.node.labels <- match.arg(check.node.labels)
 
     output <- c("Failure")
     if (type == "all" || type == "data") {

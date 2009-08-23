@@ -207,7 +207,7 @@ setMethod("phylo4d", c("phylo"),
         x$node.label <- NULL
         nlab.data[!nzchar(nlab.data)] <- NA
 
-        nlab.data <- data.frame(labelValues=as.numeric(nlab.data))
+        nlab.data <- data.frame(labelValues=as.numeric(nlab.data))        
 
         tree <- phylo4(x, check.node.labels="drop")
         res <- phylo4d(tree, tip.data, node.data, all.data, ...)

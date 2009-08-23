@@ -312,7 +312,7 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
                    warn = warning(msg),
                    fail = stop(msg))
         }
-        tmpDt <- dt[1:min(nrow(dt), nr) ,, drop = FALSE]
+        tmpDt[,] <- dt[1:min(nrow(dt), nr) ,, drop = FALSE]
     }
 
     tmpDt
