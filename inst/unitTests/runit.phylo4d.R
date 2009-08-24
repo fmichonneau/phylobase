@@ -27,8 +27,8 @@ test.Phylo4d.bruteforce <- function() {
 
     ## brute force: no matching; with all.data
     zz <- phylo4d(tr, all.data=aDt, match.data=FALSE)
-    checkEquals(zz@tip.data[,1], aDt[nodeId(tr, "tip"),1])
-    checkEquals(zz@node.data[,1], aDt[nodeId(tr, "internal"),1])
+    checkEquals(zz@tip.data[,1], aDt[1:nTips(tr),1])
+    checkEquals(zz@node.data[,1], aDt[(nTips(tr)+1):(nTips(tr)+nNodes(tr)),1])
     checkEquals(tdata(zz, "all")[,1], aDt[,1])
 
     ## brute force: no matching; with tip & node data
