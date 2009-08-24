@@ -60,7 +60,7 @@ readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
                                 "check.node.labels because there are no ",
                                 "labels associated with the tree ", i)
                         check.node.labels <- "drop"
-                    }                  
+                    }
                     trees[[i]] <- phylo4d(intreesphylolist[[i]],
                                           check.node.labels=check.node.labels)
                 }

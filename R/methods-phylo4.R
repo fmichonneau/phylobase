@@ -210,13 +210,6 @@ setMethod("labels", "phylo4", function(object, type = c("tip",
     switch(type,
            tip = object@tip.label[as.character(nodeId(object, "tip"))],
            internal =  object@node.label,
-##                 if (hasNodeLabels(object)) {
-##                     object@node.label
-##                 }
-##                 else
-##                 {
-##                     ## FIXME? should this return object@node.label
-##                     return(character(0))
            allnode = c(object@tip.label, object@node.label)
            )
 })
