@@ -34,7 +34,7 @@ The \code{reorder} method takes \code{phylo4} or \code{phylo4d} tree and orders 
 A method is also defined that takes an \code{ape phylo} object.  This also takes an order argument, however, 'pruningwise' and 'cladewise' are the only acceptable parameters.  This is because this method actually uses the \code{ape reorder()} command to complete the ordering.  
 }
 \value{
-A \code{phylo4} or \code{phylo4d} object with the edge, label, lenght and data slots ordered as \code{order}.
+A \code{phylo4} or \code{phylo4d} object with the edge, label, length and data slots ordered as \code{order}.
 }
 \author{Peter Cowan}
 \note{

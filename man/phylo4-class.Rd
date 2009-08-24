@@ -47,7 +47,7 @@ nodes}
     \item{x}{a phylo4 object}
     \item{object}{a phylo4 object}
     \item{edgeOrder}{Character string indicating whether the edges should be printed
-      as ordered in the tree "real" (e.g. preoder or postorder), or "pretty" printed 
+      as ordered in the tree "real" (e.g. preorder or postorder), or "pretty" printed 
       with tips collated together}
     \item{printall}{If TRUE all tip labels are printed}
     \item{quiet}{a logical stating whether the results of the summary

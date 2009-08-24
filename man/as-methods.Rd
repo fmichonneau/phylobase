@@ -45,7 +45,7 @@
   (\code{phylo4} or \code{phylo4d}), and objects used by other
   comparative methods packages in R:  \code{ape} objects (\code{phylo},
   \code{multiPhylo}), \code{ade4} objects (\code{phylog}), and to
-  \code{data.frame} respresentation.
+  \code{data.frame} representation.
 }
 
 \section{Methods}{
@@ -128,7 +128,7 @@ tree.owls <- read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua
 tree_in_phylo <- tree.owls                  # tree is a phylo object
 (tree_in_phylo4 <- as(tree.owls,"phylo4"))  # phylo converted to phylo4
 identical(tree_in_phylo,as(tree_in_phylo4,"phylo"))
-## test if phylo, and phlyo4 converted to phylo are identical
+## test if phylo, and phylo4 converted to phylo are identical
 ## (no, because of dimnames)
 
 ## Conversion to phylog (ade4)
