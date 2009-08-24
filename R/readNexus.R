@@ -4,7 +4,8 @@ readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
                        check.node.labels=c("keep", "drop", "asdata")) {
 
     ## file = input nexus file
-    ## simplify =
+    ## simplify = if TRUE only keeps the first tree, if several trees are found in
+    ##            the Nexus file
     ## type = specify whether to return trees+data as phylo4d object ("all") if
     ##        both are found, returning a data.frame or phylo4 object if only one
     ##        is found, "tree": return a phylo4 object only, regardless of
@@ -59,13 +60,13 @@ readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
                                 "check.node.labels because there are no ",
                                 "labels associated with the tree ", i)
                         check.node.labels <- "drop"
-                    }
+                    }                  
                     trees[[i]] <- phylo4d(intreesphylolist[[i]],
                                           check.node.labels=check.node.labels)
                 }
                 else {
                     trees[[i]] <- phylo4(intreesphylolist[[i]],
-                                         check.node.labels="keep")
+                                         check.node.labels=check.node.labels)
                 }
             }
         }
