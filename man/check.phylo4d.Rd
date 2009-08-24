@@ -1,64 +1,76 @@
-\name{checkPhylo4d}
+\name{formatData}
 \alias{formatData}
 
-\alias{checkPhylo4Data}
-\title{Data addition and validity checking for phylo4d objects}
+\title{Formatting data before attaching them to a phylo4 object}
+
 \description{
   Basic checks on the validity of S4 phylogenetic plus data objects
   (i.e. \linkS4class{phylo4d} objects).
 }
-\section{Methods}{
-  \describe{
-	\item{formatData}{\code{signature(phy="phylo4d")}} 
-	\item{checkPhylo4Data}{\code{signature(phy="phylo4d")}}
-  }
-  }
 
-  \usage{
-formatData(phy, dt, type=c("tip", "internal", "all"),
-                       match.data=TRUE, rownamesAsLabels=FALSE,
-		       label.type=c("rownames", "column"),
-                       label.column=1, missing.data=c("fail", "warn", "OK"),
-                       extra.data=c("warn", "OK", "fail"))
-checkPhylo4Data(phy)
-                       
-
+\usage{
+  formatData(phy, dt, type=c("tip", "internal", "all"),
+              match.data=TRUE, rownamesAsLabels=FALSE,
+              label.type=c("rownames", "column"),
+              label.column=1, missing.data=c("fail", "warn", "OK"),
+              extra.data=c("warn", "OK", "fail"))                       
 }
+
 \arguments{
-  \item{phy}{A phylo4 object}
-  \item{dt}{a data frame or matrix}
+  \item{phy}{a valid \code{phylo4} object}
+  \item{dt}{a data frame or a vector}
   \item{type}{type of data to attach}
-  \item{match.data}{(logical) check data labels against tree labels?}
-  \item{label.type}{character, "rownames" or "column": should
+  \item{match.data}{(logical) Are data labels matched against tree
+    labels?} 
+  \item{label.type}{character, \code{rownames} or \code{column}: should
     the labels be taken from the row names of \code{dt} or from
     the \code{label.column} column of \code{dt}?}
   \item{label.column}{if \code{label.type=="column"}, column specifier
-  (number or name) of the column containing tip labels}
-  \item{missing.data}{action to take if there are missing data/labels don't match}
-  \item{extra.data}{action to take if there are extra data/labels don't match} 
-  \item{rownamesAsLabels}{(logical), in the case of number-like labels should the row
-  names of the data provided be considered as labels (TRUE) or node numbers (FALSE and default)}
+    (number or name) of the column containing tip labels}
+  \item{missing.data}{action to take if there are missing data or if
+    there are data labels that don't match}
+  \item{extra.data}{action to take if there are extra data or if there
+    are labels that don't match} 
+  \item{rownamesAsLabels}{(logical), in the case of number-like labels
+    should the row names of the data provided be considered as labels
+    (TRUE) or node numbers (FALSE and default)}
   
 }
+
 \value{
-By default, tip data names are used to attach the tip data to the tree, must be present, and must match the set of tree taxa exactly. By default node data names are not used to attach the data to the tree, and thus node data names are not required.
-
-
+  \code{formatData} returns a data frame having node numbers as row
+  names. The data frame is also formatted to have the correct dimension
+  given the \code{phylo4} object provided.
 }
+
 \details{
-  \code{formatData} is an internal function that should not be called by the user. It
-  formats properly the data provided by the 
-  user before being attached to a tree. The function (1) converts labels provided in the
-  data into node numbers, (2) makes sure that the data are appropriately matched against
-  tip or nodes, (3) checks for differences between data and tree, (4) creates a data frame
-  with the correct dimensions given a tree. \code{formatData} returns a data frame. 
+
+  \code{formatData} is an internal function that should not be called by
+  the user. It formats properly the data provided by the user before
+  being attached to a tree.
   
-  \code{checkPhylo4Data} checks the validity of a \code{phylo4d} object. It ensures that
-  (1) the data associated with the tree have the correct dimensions, (2) that the row
-  names for the data are correct.
+  By default, data names are used to attach tip data to the
+  tree. In this case data names must be present and must match the set
+  of tip or internal nodes exactly. The matching process can be done
+  either by using \code{phylo4} labels (i.e. tip or node) or by using
+  node numbers. It is possible to provide both at the same time by using
+  the option \code{rownamesAsLabels=FALSE}.
+  
+  \code{formatData} (1) converts labels provided in the data into node
+  numbers, (2) makes sure that the data are appropriately matched
+  against  tip or nodes, (3) checks for differences between data and
+  tree, (4) creates a data frame with the correct dimensions given a
+  tree.
+  
 }
-\seealso{the \code{\link{phylo4d}} constructor, the \linkS4class{phylo4d} class. See also the \code{\link{checkPhylo4}}, the \code{\link{phylo4}} constructor and the \linkS4class{phylo4} class. See \code{\link{coerce-methods}} for translation functions.}
-\author{Steven Kembel \email{skembel@berkeley.edu}}
+
+\seealso{the \code{\link{phylo4d}} constructor, the
+  \linkS4class{phylo4d} class. See also the \code{\link{checkPhylo4}},
+  the \code{\link{phylo4}} constructor and the \linkS4class{phylo4}
+  class. See \code{\link{coerce-methods}} for translation functions.}
+
+\author{Francois Michonneau}
+
 \examples{
 require(ape) ## for rcoal
 ## generate a tree and some data
