@@ -28,7 +28,10 @@
     \item{\code{tip.label}:}{Character vector of tip labels}
     % \item{\code{root.edge}:}{Integer: root edge (NA if none)}
     \item{\code{tip.data}:}{data frame for traits of tips}
-    \item{\code{order}:}{character: tree ordering (allowable values are listed in \code{phylo4_orderings}, currently "unknown", "preorder", "postorder" (="cladewise" in \code{ape})), ("pruningwise" and "cladewise" are allowed for compatibility with \code{ape})}
+    \item{\code{order}:}{character: tree ordering (allowable values are
+      listed in \code{phylo4_orderings}, currently "unknown", "preorder"
+      (="cladewise" in \code{ape}), and "postorder", with "cladewise"
+      and "pruningwise" also allowed for compatibility with \code{ape})}
   }
 }
 \section{Methods}{

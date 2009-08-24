@@ -30,9 +30,9 @@
   \item{node.label}{A character vector of internal node names. (Optional)}
   \item{edge.label}{A character vector of edge (branch) names. (Optional)}
   \item{order}{character: tree ordering (allowable values are
-      listed in \code{phylo4_ordering}, currently "unknown", "reorder"
-      (="pruningwise" in \code{ape}), "postorder" (="cladewise" in
-      \code{ape}))}
+      listed in \code{phylo4_orderings}, currently "unknown", "preorder"
+      (="cladewise" in \code{ape}), and "postorder", with "cladewise"
+      and "pruningwise" also allowed for compatibility with \code{ape})}
   \item{check.node.labels}{if \code{x} is of class \code{phylo}, either
     "keep" (the default) or "drop" node labels. This argument is useful
     if the \code{phylo} object has non-unique node labels.}
