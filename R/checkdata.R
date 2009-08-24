@@ -177,28 +177,28 @@ checkTree <- function(object,
     return(TRUE)
   }
 
-checkPhylo4Data <- function(phy) {
+checkPhylo4Data <- function(object) {
 
     ## These are just some basic tests to make sure that the user does not
     ## alter the object in a significant way
 
-    ntips <- nTips(phy)
-    nnodes <- nNodes(phy)
+    ntips <- nTips(object)
+    nnodes <- nNodes(object)
 
     ## Check dimensions
-    if (nrow(phy@tip.data) > 0 && nrow(phy@tip.data) != ntips)
+    if (nrow(object@tip.data) > 0 && nrow(object@tip.data) != ntips)
         stop("The number of tip data does not match the number ",
              "of tips in the tree")
-    if (nrow(phy@node.data) > 0 && nrow(phy@node.data) != nnodes)
+    if (nrow(object@node.data) > 0 && nrow(object@node.data) != nnodes)
         stop("The number of node data does not match the number ",
              "of internal nodes in the tree")
 
     ## Check rownames
-    if (nrow(phy@tip.data) > 0 &&
-       !all(rownames(phy@tip.data) %in% nodeId(phy, "tip")))
+    if (nrow(object@tip.data) > 0 &&
+       !all(rownames(object@tip.data) %in% nodeId(object, "tip")))
         stop("The row names of tip data do not match the tip numbers")
-    if (nrow(phy@node.data) > 0 &&
-        !all(rownames(phy@node.data) %in% nodeId(phy, "internal")))
+    if (nrow(object@node.data) > 0 &&
+        !all(rownames(object@node.data) %in% nodeId(object, "internal")))
         stop("The row names of node data do not match the node numbers")
 
     return(TRUE)
@@ -297,6 +297,10 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
     else {
         ## Remove rownames in data provided
         rownames(dt) <- NULL
+
+        ## Tips before internal nodes for all.data
+        if (type == "all")
+            rownames(tmpDt) <- 1:nr
 
         ## Check differences between dataset and tree
         diffNr <- nrow(dt) - nr

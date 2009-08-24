@@ -92,17 +92,10 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
             tmpData <- cbind(tmpData, tmpNodeData)
         }
 
-        if(match.data) {
-            tip.data <- tmpData[rownames(tmpData) %in% nodeId(x, "tip") ,,
-                                    drop = FALSE]
-            node.data <- tmpData[rownames(tmpData) %in% nodeId(x, "internal") ,,
-                                     drop = FALSE]
-        }
-        else {
-            tip.data <- tmpData[1:nTips(x) ,, drop=FALSE]
-            node.data <- tmpData[-(1:nTips(x)) ,, drop=FALSE]
-        }
-
+        tip.data <- tmpData[rownames(tmpData) %in% nodeId(x, "tip") ,,
+                            drop = FALSE]
+        node.data <- tmpData[rownames(tmpData) %in% nodeId(x, "internal") ,,
+                             drop = FALSE]
     }
 
     else {
@@ -207,7 +200,7 @@ setMethod("phylo4d", c("phylo"),
         x$node.label <- NULL
         nlab.data[!nzchar(nlab.data)] <- NA
 
-        nlab.data <- data.frame(labelValues=as.numeric(nlab.data))        
+        nlab.data <- data.frame(labelValues=as.numeric(nlab.data))
 
         tree <- phylo4(x, check.node.labels="drop")
         res <- phylo4d(tree, tip.data, node.data, all.data, ...)
