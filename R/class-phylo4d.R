@@ -161,6 +161,7 @@ setMethod("phylo4d", "phylo4",
     res@tip.label <- x@tip.label
     res@node.label <- x@node.label
     res@edge.label <- x@edge.label
+    res@order <- x@order
 
     ## taking care of the data
     tmpData <- .phylo4Data(x=x, tip.data=tip.data, node.data=node.data,

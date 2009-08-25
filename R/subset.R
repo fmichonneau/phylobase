@@ -121,6 +121,6 @@ setMethod("[","phylo4d",
 
 extractTree <- function(from) {
     phylo4(from@edge, edge.length = from@edge.length,
-           tip.label = from@tip.label,
-           node.label = from@node.label, edge.label = from@edge.label)
+           tip.label = from@tip.label, node.label = from@node.label,
+           edge.label = from@edge.label, order = from@order)
   }

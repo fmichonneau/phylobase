@@ -6,6 +6,11 @@
 tr <- read.tree(text="(((t1:0.2,(t2:0.1,t3:0.1):0.15):0.5,t4:0.7):0.2,t5:1):0.4;")
 tr.sub2 <- read.tree(text="(t2:0.95,t5:1);")
 tr.sub4 <- read.tree(text="(((t1:0.2,t2:0.25):0.5,t4:0.7):0.2,t5:1);")
+# Explicitly set order as 'cladewise', to match behavior of
+# ape::drop.tip in test comparisons below
+tr <- reorder(tr, "cladewise")
+tr.sub2 <- reorder(tr.sub2, "cladewise")
+tr.sub4 <- reorder(tr.sub4, "cladewise")
 
 test.subset.phylo <- function() {
     # subset 2 tips
@@ -29,7 +34,6 @@ test.subset.phylo <- function() {
 }
 
 test.subset.phylo4 <- function() {
-  DEACTIVATED("Broken?: subset changes phy order from 'unknown' to 'preorder'")
     phy <- phylo4(tr)
     phy.sub2 <- phylo4(tr.sub2)
     phy.sub4 <- phylo4(tr.sub4)
@@ -50,10 +54,10 @@ test.subset.phylo4 <- function() {
     checkEquals(phy, phy[tipLabels(phy)])
     checkEquals(phy, phy[seq_len(nTips(phy))])
     # error if only one valid tip requested
-    checkException(subset(phy, tip.include="t1"))
-    checkException(subset(phy, tip.include=c("t1", "t999")))
+    checkException(subset(phy, tips.include="t1"))
+    checkException(subset(phy, tips.include=c("t1", "t999")))
     # error if zero valid tips requested
-    checkException(subset(phy, tip.include="t999"))
+    checkException(subset(phy, tips.include="t999"))
     # error if more than one subset criteria are supplied
     checkException(subset(phyd, tips.include="t1", tips.exclude="t3"))
 }
