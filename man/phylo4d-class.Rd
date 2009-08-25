@@ -46,6 +46,10 @@
       listed in \code{phylo4_orderings}, currently "unknown", "preorder"
       (="cladewise" in \code{ape}), and "postorder", with "cladewise"
       and "pruningwise" also allowed for compatibility with \code{ape})}
+    \item{\code{annote}:}{annotation data for tree (currently
+      unstructured/unused by methods)}
+    \item{\code{metadata}:}{metadata for node/tip data (currently
+      unstructured/unused by methods)}
   }
 }
 \section{Methods}{

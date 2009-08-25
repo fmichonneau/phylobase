@@ -5,7 +5,8 @@ setClass("phylo4",
                         node.label = "character",
                         tip.label = "character",
                         edge.label = "character",
-                        order = "character"),
+                        order = "character",
+                        annote = "list"),
          prototype = list(
                         edge = matrix(nrow = 0, ncol = 2,
                             dimname = list(NULL, c("ancestor", "descendant"))),
@@ -14,7 +15,8 @@ setClass("phylo4",
                         tip.label = character(0),
                         node.label = character(0),
                         edge.label = character(0),
-                        order = "unknown"
+                        order = "unknown",
+                        annote = list()
                        ),
          validity = checkPhylo4)
 
@@ -104,7 +106,7 @@ phylo4_orderings <- c("unknown", "preorder", "postorder", "pruningwise", "cladew
 ## first arg is a matrix
 setMethod("phylo4", "matrix",
     function(x, edge.length = NULL, tip.label = NULL, node.label = NULL,
-             edge.label = NULL, order="unknown", ...) {
+             edge.label = NULL, order="unknown", annote = list(), ...) {
 
     ## edge
     edge <- x
@@ -143,6 +145,7 @@ setMethod("phylo4", "matrix",
     res@node.label <- node.label
     res@edge.label <- edge.label
     res@order <- order
+    res@annote <- annote
 
     ## checkPhylo4 will return a character string if object is
     ##  bad, otherwise TRUE
@@ -152,10 +155,11 @@ setMethod("phylo4", "matrix",
 
 ## first arg is a phylo
 setMethod("phylo4", c("phylo"), function(x, check.node.labels=c("keep",
-  "drop")){
+  "drop"), annote=list()){
 
   check.node.labels <- match.arg(check.node.labels)
   if (check.node.labels == "drop") x$node.label <- NULL
+  ## FIXME: annote is silently dropped here
   res <- as(x, "phylo4")
 
   return(res)

@@ -3,10 +3,12 @@
 ## extend: phylo with data
 setClass("phylo4d",
          representation(tip.data="data.frame",
-                        node.data="data.frame"),
+                        node.data="data.frame",
+                        metadata = "list"),
 
          prototype = list( tip.data = data.frame(NULL),
-           node.data = data.frame(NULL) ),
+           node.data = data.frame(NULL),
+           metadata = list()),
 
          validity = checkPhylo4,
          contains="phylo4")
@@ -24,7 +26,8 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
 
 ## Core part that takes care of the data
 .phylo4Data <- function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
-                        match.data=TRUE, merge.data=TRUE, rownamesAsLabels=FALSE,
+                        match.data=TRUE, merge.data=TRUE,
+                        rownamesAsLabels=FALSE,
                         ...) {
 
     ## Make sure that data provided are a data frame
@@ -151,6 +154,7 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
 setMethod("phylo4d", "phylo4",
           function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
                    match.data=TRUE, merge.data=TRUE, rownamesAsLabels=FALSE,
+                   metadata = list(),
                    ...) {
 
     ## Creating new phylo4d object
@@ -171,24 +175,26 @@ setMethod("phylo4d", "phylo4",
 
     res@tip.data <- tmpData$tip.data
     res@node.data <- tmpData$node.data
-
+    res@metadata <- metadata
     return(res)
 })
 
 
 ## first arg is a matrix of edges
 setMethod("phylo4d", c("matrix"),
-          function(x, tip.data=NULL, node.data=NULL, all.data=NULL, ...) {
+          function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
+                   metadata = list(), ...) {
     tree <- phylo4(x, ...)
-    res <- phylo4d(tree, tip.data, node.data, all.data, ...)
+    res <- phylo4d(tree, tip.data, node.data, all.data, metadata, ...)
     return(res)
 })
 
 ## first arg is a phylo
-setMethod("phylo4d", c("phylo"),
+setMethod("phylo4d", "phylo",
           function(x, tip.data=NULL,
                    node.data=NULL, all.data=NULL,
-                   check.node.labels=c("keep", "drop", "asdata"), ...) {
+                   check.node.labels=c("keep", "drop", "asdata"),
+                   annote=list(), metadata=list(), ...) {
 
     check.node.labels <- match.arg(check.node.labels)
 
@@ -208,8 +214,10 @@ setMethod("phylo4d", c("phylo"),
         res <- addData(res, node.data=nlab.data, pos="before", match.data=FALSE)
     }
     else {
-        tree <- phylo4(x, check.node.labels=check.node.labels)
-        res <- phylo4d(tree, tip.data, node.data, all.data, ...)
+        tree <- phylo4(x, check.node.labels=check.node.labels, annote=annote)
+        res <- phylo4d(tree, tip.data=tip.data, node.data=node.data,
+                       all.data=all.data,
+                       metadata=metadata, ...)
     }
 
     return(res)

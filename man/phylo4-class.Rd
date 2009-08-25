@@ -15,7 +15,7 @@
 \section{Objects from the Class}{
   Phylogenetic tree objects can be created by calls to the \code{\link{phylo4}} constructor function.
   Translation functions from other phylogenetic packages are also available. See \code{\link{coerce-methods}}.
-  }
+}
 \section{Slots}{
   \describe{
     \item{\code{edge}:}{matrix of edges}
@@ -24,10 +24,14 @@
     \item{\code{tip.label}:}{character vector of tip labels}
     \item{\code{root.edge}:}{integer: root edge (NA if none)}
     \item{\code{order}:}{character: tree ordering (allowable values are
-      listed in \code{phylo4_orderings}, currently "unknown", "preorder"
-      (="cladewise" in \code{ape}), and "postorder", with "cladewise"
-      and "pruningwise" also allowed for compatibility with \code{ape})} }
-  }
+      listed in \code{phylo4_orderings}, currently "unknown",
+      "preorder" (="cladewise" in \code{ape}), and "postorder",
+      with "pruningwise" and "cladewise" also allowed for compatibility with
+      \code{ape})}
+      \item{\code{annote}:}{annotation data for tree (currently
+      unstructured/unused by methods)}
+    }
+}
 \section{Methods}{
   \describe{
     \item{\$}{\code{signature(x = "phylo4")}: extract a slot}
