@@ -26,11 +26,11 @@ setAs("phylo", "phylo4", function(from, to) {
         }
     }
     oldorder <- attr(from,"order")
-    neworder <- if (is.null(oldorder)) { "unknown" } else {
-      switch(oldorder,
-             pruningwise="pruningwise",
-             cladewise="preorder")
-    }
+    neworder <- if (is.null(oldorder)) { "unknown" } else 
+    if (!oldorder %in% phylo4_orderings) {
+      stop("unknown ordering '",oldorder,"' in ape object")
+    } else if (oldorder=="cladewise") "preorder"
+    else oldorder
     attr(from,"order") <- NULL
     newobj <- phylo4(from$edge, from$edge.length, from$tip.label,
                      node.label = from$node.label,
@@ -113,9 +113,10 @@ setAs("phylo4", "phylo", function(from, to) {
                                    preorder  = 'cladewise',
                                    unknown = 'unknown',
                                    pruningwise = 'pruningwise')
-    } else {
-      ## warning ??
-    }
+      } else {
+        ## warning ??
+        warning("trees with unknown order may be unsafe in ape")
+      }
     if (length(y$edge.length) == 0)
         y$edge.length <- NULL
     if (length(y$node.label) == 0)
