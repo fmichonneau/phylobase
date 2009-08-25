@@ -8,6 +8,20 @@
 \alias{summary,phylo4d-method}
 \alias{phylo4d,phylo4d-method}
 \alias{names,phylo4d-method}
+\alias{hasNodeData}
+\alias{hasNodeData-methods}
+\alias{hasNodeData,phylo4d-method}
+\alias{hasTipData}
+\alias{hasTipData-methods}
+\alias{hasTipData,phylo4d-method}
+\alias{tdata}
+\alias{tdata<-}
+\alias{tdata-methods}
+\alias{tdata,phylo4d-method}
+\alias{tdata<-,phylo4d-method}
+\alias{addData}
+\alias{addData,phylo4-method}
+\alias{addData,phylo4d-method}
 \alias{[,phylo4d,ANY,ANY,ANY-method}
 \title{phylo4d class}
 \description{S4 class for phylogenetic tree and data.}
@@ -42,13 +56,20 @@
     \item{names}{\code{signature(x = "phylo4d")}: gives the slots names}
     \item{head}{\code{signature(object = "phylo4d")}: show first few
 nodes}
-    \item{tail}{\code{signature(object = "phylo4d")}: show last few nodes}
+    \item{tail}{\code{signature(object = "phylo4d")}: show last few
+nodes}
+ \item{hasNodeData}{\code{signature(object = "phylo4d")}: whether
+   tree has internal node data}
+ \item{hasTipData}{TODO}
   }
 }
 \usage{
     \S4method{print}{phylo4d}(x, edgeOrder = c("pretty", "real"), printall=TRUE)
     \S4method{summary}{phylo4d}(object)
     \S4method{names}{phylo4d}(x)
+\S4method{tdata}{phylo4d}(x, type=c("tip", "internal", "allnode"),
+label.type=c("row.names", "column"), empty.columns=TRUE, \dots)
+ \S4method{tdata}{phylo4d}(object, type = "tip", \dots) <- value
   }
   \arguments{
     \item{x}{a phylo4d object}
@@ -56,6 +77,11 @@ nodes}
     \item{edgeOrder}{Character string indicating whether the edges should be printed
       as ordered in the tree "real" (e.g. preorder or postorder), or "pretty" printed 
       with tips collated together}
+    \item{type}{TODO}
+    \item{label.type}{TODO}
+    \item{empty.columns}{TODO}
+    \item{\dots}{TODO}
+    \item{value}{TODO}
     \item{printall}{If TRUE all tip labels are printed}
   }
   \value{

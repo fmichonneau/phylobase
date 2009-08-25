@@ -289,6 +289,7 @@ setMethod("nodeLabels", "phylo4", function(object) {
 setReplaceMethod("nodeLabels", signature(object="phylo4", value="character"),
   function(object, ..., value) {
       labels(object, type="internal", ...) <- value
+      if(is.character(checkval <- checkPhylo4(object))) stop(checkval)
       object
   })
 
@@ -300,6 +301,7 @@ setMethod("tipLabels", "phylo4", function(object) {
 setReplaceMethod("tipLabels", signature(object="phylo4", value="character"),
   function(object, ...,  value) {
       labels(object, type="tip", ...) <- value
+      if(is.character(checkval <- checkPhylo4(object))) stop(checkval)
       return(object)
   })
 

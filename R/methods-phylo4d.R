@@ -217,6 +217,9 @@ setMethod("hasNodeData", "phylo4d", function(x) {
     nrow(x@node.data) > 0
 })
 
+setMethod("hasTipData", "phylo4d", function(x) {
+    nrow(x@tip.data) > 0
+})
 
 ## FIXME: doesn't deal with missing node data
 ##   (don't even know how that should be done in this case)

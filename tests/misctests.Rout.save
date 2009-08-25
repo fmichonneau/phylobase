@@ -401,6 +401,58 @@ phyl4d> (exGeo8 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE, match.da
 12    13   12       17     0.53409       tip    l
 13     3   13       16     0.58333       tip    m
 14     6   14       15     0.88077       tip    n
+
+phyl4d> require(ape) ## for rcoal
+
+phyl4d> ## generate a tree and some data
+phyl4d> set.seed(1)
+
+phyl4d> p3 <- rcoal(5)
+
+phyl4d> dat <- data.frame(a = rnorm(5), b = rnorm(5), row.names = p3$tip.label)
+
+phyl4d> dat.defaultnames <- dat
+
+phyl4d> row.names(dat.defaultnames) <- NULL
+
+phyl4d> dat.superset <- rbind(dat, rnorm(2))
+
+phyl4d> dat.subset <- dat[-1, ]
+
+phyl4d> ## create a phylo4 object from a phylo object
+phyl4d> p4 <- as(p3, "phylo4")
+
+phyl4d> ## create phylo4d objects with tip data
+phyl4d> p4d <- phylo4d(p4, dat)
+
+phyl4d> ###checkData(p4d)
+phyl4d> p4d.sorted <- phylo4d(p4, dat[5:1, ])
+
+phyl4d> try(p4d.nonames <- phylo4d(p4, dat.defaultnames))
+
+phyl4d> p4d.nonames <- phylo4d(p4, dat.defaultnames, match.data=FALSE)
+
+phyl4d> ## Not run: 
+phyl4d> ##D p4d.subset <- phylo4d(p4, dat.subset)
+phyl4d> ##D p4d.subset <- phylo4d(p4, dat.subset)
+phyl4d> ##D try(p4d.superset <- phylo4d(p4, dat.superset))
+phyl4d> ##D p4d.superset <- phylo4d(p4, dat.superset)
+phyl4d> ## End(Not run)
+phyl4d> 
+phyl4d> ## create phylo4d objects with node data
+phyl4d> nod.dat <- data.frame(a = rnorm(4), b = rnorm(4))
+
+phyl4d> p4d.nod <- phylo4d(p4, node.data = nod.dat, match.data=FALSE)
+
+phyl4d> ## create phylo4 objects with node and tip data
+phyl4d> p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat, match.data=FALSE)
+
+phyl4d> nodeLabels(p4) <- as.character(sort(nodeId(p4)))
+
+phyl4d> p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat, match.data=FALSE))
+Warning message:
+In switch(extra.data, warn = warning(msg), fail = stop(msg)) :
+  The following names are not found in the tree:  NA
 > obj1 <- obj2 <- obj3 <- phylo4d(z, data.frame(wing=1:4,color=factor(c("b","w","b","b")), tail=runif(4)*10), match.data=FALSE)
 > 
 > obj2@tip.data <- as.data.frame(obj2@tip.data[,1])
@@ -433,4 +485,4 @@ phyl4d> (exGeo8 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE, match.da
 > 
 > proc.time()
    user  system elapsed 
-  2.584   0.068   2.665 
+  2.708   0.096   2.950 

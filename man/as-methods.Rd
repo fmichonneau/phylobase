@@ -58,14 +58,14 @@
   additional information from the user. Conversions exist for
   combinations:
 
-  \describe{
+  \itemize{
   
     \item{}{\code{phylobase} to \code{phylobase} formats:}
     \itemize{   
-      \item{\code{as(object, "phylo4d")}}{where object is of class
+      \item{}{\code{as(object, "phylo4d")} where object is of class
 	\linkS4class{phylo4} and returns an object of class
-	\linkS4class{phylo4d}, with empty data.} 
-      \item{\code{as(object, "phylo4")}}{where object is of class
+	\linkS4class{phylo4d}, with empty data.}
+      \item{}{\code{as(object, "phylo4")} where object is of class
 	\linkS4class{phylo4d} and returns an object of class
 	\linkS4class{phylo4}. If data are dropped during the conversion, a
 	warning message is produced. A similar conversion can be done by
@@ -75,37 +75,37 @@
     
     \item{}{\code{phylobase} to \code{ape} formats:}
     \itemize{
-      \item{\code{as(object, "phylo")}}{where object is of class
+      \item{}{\code{as(object, "phylo")}}{where object is of class
 	\linkS4class{phylo4} or \linkS4class{phylo4d} and returns an
 	object of class \code{phylo}. If data are dropped during the
 	conversion from a \code{phylo4d} object, a warning message is
 	produced.}
-      \item{\code{as(object, "multiPhylo")}}{ ~~Not implemented
+      \item{}{\code{as(object, "multiPhylo")}}{ ~~Not implemented
 	yet. where object is of class \linkS4class{multiPhylo4} and returns
 	an object of class \code{multiPhylo}. }
     }
     
     \item{}{\code{ape} to \code{phylobase} formats:}
     \itemize{
-      \item{\code{as(object, "phylo4")}}{where object is of class
+      \item{}{\code{as(object, "phylo4")}}{where object is of class
 	\code{phylo} and returns an object of class \code{phylo4}.}
-      \item{\code{as(object, "phylo4d")}}{where object is of class
+      \item{}{\code{as(object, "phylo4d")}}{where object is of class
 	\code{phylo} and returns an object of class \code{phylo4d}, with
 	empty data.} 
-      \item{\code{as(object, "multiPhylo4")}}{ ~~Not implemented
+      \item{}{\code{as(object, "multiPhylo4")}}{ ~~Not implemented
 	yet. where object is of class \code{multiPhylo} and returns an
 	object of class \code{multiPhylo4}. } 
     }
     
     \item{}{\code{phylobase} to \code{ade4} formats:}
     \itemize{
-      \item{\code{as(object, "phylog")}}{where object is of class
+      \item{}{\code{as(object, "phylog")}}{where object is of class
 	\code{phylo4} and returns an object of class \linkS4class{phylog}.} 
     }
     
     \item{}{\code{phylobase} format to \code{data.frame}:}
     \itemize{
-      \item{\code{as(object, "data.frame")}}{where object is of class
+      \item{}{\code{as(object, "data.frame")}}{where object is of class
 	\code{phylo4} or \code{phylo4d} and returns an object of class
 	\code{data.frame}, with data included in the case of
 	\code{phylo4d}.} 

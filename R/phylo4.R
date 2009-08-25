@@ -118,6 +118,10 @@ setGeneric("hasNodeData", function(x) {
     standardGeneric("hasNodeData")
 })
 
+setGeneric("hasTipData", function(x) {
+    standardGeneric("hasTipData")
+})
+
 setGeneric("na.omit")
 
 setGeneric("reorder")

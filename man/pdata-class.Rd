@@ -17,22 +17,30 @@
 }
 \section{Slots}{
          \describe{
-           \item{\code{data}:}{A data frame of tip or node data.  Can be
-             accessed transparently with any of the data frame accessor methods}
-           \item{\code{type}:}{A factor with length equal to \code{ncol(data)}
-             and levels ("multitype","binary","continuous","DNA","RNA","aacid")}
-           \item{\code{comment}:}{A character vector of length \code{ncol(data)}}
-           \item{\code{metadata}:}{An arbitrary list, for storing other user-defined metadata}
+           \item{\code{data}:}{A data frame of tip or node data.  Can be 
+             accessed transparently with any of the data frame accessor
+	     methods} 
+           \item{\code{type}:}{A factor with length equal to
+	     \code{ncol(data)} and levels("multitype", "binary",
+	     "continuous", "DNA", "RNA", "aacid")} 
+           \item{\code{comment}:}{A character vector of length
+	     \code{ncol(data)}} 
+           \item{\code{metadata}:}{An arbitrary list, for storing other
+	     user-defined metadata} 
 }
 }
 \section{Methods}{
   \describe{
-    \item{[}{\code{signature(x = "pdata")}: access data rows, columns or elements}
-    \item{[<-}{\code{signature(x = "pdata")}: set data rows, columns or elements}
-    \item{[[<-}{\code{signature(x = "pdata")}: set data columns or elements}
-    \item{[[}{\code{signature(x = "pdata", i = "ANY", j = "ANY")}: access data columns or elements }
-    \item{[[}{\code{signature(x = "pdata", i = "ANY", j = "missing")}: set data columns
-    or elements }
+    \item{[}{\code{signature(x = "pdata")}: access data rows, columns or
+      elements} 
+    \item{[<-}{\code{signature(x = "pdata")}: set data rows, columns or
+      elements} 
+    \item{[[<-}{\code{signature(x = "pdata")}: set data columns or
+      elements} 
+    \item{[[}{\code{signature(x = "pdata", i = "ANY", j = "ANY")}:
+      access data columns or elements } 
+    \item{[[}{\code{signature(x = "pdata", i = "ANY", j = "missing")}:
+      set data columns or elements }
     }
 }
 \author{Ben Bolker}
