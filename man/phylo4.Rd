@@ -18,8 +18,8 @@
    }}
 \usage{
      \S4method{phylo4}{matrix}(x, edge.length = NULL, tip.label = NULL, node.label = NULL,
-        edge.label = NULL,  order="unknown", ...)
-     \S4method{phylo4}{phylo}(x, check.node.labels = c("keep", "drop"))
+        edge.label = NULL,  order="unknown", annote=list(), ...)
+     \S4method{phylo4}{phylo}(x, check.node.labels = c("keep", "drop"), annote=list())
 }
 \arguments{
   \item{x}{a matrix of edges or an object of class \code{phylo} (see
@@ -36,6 +36,7 @@
   \item{check.node.labels}{if \code{x} is of class \code{phylo}, either
     "keep" (the default) or "drop" node labels. This argument is useful
     if the \code{phylo} object has non-unique node labels.}
+  \item{annote}{any additional annotation data to be passed to the new object}
   \item{\dots}{Additional arguments} %TODO a more elaborate description would be useful
 }
 \details{

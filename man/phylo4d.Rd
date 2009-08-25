@@ -22,12 +22,14 @@
    }}
 
 \usage{
-     \S4method{phylo4d}{phylo4}(x, tip.data = NULL, node.data = NULL,
-        all.data = NULL, match.data = TRUE, merge.data = TRUE, rownamesAsLabels = FALSE, ...)
      \S4method{phylo4d}{phylo}(x, tip.data = NULL, node.data = NULL,
-        all.data = NULL, check.node.labels = c("keep", "drop", "asdata"), ...)
+        all.data = NULL, check.node.labels = c("keep", "drop", "asdata"), 
+        annote=list(), metadata=list(), ...)
+     \S4method{phylo4d}{phylo4}(x, tip.data = NULL, node.data = NULL,
+        all.data = NULL, match.data = TRUE, merge.data = TRUE, 
+        rownamesAsLabels = FALSE, metadata = list(), ...)
      \S4method{phylo4d}{matrix}(x, tip.data = NULL, node.data = NULL,
-        all.data = NULL, ...)
+        all.data = NULL, metadata = list(), ...)
 }
 
 \arguments{
@@ -53,6 +55,8 @@
   \item{rownamesAsLabels}{(logical), in the case of number-like labels 
     should the row names of the data provided be considered as labels 
     (TRUE) or node numbers (FALSE and default)}
+  \item{annote}{any additional annotation data to be passed to the new object}
+  \item{metadata}{any additional metadata to be passed to the new object}
   \item{\dots}{further arguments to be passed to other methods. Used to
     control the validity checking of the created object (see \code{\link{formatData}}).}
 }

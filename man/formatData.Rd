@@ -71,6 +71,4 @@
 
 \author{Francois Michonneau}
 
-\examples{
-}
 \keyword{misc}

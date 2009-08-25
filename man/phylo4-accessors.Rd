@@ -74,10 +74,10 @@
 % what a pain: see
 % https://stat.ethz.ch/pipermail/r-devel/2008-May/049653.html
 \S4method{nNodes}{phylo4}(x)
-\S4method{nTips}{phylo4}(x)
-\S4method{edges}{phylo4}(x, order, drop.root=FALSE)
+\S4method{nTips}{phylo4}(x, \dots)
+\S4method{edges}{phylo4}(x, order, drop.root=FALSE, \dots)
 \S4method{nEdges}{phylo4}(x)
-\S4method{edgeOrder}{phylo4}(x)
+\S4method{edgeOrder}{phylo4}(x, \dots)
 \S4method{hasEdgeLength}{phylo4}(x)
 \S4method{edgeLength}{phylo4}(x, node)
 \S4method{edgeLength}{phylo4}(x, use.names=TRUE) <- value
@@ -98,6 +98,7 @@
   \item{use.names}{Should the names of \code{value} be used to match
   edge lengths provided? }
   \item{drop.root}{logical: drop root row from edge matrix?}
+  \item{\dots}{additional parameters passed (currently ignored)}
 }
 
 \examples{

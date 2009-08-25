@@ -35,7 +35,7 @@
 
 \usage{
 
-\S4method{labels}{phylo4}(x, type=c("tip", "internal", "allnode"))
+\S4method{labels}{phylo4}(object, type=c("tip", "internal", "allnode"), \dots)
 \S4method{labels}{phylo4,ANY,ANY,character}(x, type=c("tip", "internal", "allnode"),
 use.names=FALSE) <- value
 
@@ -61,7 +61,7 @@ use.names=FALSE) <- value
     information.}
   \item{use.names}{should the names of the vector used to create/update
     labels be used to match the labels? See Details for more information.}
-  
+  \item{\dots}{additional parameter passed to the function (currently ignored)}
 }
 
 \details{
