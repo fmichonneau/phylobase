@@ -109,7 +109,6 @@ test.labelsTipsPhylo4d <- function() {
     tLbl <- sample(tLbl)
     nmTLbl <- sample(nmTLbl)
 
-    browser()
     ## case all options by default and unnamed vector
     p4dc <- p4d
     labels(p4dc) <- tLbl
