@@ -7,9 +7,11 @@ tr <- read.tree(text="(((spA:0.2,(spB:0.1,spC:0.1):0.15):0.5,spD:0.7):0.2,spE:1)
 phy <- as(tr, "phylo4")
 
 test.phylo.As.phylo4 <- function() {
+  checkIdentical(as(tr, "phylo4"), phylo4(tr))
 }
 
 test.phylo.As.phylo4d <- function() {
+  checkIdentical(as(tr, "phylo4d"), phylo4d(tr))
 }
 
 test.multiPhylo.As.multiPhylo4 <- function() {
@@ -19,6 +21,55 @@ test.multiPhylo4.As.multiPhylo <- function() {
 }
 
 test.phylo4.As.phylo <- function() {
+# note: checkEquals("phylo") uses all.equal.phylo()
+
+  # phylo tree in unknown order
+  phy <- as(tr, "phylo4")
+  checkEquals(as(phy, "phylo"), tr)
+  # ...now check for warning for unknown order
+  opt <- options(warn=3)
+  checkException(as(phy, "phylo"))
+  options(opt)
+
+  # phylo tree in cladewise order
+  tr.cladewise <- reorder(tr, "cladewise")
+  phy <- as(tr.cladewise, "phylo4")
+  checkEquals(as(phy, "phylo"), tr.cladewise)
+
+  # phylo tree in pruningwise order
+  tr.pruningwise <- reorder(tr, "pruningwise")
+  phy <- as(tr.pruningwise, "phylo4")
+  checkEquals(as(phy, "phylo"), tr.pruningwise)
+}
+
+# this coerce method is defined implicitly
+test.phylo4d.As.phylo <- function() {
+# note: checkEquals("phylo") uses all.equal.phylo()
+
+  # phylo tree in unknown order
+  phyd <- as(tr, "phylo4d")
+  tdata(phyd) <- data.frame(x=1:5, row.names=tipLabels(phyd))
+  checkEquals(as(phyd, "phylo"), tr)
+  # ...now check for warning for unknown order
+  opt <- options(warn=3)
+  checkException(as(phyd, "phylo"))
+  options(opt)
+
+  # phylo tree in cladewise order
+  tr.cladewise <- reorder(tr, "cladewise")
+  phyd <- as(tr.cladewise, "phylo4d")
+  tdata(phyd) <- data.frame(x=1:5, row.names=tipLabels(phyd))
+  checkEquals(as(phyd, "phylo"), tr.cladewise)
+  # ...now check for warning for dropping data
+  opt <- options(warn=3)
+  checkException(as(phyd, "phylo"))
+  options(opt)
+
+  # phylo tree in pruningwise order
+  tr.pruningwise <- reorder(tr, "pruningwise")
+  phyd <- as(tr.pruningwise, "phylo4d")
+  tdata(phyd) <- data.frame(x=1:5, row.names=tipLabels(phyd))
+  checkEquals(as(phyd, "phylo"), tr.pruningwise)
 }
 
 test.phylo4.As.phylog <- function() {

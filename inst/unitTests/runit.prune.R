@@ -12,12 +12,11 @@ test.DropTip <- function() {
 
 test.prune.phylo4 <- function() {
     # function(phy, tip, trim.internal = TRUE, subtree = FALSE, ...)
-    checkEquals(gtree, prune(gtree, character(0)))
+    checkIdentical(gtree, prune(gtree, character(0)))
 }
 
 test.prune.phylo4d <- function() {
     # function(phy, tip, trim.internal = TRUE, subtree = FALSE, ...)
-    ## checkEquals(geospiza, prune(geospiza, character(0))) ## FAILS??
     checkIdentical(geospiza, prune(geospiza, character(0)))
 }
 

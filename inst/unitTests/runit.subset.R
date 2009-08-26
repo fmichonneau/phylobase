@@ -99,7 +99,12 @@ test.subset.phylo4d <- function() {
 }
 
 test.extractTree <- function() {
-    phyd <- as(tr, "phylo4d")
-    phy <- as(tr, "phylo4")
-    checkEquals(phy, extractTree(phyd))
+    # extract phylo4 from itself
+    phy <- phylo4(tr, annote=list(x="annotation"))
+    checkIdentical(phy, extractTree(phy))
+
+    # extract phylo4 from phylo4d
+    phyd <- phylo4d(tr, tip.data= data.frame(x=1:5, row.names=tr$tip.label),
+      annote=list(x="annotation"), metadata=list(x="metadata"))
+    checkIdentical(phy, extractTree(phyd))
 }
