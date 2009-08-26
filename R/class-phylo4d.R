@@ -157,22 +157,14 @@ setMethod("phylo4d", "phylo4",
                    metadata = list(),
                    ...) {
 
-    ## Creating new phylo4d object
-    res <- new("phylo4d")
-    res@edge <- x@edge
-    res@edge.length <- x@edge.length
-    res@Nnode <- x@Nnode
-    res@tip.label <- x@tip.label
-    res@node.label <- x@node.label
-    res@edge.label <- x@edge.label
-    res@order <- x@order
-
-    ## taking care of the data
+    ## prepare the data
     tmpData <- .phylo4Data(x=x, tip.data=tip.data, node.data=node.data,
                            all.data=all.data, match.data=match.data,
                            merge.data=merge.data,
                            rownamesAsLabels=rownamesAsLabels, ...)
 
+    ## coerce to phylo4d and add data/metadata
+    res <- as(x, "phylo4d")
     res@tip.data <- tmpData$tip.data
     res@node.data <- tmpData$node.data
     res@metadata <- metadata
