@@ -24,7 +24,7 @@
 }
 
 \section{MoreInfo}{
-  See the help index \code{help(package="phylobase") and run
+  See the help index \code{help(package="phylobase")} and run
   \code{vignette("phylobase", "phylobase")} for further details and
   examples about how to use \code{phylobase}.
 }

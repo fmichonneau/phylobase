@@ -59,7 +59,7 @@
   combinations:
 
   \describe{
-    \item{\code{phylobase} to \code{phylobase} formats:}{
+    \item{}{\code{phylobase} to \code{phylobase} formats:
     \describe{
     
       \item{\code{as(object, "phylo4d")}}{where object is of class \linkS4class{phylo4} and returns an object of class \linkS4class{phylo4d}, with empty data.}
@@ -67,7 +67,7 @@
       \item{\code{as(object, "phylo4")}}{where object is of class \linkS4class{phylo4d} and returns an object of class \linkS4class{phylo4}. If data are dropped during the conversion, a warning message is produced. A similar conversion can be done by using the function \code{extractTree}, but in this case, no error message is produced.}
     }} %end phylobase to phylobase
     
-    \item{\code{phylobase} to \code{ape} formats:}{
+    \item{}{\code{phylobase} to \code{ape} formats:
     \describe{
     
       \item{\code{as(object, "phylo")}}{where object is of class \linkS4class{phylo4} or \linkS4class{phylo4d} and returns an object of class \code{phylo}. If data are dropped during the conversion from a \code{phylo4d} object, a warning message is produced.}
@@ -75,7 +75,7 @@
       \item{\code{as(object, "multiPhylo")}}{~~Not implemented yet. where object is of class \linkS4class{multiPhylo4} and returns an object of class \code{multiPhylo}.}
     }} % end phylobase to ape
     
-    \item{\code{ape} to \code{phylobase} formats:}{
+    \item{}{\code{ape} to \code{phylobase} formats:
     \describe{
     
       \item{\code{as(object, "phylo4")}}{where object is of class \code{phylo} and returns an object of class \code{phylo4}.}
@@ -85,13 +85,13 @@
       \item{\code{as(object, "multiPhylo4")}}{~~Not implemented yet. where object is of class \code{multiPhylo} and returns an object of class \code{multiPhylo4}. }
     }} % end ape to phylobase
     
-    \item{\code{phylobase} to \code{ade4} formats:}{
+    \item{}{\code{phylobase} to \code{ade4} formats:
     \describe{
       
       \item{\code{as(object, "phylog")}}{where object is of class \code{phylo4} and returns an object of class \linkS4class{phylog}.}
     }} % end phylobase to ade4
     
-    \item{\code{phylobase} format to \code{data.frame}:}{
+    \item{}{\code{phylobase} format to \code{data.frame}:
     \describe{
       
       \item{\code{as(object, "data.frame")}}{where object is of class \code{phylo4} or \code{phylo4d} and returns an object of class \code{data.frame}, with data included in the case of \code{phylo4d}.}
