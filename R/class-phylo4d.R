@@ -209,8 +209,9 @@ setMethod("phylo4d", "phylo",
 
         nlab.data <- data.frame(labelValues=as.numeric(nlab.data))
 
-        tree <- phylo4(x, check.node.labels="drop")
-        res <- phylo4d(tree, tip.data, node.data, all.data, ...)
+        tree <- phylo4(x, check.node.labels="drop", annote=annote)
+        res <- phylo4d(tree, tip.data=tip.data, node.data=node.data,
+                       all.data=all.data, metadata=metadata, ...)
         res <- addData(res, node.data=nlab.data, pos="before", match.data=FALSE)
     }
     else {

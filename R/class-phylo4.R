@@ -159,8 +159,10 @@ setMethod("phylo4", c("phylo"), function(x, check.node.labels=c("keep",
 
   check.node.labels <- match.arg(check.node.labels)
   if (check.node.labels == "drop") x$node.label <- NULL
-  ## FIXME: annote is silently dropped here
   res <- as(x, "phylo4")
+  #TODO?: make default annote arg NULL, and only assign if !is.null;
+  # then update phylo4d methods accordingly (same thing with metadata?)
+  res@annote <- annote
 
   return(res)
 })
