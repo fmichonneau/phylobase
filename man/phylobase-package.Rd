@@ -8,23 +8,25 @@
 }
 
 \details{
-    \tabular{ll}{
-        Package:    \tab phylobase\cr
-        Type:       \tab Package\cr
-        Date:       \tab 2009\cr
-        Depends:    \tab methods, grid, ape(>= 2.1)\cr
-        Suggests:   \tab ade4, MASS\cr
-        License:    \tab GPL Version 2 or later\cr
-        Authors:    \tab R Hackathon et al. (alphabetically: Ben Bolker,
-    Marguerite Butler, Peter Cowan,  Damien de Vienne, Thibaut Jombart,
-    Steve Kembel, Francois Michonneau, David Orme, Brian O'Meara,
-    Emmanuel Paradis, Jim Regetz, Derrick Zwickl ) \cr        
-        URL:        \tab \url{http://phylobase.r-forge.r-project.org/}
+    \itemize{
+        \item{Package:}{phylobase}
+        \item{Type:}{Package}
+        \item{Date:}{2009}
+	\item{Depends:}{methods, grid, ape(>= 2.1)}
+	\item{Suggests:}{ade4, MASS}
+	\item{License:}{GPL Version 2 or later}
+        \item{Authors:}{R Hackathon et al. (alphabetically: Ben Bolker,
+	  Marguerite Butler, Peter Cowan,  Damien de Vienne, Thibaut Jombart,
+	  Steve Kembel, Francois Michonneau, David Orme, Brian O'Meara,
+	  Emmanuel Paradis, Jim Regetz, Derrick Zwickl )}
+	\item{URL:}{\url{http://phylobase.r-forge.r-project.org/}}
     }
 }
 
 \section{MoreInfo}{
-See the help index and run \code{vignette("phylobase", "phylobase")} -- also available at \url{../doc/phylobase.pdf} for further details.
+  See the help index \code{help(package="phylobase") and run
+  \code{vignette("phylobase", "phylobase")} for further details and
+  examples about how to use \code{phylobase}.
 }
 
 \keyword{package}
