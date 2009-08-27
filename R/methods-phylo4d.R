@@ -191,14 +191,17 @@ setMethod("addData", "phylo4", function(x, tip.data=NULL, node.data=NULL,
 ## Marguerite Butler & Peter Cowan
 setMethod("summary", "phylo4d", function(object) {
     x <- object
-    summary(as(x, "phylo4"))
+    res <- summary(as(x, "phylo4"))
+    res$name <- deparse(substitute(object, sys.frame(-1)))
     tips <- tdata(object, "tip")
     nodes <- tdata(object, "internal")
     cat("\nComparative data:\n")
     if (nrow(tips) > 0) {
         cat("\nTips: data.frame with", nTips(object), "taxa and",
             ncol(tips), "variable(s) \n\n")
-        print(summary(tips))
+        sumry.tips <- summary(tips)
+        res$sumry.tips <- sumry.tips
+        print(sumry.tips)
     }
     else {
         cat("\nObject contains no tip data.")
@@ -206,11 +209,14 @@ setMethod("summary", "phylo4d", function(object) {
     if (nrow(nodes) > 0) {
         cat("\nNodes: data.frame with", nNodes(object), "internal nodes and",
             ncol(nodes), "variables \n\n")
-        print(summary(nodes))
+        sumry.nodes <- summary(nodes)
+        res$sumry.nodes <- sumry.nodes
+        print(sumry.nodes)
     }
     else {
         cat("\nObject contains no node data.\n")
     }
+    invisible(res)
 })
 
 setMethod("hasNodeData", "phylo4d", function(x) {

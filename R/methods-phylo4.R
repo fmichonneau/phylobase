@@ -455,6 +455,7 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
         }
     }
     return(invisible(res))
+
 }) # end setMethod summary phylo4
 
 
