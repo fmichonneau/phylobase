@@ -85,8 +85,8 @@ export(phylo4_orderings)
 #export(internEdges, terminEdges, isPoly)
 
 ## presumably these should remain hidden
-export(.createLabels, .createEdge, .phylo4Data, orderIndex, .genlab,
-    .chnumsort, .phylo4ToDataFrame, .bubLegendGrob)
+##export(.createLabels, .createEdge, .phylo4Data, orderIndex, .genlab,
+##    .chnumsort, .phylo4ToDataFrame, .bubLegendGrob)
 ## hidden: drawDetails.bubLegend)
 
 ## recently removed:
