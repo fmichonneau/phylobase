@@ -14,15 +14,9 @@
 \alias{hasTipData}
 \alias{hasTipData-methods}
 \alias{hasTipData,phylo4d-method}
-\alias{tdata}
-\alias{tdata<-}
-\alias{tdata-methods}
-\alias{tdata,phylo4d-method}
-\alias{tdata<-,phylo4d-method}
 \alias{addData}
 \alias{addData,phylo4-method}
 \alias{addData,phylo4d-method}
-\alias{[,phylo4d,ANY,ANY,ANY-method}
 \title{phylo4d class}
 \description{S4 class for phylogenetic tree and data.}
 \section{Objects from the Class}{
@@ -59,21 +53,19 @@
     \item{summary}{\code{signature(object = "phylo4d")}: summary method}
     \item{names}{\code{signature(x = "phylo4d")}: gives the slots names}
     \item{head}{\code{signature(object = "phylo4d")}: show first few
-nodes}
+      nodes}
     \item{tail}{\code{signature(object = "phylo4d")}: show last few
-nodes}
- \item{hasNodeData}{\code{signature(object = "phylo4d")}: whether
-   tree has internal node data}
- \item{hasTipData}{TODO}
+      nodes}
+    \item{hasNodeData}{\code{signature(object = "phylo4d")}: whether
+      tree has internal node data}
+    \item{hasTipData}{\code{signature(object = "phylo4d")}: whether tree
+      has data associated with its tips}
   }
 }
 \usage{
     \S4method{print}{phylo4d}(x, edgeOrder = c("pretty", "real"), printall=TRUE)
-    \S4method{summary}{phylo4d}(object)
+    \S4method{summary}{phylo4d}(object, quiet=FALSE)
     \S4method{names}{phylo4d}(x)
-\S4method{tdata}{phylo4d}(x, type=c("tip", "internal", "allnode"),
-label.type=c("row.names", "column"), empty.columns=TRUE, \dots)
- \S4method{tdata}{phylo4d}(object, type = "tip", \dots) <- value
   }
   \arguments{
     \item{x}{a phylo4d object}
@@ -81,24 +73,25 @@ label.type=c("row.names", "column"), empty.columns=TRUE, \dots)
     \item{edgeOrder}{Character string indicating whether the edges should be printed
       as ordered in the tree "real" (e.g. preorder or postorder), or "pretty" printed 
       with tips collated together}
-    \item{type}{TODO}
-    \item{label.type}{TODO}
-    \item{empty.columns}{TODO}
-    \item{\dots}{TODO}
-    \item{value}{TODO}
+    \item{quiet}{Should the summary be displayed on screen?}
     \item{printall}{If TRUE all tip labels are printed}
   }
   \value{
     The \code{summary} method invisibly returns a list with the
-    following components: \cr
-    - \code{name}: the name of the object \cr
-    - \code{nb.tips}: the number of tips\cr
-    - \code{nb.nodes}: the number of nodes \cr
+    following components:
+    - \code{name}: the name of the object
+    - \code{nb.tips}: the number of tips
+    - \code{nb.nodes}: the number of nodes
     
-   The \code{names} method returns a vector of characters corresponding
-   to the names of the slots.
+    The \code{names} method returns a vector of characters corresponding
+    to the names of the slots.
   }
-\seealso{\code{\link{coerce-methods}} for translation functions. The \code{\link{phylo4d}} constructor and the \code{\link{formatData}} function to check the validity of trees and data. See also the \code{\link{phylo4}} constructor, the \linkS4class{phylo4} class, and the \code{\link{checkPhylo4}} function to check the validity of \code{phylo4} trees. }
+\seealso{\code{\link{coerce-methods}} for translation functions. The
+    \code{\link{phylo4d}} constructor and the \code{\link{formatData}}
+    function to check the validity of trees and data. See also the
+    \code{\link{phylo4}} constructor, the \linkS4class{phylo4} class,
+    and the \code{\link{checkPhylo4}} function to check the validity of
+    \code{phylo4} trees. } 
 \author{Ben Bolker, Thibaut Jombart}   
 \examples{
   library(ape)

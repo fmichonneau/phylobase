@@ -3,14 +3,13 @@
 \alias{phylo4_orderings}
 \alias{phylo-class}
 \alias{phylo4-class}
-\alias{[,phylo4,ANY,missing,missing-method}
 \alias{print,phylo4-method}
 \alias{show,phylo4-method}
 \alias{head,phylo4-method}
 \alias{tail,phylo4-method}
 \alias{summary,phylo4-method}
 \alias{names,phylo4-method}
-\title{phylo4 and extended classes}
+\title{Displaying phylo4 object}
 \description{Classes for phylogenetic trees}
 \section{Objects from the Class}{
   Phylogenetic tree objects can be created by calls to the \code{\link{phylo4}} constructor function.
@@ -33,19 +32,19 @@
     }
 }
 \section{Methods}{
-  \describe{
-    \item{\$}{\code{signature(x = "phylo4")}: extract a slot}
+  \describe{    
     \item{print}{\code{signature(x = "phylo4")}: print method}
     \item{show}{\code{signature(object = "phylo4")}: show method }
     \item{summary}{\code{signature(object = "phylo4")}: summary method}
     \item{names}{\code{signature(x = "phylo4")}: gives the slot names}
     \item{head}{\code{signature(object = "phylo4")}: show first few
-nodes}
+      nodes}
     \item{tail}{\code{signature(object = "phylo4")}: show last few nodes}  }
 }
 \usage{
     \S4method{print}{phylo4}(x, edgeOrder = c("pretty", "real"), printall)
     \S4method{summary}{phylo4}(object, quiet=FALSE)
+    \S4method{show}{phylo4}(object)
     \S4method{names}{phylo4}(x)
   }
   \arguments{
@@ -79,7 +78,9 @@ nodes}
    to the names of the slots.
   }
 \seealso{the \code{\link{phylo4}} constructor, the \code{\link{checkPhylo4}}
-  function to check the validity of \code{phylo4} objects. See also the \code{\link{phylo4d}} constructor and the \linkS4class{phylo4d} class.}
+  function to check the validity of \code{phylo4} objects. See also the
+   \code{\link{phylo4d}} constructor and the \linkS4class{phylo4d}
+   class.} 
 \author{Ben Bolker, Thibaut Jombart}
 \examples{
 

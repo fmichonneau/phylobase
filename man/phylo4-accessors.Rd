@@ -50,7 +50,10 @@
   \item{nEdges}{\code{signature(object = "phylo4")}: number of edges}
   
   \item{edges}{\code{signature(object = "phylo4")}: returns the edge
-  matrix} 
+    matrix}
+
+  \item{edgeOrder}{\code{signature(object = "phylo4")}: returns the
+    order in which the edges are stored}
   
   \item{hasEdgeLength}{\code{signature(object = "phylo4")}: whether
     tree has edge (branch) lengths}
