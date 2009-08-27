@@ -1,8 +1,9 @@
-\name{phylo4d-methods}
+\name{phylo4d}
 \docType{methods}
 \alias{phylo4d}
 \alias{phylo4d-methods}
 \alias{phylo4d,phylo4-method}
+\alias{phylo4d,phylo4d-method}
 \alias{phylo4d,matrix-method}
 \alias{phylo4d,phylo-method}
 \title{Combine a phylogenetic tree with data}
@@ -57,8 +58,11 @@
     (TRUE) or node numbers (FALSE and default)}
   \item{annote}{any additional annotation data to be passed to the new object}
   \item{metadata}{any additional metadata to be passed to the new object}
-  \item{\dots}{further arguments to be passed to other methods. Used to
-    control the validity checking of the created object (see \code{\link{formatData}}).}
+  \item{\dots}{further arguments to be passed to
+    \code{\link{formatData}}. Notably, these additional arguments
+    control the behavior of the constructor in the case of missing/extra
+    data and where to look for labels in the case of non-unique labels
+    that cannot be stored as row names in a data frame.}
 }
 
 \details{
@@ -70,7 +74,7 @@
   (and also of the value of the arguments \code{use.tip.names} and
   \code{use.node.names}). This means that you need to be consistent
   with the row names of your data frames. It is good practice to use tip
-  and node labels when you merge data with a tree.
+  and node labels (or node numbers) when you merge data with a tree.
   If \code{all.data} is provided and tip and node names are not being
   used, then the first part of the data frame will be tips data and the
   second part will be nodes data.
@@ -94,7 +98,8 @@
   rows of data vs. number of nodes/tips/etc.)
 }
 \examples{
-tree.owls.bis <- read.tree(text = "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);")
+treeOwls <- "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);"
+tree.owls.bis <- read.tree(text=treeOwls)
 try(phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3)), silent=TRUE)
 obj <- phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3), match.data=FALSE)
 obj

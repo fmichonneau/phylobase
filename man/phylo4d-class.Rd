@@ -1,22 +1,7 @@
 \name{phylo4d-class}
 \docType{class}
 \alias{phylo4d-class}
-\alias{show,phylo4d-method}
-\alias{print,phylo4d-method}
-\alias{head,phylo4d-method}
-\alias{tail,phylo4d-method}
-\alias{summary,phylo4d-method}
-\alias{phylo4d,phylo4d-method}
-\alias{names,phylo4d-method}
-\alias{hasNodeData}
-\alias{hasNodeData-methods}
-\alias{hasNodeData,phylo4d-method}
-\alias{hasTipData}
-\alias{hasTipData-methods}
-\alias{hasTipData,phylo4d-method}
-\alias{addData}
-\alias{addData,phylo4-method}
-\alias{addData,phylo4d-method}
+
 \title{phylo4d class}
 \description{S4 class for phylogenetic tree and data.}
 \section{Objects from the Class}{
@@ -46,52 +31,19 @@
       unstructured/unused by methods)}
   }
 }
-\section{Methods}{
-  \describe{    
-    \item{print}{\code{signature(x = "phylo4d")}: print method}
-    \item{show}{\code{signature(object = "phylo4d")}: show method }
-    \item{summary}{\code{signature(object = "phylo4d")}: summary method}
-    \item{names}{\code{signature(x = "phylo4d")}: gives the slots names}
-    \item{head}{\code{signature(object = "phylo4d")}: show first few
-      nodes}
-    \item{tail}{\code{signature(object = "phylo4d")}: show last few
-      nodes}
-    \item{hasNodeData}{\code{signature(object = "phylo4d")}: whether
-      tree has internal node data}
-    \item{hasTipData}{\code{signature(object = "phylo4d")}: whether tree
-      has data associated with its tips}
-  }
+
+\usage{}
+\value{}
+  
+\seealso{
+  \code{\link{coerce-methods}} for translation functions. The
+  \code{\link{phylo4d}} constructor and the \code{\link{formatData}}
+  function to check the validity of trees and data. See also the
+  \code{\link{phylo4}} constructor, the \linkS4class{phylo4} class,
+  and the \code{\link{checkPhylo4}} function to check the validity of
+  \code{phylo4} trees.
 }
-\usage{
-    \S4method{print}{phylo4d}(x, edgeOrder = c("pretty", "real"), printall=TRUE)
-    \S4method{summary}{phylo4d}(object, quiet=FALSE)
-    \S4method{names}{phylo4d}(x)
-  }
-  \arguments{
-    \item{x}{a phylo4d object}
-    \item{object}{a phylo4d object}
-    \item{edgeOrder}{Character string indicating whether the edges should be printed
-      as ordered in the tree "real" (e.g. preorder or postorder), or "pretty" printed 
-      with tips collated together}
-    \item{quiet}{Should the summary be displayed on screen?}
-    \item{printall}{If TRUE all tip labels are printed}
-  }
-  \value{
-    The \code{summary} method invisibly returns a list with the
-    following components:
-    - \code{name}: the name of the object
-    - \code{nb.tips}: the number of tips
-    - \code{nb.nodes}: the number of nodes
-    
-    The \code{names} method returns a vector of characters corresponding
-    to the names of the slots.
-  }
-\seealso{\code{\link{coerce-methods}} for translation functions. The
-    \code{\link{phylo4d}} constructor and the \code{\link{formatData}}
-    function to check the validity of trees and data. See also the
-    \code{\link{phylo4}} constructor, the \linkS4class{phylo4} class,
-    and the \code{\link{checkPhylo4}} function to check the validity of
-    \code{phylo4} trees. } 
+
 \author{Ben Bolker, Thibaut Jombart}   
 \examples{
   library(ape)
