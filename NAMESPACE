@@ -37,7 +37,7 @@ export(rootEdge)  # no methods defined yet?
 exportMethods(nodeId, nodeType)
 
 # tree data methods
-exportMethods(tdata, "tdata<-", addData, hasNodeData)
+exportMethods(tdata, "tdata<-", addData, hasTipData, hasNodeData)
 
 # prune methods
 exportMethods(prune)
@@ -85,8 +85,8 @@ export(phylo4_orderings)
 #export(internEdges, terminEdges, isPoly)
 
 ## presumably these should remain hidden
-#export(.createLabels, .createEdge, .phylo4Data, orderIndex, .genlab,
-#    .chnumsort, .phylo4ToDataFrame, .bubLegendGrob)
+export(.createLabels, .createEdge, .phylo4Data, orderIndex, .genlab,
+    .chnumsort, .phylo4ToDataFrame, .bubLegendGrob)
 ## hidden: drawDetails.bubLegend)
 
 ## recently removed:
