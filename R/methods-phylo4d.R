@@ -189,32 +189,43 @@ setMethod("addData", "phylo4", function(x, tip.data=NULL, node.data=NULL,
 
 ## Alternative phylo4d summary method, using phylo4 summary
 ## Marguerite Butler & Peter Cowan
-setMethod("summary", "phylo4d", function(object) {
+setMethod("summary", "phylo4d", function(object, quiet=FALSE) {
     x <- object
-    res <- summary(as(x, "phylo4"))
+    res <- summary(as(x, "phylo4"), quiet=quiet)
     res$name <- deparse(substitute(object, sys.frame(-1)))
     tips <- tdata(object, "tip")
     nodes <- tdata(object, "internal")
-    cat("\nComparative data:\n")
+
+    if (!quiet)
+        cat("\nComparative data:\n")
+
     if (nrow(tips) > 0) {
-        cat("\nTips: data.frame with", nTips(object), "taxa and",
-            ncol(tips), "variable(s) \n\n")
+        if(!quiet) {
+            cat("\nTips: data.frame with", nTips(object), "taxa and",
+                ncol(tips), "variable(s) \n\n")
+        }
         sumry.tips <- summary(tips)
         res$sumry.tips <- sumry.tips
-        print(sumry.tips)
+        if (!quiet)
+            print(sumry.tips)
     }
     else {
-        cat("\nObject contains no tip data.")
+        if (!quiet)
+            cat("\nObject contains no tip data.")
     }
     if (nrow(nodes) > 0) {
-        cat("\nNodes: data.frame with", nNodes(object), "internal nodes and",
-            ncol(nodes), "variables \n\n")
+        if (!quiet) {
+            cat("\nNodes: data.frame with", nNodes(object), "internal nodes and",
+                ncol(nodes), "variables \n\n")
+        }
         sumry.nodes <- summary(nodes)
         res$sumry.nodes <- sumry.nodes
-        print(sumry.nodes)
+        if (!quiet)
+            print(sumry.nodes)
     }
     else {
-        cat("\nObject contains no node data.\n")
+        if(!quiet)
+            cat("\nObject contains no node data.\n")
     }
     invisible(res)
 })
