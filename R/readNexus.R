@@ -183,6 +183,7 @@ read.nexustreestring <- function(X) {
     tree <- gsub("^.*= *", "", tree)
     semico <- grep(";", tree)
     Ntree <- length(semico)
+
     ## are some trees on several lines?
     if (any(diff(semico) != 1)) {
         STRING <- character(Ntree)
@@ -202,9 +203,11 @@ read.nexustreestring <- function(X) {
     }
     else {
         if (length(colon) == Ntree) {
-            trees <-  ifelse(translation,
-                             lapply(STRING, .treeBuildWithTokens),
-                             lapply(STRING, tree.build))
+            if (translation)
+                trees <- lapply(STRING, .treeBuildWithTokens)
+            else
+               trees <- lapply(STRING, tree.build)
+
         }
         else {
             trees <- vector("list", Ntree)
