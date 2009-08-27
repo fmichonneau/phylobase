@@ -106,7 +106,7 @@ setGeneric("tdata", function(x, ...) {
     standardGeneric("tdata")
 })
 
-setGeneric("tdata<-", function(object, ..., value) {
+setGeneric("tdata<-", function(x, ..., value) {
     standardGeneric("tdata<-")
 })
 

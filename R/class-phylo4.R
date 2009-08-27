@@ -106,7 +106,7 @@ phylo4_orderings <- c("unknown", "preorder", "postorder", "pruningwise", "cladew
 ## first arg is a matrix
 setMethod("phylo4", "matrix",
     function(x, edge.length = NULL, tip.label = NULL, node.label = NULL,
-             edge.label = NULL, order="unknown", annote = list(), ...) {
+             edge.label = NULL, order="unknown", annote = list()) {
 
     ## edge
     edge <- x

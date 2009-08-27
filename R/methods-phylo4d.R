@@ -114,10 +114,11 @@ setMethod("tdata", "phylo4d",
       tdata
   })
 
-setReplaceMethod("tdata", "phylo4d",
-                 function(object, type = c("tip", "internal", "allnode"), ...,
+setReplaceMethod("tdata", signature(x="phylo4d", value="ANY"),
+                 function(x, type = c("tip", "internal", "allnode"), ...,
                           value) {
     type <- match.arg(type)
+    object <- x
 
     ## Removes existing data, just keeps the tree (as a phylo4d)
     object <- extractTree(object)
@@ -230,13 +231,15 @@ setMethod("summary", "phylo4d", function(object, quiet=FALSE) {
     invisible(res)
 })
 
-setMethod("hasNodeData", "phylo4d", function(x) {
+
+setMethod("hasTipData", signature(x="phylo4d"), function(x) {
+    nrow(x@tip.data) > 0
+})
+
+setMethod("hasNodeData", signature(x="phylo4d"), function(x) {
     nrow(x@node.data) > 0
 })
 
-setMethod("hasTipData", "phylo4d", function(x) {
-    nrow(x@tip.data) > 0
-})
 
 ## FIXME: doesn't deal with missing node data
 ##   (don't even know how that should be done in this case)
