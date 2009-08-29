@@ -2,7 +2,7 @@
                      type = c('phylogram', 'cladogram', 'fan'), 
                      show.tip.label = TRUE,
                      show.node.label = FALSE, 
-                     tip.order = 1:nTips(phy),
+                     ## tip.order = 1:nTips(phy),
                      plot.data = is(phy, 'phylo4d'),
                      rot = 0,
                      tip.plot.fun = 'bubbles',
@@ -32,14 +32,16 @@
     Nedges <- nEdges(phy)
     Ntips  <- nTips(phy)
     
-    if(length(tip.order) != Ntips) {stop('tip.order must be the same length as nTips(phy)')}
-    if(is.numeric(tip.order)) {
-        tip.order <- tip.order
-    } else {
-        if(is.character(tip.order)) {
-            tip.order <- match(tip.order, tipLabels(phy))
-        }
-    }
+    
+    ## if(length(tip.order) != Ntips) {stop('tip.order must be the same length as nTips(phy)')}
+    ## if(is.numeric(tip.order)) {
+    ##     tip.order <- tip.order
+    ## } else {
+    ##     if(is.character(tip.order)) {
+    ##         tip.order <- match(tip.order, phy@tip.labeli)
+    ##     }
+    ## }
+    tip.order <- NULL
     
     ## TODO remove the false cladogram option?
     if(is.null(edgeLength(phy)) || type == 'cladogram') {
@@ -214,7 +216,9 @@ phyloXXYY <- function(phy, tip.order = NULL)
     Nedges <- nrow(phy@edge) ## TODO switch to the accessor once stablized
     Ntips  <- nTips(phy)
     tips <- edge[, 2] <= Ntips
-    tip.order <- match(tip.order, edge[, 2][tips])
+    if(!is.null(tip.order)) {
+        tip.order <- match(tip.order, edge[, 2][tips])
+    }
     xx <- numeric(Nedges)
     yy <- numeric(Nedges)
 
@@ -233,7 +237,11 @@ phyloXXYY <- function(phy, tip.order = NULL)
     }
 
     ## Set y positions for terminal nodes and calculate remaining y positions
-    yy[tips][tip.order] <- seq(0, 1, length = Ntips)
+    if(!is.null(tip.order)) {
+        yy[tips][tip.order] <- seq(0, 1, length = Ntips)
+    } else {
+        yy[tips] <- seq(0, 1, length = Ntips)
+    }
     segs$h0y[tips] <- segs$h1y[tips] <- yy[tips]
     segs$v1y[tips] <- segs$v0y[tips] <- yy[tips]
     for(i in rev((Ntips + 1):nEdges(phy))) {
@@ -297,7 +305,7 @@ drawDetails.bubLegend <- function(x, ...) {
 phylobubbles <- function(type = type,
                         place.tip.label = "right", 
                         show.node.label = show.node.label, 
-                        tip.order = tip.order,
+                        tip.order = NULL,
                         rot = 0,
                         edge.color = edge.color, 
                         node.color = node.color, # TODO what do with node.color parameter
@@ -415,7 +423,7 @@ phylobubbles <- function(type = type,
             layout.pos.col = 2, 
             layout.pos.row = 1
         ))
-        tt <- tipLabels(phy)
+        tt <- phy@tip.label # tipLabels(phy)
         grid.text(tt, 0.1, tys, just = 'left')
         upViewport()
     }
