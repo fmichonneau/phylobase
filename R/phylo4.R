@@ -1,130 +1,171 @@
+## Same order as in methods-phylo4.R
+
+## nTips
+setGeneric("nTips", function(x,...) {
+    standardGeneric("nTips")
+})
+
+## nNodes
 setGeneric("nNodes", function(x) {
     standardGeneric("nNodes")
 })
 
-setGeneric("nEdges", function(x) {
-    standardGeneric("nEdges")
-})
-
-setGeneric("edges", function(x, order, ...) {
-    standardGeneric("edges")
-})
-
-setGeneric("rootEdge", function(x, order, ...) {
-    standardGeneric("rootEdge")
-})
-
+## nodeType
 setGeneric("nodeType", function(phy) {
     standardGeneric("nodeType")
 })
 
-setGeneric("isRooted", function(x) {
-    standardGeneric("isRooted")
+## nodeId
+setGeneric("nodeId", function(x, type=c("internal", "tip", "all")) {
+    standardGeneric("nodeId")
 })
 
-setGeneric("rootNode", function(x) {
-    standardGeneric("rootNode")
+## nEdges
+setGeneric("nEdges", function(x) {
+    standardGeneric("nEdges")
 })
 
-setGeneric("rootNode<-", function(x, value) {
-    standardGeneric("rootNode<-")
+## edges
+setGeneric("edges", function(x, order, ...) {
+    standardGeneric("edges")
 })
 
-setGeneric("hasEdgeLength", function(x) {
-    standardGeneric("hasEdgeLength")
-})
-
-setGeneric("edgeLength", function(x, ...) {
-    standardGeneric("edgeLength")
-})
-
-setGeneric("edgeLength<-", function(x, ..., value) {
-    standardGeneric("edgeLength<-")
-})
-
-setGeneric("sumEdgeLength", function(phy, node) {
-    standardGeneric("sumEdgeLength")
-})
-
-setGeneric("hasNodeLabels", function(x) {
-    standardGeneric("hasNodeLabels")
-})
-
-setGeneric("hasEdgeLabels", function(x) {
-    standardGeneric("hasEdgeLabels")
-})
-
+## edgeOrder
 setGeneric("edgeOrder", function(x, ...) {
   standardGeneric("edgeOrder")
 })
 
+## hasEdgeLength
+setGeneric("hasEdgeLength", function(x) {
+    standardGeneric("hasEdgeLength")
+})
+
+## edgeLength
+setGeneric("edgeLength", function(x, ...) {
+    standardGeneric("edgeLength")
+})
+
+## edgeLength<-
+setGeneric("edgeLength<-", function(x, ..., value) {
+    standardGeneric("edgeLength<-")
+})
+
+## sumEdgeLength
+setGeneric("sumEdgeLength", function(phy, node) {
+    standardGeneric("sumEdgeLength")
+})
+
+## isRooted
+setGeneric("isRooted", function(x) {
+    standardGeneric("isRooted")
+})
+
+## rootNode
+setGeneric("rootNode", function(x) {
+    standardGeneric("rootNode")
+})
+
+## rootNode<-
+setGeneric("rootNode<-", function(x, value) {
+    standardGeneric("rootNode<-")
+})
+
+## labels
 setGeneric("labels")
 
+## labels<-
 setGeneric("labels<-",
            function(object, type, use.names, ..., value) {
                standardGeneric("labels<-")
            })
 
+## hasNodeLabels
+setGeneric("hasNodeLabels", function(x) {
+    standardGeneric("hasNodeLabels")
+})
+
+## nodeLabels
 setGeneric("nodeLabels", function(object) {
     standardGeneric("nodeLabels")
 })
 
+## nodeLabels<-
 setGeneric("nodeLabels<-",
            function(object, ..., value) {
                standardGeneric("nodeLabels<-")
            })
 
+## tipLabels
 setGeneric("tipLabels", function(object) {
     standardGeneric("tipLabels")
 })
 
+## tipLabels<-
 setGeneric("tipLabels<-",
    function(object, ..., value) {
        standardGeneric("tipLabels<-")
    })
 
-setGeneric("nodeId", function(x, type=c("internal", "tip", "all")) {
-    standardGeneric("nodeId")
+## hasEdgeLabels
+setGeneric("hasEdgeLabels", function(x) {
+    standardGeneric("hasEdgeLabels")
 })
 
+## edgeLabels
 setGeneric("edgeLabels", function(x) {
     standardGeneric("edgeLabels")
 })
 
+## edgeLabels<-
 setGeneric("edgeLabels<-",
            function(object, ..., value) {
                standardGeneric("edgeLabels<-")
            })
 
+## print
 setGeneric("print")
 
+## head
 setGeneric("head")
 
+## tail
 setGeneric("tail")
 
+### ----------- phylo4d methods -----------
+
+## tdata
 setGeneric("tdata", function(x, ...) {
     standardGeneric("tdata")
 })
 
+## tdata<-
 setGeneric("tdata<-", function(x, ..., value) {
     standardGeneric("tdata<-")
 })
 
+## addData
 setGeneric("addData", function(x, ...) {
     standardGeneric("addData")
 })
 
-setGeneric("hasNodeData", function(x) {
-    standardGeneric("hasNodeData")
-})
-
+## hasTipData
 setGeneric("hasTipData", function(x) {
     standardGeneric("hasTipData")
 })
 
-setGeneric("na.omit")
+## hasNodeData
+setGeneric("hasNodeData", function(x) {
+    standardGeneric("hasNodeData")
+})
+
+##
+##setGeneric("na.omit")
 
 setGeneric("reorder")
+
+##setGeneric("rootEdge", function(x, order, ...) {
+##    standardGeneric("rootEdge")
+##})
 
 ###################
 ## Function .genlab

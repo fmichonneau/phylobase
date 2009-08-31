@@ -52,10 +52,6 @@
 ### Tip accessors
 #########################################################
 
-setGeneric("nTips", function(x,...) {
-    standardGeneric("nTips")
-})
-
 setMethod("nTips", "phylo4", function(x, ...) {
     E <- edges(x)
     if(nrow(E) == 0)

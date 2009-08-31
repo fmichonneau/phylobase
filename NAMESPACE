@@ -6,7 +6,7 @@ useDynLib(phylobase)
 
 import(methods)
 importFrom(graphics, plot)
-importFrom(stats, na.omit, reorder)
+importFrom(stats, reorder)
 importFrom(utils, head, tail)
 
 #----------------------------------------------------------------------
@@ -16,7 +16,7 @@ exportClasses(phylo4, phylo4d, multiPhylo4, multiPhylo4d)
 #----------------------------------------------------------------------
 
 # utility methods
-exportMethods("[", "[<-", "[[", "[[<-", print, head, tail, na.omit,
+exportMethods("[", "[<-", "[[", "[[<-", print, head, tail,
     reorder, subset, plot, summary)
 
 # tree constructor methods
@@ -31,7 +31,7 @@ exportMethods(edges, hasEdgeLength, edgeLength, "edgeLength<-",
 
 # root methods
 exportMethods(isRooted, rootNode, "rootNode<-")
-export(rootEdge)  # no methods defined yet?
+#export(rootEdge)  # no methods defined yet?
 
 # node methods
 exportMethods(nodeId, nodeType)

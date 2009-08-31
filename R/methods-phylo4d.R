@@ -243,8 +243,8 @@ setMethod("hasNodeData", signature(x="phylo4d"), function(x) {
 
 ## FIXME: doesn't deal with missing node data
 ##   (don't even know how that should be done in this case)
-setMethod("na.omit", "phylo4d", function(object, ...) {
-    tipdata <- tdata(object, "tip")
-    na.index <- which(!complete.cases(tipdata))
-    prune(object, tip = na.index)
-})
+## setMethod("na.omit", "phylo4d", function(object, ...) {
+##    tipdata <- tdata(object, "tip")
+##    na.index <- which(!complete.cases(tipdata))
+##    prune(object, tip = na.index)
+##})
