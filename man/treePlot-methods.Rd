@@ -48,5 +48,21 @@
 
 \seealso{ \code{\link{phylobubbles}}  }
 
+\examples{
+
+## example of plotting two grid plots on the same page
+data(geospiza)
+geotree <- extractTree(geospiza)
+grid.newpage()
+pushViewport(viewport(layout=grid.layout(nrow=1, ncol=2), name="base"))
+  pushViewport(viewport(layout.pos.col=1, name="plot1"))
+    treePlot(geotree, newpage=FALSE)
+  popViewport()
+  
+  pushViewport(viewport(layout.pos.col=2, name="plot2"))
+    treePlot(geotree, newpage=FALSE, rot=180)
+popViewport(2)
+
+}
 
 \keyword{methods}
