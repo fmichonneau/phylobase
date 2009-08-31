@@ -2,7 +2,7 @@
                      type = c('phylogram', 'cladogram', 'fan'), 
                      show.tip.label = TRUE,
                      show.node.label = FALSE, 
-                     ## tip.order = 1:nTips(phy),
+                     tip.order = NULL,
                      plot.data = is(phy, 'phylo4d'),
                      rot = 0,
                      tip.plot.fun = 'bubbles',
@@ -32,16 +32,16 @@
     Nedges <- nEdges(phy)
     Ntips  <- nTips(phy)
     
-    
-    ## if(length(tip.order) != Ntips) {stop('tip.order must be the same length as nTips(phy)')}
-    ## if(is.numeric(tip.order)) {
-    ##     tip.order <- tip.order
-    ## } else {
-    ##     if(is.character(tip.order)) {
-    ##         tip.order <- match(tip.order, phy@tip.labeli)
-    ##     }
-    ## }
-    tip.order <- NULL
+    if(!is.null(tip.order)) {
+        if(length(tip.order) != Ntips) {stop('tip.order must be the same length as nTips(phy)')}
+        if(is.numeric(tip.order)) {
+            tip.order <- tip.order
+        } else {
+            if(is.character(tip.order)) {
+                tip.order <- match(tip.order, phy@tip.labeli)
+            }
+        }
+    }
     
     ## TODO remove the false cladogram option?
     if(is.null(edgeLength(phy)) || type == 'cladogram') {
@@ -100,6 +100,7 @@
             } ## if (plot.at.tip)
         } ## else
     } ## else
+    upViewport() # margins
 }
 
 plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color, 
@@ -157,7 +158,7 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
     pushViewport(viewport(
         x = 0.5, y = 0.5, 
         width = 1, height = 1, 
-        layout = treelayout, name = 'treelayout'))
+        layout = treelayout, angle = rot, name = 'treelayout'))
     pushViewport(viewport(
         layout.pos.col = 1, 
         name = 'tree'))
@@ -176,7 +177,7 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
             x1 = segs$h1x, y1 = segs$h1y, 
             name = "horz", gp = gpar(col = edge.color, lwd = edge.width))
     }
-    upViewport()
+    upViewport() # tree
     if(show.tip.label) {
         pushViewport(viewport(layout.pos.col = 1,
             name = 'tiplabelvp'))
@@ -187,7 +188,7 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
             default.units = 'native', name = 'tiplabels',
             just = 'center', gp = gpar(col = tip.color[tindex])
         )
-        upViewport()
+        upViewport() #tiplabelvp
     }
     # TODO probably want to be able to adjust the location of these guys
     if(show.node.label) {
@@ -200,9 +201,9 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
             default.units = 'npc', name = 'nodelabels', rot = -rot,
             just = 'center', gp = gpar(col = node.color[nindex])
         )
-        upViewport()
+        upViewport() #nodelabelvp
     }
-    upViewport()
+    upViewport() # treelayout
     # grobTree(vseg, hseg, labtext)
 }
 
@@ -423,7 +424,7 @@ phylobubbles <- function(type = type,
             layout.pos.col = 2, 
             layout.pos.row = 1
         ))
-        tt <- phy@tip.label # tipLabels(phy)
+        tt <- tipLabels(phy) # phy@tip.label 
         grid.text(tt, 0.1, tys, just = 'left')
         upViewport()
     }
@@ -506,11 +507,11 @@ tip.data.plot <- function(
             tvals <- tdata(phy, type = 'tip')[nodeId(phy,'tip'), , drop=FALSE]
             vals = t(tvals[i, ])
             if (!all(is.na(vals))) tip.plot.fun(vals, ...)
-        upViewport()
+        upViewport() # loop viewports
     }
     plotOneTree(xxyy, type, show.tip.label, show.node.label, edge.color, 
                             node.color, tip.color, edge.width, rot)    
-    upViewport(2)
+    upViewport(2) ## data_plot & datalayout
 }
 
 # phyloStripchart <- function()
