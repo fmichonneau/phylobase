@@ -1,7 +1,7 @@
 readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
                        char.all=FALSE, polymorphic.convert=TRUE,
-                       levels.uniform=TRUE,
-                       check.node.labels=c("keep", "drop", "asdata")) {
+                       levels.uniform=TRUE, quiet=TRUE,
+                       check.node.labels=c("keep", "drop", "asdata"), ...) {
 
     ## file = input nexus file
     ## simplify = if TRUE only keeps the first tree, if several trees are found in
@@ -16,6 +16,8 @@ readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
     ##                       characters
     ## levels.uniform = if TRUE, categorical data are loaded with the same levels,
     ##                  even if one character is missing a state
+    ## quiet = if TRUE, returns the object without printing tree strings (printing
+    ##         makes readNexus very slow in the cases of very big trees)
     ## check.node.labels = how to deal with node labels, to be passed to phylo4d
     ##                     constructor
 
@@ -49,7 +51,7 @@ readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
         ## Finally ready to make the call...
         intreesstring <- .Call("ReadTreesWithNCL", params,
                                PACKAGE="phylobase")
-        print(intreesstring)
+        if(!quiet) print(intreesstring)
         intreesphylolist <- read.nexustreestring(intreesstring);
         if (length(intreesphylolist)>1 || !simplify) {
             trees <- list()
@@ -62,11 +64,13 @@ readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
                         check.node.labels <- "drop"
                     }
                     trees[[i]] <- phylo4d(intreesphylolist[[i]],
-                                          check.node.labels=check.node.labels)
+                                          check.node.labels=check.node.labels,
+                                          ...)
                 }
                 else {
                     trees[[i]] <- phylo4(intreesphylolist[[i]],
-                                         check.node.labels=check.node.labels)
+                                         check.node.labels=check.node.labels,
+                                         ...)
                 }
             }
         }
@@ -79,11 +83,13 @@ readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
                     check.node.labels <- "drop"
                 }
                 trees <- phylo4d(intreesphylolist[[1]],
-                                 check.node.labels=check.node.labels)
+                                 check.node.labels=check.node.labels,
+                                 ...)
             }
             else {
                 trees <- phylo4(intreesphylolist[[1]],
-                                check.node.labels=check.node.labels)
+                                check.node.labels=check.node.labels,
+                                ...)
             }
         }
     }
@@ -98,19 +104,20 @@ readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
             if (length(intreesphylolist) > 1 || !simplify) {
                 output <- list()
                 for (i in 1:length(intreesphylolist)) {
-                    output[[i]] <- phylo4d(as(intreesphylolist[[i]], "phylo4"),
+                    output[[i]] <- phylo4d(intreesphylolist[[i]],
                                            tip.data = tipdata,
-                                           check.node.labels=check.node.labels)
+                                           check.node.labels=check.node.labels,
+                                           ...)
                 }
             }
             else {
-                output <- phylo4d(as(intreesphylolist[[1]], "phylo4"),
+                output <- phylo4d(intreesphylolist[[1]],
                                   tip.data=tipdata,
-                                  check.node.labels=check.node.labels)
+                                  check.node.labels=check.node.labels,
+                                  ...)
             }
         }
     }
-
     output
 }
 
