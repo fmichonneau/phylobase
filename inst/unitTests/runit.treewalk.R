@@ -59,6 +59,27 @@ test.children <- function() {
 
 test.descendants <- function() {
     # function (phy, node, type=c("tips","children","all"))
+    phy <- phylo4(read.tree(text="((t3,t4),(t1,(t2,t5)));"))
+
+    # node = tip
+    checkIdentical(descendants(phy, 5),
+        setNames(5L, "t5"))
+    checkIdentical(descendants(phy, 5, "tips"),
+        setNames(5L, "t5"))
+    checkIdentical(descendants(phy, 5, "children"),
+        setNames(integer(0), character(0)))
+    checkIdentical(descendants(phy, 5, "all"),
+        setNames(5L, "t5"))
+
+    # node = internal
+    checkIdentical(descendants(phy, 8),
+        setNames(c(3L, 4L, 5L), c("t1", "t2", "t5")))
+    checkIdentical(descendants(phy, 8, "tips"),
+        setNames(c(3L, 4L, 5L), c("t1", "t2", "t5")))
+    checkIdentical(descendants(phy, 8, "children"),
+        setNames(c(3L, 9L), c("t1", NA)))
+    checkIdentical(descendants(phy, 8, "all"),
+        setNames(c(3L, 9L, 4L, 5L), c("t1", NA, "t2", "t5")))
 }
 
 test.siblings <- function() {

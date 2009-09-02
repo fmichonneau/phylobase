@@ -70,7 +70,7 @@ descendants <- function (phy, node, type=c("tips","children","all"))
     node <- getNode(phy,node)
     if (is.na(node)) stop("node ",node," not found in tree")
     n <- nTips(phy)
-    if (node <= n) return(labels(phy,"allnode")[node])
+    if (node <= n) return(node)
     l <- numeric()
     d <- children(phy, node)
     for (j in d) {
