@@ -1,6 +1,9 @@
 #
 # --- Test subset.R ---
 #
+
+# load test comparison objects
+load("trees.RData")
  
 # Create sample tree for testing (ape::phylo object)
 tr <- read.tree(text="(((t1:0.2,(t2:0.1,t3:0.1):0.15):0.5,t4:0.7):0.2,t5:1):0.4;")
@@ -21,8 +24,7 @@ test.subset.phylo <- function() {
     # subset 4 tips
     checkEquals(tr.sub4, subset(tr, tips.include=c(1, 2, 4, 5)))
     checkEquals(tr.sub4, subset(tr, tips.exclude=3))
-    checkEquals(tr.sub4, subset(tr, tips.include=c("t1", "t2", "t4",
-      "t5")))
+    checkEquals(tr.sub4, subset(tr, tips.include=c("t1", "t2", "t4", "t5")))
     checkEquals(tr.sub4, subset(tr, tips.exclude="t3"))
     # check variants that should all return the original object
     checkEquals(tr, subset(tr))
@@ -34,9 +36,6 @@ test.subset.phylo <- function() {
 }
 
 test.subset.phylo4 <- function() {
-    phy <- phylo4(tr)
-    phy.sub2 <- phylo4(tr.sub2)
-    phy.sub4 <- phylo4(tr.sub4)
     # subset 2 tips
     checkEquals(phy.sub2, subset(phy, tips.include=c(2, 5)))
     checkEquals(phy.sub2, subset(phy, tips.exclude=c(1, 3, 4)))
@@ -63,11 +62,6 @@ test.subset.phylo4 <- function() {
 }
 
 test.subset.phylo4d <- function() {
-    phyd <- phylo4d(tr, data.frame(x=1:5, row.names=paste("t", 1:5, sep="")))
-    phyd.sub2 <- phylo4d(tr.sub2, data.frame(x=c(2,5),
-      row.names=paste("t", c(2,5), sep="")))
-    phyd.sub4 <- phylo4d(tr.sub4, data.frame(x=c(1,2,4,5),
-      row.names=paste("t", c(1,2,4,5), sep="")))
     # subset 2 tips
     checkEquals(phyd.sub2, subset(phyd, tips.include=c(2, 5)))
     checkEquals(phyd.sub2, subset(phyd, tips.exclude=c(1, 3, 4)))

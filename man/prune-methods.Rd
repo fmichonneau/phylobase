@@ -21,9 +21,7 @@
     \item{phy = "phylo"}{drop tips}
   }
 }
-\note{At the moment, this simply wraps \code{ape::drop.tip}.
-    Renamed from \code{drop.tip} to \code{prune} in order to
-    avoid conflicts with \code{ape}.}
+\note{The phylo method simply wraps \code{ape::drop.tip}.}
   \usage{
 \S4method{prune}{phylo4}(phy, tip, trim.internal = TRUE, subtree = FALSE, \dots)
 \S4method{prune}{phylo4d}(phy, tip, trim.internal = TRUE, subtree = FALSE, \dots)
@@ -53,53 +51,54 @@ DropTip(phy, tip, \dots)
   If \code{subtree = TRUE}, the returned tree has one or several
   terminal branches indicating how many tips have been removed (with a
   label \code{"[x_tips]"}). This is done for as many monophyletic groups
-  that have been deleted
+  that have been deleted. This option is only implemented for the
+  phylo method, and thus if used on phylo4 or phylo4d objects, they will
+  be coerced to phylo
 
   Note that \code{subtree = TRUE} implies \code{trim.internal = TRUE}
 
-  To understand how the option \code{root.edge} works, see the examples
-  below
+  Handling of root edge lengths differs between \code{phylobase} and
+  \code{ape}. For phylo4/phylo4d objects, the new root edge length
+  will be the total distance back through the original root edge (or NA
+  if the original edge had length NA)
+
+  A \code{root.edge} argument can be passed to the phylo method. To
+  understand how this option works, see the examples below
 }
 \value{
   an object of class \code{"phylo4"}
 }
-\author{Emmanuel Paradis \email{Emmanuel.Paradis@mpl.ird.fr}
-(original ape version)}
+\author{
+  Jim Regetz \email{regetz@nceas.ucsb.edu} (phylo4 method),
+  Emmanuel Paradis \email{Emmanuel.Paradis@mpl.ird.fr
+    (original ape version used in phylo method)}
+}
 \examples{
-require(ape)
-data(bird.families)
-tip <- c(
-"Eopsaltriidae", "Acanthisittidae", "Pittidae", "Eurylaimidae",
-"Philepittidae", "Tyrannidae", "Thamnophilidae", "Furnariidae",
-"Formicariidae", "Conopophagidae", "Rhinocryptidae", "Climacteridae",
-"Menuridae", "Ptilonorhynchidae", "Maluridae", "Meliphagidae",
-"Pardalotidae", "Petroicidae", "Irenidae", "Orthonychidae",
-"Pomatostomidae", "Laniidae", "Vireonidae", "Corvidae",
-"Callaeatidae", "Picathartidae", "Bombycillidae", "Cinclidae",
-"Muscicapidae", "Sturnidae", "Sittidae", "Certhiidae",
-"Paridae", "Aegithalidae", "Hirundinidae", "Regulidae",
-"Pycnonotidae", "Hypocoliidae", "Cisticolidae", "Zosteropidae",
-"Sylviidae", "Alaudidae", "Nectariniidae", "Melanocharitidae",
-"Paramythiidae","Passeridae", "Fringillidae")
-plot(prune(bird.families, tip),cex=0.5)
-plot(prune(bird.families, tip, trim.internal = FALSE),cex=0.5)
-data(bird.orders)
-plot(prune(bird.orders, 6:23, subtree = TRUE))
-plot(prune(bird.orders, c(1:5, 20:23), subtree = TRUE))
+data(geospiza)
 
-### Examples of the use of `root.edge'
+## Pruning phylo4 objects
+geotree <- extractTree(geospiza)
+tip <- c("difficilis", "fortis", "fuliginosa", "fusca", "olivacea",
+    "pallida", "parvulus", "scandens")
+plot(prune(geotree, tip))
+plot(prune(geotree, tip, trim.internal = FALSE))
+plot(prune(geotree, 1:11, subtree = TRUE))
+
+## Pruning phylo4d objects
+r1 <- as(rcoal(5), "phylo4")
+td <- data.frame(a=1:5, row.names=paste("t", 1:5, sep=""))
+nd <- data.frame(a=6:9, row.names=nodeId(r1, "internal"))
+r2 <- phylo4d(r1, tip.data=td, node.data=nd)
+r3 <- prune(r2, "t1")
+
+## Pruning phylo objects, including the use of `root.edge'
+require(ape)
 tr <- as(ape::read.tree(text = "(A:1,(B:1,(C:1,(D:1,E:1):1):1):1):1;"),"phylo4")
 prune(tr, c("A", "B"), root.edge = 0) # = (C:1,(D:1,E:1):1);
 prune(tr, c("A", "B"), root.edge = 1) # = (C:1,(D:1,E:1):1):1;
 prune(tr, c("A", "B"), root.edge = 2) # = (C:1,(D:1,E:1):1):2;
 prune(tr, c("A", "B"), root.edge = 3) # = (C:1,(D:1,E:1):1):3;
 
-## Dropping tips on phylo4d objects
-r1 <- as(rcoal(5), "phylo4")
-td <- data.frame(a=1:5, row.names=paste("t", 1:5, sep=""))
-nd <- data.frame(a=6:9, row.names=nodeId(r1, "internal"))
-r2 <- phylo4d(r1, tip.data=td, node.data=nd)
-r3 <- prune(r2, "t1")
 }
 \keyword{manip}
 \keyword{methods}
