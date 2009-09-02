@@ -66,21 +66,54 @@ descendants <- function (phy, node, type=c("tips","children","all"))
 {
     ## FIXME: allow vector of nodes? (or just let people lapply?)
     type <- match.arg(type)
-    if (type=="children") return(children(phy,node))
-    node <- getNode(phy,node)
-    if (is.na(node)) stop("node ",node," not found in tree")
-    n <- nTips(phy)
-    if (node <= n) return(node)
-    l <- numeric()
-    d <- children(phy, node)
-    for (j in d) {
-        if (j <= n)
-          l <- c(l,j)
-        else if (type=="all") l <- c(l,j,
-                   descendants(phy,j,type="all"))
-        else l <- c(l, descendants(phy,j,type=type))
+    if (type=="children") {
+        return(children(phy, node))
     }
-    return(getNode(phy,l))
+    node <- getNode(phy, node)
+    if (is.na(node)) stop("node ", node, " not found in tree")
+    n <- nTips(phy)
+    if (node <= n) {
+        return(node)
+    }
+
+    ## edge matrix must be in preorder for the C function!
+    if (phy@order=="preorder") {
+        edge <- phy@edge
+    } else {
+        edge <- reorder(phy, order="preorder")@edge
+    }
+    ## deal with NA root node
+    edge[is.na(edge)] <- 0
+    ## extract edge columns
+    ancestor <- as.integer(edge[, 1])
+    descendant <- as.integer(edge[, 2])
+    ## create indicator vector and seed it based on children
+    isChild <- rep(0L, length=nrow(edge))
+    isChild[ancestor==node] <- 1L
+    numEdges <- as.integer(length(isChild))
+
+    ## returned value of isChild will indicate *all* descendants 
+    isDescendant <- .C("descendants", isChild, ancestor, descendant,
+        numEdges)[[1]]
+
+    l <- descendant[as.logical(isDescendant)]
+    if (type=="tips") {
+        l <- l[l<=n]
+    }
+
+    ## Original pure R implementation of the above
+    ## (note that it does not require preorder ordering)
+    ##l <- numeric()
+    ##d <- children(phy, node)
+    ##for (j in d) {
+    ##    if (j <= n)
+    ##      l <- c(l,j)
+    ##    else if (type=="all") l <- c(l,j,
+    ##               descendants(phy,j,type="all"))
+    ##    else l <- c(l, descendants(phy,j,type=type))
+    ##}
+
+    return(getNode(phy, l))
 }
 
 siblings <- function(phy, node, include.self=FALSE) {
