@@ -462,46 +462,86 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
 #########################################################
 
 orderIndex <- function(phy, order = c('preorder', 'postorder')) {
-    ## get an root node free edge matrix
-    ## R scoping allows us to call this variable in
-    ## the postOrder() func defined above
+
     order <- match.arg(order)
+
+    ## get a root node free edge matrix
     edge <- phy@edge[!is.na(phy@edge[, 1]), ]
     ## Sort edges -- ensures that starting order of edge matrix doesn't
     ## affect the order of reordered trees
     edge <- edge[order(edge[, 2]), ]
 
-    ## recursive functions are placed first and calls to those functions below
-    postOrder <- function(node) {
-        ## this function returns a vector of nodes in the post order traversal
-        ## get the descendants
-        traversal <- NULL
-        ## edge -- defined above, outside this function
-        ## extensive testing found this loop to be faster than apply() etc.
-        for(i in edge[edge[, 1] == node, 2]) {
-            traversal <- c(traversal, postOrder(i))
-        }
-        c(traversal, node)
-    }
-    preOrder  <- function(node) {
-        ## see expanded code in comments of postOrder()
-        ## only difference here is that we record current node, then descendants
-        traversal <- NULL
-        for(i in edge[edge[, 1] == node, 2]) {
-            traversal <- c(traversal, preOrder(i))
-        }
-        c(node, traversal)
-    }
-
+    # recast order argument as integer to pass to C
     if(order == 'postorder') {
-        ## match the new node order to the old order to get an index
-        index <- match(postOrder(rootNode(phy)), phy@edge[, 2])
-
+        iOrder <- 0L
     } else if(order == 'preorder') {
-        ## match the new node order to the old order to get an index
-        index <- match(preOrder(rootNode(phy)), phy@edge[, 2])
-
+        iOrder <- 1L
     } else {stop(paste("Method for", order, "not implemented"))}
+
+    if (!hasPoly(phy) & !hasSingle(phy)) {
+        # method 1: faster, but only works if all internal nodes have
+        # exactly two children (true binary tree)
+
+        # extract nodes, separating descendants into left (first
+        # encountered) and right (second encountered) for each ancestor
+        isFirst <- !duplicated(edge[, 1])
+        ancestor <- as.integer(edge[isFirst, 1])
+        left <- as.integer(edge[isFirst, 2])
+        right <- as.integer(edge[!isFirst, 2])[match(ancestor,
+            edge[!isFirst, 1])]
+        descendantNew <- rep(0L, nEdges(phy))
+        root <- as.integer(rootNode(phy))
+        nEdge <- as.integer(length(ancestor))
+
+        descendantReord <- .C("reorderBinary", descendantNew, root,
+            ancestor, left, right, nEdge, iOrder)[[1]]
+
+    } else {
+        # method 2: not as fast, but robust to singletons and polytomies
+
+        # extract ancestors and descendants
+        ancestor <- as.integer(edge[,1])
+        descendant <- as.integer(edge[,2])
+        descendantNew <- rep(0L, nEdges(phy))
+        root <- as.integer(rootNode(phy))
+        nEdge <- as.integer(nrow(edge))
+
+        descendantReord <- .C("reorderRobust", descendantNew, root,
+            ancestor, descendant, nEdge, iOrder)[[1]]
+
+    }
+
+    ## Original pure R implementation of the above:
+    #### recursive functions are placed first and calls to those functions below
+    ##postOrder <- function(node) {
+    ##    ## this function returns a vector of nodes in the post order traversal
+    ##    ## get the descendants
+    ##    traversal <- NULL
+    ##    ## edge -- defined above, outside this function
+    ##    ## extensive testing found this loop to be faster than apply() etc.
+    ##    for(i in edge[edge[, 1] == node, 2]) {
+    ##        traversal <- c(traversal, postOrder(i))
+    ##    }
+    ##    c(traversal, node)
+    ##}
+    ##preOrder  <- function(node) {
+    ##    ## see expanded code in comments of postOrder()
+    ##    ## only difference here is that we record current node, then descendants
+    ##    traversal <- NULL
+    ##    for(i in edge[edge[, 1] == node, 2]) {
+    ##        traversal <- c(traversal, preOrder(i))
+    ##    }
+    ##    c(node, traversal)
+    ##}
+    ##if(order == 'postorder') {
+    ##    descendantReord <- postOrder(rootNode(phy))
+    ##} else if(order == 'preorder') {
+    ##    descendantReord <- preOrder(rootNode(phy))
+    ##} else {stop(paste("Method for", order, "not implemented"))}
+
+    ## match the new node order to the old order to get an index
+    index <- match(descendantReord, phy@edge[, 2])
+
 }
 
 setMethod("reorder", signature(x = 'phylo4'),
