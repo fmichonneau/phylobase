@@ -137,16 +137,16 @@ setAs("phylo4", "phylo", function(from, to) {
 
     ## Tree order
     ## TODO postorder != pruningwise -- though quite similar
-    attr(phy, "order") <- switch(edgeOrder(from),
-                                 postorder = "unknown",
-                                 preorder = "cladewise",
-                                 unknown = {
-                                     ## warning ??
-                                     warning("trees with unknown order may be",
-                                             " unsafe in ape")
-                                     "unknown"
-                                     },
-                                 pruningwise = "pruningwise")
+    if (edgeOrder(from) == "unknown") {
+        warning("trees with unknown order may be",
+                " unsafe in ape")
+    }
+    else {
+        attr(phy, "order") <- switch(edgeOrder(from),
+                                     postorder = "unknown",
+                                     preorder = "cladewise",
+                                     pruningwise = "pruningwise")
+    }
     phy
 })
 
