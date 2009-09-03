@@ -44,8 +44,8 @@
     }
     
     ## TODO remove the false cladogram option?
-    if(is.null(edgeLength(phy)) || type == 'cladogram') {
-        phy@edge.length <- rep(1, Nedges)
+    if(!hasEdgeLength(phy) || type == 'cladogram') {
+        edgeLength(phy) <- rep(1, Nedges)
     }
     xxyy   <- phyloXXYY(phy, tip.order)
     phy    <- xxyy$phy
