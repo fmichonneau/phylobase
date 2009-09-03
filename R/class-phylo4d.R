@@ -209,8 +209,7 @@ setMethod("phylo4d", "phylo",
     else {
         tree <- phylo4(x, check.node.labels=check.node.labels, annote=annote)
         res <- phylo4d(tree, tip.data=tip.data, node.data=node.data,
-                       all.data=all.data,
-                       metadata=metadata, ...)
+                       all.data=all.data, metadata=metadata, ...)
     }
 
     return(res)

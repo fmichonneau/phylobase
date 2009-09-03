@@ -26,7 +26,7 @@ setAs("phylo", "phylo4", function(from, to) {
         }
     }
     oldorder <- attr(from,"order")
-    neworder <- if (is.null(oldorder)) { "unknown" } else 
+    neworder <- if (is.null(oldorder)) { "unknown" } else
     if (!oldorder %in% phylo4_orderings) {
       stop("unknown ordering '",oldorder,"' in ape object")
     } else if (oldorder=="cladewise") "preorder"
@@ -85,49 +85,71 @@ setAs("phylo4", "phylo", function(from, to) {
 
     if (inherits(from, "phylo4d"))
         warning("losing data while coercing phylo4d to phylo")
-    brlen <- unname(from@edge.length)
+
+    phy <- list()
+
+    ## Edge matrix
     if (isRooted(from)) {
         ## rootnode is only node with no ancestor
         rootpos <- which(is.na(from@edge[, 1]))
-        brlen <- brlen[-rootpos]
         edgemat <- unname(from@edge[-rootpos, ])
-      } else {
+    }
+    else {
         edgemat <- unname(from@edge)
     }
     storage.mode(edgemat) <- "integer"
+    phy$edge <- edgemat
+
+    ## nNodes
+    phy$Nnode <- as.integer(nNodes(from))
+
+    ## Tip labels
+    phy$tip.label <- unname(from@tip.label)
+
+    ## Node labels
     if(hasNodeLabels(from)) {
-        nodLbl <- unname(from@node.label)
-      } else {
-        nodLbl <- character(0)
+        phy$node.label <- unname(nodeLabels(from))
     }
 
-    y <- list(edge = edgemat,
-              edge.length = brlen,
-              tip.label = unname(from@tip.label),
-              Nnode = as.integer(from@Nnode),
-              node.label = nodLbl)
-    class(y) <- "phylo"
-    if (from@order != 'unknown') {
-        ## TODO postorder != pruningwise -- though quite similar
-        attr(y, 'order') <- switch(from@order, postorder = 'unknown',
-                                   preorder  = 'cladewise',
-                                   unknown = 'unknown',
-                                   pruningwise = 'pruningwise')
-      } else {
-        ## warning ??
-        warning("trees with unknown order may be unsafe in ape")
-      }
-    if (length(y$edge.length) == 0)
-        y$edge.length <- NULL
-    if (length(y$node.label) == 0)
-        y$node.label <- NULL
-    ## how do we tell if there is an explicit root edge?
-    if (isRooted(from)) {
-        root.edge <- unname(edgeLength(from,rootNode(from)))
-        if (!is.na(root.edge)) y$root.edge <- root.edge
+    ## Edge lengths
+    if(hasEdgeLength(from)) {
+        edge.length <- edgeLength(from)
+        if(isRooted(from)) {
+            iRoot <- match(getEdge(from, rootNode(from), type="node",
+                                   output="allEdge"), names(edge.length))
+            phy$edge.length <- unname(edge.length[-iRoot])
+        }
+        else {
+            phy$edge.length <- unname(edge.length)
+        }
     }
-    y
+
+    ## Root edge
+    if(isRooted(from) && hasEdgeLength(from)) {
+        root.edge <- unname(edgeLength(from,rootNode(from)))
+        if(!is.na(root.edge)) {
+            phy$root.edge <- root.edge
+        }
+    }
+
+    ## Converting to class phylo
+    class(phy) <- "phylo"
+
+    ## Tree order
+    ## TODO postorder != pruningwise -- though quite similar
+    attr(phy, "order") <- switch(edgeOrder(from),
+                                 postorder = "unknown",
+                                 preorder = "cladewise",
+                                 unknown = {
+                                     ## warning ??
+                                     warning("trees with unknown order may be",
+                                             " unsafe in ape")
+                                     "unknown"
+                                     },
+                                 pruningwise = "pruningwise")
+    phy
 })
+
 
 ## BMB: redundant????
 ## setAs("phylo4d", "phylo", function(from, to) {

@@ -21,6 +21,7 @@
 ### 4. Root accessors
 ###  4.1. isRooted()
 ###  4.2. rootNode()
+###  4.3. rootNode() <-
 
 ### 5. Label accessors
 ###  5.1. labels()
@@ -141,15 +142,11 @@ setMethod("hasEdgeLength","phylo4", function(x) {
 })
 
 setMethod("edgeLength", "phylo4", function(x, node) {
-    if (!hasEdgeLength(x))
-        NULL
+    if (missing(node))
+        return(x@edge.length)
     else {
-      if (missing(node))
-          return(x@edge.length)
-      else {
-          n <- getNode(x, node)
-          return(x@edge.length[match(n, x@edge[,2])])
-      }
+        n <- getNode(x, node)
+        return(x@edge.length[match(n, x@edge[,2])])
     }
 })
 
@@ -201,7 +198,7 @@ setReplaceMethod("rootNode", "phylo4", function(x, value) {
 #########################################################
 
 setMethod("labels", "phylo4", function(object, type = c("tip",
-    "internal", "allnode"), ...) {
+    "internal", "allnode")) {
     type <- match.arg(type)
     switch(type,
            tip = object@tip.label[as.character(nodeId(object, "tip"))],
