@@ -83,8 +83,8 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
         ## Format data to have correct dimensions
         dt <- dt[!is.na(ndDt) ,, drop=FALSE]
         rownames(dt) <- ndDt[!is.na(ndDt)]
-        if(label.type == "column") dt <- dt[, -label.column]
         tmpDt[,] <- dt[match(rownames(tmpDt), rownames(dt)) ,, drop=FALSE]
+        if(label.type == "column") tmpDt <- tmpDt[, -label.column, drop=FALSE]
     }
     else {
         ## Remove rownames in data provided
