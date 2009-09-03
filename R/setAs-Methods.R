@@ -100,17 +100,6 @@ setAs("phylo4", "phylo", function(from, to) {
     storage.mode(edgemat) <- "integer"
     phy$edge <- edgemat
 
-    ## nNodes
-    phy$Nnode <- as.integer(nNodes(from))
-
-    ## Tip labels
-    phy$tip.label <- unname(from@tip.label)
-
-    ## Node labels
-    if(hasNodeLabels(from)) {
-        phy$node.label <- unname(nodeLabels(from))
-    }
-
     ## Edge lengths
     if(hasEdgeLength(from)) {
         edge.length <- edgeLength(from)
@@ -122,6 +111,17 @@ setAs("phylo4", "phylo", function(from, to) {
         else {
             phy$edge.length <- unname(edge.length)
         }
+    }
+
+    ## Tip labels
+    phy$tip.label <- unname(from@tip.label)
+
+    ## nNodes
+    phy$Nnode <- as.integer(nNodes(from))
+
+    ## Node labels
+    if(hasNodeLabels(from)) {
+        phy$node.label <- unname(nodeLabels(from))
     }
 
     ## Root edge
