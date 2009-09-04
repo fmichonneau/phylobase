@@ -1,27 +1,7 @@
-## drop.tip4.R
-
-## modified from drop.tip.R (2006-10-12)
-##   Remove Tips in a Phylogenetic Tree
-## Copyright 2003-2006 Emmanuel Paradis
-## This file is part of the R-package `ape'.
-
-## See the file ../COPYING for licensing issues.
 
 setGeneric("prune",function(phy, ...) {
   standardGeneric("prune")
 })
-
-## setGeneric("drop.tip") ## if ape has already been loaded
-
-
-DropTip <- function(phy,tip,...) {
-  if (length(tip)==0) {
-      phy
-  } else if (is(phy,"phylo4d")) {
-      ## use extract.tree instead of as() to avoid warning
-      as(ape::drop.tip(as(extractTree(phy),"phylo"),tip,...),"phylo4d")
-  } else as(ape::drop.tip(as(phy,"phylo"),tip,...),class(phy))
-}
 
 
 ## return characters, sorted in NUMERIC order
@@ -33,10 +13,7 @@ setMethod("prune","phylo4",
           function(phy, tip, trim.internal = TRUE, subtree = FALSE, ...) {
 
     if (subtree) {
-        #stop("subtree option is not currently supported for phylo4")
-        # do this for now (at least to allow examples to pass check)
         warning("subtree option is not currently supported for phylo4")
-        return(DropTip(phy,tip,trim.internal, subtree))
     }
 
     makeEdgeNames <- function(edge) {
@@ -181,12 +158,6 @@ setMethod("prune", "phylo4d", function(phy, tip, trim.internal=TRUE,
 
     phytr
 })
-
-setMethod("prune", "phylo",
-          function(phy, tip, trim.internal = TRUE, subtree = FALSE,
-                   ...) {
-            DropTip(phy, tip, trim.internal, subtree)
-          })
 
 ## setMethod("prune","ANY",
 ##           function(phy, tip, trim.internal = TRUE, subtree = FALSE,

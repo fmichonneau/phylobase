@@ -1,87 +1,141 @@
 \name{subset-methods}
 \docType{methods}
-\alias{subset}
 \alias{subset-methods}
-\alias{subset,phylo-method}
 \alias{subset,phylo4-method}
 \alias{subset,phylo4d-method}
+\alias{prune}
+\alias{prune-methods}
+\alias{prune,phylo4-method}
+\alias{prune,phylo4d-method}
+\alias{[-methods}
 \alias{[,phylo4-method}
 \alias{[,phylo4d-method}
+\alias{na.omit,phylo4d-method}
 \title{Methods for creating subsets of phylogenies}
 \description{
   Methods for creating subsets of phylogenies, based on pruning a tree
   to include or exclude a set of terminal taxa, to include all
-  descendants of the MRCA of two taxa, or eventually to a subtree rooted
-  at a given node.\cr
-
-  The "[" operator can be used with \linkS4class{phylo4} and
-  \linkS4class{phylo4d} objects. With a \linkS4class{phylo4} object
-  'foo', \code{foo[i]} creates a subset of \code{foo} taking \code{i}
-  for a tip index. With a \linkS4class{phylo4d} object
-  'foo', \code{foo[i,j]} creates a subset of \code{foo} taking \code{i}
-  for a tip index and \code{j} for the index of tips variables (see
-  details).\cr
+  descendants of the MRCA of multiple taxa, or to return a subtree
+  rooted at a given node.
 }
 \section{Methods}{
   \describe{
-    \item{phy = "phylo4d"}{drop tips and corresponding node and tip data}
-    \item{phy = "phylo4"}{drop tips}
-    \item{phy = "phylo"}{drop tips}
+    \item{x = "phylo4"}{subset tree}
+    \item{x = "phylo4d"}{subset tree and corresponding node and tip data}
   }
 }
-\note{At the moment, this simply wraps \code{ape::drop.tip}.
-  Renamed from \code{drop.tip} to \code{prune} in order to
-  avoid conflicts with ape.}
 \usage{
-\S4method{subset}{phylo4}(x, tips.include=NULL, tips.exclude=NULL, mrca=NULL, node.subtree=NULL, \dots)
+\S4method{subset}{phylo4}(x, tips.include=NULL, tips.exclude=NULL,
+  mrca=NULL, node.subtree=NULL, \dots)
+\S4method{subset}{phylo4d}(x, tips.include=NULL, tips.exclude=NULL,
+  mrca=NULL, node.subtree=NULL, \dots)
 
-\S4method{subset}{phylo4d}(x, tips.include=NULL, tips.exclude=NULL, mrca=NULL, node.subtree=NULL, \dots)
-\S4method{subset}{phylo}(x, \dots)
+\S4method{prune}{phylo4}(x, tips.exclude, trim.internal = TRUE, \dots)
+\S4method{prune}{phylo4d}(x, tips.exclude, trim.internal = TRUE, \dots)
+
+\S4method{[}{phylo4}(x, i)
+\S4method{[}{phylo4d}(x, i, j)
 }
 \arguments{
-  \item{x}{an object of class \code{"phylo4"}, \code{"phylo"} or \code{"phylo4d"}}
-  \item{tips.include}{A vector containing tips to include in the pruned tree}
-  \item{tips.exclude}{A vector containing tips to exclude from the pruned tree}
-  \item{mrca}{Prune tree to include all descendants of the most recent common ancestor of the specified taxa}
-  \item{node.subtree}{Prune to all descendants of a specified node}
-  \item{\dots}{further arguments to be passed to other methods}
+  \item{x}{an object of class \code{"phylo4"} or \code{"phylo4d"}}
+  \item{tips.include}{A vector of tips to include in the subset tree}
+  \item{tips.exclude}{A vector of tips to exclude from the subset tree}
+  \item{mrca}{A vector of tips for determining the most recent common
+    ancestor, which is then used as the root of the subset tree}
+  \item{node.subtree}{A single internal node specifying the root of the
+    subset tree}
+  \item{trim.internal}{A logical specifying whether to remove internal
+    nodes that no longer have tip descendants in the subset tree}
+  \item{i}{(\code{[} method) An index vector indicating tips to include}
+  \item{j}{(\code{[} method, phylo4d only) An index vector indicating
+    columns of node/tip data to include}
+  \item{\dots}{additional arguments to be passed to other methods}
 }
 \details{
-  The arguments \code{tip} can be either character or numeric. In the
-  first case, it gives the labels of the tips to be deleted; in the
-  second case the numbers of these labels in the vector
-  \code{phy\$tip.label} are given.\cr
+  The \code{subset} methods must be called using no more than one of the
+  four main subsetting criteria arguments (\code{tips.include},
+  \code{tips.exclude}, \code{mrca}, or \code{node.subtree}).  Each of
+  these arguments can be either character or numeric.  In the first case,
+  they are treated as node labels; in the second case, they are treated
+  as node numbers.  For the first three arguments, any supplied tips not
+  found in the tree (\code{tipLabels(x)}) will be ignored, with a
+  warning.  For the \code{node.subtree} argument, failure to provide a
+  single, valid internal node will result in an error.
 
-  The indices used with the \code{[} operator can be characters, integers
-  or logical, just like with a vector or a matrix.\cr
-  If \code{foo} is a \linkS4class{phylo4d} object, the index of
-  variables ("j") is optional: \code{foo[i,j]} is the same as
-  \code{foo[i]}.\cr
+  Although \code{prune} is mainly intended as the workhorse function
+  called by \code{subset}, it may also be called directly.  In general
+  it should be equivalent to the \code{tips.exclude} form of
+  \code{subset} (although perhaps with less up-front error checking).
 
+  The "[" operator, when used as \code{x[i]}, is similar to the
+  \code{tips.include} form of \code{subset}.  However, the indices used
+  with this operator can also be logical, just like with a vector or a
+  matrix.  With a \linkS4class{phylo4d} object 'x', \code{x[i,j]}
+  creates a subset of \code{x} taking \code{i} for a tip index and
+  \code{j} for the index of data variables in \code{tdata(geospiza,
+  "all")}.  Note that the second index is optional: \code{x[i, TRUE]},
+  \code{x[i,]}, and \code{x[i]} are all equivalent.
+
+  Regardless of which approach to subsetting is used, the argument
+  values must be such that at least two tips are retained.
+
+  If the most recent common ancestor of the retained tips is not the
+  original root node, then the root node of the subset tree will be a
+  descendant of the original root.  For rooted trees with non-NA root
+  edge length, this has implications for the new root edge length.  In
+  particular, the new length will be the summed edge length from the new
+  root node back to the original root (including the original root
+  edge).  As an alternative, see the examples for a way to determine the
+  length of the edge that was immediately ancestral to the new root node
+  in the original tree.
+
+  Note that the correspondance between nodes and labels (and data in the
+  case of \linkS4class{phylo4d}) will be retained after all forms of
+  subsetting.  Beware, however, that the node numbers (IDs) will likely
+  be altered to reflect the new tree topology, and therefore cannot be
+  compared directly between the original tree and the subset tree.
 }
 \value{
-  an object of class \code{"phylo4"}
+  an object of class \code{"phylo4"} or \code{"phylo4d"}
 }
-\author{Steven Kembel \email{skembel@berkeley.edu}\cr
+\author{
+  Jim Regetz \email{regetz@nceas.ucsb.edu}\cr
+  Steven Kembel \email{skembel@berkeley.edu}\cr
   Damien de Vienne \email{damien.de-vienne@u-psud.fr}\cr
   Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}
 }
 \examples{
 data(geospiza)
+nodeLabels(geospiza) <- paste("N", nodeId(geospiza), sep="")
+geotree <- extractTree(geospiza)
 
 ## "subset" examples
-g1 <- as(geospiza,"phylo4")
-nodeLabels(g1) <- paste("N", nodeId(g1), sep="")
-plot(subset(g1,tips.exclude="scandens"))
-plot(subset(g1,mrca=c("scandens","fortis","pauper")))
-plot(subset(g1,node.subtree=18))
+tips <- c("difficilis", "fortis", "fuliginosa", "fusca", "olivacea",
+    "pallida", "parvulus", "scandens")
+plot(subset(geotree, tips.include=tips))
+plot(subset(geotree, tips.include=tips, trim.internal=FALSE))
+plot(subset(geotree, tips.exclude="scandens"))
+plot(subset(geotree, mrca=c("scandens","fortis","pauper")))
+plot(subset(geotree, node.subtree=18))
 
-## "[" examples
-plot(g1,show.node.label=TRUE)
-plot(g1[c(1:6,14)],show.node.label=TRUE)
-nodeLabels(geospiza) <- paste("N", nodeId(geospiza), sep="")
-plot(geospiza[c(1:6,14)],show.node.label=TRUE)
-plot(geospiza[c(1:6,14),3:5],show.node.label=TRUE)
+## "prune" examples (equivalent to subset using tips.exclude)
+plot(prune(geotree, tips))
+
+## "[" examples (equivalent to subset using tips.include)
+plot(geotree[c(1:6,14)])
+plot(geospiza[c(1:6,14)])
+
+## for phylo4d, subset both tips and data columns
+geospiza[c(1:6,14), c("wingL", "beakD")]
+
+## note handling of root edge length:
+edgeLength(geotree)['NA-15'] <- 0.1
+geotree2 <- geotree[1:2]
+## in subset tree, edge of new root extends back to the original root
+edgeLength(geotree2)['NA-3']
+## edge length immediately ancestral to this node in the original tree
+edgeLength(geotree, MRCA(geotree, tipLabels(geotree2)))
+
 }
 \keyword{manip}
 \keyword{methods}

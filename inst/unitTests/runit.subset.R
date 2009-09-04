@@ -9,31 +9,6 @@ load("trees.RData")
 tr <- read.tree(text="(((t1:0.2,(t2:0.1,t3:0.1):0.15):0.5,t4:0.7):0.2,t5:1):0.4;")
 tr.sub2 <- read.tree(text="(t2:0.95,t5:1);")
 tr.sub4 <- read.tree(text="(((t1:0.2,t2:0.25):0.5,t4:0.7):0.2,t5:1);")
-# Explicitly set order as 'cladewise', to match behavior of
-# ape::drop.tip in test comparisons below
-tr <- reorder(tr, "cladewise")
-tr.sub2 <- reorder(tr.sub2, "cladewise")
-tr.sub4 <- reorder(tr.sub4, "cladewise")
-
-test.subset.phylo <- function() {
-    # subset 2 tips
-    checkEquals(tr.sub2, subset(tr, tips.include=c(2, 5)))
-    checkEquals(tr.sub2, subset(tr, tips.exclude=c(1, 3, 4)))
-    checkEquals(tr.sub2, subset(tr, tips.include=c("t2", "t5")))
-    checkEquals(tr.sub2, subset(tr, tips.exclude=c("t1", "t3", "t4")))
-    # subset 4 tips
-    checkEquals(tr.sub4, subset(tr, tips.include=c(1, 2, 4, 5)))
-    checkEquals(tr.sub4, subset(tr, tips.exclude=3))
-    checkEquals(tr.sub4, subset(tr, tips.include=c("t1", "t2", "t4", "t5")))
-    checkEquals(tr.sub4, subset(tr, tips.exclude="t3"))
-    # check variants that should all return the original object
-    checkEquals(tr, subset(tr))
-    # error if only one valid tip requested
-    checkException(subset(tr, tips.include="t1"))
-    checkException(subset(tr, tips.include=c("t1", "t999")))
-    # error if zero valid tips requested
-    checkException(subset(tr, tips.include="t999"))
-}
 
 test.subset.phylo4 <- function() {
     # subset 2 tips

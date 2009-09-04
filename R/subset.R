@@ -13,11 +13,11 @@ setMethod("subset", "phylo4",
                                  mrca,node.subtree),is.null))>1) {
               stop("must specify at most one criterion for subsetting")
             }
-            arglist <- list(...)
-            if (length(arglist)>0) {
-              warning("unused arguments: ",
-                      paste(names(arglist),collapse=","))
-            }
+            #arglist <- list(...)
+            #if (length(arglist)>0) {
+            #  warning("unused arguments: ",
+            #          paste(names(arglist),collapse=","))
+            #}
             kept <- x@tip.label
             dropped <- character(0)
             if (!is.null(tips.include)) {
@@ -59,18 +59,8 @@ setMethod("subset", "phylo4",
               stop("0 or 1 tips would remain after subsetting")
             }
             if (length(dropped)==0) return(x)
-            return(prune(x,dropped))
+            return(prune(x, dropped, ...))
           })
-
-
-setMethod("subset", "phylo", function(x,...) {
-    x <- as(x,"phylo4")
-    res <- subset(x,...)
-    return(as(res,"phylo"))
-})
-
-
-
 
 ###############
 # '[' operator

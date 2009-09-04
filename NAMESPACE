@@ -16,8 +16,7 @@ exportClasses(phylo4, phylo4d, multiPhylo4, multiPhylo4d)
 #----------------------------------------------------------------------
 
 # utility methods
-exportMethods("[", "[<-", "[[", "[[<-", print, head, tail,
-    reorder, subset, plot, summary)
+exportMethods(print, head, tail, reorder, plot, summary)
 
 # tree constructor methods
 exportMethods(phylo4, phylo4d)
@@ -39,8 +38,11 @@ exportMethods(nodeId, nodeType)
 # tree data methods
 exportMethods(tdata, "tdata<-", addData, hasTipData, hasNodeData)
 
-# prune methods
-exportMethods(prune)
+# subset methods
+exportMethods(subset, prune, "[")
+
+# pdata methods
+exportMethods("[<-", "[[", "[[<-")
 
 # label methods
 exportMethods(labels, "labels<-", nodeLabels, "nodeLabels<-",
@@ -61,9 +63,6 @@ export(readNexus, read.nexustreestring)
 
 # pdata functions
 export(pdata, check_pdata)
-
-# prune functions --> maybe don't export?
-export(DropTip)
 
 # plotting functions
 export(treePlot, plotOneTree, tip.data.plot)
