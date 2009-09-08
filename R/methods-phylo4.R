@@ -138,6 +138,7 @@ setMethod("nEdges", "phylo4", function(x) {
     nrow(x@edge)
 })
 
+# return edge matrix in its current order
 setMethod("edges", "phylo4", function(x, order, drop.root=FALSE, ...) {
   e <- x@edge
   if (drop.root) e <- e[!is.na(e[,1]),]
@@ -171,13 +172,16 @@ setMethod("hasEdgeLength","phylo4", function(x) {
     !all(is.na(x@edge.length))
 })
 
+# return edge lengths in order by edgeIds (same order as edge matrix)
 setMethod("edgeLength", "phylo4", function(x, node) {
-    if (missing(node))
-        return(x@edge.length)
-    else {
+    ## [JR: below, using match for ordering rather than direct character
+    ## indexing b/c the latter is slow for vectors of a certain size]
+    elen <- x@edge.length[match(edgeId(x, "all"), names(x@edge.length))]
+    if (!missing(node)) {
         n <- getNode(x, node)
-        return(x@edge.length[match(n, x@edge[,2])])
+        elen <- elen[match(n, x@edge[,2])]
     }
+    return(elen)
 })
 
 setReplaceMethod("edgeLength", "phylo4", function(x, use.names=TRUE, ..., value) {
@@ -342,8 +346,11 @@ setMethod("hasEdgeLabels", "phylo4", function(x) {
     length(x@edge.label) > 0
 })
 
+# return edge labels in order by edgeIds (same order as edge matrix)
 setMethod("edgeLabels", signature(x = "phylo4"), function(x) {
-    x@edge.label
+    ## [JR: below, using match for ordering rather than direct character
+    ## indexing b/c the latter is slow for vectors of a certain size]
+    x@edge.label[match(edgeId(x, "all"), names(x@edge.label))]
 })
 
 setReplaceMethod("edgeLabels", signature(object="phylo4", value="character"),

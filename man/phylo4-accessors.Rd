@@ -59,7 +59,7 @@
     tree has edge (branch) lengths}
   
   \item{edgeLength}{\code{signature(object = "phylo4")}: edge (branch)
-    lengths (or NULL if none)}
+    lengths (or NAs if missing) ordered according to the edge matrix}
  
   \item{nodeType}{\code{signature(object = "phylo4")}: named vector
     which has the type of node (internal, tip, root) for value, and the

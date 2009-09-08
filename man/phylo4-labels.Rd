@@ -85,19 +85,20 @@ use.names=FALSE) <- value
 \section{Methods}{
   \describe{
     \item{labels}{\code{signature(object = "phylo4")}: tip and/or
-      internal node labels}
+      internal node labels, ordered by node ID}
 
-    \item{tipLabels}{\code{signature(object = "phylo4")}: tip labels}
+    \item{tipLabels}{\code{signature(object = "phylo4")}: tip labels,
+      ordered by node ID}
     
     \item{hasNodeLabels}{\code{signature(object = "phylo4")}: whether
       tree has (internal) node labels}
     \item{nodeLabels}{\code{signature(object = "phylo4")}: internal
-      node labels}
+      node labels, ordered by node ID}
     
     \item{hasEdgeLabels}{\code{signature(object = "phylo4")}: whether
       tree has (internal) edge labels}
     \item{edgeLabels}{\code{signature(object = "phylo4")}: internal
-      edge labels}
+      edge labels, ordered according to the edge matrix}
   }
 }
 
