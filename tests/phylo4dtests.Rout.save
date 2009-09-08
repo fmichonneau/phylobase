@@ -61,22 +61,22 @@ C    2
 > 
 > print(tree)
   label node ancestor edge.length node.type
-5          5       NA          NA      root
-6          6        5          NA  internal
-7     C    7        6          NA  internal
 1     A    1        7          NA       tip
 2     B    2        7          NA       tip
 3     D    3        6          NA       tip
 4     E    4        5          NA       tip
+5          5       NA          NA      root
+6          6        5          NA  internal
+7     C    7        6          NA  internal
 > print(treed)
   label node ancestor edge.length node.type size
-5          5       NA          NA      root   NA
-6          6        5          NA  internal   NA
-7     C    7        6          NA  internal   NA
 1     A    1        7          NA       tip    1
 2     B    2        7          NA       tip    2
 3     D    3        6          NA       tip    4
 4     E    4        5          NA       tip    3
+5          5       NA          NA      root   NA
+6          6        5          NA  internal   NA
+7     C    7        6          NA  internal   NA
 > 
 > 
 > proc.time()

@@ -16,7 +16,8 @@ setGeneric("nodeType", function(phy) {
 })
 
 ## nodeId
-setGeneric("nodeId", function(x, type=c("internal", "tip", "all")) {
+setGeneric("nodeId", function(x, type=c("all", "tip", "internal",
+    "root")) {
     standardGeneric("nodeId")
 })
 

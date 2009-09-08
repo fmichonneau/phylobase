@@ -95,15 +95,15 @@ Warning message:
 In checkTree(object) : tree contains singleton nodes
 > try(phylo4(broke1$edge), silent=TRUE)    # constructor makes a phylo4 object with no warning
   label node ancestor edge.length node.type
-6  <NA>    6       NA          NA  internal
-7  <NA>    7        6          NA  internal
-8  <NA>    8        6          NA  internal
-9  <NA>    9        9          NA  internal
 1    T1    1        7          NA       tip
 2    T2    2        7          NA       tip
 3    T3    3        8          NA       tip
 4    T4    4        9          NA       tip
 5    T5    5        9          NA       tip
+6  <NA>    6       NA          NA  internal
+7  <NA>    7        6          NA  internal
+8  <NA>    8        6          NA  internal
+9  <NA>    9        9          NA  internal
 Warning messages:
 1: In checkTree(object) : tree contains singleton nodes
 2: In checkTree(object) : tree contains singleton nodes
@@ -144,15 +144,15 @@ In tips == 1:ntips :
 Error in .local(x, ...) : root node must be first row of edge matrix
 > try(phylo4(broke3$edge))    # works with no error message
   label node ancestor edge.length node.type
-7  <NA>    7       NA          NA  internal
-6  <NA>    6        7          NA  internal
-8  <NA>    8        7          NA  internal
-9  <NA>    9        8          NA  internal
 1    T1    1        6          NA       tip
 2    T2    2        6          NA       tip
 3    T3    3        8          NA       tip
 4    T4    4        9          NA       tip
 5    T5    5        9          NA       tip
+6  <NA>    6        7          NA  internal
+7  <NA>    7       NA          NA  internal
+8  <NA>    8        7          NA  internal
+9  <NA>    9        8          NA  internal
 > ## plot(tree3)  # would work if we could create it?
 > 
 > 

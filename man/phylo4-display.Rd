@@ -95,7 +95,7 @@
      NA,  8), ncol=2, byrow=TRUE)
 
   P2 <- phylo4(E)
-  nodeLabels(P2) <- as.character(sort(nodeId(P2)))
+  nodeLabels(P2) <- as.character(nodeId(P2, "internal"))
   plot(P2, show.node.label=TRUE)
   sumryP2 <- summary(P2)
   sumryP2

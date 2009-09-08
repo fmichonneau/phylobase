@@ -137,7 +137,7 @@ nDt <- data.frame(a=rnorm(nNodes(trGeo)), row.names=nodeId(trGeo, "internal"))
 (matchData2 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=TRUE))
 
 ## Example with 'all.data'
-nodeLabels(geoTree) <- as.character(nodeId(geoTree))
+nodeLabels(geoTree) <- as.character(nodeId(geoTree, "internal"))
 rAllData <- data.frame(randomTrait = rnorm(nTips(geoTree) + nNodes(geoTree)),
 row.names = labels(geoTree, 'all'))
 
@@ -185,7 +185,7 @@ p4d.nod <- phylo4d(p4, node.data = nod.dat, match.data=FALSE)
 
 ## create phylo4 objects with node and tip data
 p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat, match.data=FALSE)
-nodeLabels(p4) <- as.character(sort(nodeId(p4)))
+nodeLabels(p4) <- as.character(nodeId(p4, "internal"))
 p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat, match.data=FALSE))
 
 

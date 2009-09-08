@@ -111,7 +111,7 @@ You can also retrieve the node labels with \code{labels(g1,"internal")}).
 A simple way to assign the node numbers as labels (useful for various checks) is
 
 <<>>=
-nodeLabels(g1) <- paste("N", nodeId(g1), sep="")
+nodeLabels(g1) <- paste("N", nodeId(g1, "internal"), sep="")
 head(g1, 5)
 @
 
@@ -130,7 +130,7 @@ tipLabels(g1)
 
 Print node numbers (in edge matrix order):
 <<nodenumbergeodata>>=
-nodeId(g1, type='allnode')
+nodeId(g1, type='all')
 @
 
 Print edge labels (also empty in this case --- therefore
@@ -307,7 +307,7 @@ plot(treed)
 
 <<keep.source=TRUE>>=
 ## add node labels so we can match to data
-nodeLabels(tree) <- as.character(sort(nodeId(tree)))
+nodeLabels(tree) <- as.character(nodeId(tree, "internal"))
 ## ordering will make sure that we have ancestor value
 ## defined before descendant
 tree <- reorder(tree, "preorder")

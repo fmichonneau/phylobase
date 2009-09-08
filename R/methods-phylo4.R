@@ -105,16 +105,27 @@ setMethod("nodeType", "phylo4", function(phy) {
     }
 })
 
-setMethod("nodeId", "phylo4", function(x, type=c("internal","tip","allnode")) {
-  type <- match.arg(type)
-  tipNid <- x@edge[x@edge[,2]<=nTips(x),2]
-  allNid <- unique(as.vector(x@edge))
-  intNid <- allNid[! allNid %in% tipNid]
-  nid <- switch(type,
-                internal = intNid,
-                tip = tipNid,
-                allnode = allNid)
-  return(nid[!is.na(nid)])
+# return node IDs (or a subset thereof) in ascending order
+setMethod("nodeId", "phylo4", function(x, type=c("all",
+    "tip","internal","root")) {
+
+     type <- match.arg(type)
+     E <- edges(x)
+
+     ## Note: this implementation will still work even if tips are not
+     ## 1:nTips and nodes are not (nTips+1):nNodes
+     nid <- switch(type,
+         ## all nodes appear at least once in the edge matrix
+         all = unique(na.omit(as.vector(E))),
+         ## tips are nodes that do not appear in the ancestor column
+         tip = setdiff(E[, 2], E[, 1]),
+         ## internals are nodes that *do* appear in the ancestor column
+         internal = na.omit(unique(E[, 1])),
+         ## roots are nodes that have NA as ancestor
+         root = if (!isRooted(x)) NA else unname(E[is.na(E[, 1]), 2]))
+
+     return(sort(nid))
+
 })
 
 

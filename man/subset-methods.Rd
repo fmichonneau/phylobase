@@ -106,7 +106,7 @@
 }
 \examples{
 data(geospiza)
-nodeLabels(geospiza) <- paste("N", nodeId(geospiza), sep="")
+nodeLabels(geospiza) <- paste("N", nodeId(geospiza, "internal"), sep="")
 geotree <- extractTree(geospiza)
 
 ## "subset" examples

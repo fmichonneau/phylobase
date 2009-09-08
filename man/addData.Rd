@@ -45,7 +45,7 @@ pos=c("after", "before"), merge.data=TRUE, match.data=TRUE, \dots)
 \examples{
   data(geospiza)
   nDt <- data.frame(a=rnorm(nNodes(geospiza)), b=1:nNodes(geospiza),
-row.names=nodeId(geospiza))
+    row.names=nodeId(geospiza, "internal"))
   t1 <-addData(geospiza, node.data=nDt)
 }
 \author{Francois Michonneau}
