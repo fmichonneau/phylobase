@@ -44,7 +44,7 @@ In asMethod(object) : losing data while coercing phylo4d to phylo
 > p2 <- as(geospiza0$geospiza.tree,"phylo4")
 > plot(p2)
 > 
-> lab1 <- labels(p2)
+> lab1 <- tipLabels(p2)
 > lab2 <- rownames(geospiza0$geospiza.data)
 > 
 > lab1[!lab1 %in% lab2]  ## missing data

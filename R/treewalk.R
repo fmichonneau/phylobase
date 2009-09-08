@@ -15,23 +15,23 @@ getNode <- function(phy, node, missing=c("warn","OK","fail")) {
     }
 
     if (is.character(node)) {
-        irval <- match(node, labels(phy, "allnode"))
+        irval <- match(node, labels(phy, "all"))
 
     }
     else {
         if (is.integer(node)) {
-            irval <- match(as.character(node), names(labels(phy, "allnode")))
+            irval <- match(as.character(node), names(labels(phy, "all")))
         }
         else stop("Node must be a vector of class \'integer\' or \'character\'.")
     }
 
     ## node numbers
-    rval <- names(labels(phy, "allnode"))[irval]
+    rval <- names(labels(phy, "all"))[irval]
     rval <- as.integer(rval)
     rval[is.na(node)] <- NA # return NA for any NA_character_ inputs
 
     ## node labels
-    nmNd <- labels(phy, "allnode")[irval]
+    nmNd <- labels(phy, "all")[irval]
     names(rval) <- nmNd
 
     ## deal with nodes that don't match

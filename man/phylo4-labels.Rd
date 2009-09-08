@@ -35,7 +35,7 @@
 
 \usage{
 
-\S4method{labels}{phylo4}(object, type=c("tip", "internal", "allnode"), \dots)
+\S4method{labels}{phylo4}(object, type=c("all", "tip", "internal"), \dots)
 \S4method{labels}{phylo4,ANY,ANY,character}(x, type=c("tip", "internal", "allnode"),
 use.names=FALSE) <- value
 
@@ -55,8 +55,8 @@ use.names=FALSE) <- value
 \arguments{
   \item{x}{a phylo4 or phylo4d object.}
   \item{object}{a phylo4 or phylo4d object.}
-  \item{type}{which type of labels: \code{tip} (tips), \code{internal}
-  (internal nodes), \code{allnode} (tips and internal nodes).}
+  \item{type}{which type of labels: \code{all} (tips and internal nodes),
+    \code{tip} (tips only), \code{internal} (internal nodes only).}
   \item{value}{a vector of class \code{character}, see Details for more
     information.}
   \item{use.names}{should the names of the vector used to create/update
@@ -84,7 +84,8 @@ use.names=FALSE) <- value
 
 \section{Methods}{
   \describe{
-    \item{labels}{\code{signature(object = "phylo4")}: tip labels}
+    \item{labels}{\code{signature(object = "phylo4")}: tip and/or
+      internal node labels}
 
     \item{tipLabels}{\code{signature(object = "phylo4")}: tip labels}
     
@@ -94,7 +95,7 @@ use.names=FALSE) <- value
       node labels}
     
     \item{hasEdgeLabels}{\code{signature(object = "phylo4")}: whether
-    tree has (internal) edge labels}
+      tree has (internal) edge labels}
     \item{edgeLabels}{\code{signature(object = "phylo4")}: internal
       edge labels}
   }

@@ -71,7 +71,7 @@ setMethod("[","phylo4",
 
               if(missing(i)) i <- TRUE
 
-              oldlab <- labels(x)
+              oldlab <- tipLabels(x)
               if(is.character(i)){
                   newlab <- i
               } else {

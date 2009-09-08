@@ -125,7 +125,7 @@ Print tip labels:
 <<tiplabelgeodata>>=
 tipLabels(g1)
 @
-(\code{labels(g1)} or \code{labels(g1,"tip")} would also work.)
+(\code{labels(g1,"tip")} would also work.)
 
 
 Print node numbers (in edge matrix order):

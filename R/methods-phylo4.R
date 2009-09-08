@@ -227,14 +227,22 @@ setReplaceMethod("rootNode", "phylo4", function(x, value) {
 ### Label accessors
 #########################################################
 
-setMethod("labels", "phylo4", function(object, type = c("tip",
-    "internal", "allnode")) {
+## return labels in increasing node order
+setMethod("labels", "phylo4", function(object, type = c("all", "tip",
+    "internal")) {
     type <- match.arg(type)
-    switch(type,
-           tip = object@tip.label[as.character(nodeId(object, "tip"))],
-           internal =  object@node.label,
-           allnode = c(object@tip.label, object@node.label)
-           )
+    ## [JR: below, using match for ordering rather than direct character
+    ## indexing b/c the latter is slow for vectors of a certain size]
+    if (type=="all") {
+        all <- c(object@tip.label, object@node.label)
+        return(all[match(nodeId(object, "all"), names(all))])
+    } else if (type=="tip") {
+        tip <- object@tip.label
+        return(tip[match(nodeId(object, "tip"), names(tip))])
+    } else if (type=="internal") {
+        int <- object@node.label
+        return(int[match(nodeId(object, "internal"), names(int))])
+    }
 })
 
 setReplaceMethod("labels",

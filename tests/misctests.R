@@ -21,7 +21,7 @@ t1 <-  try(p1 <- phylo4d(geospiza0$geospiza.tree,geospiza0$geospiza.data))
 p2 <- as(geospiza0$geospiza.tree,"phylo4")
 plot(p2)
 
-lab1 <- labels(p2)
+lab1 <- tipLabels(p2)
 lab2 <- rownames(geospiza0$geospiza.data)
 
 lab1[!lab1 %in% lab2]  ## missing data
@@ -38,7 +38,7 @@ p1B <- prune(p1,tip="olivacea")
 ## or ...
 p1C <- na.omit(p1)
 
-labels(p1C) <- tolower(labels(p1C))
+labels(p1C, "allnode") <- tolower(labels(p1C, "all"))
 
 ## trace("prune",browser,signature="phylo4d")
 r1 <- read.tree(text="((t4:0.3210275554,(t2:0.2724586465,t3:0.2724586465):0.0485689089):0.1397952619,(t5:0.07551818331,t1:0.07551818331):0.385304634);")

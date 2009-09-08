@@ -127,7 +127,7 @@ checkTree <- function(object,
     }
 
     ## make sure that tip and node labels are unique
-    lb <- labels(object, "allnode")
+    lb <- labels(object, "all")
     lb <- lb[nchar(lb) > 0]
     lb <- na.omit(lb)
     if(any(table(lb) > 1))
