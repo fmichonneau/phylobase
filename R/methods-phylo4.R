@@ -137,6 +137,25 @@ setMethod("edgeOrder", "phylo4", function(x, ...) {
     x@order
 })
 
+# return edge IDs (or a subset thereof) in edge matrix order
+setMethod("edgeId", "phylo4", function(x, type=c("all", "tip",
+    "internal", "root")) {
+    type <- match.arg(type)
+    edge <- edges(x)
+    if (type=="tip") {
+        isTip <- !(edge[, 2] %in% edge[, 1])
+        edge <- edge[isTip, , drop=FALSE]
+    } else if (type=="internal") {
+        isInt <- (edge[, 2] %in% edge[, 1])
+        edge <- edge[isInt, , drop=FALSE]
+    } else if (type=="root") {
+        isRoot <- is.na(edge[, 1])
+        edge <- edge[isRoot, , drop=FALSE]
+    } # else just use complete edge matrix if type is "all"
+    id <- paste(edge[, 1], edge[, 2], sep="-")
+    return(id)
+})
+
 setMethod("hasEdgeLength","phylo4", function(x) {
     !all(is.na(x@edge.length))
 })

@@ -35,6 +35,12 @@ setGeneric("edgeOrder", function(x, ...) {
   standardGeneric("edgeOrder")
 })
 
+## edgeId
+setGeneric("edgeId", function(x, type=c("all", "tip", "internal",
+    "root")) {
+    standardGeneric("edgeId")
+})
+
 ## hasEdgeLength
 setGeneric("hasEdgeLength", function(x) {
     standardGeneric("hasEdgeLength")

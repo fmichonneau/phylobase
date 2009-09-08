@@ -25,7 +25,7 @@ exportMethods(phylo4, phylo4d)
 exportMethods(nTips, nNodes, nEdges)
 
 # edge methods
-exportMethods(edges, hasEdgeLength, edgeLength, "edgeLength<-",
+exportMethods(edges, edgeId, hasEdgeLength, edgeLength, "edgeLength<-",
     sumEdgeLength, edgeOrder)
 
 # root methods
