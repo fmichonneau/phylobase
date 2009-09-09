@@ -72,8 +72,9 @@ Nodes: data.frame with 3 internal nodes and 1 variables
 + }
 > 
 > plot.phylo(as(p2,"phylo"))
-Warning message:
-In asMethod(object) : losing data while coercing phylo4d to phylo
+Warning messages:
+1: In asMethod(object) : losing data while coercing phylo4d to phylo
+2: In asMethod(object) : trees with unknown order may be unsafe in ape
 > 
 > proc.time()
    user  system elapsed 
