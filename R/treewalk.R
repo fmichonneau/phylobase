@@ -226,8 +226,6 @@ getEdge <- function(phy, node, type=c("node", "ancestor", "all"),
                     missing=c("warn", "OK", "fail")) {
 
     type <- match.arg(type)
-    missing <- match.arg(missing)
-    output <- match.arg(output)
     res <- character(0)
 
     if(!identical(class(phy), "phylo4")) phy <- as(phy, "phylo4")
@@ -240,6 +238,8 @@ getEdge <- function(phy, node, type=c("node", "ancestor", "all"),
         res <- names(phy@edge.length)
     }
     else {
+        missing <- match.arg(missing)
+        output <- match.arg(output)
         node <- getNode(phy, node, missing)
 
         nd <- lapply(node, function(x) {
