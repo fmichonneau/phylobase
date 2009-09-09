@@ -74,6 +74,15 @@ test.edgeOrder.phylo4 <- function() {
   checkIdentical(edgeOrder(reorder(phy, "postorder")), "postorder")
 }
 
+test.edgeId.phylo4 <- function() {
+  eid <- paste(ancestor, descendant, sep="-")
+  checkIdentical(edgeId(phy), eid)
+  checkIdentical(edgeId(phy, "all"), eid)
+  checkIdentical(edgeId(phy, "tip"), eid[descendant %in% nid.tip])
+  checkIdentical(edgeId(phy, "internal"), eid[!descendant %in% nid.tip])
+  checkIdentical(edgeId(phy, "root"), eid[is.na(ancestor)])
+}
+
 test.hasEdgeLength.phylo4 <- function() {
   checkTrue(hasEdgeLength(phy))
   phy@edge.length <- NA_real_

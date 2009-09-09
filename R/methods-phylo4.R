@@ -13,10 +13,11 @@
 ###  3.1. nEdges()
 ###  3.2. edges()
 ###  3.3. edgeOrder()
-###  3.4. hasEdgeLength()
-###  3.5. edgeLength()
-###  3.6. edgeLength() <-
-###  3.7. sumEdgeLength()
+###  3.4. edgeId()
+###  3.5. hasEdgeLength()
+###  3.6. edgeLength()
+###  3.7. edgeLength() <-
+###  3.8. sumEdgeLength()
 
 ### 4. Root accessors
 ###  4.1. isRooted()
