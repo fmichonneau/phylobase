@@ -163,8 +163,7 @@ test.Replace.tipLabels.phylo4 <- function() {
 test.hasEdgeLabels.phylo4 <- function() {
   checkTrue(hasEdgeLabels(phy))
   phy@edge.label <- NA_character_
-# TODO: fix hasEdgeLabels
-#  checkTrue(!hasEdgeLabels(phy))
+  checkTrue(!hasEdgeLabels(phy))
 }
 
 test.edgeLabels.phylo4 <- function() {

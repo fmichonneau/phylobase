@@ -344,7 +344,7 @@ setReplaceMethod("tipLabels", signature(object="phylo4", value="character"),
 
 ### Edge labels
 setMethod("hasEdgeLabels", "phylo4", function(x) {
-    length(x@edge.label) > 0
+    !all(is.na(x@edge.label))
 })
 
 # return edge labels in order by edgeIds (same order as edge matrix)
