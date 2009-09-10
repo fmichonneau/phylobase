@@ -11,11 +11,17 @@ test.hasPoly <- function() {
     owls$edge.length <- owls$edge.length[-4]
     tr <- as(owls, "phylo4")
     checkTrue(hasPoly(tr))
+    # test against empty tree
+    checkTrue(!hasPoly(new("phylo4")))
 }
 
 test.hasSingle <- function() {
+    # test against empty tree
+    checkTrue(!hasSingle(new("phylo4")))
 }
 
 test.hasRetic <- function() {
+    # test against empty tree
+    checkTrue(!hasRetic(new("phylo4")))
 }
 

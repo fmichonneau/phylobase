@@ -5,23 +5,23 @@
 ##   any(edgeLength(x)==0) if necessary
 hasPoly <- function(object) {
   if(!checkPhylo4(object)) stop("to be used with a phylo4 object")
-  degree <- tabulate(na.omit(edges(object)[, 1]))
-  struc <- any(degree > 2)
-  return(struc)
+  if (nEdges(object)==0) return(FALSE)
+  degree <- tabulate(edges(object, drop.root=TRUE)[, 1])
+  any(degree > 2)
 }
-
-
 
 hasSingle <- function(object) {
   if(!checkPhylo4(object)) stop("to be used with a phylo4 object")
-  degree <- tabulate(na.omit(edges(object)[, 1]))
+  if (nEdges(object)==0) return(FALSE)
+  degree <- tabulate(edges(object, drop.root=TRUE)[, 1])
   any(degree == 1)
 }
 
 hasRetic <- function(object) {
   if(!checkPhylo4(object)) stop("to be used with a phylo4 object")
+  if (nEdges(object)==0) return(FALSE)
   ancest <- tabulate(edges(object)[, 2])
-  any(ancest>1)
+  any(ancest > 1)
 }
 
 
