@@ -412,25 +412,23 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
 
     ## build the result object
     res$name <- deparse(substitute(object, sys.frame(-1)))
-    res$nb.tips <- length(x@tip.label)
-    res$nb.nodes <- x@Nnode
+    res$nb.tips <- nTips(x)
+    res$nb.nodes <- nNodes(x)
 
-    if(!is.null(x@edge.length)){
-        res$mean.el <- mean(x@edge.length, na.rm=TRUE)
-        res$var.el <- var(x@edge.length, na.rm=TRUE)
-        if (isRooted(x) && is.na(x@edge.length[rootNode(x)])) {
-            res$sumry.el <- summary(x@edge.length[-rootNode(x)])
+    if(hasEdgeLength(x)) {
+        edge.length <- edgeLength(x)
+        res$mean.el <- mean(edge.length, na.rm=TRUE)
+        res$var.el <- var(edge.length, na.rm=TRUE)
+        if (isRooted(x) && is.na(edgeLength(x, rootNode(x)))) {
+            root.index <- match(edgeId(x, "root"), names(edge.length))
+            res$sumry.el <- summary(edge.length[-root.index])
         } else {
-            res$sumry.el <- summary(x@edge.length)
+            res$sumry.el <- summary(edge.length)
         }
-    } else {
-        res$mean.el <- NULL
-        res$var.el <- NULL
-        res$sumry.el <- NULL
     }
 
     ## check for polytomies
-    if (nrow(edges(x)) != 0 && any(tabulate(na.omit(edges(object)[,1]))>2)){ # if there are polytomies
+    if (hasPoly(x)) {
         E <- edges(x)
         temp <- tabulate(na.omit(E[,1]))
         degree <- temp[na.omit(E[,1])] # contains the degree of the ancestor for all edges
@@ -463,16 +461,16 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
     cat(" Number of tips    :", res$nb.tips, "\n")
     cat(" Number of nodes   :", res$nb.nodes, "\n")
     ## cat("  ")
-    if(!length(x@edge.length)) {
-        cat(" Branch lengths    : No branch lengths.\n")
-    } else {
+    if(hasEdgeLength(x)) {
         cat(" Branch lengths:\n")
         cat("        mean         :", res$mean.el, "\n")
         cat("        variance     :", res$var.el, "\n")
         cat("        distribution :\n")
         print(res$sumry.el)
+    } else {
+        cat(" Branch lengths    : No branch lengths.\n")
     }
-    if(nrow(edges(x)) != 0 && hasPoly(x)){
+    if (hasPoly(x)) {
         cat("\nDegree of the nodes  :\n")
         print(res$degree)
         cat("\n")

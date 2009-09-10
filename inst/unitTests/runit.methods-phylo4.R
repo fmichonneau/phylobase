@@ -196,7 +196,25 @@ test.tail.phylo4 <- function() {
 }
 
 test.summary.phylo4 <- function() {
- #TODO? function (object, quiet=FALSE)
+  phy.sum <- summary(phy, quiet=TRUE)
+  checkIdentical(phy.sum$name, "phy")
+  checkIdentical(phy.sum$nb.tips, length(nid.tip))
+  checkIdentical(phy.sum$nb.nodes, length(nid.int))
+  checkIdentical(phy.sum$mean.el, mean(elen))
+  checkIdentical(phy.sum$var.el, var(elen))
+  checkIdentical(phy.sum$sumry.el, summary(elen))
+  # now make root edge length NA
+  edgeLength(phy)[edgeId(phy, "root")] <- NA
+  phy.sum2 <- summary(phy, quiet=TRUE)
+  checkIdentical(phy.sum2$mean.el, mean(edgeLength(phy), na.rm=TRUE))
+  checkIdentical(phy.sum2$var.el, var(edgeLength(phy), na.rm=TRUE))
+  checkIdentical(phy.sum2$sumry.el, summary(na.omit(edgeLength(phy))))
+  # now remove edge lengths altogether
+  phy@edge.length[] <- NA
+  phy.sum3 <- summary(phy, quiet=TRUE)
+  checkTrue(is.null(phy.sum3$mean.el))
+  checkTrue(is.null(phy.sum3$var.el))
+  checkTrue(is.null(phy.sum3$sumry.el))
 }
 
 # not an exported function -- called internally by reorder("phylo4")
