@@ -9,8 +9,8 @@ setGeneric("prune",function(phy, ...) {
   as.character(sort(as.numeric(x)))
 }
 
-setMethod("prune","phylo4",
-          function(phy, tip, trim.internal = TRUE, subtree = FALSE, ...) {
+setMethod("prune","phylo4", function(phy, tips.exclude,
+    trim.internal = TRUE, subtree = FALSE, ...) {
 
     if (subtree) {
         warning("subtree option is not currently supported for phylo4")
@@ -21,16 +21,16 @@ setMethod("prune","phylo4",
     } 
 
     ## drop tips and obsolete internal nodes from edge matrix
-    tip.drop <- getNode(phy, tip, missing="fail")
-    tip.keep <- setdiff(seq_len(nTips(phy)), tip.drop)
-    nodes <- seq_len(nrow(phy@edge))
-    node.keep <- logical(nrow(phy@edge))
+    tip.drop <- getNode(phy, tips.exclude, missing="fail")
+    tip.keep <- setdiff(nodeId(phy, "tip"), tip.drop)
+    nodes <- nodeId(phy, "all")
+    node.keep <- rep(FALSE, length(nodes))
     node.keep[tip.keep] <- TRUE
     if (trim.internal) {
-        if (phy@order == "postorder") {
-            edge.post <- phy@edge
+        if (edgeOrder(phy) == "postorder") {
+            edge.post <- edges(phy)
         } else {
-            edge.post <- reorder(phy, "postorder")@edge
+            edge.post <- edges(reorder(phy, "postorder"))
         }
         for (i in seq_along(edge.post[,2])) {
             if (node.keep[edge.post[i,2]]) {
@@ -38,13 +38,13 @@ setMethod("prune","phylo4",
             }
         }
     } else {
-        node.keep[nTips(phy) + seq_len(nNodes(phy))] <- TRUE
+        node.keep[nodeId(phy, "internal")] <- TRUE
     }
-    edge.new <- phy@edge[phy@edge[,2] %in% nodes[node.keep], ]
+    edge.new <- edges(phy)[edges(phy)[,2] %in% nodes[node.keep], ]
   
     ## remove singletons
-    edge.length.new <- phy@edge.length
-    edge.label.new <- phy@edge.label
+    edge.length.new <- edgeLength(phy)
+    edge.label.new <- edgeLabels(phy)
     singletons <- which(tabulate(na.omit(edge.new[,1]))==1)
     while (length(singletons)>0) {
         sing.node <- singletons[1]
@@ -70,8 +70,8 @@ setMethod("prune","phylo4",
     }
 
     ## remove dropped elements from tip.label and node.label
-    tip.label.new <- phy@tip.label[names(phy@tip.label) %in% edge.new]
-    node.label.new <- phy@node.label[names(phy@node.label) %in% edge.new]
+    tip.label.new <- tipLabels(phy)[names(tipLabels(phy)) %in% edge.new]
+    node.label.new <- nodeLabels(phy)[names(nodeLabels(phy)) %in% edge.new]
 
     ## subset and order edge.length and edge.label with respect to edge
     edge.names <- makeEdgeNames(edge.new)
@@ -120,16 +120,18 @@ setMethod("prune","phylo4",
 
 ## trace("prune", browser, signature = "phylo4d")
 ## untrace("prune", signature = "phylo4d")
-setMethod("prune", "phylo4d", function(phy, tip, trim.internal=TRUE,
-                                       subtree=FALSE, ...) {
+setMethod("prune", "phylo4d", function(phy, tips.exclude,
+    trim.internal=TRUE, subtree=FALSE, ...) {
+
     tree <- extractTree(phy)
-    phytr <- prune(tree, tip, trim.internal, subtree)
+    phytr <- prune(tree, tips.exclude, trim.internal, subtree)
 
     ## create temporary phylo4 object with unique labels
     tmpLbl <- .genlab("n", nTips(phy)+nNodes(phy))
     tmpPhy <- tree
     labels(tmpPhy, "all") <- tmpLbl
-    tmpPhytr <- prune(tmpPhy, getNode(phy, tip), trim.internal, subtree)
+    tmpPhytr <- prune(tmpPhy, getNode(phy, tips.exclude), trim.internal,
+        subtree)
 
     ## get node numbers to keep
     oldLbl <- labels(tmpPhy, "all")
