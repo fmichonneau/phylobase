@@ -1,7 +1,7 @@
 ## Same order as in methods-phylo4.R
 
 ## nTips
-setGeneric("nTips", function(x,...) {
+setGeneric("nTips", function(x) {
     standardGeneric("nTips")
 })
 
@@ -11,7 +11,7 @@ setGeneric("nNodes", function(x) {
 })
 
 ## nodeType
-setGeneric("nodeType", function(phy) {
+setGeneric("nodeType", function(x) {
     standardGeneric("nodeType")
 })
 
@@ -58,7 +58,7 @@ setGeneric("edgeLength<-", function(x, ..., value) {
 })
 
 ## sumEdgeLength
-setGeneric("sumEdgeLength", function(phy, node) {
+setGeneric("sumEdgeLength", function(x, node) {
     standardGeneric("sumEdgeLength")
 })
 
@@ -82,7 +82,7 @@ setGeneric("labels")
 
 ## labels<-
 setGeneric("labels<-",
-           function(object, type, use.names, ..., value) {
+           function(x, type, use.names, ..., value) {
                standardGeneric("labels<-")
            })
 
@@ -92,24 +92,24 @@ setGeneric("hasNodeLabels", function(x) {
 })
 
 ## nodeLabels
-setGeneric("nodeLabels", function(object) {
+setGeneric("nodeLabels", function(x) {
     standardGeneric("nodeLabels")
 })
 
 ## nodeLabels<-
 setGeneric("nodeLabels<-",
-           function(object, ..., value) {
+           function(x, ..., value) {
                standardGeneric("nodeLabels<-")
            })
 
 ## tipLabels
-setGeneric("tipLabels", function(object) {
+setGeneric("tipLabels", function(x) {
     standardGeneric("tipLabels")
 })
 
 ## tipLabels<-
 setGeneric("tipLabels<-",
-   function(object, ..., value) {
+   function(x, ..., value) {
        standardGeneric("tipLabels<-")
    })
 
@@ -125,18 +125,22 @@ setGeneric("edgeLabels", function(x) {
 
 ## edgeLabels<-
 setGeneric("edgeLabels<-",
-           function(object, ..., value) {
+           function(x, ..., value) {
                standardGeneric("edgeLabels<-")
            })
 
 ## print
 setGeneric("print")
 
+
 ## head
 setGeneric("head")
 
 ## tail
 setGeneric("tail")
+
+## summary
+setGeneric("summary")
 
 ### ----------- phylo4d methods -----------
 

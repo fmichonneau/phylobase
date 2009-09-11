@@ -6,7 +6,7 @@
 \alias{nTips}
 \alias{nTips-methods}
 \alias{nTips,phylo4-method}
-\alias{nTips,ANY-method}
+\alias{nTips,phylo-method}
 \alias{edges}
 \alias{edges-methods}
 \alias{edges,phylo4-method}

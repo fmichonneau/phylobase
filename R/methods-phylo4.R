@@ -54,7 +54,7 @@
 ### Tip accessors
 #########################################################
 
-setMethod("nTips", "phylo4", function(x, ...) {
+setMethod("nTips", signature(x="phylo4"), function(x) {
     E <- edges(x)
     if(nrow(E) == 0)
         return(0)
@@ -69,45 +69,45 @@ setMethod("nTips", "phylo4", function(x, ...) {
 })
 
 ## hack to ensure ape compatibility
-setMethod("nTips","ANY", function(x) {
-    if (class(x)=="phylo") {
-        Ntip(x)
-    } else stop(paste("no 'nTips' method available for",
-                      deparse(substitute(x)),
-                      "(class",class(x),")"))
+setMethod("nTips", signature(x="phylo"),
+ function(x) {
+     Ntip(x)
 })
 
 #########################################################
 ### Node accessors
 #########################################################
 
-setMethod("nNodes", "phylo4", function(x) {
+setMethod("nNodes", signature(x="phylo4"),
+ function(x) {
     x@Nnode
 })
 
-setMethod("nodeType", "phylo4", function(phy) {
-    if(nTips(phy) == 0)
+setMethod("nodeType", signature(x="phylo4"),
+ function(x) {
+    if(nTips(x) == 0)
         return(NULL)
     else {
-        listNodes <- sort(unique(as.vector(edges(phy))))
+        listNodes <- sort(unique(as.vector(edges(x))))
         t <- rep("internal", length(listNodes)) # FM: internal is default (I think it's safer)
         names(t) <- listNodes
 
         ## node number of real internal nodes
-        iN <- names(table(edges(phy)[,1]))
+        iN <- names(table(edges(x)[,1]))
         ## node number that are not internal nodes (ie that are tips)
         tN <- names(t)[!names(t) %in% iN]
         t[tN] <- "tip"
 
         ## if the tree is rooted
-        if(isRooted(phy)) t[rootNode(phy)] <- "root"
+        if(isRooted(x)) t[rootNode(x)] <- "root"
 
         return(t)
     }
 })
 
 # return node IDs (or a subset thereof) in ascending order
-setMethod("nodeId", "phylo4", function(x, type=c("all",
+setMethod("nodeId", signature(x="phylo4"),
+ function(x, type=c("all",
     "tip","internal","root")) {
 
      type <- match.arg(type)
@@ -135,23 +135,27 @@ setMethod("nodeId", "phylo4", function(x, type=c("all",
 ### Edge accessors
 #########################################################
 
-setMethod("nEdges", "phylo4", function(x) {
+setMethod("nEdges", signature(x="phylo4"),
+ function(x) {
     nrow(x@edge)
 })
 
 # return edge matrix in its current order
-setMethod("edges", "phylo4", function(x, order, drop.root=FALSE, ...) {
-  e <- x@edge
-  if (drop.root) e <- e[!is.na(e[,1]),]
-  e
+setMethod("edges", signature(x="phylo4"),
+ function(x, order, drop.root=FALSE, ...) {
+     e <- x@edge
+     if (drop.root) e <- e[!is.na(e[,1]),]
+     e
 })
 
-setMethod("edgeOrder", "phylo4", function(x, ...) {
+setMethod("edgeOrder", signature(x="phylo4"),
+ function(x, ...) {
     x@order
 })
 
 # return edge IDs (or a subset thereof) in edge matrix order
-setMethod("edgeId", "phylo4", function(x, type=c("all", "tip",
+setMethod("edgeId", signature(x="phylo4"),
+ function(x, type=c("all", "tip",
     "internal", "root")) {
     type <- match.arg(type)
     edge <- edges(x)
@@ -169,12 +173,14 @@ setMethod("edgeId", "phylo4", function(x, type=c("all", "tip",
     return(id)
 })
 
-setMethod("hasEdgeLength","phylo4", function(x) {
+setMethod("hasEdgeLength", signature(x="phylo4"),
+ function(x) {
     !all(is.na(x@edge.length))
 })
 
 # return edge lengths in order by edgeIds (same order as edge matrix)
-setMethod("edgeLength", "phylo4", function(x, node) {
+setMethod("edgeLength", signature(x="phylo4"),
+ function(x, node) {
     ## [JR: below, using match for ordering rather than direct character
     ## indexing b/c the latter is slow for vectors of a certain size]
     elen <- x@edge.length[match(edgeId(x, "all"), names(x@edge.length))]
@@ -185,7 +191,8 @@ setMethod("edgeLength", "phylo4", function(x, node) {
     return(elen)
 })
 
-setReplaceMethod("edgeLength", "phylo4", function(x, use.names=TRUE, ..., value) {
+setReplaceMethod("edgeLength", signature(x="phylo4"),
+ function(x, use.names=TRUE, ..., value) {
     if(use.names && !is.null(names(value))) {
         if(!all(names(value) %in% names(edgeLength(x))))
             stop("Names provided don't match internal edge labels")
@@ -197,13 +204,14 @@ setReplaceMethod("edgeLength", "phylo4", function(x, use.names=TRUE, ..., value)
     x
 })
 
-setMethod("sumEdgeLength", "phylo4", function(phy, node) {
-    if(!hasEdgeLength(phy))
+setMethod("sumEdgeLength", signature(x="phylo4"),
+ function(x, node) {
+    if(!hasEdgeLength(x))
         NULL
     else {
-        nd <- getNode(phy, node)
-        iEdges <- which(phy@edge[,2] %in% nd)
-        sumEdges <- sum(phy@edge.length[iEdges],na.rm=TRUE)
+        nd <- getNode(x, node)
+        iEdges <- which(x@edge[,2] %in% nd)
+        sumEdges <- sum(x@edge.length[iEdges],na.rm=TRUE)
         sumEdges
     }
 })
@@ -212,19 +220,22 @@ setMethod("sumEdgeLength", "phylo4", function(phy, node) {
 ### Root accessors
 #########################################################
 
-setMethod("isRooted","phylo4", function(x) {
+setMethod("isRooted", signature(x="phylo4"),
+ function(x) {
     ## hack to avoid failure on an empty object
     if(nTips(x) == 0) return(FALSE)
     any(is.na(edges(x)[,1]))
 })
 
-setMethod("rootNode", "phylo4", function(x) {
+setMethod("rootNode", signature(x="phylo4"),
+ function(x) {
     if (!isRooted(x))
         return(NA)
     unname(edges(x)[which(is.na(edges(x)[,1])),2])
 })
 
-setReplaceMethod("rootNode", "phylo4", function(x, value) {
+setReplaceMethod("rootNode", signature(x="phylo4"),
+ function(x, value) {
     stop("Root node replacement not implemented yet")
 })
 
@@ -233,8 +244,8 @@ setReplaceMethod("rootNode", "phylo4", function(x, value) {
 #########################################################
 
 ## return labels in increasing node order
-setMethod("labels", "phylo4", function(object, type = c("all", "tip",
-    "internal")) {
+setMethod("labels", signature(object="phylo4"),
+  function(object, type = c("all", "tip", "internal")) {
     type <- match.arg(type)
     ## [JR: below, using match for ordering rather than direct character
     ## indexing b/c the latter is slow for vectors of a certain size]
@@ -255,9 +266,9 @@ setMethod("labels", "phylo4", function(object, type = c("all", "tip",
 })
 
 setReplaceMethod("labels",
-                 signature(object="phylo4", type="ANY",
+                 signature(x="phylo4", type="ANY",
                            use.names="ANY", value="character"),
-   function(object, type = c("tip", "internal", "allnode"),
+   function(x, type = c("tip", "internal", "allnode"),
             use.names, ..., value) {
 
        ## Default options
@@ -272,42 +283,42 @@ setReplaceMethod("labels",
        ob <- switch(type,
               ## If 'tip'
               tip = {
-                  object@tip.label <- .createLabels(value, nTips(object),
-                                                    nNodes(object), use.names,
+                  x@tip.label <- .createLabels(value, nTips(x),
+                                                    nNodes(x), use.names,
                                                     type="tip")
-                  object
+                  x
               },
               ## If 'internal'
               internal = {
-                  object@node.label <- .createLabels(value, nTips(object),
-                                                     nNodes(object), use.names,
+                  x@node.label <- .createLabels(value, nTips(x),
+                                                     nNodes(x), use.names,
                                                      type="internal")
-                  object
+                  x
               },
               ## If 'allnode'
               allnode = {
                   if(use.names) {
-                      tipVal <- value[names(value) %in% nodeId(object, "tip")]
-                      nodVal <- value[names(value) %in% nodeId(object, "internal")]
-                      object@tip.label <- .createLabels(tipVal, nTips(object),
-                                                        nNodes(object), use.names,
+                      tipVal <- value[names(value) %in% nodeId(x, "tip")]
+                      nodVal <- value[names(value) %in% nodeId(x, "internal")]
+                      x@tip.label <- .createLabels(tipVal, nTips(x),
+                                                        nNodes(x), use.names,
                                                         type="tip")
-                      object@node.label <- .createLabels(nodVal, nTips(object),
-                                                         nNodes(object), use.names,
+                      x@node.label <- .createLabels(nodVal, nTips(x),
+                                                         nNodes(x), use.names,
                                                          type="internal")
                   }
                   else {
-                      ntips <- nTips(object)
-                      nedges <- nTips(object) + nNodes(object)
-                      object@tip.label <- .createLabels(value[1:ntips], nTips(object),
-                                                        nNodes(object), use.names,
+                      ntips <- nTips(x)
+                      nedges <- nTips(x) + nNodes(x)
+                      x@tip.label <- .createLabels(value[1:ntips], nTips(x),
+                                                        nNodes(x), use.names,
                                                         type="tip")
-                      object@node.label <- .createLabels(value[(ntips+1):nedges],
-                                                         nTips(object),
-                                                         nNodes(object), use.names,
+                      x@node.label <- .createLabels(value[(ntips+1):nedges],
+                                                         nTips(x),
+                                                         nNodes(x), use.names,
                                                          type="internal")
                   }
-                  object
+                  x
               })
 
        if(is.character(checkval <- checkPhylo4(ob)))
@@ -318,51 +329,56 @@ setReplaceMethod("labels",
 
 
 ### Node Labels
-setMethod("hasNodeLabels", "phylo4", function(x) {
+setMethod("hasNodeLabels", signature(x="phylo4"),
+ function(x) {
     !all(is.na(x@node.label))
 })
 
-setMethod("nodeLabels", "phylo4", function(object) {
-    labels(object, type="internal")
+setMethod("nodeLabels", signature(x="phylo4"),
+ function(x) {
+    labels(x, type="internal")
 })
 
-setReplaceMethod("nodeLabels", signature(object="phylo4", value="character"),
-  function(object, ..., value) {
-      labels(object, type="internal", ...) <- value
-      if(is.character(checkval <- checkPhylo4(object))) stop(checkval)
-      object
+setReplaceMethod("nodeLabels", signature(x="phylo4", value="character"),
+  function(x, ..., value) {
+      labels(x, type="internal", ...) <- value
+      if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
+      x
   })
 
 ### Tip labels
-setMethod("tipLabels", "phylo4", function(object) {
-    labels(object, type="tip")
+setMethod("tipLabels", signature(x="phylo4"),
+ function(x) {
+    labels(x, type="tip")
     })
 
-setReplaceMethod("tipLabels", signature(object="phylo4", value="character"),
-  function(object, ...,  value) {
-      labels(object, type="tip", ...) <- value
-      if(is.character(checkval <- checkPhylo4(object))) stop(checkval)
-      return(object)
+setReplaceMethod("tipLabels", signature(x="phylo4", value="character"),
+  function(x, ...,  value) {
+      labels(x, type="tip", ...) <- value
+      if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
+      return(x)
   })
 
 
 ### Edge labels
-setMethod("hasEdgeLabels", "phylo4", function(x) {
+setMethod("hasEdgeLabels", signature(x="phylo4"),
+ function(x) {
     !all(is.na(x@edge.label))
 })
 
 # return edge labels in order by edgeIds (same order as edge matrix)
-setMethod("edgeLabels", signature(x = "phylo4"), function(x) {
+setMethod("edgeLabels", signature(x="phylo4"),
+  function(x) {
     ## [JR: below, using match for ordering rather than direct character
     ## indexing b/c the latter is slow for vectors of a certain size]
     x@edge.label[match(edgeId(x, "all"), names(x@edge.label))]
 })
 
-setReplaceMethod("edgeLabels", signature(object="phylo4", value="character"),
-  function(object, ..., value) {
-      object@edge.label <- value
-      if(is.character(checkval <- checkPhylo4(object))) stop(checkval)
-      object
+setReplaceMethod("edgeLabels", signature(x="phylo4", value="character"),
+  function(x, ..., value) {
+      x@edge.label <- value
+      if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
+      x
   })
 
 
@@ -390,114 +406,118 @@ printphylo4 <- function(x, edgeOrder=c("pretty", "real"), printall=TRUE) {
 ### Hack for print/show
 ### from http://tolstoy.newcastle.edu.au/R/e2/devel/06/12/1363.html
 setMethod("print", "phylo4", printphylo4)
-setMethod("show", "phylo4", function(object) printphylo4(object))
+setMethod("show", signature(object="phylo4"),
+   function(object) printphylo4(object))
 
 ### names
-setMethod("names", signature(x = "phylo4"), function(x){
+setMethod("names", signature(x="phylo4"),
+ function(x) {
     temp <- rev(names(attributes(x)))[-1]
     return(rev(temp))
 })
 
 ### Head and Tail
-setMethod("head",signature(x = 'phylo4'),
-          function(x,n=20) {
-            head(as(x,"data.frame"),n=n)
-          })
+setMethod("head", signature(x="phylo4"),
+  function(x, n=20) {
+      head(as(x,"data.frame"),n=n)
+  })
 
-setMethod("tail",signature(x = 'phylo4'),
-          function(x,n=20) {
-            tail(as(x,"data.frame"),n=n)
-          })
+setMethod("tail", signature(x="phylo4"),
+  function(x, n=20) {
+      tail(as(x, "data.frame"), n=n)
+  })
 
 ### summary
-setMethod("summary","phylo4", function (object, quiet=FALSE) {
-    x <- object
-    res <- list()
+setMethod("summary", signature(object="phylo4"),
+  function(object, quiet=FALSE) {
 
-    ## build the result object
-    res$name <- deparse(substitute(object, sys.frame(-1)))
-    res$nb.tips <- nTips(x)
-    res$nb.nodes <- nNodes(x)
+      res <- list()
 
-    if(hasEdgeLength(x)) {
-        edge.length <- edgeLength(x)
-        res$mean.el <- mean(edge.length, na.rm=TRUE)
-        res$var.el <- var(edge.length, na.rm=TRUE)
-        if (isRooted(x) && is.na(edgeLength(x, rootNode(x)))) {
-            root.index <- match(edgeId(x, "root"), names(edge.length))
-            res$sumry.el <- summary(edge.length[-root.index])
-        } else {
-            res$sumry.el <- summary(edge.length)
+      ## build the result object
+      res$name <- deparse(substitute(object, sys.frame(-1)))
+      res$nb.tips <- nTips(object)
+      res$nb.nodes <- nNodes(object)
+
+      if(hasEdgeLength(object)) {
+          edge.length <- edgeLength(object)
+          res$mean.el <- mean(edge.length, na.rm=TRUE)
+          res$var.el <- var(edge.length, na.rm=TRUE)
+          if (isRooted(object) && is.na(edgeLength(object, rootNode(object)))) {
+              root.index <- match(edgeId(object, "root"), names(edge.length))
+              res$sumry.el <- summary(edge.length[-root.index])
+          } else {
+              res$sumry.el <- summary(edge.length)
+          }
+      }
+
+      ## check for polytomies
+      if (hasPoly(object)) {
+          E <- edges(object)
+          temp <- tabulate(na.omit(E[,1]))
+          degree <- temp[na.omit(E[,1])] # contains the degree of the ancestor for all edges
+          endsAtATip <- !(E[,2] %in% E[,1])
+          terminPoly <- (degree>2) & endsAtATip
+          internPoly <- (degree>2) & !endsAtATip
+          res$degree <- degree
+          res$polytomy <- rep("none",nrow(E))
+          res$polytomy[terminPoly] <- "terminal"
+          res$polytomy[internPoly] <- "internal"
+          ## now just keep information about nodes (not all edges)
+          nod <- unique(E[,1])
+          idx <- match(nod,E[,1])
+          res$degree <- res$degree[idx]
+          names(res$degree) <- nodeLabels(object)
+          res$polytomy <- res$polytomy[idx]
+          names(res$polytomy) <- nodeLabels(object)
+      }
+
+      ## model info
+      res$loglik <- attr(object, "loglik")
+      res$para <- attr(object, "para")
+      res$xi <- attr(object, "xi")
+
+      ## if quiet, stop here
+      if(quiet) return(invisible(res))
+
+      ## now, print to screen is !quiet
+      cat("\n Phylogenetic tree :", res$name, "\n\n")
+      cat(" Number of tips    :", res$nb.tips, "\n")
+      cat(" Number of nodes   :", res$nb.nodes, "\n")
+      ## cat("  ")
+      if(hasEdgeLength(object)) {
+          cat(" Branch lengths:\n")
+          cat("        mean         :", res$mean.el, "\n")
+          cat("        variance     :", res$var.el, "\n")
+          cat("        distribution :\n")
+          print(res$sumry.el)
+      }
+      else {
+          cat(" Branch lengths    : No branch lengths.\n")
+      }
+      if (hasPoly(object)) {
+          cat("\nDegree of the nodes  :\n")
+          print(res$degree)
+          cat("\n")
+          cat("Types of polytomy:\n")
+          print(res$polytomy)
+          cat("\n")
+      }
+
+      if (!is.null(attr(object, "loglik"))) {
+          cat("Phylogeny estimated by maximum likelihood.\n")
+          cat("  log-likelihood:", attr(object, "loglik"), "\n\n")
+          npart <- length(attr(object, "para"))
+          for (i in 1:npart) {
+              cat("partition ", i, ":\n", sep = "")
+              print(attr(object, "para")[[i]])
+              if (i == 1)
+                  next
+              else cat("  contrast parameter (xi):", attr(object,"xi")[i - 1], "\n")
         }
-    }
+      }
+      return(invisible(res))
 
-    ## check for polytomies
-    if (hasPoly(x)) {
-        E <- edges(x)
-        temp <- tabulate(na.omit(E[,1]))
-        degree <- temp[na.omit(E[,1])] # contains the degree of the ancestor for all edges
-        endsAtATip <- !(E[,2] %in% E[,1])
-        terminPoly <- (degree>2) & endsAtATip
-        internPoly <- (degree>2) & !endsAtATip
-        res$degree <- degree
-        res$polytomy <- rep("none",nrow(E))
-        res$polytomy[terminPoly] <- "terminal"
-        res$polytomy[internPoly] <- "internal"
-        ## now just keep information about nodes (not all edges)
-        nod <- unique(E[,1])
-        idx <- match(nod,E[,1])
-        res$degree <- res$degree[idx]
-        names(res$degree) <- nodeLabels(x)
-        res$polytomy <- res$polytomy[idx]
-        names(res$polytomy) <- nodeLabels(x)
-    }
-
-    ## model info
-    res$loglik <- attr(x, "loglik")
-    res$para <- attr(x, "para")
-    res$xi <- attr(x, "xi")
-
-    ## if quiet, stop here
-    if(quiet) return(invisible(res))
-
-    ## now, print to screen is !quiet
-    cat("\n Phylogenetic tree :", res$name, "\n\n")
-    cat(" Number of tips    :", res$nb.tips, "\n")
-    cat(" Number of nodes   :", res$nb.nodes, "\n")
-    ## cat("  ")
-    if(hasEdgeLength(x)) {
-        cat(" Branch lengths:\n")
-        cat("        mean         :", res$mean.el, "\n")
-        cat("        variance     :", res$var.el, "\n")
-        cat("        distribution :\n")
-        print(res$sumry.el)
-    } else {
-        cat(" Branch lengths    : No branch lengths.\n")
-    }
-    if (hasPoly(x)) {
-        cat("\nDegree of the nodes  :\n")
-        print(res$degree)
-        cat("\n")
-        cat("Types of polytomy:\n")
-        print(res$polytomy)
-        cat("\n")
-    }
-
-    if (!is.null(attr(x, "loglik"))) {
-        cat("Phylogeny estimated by maximum likelihood.\n")
-        cat("  log-likelihood:", attr(x, "loglik"), "\n\n")
-        npart <- length(attr(x, "para"))
-        for (i in 1:npart) {
-            cat("partition ", i, ":\n", sep = "")
-            print(attr(x, "para")[[i]])
-            if (i == 1)
-              next
-            else cat("  contrast parameter (xi):", attr(x,"xi")[i - 1], "\n")
-        }
-    }
-    return(invisible(res))
-
-}) # end setMethod summary phylo4
+  }) # end setMethod summary phylo4
 
 
 
@@ -506,12 +526,12 @@ setMethod("summary","phylo4", function (object, quiet=FALSE) {
 ### Ordering
 #########################################################
 
-orderIndex <- function(phy, order = c('preorder', 'postorder')) {
+orderIndex <- function(x, order=c("preorder", "postorder")) {
 
     order <- match.arg(order)
 
     ## get a root node free edge matrix
-    edge <- edges(phy)[!is.na(edges(phy)[, 1]), ]
+    edge <- edges(x)[!is.na(edges(x)[, 1]), ]
     ## Sort edges -- ensures that starting order of edge matrix doesn't
     ## affect the order of reordered trees
     edge <- edge[order(edge[, 2]), ]
@@ -523,7 +543,7 @@ orderIndex <- function(phy, order = c('preorder', 'postorder')) {
         iOrder <- 1L
     } else {stop(paste("Method for", order, "not implemented"))}
 
-    if (!hasPoly(phy) & !hasSingle(phy)) {
+    if (!hasPoly(x) & !hasSingle(x)) {
         # method 1: faster, but only works if all internal nodes have
         # exactly two children (true binary tree)
 
@@ -534,8 +554,8 @@ orderIndex <- function(phy, order = c('preorder', 'postorder')) {
         left <- as.integer(edge[isFirst, 2])
         right <- as.integer(edge[!isFirst, 2])[match(ancestor,
             edge[!isFirst, 1])]
-        descendantNew <- rep(0L, nEdges(phy))
-        root <- as.integer(rootNode(phy))
+        descendantNew <- rep(0L, nEdges(x))
+        root <- as.integer(rootNode(x))
         nEdge <- as.integer(length(ancestor))
 
         descendantReord <- .C("reorderBinary", descendantNew, root,
@@ -547,8 +567,8 @@ orderIndex <- function(phy, order = c('preorder', 'postorder')) {
         # extract ancestors and descendants
         ancestor <- as.integer(edge[,1])
         descendant <- as.integer(edge[,2])
-        descendantNew <- rep(0L, nEdges(phy))
-        root <- as.integer(rootNode(phy))
+        descendantNew <- rep(0L, nEdges(x))
+        root <- as.integer(rootNode(x))
         nEdge <- as.integer(nrow(edge))
 
         descendantReord <- .C("reorderRobust", descendantNew, root,
@@ -579,25 +599,29 @@ orderIndex <- function(phy, order = c('preorder', 'postorder')) {
     ##    c(node, traversal)
     ##}
     ##if(order == 'postorder') {
-    ##    descendantReord <- postOrder(rootNode(phy))
+    ##    descendantReord <- postOrder(rootNode(x))
     ##} else if(order == 'preorder') {
-    ##    descendantReord <- preOrder(rootNode(phy))
+    ##    descendantReord <- preOrder(rootNode(x))
     ##} else {stop(paste("Method for", order, "not implemented"))}
 
     ## match the new node order to the old order to get an index
-    index <- match(descendantReord, edges(phy)[, 2])
+    index <- match(descendantReord, edges(x)[, 2])
 
 }
 
-setMethod("reorder", signature(x = 'phylo4'),
-    function(x, order = c('preorder', 'postorder')) {
+setMethod("reorder", signature(x="phylo4"),
+ function(x, order=c("preorder", "postorder")) {
     ## call orderIndex and use that index to order edges, labels and lengths
     order   <- match.arg(order)
     index   <- orderIndex(x, order)
     x@order <- order
     x@edge  <- x@edge[index, ]
-    if(hasEdgeLabels(x)) { x@edge.label  <- x@edge.label[index] }
-    if(hasEdgeLength(x)) { x@edge.length <- x@edge.length[index] }
+    if(hasEdgeLabels(x)) {
+        x@edge.label  <- x@edge.label[index]
+    }
+    if(hasEdgeLength(x)) {
+        x@edge.length <- x@edge.length[index]
+    }
     x
 })
 
