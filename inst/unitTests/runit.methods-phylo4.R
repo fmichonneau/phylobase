@@ -175,12 +175,16 @@ test.Replace.edgeLabels.phylo4 <- function() {
   #TODO function(object, ...,  value) {
 }
 
-test.print.phylo4 <- function() {
-  #TODO? this just calls printphylo4 function
-}
-
+## this is also the print method
 test.show.phylo4 <- function() {
-  #TODO? this just calls printphylo4 function
+  # the real work here is done in .phylo4ToDataFrame
+  phy.show <- phylobase:::.phylo4ToDataFrame(phy, "pretty")
+  checkIdentical(phy.show$label, c(lab.tip, lab.int))
+  checkIdentical(phy.show$node, c(nid.tip, nid.int))
+  checkIdentical(phy.show$ancestor, ancestor[match(c(nid.tip, nid.int),
+    descendant)])
+  checkIdentical(phy.show$edge.length, sort(elen))
+  checkIdentical(phy.show$node.typ, factor(unname(nodeType(phy))))
 }
 
 test.names.phylo4 <- function() {

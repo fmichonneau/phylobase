@@ -200,29 +200,24 @@ setAs("phylo4", "phylog", function(from, to) {
     if (edgeOrder == "pretty") {
         node <- nodeId(from, "all")
         ancestr <- ancestor(from, node)
-        E <- data.frame(node, ancestr)
-    }
-    else {
+    } else {
         E <- edges(from)
         node <- E[, 2]
         ancestr <- E[, 1]
     }
 
-    if (hasEdgeLength(from)) {
-        nmE <- paste(E[,2], E[,1], sep="-")
-        edge.length <- edgeLength(from)[match(nmE, names(from@edge.length))]
-    }
-    else {
-        edge.length <- rep(NA, nrow(E))
-    }
-
+    ## extract and reorder (as needed) other object slots
+    nmE <- paste(ancestr, node, sep="-")
+    edge.length <- edgeLength(from)
+    edge.length <- edge.length[match(nmE, names(edge.length))]
 
     ndType <- nodeType(from)
-    label <- labels(from,type="all")
+    ndType <- ndType[match(node, names(ndType))]
+    label <- labels(from, type="all")
     label <- label[match(node, names(label))]
 
     tDf <- data.frame(label, node, ancestor=ancestr, edge.length,
-                    node.type=ndType[node], row.names=node)
+                    node.type=ndType, row.names=node)
     tDf$label <- as.character(tDf$label)
 
     if (class(from) == "phylo4d") {
