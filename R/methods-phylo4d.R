@@ -1,4 +1,4 @@
-setMethod("tdata", "phylo4d",
+setMethod("tdata", signature(x="phylo4d"),
   function(x, type=c("tip", "internal", "allnode"),
            label.type=c("row.names","column"),
            empty.columns=TRUE, ...) {
@@ -115,8 +115,7 @@ setMethod("tdata", "phylo4d",
   })
 
 setReplaceMethod("tdata", signature(x="phylo4d", value="ANY"),
-                 function(x, type = c("tip", "internal", "allnode"), ...,
-                          value) {
+ function(x, type = c("tip", "internal", "allnode"), ..., value) {
     type <- match.arg(type)
     object <- x
 
@@ -137,10 +136,11 @@ setReplaceMethod("tdata", signature(x="phylo4d", value="ANY"),
     object
 })
 
-setMethod("addData", "phylo4d", function(x, tip.data=NULL, node.data=NULL,
-                                         all.data=NULL, pos=c("after", "before"),
-                                         merge.data=TRUE, match.data=TRUE,
-                                         ...) {
+setMethod("addData", signature(x="phylo4d"),
+  function(x, tip.data=NULL, node.data=NULL,
+           all.data=NULL, pos=c("after", "before"),
+           merge.data=TRUE, match.data=TRUE,  ...) {
+
     pos <- match.arg(pos)
 
     tmpData <- .phylo4Data(x=x, tip.data=tip.data, node.data=node.data,
@@ -180,17 +180,18 @@ setMethod("addData", "phylo4d", function(x, tip.data=NULL, node.data=NULL,
     x
 })
 
-setMethod("addData", "phylo4", function(x, tip.data=NULL, node.data=NULL,
-                                        all.data=NULL, pos=c("after", "before"),
-                                        merge.data=TRUE, match.data=TRUE,
-                                        ...) {
+setMethod("addData", signature(x="phylo4"),
+  function(x, tip.data=NULL, node.data=NULL,
+           all.data=NULL, pos=c("after", "before"),
+           merge.data=TRUE, match.data=TRUE, ...) {
     phylo4d(x, tip.data=tip.data, node.data=node.data, all.data=all.data,
             merge.data=merge.data, match.data=match.data, ...)
 })
 
 ## Alternative phylo4d summary method, using phylo4 summary
 ## Marguerite Butler & Peter Cowan
-setMethod("summary", "phylo4d", function(object, quiet=FALSE) {
+setMethod("summary", signature(object="phylo4d"),
+ function(object, quiet=FALSE) {
     x <- object
     res <- summary(as(x, "phylo4"), quiet=quiet)
     res$name <- deparse(substitute(object, sys.frame(-1)))
@@ -232,11 +233,13 @@ setMethod("summary", "phylo4d", function(object, quiet=FALSE) {
 })
 
 
-setMethod("hasTipData", signature(x="phylo4d"), function(x) {
+setMethod("hasTipData", signature(x="phylo4d"),
+ function(x) {
     nrow(x@tip.data) > 0
 })
 
-setMethod("hasNodeData", signature(x="phylo4d"), function(x) {
+setMethod("hasNodeData", signature(x="phylo4d"),
+ function(x) {
     nrow(x@node.data) > 0
 })
 
