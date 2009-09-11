@@ -1,11 +1,35 @@
 #
 # --- Test setAs-Methods.R ---
 #
- 
-# Create sample tree for testing (ape::phylo object)
-tr <- read.tree(text="(((spA:0.2,(spB:0.1,spC:0.1):0.15):0.5,spD:0.7):0.2,spE:1):0.4;") 
-phy <- as(tr, "phylo4")
 
+# create ape::phylo version of a simple tree for testing
+nwk <- "((t1:0.1,t2:0.2)n7:0.7,(t3:0.3,(t4:0.4,t5:0.5)n9:0.9)n8:0.8)n6:0.6;"
+tr <- read.tree(text=nwk)
+
+# create analogous phylo4 object with a full complement of valid slots
+ancestor <- as.integer(c(6,7,7,6,8,NA,8,9,9))
+descendant <- as.integer(c(7,1,2,8,3,6,9,4,5))
+edge <- cbind(ancestor, descendant)
+nid.tip <- 1:5
+nid.int <- 6:9
+lab.tip <- paste("t", nid.tip, sep="")
+lab.int <- paste("n", nid.int, sep="")
+elen <- descendant/10
+elab <- paste("e", ancestor, descendant, sep="-")
+phy <- phylo4(x=edge, tip.label=lab.tip, node.label=lab.int,
+    edge.length=elen, edge.label=elab)
+
+# create altered version such that each slot is out of order with
+# respect to all others; methods should be able to handle this
+phy.alt <- phy
+phy.alt@tip.label <- rev(phy@tip.label)
+phy.alt@node.label <- rev(phy@node.label)
+phy.alt@edge <- phy@edge[c(6:9, 1:5), ]
+phy.alt@edge.length <- phy@edge.length[c(7:9, 1:6)]
+phy.alt@edge.label <- phy@edge.label[c(8:9, 1:7)]
+
+#-----------------------------------------------------------------------
+ 
 test.phylo.As.phylo4 <- function() {
   checkIdentical(as(tr, "phylo4"), phylo4(tr))
 }
@@ -24,8 +48,7 @@ test.phylo4.As.phylo <- function() {
 # note: checkEquals("phylo") uses all.equal.phylo()
 
   # phylo tree in unknown order
-  phy <- as(tr, "phylo4")
-  checkEquals(as(phy, "phylo"), tr)
+  checkEquals(suppressWarnings(as(phy, "phylo")), tr)
   # ...now check for warning for unknown order
   opt <- options(warn=3)
   checkException(as(phy, "phylo"))
@@ -33,13 +56,23 @@ test.phylo4.As.phylo <- function() {
 
   # phylo tree in cladewise order
   tr.cladewise <- reorder(tr, "cladewise")
-  phy <- as(tr.cladewise, "phylo4")
-  checkEquals(as(phy, "phylo"), tr.cladewise)
+  phy.c <- as(tr.cladewise, "phylo4")
+  checkEquals(as(phy.c, "phylo"), tr.cladewise)
 
   # phylo tree in pruningwise order
   tr.pruningwise <- reorder(tr, "pruningwise")
-  phy <- as(tr.pruningwise, "phylo4")
-  checkEquals(as(phy, "phylo"), tr.pruningwise)
+  phy.p <- as(tr.pruningwise, "phylo4")
+  checkEquals(as(phy.p, "phylo"), tr.pruningwise)
+
+  # after transforming the jumbled tree to phylo and back, edge matrix
+  # and edge slots should still be in the original order, but node slots
+  # should be back in nodeId order
+  phy.r <- reorder(phy.alt)
+  phy.roundtrip.r <- reorder(phylo4(as(phy.alt, "phylo")))
+  checkIdentical(edges(phy.roundtrip.r), edges(phy.r))
+  checkIdentical(edgeLength(phy.roundtrip.r), edgeLength(phy.r))
+  checkIdentical(labels(phy.roundtrip.r), labels(phy.r))
+
 }
 
 # this coerce method is defined implicitly
@@ -75,19 +108,20 @@ test.phylo4d.As.phylo <- function() {
 test.phylo4.As.phylog <- function() {
 }
 
-test.phylo4.As.data.frame <- function() {
+test..phylo4ToDataFrame <- function() {
+  phy.show <- phylobase:::.phylo4ToDataFrame(phy.alt, "pretty")
+  checkIdentical(phy.show$label, c(lab.tip, lab.int))
+  checkIdentical(phy.show$node, c(nid.tip, nid.int))
+  checkIdentical(phy.show$ancestor, ancestor[match(c(nid.tip, nid.int),
+    descendant)])
+  checkIdentical(phy.show$edge.length, sort(elen))
+  checkIdentical(phy.show$node.typ, factor(unname(nodeType(phy))))
+}
 
+## core functionality is already tested in test..phylo4ToDataFrame()
+test.phylo4.As.data.frame <- function() {
     # rooted tree
     checkTrue(is.data.frame(as(phy, "data.frame")))
-    phy.df <- structure(list(label = c("spA", "spB", "spC", "spD",
-        "spE", NA, NA, NA, NA), node = 1:9, ancestor = c(8L, 9L, 9L, 7L,
-        6L, NA, 6L, 7L, 8L), edge.length = c(0.2, 0.1, 0.1, 0.7, 1, 0.4,
-        0.2, 0.5, 0.15), node.type = structure(c(3L, 3L, 3L, 3L, 3L, 2L,
-        1L, 1L, 1L), .Label = c("internal", "root", "tip"), class =
-        "factor")), .Names = c("label", "node", "ancestor",
-        "edge.length", "node.type"), row.names = c(NA, 9L), class =
-        "data.frame")
-    checkEquals(as(phy, "data.frame"), phy.df)
 
     # unrooted tree
     tru <- unroot(tr)
@@ -95,5 +129,4 @@ test.phylo4.As.data.frame <- function() {
     # should probably check that this coercion results in something
     # *correct*, not just that it produces a data.frame
     checkTrue(is.data.frame(as(phyu, "data.frame")))
-
 }

@@ -88,15 +88,8 @@ setAs("phylo4", "phylo", function(from, to) {
 
     phy <- list()
 
-    ## Edge matrix
-    if (isRooted(from)) {
-        ## rootnode is only node with no ancestor
-        rootpos <- which(is.na(from@edge[, 1]))
-        edgemat <- unname(from@edge[-rootpos, ])
-    }
-    else {
-        edgemat <- unname(from@edge)
-    }
+    ## Edge matrix (dropping root edge if it exists)
+    edgemat <- unname(edges(from, drop.root=TRUE))
     storage.mode(edgemat) <- "integer"
     phy$edge <- edgemat
 
@@ -104,8 +97,7 @@ setAs("phylo4", "phylo", function(from, to) {
     if(hasEdgeLength(from)) {
         edge.length <- edgeLength(from)
         if(isRooted(from)) {
-            iRoot <- match(getEdge(from, rootNode(from), type="node",
-                                   output="allEdge"), names(edge.length))
+            iRoot <- match(edgeId(from, "root"), names(edge.length))
             phy$edge.length <- unname(edge.length[-iRoot])
         }
         else {
@@ -114,7 +106,7 @@ setAs("phylo4", "phylo", function(from, to) {
     }
 
     ## Tip labels
-    phy$tip.label <- unname(from@tip.label)
+    phy$tip.label <- unname(tipLabels(from))
 
     ## nNodes
     phy$Nnode <- as.integer(nNodes(from))
