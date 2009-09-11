@@ -187,7 +187,7 @@ setMethod("edgeLength", "phylo4", function(x, node) {
 
 setReplaceMethod("edgeLength", "phylo4", function(x, use.names=TRUE, ..., value) {
     if(use.names && !is.null(names(value))) {
-        if(!all(names(value) %in% names(x@edge.length)))
+        if(!all(names(value) %in% names(edgeLength(x))))
             stop("Names provided don't match internal edge labels")
         x@edge.length[match(names(value), names(x@edge.length))] <- value
     }
@@ -238,16 +238,20 @@ setMethod("labels", "phylo4", function(object, type = c("all", "tip",
     type <- match.arg(type)
     ## [JR: below, using match for ordering rather than direct character
     ## indexing b/c the latter is slow for vectors of a certain size]
-    if (type=="all") {
-        all <- c(object@tip.label, object@node.label)
-        return(all[match(nodeId(object, "all"), names(all))])
-    } else if (type=="tip") {
-        tip <- object@tip.label
-        return(tip[match(nodeId(object, "tip"), names(tip))])
-    } else if (type=="internal") {
-        int <- object@node.label
-        return(int[match(nodeId(object, "internal"), names(int))])
-    }
+    lbl <- switch(type,
+                  all={
+                      all <- c(object@tip.label, object@node.label)
+                      all[match(nodeId(object, "all"), names(all))]
+                  },
+                  tip={
+                      tip <- object@tip.label
+                      tip[match(nodeId(object, "tip"), names(tip))]
+                  },
+                  internal={
+                      int <- object@node.label
+                      int[match(nodeId(object, "internal"), names(int))]
+                  })
+    return(lbl)
 })
 
 setReplaceMethod("labels",
@@ -368,7 +372,7 @@ setReplaceMethod("edgeLabels", signature(object="phylo4", value="character"),
 
 ### print
 printphylo4 <- function(x, edgeOrder=c("pretty", "real"), printall=TRUE) {
-    if(!nrow(x@edge)) {
+    if(!nrow(edges(x))) {
         msg <- paste("Empty \'", class(x), "\' object\n", sep="")
         cat(msg)
     }
@@ -507,7 +511,7 @@ orderIndex <- function(phy, order = c('preorder', 'postorder')) {
     order <- match.arg(order)
 
     ## get a root node free edge matrix
-    edge <- phy@edge[!is.na(phy@edge[, 1]), ]
+    edge <- edges(phy)[!is.na(edges(phy)[, 1]), ]
     ## Sort edges -- ensures that starting order of edge matrix doesn't
     ## affect the order of reordered trees
     edge <- edge[order(edge[, 2]), ]
@@ -581,7 +585,7 @@ orderIndex <- function(phy, order = c('preorder', 'postorder')) {
     ##} else {stop(paste("Method for", order, "not implemented"))}
 
     ## match the new node order to the old order to get an index
-    index <- match(descendantReord, phy@edge[, 2])
+    index <- match(descendantReord, edges(phy)[, 2])
 
 }
 

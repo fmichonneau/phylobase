@@ -31,7 +31,7 @@ checkTree <- function(object,
       ## presumably we shouldn't allow NAs mixed
       ## with numeric branch lengths except at the root
       if (sum(is.na(object@edge.length)) > 1)
-        return("NAs in edge lenghts")
+        return("NAs in edge lengths")
       ## Strip root edge branch lenght (if set to NA)
       if (any(object@edge.length[!is.na(object@edge.length)] < 0))
         return("edge lengths must be non-negative")
