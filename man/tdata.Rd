@@ -19,14 +19,14 @@
   
     \item{x}{A \code{phylo4d} object}
     \item{type}{The type of data to retrieve or update:
-      \code{\dQuote{tip}}  for data associated with tips,
-      \code{\dQuote{internal}} for data  associated with internal nodes,
-      \code{\dQuote{allnode}} for data associated with tip and internal
+      \dQuote{\code{tip}}  for data associated with tips,
+      \dQuote{\code{internal}} for data  associated with internal nodes,
+      \dQuote{\code{allnode}} for data associated with tip and internal
       nodes.}
     
     \item{label.type}{How the tip/node labels from the tree be
-      returned? \code{\dQuote{row.names}} returns them as row names of
-      the data frame, \code{\dQuote{column}} returns the labels in the
+      returned? \dQuote{\code{row.names}} returns them as row names of
+      the data frame, \dQuote{\code{column}} returns the labels in the
       first column of the data frame. This options is useful in the case
       of missing (\code{NA}) or non-unique labels.}
     
