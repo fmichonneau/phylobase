@@ -517,8 +517,9 @@ tip.data.plot <- function(
                      edge.width = 1, # TODO line-type modification hack
                      ...)    
 {
-    phy <- xxyy$phy
-    Ntips <- nTips(phy)
+    phy    <- xxyy$phy
+    pedges <- edges(phy)
+    Ntips  <- nTips(phy)
     datalayout <- grid.layout(ncol = 2, width = unit(c(1, 1/Ntips), c('null', 'null')))
     # TODO this is done multiple times, 
     pushViewport(viewport(layout = datalayout, angle = rot,
