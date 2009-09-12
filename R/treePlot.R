@@ -230,12 +230,30 @@ phyloXXYY <- function(phy, tip.order = NULL)
     ## Set root x value to zero and calculate x positions
     xx[1] <- 0
     segs$v0x[1] <- segs$v1x[1] <- segs$h0x[1] <- 0 
-    for (i in edge[, 2]) {
-        dex <- edge[, 1] == i
-        cur <- edge[, 2] == i
-        xx[dex] <- phy@edge.length[dex] + xx[cur]
-        segs$h1x[cur] <- segs$v0x[dex] <- segs$v1x[dex] <- segs$h0x[dex] <- xx[cur]
-    }
+    edge1   <- as.integer(edge[,1])
+    edge2   <- as.integer(edge[,2])
+    edgeLen <- phy@edge.length
+    edgeLen[is.na(edgeLen)] <- 0
+    edgeLen <- as.numeric(edgeLen)
+    nedges  <- as.integer(nEdges(phy))
+    segsv0x <- as.numeric(rep.int(0, Nedges))
+    xPos <- .C("phyloxx", edge1, edge2,
+            edgeLen, nedges, xx, segsv0x)
+    ## browser()
+    xx <- xPos[[5]]
+    segs$v0x <- xPos[[6]]
+    ## test1 <- function() {
+    ##     for (i in edge[, 2]) {
+    ##         dex <- edge[, 1] == i
+    ##         cur <- edge[, 2] == i
+    ##         xx[dex] <- phy@edge.length[dex] + xx[cur]
+    ##         segs$v0x[dex] <- xx[cur]
+    ##     }
+    ##     return(list(segs=segs, xx=xx))
+    ## }
+    ## test1out <- test1()
+    ## segs <- test1out$segs
+    ## xx   <- test1out$xx
 
     ## Set y positions for terminal nodes and calculate remaining y positions
     if(!is.null(tip.order)) {
@@ -245,19 +263,36 @@ phyloXXYY <- function(phy, tip.order = NULL)
     }
     segs$h0y[tips] <- segs$h1y[tips] <- yy[tips]
     segs$v1y[tips] <- segs$v0y[tips] <- yy[tips]
-    for(i in rev((Ntips + 1):nEdges(phy))) {
-        dex <- edge[, 1] == i
-        cur <- edge[, 2] == i
-        yy[cur] <- segs$h0y[cur] <- segs$h1y[cur] <- segs$v1y[cur] <- segs$v0y[dex] <- mean(yy[dex])
+    placeHolder <- function() {
+        for(i in rev((Ntips + 1):nEdges(phy))) {
+            dex <- edge[, 1] == i
+            cur <- edge[, 2] == i
+            yy[cur] <- segs$v0y[dex] <- mean(yy[dex])
+        }
+        return(list(segs=segs, yy=yy))
     }
-    
+    yPos <- placeHolder()
+    segs <- yPos$segs
+    yy   <- yPos$yy
+
+    ## edgeLen[is.na(edgeLen)] <- 0
+    ## edgeLen <- as.numeric(edgeLen)
+    ## ntips   <- as.integer(nTips(phy))
+    ## yy      <- as.numeric(yy)
+    ## segsv0y <- as.numeric(yy)
+    ## browser()
+    ## yPos <- .C("phyloyy", edge1, edge2,
+    ##         ntips, nedges, yy, segsv0y)
+
+    segs$h0y <- segs$h1y <- segs$v1y <- yy
+
     ## scale the x values so they range from 0 to 1
     Xmax <- max(xx)
     segs$v0x <- segs$v0x / Xmax
-    segs$v1x <- segs$v1x / Xmax
-    segs$h0x <- segs$h0x / Xmax
-    segs$h1x <- segs$h1x / Xmax
     xx <- xx / Xmax
+    
+    segs$h1x <- xx
+    segs$v1x <- segs$h0x <- segs$v0x 
     
     # TODO return an index vector instead of a second phy object
     list(xx = xx, yy = yy, phy = phy, phy.orig = phy.orig, segs = segs)
