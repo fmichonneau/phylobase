@@ -221,50 +221,32 @@ shortestPath <- function(phy, node1, node2){
 ###########
 # getEdge
 ###########
-getEdge <- function(phy, node, type=c("node", "ancestor", "all"),
-                    output=c("otherEnd", "allEdge"),
-                    missing=c("warn", "OK", "fail")) {
-
-    type <- match.arg(type)
-    res <- character(0)
+getEdge <- function(phy, node, type=c("descendant", "ancestor"),
+    missing=c("warn", "OK", "fail")) {
 
     if(!identical(class(phy), "phylo4")) phy <- as(phy, "phylo4")
 
-    if(identical(type, "all")) {
-        if(!missing(node))
-            warning("Argument \'node\' is ignored if type=\"all\".")
-        if(!missing(output))
-            warning("Argument \'output\' is ignored if type=\"all\".")
-        res <- names(phy@edge.length)
-    }
-    else {
-        missing <- match.arg(missing)
-        output <- match.arg(output)
-        node <- getNode(phy, node, missing)
+    missing <- match.arg(missing)
+    node <- getNode(phy, node, missing)
 
-        nd <- lapply(node, function(x) {
-            if(is.na(x))
-                res <- NA
-            else {
-                ndTmp <- switch(type,
-                                node = paste("-", x, sep=""),
-                                ancestor = paste(x, "-", sep=""))
-                res <- grep(ndTmp, names(phy@edge.length), value=TRUE)
-            }
-        })
-        nd <- unlist(nd)
-        if(identical(output, "allEdge"))
-            res <- nd
-        else {
-            nd <- strsplit(nd, "-")
+    type <- match.arg(type)
+
+    ##TODO: should missing arg also apply to tips-as-ancestors case?
+    nd <- lapply(node, function(x) {
+        if (is.na(x)) {
+            res <- NA
+        } else {
             res <- switch(type,
-                          node = sapply(nd, function(x) x[2]),
-                          ancestor = sapply(nd, function(x) x[1]))
-            res <- as.integer(res)
-        }
-    }
-    ## if we return names, then it gets confusing if it's not unique
-    ## for instance for edge 17 in geospiza, the names would be:
-    ## 171 172 173
-    unname(res)
+                descendant = edgeId(phy)[edges(phy)[,2] %in% x],
+                ancestor = edgeId(phy)[edges(phy)[,1] %in% x])
+            ## hack to return NA for tip nodes when type='ancestor'
+            if(length(res)==0) res <- NA
+            names(res) <- rep(x, length(res))
+        }   
+        names(res) <- rep(x, length(res))
+        res
+    })  
+
+    return(unlist(unname(nd)))
+
 }
