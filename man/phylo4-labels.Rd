@@ -1,4 +1,4 @@
-\name{labels-phylo4}
+\name{phylo4-labels}
 \docType{methods}
 \alias{labels<-}
 \alias{labels,phylo4-method}
@@ -35,16 +35,16 @@
 
 \usage{
 
-\S4method{labels}{phylo4}(object, type=c("all", "tip", "internal"), \dots)
+\S4method{labels}{phylo4}(object, type=c("all", "tip", "internal"))
 \S4method{labels}{phylo4,ANY,ANY,character}(x, type=c("tip", "internal", "allnode"),
 use.names=FALSE) <- value
 
-\S4method{tipLabels}{phylo4}(object)
-\S4method{tipLabels}{phylo4,character}(object) <- value
+\S4method{tipLabels}{phylo4}(x)
+\S4method{tipLabels}{phylo4,character}(x) <- value
 
 \S4method{hasNodeLabels}{phylo4}(x)
-\S4method{nodeLabels}{phylo4}(object)
-\S4method{nodeLabels}{phylo4,character}(object) <- value
+\S4method{nodeLabels}{phylo4}(x)
+\S4method{nodeLabels}{phylo4,character}(x) <- value
 
 \S4method{hasEdgeLabels}{phylo4}(x)
 \S4method{edgeLabels}{phylo4}(x)
@@ -61,7 +61,6 @@ use.names=FALSE) <- value
     information.}
   \item{use.names}{should the names of the vector used to create/update
     labels be used to match the labels? See Details for more information.}
-  \item{\dots}{additional parameter passed to the function (currently ignored)}
 }
 
 \details{

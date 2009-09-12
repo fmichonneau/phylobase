@@ -77,14 +77,14 @@
 % what a pain: see
 % https://stat.ethz.ch/pipermail/r-devel/2008-May/049653.html
 \S4method{nNodes}{phylo4}(x)
-\S4method{nTips}{phylo4}(x, \dots)
+\S4method{nTips}{phylo4}(x)
 \S4method{edges}{phylo4}(x, order, drop.root=FALSE, \dots)
 \S4method{nEdges}{phylo4}(x)
 \S4method{edgeOrder}{phylo4}(x, \dots)
 \S4method{hasEdgeLength}{phylo4}(x)
 \S4method{edgeLength}{phylo4}(x, node)
 \S4method{edgeLength}{phylo4}(x, use.names=TRUE) <- value
-\S4method{nodeType}{phylo4}(phy)
+\S4method{nodeType}{phylo4}(x)
 \S4method{isRooted}{phylo4}(x)
 \S4method{rootEdge}{phylo4}(x)
 \S4method{rootNode}{phylo4}(x)
@@ -93,7 +93,6 @@
 
 \arguments{
   \item{x}{a phylo4/phylo4d object}
-  \item{phy}{a phylo4/phylo4d object}
   \item{node}{which edge lengths to extract (indexed by descendant
     node)} 
   \item{value}{a vector of edge lengths or a node number}

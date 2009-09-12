@@ -28,10 +28,13 @@ children(phy, node)
 descendants(phy, node, type=c("tips","children","all"))
 MRCA(phy,\dots)
 shortestPath(phy, node1, node2)
-\S4method{sumEdgeLength}{phylo4}(phy, node)
+\S4method{sumEdgeLength}{phylo4}(x, node)
 }
 \arguments{
   \item{phy}{a \linkS4class{phylo4} object (or one inheriting from
+    \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
+  }
+  \item{x}{a \linkS4class{phylo4} object (or one inheriting from
     \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
   }
   \item{node}{a node ID number (or name)}
