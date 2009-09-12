@@ -26,9 +26,9 @@
     }
 }
 
-\usage{}
-\arguments{}
-\value{}
+% \usage{}
+% \arguments{}
+% \value{}
 \seealso{
   The \code{\link{phylo4}} constructor, the \code{\link{checkPhylo4}}
   function to check the validity of \code{phylo4} objects. See also the
@@ -36,5 +36,5 @@
   class.} 
 
 \author{Ben Bolker, Thibaut Jombart}
-\examples{}
+% \examples{}
 \keyword{classes}

@@ -32,8 +32,8 @@
   }
 }
 
-\usage{}
-\value{}
+% \usage{}
+% \value{}
   
 \seealso{
   \code{\link{coerce-methods}} for translation functions. The

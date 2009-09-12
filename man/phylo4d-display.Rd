@@ -72,6 +72,6 @@
 }
 
 \author{Ben Bolker, Thibaut Jombart}
-\examples{}
+% \examples{}
 \keyword{methods}
   
