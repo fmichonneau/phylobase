@@ -3,64 +3,66 @@
 ################
 
 setGeneric("subset")
-setMethod("subset", "phylo4",
-          function(x,tips.include=NULL,tips.exclude=NULL,
-                   mrca=NULL,node.subtree=NULL,...) {
-              ##  FIXME: could eliminate NULL and make the test
-              ## if (!missing) rather than if (!is.null)
-            ## (might have to change next line?)
-            if (sum(!sapply(list(tips.include,tips.exclude,
-                                 mrca,node.subtree),is.null))>1) {
-              stop("must specify at most one criterion for subsetting")
-            }
-            #arglist <- list(...)
-            #if (length(arglist)>0) {
-            #  warning("unused arguments: ",
-            #          paste(names(arglist),collapse=","))
-            #}
-            kept <- x@tip.label
-            dropped <- character(0)
-            if (!is.null(tips.include)) {
-              if (is.numeric(tips.include)) {
-                tips.include <- x@tip.label[tips.include]
-              }
-              unknown <- setdiff(tips.include,x@tip.label)
-              if (length(unknown)>0) {
-                warning("unknown tip labels ignored:",
-                        paste(unknown,collapse=", "))
-                tips.include <- intersect(tips.include,x@tip.label)
-              }
-              kept <- tips.include
-              dropped <- setdiff(x@tip.label,tips.include)
-            }
-            if (!is.null(tips.exclude)) {
-              if (is.numeric(tips.exclude)) {
-                tips.exclude <- x@tip.label[tips.exclude]
-              }
-              unknown <- setdiff(tips.exclude,x@tip.label)
-              if (length(unknown)>0) {
-                warning("unknown tip labels ignored:",
-                        paste(unknown,collapse=", "))
-                tips.exclude <- intersect(tips.exclude,x@tip.label)
-              }
-              dropped <- tips.exclude
-              kept <- setdiff(x@tip.label,tips.exclude)
-            }
-            if (!is.null(node.subtree)) {
-              kept <- intersect(x@tip.label,names(descendants(x,node.subtree)))
-              dropped <- setdiff(x@tip.label,kept)
-            }
-            if (!is.null(mrca)) {
-              mnode <- MRCA(x,mrca)
-              kept <- intersect(x@tip.label,names(descendants(x,mnode)))
-              dropped <- setdiff(x@tip.label,kept)
-            }
-            if (length(kept)<2) {
-              stop("0 or 1 tips would remain after subsetting")
-            }
-            if (length(dropped)==0) return(x)
-            return(prune(x, dropped, ...))
-          })
+setMethod("subset", "phylo4", function(x, tips.include=NULL,
+    tips.exclude=NULL, mrca=NULL, node.subtree=NULL, ...) {
+    ##  FIXME: could eliminate NULL and make the test
+    ## if (!missing) rather than if (!is.null)
+    ## (might have to change next line?)
+    if (sum(!sapply(list(tips.include, tips.exclude, mrca,
+        node.subtree), is.null))>1) {
+        stop("must specify at most one criterion for subsetting")
+    }
+    #arglist <- list(...)
+    #if (length(arglist)>0) {
+    #  warning("unused arguments: ",
+    #          paste(names(arglist),collapse=","))
+    #}
+    all.tips <- nodeId(x, "tip")
+    if (!is.null(tips.include)) {
+        nodes <- getNode(x, tips.include, missing="OK")
+        is.valid.tip <- nodes %in% all.tips
+        kept <- nodes[is.valid.tip]
+        dropped <- setdiff(all.tips, kept)
+        unknown <- tips.include[!is.valid.tip]
+    } else if (!is.null(tips.exclude)) {
+        nodes <- getNode(x, tips.exclude, missing="OK")
+        is.valid.tip <- nodes %in% all.tips
+        dropped <- nodes[is.valid.tip]
+        kept <- setdiff(all.tips, dropped)
+        unknown <- tips.exclude[!is.valid.tip]
+    } else if (!is.null(mrca)) {
+        nodes <- getNode(x, mrca, missing="OK")
+        is.valid.tip <- nodes %in% all.tips
+        if (sum(is.valid.tip)<2) {
+            stop("mrca must include at least two valid tips")
+        }
+        mnode <- MRCA(x, nodes[is.valid.tip])
+        kept <- descendants(x, mnode)
+        dropped <- setdiff(all.tips, kept)
+        unknown <- mrca[!is.valid.tip]
+    } else if (!is.null(node.subtree)) {
+        node <- getNode(x, node.subtree, missing="OK")
+        if (length(node)!=1 || !(node %in% nodeId(x, "internal"))) {
+            stop("node.subtree must be a single valid internal node")
+        }
+        kept <- descendants(x, node)
+        dropped <- setdiff(all.tips, kept)
+        unknown <- numeric(0)
+    } else {
+        kept <- x@tip.label
+        dropped <- numeric(0)
+        unknown <- numeric(0)
+    }
+    if (length(unknown)>0) {
+        warning("unknown tips ignored: ", paste(unknown, 
+            collapse=", "))
+    }
+    if (length(kept)<2) {
+        stop("0 or 1 tips would remain after subsetting")
+    }
+    if (length(dropped)==0) return(x)
+    return(prune(x, dropped, ...))
+})
 
 ###############
 # '[' operator
