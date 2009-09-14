@@ -30,8 +30,8 @@
 \S4method{subset}{phylo4d}(x, tips.include=NULL, tips.exclude=NULL,
   mrca=NULL, node.subtree=NULL, \dots)
 
-\S4method{prune}{phylo4}(x, tips.exclude, trim.internal = TRUE, \dots)
-\S4method{prune}{phylo4d}(x, tips.exclude, trim.internal = TRUE, \dots)
+\S4method{prune}{phylo4}(x, tips.exclude, trim.internal = TRUE)
+\S4method{prune}{phylo4d}(x, tips.exclude, trim.internal = TRUE)
 
 \S4method{[}{phylo4}(x, i)
 \S4method{[}{phylo4d}(x, i, j)

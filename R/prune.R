@@ -1,6 +1,6 @@
 
-setGeneric("prune",function(phy, ...) {
-  standardGeneric("prune")
+setGeneric("prune", function(x, ...) {
+    standardGeneric("prune")
 })
 
 
@@ -9,28 +9,24 @@ setGeneric("prune",function(phy, ...) {
   as.character(sort(as.numeric(x)))
 }
 
-setMethod("prune","phylo4", function(phy, tips.exclude,
-    trim.internal = TRUE, subtree = FALSE, ...) {
-
-    if (subtree) {
-        warning("subtree option is not currently supported for phylo4")
-    }
+setMethod("prune","phylo4", function(x, tips.exclude,
+    trim.internal=TRUE) {
 
     makeEdgeNames <- function(edge) {
         paste(edge[,1], edge[,2], sep="-")
     } 
 
     ## drop tips and obsolete internal nodes from edge matrix
-    tip.drop <- getNode(phy, tips.exclude, missing="fail")
-    tip.keep <- setdiff(nodeId(phy, "tip"), tip.drop)
-    nodes <- nodeId(phy, "all")
+    tip.drop <- getNode(x, tips.exclude, missing="fail")
+    tip.keep <- setdiff(nodeId(x, "tip"), tip.drop)
+    nodes <- nodeId(x, "all")
     node.keep <- rep(FALSE, length(nodes))
     node.keep[tip.keep] <- TRUE
     if (trim.internal) {
-        if (edgeOrder(phy) == "postorder") {
-            edge.post <- edges(phy)
+        if (edgeOrder(x) == "postorder") {
+            edge.post <- edges(x)
         } else {
-            edge.post <- edges(reorder(phy, "postorder"))
+            edge.post <- edges(reorder(x, "postorder"))
         }
         for (i in seq_along(edge.post[,2])) {
             if (node.keep[edge.post[i,2]]) {
@@ -38,13 +34,13 @@ setMethod("prune","phylo4", function(phy, tips.exclude,
             }
         }
     } else {
-        node.keep[nodeId(phy, "internal")] <- TRUE
+        node.keep[nodeId(x, "internal")] <- TRUE
     }
-    edge.new <- edges(phy)[edges(phy)[,2] %in% nodes[node.keep], ]
+    edge.new <- edges(x)[edges(x)[,2] %in% nodes[node.keep], ]
   
     ## remove singletons
-    edge.length.new <- edgeLength(phy)
-    edge.label.new <- edgeLabels(phy)
+    edge.length.new <- edgeLength(x)
+    edge.label.new <- edgeLabels(x)
     singletons <- which(tabulate(na.omit(edge.new[,1]))==1)
     while (length(singletons)>0) {
         sing.node <- singletons[1]
@@ -70,8 +66,8 @@ setMethod("prune","phylo4", function(phy, tips.exclude,
     }
 
     ## remove dropped elements from tip.label and node.label
-    tip.label.new <- tipLabels(phy)[names(tipLabels(phy)) %in% edge.new]
-    node.label.new <- nodeLabels(phy)[names(nodeLabels(phy)) %in% edge.new]
+    tip.label.new <- tipLabels(x)[names(tipLabels(x)) %in% edge.new]
+    node.label.new <- nodeLabels(x)[names(nodeLabels(x)) %in% edge.new]
 
     ## subset and order edge.length and edge.label with respect to edge
     edge.names <- makeEdgeNames(edge.new)
@@ -81,12 +77,12 @@ setMethod("prune","phylo4", function(phy, tips.exclude,
     if (!trim.internal) {
         ## make sure now-terminal internal nodes are treated as tips
         tip.now <- setdiff(edge.new[,2], edge.new[,1])
-        tip.add <- tip.now[tip.now>nTips(phy)]
+        tip.add <- tip.now[tip.now>nTips(x)]
         if (length(tip.add)>0) {
             ind <- match(tip.add, names(node.label.new))
 
             ## node renumbering workaround to satisfy plot method
-            newid <- sapply(tip.add, function(x) descendants(phy, x)[1])
+            newid <- sapply(tip.add, function(tip) descendants(x, tip)[1])
             names(node.label.new)[ind] <- newid
             edge.new[match(tip.add, edge.new)] <- newid
             tip.now[match(tip.add, tip.now)] <- newid
@@ -111,45 +107,44 @@ setMethod("prune","phylo4", function(phy, tips.exclude,
     names(node.label.new) <- seq_along(node.label.new) + length(tip.label.new)
 
     ## create and return new phylo4 object
-    ## NOTE: a faster but looser approach would be to replace the phy
-    ## slots with their new values (including Nnode) and return phy
+    ## NOTE: a faster but looser approach would be to replace the slots
+    ## of x with their new values (including Nnode) and return x
     phylo4(x=edge.new, edge.length = edge.length.new, tip.label =
         tip.label.new, node.label = node.label.new, edge.label =
-        edge.label.new, annote=phy@annote)
+        edge.label.new, annote=x@annote)
 })
 
 ## trace("prune", browser, signature = "phylo4d")
 ## untrace("prune", signature = "phylo4d")
-setMethod("prune", "phylo4d", function(phy, tips.exclude,
-    trim.internal=TRUE, subtree=FALSE, ...) {
+setMethod("prune", "phylo4d", function(x, tips.exclude,
+    trim.internal=TRUE) {
 
-    tree <- extractTree(phy)
-    phytr <- prune(tree, tips.exclude, trim.internal, subtree)
+    tree <- extractTree(x)
+    phytr <- prune(tree, tips.exclude, trim.internal)
 
     ## create temporary phylo4 object with unique labels
-    tmpLbl <- .genlab("n", nTips(phy)+nNodes(phy))
+    tmpLbl <- .genlab("n", nTips(x)+nNodes(x))
     tmpPhy <- tree
     labels(tmpPhy, "all") <- tmpLbl
-    tmpPhytr <- prune(tmpPhy, getNode(phy, tips.exclude), trim.internal,
-        subtree)
+    tmpPhytr <- prune(tmpPhy, getNode(x, tips.exclude), trim.internal)
 
     ## get node numbers to keep
     oldLbl <- labels(tmpPhy, "all")
     newLbl <- labels(tmpPhytr, "all")
     toKeep <- as.numeric(names(oldLbl[oldLbl %in% newLbl]))
-    tipToKeep <- toKeep[toKeep %in% nodeId(phy, "tip")]
-    nodToKeep <- toKeep[toKeep %in% nodeId(phy, "internal")]
+    tipToKeep <- toKeep[toKeep %in% nodeId(x, "tip")]
+    nodToKeep <- toKeep[toKeep %in% nodeId(x, "internal")]
 
-    if(!all(dim(phy@tip.data) == 0)) {
-        tipDt <- phy@tip.data[match(tipToKeep, rownames(phy@tip.data)) ,, drop=FALSE]
+    if(!all(dim(x@tip.data) == 0)) {
+        tipDt <- x@tip.data[match(tipToKeep, rownames(x@tip.data)) ,, drop=FALSE]
         tipDt <- tipDt[.chnumsort(rownames(tipDt)) ,, drop=FALSE]
         rownames(tipDt) <- 1:nTips(phytr)
     }
     else
         tipDt <- data.frame(NULL)
 
-    if(!all(dim(phy@node.data) == 0)) {
-        nodDt <- phy@node.data[match(nodToKeep, rownames(phy@node.data)) ,, drop=FALSE]
+    if(!all(dim(x@node.data) == 0)) {
+        nodDt <- x@node.data[match(nodToKeep, rownames(x@node.data)) ,, drop=FALSE]
         nodDt <- nodDt[.chnumsort(rownames(nodDt)) ,, drop=FALSE]
         rownames(nodDt) <- 1:nNodes(phytr)
     }
