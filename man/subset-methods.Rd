@@ -69,8 +69,10 @@
 
   The "[" operator, when used as \code{x[i]}, is similar to the
   \code{tips.include} form of \code{subset}.  However, the indices used
-  with this operator can also be logical, just like with a vector or a
-  matrix.  With a \linkS4class{phylo4d} object 'x', \code{x[i,j]}
+  with this operator can also be logical, in which case the
+  corresponding tips are assumed to be ordered as in \code{nodeId(x,
+  "tip")}, and recycling rules will apply (just like with a vector or a
+  matrix).  With a \linkS4class{phylo4d} object 'x', \code{x[i,j]}
   creates a subset of \code{x} taking \code{i} for a tip index and
   \code{j} for the index of data variables in \code{tdata(geospiza,
   "all")}.  Note that the second index is optional: \code{x[i, TRUE]},

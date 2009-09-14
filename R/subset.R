@@ -68,25 +68,13 @@ setMethod("subset", "phylo4", function(x, tips.include=NULL,
 # '[' operator
 ###############
 ## phylo4
-setMethod("[","phylo4",
-          function(x, i, j, ..., drop=FALSE) {
-
-              if(missing(i)) i <- TRUE
-
-              oldlab <- tipLabels(x)
-              if(is.character(i)){
-                  newlab <- i
-              } else {
-                  newlab <- oldlab[i]
-              }
-              tip.include <- match(newlab, oldlab)
-              res <- subset(x, tips.include=tip.include)
-
-              return(res)
-          })
-
-
-
+setMethod("[", "phylo4", function(x, i, j, ..., drop=FALSE) {
+    if (missing(i)) i <- TRUE
+    if (is.logical(i)) {
+        i <- nodeId(x, "tip")[i]
+    } # else pass 'i' straight through to subset method
+    subset(x, tips.include=i)
+})
 
 ## phylo4d
 setMethod("[","phylo4d", 
@@ -112,4 +100,4 @@ setMethod("[","phylo4d",
 ## extract the phylo4 part of phylo4d; relies on implicit coerce method
 extractTree <- function(from) {
     as(from, "phylo4")
-  }
+}
