@@ -32,14 +32,14 @@ setMethod("subset", "phylo4", function(x, tips.include=NULL,
         unknown <- tips.exclude[!is.valid.tip]
     } else if (!is.null(mrca)) {
         nodes <- getNode(x, mrca, missing="OK")
-        is.valid.tip <- nodes %in% all.tips
-        if (sum(is.valid.tip)<2) {
-            stop("mrca must include at least two valid tips")
+        is.valid.node <- nodes %in% nodeId(x, "all")
+        mnode <- MRCA(x, nodes[is.valid.node])
+        if (length(mnode)!=1) {
+            stop("mrca must include at least one valid node")
         }
-        mnode <- MRCA(x, nodes[is.valid.tip])
         kept <- descendants(x, mnode)
         dropped <- setdiff(all.tips, kept)
-        unknown <- mrca[!is.valid.tip]
+        unknown <- mrca[!is.valid.node]
     } else if (!is.null(node.subtree)) {
         node <- getNode(x, node.subtree, missing="OK")
         if (length(node)!=1 || !(node %in% nodeId(x, "internal"))) {
@@ -54,7 +54,7 @@ setMethod("subset", "phylo4", function(x, tips.include=NULL,
         unknown <- numeric(0)
     }
     if (length(unknown)>0) {
-        warning("unknown tips ignored: ", paste(unknown, 
+        warning("invalid nodes ignored: ", paste(unknown, 
             collapse=", "))
     }
     if (length(kept)<2) {

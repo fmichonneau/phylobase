@@ -40,7 +40,7 @@
   \item{x}{an object of class \code{"phylo4"} or \code{"phylo4d"}}
   \item{tips.include}{A vector of tips to include in the subset tree}
   \item{tips.exclude}{A vector of tips to exclude from the subset tree}
-  \item{mrca}{A vector of tips for determining the most recent common
+  \item{mrca}{A vector of nodes for determining the most recent common
     ancestor, which is then used as the root of the subset tree}
   \item{node.subtree}{A single internal node specifying the root of the
     subset tree}
@@ -57,8 +57,10 @@
   \code{tips.exclude}, \code{mrca}, or \code{node.subtree}).  Each of
   these arguments can be either character or numeric.  In the first case,
   they are treated as node labels; in the second case, they are treated
-  as node numbers.  For the first three arguments, any supplied tips not
+  as node numbers.  For the first two arguments, any supplied tips not
   found in the tree (\code{tipLabels(x)}) will be ignored, with a
+  warning.  Similarly, for the \code{mrca} argument, any supplied tips
+  or internal nodes not found in the tree will be ignored, with a
   warning.  For the \code{node.subtree} argument, failure to provide a
   single, valid internal node will result in an error.
 
