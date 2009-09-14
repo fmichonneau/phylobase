@@ -38,10 +38,11 @@ getNode <- function(phy, node, missing=c("warn","OK","fail")) {
     if (any(is.na(rval))) {
         missnodes <- node[is.na(rval)]
         msg <- paste("Some nodes are missing from tree: ", paste(missnodes,collapse=", "))
-        switch(missing,
-               fail=stop(msg),
-               warn=warning(msg),
-               OK={})
+        if (missing=="fail") {
+            stop(msg)
+        } else if (missing=="warn") {
+            warning(msg)
+        }
     }
     return(rval)
 }
