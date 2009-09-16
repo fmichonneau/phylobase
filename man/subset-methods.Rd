@@ -9,7 +9,16 @@
 \alias{prune,phylo4d-method}
 \alias{[-methods}
 \alias{[,phylo4-method}
+\alias{[,phylo4,character,missing,missing-method}
+\alias{[,phylo4,numeric,missing,missing-method}
+\alias{[,phylo4,logical,missing,missing-method}
+\alias{[,phylo4,missing,missing,missing-method}
 \alias{[,phylo4d-method}
+\alias{[,phylo4d,ANY,character,missing-method}
+\alias{[,phylo4d,ANY,numeric,missing-method}
+\alias{[,phylo4d,ANY,logical,missing-method}
+\alias{[,phylo4d,ANY,missing,missing-method}
+\alias{[,phylo4,ANY,ANY,ANY-method}
 \alias{na.omit,phylo4d-method}
 \title{Methods for creating subsets of phylogenies}
 \description{

@@ -67,35 +67,57 @@ setMethod("subset", "phylo4", function(x, tips.include=NULL,
 ###############
 # '[' operator
 ###############
-## phylo4
-setMethod("[", "phylo4", function(x, i, j, ..., drop=FALSE) {
-    if (missing(i)) i <- TRUE
-    if (is.logical(i)) {
-        i <- nodeId(x, "tip")[i]
-    } # else pass 'i' straight through to subset method
+
+## Consider using some combination of these for stricter argument
+## checking? Not implementing now because extra arguments are just
+## ignored, which is fairly common S4 method behavior:
+## * in "[" methods for phylo4:
+##    if (nargs()>2) stop("unused arguments")
+## * in "[" methods for both phylo4 and phylo4d:
+##    if (!missing(...)) stop("unused argument(s)")
+
+## phylo4 '[' methods
+setMethod("[", signature(x="phylo4", i="character", j="missing",
+    drop="missing"), function(x, i, j, ..., drop) {
     subset(x, tips.include=i)
 })
+setMethod("[", signature(x="phylo4", i="numeric", j="missing",
+    drop="missing"), function(x, i, j, ..., drop) {
+    subset(x, tips.include=i)
+})
+setMethod("[", signature(x="phylo4", i="logical", j="missing",
+    drop="missing"), function(x, i, j, ..., drop) {
+    subset(x, tips.include=nodeId(x, "tip")[i])
+})
+setMethod("[", signature(x="phylo4", i="missing", j="missing",
+    drop="missing"), function(x, i, j, ..., drop) {
+    x
+})
+## phylo4d '[' methods
+setMethod("[", signature(x="phylo4d", i="ANY", j="character",
+    drop="missing"), function(x, i, j, ..., drop) {
+    if (!missing(i)) x <- x[i]
+    tdata(x, type="allnode") <- tdata(x, type="allnode")[j]
+    return(x)
+})
+setMethod("[", signature(x="phylo4d", i="ANY", j="numeric",
+    drop="missing"), function(x, i, j, ..., drop) {
+    if (!missing(i)) x <- x[i]
+    tdata(x, type="allnode") <- tdata(x, type="allnode")[j]
+    return(x)
+})
+setMethod("[", signature(x="phylo4d", i="ANY", j="logical",
+    drop="missing"), function(x, i, j, ..., drop) {
+    if (!missing(i)) x <- x[i]
+    tdata(x, type="allnode") <- tdata(x, type="allnode")[j]
+    return(x)
+})
+## borrow from Matrix package approach of trapping invalid usage
+setMethod("[", signature(x="phylo4", i="ANY", j="ANY", drop="ANY"),
+    function(x, i, j, ..., drop) {
+    stop("invalid argument(s)")
+})
 
-## phylo4d
-setMethod("[","phylo4d", 
-          function(x, i, j, ..., drop=FALSE) {
-
-              if(missing(i)) i <- TRUE
-              if(missing(j)) j <- TRUE
-
-              #### data handling
-              ## for now handle only tip data - assumes tip names are good row.names
-              tab <- tdata(x, type="tip")[i, j, ..., drop=FALSE]
-              
-              #### tree handling
-              tip.include <- match(row.names(tab), x@tip.label)
-              tre <- subset(as(x,"phylo4"), tips.include=tip.include)
-
-              ## result
-              res <- phylo4d(x=tre, tip.data=tab)
-              
-              return(res)
-          })
 
 ## extract the phylo4 part of phylo4d; relies on implicit coerce method
 extractTree <- function(from) {
