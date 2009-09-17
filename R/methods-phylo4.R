@@ -529,7 +529,9 @@ setMethod("summary", signature(object="phylo4"),
 orderIndex <- function(x, order=c("preorder", "postorder")) {
 
     order <- match.arg(order)
-
+    if(!isRooted(x)){
+        stop("Tree must be rooted to reorder")
+    }
     ## get a root node free edge matrix
     edge <- edges(x)[!is.na(edges(x)[, 1]), ]
     ## Sort edges -- ensures that starting order of edge matrix doesn't
