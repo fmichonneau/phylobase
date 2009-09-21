@@ -1,5 +1,5 @@
 #
-# --- Test treewalk.R functions ---
+# --- Test treewalk.R ---
 #
 
 # Create sample phylo4 tree for testing
@@ -99,8 +99,8 @@ test.shortestPath <- function() {
 }
 
 test.getEdge <- function() {
-    # function(phy, node, type=c("node", "ancestor", "all"),
-    # output=c("otherEnd", "allEdge"), missing=c("warn", "OK", "fail"))
+    # function(phy, node, type=c("descendant", "ancestor"),
+    #     missing=c("warn", "OK", "fail"))
 }
 
 

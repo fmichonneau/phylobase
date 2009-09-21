@@ -34,22 +34,51 @@ test.phylo4.matrix <- function() {
     checkException(phylo4(edge, annote="invalid annotation"))
 }
 
+# note: this method mostly just wraps phylo->phylo4 coercion, which is
+# tested more thoroughly in runit.setAs-methods.R; focus here is on
+# annote and check.node.labels arguments
 test.phylo4.phylo <- function() {
-    tr <- read.tree(text="(((t1:0.2,(t2:0.1,t3:0.1)n4:0.15)n3:0.5,t4:0.7)n2:0.2,t5:1)n1:0.4;")
+    tr <- read.tree(text="(((t1:0.2,(t2:0.1,t3:0.1):0.15):0.5,t4:0.7):0.2,t5:1):0.4;")
+
+    ##
+    ## annote
+    ##
+
     annote <- list(x="annotation")
-    phy <- phylo4(tr, check.node.labels="keep", annote=annote)
-    checkIdentical(tr$tip.label, unname(tipLabels(phy)))
-    checkIdentical(tr$node.label, unname(nodeLabels(phy)))
-    checkIdentical("unknown", edgeOrder(phy))
+    phy <- phylo4(tr, annote=annote)
     checkIdentical(annote, phy@annote)
 
-    # test preservation of order attribute
-    phy <- phylo4(reorder(tr, "cladewise"))
-    checkIdentical("preorder", edgeOrder(phy))
-    phy <- phylo4(reorder(tr, "pruningwise"))
-    checkIdentical("pruningwise", edgeOrder(phy))
+    ##
+    ## check.node.labels
+    ##
 
+    # case 0: no node labels
+    phy <- phylo4(tr)
+    checkTrue(!hasNodeLabels(phy))
+
+    # case 1: keep unique character labels
+    tr$node.label <- paste("n", 1:4, sep="")
+    phy <- phylo4(tr, check.node.labels="keep")
+    checkIdentical(tr$node.label, unname(nodeLabels(phy)))
+    # keeping node labels should be the default
+    checkIdentical(phy, phylo4(tr))
+
+    # case 2: keep unique number-like character labels
+    tr$node.label <- as.character(1:4)
+    phy <- phylo4(tr, check.node.labels="keep")
+    checkIdentical(tr$node.label, unname(nodeLabels(phy)))
+
+    # case 3: keep unique numeric labels, but convert to character
+    tr$node.label <- as.numeric(1:4)
+    phy <- phylo4(tr, check.node.labels="keep")
+    checkIdentical(as.character(tr$node.label), unname(nodeLabels(phy)))
+
+    # case 4: must drop non-unique labels
+    tr$node.label <- rep("x", 4)
+    checkException(phylo4(tr))
+    checkException(phylo4(tr, check.node.labels="keep"))
     # test dropping node labels
     phy <- phylo4(tr, check.node.labels="drop")
-    checkIdentical(unname(nodeLabels(phy)), rep(NA_character_, nNodes(phy)))
+    checkTrue(!hasNodeLabels(phy))
+
 }

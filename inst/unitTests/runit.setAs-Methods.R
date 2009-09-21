@@ -31,11 +31,41 @@ phy.alt@edge.label <- phy@edge.label[c(8:9, 1:7)]
 #-----------------------------------------------------------------------
  
 test.phylo.As.phylo4 <- function() {
-  checkIdentical(as(tr, "phylo4"), phylo4(tr))
+    # simple case
+    as.phy <- as(tr, "phylo4")
+    checkTrue(class(as.phy)=="phylo4")
+    checkIdentical(tr$edge, unname(edges(as.phy, drop.root=TRUE)))
+    checkIdentical(tr$tip.label, unname(tipLabels(as.phy)))
+    checkIdentical(tr$node.label, unname(nodeLabels(as.phy)))
+    # TODO: ape keeps the root edge length in $root.edge
+    #checkIdentical(tr$edge.length, unname(edgeLength(as.phy)))
+    checkIdentical("unknown", edgeOrder(as.phy))
+
+    # test preservation of order attribute
+    as.phy <- as(reorder(tr, "cladewise"), "phylo4")
+    checkIdentical("preorder", edgeOrder(as.phy))
+    as.phy <- as(reorder(tr, "pruningwise"), "phylo4")
+    checkIdentical("pruningwise", edgeOrder(as.phy))
+
+    # test phylo import when only 2 tips
+    tr2 <- ape::drop.tip(tr, 3:Ntip(tr))
+    checkEquals(nTips(as(tr2, "phylo4")), 2)
+    checkEquals(nNodes(as(tr2, "phylo4")), 1)
+
+    # simple roundtrip test
+    phy <- as(tr, "phylo4")
+    checkEquals(tr, as(phy, "phylo"))
 }
 
+# note: this method mostly just wraps phylo->phylo4 coercion (tested
+# above) and phylo4d("phylo4") method (tested in runit.class-phylo4d.R)
 test.phylo.As.phylo4d <- function() {
-  checkIdentical(as(tr, "phylo4d"), phylo4d(tr))
+    checkIdentical(as(tr, "phylo4d"), phylo4d(tr))
+    phyd <- as(tr, "phylo4d")
+    checkTrue(class(phyd)=="phylo4d")
+    # simple roundtrip test
+    phyd <- as(tr, "phylo4d")
+    checkEquals(tr, as(phyd, "phylo"))
 }
 
 test.multiPhylo.As.multiPhylo4 <- function() {
@@ -68,7 +98,7 @@ test.phylo4.As.phylo <- function() {
   # and edge slots should still be in the original order, but node slots
   # should be back in nodeId order
   phy.r <- reorder(phy.alt)
-  phy.roundtrip.r <- reorder(phylo4(as(phy.alt, "phylo")))
+  phy.roundtrip.r <- reorder(as(as(phy.alt, "phylo"), "phylo4"))
   checkIdentical(edges(phy.roundtrip.r), edges(phy.r))
   checkIdentical(edgeLength(phy.roundtrip.r), edgeLength(phy.r))
   checkIdentical(labels(phy.roundtrip.r), labels(phy.r))
@@ -115,7 +145,7 @@ test..phylo4ToDataFrame <- function() {
   checkIdentical(phy.show$ancestor, ancestor[match(c(nid.tip, nid.int),
     descendant)])
   checkIdentical(phy.show$edge.length, sort(elen))
-  checkIdentical(phy.show$node.typ, factor(unname(nodeType(phy))))
+  checkIdentical(phy.show$node.type, factor(unname(nodeType(phy))))
 }
 
 ## core functionality is already tested in test..phylo4ToDataFrame()
