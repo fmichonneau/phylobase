@@ -16,7 +16,7 @@ checkTree <- function(object,
 
     ## case of empty phylo4 object
     if(nrow(object@edge) == 0 && length(object@edge.length) == 0 &&
-       object@Nnode == 0 && length(object@node.label) == 0 &&
+       length(object@node.label) == 0 &&
        length(object@tip.label) == 0 && length(object@edge.label) == 0)
         return(TRUE)
 
@@ -32,10 +32,11 @@ checkTree <- function(object,
       ## with numeric branch lengths except at the root
       if (sum(is.na(object@edge.length)) > 1)
         return("NAs in edge lengths")
-      ## Strip root edge branch lenght (if set to NA)
+      ## Strip root edge branch length (if set to NA)
       if (any(object@edge.length[!is.na(object@edge.length)] < 0))
         return("edge lengths must be non-negative")
     }
+    ##TODO fix this up somehow, or remove? (Nnode slot no longer exists)
     ## if (length(object@tip.label)+object@Nnode-1 != N) # does not work with multifurcations
     ##  return("number of tip labels not consistent with number of edges and nodes")
     ## check: tip numbers = (m+1):(m+n)

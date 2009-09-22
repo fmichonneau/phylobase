@@ -146,7 +146,7 @@ setAs("phylo4", "phylo", function(from, to) {
 ## BMB: redundant????
 ## setAs("phylo4d", "phylo", function(from, to) {
 ##     y <- list(edge = from@edge, edge.length = from@edge.length,
-##         Nnode = from@Nnode, tip.label = from@tip.label)
+##         Nnode = nNodes(from), tip.label = from@tip.label)
 ##     class(y) <- "phylo"
 ##     if (length(y$edge.length) == 0)
 ##         y$edge.length <- NULL

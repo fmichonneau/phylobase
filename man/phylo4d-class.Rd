@@ -14,7 +14,6 @@
     \item{\code{edge}:}{Matrix of edges}
     \item{\code{edge.label}:}{Character vector of edge (branch) labels}
     \item{\code{edge.length}:}{Numeric vector of edge (branch) lengths}
-    \item{\code{Nnode}:}{Integer: number of nodes}
     \item{\code{node.data}:}{data frame for traits of internal
       nodes}
     \item{\code{node.label}:}{Character vector of node labels}

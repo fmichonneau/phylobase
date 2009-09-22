@@ -13,7 +13,6 @@
   \describe{
     \item{\code{edge}:}{matrix of edges}
     \item{\code{edge.length}:}{numeric vector of edge lengths}
-    \item{\code{Nnode}:}{integer: number of nodes}
     \item{\code{tip.label}:}{character vector of tip labels}
     \item{\code{root.edge}:}{integer: root edge (NA if none)}
     \item{\code{order}:}{character: tree ordering (allowable values are

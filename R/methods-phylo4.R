@@ -78,9 +78,13 @@ setMethod("nTips", signature(x="phylo"),
 ### Node accessors
 #########################################################
 
-setMethod("nNodes", signature(x="phylo4"),
- function(x) {
-    x@Nnode
+setMethod("nNodes", signature(x="phylo4"), function(x) {
+    E <- edges(x, drop.root=TRUE)
+    if(nrow(E) == 0) {
+        return(0)
+    } else {
+        return(length(unique(E[, 1])))
+    }
 })
 
 setMethod("nodeType", signature(x="phylo4"),

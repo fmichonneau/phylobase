@@ -366,7 +366,6 @@ the \code{phylo4} class are:
     See below for further constraints on the edge matrix.}
 \item[edge.length]{numeric list of edge lengths
     (length $N$ (rooted) or $N-1$ (unrooted) or empty (length 0))}
-\item[Nnode]{integer, number of (internal) nodes}
 \item[tip.label]{character vector of tip labels (required), with     length=\# of tips. Tip labels need not be unique, but data-tree     matching with non-unique labels will cause an error}
 \item[node.label]{character vector of node labels, length=\# of
     internal nodes or 0 (if empty).  Node labels need not be unique, but data-tree matching with non-unique labels will cause an error}

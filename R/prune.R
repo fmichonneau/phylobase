@@ -108,7 +108,7 @@ setMethod("prune","phylo4", function(x, tips.exclude,
 
     ## create and return new phylo4 object
     ## NOTE: a faster but looser approach would be to replace the slots
-    ## of x with their new values (including Nnode) and return x
+    ## of x with their new values and return x
     phylo4(x=edge.new, edge.length = edge.length.new, tip.label =
         tip.label.new, node.label = node.label.new, edge.label =
         edge.label.new, annote=x@annote)

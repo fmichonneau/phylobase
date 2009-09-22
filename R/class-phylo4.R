@@ -1,7 +1,6 @@
 setClass("phylo4",
          representation(edge = "matrix",
                         edge.length = "numeric",
-                        Nnode = "integer",
                         node.label = "character",
                         tip.label = "character",
                         edge.label = "character",
@@ -11,7 +10,6 @@ setClass("phylo4",
                         edge = matrix(nrow = 0, ncol = 2,
                             dimname = list(NULL, c("ancestor", "descendant"))),
                         edge.length = numeric(0),
-                        Nnode = as.integer(0),
                         tip.label = character(0),
                         node.label = character(0),
                         edge.label = character(0),
@@ -140,7 +138,6 @@ setMethod("phylo4", "matrix",
     res <- new("phylo4")
     res@edge <- edge
     res@edge.length <- edge.length
-    res@Nnode <- nnodes
     res@tip.label <- tip.label
     res@node.label <- node.label
     res@edge.label <- edge.label
