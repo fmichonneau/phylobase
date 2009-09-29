@@ -93,7 +93,7 @@ setMethod("prune","phylo4", function(x, tips.exclude,
     }
 
     ## renumber nodes in the edge matrix
-    edge.new[] <- match(edge.new, sort(unique.default(edge.new))) - 1
+    edge.new[] <- match(edge.new, sort(unique.default(edge.new))) - 1L
 
     ## update corresponding element names in the other slots
     edge.names <- makeEdgeNames(edge.new)
