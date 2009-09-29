@@ -6,3 +6,8 @@ setClass("multiPhylo4", representation(phylolist = "list",
 
 setClass("multiPhylo4d", representation(tip.data = "data.frame"), 
     contains = "multiPhylo4")
+
+setMethod("initialize", "multiPhylo4", function(.Object, ...) {
+    stop('multiPhylo and multiphylo4d not yet implemented.  
+    Try using a list of phylo4(d) objects and lapply()')
+})
