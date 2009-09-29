@@ -39,7 +39,7 @@ This vignette is intended as a guide for the development of \pb and a repository
 
 \section{R-Forge}
 
-Our development infrastructure hosted by R-Forge,\footnote{\url{http://phylobase.r-forge.r-project.org}} and includes a Subversion repository (see \autoref{subversion}~[\nameref{subversion}] on \autopageref{subversion}) for source code management, trackers for bug reports and feature requests,\footnote{\url{http://r-forge.r-project.org/tracker/?group_id=111}} and mailing lists for development discussion and tracking changes in the source code.\footnote{\url{http://r-forge.r-project.org/mail/?group_id=111}}
+Our development infrastructure hosted by R-Forge,\footnote{\url{http://phylobase.r-forge.r-project.org}} and includes a Subversion repository (see \autoref{subversion}~[\nameref{subversion}]) for source code management, trackers for bug reports and feature requests,\footnote{\url{http://r-forge.r-project.org/tracker/?group_id=111}} and mailing lists for development discussion and tracking changes in the source code.\footnote{\url{http://r-forge.r-project.org/mail/?group_id=111}}
 
 The R-Forge manual\footnote{\url{http://r-forge.r-project.org/R-Forge_Manual.pdf}} describes how to develop a package using their infrastructure Of particular importance is the section on getting ssh keys to work so that you can commit changes to the \code{phylobase} code using Subversion (\code{svn}).
 
