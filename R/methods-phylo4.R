@@ -150,7 +150,7 @@ setMethod("nEdges", signature(x="phylo4"),
 
 # return edge matrix in its current order
 setMethod("edges", signature(x="phylo4"),
- function(x, order, drop.root=FALSE, ...) {
+ function(x, drop.root=FALSE, ...) {
      e <- x@edge
      if (drop.root) e <- e[e[, 1] != 0, ]
      e

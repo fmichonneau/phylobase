@@ -27,7 +27,7 @@ setGeneric("nEdges", function(x) {
 })
 
 ## edges
-setGeneric("edges", function(x, order, ...) {
+setGeneric("edges", function(x, ...) {
     standardGeneric("edges")
 })
 
