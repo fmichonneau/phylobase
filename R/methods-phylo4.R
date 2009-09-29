@@ -191,11 +191,13 @@ setMethod("edgeLength", signature(x="phylo4"),
  function(x, node) {
     ## [JR: below, using match for ordering rather than direct character
     ## indexing b/c the latter is slow for vectors of a certain size]
-    elen <- x@edge.length[match(edgeId(x, "all"), names(x@edge.length))]
     if (!missing(node)) {
-        n <- getNode(x, node)
-        elen <- elen[match(n, x@edge[,2])]
+        id <- getEdge(x, node)
+    } else {
+        id <- edgeId(x, "all")
     }
+    elen <- x@edge.length[match(id, names(x@edge.length))]
+    names(elen) <- id
     return(elen)
 })
 
@@ -344,7 +346,10 @@ setMethod("edgeLabels", signature(x="phylo4"),
   function(x) {
     ## [JR: below, using match for ordering rather than direct character
     ## indexing b/c the latter is slow for vectors of a certain size]
-    x@edge.label[match(edgeId(x, "all"), names(x@edge.label))]
+    id <- edgeId(x, "all")
+    lbl <- x@edge.label[match(id, names(x@edge.label))]
+    names(lbl) <- id
+    return(lbl)
 })
 
 setReplaceMethod("edgeLabels", signature(x="phylo4", value="character"),
