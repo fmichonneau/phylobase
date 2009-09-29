@@ -12,10 +12,13 @@ descendant <- as.integer(c(7,1,2,8,3,6,9,4,5))
 edge <- cbind(ancestor, descendant)
 nid.tip <- 1:5
 nid.int <- 6:9
+nid.all <- c(nid.tip, nid.int)
 lab.tip <- paste("t", nid.tip, sep="")
 lab.int <- paste("n", nid.int, sep="")
+lab.all <- c(lab.tip, lab.int)
+eid <- paste(ancestor, descendant, sep="-")
 elen <- descendant/10
-elab <- paste("e", ancestor, descendant, sep="-")
+elab <- paste("e", eid, sep="")
 phy <- phylo4(x=edge, tip.label=lab.tip, node.label=lab.int,
     edge.length=elen, edge.label=elab)
 
@@ -31,6 +34,7 @@ phy.alt@edge.label <- phy@edge.label[c(8:9, 1:7)]
 ancestor <- ancestor[c(6:9, 1:5)]
 descendant <- descendant[c(6:9, 1:5)]
 edge <- cbind(ancestor, descendant)
+eid <- eid[c(6:9, 1:5)]
 elen <- elen[c(6:9, 1:5)]
 elab <- elab[c(6:9, 1:5)]
 
@@ -78,7 +82,6 @@ test.edgeOrder.phylo4 <- function() {
 }
 
 test.edgeId.phylo4 <- function() {
-  eid <- paste(ancestor, descendant, sep="-")
   checkIdentical(edgeId(phy.alt), eid)
   checkIdentical(edgeId(phy.alt, "all"), eid)
   checkIdentical(edgeId(phy.alt, "tip"), eid[descendant %in% nid.tip])
@@ -94,8 +97,7 @@ test.hasEdgeLength.phylo4 <- function() {
 
 test.edgeLength.phylo4 <- function() {
   # all edge lengths
-  checkIdentical(edgeLength(phy.alt), setNames(elen, paste(ancestor,
-    descendant, sep="-")))
+  checkIdentical(edgeLength(phy.alt), setNames(elen, eid))
   # one edge length, by label
   checkEquals(edgeLength(phy.alt, "t1"), c(`7-1`=0.1))
   # one edge length, by node ID
@@ -138,7 +140,71 @@ test.labels.phylo4 <- function() {
 }
 
 test.Replace.labels.phylo4 <- function() {
-  #TODO function(object, type = c("tip", "internal", "allnode"), use.names, ..., value)
+
+  ## dropping all should produce default tip labels, no internal labels
+  labels(phy.alt) <- character()
+  checkIdentical(labels(phy.alt), setNames(c(paste("T", 1:5, sep=""),
+      rep(NA, 4)), nid.all))
+
+  #
+  # complete replacement
+  #
+
+  # vector with reversed names, but names not used
+  labels(phy.alt) <- character()
+  labels(phy.alt) <- setNames(lab.all, rev(nid.all))
+  checkIdentical(labels(phy.alt), setNames(lab.all, nid.all))
+  labels(phy.alt) <- character()
+  labels(phy.alt, "tip") <- setNames(lab.tip, rev(nid.tip))
+  checkIdentical(tipLabels(phy.alt), setNames(lab.tip, nid.tip))
+  labels(phy.alt) <- character()
+  labels(phy.alt, "internal") <- setNames(lab.int, rev(nid.int))
+  checkIdentical(nodeLabels(phy.alt), setNames(lab.int, nid.int))
+  # as above, but specify name matching, hence labels get reversed too
+  labels(phy.alt) <- character()
+  labels(phy.alt, use.names=TRUE) <- setNames(lab.all, rev(nid.all))
+  checkIdentical(labels(phy.alt), setNames(rev(lab.all), nid.all))
+  labels(phy.alt) <- character()
+  labels(phy.alt, "tip", use.names=TRUE) <- setNames(lab.tip, rev(nid.tip))
+  checkIdentical(tipLabels(phy.alt), setNames(rev(lab.tip), nid.tip))
+  labels(phy.alt) <- character()
+  labels(phy.alt, "internal", use.names=TRUE) <- setNames(lab.int, rev(nid.int))
+  checkIdentical(nodeLabels(phy.alt), setNames(rev(lab.int), nid.int))
+  # vector with no names, should match to nodeId order
+  labels(phy.alt) <- character()
+  labels(phy.alt) <- lab.all
+  checkIdentical(labels(phy.alt), setNames(lab.all, nid.all))
+  labels(phy.alt) <- character()
+  labels(phy.alt, type="tip") <- lab.tip
+  checkIdentical(tipLabels(phy.alt), setNames(lab.tip, nid.tip))
+  labels(phy.alt) <- character()
+  labels(phy.alt, type="internal") <- lab.int
+  checkIdentical(nodeLabels(phy.alt), setNames(lab.int, nid.int))
+
+  #
+  # partial replacement
+  #
+
+  labels(phy.alt) <- lab.all
+  # replace a tip using numeric index
+  labels(phy.alt)[5] <- "t5a"
+  checkIdentical(tipLabels(phy.alt), setNames(c(lab.tip[1:4], "t5a"), nid.tip))
+  # and back again, now using character index
+  labels(phy.alt)["5"] <- "t5"
+  checkIdentical(labels(phy.alt), setNames(lab.all, nid.all))
+  # replace an internal node using numeric index
+  labels(phy.alt)[9] <- "n9a"
+  checkIdentical(nodeLabels(phy.alt), setNames(c(lab.int[1:3], "n9a"), nid.int))
+  # and back again, now using character index
+  labels(phy.alt)["9"] <- "n9"
+  checkIdentical(labels(phy.alt), setNames(lab.all, nid.all))
+  # error to produce duplicate tip or internal label
+  checkException(labels(phy.alt)[1] <- "t2")
+  checkException(labels(phy.alt)[6] <- "n7")
+  # error to add labels for nodes that don't exist
+  checkException(labels(phy.alt)["fake"] <- "xxx")
+  checkException(labels(phy.alt)[999] <- "xxx")
+
 }
 
 test.nodeLabels.phylo4 <- function() {
@@ -152,7 +218,28 @@ test.hasNodeLabels.phylo4 <- function() {
 }
 
 test.Replace.nodeLabels.phylo4 <- function() {
-  #TODO function(object, ...,  value) {
+
+  ## dropping all should produce no internal labels
+  nodeLabels(phy.alt) <- character()
+  checkTrue(!any(nid.int %in% names(phy.alt@label)))
+  checkIdentical(nodeLabels(phy.alt), setNames(rep(NA_character_, 4), nid.int))
+
+  #
+  # partial replacement
+  #
+
+  labels(phy.alt) <- lab.all
+  # replace an internal node using numeric index
+  nodeLabels(phy.alt)[4] <- "n9a"
+  checkIdentical(nodeLabels(phy.alt), setNames(c(lab.int[1:3], "n9a"), nid.int))
+  # and back again, now using character index
+  nodeLabels(phy.alt)["9"] <- "n9"
+  checkIdentical(labels(phy.alt), setNames(lab.all, nid.all))
+  # error to produce duplicate internal label
+  checkException(nodeLabels(phy.alt)["6"] <- "n7")
+  # error to add labels for nodes that don't exist
+  checkException(nodeLabels(phy.alt)["fake"] <- "xxx")
+  checkException(nodeLabels(phy.alt)[999] <- "xxx")
 }
 
 test.tipLabels.phylo4 <- function() {
@@ -160,7 +247,27 @@ test.tipLabels.phylo4 <- function() {
 }
 
 test.Replace.tipLabels.phylo4 <- function() {
-  #TODO function(object, ...,  value) {
+
+  ## dropping all tip labels should produce default labels
+  tipLabels(phy.alt) <- character()
+  checkIdentical(tipLabels(phy.alt), setNames(paste("T", 1:5, sep=""), nid.tip))
+
+  #
+  # partial replacement
+  #
+
+  labels(phy.alt) <- lab.all
+  # replace a tip using numeric index
+  tipLabels(phy.alt)[5] <- "t5a"
+  checkIdentical(tipLabels(phy.alt), setNames(c(lab.tip[1:4], "t5a"), nid.tip))
+  # and back again, now using character index
+  tipLabels(phy.alt)["5"] <- "t5"
+  checkIdentical(labels(phy.alt), setNames(lab.all, nid.all))
+  # error to produce duplicate tip or internal label
+  checkException(tipLabels(phy.alt)[1] <- "t2")
+  # error to add labels for nodes that don't exist
+  checkException(tipLabels(phy.alt)["fake"] <- "xxx")
+  checkException(tipLabels(phy.alt)[999] <- "xxx")
 }
 
 test.hasEdgeLabels.phylo4 <- function() {
@@ -170,12 +277,58 @@ test.hasEdgeLabels.phylo4 <- function() {
 }
 
 test.edgeLabels.phylo4 <- function() {
-  checkIdentical(edgeLabels(phy.alt), setNames(elab, paste(ancestor,
-    descendant, sep="-")))
+
+  # basic usage
+  checkIdentical(edgeLabels(phy.alt), setNames(elab, eid))
+  # should return named vector of NAs if edge labels are missing or NA
+  phy.alt@edge.label <- NA_character_
+  checkIdentical(edgeLabels(phy.alt), setNames(rep(NA_character_, 9), eid))
+  phy.alt@edge.label <- character()
+  checkIdentical(edgeLabels(phy.alt), setNames(rep(NA_character_, 9), eid))
+  # if only some labels exists, should fill in NA for the others
+  phy.alt@edge.label <- setNames(elab[-1], eid[-1])
+  checkIdentical(edgeLabels(phy.alt), setNames(c(NA, elab[-1]), eid))
+
 }
 
 test.Replace.edgeLabels.phylo4 <- function() {
-  #TODO function(object, ...,  value) {
+
+  ## dropping all should produce default tip labels, no internal labels
+  edgeLabels(phy.alt) <- character()
+  checkIdentical(edgeLabels(phy.alt), setNames(rep(NA_character_, 9), eid))
+
+  #
+  # complete replacement
+  #
+
+  # vector with reversed names, which always get matched
+  edgeLabels(phy.alt) <- character()
+  edgeLabels(phy.alt) <- setNames(elab, rev(eid))
+  checkIdentical(edgeLabels(phy.alt), setNames(rev(elab), eid))
+  # vector with no names, should match to edgeId order
+  edgeLabels(phy.alt) <- character()
+  edgeLabels(phy.alt) <- elab
+  checkIdentical(edgeLabels(phy.alt), setNames(elab, eid))
+
+  # recycling applies if fewer the nEdges elements are supplied
+  # (duplicate edge labels are okay)
+  edgeLabels(phy.alt) <- "x"
+  checkIdentical(edgeLabels(phy.alt), setNames(rep("x", 9), eid))
+
+  #
+  # partial replacement
+  #
+
+  edgeLabels(phy.alt) <- elab
+  # replace an edge label using numeric index
+  edgeLabels(phy.alt)[9] <- "e8-3a"
+  checkIdentical(edgeLabels(phy.alt), setNames(c(elab[1:8], "e8-3a"), eid))
+  # and back again, now using character index
+  edgeLabels(phy.alt)["8-3"] <- "e8-3"
+  checkIdentical(edgeLabels(phy.alt), setNames(elab, eid))
+  # error to add labels for edges that don't exist
+  checkException(edgeLabels(phy.alt)["fake"] <- "xxx")
+  checkException(edgeLabels(phy.alt)[999] <- "xxx")
 }
 
 ## this is also the print method
