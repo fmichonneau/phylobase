@@ -40,22 +40,22 @@
   \item{node.data}{a data frame for nodes data}
   \item{all.data}{a data frame for all (i.e. tips and nodes) data. In such
     case, first rows should correspond to tips, last rows to nodes.}
-  \item{match.data}{(logical) should the rownames of the data frame provided in
-  \code{tip.data}, \code{node.data} and/or \code{all.data} be used to be matched against
-  tip and node labels?}
+  \item{match.data}{(logical) should the rownames of the data frame
+    provided in \code{tip.data}, \code{node.data} and/or \code{all.data}
+    be used to be matched against tip and internal node identifiers? See
+    details.}
   \item{merge.data}{if both \code{tip.data} and \code{node.data} are
-    provided, it determines if they should be merged as a single
-    trait (if TRUE). This argument is evaluated only if both \code{tip.data} and
-    \code{node.data} have identical column names.}
+    provided, should columns with common names will be merged together
+    (default TRUE) or not (FALSE)? See details.}
   \item{check.node.labels}{if \code{x} is of class \code{phylo}, use
     either "keep" (the default) to retain internal node labels, "drop"
     to drop them, or "asdata" to convert them to numeric tree data. This
     argument is useful if the \code{phylo} object has non-unique node
     labels or node labels with informative data (e.g., posterior
     probabilities).}
-  \item{rownamesAsLabels}{(logical), in the case of number-like labels 
-    should the row names of the data provided be considered as labels 
-    (TRUE) or node numbers (FALSE and default)}
+  \item{rownamesAsLabels}{(logical), should the row names of the data
+    provided be matched only to labels (TRUE), or should any number-like
+    row names be matched to node numbers (FALSE and default)}
   \item{annote}{any additional annotation data to be passed to the new object}
   \item{metadata}{any additional metadata to be passed to the new object}
   \item{\dots}{further arguments to be passed to
@@ -67,17 +67,39 @@
 
 \details{
   You can provide several data frames to define traits associated with
-  tips and/or nodes. If you provide \code{all.data} and \code{tip.data}
-  or \code{node.data}, row names of the data frames will be matched
-  (\code{all.data} names are matched against \code{tip.data} and/or
-  \code{node.data}). This is done independently of the labels of the tree
-  (and also of the value of the arguments \code{use.tip.names} and
-  \code{use.node.names}). This means that you need to be consistent
-  with the row names of your data frames. It is good practice to use tip
-  and node labels (or node numbers) when you merge data with a tree.
-  If \code{all.data} is provided and tip and node names are not being
-  used, then the first part of the data frame will be tips data and the
-  second part will be nodes data.
+  tip and/or internal nodes. Rules for matching rows of data to tree
+  nodes are determined jointly by the \code{match.data} and
+  \code{rownamesAsLabels} arguments, and these will apply the same way
+  to all supplied data frames. If \code{match.data} is TRUE, data frame
+  rows will be matched exclusively against tip and node labels if
+  \code{rownamesAsLabels} is also TRUE, whereas any all-digit row names
+  will be matched against tip and node numbers if
+  \code{rownamesAsLabels} is FALSE (the default). If \code{match.data}
+  is FALSE, \code{rownamesAsLabels} has no effect, and row matching is
+  purely positional with respect to the order returned by
+  \code{nodeId(x, "tip")} for tip.data, \code{nodeId(x, "internal")} for
+  node.data, and \code{nodeId(x, "all")} for all.data.
+
+  This means that you need to be consistent with the row names of your
+  data frames. It is good practice to use tip and node labels (or node
+  numbers) when you merge data with a tree.
+
+  If you provide both \code{tip.data} and \code{node.data}, the
+  treatment of columns with common names will depend on the
+  \code{merge.data} argument. If TRUE, columns with the same name in
+  both data frames will be merged; when merging columns of different
+  data types, coercion to a common type will follow standard R rules. If
+  \code{merge.data} is FALSE, columns with common names will be
+  preserved independently, with ".tip" and ".node" appended to the
+  names. This argument has no effect if \code{tip.data} and
+  \code{node.data} have no column names in common.
+
+  If you provide \code{all.data} along with either of \code{tip.data}
+  and \code{node.data}, it must have distinct column names, otherwise an
+  error will result. Additionally, although supplying columns with the
+  same names \emph{within} data frames is not illegal, automatic
+  renaming for uniqeness may lead to surprising results, so this
+  practice should be avoided.
 }
 
 \value{
@@ -90,7 +112,8 @@
   function to check the validity of \code{phylo4d} objects;
   \linkS4class{phylo4} class and \link{phylo4} constructor.}
 
-\author{Ben Bolker, Thibaut Jombart, Steve Kembel, Francois Michonneau}
+\author{Ben Bolker, Thibaut Jombart, Steve Kembel, Francois Michonneau,
+  Jim Regetz}
 
 \note{
   Checking on matches between the tree and the data will be done by the

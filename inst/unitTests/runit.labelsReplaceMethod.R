@@ -12,53 +12,53 @@ test.labelsTipsPhylo4 <- function() {
 
     ## case all options by default and unnamed vector
     p4c <- p4
-    labels(p4c) <- tLbl
+    tipLabels(p4c) <- tLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4c@tip.label) %in% nodeId(p4c, "tip")))
+    checkTrue(all(names(tipLabels(p4c)) %in% nodeId(p4c, "tip")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4c@tip.label), tLbl)
+    checkEquals(unname(tipLabels(p4c)), tLbl)
 
     ## case all options by default and named vector
     p4c <- p4
-    labels(p4c) <- nmTLbl
+    tipLabels(p4c) <- nmTLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4c@tip.label) %in% nodeId(p4c, "tip")))
+    checkTrue(all(names(tipLabels(p4c)) %in% nodeId(p4c, "tip")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4c@tip.label), unname(nmTLbl))
+    checkEquals(unname(tipLabels(p4c)), unname(nmTLbl))
 
     ## case type defined
     p4c <- p4
-    labels(p4c, "tip") <- tLbl
+    tipLabels(p4c) <- tLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4c@tip.label) %in% nodeId(p4c, "tip")))
+    checkTrue(all(names(tipLabels(p4c)) %in% nodeId(p4c, "tip")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4c@tip.label), tLbl)
+    checkEquals(unname(tipLabels(p4c)), tLbl)
 
     ## case type defined and use.names=TRUE but no names
     p4c <- p4
-    labels(p4c, "tip", use.names=TRUE) <- tLbl
+    tipLabels(p4c, use.names=TRUE) <- tLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4c@tip.label) %in% nodeId(p4c, "tip")))
+    checkTrue(all(names(tipLabels(p4c)) %in% nodeId(p4c, "tip")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4c@tip.label), tLbl)
+    checkEquals(unname(tipLabels(p4c)), tLbl)
 
     ## case type defined and use.names=TRUE with names
     p4c <- p4
-    labels(p4c, "tip", use.names=TRUE) <- nmTLbl
+    tipLabels(p4c, use.names=TRUE) <- nmTLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4c@tip.label) %in% nodeId(p4c, "tip")))
+    checkTrue(all(names(tipLabels(p4c)) %in% nodeId(p4c, "tip")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(p4c@tip.label, nmTLbl[order(as.numeric(names(nmTLbl)))])
+    checkEquals(tipLabels(p4c), nmTLbl[order(as.numeric(names(nmTLbl)))])
 }
 
 test.labelsNodePhylo4 <- function() {
@@ -72,33 +72,33 @@ test.labelsNodePhylo4 <- function() {
 
     ## case type defined
     p4c <- p4
-    labels(p4c, "internal") <- ndLbl
+    nodeLabels(p4c) <- ndLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4c@node.label) %in% nodeId(p4c, "internal")))
+    checkTrue(all(names(nodeLabels(p4c)) %in% nodeId(p4c, "all")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4c@node.label), ndLbl)
+    checkEquals(unname(nodeLabels(p4c)), ndLbl)
 
     ## case type defined and use.names=TRUE but no names
     p4c <- p4
-    labels(p4c, "internal", use.names=TRUE) <- ndLbl
+    nodeLabels(p4c, use.names=TRUE) <- ndLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4c@node.label) %in% nodeId(p4c, "internal")))
+    checkTrue(all(names(nodeLabels(p4c)) %in% nodeId(p4c, "all")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4c@node.label), ndLbl)
+    checkEquals(unname(nodeLabels(p4c)), ndLbl)
 
     ## case type defined and use.names=TRUE with names
     p4c <- p4
-    labels(p4c, "internal", use.names=TRUE) <- nmNdLbl
+    nodeLabels(p4c, use.names=TRUE) <- nmNdLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4c@node.label) %in% nodeId(p4c, "internal")))
+    checkTrue(all(names(nodeLabels(p4c)) %in% nodeId(p4c, "all")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(p4c@node.label, nmNdLbl[order(as.numeric(names(nmNdLbl)))])
+    checkEquals(nodeLabels(p4c), nmNdLbl[order(as.numeric(names(nmNdLbl)))])
 
 }
 
@@ -111,53 +111,53 @@ test.labelsTipsPhylo4d <- function() {
 
     ## case all options by default and unnamed vector
     p4dc <- p4d
-    labels(p4dc) <- tLbl
+    tipLabels(p4dc) <- tLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4dc@tip.label) %in% nodeId(p4dc, "tip")))
+    checkTrue(all(names(tipLabels(p4dc)) %in% nodeId(p4dc, "tip")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4dc@tip.label), tLbl)
+    checkEquals(unname(tipLabels(p4dc)), tLbl)
 
     ## case all options by default and named vector
     p4dc <- p4d
-    labels(p4dc) <- nmTLbl
+    tipLabels(p4dc) <- nmTLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4dc@tip.label) %in% nodeId(p4dc, "tip")))
+    checkTrue(all(names(tipLabels(p4dc)) %in% nodeId(p4dc, "tip")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4dc@tip.label), unname(nmTLbl))
+    checkEquals(unname(tipLabels(p4dc)), unname(nmTLbl))
 
     ## case type defined
     p4dc <- p4d
-    labels(p4dc, "tip") <- tLbl
+    tipLabels(p4dc) <- tLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4dc@tip.label) %in% nodeId(p4dc, "tip")))
+    checkTrue(all(names(tipLabels(p4dc)) %in% nodeId(p4dc, "tip")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4dc@tip.label), tLbl)
+    checkEquals(unname(tipLabels(p4dc)), tLbl)
 
     ## case type defined and use.names=TRUE but no names
     p4dc <- p4d
-    labels(p4dc, "tip", use.names=TRUE) <- tLbl
+    tipLabels(p4dc, use.names=TRUE) <- tLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4dc@tip.label) %in% nodeId(p4dc, "tip")))
+    checkTrue(all(names(tipLabels(p4dc)) %in% nodeId(p4dc, "tip")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4dc@tip.label), tLbl)
+    checkEquals(unname(tipLabels(p4dc)), tLbl)
 
     ## case type defined and use.names=TRUE with names
     p4dc <- p4d
-    labels(p4dc, "tip", use.names=TRUE) <- nmTLbl
+    tipLabels(p4dc, use.names=TRUE) <- nmTLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4dc@tip.label) %in% nodeId(p4dc, "tip")))
+    checkTrue(all(names(tipLabels(p4dc)) %in% nodeId(p4dc, "tip")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(p4dc@tip.label, nmTLbl[order(as.numeric(names(nmTLbl)))])
+    checkEquals(tipLabels(p4dc), nmTLbl[order(as.numeric(names(nmTLbl)))])
 }
 
 test.labelsNodePhylo4d <- function() {
@@ -171,33 +171,33 @@ test.labelsNodePhylo4d <- function() {
 
     ## case type defined
     p4dc <- p4d
-    labels(p4dc, "internal") <- ndLbl
+    nodeLabels(p4dc) <- ndLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4dc@node.label) %in% nodeId(p4dc, "internal")))
+    checkTrue(all(names(nodeLabels(p4dc)) %in% nodeId(p4dc, "internal")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4dc@node.label), ndLbl)
+    checkEquals(unname(nodeLabels(p4dc)), ndLbl)
 
     ## case type defined and use.names=TRUE but no names
     p4dc <- p4d
-    labels(p4dc, "internal", use.names=TRUE) <- ndLbl
+    nodeLabels(p4dc, use.names=TRUE) <- ndLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4dc@node.label) %in% nodeId(p4dc, "internal")))
+    checkTrue(all(names(nodeLabels(p4dc)) %in% nodeId(p4dc, "internal")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(unname(p4dc@node.label), ndLbl)
+    checkEquals(unname(nodeLabels(p4dc)), ndLbl)
 
     ## case type defined and use.names=TRUE with names
     p4dc <- p4d
-    labels(p4dc, "internal", use.names=TRUE) <- nmNdLbl
+    nodeLabels(p4dc, use.names=TRUE) <- nmNdLbl
     ## check the internal names are there and match tips
-    checkTrue(all(names(p4dc@node.label) %in% nodeId(p4dc, "internal")))
+    checkTrue(all(names(nodeLabels(p4dc)) %in% nodeId(p4dc, "internal")))
     ## check that the labels are correct: here use.names=FALSE
     ## so the order should be the same as in the shuffled vector
     ## of name labels
-    checkEquals(p4dc@node.label, nmNdLbl[order(as.numeric(names(nmNdLbl)))])
+    checkEquals(nodeLabels(p4dc), nmNdLbl[order(as.numeric(names(nmNdLbl)))])
 
 }
 
@@ -212,28 +212,19 @@ test.labelsAllPhylo4 <- function() {
 
     p4c <- p4
     labels(p4c, "all") <- allLbl
-    checkTrue(all(names(p4c@tip.label) %in% nodeId(p4c, "tip")))
-    checkTrue(all(names(p4c@node.label) %in% nodeId(p4c, "internal")))
-    checkEquals(unname(p4c@tip.label), allLbl[1:nTips(p4)])
-    checkEquals(unname(p4c@node.label),
-                allLbl[(nTips(p4)+1):(nTips(p4)+nNodes(p4))])
+    checkTrue(all(names(labels(p4c)) %in% nodeId(p4c, "all")))
+    checkEquals(unname(labels(p4c)), allLbl)
 
     p4c <- p4
     labels(p4c, "all") <- nmAllLbl
-    checkTrue(all(names(p4c@tip.label) %in% nodeId(p4c, "tip")))
-    checkTrue(all(names(p4c@node.label) %in% nodeId(p4c, "internal")))
-    checkEquals(unname(p4c@tip.label), unname(nmAllLbl[1:nTips(p4)]))
-    checkEquals(unname(p4c@node.label),
-                unname(nmAllLbl[(nTips(p4)+1):(nTips(p4)+nNodes(p4))]))
-
+    checkTrue(all(names(labels(p4c)) %in% nodeId(p4c, "all")))
+    checkEquals(unname(labels(p4c)), unname(nmAllLbl))
 
     p4c <- p4
     tmpNm <- nmAllLbl[order(as.numeric(names(nmAllLbl)))]
     labels(p4c, "all", use.names=TRUE) <- nmAllLbl
-    checkTrue(all(names(p4c@tip.label) %in% nodeId(p4c, "tip")))
-    checkTrue(all(names(p4c@node.label) %in% nodeId(p4c, "internal")))
-    checkEquals(p4c@tip.label, tmpNm[names(tmpNm) %in% nodeId(p4c, "tip")])
-    checkEquals(p4c@node.label, tmpNm[names(tmpNm) %in% nodeId(p4c, "internal")])
+    checkTrue(all(names(labels(p4c)) %in% nodeId(p4c, "all")))
+    checkEquals(labels(p4c), tmpNm[names(tmpNm) %in% nodeId(p4c, "all")])
 }
 
 test.labelsAllPhylo4d <- function() {
@@ -247,26 +238,18 @@ test.labelsAllPhylo4d <- function() {
 
     p4dc <- p4d
     labels(p4dc, "all") <- allLbl
-    checkTrue(all(names(p4dc@tip.label) %in% nodeId(p4dc, "tip")))
-    checkTrue(all(names(p4dc@node.label) %in% nodeId(p4dc, "internal")))
-    checkEquals(unname(p4dc@tip.label), allLbl[1:nTips(p4d)])
-    checkEquals(unname(p4dc@node.label),
-                allLbl[(nTips(p4d)+1):(nTips(p4d)+nNodes(p4d))])
+    checkTrue(all(names(labels(p4dc)) %in% nodeId(p4dc, "all")))
+    checkEquals(unname(labels(p4dc)), allLbl)
 
     p4dc <- p4d
     labels(p4dc, "all") <- nmAllLbl
-    checkTrue(all(names(p4dc@tip.label) %in% nodeId(p4dc, "tip")))
-    checkTrue(all(names(p4dc@node.label) %in% nodeId(p4dc, "internal")))
-    checkEquals(unname(p4dc@tip.label), unname(nmAllLbl[1:nTips(p4d)]))
-    checkEquals(unname(p4dc@node.label),
-                unname(nmAllLbl[(nTips(p4d)+1):(nTips(p4d)+nNodes(p4d))]))
+    checkTrue(all(names(labels(p4dc)) %in% nodeId(p4dc, "all")))
+    checkEquals(unname(labels(p4dc)), unname(nmAllLbl))
 
 
     p4dc <- p4d
     tmpNm <- nmAllLbl[order(as.numeric(names(nmAllLbl)))]
     labels(p4dc, "all", use.names=TRUE) <- nmAllLbl
-    checkTrue(all(names(p4dc@tip.label) %in% nodeId(p4dc, "tip")))
-    checkTrue(all(names(p4dc@node.label) %in% nodeId(p4dc, "internal")))
-    checkEquals(p4dc@tip.label, tmpNm[names(tmpNm) %in% nodeId(p4dc, "tip")])
-    checkEquals(p4dc@node.label, tmpNm[names(tmpNm) %in% nodeId(p4dc, "internal")])
+    checkTrue(all(names(labels(p4dc)) %in% nodeId(p4dc, "all")))
+    checkEquals(labels(p4dc), tmpNm[names(tmpNm) %in% nodeId(p4dc, "all")])
 }

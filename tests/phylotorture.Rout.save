@@ -184,8 +184,7 @@ Error in treePlot(x, ...) : treePlot function requires a rooted tree.
 attr(,"class")
 [1] "try-error"
 > 
-> foo@tip.label <- rep('blah',10)
-> foo@node.label <- rep("",9)
+> foo@label <- c(rep('blah',10), rep("",9))
 > 
 > #####
 > ## tree with only 2 tips: will fail under previous versions

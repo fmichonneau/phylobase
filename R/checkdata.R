@@ -16,8 +16,7 @@ checkTree <- function(object,
 
     ## case of empty phylo4 object
     if(nrow(object@edge) == 0 && length(object@edge.length) == 0 &&
-       length(object@node.label) == 0 &&
-       length(object@tip.label) == 0 && length(object@edge.label) == 0)
+       length(object@label) == 0 && length(object@edge.label) == 0)
         return(TRUE)
 
     ## FIXME: check for cyclicity?
@@ -27,7 +26,7 @@ checkTree <- function(object,
       if (length(object@edge.length) != nedges)
         return("edge lengths do not match number of edges")
       if(!is.numeric(object@edge.length))
-          stop("Edge lengths are not numeric.")
+          return("edge lengths are not numeric")
       ## presumably we shouldn't allow NAs mixed
       ## with numeric branch lengths except at the root
       if (sum(is.na(object@edge.length)) > 1)
@@ -41,8 +40,6 @@ checkTree <- function(object,
     ##  return("number of tip labels not consistent with number of edges and nodes")
     ## check: tip numbers = (m+1):(m+n)
     ntips <- nTips(object)
-    if(length(object@tip.label) != ntips)
-      return("number of tip labels not consistent with number of tips")
     E <- edges(object)
     tips <- unique(sort(E[,2][!E[,2] %in% E[,1]]))
     nodes <- unique(sort(c(E)))
@@ -82,49 +79,33 @@ checkTree <- function(object,
            paste(phylo4_orderings,collapse=","))
     }
 
-    ## make sure that nodes and edges have internal names
-    ## and that they match the nodes
-    if (is.null(names(object@tip.label))) {
-        if(length(object@tip.label) == nTips(object)) {
-            stop("There is no internal name associated with your tips. Use the ",
-                 "function tipLabels <- to change your tip labels.")
+    ## make sure tip/node labels have internal names that match node IDs
+    lab.msg <- "Use tipLabels<- (and nodeLabels<- if needed) to update them."
+    if (is.null(names(object@label))) {
+        return(c("Tip and node labels must have names matching node IDs. ",
+            lab.msg))
+             
+    } else {
+        if (!all(tips %in% names(na.omit(object@label)))) {
+            return(c("All tips must have associated tip labels. ",
+                lab.msg))
         }
-        else
-            stop("Your object doesn't have internal node names and the number of ",
-                 "tip labels doesn't match the number tips.")
-    }
-    else {
-        if(!all(names(object@tip.label) %in%  nodeId(object, "tip")))
-            stop("Internal names for tips don't match tip ID numbers")
+        if (!all(names(object@label) %in% nodeId(object, "all"))) {
+            return(c("One or more tip/node label has an unmatched ID name ",
+                lab.msg))
+        }
     }
 
-    if (is.null(names(object@node.label))) {
-        if(length(object@node.label) == nNodes(object)) {
-            stop("There is no internal names associated with internal ",
-                 "nodes. Use the function nodeLabels <- to create or ",
-                 "change your internal node labels.")
-        }
-        else
-            stop("Your object doesn't have internal node names and the number of ",
-                 "node labels doesn't match the number nodes.")
-    }
-    else {
-        if(!all(names(object@node.label) %in%  nodeId(object, "internal")))
-            stop("Internal names for nodes don't match node ID numbers")
-    }
-
+    ## make sure edge lengths have internal names that match the edges
+    elen.msg <- "Use edgeLength<- to update them."
     if(hasEdgeLength(object)) {
-        if(is.null(names(object@edge.length))) {
-            warning("Your edges don't have internal names. Use the function ",
-                    "edgeLength <- to update the the branch lengths of your ",
-                    "tree.")
+        if (is.null(names(object@edge.length))) {
+            return(c("Edge lengths must have names matching edge IDs. ",
+                elen.msg))
         }
-        else {
-            tEdgLbl <- paste(object@edge[,1], object@edge[,2], sep="-")
-            if(!all(names(object@edge.length) %in% tEdgLbl))
-                stop("There is something wrong with your internal edge length ",
-                     "labels. Use the function edgeLength <- to update the the ",
-                     "branch lengths of your tree.")
+        if (!all(names(object@edge.length) %in% edgeId(object, "all"))) {
+            return(c("One or more edge lengths has an unmatched ID name. ",
+                elen.msg))
         }
     }
 
@@ -184,24 +165,23 @@ checkPhylo4Data <- function(object) {
     ## These are just some basic tests to make sure that the user does not
     ## alter the object in a significant way
 
-    ntips <- nTips(object)
-    nnodes <- nNodes(object)
-
-    ## Check dimensions
-    if (nrow(object@tip.data) > 0 && nrow(object@tip.data) != ntips)
-        stop("The number of tip data does not match the number ",
-             "of tips in the tree")
-    if (nrow(object@node.data) > 0 && nrow(object@node.data) != nnodes)
-        stop("The number of node data does not match the number ",
-             "of internal nodes in the tree")
+# JR: I don't think this part is necessary. All that matters is that all
+# rows in the data have names corresponding to (valid) node numbers
+#    ntips <- nTips(object)
+#    nnodes <- nNodes(object)
+#
+#    ## Check dimensions
+#    if (nrow(object@tip.data) > 0 && nrow(object@tip.data) != ntips)
+#        stop("The number of tip data does not match the number ",
+#             "of tips in the tree")
+#    if (nrow(object@node.data) > 0 && nrow(object@node.data) != nnodes)
+#        stop("The number of node data does not match the number ",
+#             "of internal nodes in the tree")
 
     ## Check rownames
-    if (nrow(object@tip.data) > 0 &&
-       !all(rownames(object@tip.data) %in% nodeId(object, "tip")))
-        stop("The row names of tip data do not match the tip numbers")
-    if (nrow(object@node.data) > 0 &&
-        !all(rownames(object@node.data) %in% nodeId(object, "internal")))
-        stop("The row names of node data do not match the node numbers")
+    if (nrow(object@data) > 0 &&
+        !all(row.names(object@data) %in% nodeId(object, "all")))
+        stop("The row names of tree data do not match the node numbers")
 
     return(TRUE)
 }

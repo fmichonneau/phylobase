@@ -26,15 +26,21 @@ pos=c("after", "before"), merge.data=TRUE, match.data=TRUE, \dots)
   \item{pos}{should the new data provided be bound \code{before} or
     \code{after} the pre-existing data?}
   \item{merge.data}{if both \code{tip.data} and \code{node.data} are
-    provided, it determines if they should be merged as a single
-    trait (if TRUE). This argument is evaluated only if both \code{tip.data} and
-    \code{node.data} have identical column names.}
+    provided, it determines whether columns with common names will be
+    merged together (default TRUE). If FALSE, columns with common names
+    will be preserved separately, with ".tip" and ".node" appended to
+    the names. This argument has no effect if \code{tip.data} and
+    \code{node.data} have no column names in common.}
   \item{\dots}{additional arguments to be passed to \link{formatData}}
 }
 \value{
   \code{addData} returns a \code{phylo4d} object. 
 }
 \details{
+  If any column names in the original data are the same as columns in
+  the new data, ".old" is appended to the former column names and ".new"
+  is appended to the new column names.
+
   The option \code{pos} is ignored (silently) if \code{x} is a
   \code{phylo4} object. It is provided for compatibility reasons.
 }

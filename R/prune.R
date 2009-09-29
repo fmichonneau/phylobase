@@ -65,9 +65,8 @@ setMethod("prune","phylo4", function(x, tips.exclude,
         singletons <- which(tabulate(edge.new[edge.new[, 1] != 0, 1])==1)
     }
 
-    ## remove dropped elements from tip.label and node.label
-    tip.label.new <- tipLabels(x)[names(tipLabels(x)) %in% edge.new]
-    node.label.new <- nodeLabels(x)[names(nodeLabels(x)) %in% edge.new]
+    ## remove dropped elements from labels
+    label.new <- labels(x)[names(labels(x)) %in% edge.new]
 
     ## subset and order edge.length and edge.label with respect to edge
     edge.names <- makeEdgeNames(edge.new)
@@ -79,16 +78,14 @@ setMethod("prune","phylo4", function(x, tips.exclude,
         tip.now <- setdiff(edge.new[,2], edge.new[,1])
         tip.add <- tip.now[tip.now>nTips(x)]
         if (length(tip.add)>0) {
-            ind <- match(tip.add, names(node.label.new))
+            ind <- match(tip.add, names(label.new))
 
             ## node renumbering workaround to satisfy plot method
             newid <- sapply(tip.add, function(tip) descendants(x, tip)[1])
-            names(node.label.new)[ind] <- newid
+            names(label.new)[ind] <- newid
             edge.new[match(tip.add, edge.new)] <- newid
             tip.now[match(tip.add, tip.now)] <- newid
 
-            tip.label.new <- c(tip.label.new, node.label.new[ind])
-            node.label.new <- node.label.new[-ind]
             isTip <- edge.new %in% tip.now
             edge.new[isTip] <- match(edge.new[isTip],
             sort(unique.default(edge.new[isTip])))
@@ -102,16 +99,21 @@ setMethod("prune","phylo4", function(x, tips.exclude,
     edge.names <- makeEdgeNames(edge.new)
     names(edge.length.new) <- edge.names
     names(edge.label.new) <- edge.names
-    tip.label.new <- tip.label.new[order(as.numeric(names(tip.label.new)))]
-    names(tip.label.new) <- seq_along(tip.label.new)
-    names(node.label.new) <- seq_along(node.label.new) + length(tip.label.new)
+    label.new <- label.new[order(as.numeric(names(label.new)))]
+    names(label.new) <- seq_along(label.new)
 
-    ## create and return new phylo4 object
-    ## NOTE: a faster but looser approach would be to replace the slots
-    ## of x with their new values and return x
-    phylo4(x=edge.new, edge.length = edge.length.new, tip.label =
-        tip.label.new, node.label = node.label.new, edge.label =
-        edge.label.new, annote=x@annote)
+    ## update, check, then return the pruned phylo4 object
+    x@edge <- edge.new
+    ##TODO would prefer to leave out NA from edge.length slot, but can't 
+    x@edge.length <- edge.length.new
+    x@edge.label <- edge.label.new[!is.na(edge.label.new)]
+    x@label <- label.new[!is.na(label.new)]
+    if(is.character(checkval <- checkPhylo4(x))) {
+        stop(checkval)
+    } else {
+        return(x)
+    }
+
 })
 
 ## trace("prune", browser, signature = "phylo4d")
@@ -122,7 +124,7 @@ setMethod("prune", "phylo4d", function(x, tips.exclude,
     tree <- extractTree(x)
     phytr <- prune(tree, tips.exclude, trim.internal)
 
-    ## create temporary phylo4 object with unique labels
+    ## create temporary phylo4 object with complete and unique labels
     tmpLbl <- .genlab("n", nTips(x)+nNodes(x))
     tmpPhy <- tree
     labels(tmpPhy, "all") <- tmpLbl
@@ -131,27 +133,14 @@ setMethod("prune", "phylo4d", function(x, tips.exclude,
     ## get node numbers to keep
     oldLbl <- labels(tmpPhy, "all")
     newLbl <- labels(tmpPhytr, "all")
-    toKeep <- as.numeric(names(oldLbl[oldLbl %in% newLbl]))
-    tipToKeep <- toKeep[toKeep %in% nodeId(x, "tip")]
-    nodToKeep <- toKeep[toKeep %in% nodeId(x, "internal")]
+    wasKept <- oldLbl %in% newLbl
+    nodesToKeep <- as.numeric(names(oldLbl[wasKept]))
 
-    if(!all(dim(x@tip.data) == 0)) {
-        tipDt <- x@tip.data[match(tipToKeep, rownames(x@tip.data)) ,, drop=FALSE]
-        tipDt <- tipDt[.chnumsort(rownames(tipDt)) ,, drop=FALSE]
-        rownames(tipDt) <- 1:nTips(phytr)
-    }
-    else
-        tipDt <- data.frame(NULL)
+    ## subset original data, and update names
+    allDt <- x@data[match(nodesToKeep, rownames(x@data)), , drop=FALSE]
+    rownames(allDt) <- match(newLbl, oldLbl[wasKept])
 
-    if(!all(dim(x@node.data) == 0)) {
-        nodDt <- x@node.data[match(nodToKeep, rownames(x@node.data)) ,, drop=FALSE]
-        nodDt <- nodDt[.chnumsort(rownames(nodDt)) ,, drop=FALSE]
-        rownames(nodDt) <- 1:nNodes(phytr)
-    }
-    else
-        nodDt <- data.frame(NULL)
-
-    phytr <- phylo4d(phytr, tip.data=tipDt, node.data=nodDt, match.data=FALSE)
+    phytr <- phylo4d(phytr, all.data=allDt, match.data=TRUE)
 
     phytr
 })

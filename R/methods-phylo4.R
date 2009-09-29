@@ -202,7 +202,7 @@ setMethod("edgeLength", signature(x="phylo4"),
 setReplaceMethod("edgeLength", signature(x="phylo4"),
  function(x, use.names=TRUE, ..., value) {
     if(use.names && !is.null(names(value))) {
-        if(!all(names(value) %in% names(edgeLength(x))))
+        if(!all(names(value) %in% edgeId(x, "all")))
             stop("Names provided don't match internal edge labels")
         x@edge.length[match(names(value), names(x@edge.length))] <- value
     }
@@ -257,89 +257,54 @@ setMethod("labels", signature(object="phylo4"),
     type <- match.arg(type)
     ## [JR: below, using match for ordering rather than direct character
     ## indexing b/c the latter is slow for vectors of a certain size]
-    lbl <- switch(type,
-                  all={
-                      all <- c(object@tip.label, object@node.label)
-                      all[match(nodeId(object, "all"), names(all))]
-                  },
-                  tip={
-                      tip <- object@tip.label
-                      tip[match(nodeId(object, "tip"), names(tip))]
-                  },
-                  internal={
-                      int <- object@node.label
-                      int[match(nodeId(object, "internal"), names(int))]
-                  })
+    label <- object@label
+    id <- nodeId(object, type)
+    lbl <- label[match(id, names(label))]
+    # reassign names b/c any unmatched will be NA (could instead assign
+    # names only to the unmatched ones, but this seems simpler)
+    names(lbl) <- id
     return(lbl)
 })
 
 setReplaceMethod("labels",
                  signature(x="phylo4", type="ANY",
                            use.names="ANY", value="character"),
-   function(x, type = c("tip", "internal", "allnode"),
+   function(x, type = c("all", "tip", "internal"),
             use.names, ..., value) {
 
        ## Default options
        if(missing(type))
-           type <- "tip"
+           type <- "all"
        if (missing(use.names))
            use.names <- FALSE
 
        type <- match.arg(type)
 
+       ## generate new labels of the desired type
+       new.label <- .createLabels(value, nTips(x), nNodes(x), use.names,
+           type=type)
 
-       ob <- switch(type,
-              ## If 'tip'
-              tip = {
-                  x@tip.label <- .createLabels(value, nTips(x),
-                                                    nNodes(x), use.names,
-                                                    type="tip")
-                  x
-              },
-              ## If 'internal'
-              internal = {
-                  x@node.label <- .createLabels(value, nTips(x),
-                                                     nNodes(x), use.names,
-                                                     type="internal")
-                  x
-              },
-              ## If 'allnode'
-              allnode = {
-                  if(use.names) {
-                      tipVal <- value[names(value) %in% nodeId(x, "tip")]
-                      nodVal <- value[names(value) %in% nodeId(x, "internal")]
-                      x@tip.label <- .createLabels(tipVal, nTips(x),
-                                                        nNodes(x), use.names,
-                                                        type="tip")
-                      x@node.label <- .createLabels(nodVal, nTips(x),
-                                                         nNodes(x), use.names,
-                                                         type="internal")
-                  }
-                  else {
-                      ntips <- nTips(x)
-                      nedges <- nTips(x) + nNodes(x)
-                      x@tip.label <- .createLabels(value[1:ntips], nTips(x),
-                                                        nNodes(x), use.names,
-                                                        type="tip")
-                      x@node.label <- .createLabels(value[(ntips+1):nedges],
-                                                         nTips(x),
-                                                         nNodes(x), use.names,
-                                                         type="internal")
-                  }
-                  x
-              })
+       ## replace existing labels and add new ones as needed
+       old.label <- x@label
+       old.index <- match(names(new.label), names(old.label))
+       isNew <- is.na(old.index)
+       old.label[old.index[!isNew]] <- new.label[!isNew]
+       updated.label <- c(old.label, new.label[isNew])
 
-       if(is.character(checkval <- checkPhylo4(ob)))
+       ## for efficiency, drop any NA labels
+       x@label <- updated.label[!is.na(updated.label)]
+
+       if(is.character(checkval <- checkPhylo4(x)))
            stop(checkval)
        else
-           return(ob)
+           return(x)
    })
 
 
 ### Node Labels
 setMethod("hasNodeLabels", signature(x="phylo4"),
  function(x) {
-    !all(is.na(x@node.label))
+    !all(is.na(nodeLabels(x)))
 })
 
 setMethod("nodeLabels", signature(x="phylo4"),

@@ -106,8 +106,7 @@ set.seed(1001)
 foo@edge <- rcoal(10)$edge
 print(try(plot(foo)))
 
-foo@tip.label <- rep('blah',10)
-foo@node.label <- rep("",9)
+foo@label <- c(rep('blah',10), rep("",9))
 
 #####
 ## tree with only 2 tips: will fail under previous versions

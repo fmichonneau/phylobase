@@ -11,7 +11,7 @@
   phylogenetic tree stored as a phylo4d object
 }
 \usage{
- \S4method{tdata}{phylo4d}(x, type=c("tip", "internal", "allnode"),
+ \S4method{tdata}{phylo4d}(x, type=c("tip", "internal", "all"),
      label.type=c("row.names", "column"), empty.columns=TRUE, \dots)
  \S4method{tdata}{phylo4d,ANY}(x, type = "tip", \dots) <- value
 }
@@ -21,7 +21,7 @@
     \item{type}{The type of data to retrieve or update:
       \dQuote{\code{tip}}  for data associated with tips,
       \dQuote{\code{internal}} for data  associated with internal nodes,
-      \dQuote{\code{allnode}} for data associated with tip and internal
+      \dQuote{\code{all}} for data associated with tip and internal
       nodes.}
     
     \item{label.type}{How the tip/node labels from the tree be

@@ -30,49 +30,52 @@ phyd <- phylo4d(phy, tip.data=tipDt, node.data=nodDt, all.data=allDt,
 # create altered version such that each slot is out of order with
 # respect to all others; methods should be able to handle this
 phyd.alt <- phyd
-phyd.alt@tip.label <- rev(phyd@tip.label)
-phyd.alt@node.label <- rev(phyd@node.label)
+phyd.alt@label <- rev(phyd@label)
 phyd.alt@edge <- phyd@edge[c(6:9, 1:5), ]
 phyd.alt@edge.length <- phyd@edge.length[c(7:9, 1:6)]
 phyd.alt@edge.label <- phyd@edge.label[c(8:9, 1:7)]
 nid.tip.r <- c(2,5,4,3,1)
 nid.int.r <- c(8,7,9,6)
 nid.all.r <- c(nid.tip.r, nid.int.r)
-phyd.alt@tip.data <- phyd@tip.data[rank(nid.tip.r), ]
-phyd.alt@node.data <- phyd@node.data[rank(nid.int.r), ]
+phyd.alt@data <- phyd@data[rank(nid.all.r), ]
 
 #-----------------------------------------------------------------------
 
 test.tdata.phylo4d <- function() {
-DEACTIVATED("turned off until tdata can handle out-of-order rows in data slots")
     # function(x, type=c("tip", "internal", "allnode"),
     #   label.type=c("row.names","column"), empty.columns=TRUE, ...)
 
-    # TODO: flesh out these tests!
-    tip.data <- tdata(phyd.alt, type="tip")
-    checkTrue(is.data.frame(tip.data))
-    int.data <- tdata(phyd.alt, type="internal")
-    checkTrue(is.data.frame(int.data))
-    all.data <- tdata(phyd.alt, type="all")
-    checkTrue(is.data.frame(all.data))
+    # manually create expected full trait data.frame
+    m1 <- merge(allDt, rbind(tipDt["c"], nodDt["c"]), by=0, all=TRUE)
+    m2 <- merge(tipDt["d"], nodDt["e"], by=0, all=TRUE)
+    compDt <- merge(m1, m2, by="Row.names", all=TRUE)[-1]
+    row.names(compDt) <- lab.all
+
+    # check basic tdata usage
+    checkIdentical(tdata(phyd.alt, type="tip"), compDt[nid.tip,])
+    checkIdentical(tdata(phyd.alt, type="internal"), compDt[nid.int,])
+    checkIdentical(tdata(phyd.alt, type="all"), compDt)
 
     #
     # label.type
     #
 
     # label.type="row.names"
-    compDt <- data.frame(allDt[nid.tip, ], tipDt, row.names=lab.tip)
+    tmpDt <- data.frame(compDt[nid.tip, -5, ], row.names=lab.tip)
     checkIdentical(tdata(phyd.alt, type="tip", label.type="row.names",
-                         empty.columns=FALSE), compDt)
+        empty.columns=FALSE), data.frame(tmpDt[nid.tip,], row.names=lab.tip))
     # label.type="column"
-    compDt <- cbind(label=lab.tip, allDt[nid.tip, ], tipDt,
+    tmpDt <- data.frame(label=lab.tip, compDt[nid.tip, -5, ],
         row.names=as.character(nid.tip))
     checkIdentical(tdata(phyd.alt, type="tip", label.type="column",
-                         empty.columns=FALSE), compDt)
+                         empty.columns=FALSE), tmpDt)
 
     #
-    # empty.columns
+    # keep empty.columns
     #
+
+    checkIdentical(tdata(phyd.alt, type="tip", empty.columns=TRUE),
+        compDt[nid.tip,])
 
     #
     # misc tests
@@ -80,11 +83,9 @@ DEACTIVATED("turned off until tdata can handle out-of-order rows in data slots")
 
     # check with other tree orderings
     phyd.pre <- reorder(phyd.alt, "preorder")
-    checkIdentical(tdata(phyd.pre, label.type="column",
-                         empty.columns=FALSE), compDt)
+    checkIdentical(tdata(phyd.pre, "all", empty.columns=FALSE), compDt)
     phyd.post <- reorder(phyd.alt, "postorder")
-    checkIdentical(tdata(phyd.post, label.type="column",
-                         empty.columns=FALSE), compDt)
+    checkIdentical(tdata(phyd.post, "all", empty.columns=FALSE), compDt)
 
 }
 

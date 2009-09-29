@@ -26,6 +26,10 @@
 
     if (!inherits(phy, 'phylo4')) stop('treePlot requires a phylo4 or phylo4d object')
     if (!isRooted(phy)) stop("treePlot function requires a rooted tree.")
+    if (plot.data && !hasTipData(phy)) {
+        warning("tree has no tip data to plot")
+        plot.data <- FALSE
+    }
     
     if(newpage) grid.newpage()
     type   <- match.arg(type)

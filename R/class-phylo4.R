@@ -1,8 +1,7 @@
 setClass("phylo4",
          representation(edge = "matrix",
                         edge.length = "numeric",
-                        node.label = "character",
-                        tip.label = "character",
+                        label = "character",
                         edge.label = "character",
                         order = "character",
                         annote = "list"),
@@ -10,8 +9,7 @@ setClass("phylo4",
                         edge = matrix(nrow = 0, ncol = 2,
                             dimname = list(NULL, c("ancestor", "descendant"))),
                         edge.length = numeric(0),
-                        tip.label = character(0),
-                        node.label = character(0),
+                        label = character(0),
                         edge.label = character(0),
                         order = "unknown",
                         annote = list()
@@ -23,12 +21,12 @@ setClass("phylo4",
 #####################
 
 .createLabels <- function(value, ntips, nnodes, use.names = TRUE,
-                          type = c("tip", "internal", "allnode")) {
+                          type = c("all", "tip", "internal")) {
 
     type <- match.arg(type)
 
     ## set up final length of object to return
-    lgthRes <- switch(type, tip=ntips, internal=nnodes, allnode=ntips+nnodes)
+    lgthRes <- switch(type, tip=ntips, internal=nnodes, all=ntips+nnodes)
 
     ## create NA character vector of node labels
     res <- character(lgthRes)
@@ -38,7 +36,7 @@ setClass("phylo4",
     names(res) <- switch(type,
                          tip = 1:ntips,
                          internal = seq(from=ntips+1, length=lgthRes),
-                         allnode = 1:(ntips+nnodes))
+                         all = 1:(ntips+nnodes))
 
 
     ## if no values are provided
@@ -140,8 +138,7 @@ setMethod("phylo4", "matrix",
     res <- new("phylo4")
     res@edge <- edge
     res@edge.length <- edge.length
-    res@tip.label <- tip.label
-    res@node.label <- node.label
+    res@label <- c(tip.label, node.label)
     res@edge.label <- edge.label
     res@order <- order
     res@annote <- annote

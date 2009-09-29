@@ -36,8 +36,8 @@
 \usage{
 
 \S4method{labels}{phylo4}(object, type=c("all", "tip", "internal"))
-\S4method{labels}{phylo4,ANY,ANY,character}(x, type=c("tip", "internal", "allnode"),
-use.names=FALSE) <- value
+\S4method{labels}{phylo4,ANY,ANY,character}(x, type=c("all", "tip",
+  "internal"), use.names=FALSE) <- value
 
 \S4method{tipLabels}{phylo4}(x)
 \S4method{tipLabels}{phylo4,character}(x) <- value

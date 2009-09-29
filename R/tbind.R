@@ -9,7 +9,7 @@
 
 ## function to bind trees together into a multi-tree object
 tbind <- function(...,checkData=TRUE) {
-    L <- as.list(...)
+    L <- list(...)
     namevec <- names(L)
     treeclasses <- c("multiPhylo4d","multiPhylo4","phylo4","phylo4d")
     tdataclasses <- c("multiPhylo4d","phylo4d")
@@ -27,14 +27,12 @@ tbind <- function(...,checkData=TRUE) {
                multiPhylo4d=suppressWarnings(as("multiPhylo4",x)@phylolist))}
     ## decompose multi-trees into lists
     treelist <- unlist(lapply(L,xfun))
-    if (hasData) alldat <- lapply(L[classes %in% tdataclasses],
-                     "@","tip.data") ## ???
-    ## or function(x) {x@tip.data}
-    hasNodeData <- sapply(L[classes %in% tdataclasses],
-                          function(x) {!is.null(x@node.data)})
+    if (hasData) alldat <- lapply(L[classes %in% tdataclasses], tdata,
+        type="tip")
+    hasNodeData <- sapply(L[classes %in% tdataclasses], hasNodeData)
     if (any(hasNodeData)) warning("internal node data discarded")
     if (checkData) {
-        ident <- sapply(alldat[-1],identical,y=alldat[[1]])
+        ident <- sapply(alldat,identical,y=alldat[[1]])
         if (!all(ident)) stop(paste("tip data sets differ"))
     } ## ?? implement code to check which ones differ (taking
     ## null/multiple values in original set into account)

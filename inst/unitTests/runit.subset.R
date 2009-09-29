@@ -19,8 +19,7 @@ phy <- phylo4(x=edge, tip.label=lab.tip, node.label=lab.int,
 # create altered version such that each slot is out of order with
 # respect to all others; methods should be able to handle this
 phy.alt <- phy
-phy.alt@tip.label <- rev(phy@tip.label)
-phy.alt@node.label <- rev(phy@node.label)
+phy.alt@label <- rev(phy@label)
 phy.alt@edge <- phy@edge[c(6:9, 1:5), ]
 phy.alt@edge.length <- phy@edge.length[c(7:9, 1:6)]
 phy.alt@edge.label <- phy@edge.label[c(8:9, 1:7)]
@@ -35,8 +34,7 @@ tdata(phyd.alt, "all") <- allDt
 nid.tip.r <- c(2,5,4,3,1)
 nid.int.r <- c(8,7,9,6)
 nid.all.r <- c(nid.tip.r, nid.int.r)
-phyd.alt@tip.data <- phyd.alt@tip.data[rank(nid.tip.r), ]
-phyd.alt@node.data <- phyd.alt@node.data[rank(nid.int.r), ]
+phyd.alt@data <- phyd.alt@data[rank(nid.all.r), ]
 
 #-----------------------------------------------------------------------
 

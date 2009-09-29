@@ -8,8 +8,8 @@
 \alias{hasTipData,phylo4d-method}
 
 
-\title{Tests for presence of data associated with trees stored
-as phylo4d objects}
+\title{Tests for presence of data associated with trees stored as
+  phylo4d objects}
 \description{
   Methods that test for the presence of data associated with trees
   stored as phylo4d objects.
@@ -27,9 +27,11 @@ as phylo4d objects}
     \code{tip.data} or \code{node.data} are not empty)}
 }
 \details{
-  The outcome of the test is based on the number of rows in the data
-  frame stored in \code{tip.data} or \code{node.data}. If the number of
-  rows is greater than 0, then \code{TRUE} is returned.
+  The outcome of the test is based on row names of the data frame stored
+  in \code{data}. If there are no rows having row names from the set
+  \code{nodeId(x, "tip")}, then \code{hasTipData} returns FALSE.
+  Likewise, if there are no rows having row names from the set
+  \code{nodeId(x, "internal")}, then \code{hasNodeData} returns FALSE.
 }
 
 \section{Methods}{

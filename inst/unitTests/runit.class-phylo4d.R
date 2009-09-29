@@ -24,8 +24,7 @@ phy <- phylo4(x=edge, tip.label=lab.tip, node.label=lab.int,
 # create altered version such that each slot is out of order with
 # respect to all others; methods should be able to handle this
 phy.alt <- phy
-phy.alt@tip.label <- rev(phy@tip.label)
-phy.alt@node.label <- rev(phy@node.label)
+phy.alt@label <- rev(phy@label)
 phy.alt@edge <- phy@edge[c(6:9, 1:5), ]
 phy.alt@edge.length <- phy@edge.length[c(7:9, 1:6)]
 phy.alt@edge.label <- phy@edge.label[c(8:9, 1:7)]
@@ -59,53 +58,46 @@ test.phylo4d.phylo4 <- function() {
 
     ## brute force: no matching; with tip data
     phyd <- phylo4d(phy.alt, tip.data=tipDt, match.data=FALSE)
-    checkEquals(phyd@tip.data, data.frame(tipDt,
-        row.names=as.character(nid.tip)))
-    checkEquals(tdata(phyd, "tip"), data.frame(tipDt,
+    checkIdentical(phyd@data, data.frame(tipDt,
+        row.names=nid.tip))
+    checkIdentical(tdata(phyd, "tip"), data.frame(tipDt,
         row.names=lab.tip))
 
     ## brute force: no matching; with node data
     phyd <- phylo4d(phy.alt, node.data=nodDt, match.data=FALSE)
-    checkEquals(phyd@node.data, data.frame(nodDt,
-        row.names=as.character(nid.int)))
-    checkEquals(tdata(phyd, "internal"), data.frame(nodDt,
+    checkIdentical(phyd@data, data.frame(nodDt,
+        row.names=nid.int))
+    checkIdentical(tdata(phyd, "internal"), data.frame(nodDt,
         row.names=lab.int))
 
     ## brute force: no matching; with all.data
     phyd <- phylo4d(phy.alt, all.data=allDt, match.data=FALSE)
-    # TODO: these fail b/c all.data option creates numeric row.names
-    # whereas tip.data and node.data options create character row.names
-    #checkEquals(phyd@tip.data, data.frame(allDt,
-    #    row.names=as.character(nid.all))[nid.tip,])
-    #checkEquals(phyd@node.data, data.frame(allDt,
-    #    row.names=as.character(nid.all))[nid.int,])
-    checkEquals(tdata(phyd, "all"), data.frame(allDt,
+    checkIdentical(phyd@data, data.frame(allDt,
+        row.names=nid.all))
+    checkIdentical(tdata(phyd, "all"), data.frame(allDt,
         row.names=lab.all))
 
     ## brute force: no matching; with tip & node data
     ## no merging (data names don't match)
     phyd <- phylo4d(phy.alt, tip.data=tipDt["d"], node.data=nodDt["e"],
         match.data=FALSE)
-    checkEquals(phyd@tip.data, data.frame(tipDt["d"], e=NA_real_,
-        row.names=as.character(nid.tip)))
-    checkEquals(tdata(phyd, "tip"), data.frame(tipDt["d"], e=NA_real_,
+    checkIdentical(phyd@data, data.frame(rbind(data.frame(tipDt["d"],
+        e=NA_real_), data.frame(d=NA_real_, nodDt["e"])),
+        row.names=nid.all))
+    checkIdentical(tdata(phyd, "tip"), data.frame(tipDt["d"], e=NA_real_,
         row.names=lab.tip))
-    checkEquals(phyd@node.data, data.frame(d=NA_real_, nodDt["e"],
-        row.names=as.character(nid.int)))
-    checkEquals(tdata(phyd, "internal"), data.frame(d=NA_real_, nodDt["e"],
+    checkIdentical(tdata(phyd, "internal"), data.frame(d=NA_real_, nodDt["e"],
         row.names=lab.int))
 
     ## brute force: no matching; with tip & node data
     ## merging (common data names)
     phyd <- phylo4d(phy.alt, tip.data=tipDt["c"], node.data=nodDt["c"],
         match.data=FALSE)
-    checkEquals(phyd@tip.data, data.frame(c=factor(tipDt$c,
-        levels=letters[nid.all]), row.names=as.character(nid.tip)))
-    checkEquals(phyd@node.data, data.frame(c=factor(nodDt$c,
-        levels=letters[nid.all]), row.names=as.character(nid.int)))
-    checkEquals(tdata(phyd, "tip"), data.frame(c=factor(tipDt$c,
+    checkIdentical(phyd@data, data.frame(rbind(tipDt["c"], nodDt["c"]),
+        row.names=nid.all))
+    checkIdentical(tdata(phyd, "tip"), data.frame(c=factor(tipDt$c,
         levels=letters[nid.all]), row.names=lab.tip))
-    checkEquals(tdata(phyd, "internal"), data.frame(c=factor(nodDt$c,
+    checkIdentical(tdata(phyd, "internal"), data.frame(c=factor(nodDt$c,
         levels=letters[nid.all]), row.names=lab.int))
 
     ## case 2: add data matching on numeric (node ID) row.names
@@ -115,76 +107,73 @@ test.phylo4d.phylo4 <- function() {
 
     ## match with node numbers, tip data
     phyd <- phylo4d(phy.alt, tip.data=tipDt)
-    checkEquals(phyd@tip.data, data.frame(tipDt[order(nid.tip.r),],
-        row.names=as.character(nid.tip)))
-    checkEquals(tdata(phyd, "tip"), data.frame(tipDt[order(nid.tip.r),],
+    checkIdentical(phyd@data, data.frame(tipDt[order(nid.tip.r),],
+        row.names=nid.tip))
+    checkIdentical(tdata(phyd, "tip"), data.frame(tipDt[order(nid.tip.r),],
         row.names=lab.tip))
 
     ## match with node numbers, node data
     phyd <- phylo4d(phy.alt, node.data=nodDt)
-    checkEquals(phyd@node.data, data.frame(nodDt[order(nid.int.r),],
-        row.names=as.character(nid.int)))
-    checkEquals(tdata(phyd, "internal"), data.frame(nodDt[order(nid.int.r),],
+    checkIdentical(phyd@data, data.frame(nodDt[order(nid.int.r),],
+        row.names=nid.int))
+    checkIdentical(tdata(phyd, "internal"), data.frame(nodDt[order(nid.int.r),],
         row.names=lab.int))
 
     ## match with node numbers, tip & node data, no merge
     phyd <- phylo4d(phy.alt, tip.data=tipDt["d"], node.data=nodDt["e"])
-    checkEquals(phyd@tip.data, data.frame(d=tipDt[order(nid.tip.r), "d"],
-        e=NA_real_, row.names=as.character(nid.tip)))
-    checkEquals(tdata(phyd, "tip"), data.frame(d=tipDt[order(nid.tip.r), "d"],
+    checkIdentical(phyd@data, data.frame(rbind(data.frame(
+        d=tipDt[order(nid.tip.r), "d"], e=NA_real_),
+        data.frame(d=NA_real_, e=nodDt[order(nid.int.r), "e"])),
+        row.names=nid.all))
+    checkIdentical(tdata(phyd, "tip"), data.frame(d=tipDt[order(nid.tip.r), "d"],
         e=NA_real_, row.names=lab.tip))
-    checkEquals(phyd@node.data, data.frame(d=NA_real_,
-        e=nodDt[order(nid.int.r), "e"], row.names=as.character(nid.int)))
-    checkEquals(tdata(phyd, "internal"), data.frame(d=NA_real_,
+    checkIdentical(tdata(phyd, "internal"), data.frame(d=NA_real_,
         e=nodDt[order(nid.int.r), "e"], row.names=lab.int))
 
     ## match with node numbers, tip & all data
     phyd <- phylo4d(phy.alt, tip.data=tipDt, all.data=allDt)
     merged <- data.frame(merge(allDt[order(nid.all.r),],
         tipDt[order(nid.tip.r),], all=TRUE, by=0)[-1])
-    checkEquals(phyd@tip.data, data.frame(merged[nid.tip,],
-        row.names=as.character(nid.tip)))
-    checkEquals(phyd@node.data, data.frame(merged[nid.int,],
-        row.names=as.character(nid.int)))
-    checkEquals(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
+    checkIdentical(phyd@data, data.frame(merged, row.names=nid.all))
+    checkIdentical(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
 
     ## match with node numbers, node & all data
     phyd <- phylo4d(phy.alt, node.data=nodDt, all.data=allDt)
     merged <- data.frame(merge(allDt[order(nid.all.r),],
         nodDt[order(nid.int.r),], all=TRUE, by=0)[-1])
-    # TODO: need the next line because factor node data are converted
-    # to character when supplied along with tip data (no merging)
-    merged$c <- as.character(merged$c)
-    checkEquals(phyd@tip.data, data.frame(merged[nid.tip,],
-        row.names=as.character(nid.tip)))
-    checkEquals(phyd@node.data, data.frame(merged[nid.int,],
-        row.names=as.character(nid.int)))
-    checkEquals(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
+    checkIdentical(phyd@data, data.frame(merged, row.names=nid.all))
+    checkIdentical(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
 
     ## match with node numbers, tip, node & all data
     phyd <- phylo4d(phy.alt, tip.data=tipDt, node.data=nodDt, all.data=allDt)
-    # merge alldata with tipdata
-    merged <- data.frame(merge(allDt[order(nid.all.r),],
-        tipDt[order(nid.tip.r),], all=TRUE, by=0)[-1])
-    # ...now merge this with nodedata
-    merged <- data.frame(merge(merged, nodDt[order(nid.int.r),], all=TRUE,
-        by=0, suffix=c("", ".1"))[-1])
-    # TODO: need the next line because factor node data are converted
-    # to character when supplied along with tip data (no merging)
-    merged$c.1 <- as.character(merged$c.1)
-    checkEquals(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
-    # TODO: need the next line because common column names across tip
-    # and node data are preserved in original form in the individual
-    # data slots, but not in the tdata(x, "all") output
-    names(merged)[names(merged)=="c.1"] <- "c"
-    checkEquals(tdata(phyd, "tip"), data.frame(merged[nid.tip,],
+    # merge alldata with common tip and node data
+    m1 <- data.frame(merge(allDt, rbind(tipDt["c"], nodDt["c"]),
+        all=TRUE, by=0)[-1])
+    # merge distinct columns of tipdata and nodedata
+    m2 <- data.frame(merge(tipDt["d"], nodDt["e"], all=TRUE, by=0)[-1])
+    # ...now merge these together
+    merged <- data.frame(merge(m1, m2, by=0)[-1])
+    checkIdentical(phyd@data, data.frame(merged,
+        row.names=nid.all))
+    checkIdentical(tdata(phyd, "tip"), data.frame(merged[nid.tip,],
         row.names=lab.tip, check.names=FALSE))
-    checkEquals(tdata(phyd, "internal"), data.frame(merged[nid.int,],
+    checkIdentical(tdata(phyd, "internal"), data.frame(merged[nid.int,],
         row.names=lab.int, check.names=FALSE))
-    checkEquals(phyd@tip.data, data.frame(merged[nid.tip,],
-        row.names=as.character(nid.tip), check.names=FALSE))
-    checkEquals(phyd@node.data, data.frame(merged[nid.int,],
-        row.names=as.character(nid.int), check.names=FALSE))
+    checkIdentical(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
+
+    ## as above, but without merging common tip and node column
+    phyd <- phylo4d(phy.alt, tip.data=tipDt, node.data=nodDt,
+        all.data=allDt, merge.data=FALSE)
+    m3 <- data.frame(merge(tipDt, nodDt, all=TRUE, by=0,
+        suffix=c(".tip", ".node"))[-1])
+    merged <- data.frame(merge(allDt, m3, by=0)[-1])
+    checkIdentical(phyd@data, data.frame(merged,
+        row.names=nid.all))
+    checkIdentical(tdata(phyd, "tip"), data.frame(merged[nid.tip,],
+        row.names=lab.tip, check.names=FALSE))
+    checkIdentical(tdata(phyd, "internal"), data.frame(merged[nid.int,],
+        row.names=lab.int, check.names=FALSE))
+    checkIdentical(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
 
     ## case 3: add data matching on character (label) row.names for tips
     row.names(tipDt) <- c(lab.tip, lab.int)[nid.tip.r]
@@ -192,9 +181,9 @@ test.phylo4d.phylo4 <- function() {
 
     ## match with names, tip data
     phyd <- phylo4d(phy.alt, tip.data=tipDt)
-    checkEquals(phyd@tip.data, data.frame(tipDt[order(nid.tip.r),],
-        row.names=as.character(nid.tip)))
-    checkEquals(tdata(phyd, "tip"), data.frame(tipDt[order(nid.tip.r),],
+    checkIdentical(phyd@data, data.frame(tipDt[order(nid.tip.r),],
+        row.names=nid.tip))
+    checkIdentical(tdata(phyd, "tip"), data.frame(tipDt[order(nid.tip.r),],
         row.names=lab.tip))
 
     ## case 4: add data matching on mixed rowname types (for tips and
@@ -204,16 +193,14 @@ test.phylo4d.phylo4 <- function() {
 
     ## match with names for tips and numbers for nodes with all data
     phyd <- phylo4d(phy.alt, all.data=allDt)
-    checkEquals(tdata(phyd, "all"), data.frame(allDt[match(nid.all,
+    checkIdentical(tdata(phyd, "all"), data.frame(allDt[match(nid.all,
         nid.all.r),], row.names=lab.all))
-    checkEquals(tdata(phyd, "tip"), data.frame(allDt[match(nid.tip,
+    checkIdentical(tdata(phyd, "tip"), data.frame(allDt[match(nid.tip,
         nid.all.r),], row.names=lab.tip))
-    checkEquals(tdata(phyd, "internal"), data.frame(allDt[match(nid.int,
+    checkIdentical(tdata(phyd, "internal"), data.frame(allDt[match(nid.int,
         nid.all.r),], row.names=lab.int))
-    checkEquals(phyd@tip.data, data.frame(allDt[match(nid.tip, nid.all.r),],
-        row.names=as.character(nid.tip)))
-    checkEquals(phyd@node.data, data.frame(allDt[match(nid.int, nid.all.r),],
-        row.names=as.character(nid.int)))
+    checkIdentical(phyd@data, data.frame(allDt[match(nid.all, nid.all.r),],
+        row.names=nid.all))
 
 }
 

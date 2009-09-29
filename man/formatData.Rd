@@ -13,7 +13,7 @@
               match.data=TRUE, rownamesAsLabels=FALSE,
               label.type=c("rownames", "column"),
               label.column=1, missing.data=c("fail", "warn", "OK"),
-              extra.data=c("warn", "OK", "fail"))                       
+              extra.data=c("warn", "OK", "fail"), keep.all=TRUE)
 }
 
 \arguments{
@@ -34,7 +34,9 @@
   \item{rownamesAsLabels}{(logical), in the case of number-like labels
     should the row names of the data provided be considered as labels
     (TRUE) or node numbers (FALSE and default)}
-  
+  \item{keep.all}{(logical), should the data have rows for all nodes
+    (with NA values for internal rows when type='tip', and vice versa) 
+    (TRUE and default) or only rows corresponding to type argument}
 }
 
 \value{
@@ -58,7 +60,7 @@
   
   \code{formatData} (1) converts labels provided in the data into node
   numbers, (2) makes sure that the data are appropriately matched
-  against  tip or nodes, (3) checks for differences between data and
+  against tip or nodes, (3) checks for differences between data and
   tree, (4) creates a data frame with the correct dimensions given a
   tree.
   

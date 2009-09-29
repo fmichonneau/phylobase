@@ -2,12 +2,11 @@
 ## phylo4d class
 ## extend: phylo with data
 setClass("phylo4d",
-         representation(tip.data="data.frame",
-                        node.data="data.frame",
+         representation(data="data.frame",
                         metadata = "list"),
 
-         prototype = list( tip.data = data.frame(NULL),
-           node.data = data.frame(NULL),
+         prototype = list(
+           data = data.frame(NULL),
            metadata = list()),
 
          validity = checkPhylo4,
@@ -30,122 +29,59 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
                         rownamesAsLabels=FALSE,
                         ...) {
 
-    ## Make sure that data provided are a data frame
-    classData <- function(someData) {
-        if(!is.null(someData)) {
-            if(is.vector(someData))
-                someData <- as.data.frame(someData)
-            if(!is.data.frame(someData)) {
-                nmSomeData <- substitute(someData)
-                stop(paste(nmSomeData, "must be a vector or a data frame"))
-            }
-            someData
-        }
-    }
-
     ## Check validity of phylo4 object
     if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
 
-    ## Check/Transform provided data to data.frame
-    all.data <- classData(all.data)
-    tip.data <- classData(tip.data)
-    node.data <- classData(node.data)
+    ## apply formatData to ensure data have node number rownames and
+    ## correct dimensions
+    all.data <- formatData(phy=x, dt=all.data, type="all",
+        match.data=match.data, rownamesAsLabels=rownamesAsLabels, ...)
+    tip.data <- formatData(phy=x, dt=tip.data, type="tip",
+        match.data=match.data, rownamesAsLabels=rownamesAsLabels, ...)
+    node.data <- formatData(phy=x, dt=node.data, type="internal",
+        match.data=match.data, rownamesAsLabels=rownamesAsLabels, ...)
 
-    is.empty <- function(x) { is.null(x) || all(dim(x)==0) }
-
-    ## Replacing node labels by node numbers and formatting the data to make sure
-    ## they have the correct dimensions
-    if(!is.empty(all.data))
-        all.data <- formatData(phy=x, dt=all.data, type="all",
-                               match.data=match.data,
-                               rownamesAsLabels=rownamesAsLabels, ...)
-
-    if(!is.empty(tip.data))
-        tip.data <- formatData(phy=x, dt=tip.data, type="tip",
-                               match.data=match.data,
-                               rownamesAsLabels=rownamesAsLabels, ...)
-
-    if(!is.empty(node.data))
-        node.data <- formatData(phy=x, dt=node.data, type="internal",
-                                match.data=match.data,
-                                rownamesAsLabels=rownamesAsLabels, ...)
-
-    ## Merging dataset
-    if(!is.empty(all.data)) {
-        tmpData <- all.data
-        if(!is.empty(tip.data)) {
-            emptyNodeData <- array(, dim = c(nNodes(x), ncol(tip.data)),
-                                   dimnames = list(nodeId(x, "internal"),
-                                   colnames(tip.data)))
-            tmpTipData <- rbind(tip.data, emptyNodeData)
-
-            tmpTipData <- tmpTipData[match(rownames(all.data),
-                                           rownames(tmpTipData)) ,,
-                                     drop = FALSE]
-            tmpData <- cbind(all.data, tmpTipData)
-        }
-        if(!is.empty(node.data)) {
-            emptyTipData <- array(, dim = c(nTips(x), ncol(node.data)),
-                                  dimnames = list(nodeId(x, "tip"),
-                                  colnames(node.data)))
-            tmpNodeData <- rbind(emptyTipData, node.data)
-            tmpNodeData <- tmpNodeData[match(rownames(all.data),
-                                             rownames(tmpNodeData)) ,,
-                                       drop = FALSE]
-            tmpData <- cbind(tmpData, tmpNodeData)
-        }
-
-        tip.data <- tmpData[rownames(tmpData) %in% nodeId(x, "tip") ,,
-                            drop = FALSE]
-        node.data <- tmpData[rownames(tmpData) %in% nodeId(x, "internal") ,,
-                             drop = FALSE]
+    # don't allow all.data columns of same name as tip.data or node.data
+    colnamesTipOrNode <- union(names(tip.data), names(node.data))
+    if (any(names(all.data) %in% colnamesTipOrNode)) {
+        stop("all.data column names must be distinct from ",
+             "tip.data and node.data column names")
     }
 
-    else {
-        if(!is.empty(tip.data) && !is.empty(node.data)) {
-            if(identical(colnames(tip.data), colnames(node.data)) && merge.data) {
-                tmpAllData <- rbind(tip.data, node.data)
-                tip.data <- tmpAllData[rownames(tmpAllData) %in%
-                                           nodeId(x, "tip") ,, drop=FALSE]
-                node.data <- tmpAllData[rownames(tmpAllData) %in%
-                                            nodeId(x, "internal") ,, drop=FALSE]
-            }
-            else {
-                emptyTipData <- array(, dim = c(nTips(x), ncol(node.data)),
-                                      dimnames = list(nodeId(x, "tip"),
-                                      colnames(node.data)))
-                emptyNodeData <- array(, dim = c(nNodes(x), ncol(tip.data)),
-                                       dimnames = list(nodeId(x, "internal"),
-                                       colnames(tip.data)))
-                tmpTipData <- rbind(tip.data, emptyNodeData)
-                tmpNodeData <- rbind(emptyTipData, node.data)
-                tmpNodeData <- tmpNodeData[rownames(tmpTipData) ,, drop=FALSE]
+    ## combine common columns and move into all.data if merging,
+    ## otherwise rename them
+    colsToMerge <- intersect(names(tip.data), names(node.data))
+    if (merge.data && length(colsToMerge)>0) {
+        ##TODO could really just index rows directly on 1:nTip and
+        ## (nTip+1):(nTip+nNode) in the next two statements for speed,
+        ## but this is more robust to changes in node numbering rules
+        tip.rows <- tip.data[match(nodeId(x, "tip"),
+            row.names(tip.data)), colsToMerge, drop=FALSE]
+        node.rows <- node.data[match(nodeId(x, "internal"),
+            row.names(tip.data)), colsToMerge, drop=FALSE]
+        merge.data <- rbind(tip.rows, node.rows)
+        all.data <- data.frame(all.data, merge.data)
+    } else {
+        names(tip.data)[names(tip.data) %in% colsToMerge] <-
+            paste(colsToMerge, "tip", sep=".")
+        names(node.data)[names(node.data) %in% colsToMerge] <-
+            paste(colsToMerge, "node", sep=".")
+    }
+    ## now separate tips-only and nodes-only data
+    tip.only.data <- tip.data[setdiff(names(tip.data), names(node.data))]
+    node.only.data <- node.data[setdiff(names(node.data), names(tip.data))]
 
-                tmpData <- cbind(tmpTipData, tmpNodeData)
+    ## combine all data
+    complete.data <- data.frame(all.data, tip.only.data, node.only.data)
 
-                if(match.data) {
-                    tip.data <- tmpData[rownames(tmpData) %in%
-                                            nodeId(x, "tip") ,, drop=FALSE]
-                    node.data <- tmpData[rownames(tmpData) %in%
-                                             nodeId(x, "internal") ,, drop=FALSE]
-                }
-                else {
-                    tip.data <- tmpData[1:nTips(x) ,, drop=FALSE]
-                    node.data <- tmpData[-(1:nTips(x)) ,, drop=FALSE]
-                }
-            }
-        }
-        else {
-            ## at this point provide NULL data frame for empty arguments
-            if(is.empty(tip.data)) tip.data <- data.frame(NULL)
-            if(is.empty(node.data)) node.data <- data.frame(NULL)
-
-            tip.data <- tip.data
-            node.data <- node.data
-        }
+    ## drop any rows that only contain NAs
+    if (ncol(complete.data)==0) {
+        return(data.frame())
+    } else {
+        empty.rows <- as.logical(rowSums(!is.na(complete.data)))
+        return(complete.data[empty.rows, , drop=FALSE])
     }
 
-    return(list(tip.data=tip.data, node.data=node.data))
 }
 
 
@@ -156,17 +92,14 @@ setMethod("phylo4d", "phylo4",
                    match.data=TRUE, merge.data=TRUE, rownamesAsLabels=FALSE,
                    metadata = list(),
                    ...) {
-
-    ## prepare the data
-    tmpData <- .phylo4Data(x=x, tip.data=tip.data, node.data=node.data,
+    ## coerce tree to phylo4d
+    res <- as(x, "phylo4d")
+    ## add any data
+    res@data <- .phylo4Data(x=x, tip.data=tip.data, node.data=node.data,
                            all.data=all.data, match.data=match.data,
                            merge.data=merge.data,
                            rownamesAsLabels=rownamesAsLabels, ...)
-
-    ## coerce to phylo4d and add data/metadata
-    res <- as(x, "phylo4d")
-    res@tip.data <- tmpData$tip.data
-    res@node.data <- tmpData$node.data
+    ## add any metadata
     res@metadata <- metadata
     return(res)
 })
