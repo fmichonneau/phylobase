@@ -92,7 +92,11 @@ setMethod("nodeType", signature(x="phylo4"),
     if(nTips(x) == 0)
         return(NULL)
     else {
-        listNodes <- sort(unique(as.vector(edges(x))))
+        ## strip out the root ancestor
+        nodesVect <- as.vector(edges(x))
+        nodesVect <- nodesVect[nodesVect != 0]
+        ## get a sorted list of the unique nodes 
+        listNodes <- sort(unique(nodesVect))
         t <- rep("internal", length(listNodes)) # FM: internal is default (I think it's safer)
         names(t) <- listNodes
 
@@ -121,13 +125,13 @@ setMethod("nodeId", signature(x="phylo4"),
      ## 1:nTips and nodes are not (nTips+1):nNodes
      nid <- switch(type,
          ## all nodes appear at least once in the edge matrix
-         all = unique(na.omit(as.vector(E))),
+         all = unique(as.vector(E)[as.vector(E) != 0]),
          ## tips are nodes that do not appear in the ancestor column
          tip = setdiff(E[, 2], E[, 1]),
          ## internals are nodes that *do* appear in the ancestor column
-         internal = na.omit(unique(E[, 1])),
+         internal = unique(E[E[, 1] != 0, 1]),
          ## roots are nodes that have NA as ancestor
-         root = if (!isRooted(x)) NA else unname(E[is.na(E[, 1]), 2]))
+         root = if (!isRooted(x)) NA else unname(E[E[, 1] == 0, 2]))
 
      return(sort(nid))
 
@@ -148,7 +152,7 @@ setMethod("nEdges", signature(x="phylo4"),
 setMethod("edges", signature(x="phylo4"),
  function(x, order, drop.root=FALSE, ...) {
      e <- x@edge
-     if (drop.root) e <- e[!is.na(e[,1]),]
+     if (drop.root) e <- e[e[, 1] != 0, ]
      e
 })
 
@@ -170,7 +174,7 @@ setMethod("edgeId", signature(x="phylo4"),
         isInt <- (edge[, 2] %in% edge[, 1])
         edge <- edge[isInt, , drop=FALSE]
     } else if (type=="root") {
-        isRoot <- is.na(edge[, 1])
+        isRoot <- edge[, 1] == 0
         edge <- edge[isRoot, , drop=FALSE]
     } # else just use complete edge matrix if type is "all"
     id <- paste(edge[, 1], edge[, 2], sep="-")
@@ -228,14 +232,14 @@ setMethod("isRooted", signature(x="phylo4"),
  function(x) {
     ## hack to avoid failure on an empty object
     if(nTips(x) == 0) return(FALSE)
-    any(is.na(edges(x)[,1]))
+    any(edges(x)[, 1] == 0)
 })
 
 setMethod("rootNode", signature(x="phylo4"),
  function(x) {
     if (!isRooted(x))
         return(NA)
-    unname(edges(x)[which(is.na(edges(x)[,1])),2])
+    unname(edges(x)[which(edges(x)[, 1] == 0), 2])
 })
 
 setReplaceMethod("rootNode", signature(x="phylo4"),
@@ -537,7 +541,7 @@ orderIndex <- function(x, order=c("preorder", "postorder")) {
         stop("Tree must be rooted to reorder")
     }
     ## get a root node free edge matrix
-    edge <- edges(x)[!is.na(edges(x)[, 1]), ]
+    edge <- edges(x, drop.root=TRUE)
     ## Sort edges -- ensures that starting order of edge matrix doesn't
     ## affect the order of reordered trees
     edge <- edge[order(edge[, 2]), ]

@@ -3,7 +3,7 @@
 #
 
 # create phylo4 object with a full complement of valid slots
-ancestor <- as.integer(c(6,7,7,6,8,NA,8,9,9))
+ancestor <- as.integer(c(6,7,7,6,8,0,8,9,9))
 descendant <- as.integer(c(7,1,2,8,3,6,9,4,5))
 edge <- cbind(ancestor, descendant)
 nid.tip <- 1:5

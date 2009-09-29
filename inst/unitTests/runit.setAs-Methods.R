@@ -7,7 +7,7 @@ nwk <- "((t1:0.1,t2:0.2)n7:0.7,(t3:0.3,(t4:0.4,t5:0.5)n9:0.9)n8:0.8)n6:0.6;"
 tr <- read.tree(text=nwk)
 
 # create analogous phylo4 object with a full complement of valid slots
-ancestor <- as.integer(c(6,7,7,6,8,NA,8,9,9))
+ancestor <- as.integer(c(6,7,7,6,8,0,8,9,9))
 descendant <- as.integer(c(7,1,2,8,3,6,9,4,5))
 edge <- cbind(ancestor, descendant)
 nid.tip <- 1:5
@@ -138,7 +138,7 @@ test.phylo4d.As.phylo <- function() {
 test.phylo4.As.phylog <- function() {
 }
 
-test..phylo4ToDataFrame <- function() {
+test.phylo4ToDataFrame <- function() {
   phy.show <- phylobase:::.phylo4ToDataFrame(phy.alt, "pretty")
   checkIdentical(phy.show$label, c(lab.tip, lab.int))
   checkIdentical(phy.show$node, c(nid.tip, nid.int))

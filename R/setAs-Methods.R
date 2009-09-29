@@ -12,7 +12,7 @@ setAs("phylo", "phylo4", function(from, to) {
         }
         root.node <- as.numeric(setdiff(unique(from$edge[,1]), unique(from$edge[,2])))
 
-        from$edge <- rbind(from$edge[tip.idx,],c(NA,root.node),from$edge[int.idx,])
+        from$edge <- rbind(from$edge[tip.idx,],c(0,root.node),from$edge[int.idx,])
         if (!is.null(from$edge.length)) {
             if (is.null(from$root.edge)) {
                 from$edge.length <- c(from$edge.length[tip.idx],as.numeric(NA),from$edge.length[int.idx])
@@ -192,6 +192,9 @@ setAs("phylo4", "phylog", function(from, to) {
     if (edgeOrder == "pretty") {
         node <- nodeId(from, "all")
         ancestr <- ancestor(from, node)
+
+        # ancestor returns an NA, replace this w/ 0 to construct names correctly
+        ancestr[is.na(ancestr)] <- as.integer(0)
     } else {
         E <- edges(from)
         node <- E[, 2]

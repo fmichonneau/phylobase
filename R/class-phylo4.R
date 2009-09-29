@@ -117,8 +117,10 @@ setMethod("phylo4", "matrix",
     colnames(edge) <- c("ancestor", "descendant")
 
     ## number of tips and number of nodes
-    ntips <- sum(tabulate(na.omit(edge[, 1])) == 0)
-    nnodes <- length(unique(na.omit(c(edge)))) - ntips
+    ntips  <- sum(tabulate(na.omit(edge[, 1])) == 0)
+    # all the internal nodes except the root are the ancestor of an edge
+    nnodes <- sum(unique(c(edge)) != 0) - ntips
+    ## nnodes <- length(unique(na.omit(c(edge)))) - ntips
 
     ## edge.length
     edge.length <- .createEdge(value=edge.length, edgeMat=edge, type="lengths", use.names=FALSE)

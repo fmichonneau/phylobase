@@ -142,7 +142,7 @@ plot(geospiza[c(1:6,14)])
 geospiza[c(1:6,14), c("wingL", "beakD")]
 
 ## note handling of root edge length:
-edgeLength(geotree)['NA-15'] <- 0.1
+edgeLength(geotree)['0-15'] <- 0.1
 geotree2 <- geotree[1:2]
 ## in subset tree, edge of new root extends back to the original root
 edgeLength(geotree2)['NA-3']

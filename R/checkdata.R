@@ -60,12 +60,13 @@ checkTree <- function(object,
     if (!all(nDesc[1:nTips]==0))
       return("nodes 1 to nTips must all be tips")
 
-    if (nRoots>0) {
-      if (sum(is.na(E[,1]))!=1) {
-        return("for a rooted tree, edge matrix must contain (exactly one) explicit root edge with ancestor==NA")
+    if (nRoots > 0) {
+      if (sum(E[, 1] == 0) != 1) {
+        return("for a rooted tree, edge matrix must contain (exactly one) explicit root edge with ancestor==0")
       }
-      root.node <- unname(E[which(is.na(E[,1])),2])
-      if (!root.node==nTips+1)
+      root.node <- unname(E[which(E[,1] == 0), 2])
+      if (!root.node == nTips + 1)
+        ## TODO this isn't actually a requirement
         return("root node must be first row of edge matrix")
     }
 
@@ -109,7 +110,7 @@ checkTree <- function(object,
     }
     else {
         if(!all(names(object@node.label) %in%  nodeId(object, "internal")))
-            stop("Internal names for tips don't match tip ID numbers")
+            stop("Internal names for nodes don't match node ID numbers")
     }
 
     if(hasEdgeLength(object)) {

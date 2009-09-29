@@ -216,7 +216,6 @@ phyloXXYY <- function(phy, tip.order = NULL)
     phy    <- reorder(phy, 'preorder')
     pedges <- edges(phy)
     Nedges <- nrow(pedges) ## TODO switch to the accessor once stablized
-    pedges[is.na(pedges[,1]), 1] <- -1
     Ntips  <- nTips(phy)
     tips <- pedges[, 2] <= Ntips
     if(!is.null(tip.order)) {
@@ -273,6 +272,15 @@ phyloXXYY <- function(phy, tip.order = NULL)
         }
         return(list(segs=segs, yy=yy))
     }
+    placeHolder2 <- function() {
+        for(i in rev((Ntips + 1):nEdges(phy))) {
+            cur <- pedges[, 2] == i
+            dex <- pedges[, 1] == i
+            yy[cur] <- segs$v0y[dex] <- mean(yy[dex])
+        }
+        return(list(segs=segs, yy=yy))
+    }
+
     yPos <- placeHolder()
     segs <- yPos$segs
     yy   <- yPos$yy

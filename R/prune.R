@@ -41,7 +41,7 @@ setMethod("prune","phylo4", function(x, tips.exclude,
     ## remove singletons
     edge.length.new <- edgeLength(x)
     edge.label.new <- edgeLabels(x)
-    singletons <- which(tabulate(na.omit(edge.new[,1]))==1)
+    singletons <- which(tabulate(edge.new[edge.new[, 1] != 0, 1])==1)
     while (length(singletons)>0) {
         sing.node <- singletons[1]
 
@@ -62,7 +62,7 @@ setMethod("prune","phylo4", function(x, tips.exclude,
         edge.label.new <- edge.label.new[-match(edge.names.drop,
             names(edge.label.new))]
 
-        singletons <- which(tabulate(na.omit(edge.new[,1]))==1)
+        singletons <- which(tabulate(edge.new[edge.new[, 1] != 0, 1])==1)
     }
 
     ## remove dropped elements from tip.label and node.label
@@ -96,7 +96,7 @@ setMethod("prune","phylo4", function(x, tips.exclude,
     }
 
     ## renumber nodes in the edge matrix
-    edge.new[] <- match(edge.new, sort(unique.default(edge.new)))
+    edge.new[] <- match(edge.new, sort(unique.default(edge.new))) - 1
 
     ## update corresponding element names in the other slots
     edge.names <- makeEdgeNames(edge.new)

@@ -7,7 +7,7 @@ nwk <- "((t1:0.1,t2:0.2)n7:0.7,(t3:0.3,(t4:0.4,t5:0.5)n9:0.9)n8:0.8)n6:0.6;"
 tr <- read.tree(text=nwk)
 
 # create analogous phylo4 object with a full complement of valid slots
-ancestor <- as.integer(c(6,7,7,6,8,NA,8,9,9))
+ancestor <- as.integer(c(6,7,7,6,8,0,8,9,9))
 descendant <- as.integer(c(7,1,2,8,3,6,9,4,5))
 edge <- cbind(ancestor, descendant)
 nid.tip <- 1:5
@@ -69,7 +69,7 @@ test.nEdges.phylo4 <- function() {
 
 test.edges.phylo4 <- function() {
   checkIdentical(edges(phy.alt), edge)
-  checkIdentical(edges(phy.alt, drop.root=TRUE), edge[!is.na(edge[,1]),])
+  checkIdentical(edges(phy.alt, drop.root=TRUE), edge[edge[,1] != 0,])
 }
 
 test.edgeOrder.phylo4 <- function() {
@@ -84,7 +84,7 @@ test.edgeId.phylo4 <- function() {
   checkIdentical(edgeId(phy.alt, "all"), eid)
   checkIdentical(edgeId(phy.alt, "tip"), eid[descendant %in% nid.tip])
   checkIdentical(edgeId(phy.alt, "internal"), eid[!descendant %in% nid.tip])
-  checkIdentical(edgeId(phy.alt, "root"), eid[is.na(ancestor)])
+  checkIdentical(edgeId(phy.alt, "root"), eid[ancestor == 0])
 }
 
 test.hasEdgeLength.phylo4 <- function() {
