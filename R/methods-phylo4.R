@@ -203,13 +203,13 @@ setMethod("edgeLength", signature(x="phylo4"),
 
 setReplaceMethod("edgeLength", signature(x="phylo4"),
  function(x, use.names=TRUE, ..., value) {
-    if(use.names && !is.null(names(value))) {
-        if(!all(names(value) %in% edgeId(x, "all")))
-            stop("Names provided don't match internal edge labels")
-        x@edge.length[match(names(value), names(x@edge.length))] <- value
+    len <- .createEdge(value, x@edge, type="lengths", use.names)
+    ## return empty vector if all values are NA
+    if (all(is.na(len))) {
+        x@edge.length <- numeric()
+    } else {
+        x@edge.length <- len
     }
-    else
-        x@edge.length[1:nEdges(x)] <- value
     if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
     x
 })
