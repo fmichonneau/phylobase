@@ -107,6 +107,6 @@ E <- matrix(c(
    11,  5,
    11,  6,
    11,  7,
-   NA,  8), ncol=2,byrow=TRUE)
+    0,  8), ncol=2,byrow=TRUE)
 
 P2 <- phylo4(E)

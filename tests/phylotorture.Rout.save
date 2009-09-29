@@ -1,5 +1,5 @@
 
-R version 2.9.1 (2009-06-26)
+R version 2.9.2 (2009-08-24)
 Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -100,7 +100,7 @@ In checkTree(object) : tree contains singleton nodes
 3    T3    3        8          NA       tip
 4    T4    4        9          NA       tip
 5    T5    5        9          NA       tip
-6  <NA>    6       NA          NA  internal
+6  <NA>    6        0          NA  internal
 7  <NA>    7        6          NA  internal
 8  <NA>    8        6          NA  internal
 9  <NA>    9        9          NA  internal
@@ -141,7 +141,6 @@ In tips == 1:ntips :
 > ## both of the following now fail with
 > ## "root node is not at position (nTips+1)
 > try(as(broke3,"phylo4") -> tree3)  # works with no error message
-Error in .local(x, ...) : root node must be first row of edge matrix
 > try(phylo4(broke3$edge))    # works with no error message
   label node ancestor edge.length node.type
 1    T1    1        6          NA       tip
@@ -150,7 +149,7 @@ Error in .local(x, ...) : root node must be first row of edge matrix
 4    T4    4        9          NA       tip
 5    T5    5        9          NA       tip
 6  <NA>    6        7          NA  internal
-7  <NA>    7       NA          NA  internal
+7  <NA>    7        0          NA  internal
 8  <NA>    8        7          NA  internal
 9  <NA>    9        8          NA  internal
 > ## plot(tree3)  # would work if we could create it?
@@ -196,6 +195,3 @@ attr(,"class")
 > edge <- matrix(c(3,1,3,2),byrow=TRUE,ncol=2)
 > try(p2 <- phylo4(edge), silent=TRUE)
 > 
-> proc.time()
-   user  system elapsed 
-  1.744   0.044   1.807 

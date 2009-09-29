@@ -1,5 +1,5 @@
 
-R version 2.9.1 (2009-06-26)
+R version 2.9.2 (2009-08-24)
 Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -187,7 +187,7 @@ phyl4d> try(phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3)), silent=TRU
 1   Strix_aluco    1        5         4.2       tip    1
 2     Asio_otus    2        5         4.2       tip    2
 3 Athene_noctua    3        4         7.3       tip    3
-4          <NA>    4       NA          NA      root   NA
+4          <NA>    4        0          NA      root   NA
 5          <NA>    5        4         3.1  internal   NA
 
 phyl4d> obj <- phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3), match.data=FALSE)
@@ -197,7 +197,7 @@ phyl4d> obj
 1   Strix_aluco    1        5         4.2       tip    1
 2     Asio_otus    2        5         4.2       tip    2
 3 Athene_noctua    3        4         7.3       tip    3
-4          <NA>    4       NA          NA      root   NA
+4          <NA>    4        0          NA      root   NA
 5          <NA>    5        4         3.1  internal   NA
 
 phyl4d> print(obj)
@@ -205,7 +205,7 @@ phyl4d> print(obj)
 1   Strix_aluco    1        5         4.2       tip    1
 2     Asio_otus    2        5         4.2       tip    2
 3 Athene_noctua    3        4         7.3       tip    3
-4          <NA>    4       NA          NA      root   NA
+4          <NA>    4        0          NA      root   NA
 5          <NA>    5        4         3.1  internal   NA
 
 phyl4d> ####
@@ -257,19 +257,19 @@ phyl4d> (matchData1 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=FA
 12        fusca   12       17     0.53409       tip  0.61982575          NA
 13 Pinaroloxias   13       16     0.58333       tip -0.05612874          NA
 14     olivacea   14       15     0.88077       tip -0.15579551          NA
-15         <NA>   15       NA          NA      root          NA -1.47075238
-16         <NA>   16       15     0.29744  internal          NA -0.47815006
-17         <NA>   17       16     0.04924  internal          NA  0.41794156
-18         <NA>   18       17     0.06859  internal          NA  1.35867955
-19         <NA>   19       18     0.13404  internal          NA -0.10278773
-20         <NA>   20       19     0.10346  internal          NA  0.38767161
-21         <NA>   21       20     0.03550  internal          NA -0.05380504
-22         <NA>   22       21     0.00917  internal          NA -1.37705956
-23         <NA>   23       22     0.07333  internal          NA -0.41499456
-24         <NA>   24       23     0.05500  internal          NA -0.39428995
-25         <NA>   25       19     0.24479  internal          NA -0.05931340
-26         <NA>   26       25     0.05167  internal          NA  1.10002537
-27         <NA>   27       26     0.01500  internal          NA  0.76317575
+15          N15   15        0          NA      root          NA -1.47075238
+16          N16   16       15     0.29744  internal          NA -0.47815006
+17          N17   17       16     0.04924  internal          NA  0.41794156
+18          N18   18       17     0.06859  internal          NA  1.35867955
+19          N19   19       18     0.13404  internal          NA -0.10278773
+20          N20   20       19     0.10346  internal          NA  0.38767161
+21          N21   21       20     0.03550  internal          NA -0.05380504
+22          N22   22       21     0.00917  internal          NA -1.37705956
+23          N23   23       22     0.07333  internal          NA -0.41499456
+24          N24   24       23     0.05500  internal          NA -0.39428995
+25          N25   25       19     0.24479  internal          NA -0.05931340
+26          N26   26       25     0.05167  internal          NA  1.10002537
+27          N27   27       26     0.01500  internal          NA  0.76317575
 
 phyl4d> (matchData2 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=TRUE))
           label node ancestor edge.length node.type           a
@@ -287,19 +287,19 @@ phyl4d> (matchData2 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=TR
 12        fusca   12       17     0.53409       tip  0.61982575
 13 Pinaroloxias   13       16     0.58333       tip -0.05612874
 14     olivacea   14       15     0.88077       tip -0.15579551
-15         <NA>   15       NA          NA      root -1.47075238
-16         <NA>   16       15     0.29744  internal -0.47815006
-17         <NA>   17       16     0.04924  internal  0.41794156
-18         <NA>   18       17     0.06859  internal  1.35867955
-19         <NA>   19       18     0.13404  internal -0.10278773
-20         <NA>   20       19     0.10346  internal  0.38767161
-21         <NA>   21       20     0.03550  internal -0.05380504
-22         <NA>   22       21     0.00917  internal -1.37705956
-23         <NA>   23       22     0.07333  internal -0.41499456
-24         <NA>   24       23     0.05500  internal -0.39428995
-25         <NA>   25       19     0.24479  internal -0.05931340
-26         <NA>   26       25     0.05167  internal  1.10002537
-27         <NA>   27       26     0.01500  internal  0.76317575
+15          N15   15        0          NA      root -1.47075238
+16          N16   16       15     0.29744  internal -0.47815006
+17          N17   17       16     0.04924  internal  0.41794156
+18          N18   18       17     0.06859  internal  1.35867955
+19          N19   19       18     0.13404  internal -0.10278773
+20          N20   20       19     0.10346  internal  0.38767161
+21          N21   21       20     0.03550  internal -0.05380504
+22          N22   22       21     0.00917  internal -1.37705956
+23          N23   23       22     0.07333  internal -0.41499456
+24          N24   24       23     0.05500  internal -0.39428995
+25          N25   25       19     0.24479  internal -0.05931340
+26          N26   26       25     0.05167  internal  1.10002537
+27          N27   27       26     0.01500  internal  0.76317575
 
 phyl4d> ## Example with 'all.data'
 phyl4d> nodeLabels(geoTree) <- as.character(nodeId(geoTree, "internal"))
@@ -331,19 +331,19 @@ phyl4d> (exGeo6 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=TRUE))
 12    13   12       17     0.53409       tip    j
 13     3   13       16     0.58333       tip    k
 14     6   14       15     0.88077       tip    d
-15  <NA>   15       NA          NA      root <NA>
-16  <NA>   16       15     0.29744  internal <NA>
-17  <NA>   17       16     0.04924  internal <NA>
-18  <NA>   18       17     0.06859  internal <NA>
-19  <NA>   19       18     0.13404  internal <NA>
-20  <NA>   20       19     0.10346  internal <NA>
-21  <NA>   21       20     0.03550  internal <NA>
-22  <NA>   22       21     0.00917  internal <NA>
-23  <NA>   23       22     0.07333  internal <NA>
-24  <NA>   24       23     0.05500  internal <NA>
-25  <NA>   25       19     0.24479  internal <NA>
-26  <NA>   26       25     0.05167  internal <NA>
-27  <NA>   27       26     0.01500  internal <NA>
+15   N15   15        0          NA      root <NA>
+16   N16   16       15     0.29744  internal <NA>
+17   N17   17       16     0.04924  internal <NA>
+18   N18   18       17     0.06859  internal <NA>
+19   N19   19       18     0.13404  internal <NA>
+20   N20   20       19     0.10346  internal <NA>
+21   N21   21       20     0.03550  internal <NA>
+22   N22   22       21     0.00917  internal <NA>
+23   N23   23       22     0.07333  internal <NA>
+24   N24   24       23     0.05500  internal <NA>
+25   N25   25       19     0.24479  internal <NA>
+26   N26   26       25     0.05167  internal <NA>
+27   N27   27       26     0.01500  internal <NA>
 
 phyl4d> (exGeo7 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE))
    label node ancestor edge.length node.type    x
@@ -361,19 +361,19 @@ phyl4d> (exGeo7 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE))
 12    13   12       17     0.53409       tip    l
 13     3   13       16     0.58333       tip    j
 14     6   14       15     0.88077       tip    a
-15  <NA>   15       NA          NA      root <NA>
-16  <NA>   16       15     0.29744  internal <NA>
-17  <NA>   17       16     0.04924  internal <NA>
-18  <NA>   18       17     0.06859  internal <NA>
-19  <NA>   19       18     0.13404  internal <NA>
-20  <NA>   20       19     0.10346  internal <NA>
-21  <NA>   21       20     0.03550  internal <NA>
-22  <NA>   22       21     0.00917  internal <NA>
-23  <NA>   23       22     0.07333  internal <NA>
-24  <NA>   24       23     0.05500  internal <NA>
-25  <NA>   25       19     0.24479  internal <NA>
-26  <NA>   26       25     0.05167  internal <NA>
-27  <NA>   27       26     0.01500  internal <NA>
+15   N15   15        0          NA      root <NA>
+16   N16   16       15     0.29744  internal <NA>
+17   N17   17       16     0.04924  internal <NA>
+18   N18   18       17     0.06859  internal <NA>
+19   N19   19       18     0.13404  internal <NA>
+20   N20   20       19     0.10346  internal <NA>
+21   N21   21       20     0.03550  internal <NA>
+22   N22   22       21     0.00917  internal <NA>
+23   N23   23       22     0.07333  internal <NA>
+24   N24   24       23     0.05500  internal <NA>
+25   N25   25       19     0.24479  internal <NA>
+26   N26   26       25     0.05167  internal <NA>
+27   N27   27       26     0.01500  internal <NA>
 
 phyl4d> (exGeo8 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE, match.data=FALSE))
    label node ancestor edge.length node.type    x
@@ -391,19 +391,19 @@ phyl4d> (exGeo8 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE, match.da
 12    13   12       17     0.53409       tip    l
 13     3   13       16     0.58333       tip    m
 14     6   14       15     0.88077       tip    n
-15  <NA>   15       NA          NA      root <NA>
-16  <NA>   16       15     0.29744  internal <NA>
-17  <NA>   17       16     0.04924  internal <NA>
-18  <NA>   18       17     0.06859  internal <NA>
-19  <NA>   19       18     0.13404  internal <NA>
-20  <NA>   20       19     0.10346  internal <NA>
-21  <NA>   21       20     0.03550  internal <NA>
-22  <NA>   22       21     0.00917  internal <NA>
-23  <NA>   23       22     0.07333  internal <NA>
-24  <NA>   24       23     0.05500  internal <NA>
-25  <NA>   25       19     0.24479  internal <NA>
-26  <NA>   26       25     0.05167  internal <NA>
-27  <NA>   27       26     0.01500  internal <NA>
+15   N15   15        0          NA      root <NA>
+16   N16   16       15     0.29744  internal <NA>
+17   N17   17       16     0.04924  internal <NA>
+18   N18   18       17     0.06859  internal <NA>
+19   N19   19       18     0.13404  internal <NA>
+20   N20   20       19     0.10346  internal <NA>
+21   N21   21       20     0.03550  internal <NA>
+22   N22   22       21     0.00917  internal <NA>
+23   N23   23       22     0.07333  internal <NA>
+24   N24   24       23     0.05500  internal <NA>
+25   N25   25       19     0.24479  internal <NA>
+26   N26   26       25     0.05167  internal <NA>
+27   N27   27       26     0.01500  internal <NA>
 
 phyl4d> require(ape) ## for rcoal
 
@@ -482,10 +482,7 @@ In switch(extra.data, warn = warning(msg), fail = stop(msg)) :
 +    11,  5,
 +    11,  6,
 +    11,  7,
-+    NA,  8), ncol=2,byrow=TRUE)
++     0,  8), ncol=2,byrow=TRUE)
 > 
 > P2 <- phylo4(E)
 > 
-> proc.time()
-   user  system elapsed 
-  2.708   0.096   2.950 
