@@ -231,12 +231,11 @@ getEdge <- function(phy, node, type=c("descendant", "ancestor"),
     if(!identical(class(phy), "phylo4")) phy <- as(phy, "phylo4")
 
     missing <- match.arg(missing)
-    node <- getNode(phy, node, missing)
+    node.id <- getNode(phy, node, missing="OK")
 
     type <- match.arg(type)
 
-    ##TODO: should missing arg also apply to tips-as-ancestors case?
-    nd <- lapply(node, function(x) {
+    nd <- lapply(node.id, function(x) {
         if (is.na(x)) {
             res <- NA
         } else {
@@ -249,7 +248,19 @@ getEdge <- function(phy, node, type=c("descendant", "ancestor"),
         }   
         names(res) <- rep(x, length(res))
         res
-    })  
+    })
+
+    ## warn or stop if necessary
+    is.missing <- is.na(nd)
+    if (missing!="OK" && any(is.missing)) {
+        msg <- paste("Not all nodes are ", type, "s in this tree: ",
+            paste(node[is.missing], collapse=", "), sep="")
+        if (missing=="fail") {
+            stop(msg)
+        } else if (missing=="warn") {
+            warning(msg)
+        }
+    }
 
     return(unlist(unname(nd)))
 
