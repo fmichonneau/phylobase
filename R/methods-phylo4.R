@@ -354,9 +354,10 @@ setMethod("edgeLabels", signature(x="phylo4"),
 
 setReplaceMethod("edgeLabels", signature(x="phylo4", value="character"),
   function(x, ..., value) {
-      x@edge.label <- value
-      if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
-      x
+    lbl <- .createEdge(value, x@edge, type="labels")
+    x@edge.label <- lbl[!is.na(lbl)]
+    if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
+    x
   })
 
 

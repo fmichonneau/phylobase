@@ -82,16 +82,16 @@ checkTree <- function(object,
     ## make sure tip/node labels have internal names that match node IDs
     lab.msg <- "Use tipLabels<- (and nodeLabels<- if needed) to update them."
     if (is.null(names(object@label))) {
-        return(c("Tip and node labels must have names matching node IDs. ",
+        stop(c("Tip and node labels must have names matching node IDs. ",
             lab.msg))
              
     } else {
         if (!all(tips %in% names(na.omit(object@label)))) {
-            return(c("All tips must have associated tip labels. ",
+            stop(c("All tips must have associated tip labels. ",
                 lab.msg))
         }
         if (!all(names(object@label) %in% nodeId(object, "all"))) {
-            return(c("One or more tip/node label has an unmatched ID name ",
+            stop(c("One or more tip/node label has an unmatched ID name ",
                 lab.msg))
         }
     }
@@ -100,12 +100,25 @@ checkTree <- function(object,
     elen.msg <- "Use edgeLength<- to update them."
     if(hasEdgeLength(object)) {
         if (is.null(names(object@edge.length))) {
-            return(c("Edge lengths must have names matching edge IDs. ",
+            stop(c("Edge lengths must have names matching edge IDs. ",
                 elen.msg))
         }
         if (!all(names(object@edge.length) %in% edgeId(object, "all"))) {
-            return(c("One or more edge lengths has an unmatched ID name. ",
+            stop(c("One or more edge lengths has an unmatched ID name. ",
                 elen.msg))
+        }
+    }
+
+    ## make sure edge labels have internal names that match the edges
+    elab.msg <- "Use edgeLabels<- to update them."
+    if(hasEdgeLabels(object)) {
+        if (is.null(names(object@edge.label))) {
+            stop(c("Edge labels must have names matching edge IDs. ",
+                elab.msg))
+        }
+        if (!all(names(object@edge.label) %in% edgeId(object, "all"))) {
+            stop(c("One or more edge labels has an unmatched ID name. ",
+                elab.msg))
         }
     }
 
