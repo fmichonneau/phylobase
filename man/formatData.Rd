@@ -18,7 +18,7 @@
 
 \arguments{
   \item{phy}{a valid \code{phylo4} object}
-  \item{dt}{a data frame or a vector}
+  \item{dt}{a data frame, matrix, vector, or factor}
   \item{type}{type of data to attach}
   \item{match.data}{(logical) Are data labels matched against tree
     labels?} 

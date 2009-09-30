@@ -18,13 +18,13 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
         return(data.frame(row.names=ids.out))
     }
     ## if vector, coerce to data.frame
-    if (is.vector(dt)) {
+    if (is.vector(dt) || is.factor(dt) || is.matrix(dt)) {
         dt <- as.data.frame(dt)
     }
     ## before proceeding, make sure that data provided are a data frame
     if (!is.data.frame(dt)) {
-        nmSomeData <- substitute(dt)
-        stop(paste(nmSomeData, "must be a vector or a data frame"))
+        stop(paste(deparse(substitute(dt)),
+            "must be a vector, factor, matrix, or data frame"))
     }
     ## if lacking rows or columns, return a placeholder data frame with
     ## node numbers as row names

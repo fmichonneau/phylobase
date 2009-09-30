@@ -17,9 +17,12 @@ pos=c("after", "before"), merge.data=TRUE, match.data=TRUE, \dots)
 }
 \arguments{
   \item{x}{a phylo4 or a phylo4d object}
-  \item{tip.data}{a data frame for tip data}
-  \item{node.data}{a data frame for node data}
-  \item{all.data}{a data frame for both tip an node data}
+  \item{tip.data}{a data frame (or object to be coerced to one)
+    containing only tip data}
+  \item{node.data}{a data frame (or object to be coerced to one)
+    containing only node data}
+  \item{all.data}{a data frame (or object to be coerced to one)
+    containing both tip and node data}
   \item{match.data}{(logical), should the row names provided in
     \code{tip.data}, \code{node.data} and/or \code{all.data} be used to
     match data against the tree labels?}

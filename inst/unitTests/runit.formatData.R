@@ -48,6 +48,25 @@ test.formatData <- function() {
     #   missing.data=c("fail", "warn", "OK"),
     #   extra.data=c("warn", "OK", "fail"), keep.all=TRUE
 
+    ## vector data coerced to data.frame (colname dt)
+    checkIdentical(formatData(phy.alt, 1:5),
+        formatData(phy.alt, data.frame(dt=1:5)))
+    ## list of vector data coerced to data.frame (colnames as given)
+    checkIdentical(formatData(phy.alt, list(a=1:5, b=6:10)),
+        formatData(phy.alt, data.frame(a=1:5, b=6:10)))
+    ## factor data coerced to data.frame (colname dt)
+    checkIdentical(formatData(phy.alt, factor(letters[1:5])),
+        formatData(phy.alt, data.frame(dt=letters[1:5])))
+    ## matrix data coerced to data.frame (colnames V1, V2)
+    checkIdentical(formatData(phy.alt, matrix(1:10, ncol=2)),
+        formatData(phy.alt, data.frame(V1=1:5, V2=6:10)))
+    ## matrix data coerced to data.frame (colname as given)
+    checkIdentical(formatData(phy.alt, matrix(1:10, ncol=2,
+        dimnames=list(NULL, c("a", "b")))),
+        formatData(phy.alt, data.frame(a=1:5, b=6:10)))
+    ## error if dt is, say, a phylo4 object
+    checkException(formatData(phy.alt, phy.alt))
+
     #
     # matching options
     #

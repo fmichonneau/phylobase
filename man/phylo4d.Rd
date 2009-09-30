@@ -36,10 +36,12 @@
 \arguments{
   \item{x}{an object of class \code{phylo4}, \code{phylo} or a matrix of
   edges (see above)}
-  \item{tip.data}{a data frame for tips data}
-  \item{node.data}{a data frame for nodes data}
-  \item{all.data}{a data frame for all (i.e. tips and nodes) data. In such
-    case, first rows should correspond to tips, last rows to nodes.}
+  \item{tip.data}{a data frame (or object to be coerced to one)
+    containing only tip data}
+  \item{node.data}{a data frame (or object to be coerced to one)
+    containing only node data}
+  \item{all.data}{a data frame (or object to be coerced to one)
+    containing both tip and node data}
   \item{match.data}{(logical) should the rownames of the data frame
     provided in \code{tip.data}, \code{node.data} and/or \code{all.data}
     be used to be matched against tip and internal node identifiers? See

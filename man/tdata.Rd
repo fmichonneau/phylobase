@@ -37,8 +37,9 @@
       \code{phylo4d} (e.g. \code{match.data}), see \link{phylo4d} for
       more details.}
 
-    \item{value}{a data frame to replace the values associated with the
-      nodes specified by the argument \code{type}}
+    \item{value}{a data frame (or object to be coerced to one) to
+      replace the values associated with the nodes specified by the
+      argument \code{type}}
 
 }
 
