@@ -114,6 +114,7 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
     # TODO switch to phylobase abstractions
     phy    <- xxyy$phy
     Nedges <- nEdges(phy)
+    Nnodes <- nNodes(phy)
     Ntips  <- nTips(phy)
     pedges <- edges(phy)
     tindex <- pedges[pedges[, 2] <= Ntips, 2]
@@ -132,11 +133,9 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
     edge.width <- edge.width[eindex]
 
     ## TODO check that colors are valid?
-    nindex <- sort(eindex[pedges[, 2] > Ntips], index.return = TRUE)$ix
-    if(length(node.color) != length(nindex)) {
-        node.color <- rep(node.color, length.out = length(nindex))
+    if(length(node.color) != Nnodes) {
+        node.color <- rep(node.color, length.out = Nnodes)
     }
-    node.color <- node.color[nindex]
 
     if(show.tip.label) {
         ## calculate several lab dimesisions
@@ -198,14 +197,16 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
     }
     # TODO probably want to be able to adjust the location of these guys
     if(show.node.label) {
-        pushViewport(viewport(layout = treelayout, layout.pos.col = 1))
-            rty <- mean(xxyy$yy[pedges[, 1] == Ntips + 1], name = 'nodelabelvp')
+        pushViewport(viewport(layout = treelayout, layout.pos.col = 1, name = 'nodelabelvp'))
+            theLabels <- nodeLabels(phy)
+            # don't plot NAs
+            theLabels[is.na(theLabels)] <- ""
         labtext <- grid.text(
-            nodeLabels(phy), 
-            x = c(0, xxyy$xx[pedges[, 2] > Ntips][nindex]), 
-            y = c(rty, xxyy$yy[pedges[, 2] > Ntips][nindex]), 
+            theLabels, 
+            x = c(xxyy$xx[pedges[, 2] > Ntips]), 
+            y = c(xxyy$yy[pedges[, 2] > Ntips]), 
             default.units = 'npc', name = 'nodelabels', rot = -rot,
-            just = 'center', gp = gpar(col = node.color[nindex])
+            just = 'center', gp = gpar(col = node.color)
         )
         upViewport() #nodelabelvp
     }
