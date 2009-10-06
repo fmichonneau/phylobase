@@ -11,7 +11,7 @@ if(is.character(checkval <- checkPhylo4(geospiza)))
   
 
 geospiza0 <-
-  list(geospiza.tree=as(geospiza,"phylo"),geospiza.data=tdata(geospiza))
+  list(geospiza.tree=as(geospiza,"phylo"),geospiza.data=tipData(geospiza))
 ## push data back into list form as in geiger
 
 t1 <-  try(p1 <- phylo4d(geospiza0$geospiza.tree,geospiza0$geospiza.data))
@@ -92,7 +92,7 @@ obj4@data[1,1] <- NA
 nodeLabels(obj4) <- character(0)
 
 obj5 <- obj1
-tdata(obj4) <- subset(tdata(obj4),select=sapply(tdata(obj4),class)=="numeric")
+tipData(obj4) <- subset(tipData(obj4),select=sapply(tipData(obj4),class)=="numeric")
 
 treePlot(obj4)
 

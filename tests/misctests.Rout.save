@@ -32,7 +32,7 @@ Loading required package: ape
 >   
 > 
 > geospiza0 <-
-+   list(geospiza.tree=as(geospiza,"phylo"),geospiza.data=tdata(geospiza))
++   list(geospiza.tree=as(geospiza,"phylo"),geospiza.data=tipData(geospiza))
 Warning messages:
 1: In asMethod(object) : losing data while coercing phylo4d to phylo
 2: In asMethod(object) : trees with unknown order may be unsafe in ape
@@ -467,7 +467,7 @@ In switch(extra.data, warn = warning(msg), fail = stop(msg)) :
 > nodeLabels(obj4) <- character(0)
 > 
 > obj5 <- obj1
-> tdata(obj4) <- subset(tdata(obj4),select=sapply(tdata(obj4),class)=="numeric")
+> tipData(obj4) <- subset(tipData(obj4),select=sapply(tipData(obj4),class)=="numeric")
 > 
 > treePlot(obj4)
 > 

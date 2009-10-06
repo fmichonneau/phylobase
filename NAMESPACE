@@ -36,7 +36,8 @@ exportMethods(isRooted, rootNode, "rootNode<-")
 exportMethods(nodeId, nodeType)
 
 # tree data methods
-exportMethods(tdata, "tdata<-", addData, hasTipData, hasNodeData)
+exportMethods(tdata, "tdata<-", tipData, "tipData<-", nodeData,
+    "nodeData<-", hasTipData, hasNodeData, addData)
 
 # subset methods
 exportMethods(subset, prune, "[")

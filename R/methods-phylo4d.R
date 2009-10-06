@@ -1,7 +1,7 @@
 setMethod("tdata", signature(x="phylo4d"),
-  function(x, type=c("tip", "internal", "all"),
+  function(x, type=c("all", "tip", "internal"),
            label.type=c("row.names","column"),
-           empty.columns=TRUE, ...) {
+           empty.columns=TRUE) {
 
       ## Returns data associated with the tree
       ## Note: the function checks for unique labels. It's currently unecessary
@@ -46,22 +46,68 @@ setMethod("tdata", signature(x="phylo4d"),
   })
 
 setReplaceMethod("tdata", signature(x="phylo4d", value="ANY"),
- function(x, type = c("tip", "internal", "all"), ..., value) {
+    function(x, type = c("all", "tip", "internal"), merge.data = TRUE,
+        clear.all = FALSE, ..., value) {
+
     type <- match.arg(type)
-    object <- x
 
-    ## Removes existing data, just keeps the tree (as a phylo4d)
-    object <- extractTree(object)
-    object <- as(object, "phylo4d")
+    ## format new data
+    value <- formatData(x, value, type, keep.all=FALSE, ...)
 
-    object@data <- switch(type,
-                      tip = .phylo4Data(object, tip.data=value, ...),
-                      internal = .phylo4Data(object, node.data=value, ...),
-                      all = .phylo4Data(object, all.data=value, ...))
+    ## get old data to keep (if any)
+    if (clear.all || type=="all") {
+        keep <- NULL
+    } else {
+        if (type=="tip") {
+            keep <- tdata(x, type="internal", empty.column=FALSE)
+        } else if (type=="internal") {
+            keep <- tdata(x, type="tip", empty.column=FALSE)
+        }
+    }
 
-    object
+    ## create updated data
+    updated.data <- switch(type,
+        tip = .phylo4Data(x, tip.data=value, node.data=keep,
+            merge.data=merge.data),
+        internal = .phylo4Data(x, tip.data=keep, node.data=value,
+            merge.data=merge.data),
+        all = .phylo4Data(x, all.data=value, merge.data=merge.data))
+
+    ## try to arrange new columns after old columns
+    kept <- names(updated.data) %in% names(keep)
+    old.cols <- names(updated.data)[kept]
+    new.cols <- names(updated.data)[!kept]
+    x@data <- updated.data[c(old.cols, new.cols)]
+
+    if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
+    return(x)
 })
 
+### Tip data wrappers
+setMethod("tipData", signature(x="phylo4d"), function(x, ...) {
+    tdata(x, type="tip", ...)
+})
+
+setReplaceMethod("tipData", signature(x="phylo4d", value="ANY"),
+    function(x, ...,  value) {
+    tdata(x, type="tip", ...) <- value
+    if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
+    return(x)
+})
+
+### Node data wrappers
+setMethod("nodeData", signature(x="phylo4d"), function(x, ...) {
+    tdata(x, type="internal", ...)
+})
+
+setReplaceMethod("nodeData", signature(x="phylo4d", value="ANY"),
+    function(x, ...,  value) {
+    tdata(x, type="internal", ...) <- value
+    if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
+    return(x)
+})
+
+### Add new data
 setMethod("addData", signature(x="phylo4d"),
   function(x, tip.data=NULL, node.data=NULL,
            all.data=NULL, pos=c("after", "before"),

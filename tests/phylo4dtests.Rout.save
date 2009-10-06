@@ -37,13 +37,13 @@ Type 'q()' to quit R.
 > plot(treed2) # works with a warning about no tip data to plot
 Warning message:
 In treePlot(x, ...) : tree has no tip data to plot
-> tdata(treed2, empty.columns=FALSE) #returns empty 4-row data.frame
+> tipData(treed2, empty.columns=FALSE) #returns empty 4-row data.frame
 data frame with 0 columns and 4 rows
 > 
 > phylo4d(tree2, tip.data=tip.data, node.data=dat2) -> treed3 #node+tip data
 > 
 > plot(treed3)  # works
-> tdata(treed3)  #works, but returns tips only
+> tipData(treed3)  #works, but returns tips only
   size
 A    1
 B    2

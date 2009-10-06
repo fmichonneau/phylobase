@@ -25,21 +25,16 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
 
 ## Core part that takes care of the data
 .phylo4Data <- function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
-                        match.data=TRUE, merge.data=TRUE,
-                        rownamesAsLabels=FALSE,
-                        ...) {
+                        merge.data=TRUE, ...) {
 
     ## Check validity of phylo4 object
     if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
 
     ## apply formatData to ensure data have node number rownames and
     ## correct dimensions
-    all.data <- formatData(phy=x, dt=all.data, type="all",
-        match.data=match.data, rownamesAsLabels=rownamesAsLabels, ...)
-    tip.data <- formatData(phy=x, dt=tip.data, type="tip",
-        match.data=match.data, rownamesAsLabels=rownamesAsLabels, ...)
-    node.data <- formatData(phy=x, dt=node.data, type="internal",
-        match.data=match.data, rownamesAsLabels=rownamesAsLabels, ...)
+    all.data <- formatData(phy=x, dt=all.data, type="all", ...)
+    tip.data <- formatData(phy=x, dt=tip.data, type="tip", ...)
+    node.data <- formatData(phy=x, dt=node.data, type="internal", ...)
 
     # don't allow all.data columns of same name as tip.data or node.data
     colnamesTipOrNode <- union(names(tip.data), names(node.data))

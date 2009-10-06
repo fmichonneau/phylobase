@@ -16,12 +16,12 @@ try(phylo4d(tree, node.data=dat2), silent = TRUE)  # error, cannot match data be
 phylo4d(tree2, node.data=dat2) -> treed2  # OK tree labelled; has node data, no tip data 
 
 plot(treed2) # works with a warning about no tip data to plot
-tdata(treed2, empty.columns=FALSE) #returns empty 4-row data.frame
+tipData(treed2, empty.columns=FALSE) #returns empty 4-row data.frame
 
 phylo4d(tree2, tip.data=tip.data, node.data=dat2) -> treed3 #node+tip data
 
 plot(treed3)  # works
-tdata(treed3)  #works, but returns tips only
+tipData(treed3)  #works, but returns tips only
 tdata(treed3, "all")
 
 print(tree)

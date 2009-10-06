@@ -110,7 +110,7 @@ test.phylo4d.As.phylo <- function() {
 
   # phylo tree in unknown order
   phyd <- as(tr, "phylo4d")
-  tdata(phyd) <- data.frame(x=1:5, row.names=tipLabels(phyd))
+  tipData(phyd) <- data.frame(x=1:5, row.names=tipLabels(phyd))
   checkEquals(as(phyd, "phylo"), tr)
   # ...now check for warning for unknown order
   opt <- options(warn=3)
@@ -120,7 +120,7 @@ test.phylo4d.As.phylo <- function() {
   # phylo tree in cladewise order
   tr.cladewise <- reorder(tr, "cladewise")
   phyd <- as(tr.cladewise, "phylo4d")
-  tdata(phyd) <- data.frame(x=1:5, row.names=tipLabels(phyd))
+  tipData(phyd) <- data.frame(x=1:5, row.names=tipLabels(phyd))
   checkEquals(as(phyd, "phylo"), tr.cladewise)
   # ...now check for warning for dropping data
   opt <- options(warn=3)
@@ -130,7 +130,7 @@ test.phylo4d.As.phylo <- function() {
   # phylo tree in pruningwise order
   tr.pruningwise <- reorder(tr, "pruningwise")
   phyd <- as(tr.pruningwise, "phylo4d")
-  tdata(phyd) <- data.frame(x=1:5, row.names=tipLabels(phyd))
+  tipData(phyd) <- data.frame(x=1:5, row.names=tipLabels(phyd))
   checkEquals(as(phyd, "phylo"), tr.pruningwise)
 }
 

@@ -154,6 +154,26 @@ setGeneric("tdata<-", function(x, ..., value) {
     standardGeneric("tdata<-")
 })
 
+## tipData
+setGeneric("tipData", function(x, ...) {
+    standardGeneric("tipData")
+})
+
+## tipData<-
+setGeneric("tipData<-", function(x, ..., value) {
+    standardGeneric("tipData<-")
+})
+
+## nodeData
+setGeneric("nodeData", function(x, ...) {
+    standardGeneric("nodeData")
+})
+
+## nodeData<-
+setGeneric("nodeData<-", function(x, ..., value) {
+    standardGeneric("nodeData<-")
+})
+
 ## addData
 setGeneric("addData", function(x, ...) {
     standardGeneric("addData")
