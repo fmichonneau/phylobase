@@ -9,11 +9,13 @@
 \alias{tipData-method}
 \alias{tipData,phylo4d-method}
 \alias{tipData<-}
+\alias{tipData<-,phylo4d-method}
 \alias{tipData<-,phylo4d,ANY-method}
 \alias{nodeData}
 \alias{nodeData-method}
 \alias{nodeData,phylo4d-method}
 \alias{nodeData<-}
+\alias{nodeData<-,phylo4d-method}
 \alias{nodeData<-,phylo4d,ANY-method}
 \title{Retrieving or updating tip and node data in phylo4d objects}
 \description{
@@ -23,7 +25,7 @@
 \usage{
   \S4method{tdata}{phylo4d}(x, type=c("all", "tip", "internal"),
     label.type=c("row.names", "column"), empty.columns=TRUE)
-  \S4method{tdata}{phylo4d,ANY}(x, type = ("all", "tip", "internal"),
+  \S4method{tdata}{phylo4d,ANY}(x, type=c("all", "tip", "internal"),
     merge.data=TRUE, clear.all=FALSE, \dots) <- value
   \S4method{tipData}{phylo4d}(x, \dots)
   \S4method{tipData}{phylo4d,ANY}(x, \dots) <- value
@@ -57,6 +59,9 @@
       argument has no effect if tip and node data have no column names
       in common, or if type=\dQuote{all}.}
     
+    \item{clear.all}{If only tip or internal node data are to be
+      replaced, should data of the other type be dropped?}
+
     \item{\dots}{For the tipData and nodeData accessors, further
       arguments to be used by tdata. For the replacement forms, further
       arguments to be used by \code{formatData} (e.g.
