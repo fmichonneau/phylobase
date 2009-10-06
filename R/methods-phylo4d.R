@@ -52,7 +52,7 @@ setReplaceMethod("tdata", signature(x="phylo4d", value="ANY"),
     type <- match.arg(type)
 
     ## format new data
-    value <- formatData(x, value, type, keep.all=FALSE, ...)
+    value <- formatData(x, value, type, keep.all=TRUE, ...)
 
     ## get old data to keep (if any)
     if (clear.all || type=="all") {
@@ -60,8 +60,10 @@ setReplaceMethod("tdata", signature(x="phylo4d", value="ANY"),
     } else {
         if (type=="tip") {
             keep <- tdata(x, type="internal", empty.column=FALSE)
+            keep <- formatData(x, keep, "internal", match.data=FALSE)
         } else if (type=="internal") {
             keep <- tdata(x, type="tip", empty.column=FALSE)
+            keep <- formatData(x, keep, "tip", match.data=FALSE)
         }
     }
 
@@ -109,14 +111,19 @@ setReplaceMethod("nodeData", signature(x="phylo4d", value="ANY"),
 
 ### Add new data
 setMethod("addData", signature(x="phylo4d"),
-  function(x, tip.data=NULL, node.data=NULL,
-           all.data=NULL, pos=c("after", "before"),
-           merge.data=TRUE, match.data=TRUE,  ...) {
+  function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
+           merge.data=TRUE, pos=c("after", "before"), ...) {
 
     pos <- match.arg(pos)
 
+    ## apply formatData to ensure data have node number rownames and
+    ## correct dimensions
+    tip.data <- formatData(phy=x, dt=tip.data, type="tip", ...)
+    node.data <- formatData(phy=x, dt=node.data, type="internal", ...)
+    all.data <- formatData(phy=x, dt=all.data, type="all", ...)
+    ## combine data as needed
     new.data <- .phylo4Data(x=x, tip.data=tip.data, node.data=node.data,
-        all.data=all.data, merge.data=merge.data, match.data=match.data, ...)
+        all.data=all.data, merge.data=merge.data)
 
     if (all(dim(new.data) == 0)) {
         return(x)
@@ -140,11 +147,10 @@ setMethod("addData", signature(x="phylo4d"),
 })
 
 setMethod("addData", signature(x="phylo4"),
-  function(x, tip.data=NULL, node.data=NULL,
-           all.data=NULL, pos=c("after", "before"),
-           merge.data=TRUE, match.data=TRUE, ...) {
+  function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
+           merge.data=TRUE, pos=c("after", "before"), ...) {
     phylo4d(x, tip.data=tip.data, node.data=node.data, all.data=all.data,
-            merge.data=merge.data, match.data=match.data, ...)
+            merge.data=merge.data, ...)
 })
 
 ## Alternative phylo4d summary method, using phylo4 summary

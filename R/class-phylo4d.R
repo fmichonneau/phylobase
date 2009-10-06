@@ -25,16 +25,15 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
 
 ## Core part that takes care of the data
 .phylo4Data <- function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
-                        merge.data=TRUE, ...) {
+                        merge.data=TRUE) {
 
     ## Check validity of phylo4 object
-    if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
+    if (is.character(checkval <- checkPhylo4(x))) stop(checkval)
 
-    ## apply formatData to ensure data have node number rownames and
-    ## correct dimensions
-    all.data <- formatData(phy=x, dt=all.data, type="all", ...)
-    tip.data <- formatData(phy=x, dt=tip.data, type="tip", ...)
-    node.data <- formatData(phy=x, dt=node.data, type="internal", ...)
+    ## Create placeholder data frames for any null data arguments
+    if (is.null(tip.data)) tip.data <- formatData(x, NULL, "tip")
+    if (is.null(node.data)) node.data <- formatData(x, NULL, "internal")
+    if (is.null(all.data)) all.data <- formatData(x, NULL, "all")
 
     # don't allow all.data columns of same name as tip.data or node.data
     colnamesTipOrNode <- union(names(tip.data), names(node.data))
@@ -84,16 +83,19 @@ setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
 ### phylo4d class rewrite
 setMethod("phylo4d", "phylo4",
           function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
-                   match.data=TRUE, merge.data=TRUE, rownamesAsLabels=FALSE,
-                   metadata = list(),
-                   ...) {
+                   merge.data=TRUE, metadata = list(), ...) {
     ## coerce tree to phylo4d
     res <- as(x, "phylo4d")
+
+    ## apply formatData to ensure data have node number rownames and
+    ## correct dimensions
+    tip.data <- formatData(phy=x, dt=tip.data, type="tip", ...)
+    node.data <- formatData(phy=x, dt=node.data, type="internal", ...)
+    all.data <- formatData(phy=x, dt=all.data, type="all", ...)
+
     ## add any data
     res@data <- .phylo4Data(x=x, tip.data=tip.data, node.data=node.data,
-                           all.data=all.data, match.data=match.data,
-                           merge.data=merge.data,
-                           rownamesAsLabels=rownamesAsLabels, ...)
+        all.data=all.data, merge.data=merge.data)
     ## add any metadata
     res@metadata <- metadata
     return(res)

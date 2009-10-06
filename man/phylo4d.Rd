@@ -27,37 +27,29 @@
         all.data = NULL, check.node.labels = c("keep", "drop", "asdata"), 
         annote=list(), metadata=list(), ...)
      \S4method{phylo4d}{phylo4}(x, tip.data = NULL, node.data = NULL,
-        all.data = NULL, match.data = TRUE, merge.data = TRUE, 
-        rownamesAsLabels = FALSE, metadata = list(), ...)
+        all.data = NULL, merge.data = TRUE, metadata = list(), ...)
      \S4method{phylo4d}{matrix}(x, tip.data = NULL, node.data = NULL,
         all.data = NULL, metadata = list(), ...)
 }
 
 \arguments{
   \item{x}{an object of class \code{phylo4}, \code{phylo} or a matrix of
-  edges (see above)}
+    edges (see above)}
   \item{tip.data}{a data frame (or object to be coerced to one)
     containing only tip data}
   \item{node.data}{a data frame (or object to be coerced to one)
     containing only node data}
   \item{all.data}{a data frame (or object to be coerced to one)
     containing both tip and node data}
-  \item{match.data}{(logical) should the rownames of the data frame
-    provided in \code{tip.data}, \code{node.data} and/or \code{all.data}
-    be used to be matched against tip and internal node identifiers? See
-    details.}
   \item{merge.data}{if both \code{tip.data} and \code{node.data} are
     provided, should columns with common names will be merged together
     (default TRUE) or not (FALSE)? See details.}
   \item{check.node.labels}{if \code{x} is of class \code{phylo}, use
-    either "keep" (the default) to retain internal node labels, "drop"
-    to drop them, or "asdata" to convert them to numeric tree data. This
-    argument is useful if the \code{phylo} object has non-unique node
-    labels or node labels with informative data (e.g., posterior
-    probabilities).}
-  \item{rownamesAsLabels}{(logical), should the row names of the data
-    provided be matched only to labels (TRUE), or should any number-like
-    row names be matched to node numbers (FALSE and default)}
+    either \dQuote{keep} (the default) to retain internal node labels,
+    \dQuote{drop} to drop them, or \dQuote{asdata} to convert them to
+    numeric tree data. This argument is useful if the \code{phylo}
+    object has non-unique node labels or node labels with informative
+    data (e.g., posterior probabilities).}
   \item{annote}{any additional annotation data to be passed to the new object}
   \item{metadata}{any additional metadata to be passed to the new object}
   \item{\dots}{further arguments to be passed to
@@ -68,23 +60,22 @@
 }
 
 \details{
-  You can provide several data frames to define traits associated with
-  tip and/or internal nodes. Rules for matching rows of data to tree
-  nodes are determined jointly by the \code{match.data} and
-  \code{rownamesAsLabels} arguments, and these will apply the same way
-  to all supplied data frames. If \code{match.data} is TRUE, data frame
-  rows will be matched exclusively against tip and node labels if
-  \code{rownamesAsLabels} is also TRUE, whereas any all-digit row names
-  will be matched against tip and node numbers if
-  \code{rownamesAsLabels} is FALSE (the default). If \code{match.data}
-  is FALSE, \code{rownamesAsLabels} has no effect, and row matching is
-  purely positional with respect to the order returned by
-  \code{nodeId(x, "tip")} for tip.data, \code{nodeId(x, "internal")} for
-  node.data, and \code{nodeId(x, "all")} for all.data.
 
+  You can provide several data frames to define traits associated with
+  tip and/or internal nodes. By default, data row names are used to
+  link data to nodes in the tree, with any number-like names (e.g.,
+  \dQuote{10}) matched against node ID numbers, and any non-number-like
+  names (e.g., \dQuote{n10}) matched against node labels. Alternative
+  matching rules can be specified by passing additional arguments to
+  \code{formatData}; these include positional matching, matching
+  exclusively on node labels, and matching based on a column of data
+  rather than on row names. See \code{\link{formatData}} for more
+  information.
+
+  Matching rules will apply the same way to all supplied data frames.
   This means that you need to be consistent with the row names of your
   data frames. It is good practice to use tip and node labels (or node
-  numbers) when you merge data with a tree.
+  numbers) when you combine data with a tree.
 
   If you provide both \code{tip.data} and \code{node.data}, the
   treatment of columns with common names will depend on the
@@ -92,9 +83,9 @@
   both data frames will be merged; when merging columns of different
   data types, coercion to a common type will follow standard R rules. If
   \code{merge.data} is FALSE, columns with common names will be
-  preserved independently, with ".tip" and ".node" appended to the
-  names. This argument has no effect if \code{tip.data} and
-  \code{node.data} have no column names in common.
+  preserved independently, with \dQuote{.tip} and \dQuote{.node}
+  appended to the names. This argument has no effect if \code{tip.data}
+  and \code{node.data} have no column names in common.
 
   If you provide \code{all.data} along with either of \code{tip.data}
   and \code{node.data}, it must have distinct column names, otherwise an
@@ -174,7 +165,7 @@ tDt <- data.frame(x=letters[1:nTips(trGeo)],
 tipLabels(trGeo) <- as.character(sample(1:nTips(trGeo)))
 (exGeo6 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=TRUE))
 (exGeo7 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE))
-(exGeo8 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE, match.data=FALSE))
+(exGeo8 <- phylo4d(trGeo, tip.data=tDt, match.data=FALSE))
 
 require(ape) ## for rcoal
 ## generate a tree and some data

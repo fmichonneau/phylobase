@@ -375,7 +375,7 @@ phyl4d> (exGeo7 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE))
 26   N26   26       25     0.05167  internal <NA>
 27   N27   27       26     0.01500  internal <NA>
 
-phyl4d> (exGeo8 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE, match.data=FALSE))
+phyl4d> (exGeo8 <- phylo4d(trGeo, tip.data=tDt, match.data=FALSE))
    label node ancestor edge.length node.type    x
 1      2    1       24     0.05500       tip    a
 2     12    2       24     0.05500       tip    b
