@@ -114,29 +114,33 @@ setMethod("phylo4", "matrix",
     edge <- as.matrix(edge[, 1:2])
     colnames(edge) <- c("ancestor", "descendant")
 
-    ## number of tips and number of nodes
-    ntips  <- sum(tabulate(na.omit(edge[, 1])) == 0)
-    # all the internal nodes except the root are the ancestor of an edge
-    nnodes <- sum(unique(c(edge)) != 0) - ntips
-    ## nnodes <- length(unique(na.omit(c(edge)))) - ntips
+    ## create new phylo4 object and insert edge matrix
+    res <- new("phylo4")
+    res@edge <- edge
 
-    ## edge.length
+    ## get number of tips and number of nodes
+    ## (these accessors work fine now that edge matrix exists)
+    ntips <- nTips(res)
+    nnodes <- nNodes(res)
+
+    ## edge.length (drop elements if all are NA)
     edge.length <- .createEdge(value=edge.length, edgeMat=edge, type="lengths", use.names=FALSE)
+    if (all(is.na(edge.length))) edge.length <- numeric()
 
-    ## edge.label
+    ## edge.label (drop NA elements)
     edge.label <- .createEdge(value=edge.label, edgeMat=edge, type="labels", use.names=FALSE)
+    edge.label <- edge.label[!is.na(edge.label)]
 
-    ## tip.label
+    ## tip.label (leave NA elements; let checkTree complain about it)
     tip.label <- .createLabels(value=tip.label, ntips=ntips, nnodes=nnodes,
                                type="tip")
 
-    ## node.label
+    ## node.label (drop NA elements)
     node.label <- .createLabels(node.label, ntips=ntips, nnodes=nnodes,
                                 type="internal")
+    node.label <- node.label[!is.na(node.label)]
 
-    ## fill in the result
-    res <- new("phylo4")
-    res@edge <- edge
+    ## populate the slots
     res@edge.length <- edge.length
     res@label <- c(tip.label, node.label)
     res@edge.label <- edge.label

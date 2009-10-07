@@ -43,10 +43,8 @@ Warning messages:
 > OKvals <- sapply(p1,class)!="try-error"
 > table(sapply(p1[!OKvals],as.character))
 
-   Error in .local(x, ...) : tips and nodes incorrectly numbered\n 
-                                                                 9 
-Error in vector("character", length) : invalid 'length' argument\n 
-                                                                 1 
+Error in .local(x, ...) : tips and nodes incorrectly numbered\n 
+                                                             10 
 > 
 > if (any(OKvals)) {
 +     p2 <- p1[OKvals]
