@@ -105,9 +105,14 @@ setMethod("phylo4d", "phylo4",
 ## first arg is a matrix of edges
 setMethod("phylo4d", c("matrix"),
           function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
-                   metadata = list(), ...) {
-    tree <- phylo4(x, ...)
-    res <- phylo4d(tree, tip.data, node.data, all.data, metadata, ...)
+                   merge.data=TRUE, metadata=list(), edge.length=NULL,
+                   tip.label=NULL, node.label=NULL, edge.label=NULL,
+                   order="unknown", annote=list(), ...) {
+    tree <- phylo4(x, edge.length=edge.length, tip.label=tip.label,
+        node.label=node.label, edge.label=edge.label, order=order,
+        annote=annote)
+    res <- phylo4d(tree, tip.data, node.data, all.data,
+        merge.data=merge.data, metadata=metadata, ...)
     return(res)
 })
 

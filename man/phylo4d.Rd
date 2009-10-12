@@ -29,29 +29,40 @@
      \S4method{phylo4d}{phylo4}(x, tip.data = NULL, node.data = NULL,
         all.data = NULL, merge.data = TRUE, metadata = list(), ...)
      \S4method{phylo4d}{matrix}(x, tip.data = NULL, node.data = NULL,
-        all.data = NULL, metadata = list(), ...)
+        all.data = NULL, merge.data = TRUE, metadata = list(),
+        edge.length = NULL, tip.label = NULL, node.label = NULL,
+        edge.label = NULL, order = "unknown", annote=list(), ...)
 }
 
 \arguments{
   \item{x}{an object of class \code{phylo4}, \code{phylo} or a matrix of
     edges (see above)}
   \item{tip.data}{a data frame (or object to be coerced to one)
-    containing only tip data}
+    containing only tip data (Optional)}
   \item{node.data}{a data frame (or object to be coerced to one)
-    containing only node data}
+    containing only node data (Optional)}
   \item{all.data}{a data frame (or object to be coerced to one)
-    containing both tip and node data}
+    containing both tip and node data (Optional)}
   \item{merge.data}{if both \code{tip.data} and \code{node.data} are
     provided, should columns with common names will be merged together
     (default TRUE) or not (FALSE)? See details.}
+  \item{metadata}{any additional metadata to be passed to the new object}
+  \item{edge.length}{Edge (branch) length. (Optional)}
+  \item{tip.label}{A character vector of species names (names of "tip"
+       nodes). (Optional)} 
+  \item{node.label}{A character vector of internal node names. (Optional)}
+  \item{edge.label}{A character vector of edge (branch) names. (Optional)}
+  \item{order}{character: tree ordering (allowable values are
+      listed in \code{phylo4_orderings}, currently "unknown", "preorder"
+      (="cladewise" in \code{ape}), and "postorder", with "cladewise"
+      and "pruningwise" also allowed for compatibility with \code{ape})}
+  \item{annote}{any additional annotation data to be passed to the new object}
   \item{check.node.labels}{if \code{x} is of class \code{phylo}, use
     either \dQuote{keep} (the default) to retain internal node labels,
     \dQuote{drop} to drop them, or \dQuote{asdata} to convert them to
     numeric tree data. This argument is useful if the \code{phylo}
     object has non-unique node labels or node labels with informative
     data (e.g., posterior probabilities).}
-  \item{annote}{any additional annotation data to be passed to the new object}
-  \item{metadata}{any additional metadata to be passed to the new object}
   \item{\dots}{further arguments to be passed to
     \code{\link{formatData}}. Notably, these additional arguments
     control the behavior of the constructor in the case of missing/extra
