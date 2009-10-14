@@ -7,7 +7,7 @@
 ## x = n-nTips(phy)
 ## so:     n = x+nTips(phy)
 
-getNode <- function(phy, node, type=c("all", "tip", "internal"),
+getNode <- function(x, node, type=c("all", "tip", "internal"),
     missing=c("warn","OK","fail")) {
 
     type <- match.arg(type)
@@ -15,27 +15,27 @@ getNode <- function(phy, node, type=c("all", "tip", "internal"),
 
     ## if missing node arg, get all nodes of specified type
     if (missing(node)) {
-        node <- nodeId(phy, type)
+        node <- nodeId(x, type)
     }
 
     ## match node to tree
     if (is.character(node)) {
-        irval <- match(node, labels(phy, type))
+        irval <- match(node, labels(x, type))
     } else if (is.numeric(node) && all(floor(node) == node, na.rm=TRUE)) {
-        irval <- match(as.character(node), names(labels(phy, type)))
+        irval <- match(as.character(node), names(labels(x, type)))
     } else {
         stop("Node must be a vector of class \'integer\' or \'character\'.")
     }
 
     ## node numbers
-    rval <- names(labels(phy, type))[irval]
+    rval <- names(labels(x, type))[irval]
 
     rval[node == 0]   <- NA # root ancestor gets special treatment
     rval[is.na(node)] <- NA # return NA for any NA_character_ inputs
     rval <- as.integer(rval)
 
     ## node labels
-    nmNd <- labels(phy, type)[irval]
+    nmNd <- labels(x, type)[irval]
 
     names(rval) <- nmNd
     names(rval)[rval == 0] <- "0" # root ancestor gets special treatment
@@ -162,7 +162,7 @@ MRCA <- function(phy, ...) {
     }
 
     ## Correct behavior when the root is part of the nodes
-    testNodes <- lapply(nodes, getNode, phy=phy)
+    testNodes <- lapply(nodes, getNode, x=phy)
     ## BMB: why lapply, not sapply?
     lNodes <- unlist(testNodes)
     if (any(is.na(lNodes)))
@@ -229,35 +229,35 @@ shortestPath <- function(phy, node1, node2){
 ###########
 # getEdge
 ###########
-getEdge <- function(phy, node, type=c("descendant", "ancestor"),
+getEdge <- function(x, node, type=c("descendant", "ancestor"),
     missing=c("warn", "OK", "fail")) {
 
-    if(!identical(class(phy), "phylo4")) phy <- as(phy, "phylo4")
+    if(!identical(class(x), "phylo4")) x <- as(x, "phylo4")
 
     type <- match.arg(type)
     missing <- match.arg(missing)
     if (missing(node)) {
         if (type=="descendant") {
-            node <- nodeId(phy, "all")
+            node <- nodeId(x, "all")
         } else if (type=="ancestor") {
-            node <- nodeId(phy, "internal")
+            node <- nodeId(x, "internal")
         }
     }
 
-    node.id <- getNode(phy, node, missing="OK")
+    node.id <- getNode(x, node, missing="OK")
 
-    nd <- lapply(node.id, function(x) {
-        if (is.na(x)) {
+    nd <- lapply(node.id, function(nid) {
+        if (is.na(nid)) {
             res <- NA
         } else {
             res <- switch(type,
-                descendant = edgeId(phy)[edges(phy)[,2] %in% x],
-                ancestor = edgeId(phy)[edges(phy)[,1] %in% x])
+                descendant = edgeId(x)[edges(x)[,2] %in% nid],
+                ancestor = edgeId(x)[edges(x)[,1] %in% nid])
             ## hack to return NA for tip nodes when type='ancestor'
             if(length(res)==0) res <- NA
-            names(res) <- rep(x, length(res))
+            names(res) <- rep(nid, length(res))
         }   
-        names(res) <- rep(x, length(res))
+        names(res) <- rep(nid, length(res))
         res
     })
 

@@ -5,22 +5,15 @@
 \alias{ancestors}
 \alias{siblings}
 \alias{MRCA}
-\alias{getNode}
-\alias{getEdge}
 \alias{shortestPath}
 \alias{sumEdgeLength}
 \alias{sumEdgeLength,phylo4-method}
-\alias{nodeId}
-\alias{nodeId,phylo4-method}
-\alias{edgeId}
-\alias{edgeId,phylo4-method}
 \title{tree traversal and utility functions}
 \description{
   Functions for describing relationships among
   phylogenetic nodes (i.e. internal nodes or tips).
 }
 \usage{
-getNode(phy,node,type=c("all","tip","internal"),missing=c("warn","OK","fail"))
 ancestors(phy, node, type=c("all","parent","ALL"))
 ancestor(phy, node)
 siblings(phy,node,include.self=FALSE)
@@ -49,16 +42,8 @@ shortestPath(phy, node1, node2)
     or a vector of node numbers or names}
   \item{node1}{a node number (or name)}
   \item{node2}{a node number (or name)}
-  \item{missing}{what to do if some requested node IDs or names are not
-    in the tree: warn, do nothing, or stop with an error}
 }
 \value{
-  \item{\code{getNode}}{
-    takes character strings corresponding to tip or node labels, or node numbers; it returns a named
-    vector of node numbers}
-  \item{\code{getEdge}}{
-    takes character strings naming terminal node of edges, or the corresponding node numbers; it 
-    returns a named vector of edge numbers}
   \item{\code{ancestors} and \code{descendants}}{
     return named vectors of the ancestors and descendants of a node; \code{ancestor} is a synonym 
     for \code{ancestors(\dots, type="parent")} (i.e. direct ancestor only), while \code{children} 
@@ -81,8 +66,6 @@ shortestPath(phy, node1, node2)
   data(geospiza)
   nodeLabels(geospiza) <- LETTERS[1:nNodes(geospiza)]
   plot(as(geospiza,"phylo4"), show.node.label=TRUE)
-  getNode(geospiza,18)
-  getNode(geospiza,"D")
   ancestor(geospiza,"E")
   children(geospiza,"C")
   descendants(geospiza,"D",type="tips")
@@ -95,10 +78,6 @@ shortestPath(phy, node1, node2)
   shortestPath(geospiza, "fortis","fuliginosa")
   shortestPath(geospiza, "F","L")
 
-  ## identifying an edge from its terminal node
-  getEdge(geospiza,c("olivacea","B","fortis"))
-  getNode(geospiza, c("olivacea","B","fortis"))
-  geospiza@edge[c(26,1,11),]
   ## FIXME
   ## if(require(ape)){ edgelabels() }
 
