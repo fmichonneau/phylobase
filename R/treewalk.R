@@ -234,10 +234,17 @@ getEdge <- function(phy, node, type=c("descendant", "ancestor"),
 
     if(!identical(class(phy), "phylo4")) phy <- as(phy, "phylo4")
 
-    missing <- match.arg(missing)
-    node.id <- getNode(phy, node, missing="OK")
-
     type <- match.arg(type)
+    missing <- match.arg(missing)
+    if (missing(node)) {
+        if (type=="descendant") {
+            node <- nodeId(phy, "all")
+        } else if (type=="ancestor") {
+            node <- nodeId(phy, "internal")
+        }
+    }
+
+    node.id <- getNode(phy, node, missing="OK")
 
     nd <- lapply(node.id, function(x) {
         if (is.na(x)) {
