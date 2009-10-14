@@ -7,32 +7,35 @@
 ## x = n-nTips(phy)
 ## so:     n = x+nTips(phy)
 
-getNode <- function(phy, node, missing=c("warn","OK","fail")) {
+getNode <- function(phy, node, type=c("all", "tip", "internal"),
+    missing=c("warn","OK","fail")) {
+
+    type <- match.arg(type)
     missing <- match.arg(missing)
-    if (is.numeric(node) && all(floor(node) == node, na.rm=TRUE)) {
-        node <- as.integer(node)
+
+    ## if missing node arg, get all nodes of specified type
+    if (missing(node)) {
+        node <- nodeId(phy, type)
     }
 
+    ## match node to tree
     if (is.character(node)) {
-        irval <- match(node, labels(phy, "all"))
-
-    }
-    else {
-        if (is.integer(node)) {
-            irval <- match(as.character(node), names(labels(phy, "all")))
-        }
-        else stop("Node must be a vector of class \'integer\' or \'character\'.")
+        irval <- match(node, labels(phy, type))
+    } else if (is.numeric(node) && all(floor(node) == node, na.rm=TRUE)) {
+        irval <- match(as.character(node), names(labels(phy, type)))
+    } else {
+        stop("Node must be a vector of class \'integer\' or \'character\'.")
     }
 
     ## node numbers
-    rval <- names(labels(phy, "all"))[irval]
+    rval <- names(labels(phy, type))[irval]
 
     rval[node == 0]   <- NA # root ancestor gets special treatment
     rval[is.na(node)] <- NA # return NA for any NA_character_ inputs
     rval <- as.integer(rval)
 
     ## node labels
-    nmNd <- labels(phy, "all")[irval]
+    nmNd <- labels(phy, type)[irval]
 
     names(rval) <- nmNd
     names(rval)[rval == 0] <- "0" # root ancestor gets special treatment
@@ -40,7 +43,8 @@ getNode <- function(phy, node, missing=c("warn","OK","fail")) {
     ## deal with nodes that don't match
     if (any(is.na(rval))) {
         missnodes <- node[is.na(rval)]
-        msg <- paste("Some nodes are missing from tree: ", paste(missnodes,collapse=", "))
+        msg <- paste("Some nodes not found among", type, "nodes in tree:",
+            paste(missnodes,collapse=", "))
         if (missing=="fail") {
             stop(msg)
         } else if (missing=="warn") {

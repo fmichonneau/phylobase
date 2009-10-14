@@ -20,7 +20,7 @@
   phylogenetic nodes (i.e. internal nodes or tips).
 }
 \usage{
-getNode(phy,node,missing=c("warn","OK","fail"))
+getNode(phy,node,type=c("all","tip","internal"),missing=c("warn","OK","fail"))
 ancestors(phy, node, type=c("all","parent","ALL"))
 ancestor(phy, node)
 siblings(phy,node,include.self=FALSE)
