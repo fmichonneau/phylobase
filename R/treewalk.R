@@ -70,47 +70,55 @@ children <- function(phy,node) {
 }
 
 ## get descendants [recursively]
-descendants <- function (phy, node, type=c("tips","children","all"))
-{
-    ## FIXME: allow vector of nodes? (or just let people lapply?)
+descendants <- function (phy, node, type=c("tips","children","all")) {
     type <- match.arg(type)
-    if (type=="children") {
-        return(children(phy, node))
-    }
-    node <- getNode(phy, node)
-    if (is.na(node)) stop("node ", node, " not found in tree")
-    n <- nTips(phy)
-    if (node <= n) {
-        return(node)
-    }
 
-    ## edge matrix must be in preorder for the C function!
-    if (phy@order=="preorder") {
-        edge <- phy@edge
+    ## look up nodes, warning about and excluding invalid nodes
+    oNode <- node
+    node <- getNode(phy, node, missing="warn")
+    isValid <- !is.na(node)
+    node <- as.integer(node[isValid])
+
+    if (type == "children") {
+        res <- lapply(node, function(x) children(phy, x))
     } else {
-        edge <- reorder(phy, order="preorder")@edge
-    }
-    ## deal with NA root node
-    edge[is.na(edge)] <- 0
-    ## extract edge columns
-    ancestor <- as.integer(edge[, 1])
-    descendant <- as.integer(edge[, 2])
-    ## create indicator vector and seed it based on children
-    isChild <- rep(0L, length=nrow(edge))
-    isChild[ancestor==node] <- 1L
-    numEdges <- as.integer(length(isChild))
+        ## edge matrix must be in preorder for the C function!
+        if (phy@order=="preorder") {
+            edge <- phy@edge
+        } else {
+            edge <- reorder(phy, order="preorder")@edge
+        }
+        ## extract edge columns
+        ancestor <- as.integer(edge[, 1])
+        descendant <- as.integer(edge[, 2])
 
-    ## returned value of isChild will indicate *all* descendants 
-    isDescendant <- .C("descendants", isChild, ancestor, descendant,
-        numEdges)[[1]]
+        ## return indicator matrix of ALL descendants (including self)
+        isDes <- .Call("descendants", node, ancestor, descendant)
+        storage.mode(isDes) <- "logical"
 
-    l <- descendant[as.logical(isDescendant)]
-    if (type=="tips") {
-        l <- l[l<=n]
+        ## for internal nodes only, drop self (not sure why this rule?)
+        int.node <- intersect(node, nodeId(phy, "internal"))
+        isDes[cbind(match(int.node, descendant),
+            match(int.node, node))] <- FALSE
+        ## if only tips desired, drop internal nodes
+        if (type=="tips") {
+            isDes[descendant %in% nodeId(phy, "internal"),] <- FALSE
+        }
+        res <- lapply(seq_along(node), function(n) getNode(phy,
+            descendant[isDes[,n]]))
     }
+    names(res) <- as.character(oNode[isValid])
+
+    ## if just a single node, return as a single vector
+    if (length(res)==1) res <- res[[1]]
+    res
 
     ## Original pure R implementation of the above
     ## (note that it does not require preorder ordering)
+    ##n <- nTips(phy)
+    ##if (node <= n) {
+    ##    return(node)
+    ##}
     ##l <- numeric()
     ##d <- children(phy, node)
     ##for (j in d) {
@@ -120,8 +128,6 @@ descendants <- function (phy, node, type=c("tips","children","all"))
     ##               descendants(phy,j,type="all"))
     ##    else l <- c(l, descendants(phy,j,type=type))
     ##}
-
-    return(getNode(phy, l))
 }
 
 siblings <- function(phy, node, include.self=FALSE) {
@@ -131,26 +137,57 @@ siblings <- function(phy, node, include.self=FALSE) {
 }
 
 ## get ancestors (all nodes)
-ancestors <- function (phy, node, type=c("all","parent","ALL"))
-{
+ancestors <- function (phy, node, type=c("all","parent","ALL")) {
+
     type <- match.arg(type)
-    if (type=="parent") return(ancestor(phy,node))
-    oNode <- node <- getNode(phy,node)
-    if (is.na(node)) stop("node ",node," not found in tree")
-    res <- numeric(0)
-    n <- nTips(phy)
 
-    ## correct behavior when node==root
-    if(node == rootNode(phy)) return(NULL)
+    ## look up nodes, warning about and excluding invalid nodes
+    oNode <- node
+    node <- getNode(phy, node, missing="warn")
+    isValid <- !is.na(node)
+    node <- as.integer(node[isValid])
 
-    repeat {
-        anc <- ancestor(phy,node)
-        res <- c(res,anc)
-        node <- anc
-        if (anc==n+1) break
+    if (type == "parent") {
+        res <- lapply(node, function(x) ancestor(phy, x))
+    } else {
+        ## edge matrix must be in postorder for the C function!
+        if (phy@order=="postorder") {
+            edge <- phy@edge
+        } else {
+            edge <- reorder(phy, order="postorder")@edge
+        }
+        ## extract edge columns
+        ancestor <- as.integer(edge[, 1])
+        descendant <- as.integer(edge[, 2])
+
+        ## return indicator matrix of ALL ancestors (including self)
+        isAnc <- .Call("ancestors", node, ancestor, descendant)
+        storage.mode(isAnc) <- "logical"
+
+        ## drop self if needed
+        if (type=="all") {
+            isAnc[cbind(match(node, descendant), seq_along(node))] <- FALSE
+        }
+        res <- lapply(seq_along(node), function(n) getNode(phy,
+            descendant[isAnc[,n]]))
     }
-    if(type == "ALL") res <- c(oNode, res)
-    return(getNode(phy,res))
+    names(res) <- as.character(oNode[isValid])
+
+    ## if just a single node, return as a single vector
+    if (length(res)==1) res <- res[[1]]
+    res
+
+    ## Original pure R implementation of the above
+    ## (note that it does not require preorder ordering)
+    ##if (node == rootNode(phy))
+    ##    return(NULL)
+    ##repeat {
+    ##    anc <- ancestor(phy, node)
+    ##    res <- c(res, anc)
+    ##    node <- anc
+    ##    if (anc == n + 1)
+    ##        break
+    ##}
 }
 
 MRCA <- function(phy, ...) {
