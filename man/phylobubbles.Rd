@@ -5,7 +5,7 @@
 \description{
 Plots either circles or squares corresponding to the magnitude of each cell of a \code{phylo4d} object.}
 \usage{
-phylobubbles(type, place.tip.label, show.node.label, tip.order, rot, edge.color, node.color, tip.color, edge.width, newpage, ..., XXYY, square = FALSE, grid = TRUE)
+phylobubbles(type, place.tip.label, show.node.label, rot, edge.color, node.color, tip.color, edge.width, newpage, ..., XXYY, square = FALSE, grid = TRUE)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -13,7 +13,6 @@ phylobubbles(type, place.tip.label, show.node.label, tip.order, rot, edge.color,
   \item{type}{the type of plot }
   \item{place.tip.label}{A string indicating whether labels should be plotted to the right or to the left of the bubble plot}
   \item{show.node.label}{A logical indicating whether internal node labels should be plotted }
-  \item{tip.order}{The order of that the tip labels should be plotted in}
   \item{rot}{The number of degrees that the plot should be rotated }
   \item{edge.color}{A vector of colors for the tree edge segments}
   \item{node.color}{A vector of colors for the coloring the nodes}

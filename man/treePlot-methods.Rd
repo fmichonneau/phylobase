@@ -20,7 +20,7 @@
 \usage{
   \S4method{treePlot}{phylo4,phylo4d}(phy, type = c("phylogram", "cladogram", "fan"), show.tip.label = TRUE, 
   show.node.label = FALSE, tip.order = NULL, plot.data = is(phy, "phylo4d"), 
-  rot = 0, tip.plot.fun = "bubbles", plot_by_tip = TRUE, edge.color = "black", 
+  rot = 0, tip.plot.fun = "bubbles", edge.color = "black", 
   node.color = "black", tip.color = "black", edge.width = 1, newpage = TRUE, \dots)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -29,11 +29,10 @@
   \item{type}{ A character string indicating the shape of plotted tree }
   \item{show.tip.label}{ Logical, indicating whether tip labels should be shown }
   \item{show.node.label}{ Logical, indicating whether node labels should be shown }
-  \item{tip.order}{ Unused, a character vector of tip labels, indicating they're order along the y axis }
+  \item{tip.order}{A character vector of tip labels, indicating their order along the y axis (from top to bottom). Or, a numeric vector of tip node IDs indicating the order.}
   \item{plot.data}{ Logical indicating whether \code{phylo4d} data should be plotted }
   \item{rot}{ Numeric indicating the rotation of the plot in degrees }
   \item{tip.plot.fun}{ A function used to generate plot at the each tip of the phylogenetic trees }
-  \item{plot_by_tip}{TODO} % TODO what does the plot_by_tip argument do
   \item{edge.color}{ A vector of colors in the order of \code{edges(phy)} }
   \item{node.color}{ A vector of colors indicating the colors of the node labels }
   \item{tip.color}{ A vector of colors indicating the colors of the tip labels }

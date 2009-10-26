@@ -8,7 +8,7 @@ phyloXXYY(phy, tip.order = NULL)
 }
 \arguments{
   \item{phy}{ A \code{phylo4} or \code{phylo4d} object. }
-  \item{tip.order}{ Unused. A character vector indicating the ordering of tip nodes}
+  \item{tip.order}{A character vector of tip labels, indicating their order along the y axis (from top to bottom). Or, a numeric vector of tip node IDs indicating the order.}
 }
 \details{
 The y coordinates of the tips are evenly spaced from 0 to 1 in pruningwise order.  Ancestor y nodes are given the mean value of immediate descendants.  The root is given the x coordinate 0 and descendant nodes are placed according to the cumulative branch length from the root, with a maximum x value of 1.
@@ -16,9 +16,11 @@ The y coordinates of the tips are evenly spaced from 0 to 1 in pruningwise order
 \value{
   \item{yy}{Internal node and tip y coordinates}
   \item{xx}{Internal node and tip x coordinates}
-  \item{traverse}{The tree traversal order}
   \item{phy}{A \code{phylo4} or \code{phylo4d} object}
-  \item{phy.orig}{The original \code{phylo4} or \code{phylo4d} object}
+  \item{segs}{A list of \code{h0x, h1x, v0x, v1x} and \code{h0y, h1y, v0y, v1y} describing the start and end points for the plot line segments}
+  \item{torder}{The tip order provided as \code{tip.order} or if NULL the preoder tip order}
+  \item{eorder}{The an index of the reordered edges compared to the result of \code{edges(phy)}}
+
 }
 
 \author{Peter Cowan \email{pdc@berkeley.edu}}

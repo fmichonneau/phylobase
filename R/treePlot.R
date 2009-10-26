@@ -35,28 +35,24 @@
     type   <- match.arg(type)
     Nedges <- nEdges(phy)
     Ntips  <- nTips(phy)
-    
     if(!is.null(tip.order)) {
         if(length(tip.order) != Ntips) {stop('tip.order must be the same length as nTips(phy)')}
         if(is.numeric(tip.order)) {
             tip.order <- tip.order
         } else {
             if(is.character(tip.order)) {
-                tip.order <- match(tip.order, tipLabels(phy))
+                tip.order <- as.numeric(names(tipLabels(phy))[match(tip.order, tipLabels(phy))])
             }
         }
     }
-    
+    tip.order <- rev(tip.order)
     ## TODO remove the false cladogram option?
     if(!hasEdgeLength(phy) || type == 'cladogram') {
         edgeLength(phy) <- rep(1, Nedges)
     }
     xxyy   <- phyloXXYY(phy, tip.order)
-    phy    <- xxyy$phy
-    pedges <- edges(phy)
-    tindex <- pedges[pedges[, 2] <= Ntips, 2][tip.order]
     if(type == 'cladogram') {
-        xxyy$xx[pedges[, 2] <= Ntips] <- 1
+        xxyy$xx[edges(xxyy$phy)[, 2] <= Ntips] <- 1
     }
     
     ## plotViewport is a convience function that provides margins in lines
@@ -71,7 +67,6 @@
                 phylobubbles(
                     type = type, 
                     show.node.label = show.node.label, 
-                    tip.order = tip.order, 
                     rot = 0, 
                     edge.color = edge.color, 
                     node.color = node.color, # TODO what do with node.color parameter
@@ -91,7 +86,6 @@
                     type = type, 
                     show.tip.label = show.tip.label, 
                     show.node.label = show.node.label, 
-                    tip.order = tip.order, 
                     rot = 0, 
                     tip.plot.fun = tip.plot.fun, 
                     edge.color = edge.color, 
@@ -118,7 +112,7 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
     Ntips  <- nTips(phy)
     pedges <- edges(phy)
     tindex <- pedges[pedges[, 2] <= Ntips, 2]
-    eindex <- match(pedges[,2], edges(xxyy$phy.orig)[,2])
+    eindex <- xxyy$eorder
     segs   <- xxyy$segs
 
     ## TODO check that colors are valid?
@@ -214,18 +208,16 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
     # grobTree(vseg, hseg, labtext)
 }
 
-phyloXXYY <- function(phy, tip.order = NULL) 
+phyloXXYY <- function(phy, tip.order=NULL) 
 {
     phy.orig <- phy
     ## initalize the output
     phy    <- reorder(phy, 'preorder')
     pedges <- edges(phy)
+    eindex <- match(pedges[,2], edges(phy.orig)[,2])
     Nedges <- nrow(pedges) ## TODO switch to the accessor once stablized
     Ntips  <- nTips(phy)
     tips <- pedges[, 2] <= Ntips
-    if(!is.null(tip.order)) {
-        tip.order <- match(tip.order, pedges[, 2][tips])
-    }
     xx <- numeric(Nedges)
     yy <- numeric(Nedges)
 
@@ -245,48 +237,28 @@ phyloXXYY <- function(phy, tip.order = NULL)
     segsv0x <- as.numeric(rep.int(0, Nedges))
     xPos <- .C("phyloxx", edge1, edge2,
             edgeLen, nedges, xx, segsv0x)
-    ## browser()
     xx <- xPos[[5]]
     segs$v0x <- xPos[[6]]
-    ## test1 <- function() {
-    ##     for (i in edge[, 2]) {
-    ##         dex <- edge[, 1] == i
-    ##         cur <- edge[, 2] == i
-    ##         xx[dex] <- phy@edge.length[dex] + xx[cur]
-    ##         segs$v0x[dex] <- xx[cur]
-    ##     }
-    ##     return(list(segs=segs, xx=xx))
-    ## }
-    ## test1out <- test1()
-    ## segs <- test1out$segs
-    ## xx   <- test1out$xx
 
     ## Set y positions for terminal nodes and calculate remaining y positions
     if(!is.null(tip.order)) {
-        yy[tips][tip.order] <- seq(0, 1, length = Ntips)
+        yy[tips][match(tip.order, edge2[tips])] <- seq(0, 1, length = Ntips)
     } else {
         yy[tips] <- seq(0, 1, length = Ntips)
+        tip.order <- edge2[edge2 <= Ntips]
     }
     segs$h0y[tips] <- segs$h1y[tips] <- yy[tips]
     segs$v1y[tips] <- segs$v0y[tips] <- yy[tips]
-    placeHolder <- function() {
+    phyloyy <- function() {
         for(i in rev((Ntips + 1):nEdges(phy))) {
             dex <- pedges[, 1] == i
             cur <- pedges[, 2] == i
-            yy[cur] <- segs$v0y[dex] <- mean(yy[dex])
-        }
-        return(list(segs=segs, yy=yy))
-    }
-    placeHolder2 <- function() {
-        for(i in rev((Ntips + 1):nEdges(phy))) {
-            cur <- pedges[, 2] == i
-            dex <- pedges[, 1] == i
             yy[cur] <- segs$v0y[dex] <- mean(yy[dex])
         }
         return(list(segs=segs, yy=yy))
     }
 
-    yPos <- placeHolder()
+    yPos <- phyloyy()
     segs <- yPos$segs
     yy   <- yPos$yy
 
@@ -295,7 +267,7 @@ phyloXXYY <- function(phy, tip.order = NULL)
     ## ntips   <- as.integer(nTips(phy))
     ## yy      <- as.numeric(yy)
     ## segsv0y <- as.numeric(yy)
-    ## browser()
+
     ## yPos <- .C("phyloyy", edge1, edge2,
     ##         ntips, nedges, yy, segsv0y)
 
@@ -310,7 +282,7 @@ phyloXXYY <- function(phy, tip.order = NULL)
     segs$v1x <- segs$h0x <- segs$v0x 
     
     # TODO return an index vector instead of a second phy object
-    list(xx = xx, yy = yy, phy = phy, phy.orig = phy.orig, segs = segs)
+    list(xx = xx, yy = yy, phy = phy, segs = segs, torder=tip.order, eorder=eindex)
 }
 
 
@@ -356,7 +328,6 @@ drawDetails.bubLegend <- function(x, ...) {
 phylobubbles <- function(type = type,
                         place.tip.label = "right", 
                         show.node.label = show.node.label, 
-                        tip.order = NULL,
                         rot = 0,
                         edge.color = edge.color, 
                         node.color = node.color, # TODO what do with node.color parameter
@@ -367,20 +338,21 @@ phylobubbles <- function(type = type,
                         XXYY, square = FALSE, grid = TRUE)
 {
     ## TODO add legend command
-    ## tys   -- tip y coordinates
-    ## nVars -- number of traits/characters
-    ## maxr  -- maximum circle radius, based on nVars or nTips
+    ## tys    -- tip y coordinates
+    ## nVars  -- number of traits/characters
+    ## maxr   -- maximum circle radius, based on nVars or nTips
+    ## torder -- the order of tips in the reordered edge matrix
     if(rot != 0) {stop("Rotation of bubble plots not yet implemented")}
     lab.right <- ifelse(place.tip.label %in% c("right", "both"), TRUE, FALSE)
     lab.left  <- ifelse(place.tip.label %in% c("left", "both"), TRUE, FALSE)
 
-
-    phy     <- XXYY$phy
-    tmin    <- min(tdata(phy, type = 'tip'), na.rm = TRUE)
-    tmax    <- max(tdata(phy, type = 'tip'), na.rm = TRUE)
-    tipdata <- tdata(phy, type = "tip")[nodeId(phy,"tip"),,drop=FALSE]
-    nVars   <- ncol(tipdata) # number of bubble columns
-    pedges  <- edges(phy)
+    phy       <- XXYY$phy
+    tmin      <- min(tdata(phy, type = 'tip'), na.rm = TRUE)
+    tmax      <- max(tdata(phy, type = 'tip'), na.rm = TRUE)
+    pedges    <- edges(phy)
+    tip.order <- XXYY$torder
+    tipdata   <- tdata(phy, type = "tip")[tip.order,,drop=FALSE]
+    nVars     <- ncol(tipdata) # number of bubble columns
 
     dlabwdth <- max(stringWidth(colnames(tipdata))) * 1.2
     if(convertWidth(dlabwdth, 'cm', valueOnly=TRUE) < 2) {dlabwdth <- unit(2, 'cm')}
@@ -395,7 +367,8 @@ phylobubbles <- function(type = type,
 
     # tip y coordinates
     tys <- XXYY$yy[pedges[, 2] <= nTips(phy)]
-    
+    tys <- tys[match(names(tipLabels(phy))[tip.order], XXYY$torder)]
+
     maxr <- ifelse(ncol(tipdata) > nTips(phy), 1 / ncol(tipdata), 1 / nTips(phy))
     tipdataS <- apply(tipdata, 2, 
                     function(x) (maxr * x) / max(abs(x), na.rm = TRUE))
@@ -409,6 +382,7 @@ phylobubbles <- function(type = type,
     xrep <- rep(xpos, each = length(tys))
     yrep <- rep(tys, nVars)
     ## color bubbles 
+
     ccol <- ifelse(tipdata < 0, 'black', 'white')
     
     ## generate matrices of every x and y by filling the repd value columnwise
@@ -475,7 +449,7 @@ phylobubbles <- function(type = type,
             layout.pos.col = 2, 
             layout.pos.row = 1
         ))
-        tt <- tipLabels(phy) # phy@tip.label 
+        tt <- tipLabels(phy)[tip.order] # phy@tip.label 
         grid.text(tt, 0.1, tys, just = 'left')
         upViewport()
     }
@@ -521,7 +495,6 @@ tip.data.plot <- function(
                      type = c('phylogram', 'cladogram', 'fan'), 
                      show.tip.label = TRUE,
                      show.node.label = FALSE, 
-                     tip.order = NULL,
                      rot = 0, 
                      tip.plot.fun = grid.points, 
                      edge.color = 'black', 
@@ -531,6 +504,7 @@ tip.data.plot <- function(
                      ...)    
 {
     phy    <- xxyy$phy
+    tip.order <- xxyy$torder
     pedges <- edges(phy)
     Ntips  <- nTips(phy)
     datalayout <- grid.layout(ncol = 2, width = unit(c(1, 1/Ntips), c('null', 'null')))
