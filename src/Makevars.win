@@ -1,0 +1,2 @@
+PKG_LIBS = -s -L RcppSrc -lRcpp -L"$(RHOME)/bin" -lR -L ncl/ncl -lncl --no-export-all-symbols --add-stdcall-alias
+PKG_CXXFLAGS = -I RcppSrc -I ncl/ncl -DBUILDING_DLL=1
