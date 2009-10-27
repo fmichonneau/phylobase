@@ -379,7 +379,7 @@ The basic criteria for the edge matrix are taken from \code{ape}, as documented 
 
 \begin{itemize}
 \item Tips (no descendants) are coded $1,\ldots, n$,
-  and internal nodes ($\ge 1 descendant$)
+  and internal nodes ($\ge 1$ descendant)
   are coded $n + 1, \ldots , n + m$
   ($n + 1$ is the root).
   Both series are numbered with no gaps.
