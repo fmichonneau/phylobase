@@ -57,6 +57,62 @@ If you are interested in building \pb from source, you will need the same tools 
 
 We try to follow the coding standards of Bioconductor.\footnote{\url{http://wiki.fhcrc.org/bioc/Coding_Standards}}  Namely, variables and particularily function exposed to users should be in \code{camelCase}.  As of this writing many non-exported functions are prefixed with `.' however, future private functions should be named without this convention.  Indentation should be 4 spaces and tabs should be avoided.  We also use \code{<-} for assignment, and place spaces after commas, in indexes and function calls (e.g. \code{df[2, 2]} and \code{seq(1, 2, 0.1)}, not \code{df[2,2]} or \code{seq(1,2,0.1}.)
 
+\section{Release procedure}
+
+When the package code has stabilized or significant bugs have been fixed we want to push those changes out to CRAN.  This section documents the release sequence used for when submitting the package to CRAN.
+
+\begin{enumerate}
+    \item Update the NEWS file which resides in the pkg/ directory and describes  changes in the package since its last release.  New changes should be appended above the earlier entries and formatted so that it can be read by \code{news(package="phylobase")}, (format documented in \code{?news}).  Briefly, the version header should look like a previous entry and changes should be grouped in categories which start at the beginning of a line.  Within each category individual changes should be marked with an indented (4 spaces) asterisk, with the change text indented and wrapped a further four space, eight total.  The most comprehensive way to find the changes since the last version is to look at the SVN log.  This procedure was followed for the the 0.5 release and assumes that you have the entire project checked out, including the www and tags directories.
+
+Navigate to the tag for the previous release and get the revision it was created:
+\begin{verbatim}
+~$ cd phylobase/tags/phylobase-0.4
+~$ svn log --stop-on-copy
+------------------------------------------------------------------------
+r309 | skembel | 2008-12-18 12:55:14 -0800 (Thu, 18 Dec 2008) | 1 line
+
+Tagging current version as 0.4 prior to hackathon changes
+------------------------------------------------------------------------
+\end{verbatim}
+
+In this case we can see that the tag was created in revision 309 and as this was the current release, we want all the changes that have been made since.  To do that we navigate to the top level to get the change log from any branches that have been made and save the log.  If there are unmerged branches, care should be taken to exclude those changes from the NEWS file.  Because this file may be rather large we'll output it to a file.
+
+\begin{verbatim}
+~$ cd ../..
+~$ svn log -r309:HEAD > RecentChanges.txt
+\end{verbatim}
+
+The NEWS file can then be updated by going through the RecentChanges.txt file and picking out significant changes.
+
+    \item The DESCRIPTION file should be updated to reflect the new version number and current date. Version numbers should follow the 0.5.0 format (no dashes), and the date should be formatted as 2009-01-30.
+    \item Rebuild the vignettes to incorporate the latest changes.  CRAN may not have all the package we use to build our vignettes or able to run latex the multiple time necessary to generate the PDFs.
+
+\begin{verbatim}
+~$ cd phylobase/pkg/inst/doc
+~$ R CMD Sweave phylobase.Rnw
+~$ pdflatex phylobase.tex
+~$ pdflatex phylobase.tex
+
+~$ R CMD Sweave developer.Rnw
+~$ pdflatex developer.tex
+~$ pdflatex developer.tex
+
+~$ rm rm *.toc *.out *.log *.aux
+\end{verbatim}
+
+    \item Code freeze.  Before the package can be submitted to CRAN it must pass the R-Forge build and check process which happens every night.  The easiest way to handle this is to freeze the the code for a day or two after the NEWS, DESCRIPTION and PDF files have been updated.
+    \item Tag the release in SVN.  Each release is tagged so that a copy of it is easily available if needed at a later date.  This is done using the SVN copy as follows for a hypothetical 0.5.1 release:
+
+\begin{verbatim}
+~$ cd phylobase/
+~$ svn copy pkg/ tags/phylobase-0.5.1
+~$ svn commit -m "tagging version 0.5.1"
+\end{verbatim}
+
+    \item Uploading to CRAN is done by clicking the Upload to CRAN link on the R-Forge package page.  Ensure that the revision number corresponds to the revision with the updated NEWS etc. files.
+    \item Update the R-Forge website with the correct version number and PDFs of the vignettes.
+\end{enumerate}
+
 \section{Unit testing with RUnit}
 
 We are in the process of moving our testing infrastructure to the \code{RUnit}\footnote{\url{http://cran.r-project.org/web/packages/RUnit/index.html}} framework.  New contributions and bug fixes should be accompanied by unit tests which test the basic functionality of the code as well as edge cases (e.g what happens when the function is passed an empty string or negative number -- even when those inputs don't make sense.)  Unit tests are stored in the \code{inst/unitTests/} directory and are named according to the source file they correspond to.  See the included tests and the \code{RUnit} documentation for further details. \code{RUnit} has a few advantages over the other testing frameworks in \code{R}, namely the examples in documentation, vignettes,  
