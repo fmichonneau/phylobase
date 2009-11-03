@@ -85,15 +85,17 @@ In this case we can see that the tag was created in revision 309 and as this was
 The NEWS file can then be updated by going through the RecentChanges.txt file and picking out significant changes.
 
     \item The DESCRIPTION file should be updated to reflect the new version number and current date. Version numbers should follow the 0.5.0 format (no dashes), and the date should be formatted as 2009-01-30.
-    \item Rebuild the vignettes to incorporate the latest changes.  CRAN may not have all the package we use to build our vignettes or able to run latex the multiple time necessary to generate the PDFs.
+    \item Rebuild the vignettes to incorporate the latest changes.  CRAN may not have all the package we use to build our vignettes or able to run latex the multiple time necessary to generate the PDFs with the proper cross references and table of contents.
 
 \begin{verbatim}
 ~$ cd phylobase/pkg/inst/doc
 ~$ R CMD Sweave phylobase.Rnw
 ~$ pdflatex phylobase.tex
 ~$ pdflatex phylobase.tex
+~$ pdflatex phylobase.tex
 
 ~$ R CMD Sweave developer.Rnw
+~$ pdflatex developer.tex
 ~$ pdflatex developer.tex
 ~$ pdflatex developer.tex
 
