@@ -218,6 +218,7 @@ RcppExport SEXP ReadCharsWithNCL(SEXP params) {
 /*
  * Sample function illustrates how to use the Rcpp R/C++ interface library.
  */
+/*
 RcppExport SEXP Rcpp_Example(SEXP params, SEXP nlist, 
 			     SEXP numvec, SEXP nummat,
 			     SEXP df, SEXP datevec, SEXP stringvec,
@@ -226,7 +227,7 @@ RcppExport SEXP Rcpp_Example(SEXP params, SEXP nlist,
     SEXP  rl=R_NilValue; // Use this when there is nothing to be returned.
     char* exceptionMesg=NULL;
 }
-
+*/
 
 
 /*
