@@ -97,7 +97,7 @@ The NEWS file can then be updated by going through the RecentChanges.txt file an
 ~$ pdflatex developer.tex
 ~$ pdflatex developer.tex
 
-~$ rm rm *.toc *.out *.log *.aux
+~$ rm rm *.toc *.out *.log *.aux *.tex
 \end{verbatim}
 
     \item Code freeze.  Before the package can be submitted to CRAN it must pass the R-Forge build and check process which happens every night.  The easiest way to handle this is to freeze the the code for a day or two after the NEWS, DESCRIPTION and PDF files have been updated.
