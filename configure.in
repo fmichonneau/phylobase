@@ -18,14 +18,39 @@ AC_LANG(C++) dnl using C++
 
 AC_REQUIRE_CPP
 
-dnl configure include/load flags and copy sample source to inst/doc
-AC_SUBST([CPPFLAGS],["${CPPFLAGS} -IRcppSrc -Incl/ncl"])
-AC_SUBST([LDFLAGS],["${LDFLAGS} -LRcppSrc -lRcpp -Lncl/ncl/.libs -lncl"])
+AC_DEFUN([AC_PROG_R], [AC_CHECK_PROG(R,R,yes)])
+AC_PROG_R
 
-echo "Building libRcpp.a in RcppSrc..."
-cd src/RcppSrc
-make RHOME=${R_HOME}
-cd ../..
+## With thanks to Kurt
+: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
+    AC_MSG_ERROR([Could not determine R_HOME.])
+fi
+## look for Rscript, but use the one found via R_HOME 
+## to allow for multiple installations as on CRAN
+AC_DEFUN([AC_PROG_RSCRIPT], [AC_CHECK_PROG(RSCRIPT,Rscript,yes)])
+AC_PROG_RSCRIPT
+if test x"${RSCRIPT}" == x"yes" ; then
+    ## Rcpp compile flag providing header directory containing Rcpp.h
+    rcpp_cxxflags=`${R_HOME}/bin/Rscript -e 'Rcpp:::CxxFlags()'`
+    ## link flag providing libary as well as path to library, and optionally rpath
+    rcpp_ldflags=`${R_HOME}/bin/Rscript -e 'Rcpp:::LdFlags()'`
+else
+    echo "
+  Your installation does not appear to have Rscript installed.
+  Please make sure that you have a working and complete R installation.
+"
+    exit 1
+fi
+
+dnl configure include/load flags and copy sample source to inst/doc
+AC_SUBST([CPPFLAGS],["${CPPFLAGS} ${rcpp_cxxflags} -Incl/ncl"])
+AC_SUBST([LDFLAGS],["${LDFLAGS} ${rcpp_ldflags} -Lncl/ncl/.libs -lncl"])
+
+#echo "Building libRcpp.a in RcppSrc..."
+#cd src/RcppSrc
+#make RHOME=${R_HOME}
+#cd ../..
 
 echo "Building libncl.a in ncl..."
 cd src/ncl

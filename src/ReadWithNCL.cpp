@@ -24,10 +24,14 @@
 
 #include <fstream>
 
-#include "Rcpp.hpp"
+#include <Rcpp.h>
 
 //TODO - figure out where/why length is getting defined as Rf_length so that
 //this isn't necessary to compile
+// DE: This comes from Rinternals.h via the R_NO_REMAP used in Rcpp.h -- I have
+//     found that some libraries fail to build when R defines length, error, ... 
+//     so I prefer to use the safer and explicit Rf_ prefixes as eg Rf_error
+//     used here three times
 #define  Rf_length length
 
 #include "ncl.h"
@@ -108,7 +112,7 @@ RcppExport SEXP ReadWithNCL(SEXP params) {
     	}
     
     if(exceptionMesg != NULL)
-	error(exceptionMesg);
+	Rf_error(exceptionMesg);
 
     return rl;
 
@@ -156,7 +160,7 @@ RcppExport SEXP ReadTreesWithNCL(SEXP params) {
 	}
     
     if(exceptionMesg != NULL)
-		error(exceptionMesg);
+		Rf_error(exceptionMesg);
 	
     return rl;
 	
@@ -208,7 +212,7 @@ RcppExport SEXP ReadCharsWithNCL(SEXP params) {
 	}
     
     if(exceptionMesg != NULL)
-		error(exceptionMesg);
+		Rf_error(exceptionMesg);
 	
     return rl;
 	
