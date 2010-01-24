@@ -2494,9 +2494,9 @@ else
     exit 1
 fi
 
-CPPFLAGS="${CPPFLAGS} ${rcpp_cxxflags} -Incl/ncl"
+CPPFLAGS="${CPPFLAGS} ${rcpp_cxxflags} -Iinclude/ncl"
 
-LDFLAGS="${LDFLAGS} ${rcpp_ldflags} -Lncl/ncl/.libs -lncl"
+LDFLAGS="${LDFLAGS} ${rcpp_ldflags} -Llib/ncl -lncl"
 
 
 #echo "Building libRcpp.a in RcppSrc..."
@@ -2504,11 +2504,16 @@ LDFLAGS="${LDFLAGS} ${rcpp_ldflags} -Lncl/ncl/.libs -lncl"
 #make RHOME=${R_HOME}
 #cd ../..
 
-echo "Building libncl.a in ncl..."
+{ $as_echo "$as_me:${as_lineno-$LINENO}: starting to build libncl.a in ncl" >&5
+$as_echo "$as_me: starting to build libncl.a in ncl" >&6;}
 cd src/ncl
-./configure
+./configure --quiet --enable-static --disable-shared --prefix=`pwd`/..
 make
+make install
 cd ../..
+#ls -ltr src/
+{ $as_echo "$as_me:${as_lineno-$LINENO}: finished building libncl.a in ncl" >&5
+$as_echo "$as_me: finished building libncl.a in ncl" >&6;}
 
 if test \! -d inst
 then

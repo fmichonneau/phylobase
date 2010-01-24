@@ -1,11 +1,11 @@
-AC_PREREQ(2.50) dnl require version 2.5+ of autoconf
+AC_PREREQ(2.50) 		## require version 2.5+ of autoconf
 
-AC_INIT([phylobase], 0.2) dnl package name, version
+AC_INIT([phylobase], 0.5) 	## package name, version
 
-dnl the CC and CFLAGS variables control configure tests, and they need to
-dnl be the same as what will be used when the package is built. There is
-dnl no need to place these flags in Makevars, and if no configure tests are
-dnl done they are not needed here (see "Writing R Extensions" manual).
+## the CC and CFLAGS variables control configure tests, and they need to
+## be the same as what will be used when the package is built. There is
+## no need to place these flags in Makevars, and if no configure tests are
+## done they are not needed here (see "Writing R Extensions" manual).
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
     echo "Could not determine R home directory"
@@ -14,14 +14,15 @@ fi
 CXX=`"${R_HOME}/bin/R" CMD config CXX`
 CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXXFLAGS`
 
-AC_LANG(C++) dnl using C++
+AC_LANG(C++) ## using C++
 
 AC_REQUIRE_CPP
 
 AC_DEFUN([AC_PROG_R], [AC_CHECK_PROG(R,R,yes)])
 AC_PROG_R
 
-## With thanks to Kurt
+## Make sure we find R_HOME as several R instances could be installed 
+## on the same machine -- with thanks to Kurt Hornik for the hint
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
     AC_MSG_ERROR([Could not determine R_HOME.])
@@ -43,20 +44,17 @@ else
     exit 1
 fi
 
-dnl configure include/load flags and copy sample source to inst/doc
-AC_SUBST([CPPFLAGS],["${CPPFLAGS} ${rcpp_cxxflags} -Incl/ncl"])
-AC_SUBST([LDFLAGS],["${LDFLAGS} ${rcpp_ldflags} -Lncl/ncl/.libs -lncl"])
+## configure include/load flags and copy sample source to inst/doc
+AC_SUBST([CPPFLAGS],["${CPPFLAGS} ${rcpp_cxxflags} -Iinclude/ncl"])
+AC_SUBST([LDFLAGS],["${LDFLAGS} ${rcpp_ldflags} -Llib/ncl -lncl"])
 
-#echo "Building libRcpp.a in RcppSrc..."
-#cd src/RcppSrc
-#make RHOME=${R_HOME}
-#cd ../..
-
-echo "Building libncl.a in ncl..."
+AC_MSG_NOTICE([starting to build libncl.a in ncl])
 cd src/ncl
-./configure
+./configure --quiet --enable-static --disable-shared --prefix=`pwd`/..
 make
+make install
 cd ../..
+AC_MSG_NOTICE([finished building libncl.a in ncl])
 
 if test \! -d inst
 then
