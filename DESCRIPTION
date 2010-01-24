@@ -3,7 +3,7 @@ Type: Package
 Title: Base package for phylogenetic structures and comparative data
 Version: 0.5
 Date: 2009-10-30
-Depends: methods, grid, ape(>= 2.1), Rcpp (>= 0.6.8)
+Depends: methods, grid, ape(>= 2.1), Rcpp (>= 0.7.3)
 Suggests: ade4, MASS
 Author: R Hackathon et al. (alphabetically: Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vienne, Thibaut Jombart, Steve Kembel, Francois Michonneau, David Orme, Brian O'Meara, Emmanuel Paradis, Jim Regetz, Derrick Zwickl)
 Maintainer:  Ben Bolker <bolker@ufl.edu>
