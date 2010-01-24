@@ -80,7 +80,7 @@ void phyloxx(int *edge1, int *edge2, double *edgeLengths,
     int j;
     int i;
     int k;
-    int cur;
+    int cur=0;
     for (i=0; i <*numEdges; i++) {
         for (k=0; k<*numEdges; k++) {
             if(edge2[i] == edge2[k]) {

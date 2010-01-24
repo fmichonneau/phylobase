@@ -343,7 +343,7 @@ void BASICCMDLINE::RReturnCharacters(NxsString & nexuscharacters, bool allchar, 
 						}
 						else {
 							nexuscharacters+='{';
-							for (int k=0;k<characters->GetNumStates(taxon,character);k++) {
+							for (unsigned int k=0;k<characters->GetNumStates(taxon,character);k++) {
 								nexuscharacters+=characters->GetInternalRepresentation(taxon,character,0);
 								if (k+1<characters->GetNumStates(taxon,character)) {
 									nexuscharacters+=',';
@@ -362,7 +362,7 @@ void BASICCMDLINE::RReturnCharacters(NxsString & nexuscharacters, bool allchar, 
 				nexuscharacters+=')';
 				if (levelsall) {
 					nexuscharacters+=", levels=c(";
-					for (int l=0;l<characters->GetMaxObsNumStates(); l++) {
+					for (unsigned int l=0;l<characters->GetMaxObsNumStates(); l++) {
 						nexuscharacters+=l;
 						if (l+1<characters->GetMaxObsNumStates()) {
 							nexuscharacters+=',';
@@ -374,8 +374,8 @@ void BASICCMDLINE::RReturnCharacters(NxsString & nexuscharacters, bool allchar, 
 					
 					NxsString levels=", levels=c(";
 					NxsString labels=", labels=c(";
-					int totallabellength=0;
-					for (int l=0;l<characters->GetObsNumStates(character); l++) {
+					unsigned int totallabellength=0;
+					for (unsigned int l=0;l<characters->GetObsNumStates(character); l++) {
 						labels+='"';
 						labels+= characters->GetStateLabel(character,l);
 						totallabellength+=(characters->GetStateLabel(character,l)).length();
@@ -676,7 +676,7 @@ void BASICCMDLINE::RReturnTrees(NxsString & nexustrees) {
 			data->Report(logf);
 	}
 	*/
-	int ntax = taxa->GetNumTaxonLabels(); 
+        // int ntax = taxa->GetNumTaxonLabels(); 
 
 	if (!trees->IsEmpty())
 	{
@@ -761,7 +761,7 @@ void BASICCMDLINE::RReturnDistances(NxsString  & nexusdistances) {
 				distancevector.push_back(distances->GetDistance(row,col));
 			}
 		}
-		for (int i=0;i<distancevector.size();i++) {
+		for (unsigned int i=0;i<distancevector.size();i++) {
 			nexusdistances+=distancevector.at(i);
 			if (i+1<distancevector.size()) {
 				nexusdistances+=',';
@@ -850,7 +850,7 @@ NxsString BASICCMDLINE::ReturnDataForR(bool allchar, bool polymorphictomissing, 
 					}
 					else {
 						outputforR+='{';
-						for (int k=0;k<characters->GetNumStates(taxon,character);k++) {
+						for (unsigned int k=0;k<characters->GetNumStates(taxon,character);k++) {
 							outputforR+=characters->GetInternalRepresentation(taxon,character,0);
 							if (k+1<characters->GetNumStates(taxon,character)) {
 								outputforR+=',';
@@ -869,7 +869,7 @@ NxsString BASICCMDLINE::ReturnDataForR(bool allchar, bool polymorphictomissing, 
 			outputforR+=')';
 			if (levelsall) {
 				outputforR+=", levels=c(";
-				for (int l=0;l<characters->GetMaxObsNumStates(); l++) {
+				for (unsigned int l=0;l<characters->GetMaxObsNumStates(); l++) {
 					outputforR+=l;
 					if (l+1<characters->GetMaxObsNumStates()) {
 						outputforR+=',';
@@ -882,7 +882,7 @@ NxsString BASICCMDLINE::ReturnDataForR(bool allchar, bool polymorphictomissing, 
 				NxsString levels=", levels=c(";
 				NxsString labels=", labels=c(";
 				
-				for (int l=0;l<characters->GetObsNumStates(character); l++) {
+				for (unsigned int l=0;l<characters->GetObsNumStates(character); l++) {
 					labels+= characters->GetStateLabel(character,l);
 					levels+= l;
 					if (l+1<characters->GetObsNumStates(character)) {
@@ -940,7 +940,7 @@ NxsString BASICCMDLINE::ReturnDataForR(bool allchar, bool polymorphictomissing, 
 				distancevector.push_back(distances->GetDistance(row,col));
 			}
 		}
-		for (int i=0;i<distancevector.size();i++) {
+		for (unsigned int i=0;i<distancevector.size();i++) {
 			outputforR+=distancevector.at(i);
 			if (i+1<distancevector.size()) {
 				outputforR+=',';
@@ -1392,7 +1392,7 @@ void BASICCMDLINE::PreprocessNextCommand()
 	// Remove any whitespace characters from end of string entered by user
 	//
 	unsigned i = len;
-	while (i > 0 && next_command[i-1] == ' ' || next_command[i-1] == '\t' || next_command[i-1] == '\n')
+	while (i > 0 && (next_command[i-1] == ' ' || next_command[i-1] == '\t' || next_command[i-1] == '\n'))
 		i--;
 	
 	// If character at position i - 1 is a semicolon, put '\0' terminator at position i;
