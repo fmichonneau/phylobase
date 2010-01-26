@@ -1,0 +1,98 @@
+#NEXUS
+BEGIN TAXA;
+    TITLE Untitled_TAXA_Block_1;
+    DIMENSIONS NTax = 6;
+    TAXLABELS P._fimbriata P._robusta P._americana P._myriophylla P._polygama P._macrophylla;
+    blockid bogus;
+END;
+BEGIN CHARACTERS;
+    TITLE dna_forty_five;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    DIMENSIONS NChar=45;
+    FORMAT Datatype=DNA  Gap=- Equate=" Q=(AC)";
+Matrix
+P._fimbriata       RCCTCGGCTTAACGAACCTCGGCTTAACGAACCTCGGCTTAACGA
+P._robusta         QCCTCGGCTTAACCAACCTCGGCTTAACGAACCTCGGCTTAACGA
+P._americana       QCGTCGCTTTCA---ACGTCGCTTTCACCAACGTCGCTTTCACCA
+P._myriophylla     ACGTCGCTTTCA---ACGTCGCTTTCACCAACGTC?CTTTCACCA
+P._polygama        ACGTCGCTCTCACCAACGTCGCTTTCACCAACGTC?CTTTCACCA
+P._macrophylla     ACGTCGCTCTCACCAACGTCGCTTTCACCAACGTCGCTTTCACCA
+;
+END;
+BEGIN CHARACTERS;
+    TITLE rna_forty_five;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    DIMENSIONS NChar=45;
+    FORMAT Datatype=RNA  Gap=-;
+Matrix
+P._fimbriata       YR?UCGGCUUAACGAACCUCGGCUUAACGAACCUCGGCUUAACGA
+P._robusta         NC?UCGGCUUAACCAACCUCGGCUUAACGAACCUCGGCUUAACGA
+P._americana       ACGUCGCUUUCA---ACGUCGCUUUCACCAACGUCGCUUUCACCA
+P._myriophylla     ACGUCGCUUUCA---ACGUCGCUUUCACCAACGUC?CUUUCACCA
+P._polygama        ACGUCGCUCUCACCAACGUCGCUUUCACCAACGUC?CUUUCACCA
+P._macrophylla     ACGUCGCUCUCACCAACGUCGCUUUCACCAACGUCGCUUUCACCA
+;
+END;
+BEGIN CHARACTERS;
+    TITLE Untitled_CHARACTERS_Block_1;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    DIMENSIONS NChar=3;
+    FORMAT Datatype=Standard Symbols="01" Tokens;
+    CharStateLabels 
+      1 leaf_margins /  entire fimbriate,
+      2 flower_color /  white_to_cream crimson,
+      3 breeding_system /  hermaphroditic gynomonoecious gynodioecious dioecious;
+Matrix
+P._fimbriata        fimbriate crimson gynomonoecious
+P._robusta          fimbriate crimson gynomonoecious
+P._americana        entire white_to_cream hermaphroditic
+P._myriophylla      entire white_to_cream hermaphroditic
+P._polygama         entire white_to_cream dioecious
+P._macrophylla      entire crimson gynodioecious
+;
+END;
+BEGIN CHARACTERS;
+    TITLE Untitled_CHARACTERS_Block_2;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    DIMENSIONS NChar=3;
+    FORMAT Datatype=Standard Symbols="0123";
+    CharStateLabels 
+      1 leaf_margins /  entire fimbriate,
+      2 flower_color /  white_to_cream crimson,
+      3 breeding_system /  hermaphroditic gynomonoecious gynodioecious dioecious;
+Matrix
+P._fimbriata       111
+P._robusta         111
+P._americana       000
+P._myriophylla     000
+P._polygama        003
+P._macrophylla     012
+;
+END;
+BEGIN CHARACTERS;
+    TITLE Untitled_CHARACTERS_Block_3;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    DIMENSIONS NTax=4 NChar=15;
+    FORMAT Datatype=DNA;
+Matrix
+P._fimbriata       ACCTCGGCTTAACGA
+P._robusta         ACCTCGGCTTAACCA
+P._americana       ACGTCGCTCTCACCA
+P._myriophylla     ACGTCGCTTTCACCA
+;
+END;
+BEGIN CHARACTERS;
+    TITLE Untitled_CHARACTERS_Block_4;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    DIMENSIONS NChar=15;
+    FORMAT Datatype=DNA;
+    CHARLABELS site_1 site_2 site_3 site_4 site_5 site_6 site_7 site_8 site_9 site_10 site_11 site_12 site_13 site_14 site_15;
+Matrix
+P._fimbriata       ACCTCGGCTTAACGA
+P._robusta         ACCTCGGCTTAACCA
+P._americana       ACGTCGCTCTCACCA
+P._myriophylla     ACGTCGCTTTCACCA
+P._polygama        ACCTCGCTTTCACGA
+P._macrophylla     ACCTCGCTTTCACGA
+;
+END;

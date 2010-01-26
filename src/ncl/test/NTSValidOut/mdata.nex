@@ -1,0 +1,24 @@
+#NEXUS
+BEGIN TAXA;
+    TITLE Untitled_TAXA_Block_1;
+    DIMENSIONS NTax = 4;
+    TAXLABELS one_fish two_fish red_fish blue_fish;
+END;
+BEGIN CHARACTERS;
+    TITLE Untitled_DATA_Block_1;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    DIMENSIONS NChar=9;
+    FORMAT Datatype=Continuous Items = (X Y );
+    CHARLABELS landmark_1 landmark_2 landmark_3 landmark_4 landmark_5 landmark_6 landmark_7 landmark_8;
+Matrix
+one_fish       (0 1 )  (2 3 )  (5 3 )  (6.5 2 )  (9.5 2.5 )  (9.5 0 )  (6.5 0.5 )  (4 0 )  (2 0 ) 
+two_fish       (0 1.5 )  (2.5 2.8 )  (4.7 3 )  (6.5 2 )  (9.5 2.5 )  (8.5 0 )  (6.5 0.5 )  (4 0 )  (2 0 ) 
+red_fish       (0 1.2 )  (2 3 )  (4.7 3 )  (7.5 2 )  (12.5 2.5 )  (9.5 0 )  (7.5 0.9 )  (4 0 )  (2 0 ) 
+blue_fish      (0 1 )  (2 3 )  (5 3 )  (7.5 2 )  (9 2.5 )  (8.5 0.5 )  (7.5 0.8 )  (4 0 )  (2 0 ) 
+;
+END;
+BEGIN SETS;
+    LINK CHARACTERS = Untitled_DATA_Block_1;
+    CHARSET t = 1-5 \ 2;
+    CHARSET u = 1-5 \ 2 6;
+END;

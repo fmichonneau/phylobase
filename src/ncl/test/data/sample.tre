@@ -1,0 +1,29 @@
+#NEXUS
+BEGIN PAUP;
+    lset nst = 2 basefreq = empirical tratio = estimate rates = gamma shape = estimate;
+END;
+BEGIN TAXA;
+    TITLE Untitled_TAXA_Block_1;
+    DIMENSIONS NTax = 11;
+    TAXLABELS P._fimbriata P._robusta P._americana P._myriophylla P._articulata P._parksii P._gracilis P._macrophylla P._polygama P._basiramia P._ciliata;
+END;
+BEGIN TREES;
+    TITLE Untitled_TREES_Block_1;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    TRANSLATE
+        1 P._fimbriata,
+        2 P._robusta,
+        3 P._americana,
+        4 P._myriophylla,
+        5 P._articulata,
+        6 P._parksii,
+        7 P._gracilis,
+        8 P._macrophylla,
+        9 P._polygama,
+        10 P._basiramia,
+        11 P._ciliata;
+    TREE unrooted = [&U](1,2,((4,3,(5,6)),((9,8),(7,(10,11)))));
+    TREE rooted = [&R]((1,2),((4,3,(5,6)),(9,(8,(7,(10,11))))));
+    TREE u_to_r = [&R]((1,2),((4,3,(5,6)),(9,(8,(7,(10,11))))));
+    TREE r_to_u = [&U](1,2,((4,3,(5,6)),((9,8),(7,(10,11)))));
+END;

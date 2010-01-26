@@ -1,0 +1,39 @@
+DIV.linkstrip {
+	MARGIN-TOP: 1em; FONT-SIZE: large; TEXT-ALIGN: center
+}
+
+P.footer {
+	CLEAR: left; PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-SIZE: x-small; PADDING-BOTTOM: 0px; MARGIN: 1ex 15% 0px; LINE-HEIGHT: 0.6; PADDING-TOP: 0px; FONT-FAMILY: Arial, Chicago, sans-serif; TEXT-ALIGN: center
+}
+
+A:hover {
+	COLOR: #a00; BACKGROUND-COLOR: white; TEXT-DECORATION: none
+}
+
+.quickref {
+	font-family: Arial, sans-serif
+}
+
+.public {
+	font-weight: bold; color: black; background: white;
+}
+
+.protected {
+	font-weight: bold; color: teal; background: white;
+}
+
+.private {
+	font-weight: bold; color: red; background: white;
+}
+
+.groupheading {
+	font-size: large; font-weight: bold;
+}
+
+.classy {
+	font-family: Arial, sans-serif; color: navy;
+}
+
+.variablename {
+	font-weight: bold; color: maroon;
+}

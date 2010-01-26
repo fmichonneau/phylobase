@@ -1,0 +1,60 @@
+#nexus
+
+begin taxa;
+  dimensions ntax=6;
+  taxlabels
+	'P. fimbriata'
+	'P. robusta'
+	'P. americana'
+	'P. myriophylla'
+	'P. polygama'
+	'P. macrophylla'
+  ;
+  blockid bogus;
+end;
+
+[!
+*************
+* dna       *
+*************
+]
+begin characters;
+  dimensions nchar=45;
+  format datatype=dna missing=? gap=-;
+  title dna_forty_five;
+	CHARLABELS labone labtwo labthree labfour labfive labsix labseven;
+
+  matrix
+	P._fimbriata    {a, G}cctcggcttaacgaacctcggcttaacgaacctcggcttaacga
+	P._robusta      (a, , C)cctcggcttaaccaacctcggcttaacgaacctcggcttaacga
+	P._americana    rcgtcgctttca---acgtcgctttcaccaacgtcgctttcacca
+	P._myriophylla  acgtcgctttca---acgtcgctttcaccaacgtc?ctttcacca
+	P._polygama     acgtcgctctcaccaacgtcgctttcaccaacgtc?ctttcacca
+	P._macrophylla  acgtcgctctcaccaacgtcgctttcaccaacgtcgctttcacca
+  ;
+end;
+
+begin trees;
+	tree treone = (1,2,3,4,5,6);
+	tree tretwo = (1,(2,3),4,5,6)[test];
+	tree trethr = (1,2,(3,4),5,6);
+end;
+BEGIN Sets;
+    Charset csone = 1-3;
+    CHARPARTITION csparttwo (STANDARD CHARACTERS='dna forty five') = firstthree: csone, next: 4-12\2, anothergr : 5 - . \2 , rest : 14 - 44\2;
+    CHARPARTITION cspart (STANDARD CHARACTERS='dna forty five') = firstthree: csone, next: 4-14\2, anothergr : 5 - . \2 , rest : 16 - 44\2;
+    TaxPARTITION cspart = firstthree: P._fimbriata-3, next: 4, anothergr : 6 , rest : 5;
+    TreePARTITION cspart=next:3,firstthree:1-2;
+end; BEGIN ASSUMPTIONS;
+	Usertype mine (stepmatrix) = 4 a c g t . 1 1 1 2 . 2 2 3 3 . 3 4 4 4 . ;
+    ExSet  e = 3-. \ 4;
+    TypeSet * ts = ORD: csone 3-14\2, UNORD: 4-.\2, mine : 15-. \2;
+    WtSet  t = 2: csone 3-14\2, 1: 4-.\2, 3 : 15-. \2;
+    WtSet  tes = 2: csone 3-14\2, 6.01: 4-.\2, 3 : 15-. \2;
+    WtSet * tvecs (vector ) = 1 2  3 1 2 3  1  2 3 
+                             1 2  3 1 2 3  11 2 3 
+                             1 21 3 1 2 3  1  2 3 
+                             1 2  3 1 2 31 1  2 3 
+                             1 2  3 1 2 3  1  2 3  ;
+    ExSet * edef = 2-. \ 4;
+end;

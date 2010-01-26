@@ -1,0 +1,35 @@
+NCL NEWS -- history of user-visible changes.  20 May 2003
+
+Copyright (C) 2003-2008 Paul O. Lewis
+
+Please send NCL bug reports to paul.lewis@uconn.edu.
+
+See ChangeLog for details about minor upgrades.
+
+Version 2.0
+-----------
+This version significant upgrade to NCL in terms of ease of use for programmers 
+and the coverage of variants of NEXUS files.  This version naturally supports 
+multiple instances of blocks (common in files from Mesquite) and the Mixed 
+datatype used by MrBayes. Support for the UNALIGNED and ASSUMPTIONS block has
+been dramatically improved. The SETS and CODONS blocks are now handled 
+(they are treated as special forms of the ASSUMPTIONS block to tolerate the 
+inclusion of many of the same commands in different block types). Almost all of 
+the changes in this version were made by Mark Holder, so please direct bug 
+reports, questions, and feature requests to him (though the sourceforge page
+is the best place to report these).
+
+
+Version 2.0
+-----------
+Although this is the second version of the library, it is really the
+first official release. My container classes used in the first version
+have been replaced by their STL equivalents, and the source code 
+documentation is now much more thorough. This version is being pubicized
+in the form of an application note in the journal Bioinformatics.
+
+Version 1.0
+-----------
+This first version did not make use of the standard template library,
+instead using container classes of my own design. This version was 
+distributed from my web site, but never publicized.

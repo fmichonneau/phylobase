@@ -1,0 +1,21 @@
+#NEXUS
+BEGIN TAXA;
+	DIMENSIONS NTax = 4;
+	TAXLABELS 'one fish' 'two fish' 'red fish' 'blue fish';
+END;
+BEGIN CHARACTERS;
+	DIMENSIONS NChar=9;
+	
+	FORMAT Datatype=DNA gap = -;
+Matrix
+'one fish'   ACGTACGTN
+'two fish'   BDHKMNRSV
+'red fish'   CGTACGTNA
+'blue fish'  GTACGTNAC
+;
+END;
+[!Skipping unknown block (NOTES)...]
+begin assumptions;
+	charset t = 1-5\2;
+	charset u = t 6;
+end;

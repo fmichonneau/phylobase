@@ -1,0 +1,19 @@
+#NEXUS
+BEGIN TAXA;
+    TITLE Untitled_TAXA_Block_1;
+    DIMENSIONS NTax = 10;
+    TAXLABELS taxon_1 taxon_2 taxon_3 taxon_4 taxon_5 taxon_6 taxon_7 taxon_8 taxon_9 taxon_10;
+END;
+BEGIN UNALIGNED;
+    TITLE Untitled_UNALIGNED_Block_1;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    DIMENSIONS NTax=5;
+    FORMAT Datatype=DNA;
+Matrix
+taxon_2      ACCAGGAC(CT)AGCGGATCAAG,
+taxon_4      AGCCAGGACTAGTTC,
+taxon_5      RTCAGGACNAGA?CAAGTTC,
+taxon_7      ACCAGGACTAGATCAAG,
+taxon_10     ACYAGGACTAGATCAAGTT
+;
+END;

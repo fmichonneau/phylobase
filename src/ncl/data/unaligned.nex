@@ -1,0 +1,28 @@
+#nexus
+
+begin taxa; 
+  dimensions ntax=10;
+  taxlabels
+    taxon_1
+    taxon_2
+    taxon_3
+    taxon_4
+    taxon_5
+    taxon_6
+    taxon_7
+    taxon_8
+    taxon_9
+    taxon_10
+    ;
+end;
+
+begin unaligned;
+  dimensions ntax=5;
+  format datatype=dna;
+  matrix
+    taxon_10 ACYAGGACTAGATCAAGTT,
+    taxon_2 ACCAGGAC(CT)AGCGGATCAAG,
+    taxon_7 ACCAGGACTAGATCAAG,
+    taxon_4 AGCCAGGACTAGTTC,
+    taxon_5 {AG}TCAGGACNAGA?CAAGTTC;
+end;

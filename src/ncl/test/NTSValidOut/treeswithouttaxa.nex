@@ -1,0 +1,16 @@
+#NEXUS
+BEGIN TAXA;
+    TITLE Untitled_TAXA_Block_1;
+    DIMENSIONS NTax = 4;
+    TAXLABELS a b c d;
+END;
+BEGIN TREES;
+    TITLE Untitled_TREES_Block_1;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    TRANSLATE
+        1 a,
+        2 b,
+        3 c,
+        4 d;
+    TREE test = [&U](1,(2,3),4);
+END;

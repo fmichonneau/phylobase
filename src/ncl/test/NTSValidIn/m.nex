@@ -1,0 +1,21 @@
+#NEXUS
+BEGIN TAXA;
+	DIMENSIONS NTax = 4;
+	TAXLABELS 'one fish' 'two fish' 'red fish' 'blue fish';
+END;
+BEGIN CHARACTERS;
+	DIMENSIONS NChar=9;
+	
+	CHARLABELS  'landmark 1' 'landmark 2' 'landmark 3' 'landmark 4' 'landmark 5' 'landmark 6' 'landmark 7' 'landmark 8';
+	FORMAT Datatype=Continuous Items = (X Y );
+Matrix
+'one fish'     (0 1 )  (2 3 )  (5 3 )  (6.5 2 )  (9.5 2.5 )  (9.5 0 )  (6.5 0.5 )  (4 0 )  (2 0 ) 
+'two fish'     (0 1.5 )  (2.5 2.8 )  (4.7 3 )  (6.5 2 )  (9.5 2.5 )  (8.5 0 )  (6.5 0.5 )  (4 0 )  (2 0 ) 
+'red fish'     (0 1.2 )  (2 3 )  (4.7 3 )  (7.5 2 )  (12.5 2.5 )  (9.5 0 )  (7.5 0.9 )  (4 0 )  (2 0 ) 
+'blue fish'    (0 1 )  (2 3 )  (5 3 )  (7.5 2 )  (9 2.5 )  (8.5 0.5 )  (7.5 0.8 )  (4 0 )  (2 0 ) ;
+END;
+[!Skipping unknown block (NOTES)...]
+begin assumptions;
+	charset t = 1-5\2;
+	charset u = t 6;
+end;

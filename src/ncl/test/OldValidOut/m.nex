@@ -1,0 +1,17 @@
+#NEXUS
+BEGIN TAXA;
+    TITLE Untitled_TAXA_Block_1;
+    DIMENSIONS NTax = 4;
+    TAXLABELS one_fish two_fish red_fish blue_fish;
+END;
+BEGIN DATA;
+    DIMENSIONS NTax=4 NChar=9;
+    FORMAT Datatype = DNA missing=? gap=-;
+Matrix
+one_fish ACGTACGT{ACGT}
+two_fish {CGT}{AGT}{ACT}{GT}{AC}{ACGT}{AG}{CG}{ACG}
+red_fish CGTACGT{ACGT}A
+blue_fish GTACGT{ACGT}AC
+;
+END;
+[!Skipping unknown block (NOTES)...]

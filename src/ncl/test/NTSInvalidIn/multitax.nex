@@ -1,0 +1,12 @@
+#NEXUS
+begin taxa;
+	dimensions ntax = 4;
+	taxlabels  A B C D;
+end;
+begin taxa;
+	dimensions ntax = 4;
+	taxlabels  A B C D;
+end;
+begin trees;
+	tree a = [&U] (A,B,(C,D));
+end;

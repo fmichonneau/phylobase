@@ -1,0 +1,11 @@
+The files in the NTS*In directories were provided by Arlin Stoltzfus. see
+	http://www.molevol.org/camel/projects/nexus/ for more information.
+
+The files in NTSValidIn should be accepted by NCL.
+
+The files in NTSInvalidIn should generate errors.
+
+The corresponding output files are found in the NTS*Out dir and have the same
+	file name as the input.  These output files will be sensitive to
+	inconsequential changes in formatting in the normalizer program, but will
+	still be useful for regression testing.

@@ -1,0 +1,92 @@
+#NEXUS
+BEGIN TAXA;
+    TITLE firstt;
+    DIMENSIONS NTax = 6;
+    TAXLABELS P._fimbriata P._robusta P._americana P._myriophylla P._polygama P._macrophylla;
+    blockid bogus;
+END;
+BEGIN TAXA;
+    TITLE second;
+    DIMENSIONS NTax = 6;
+    TAXLABELS P._fimbriata X._robusta P._americana N._myriophylla P._polygama P._macrophylla;
+    blockid bogus2;
+END;
+BEGIN CHARACTERS;
+    TITLE firstchars;
+    LINK TAXA = firstt;
+    DIMENSIONS NChar=45;
+    FORMAT Datatype=DNA  Gap=-;
+Matrix
+P._fimbriata       RCCTCGGCTTAACGAACCTCGGCTTAACGAACCTCGGCTTAACGA
+P._robusta         (AC)CCTCGGCTTAACCAACCTCGGCTTAACGAACCTCGGCTTAACGA
+P._americana       RCGTCGCTTTCA---ACGTCGCTTTCACCAACGTCGCTTTCACCA
+P._myriophylla     ACGTCGCTTTCA---ACGTCGCTTTCACCAACGTC?CTTTCACCA
+P._polygama        ACGTCGCTCTCACCAACGTCGCTTTCACCAACGTC?CTTTCACCA
+P._macrophylla     ACGTCGCTCTCACCAACGTCGCTTTCACCAACGTCGCTTTCACCA
+;
+END;
+BEGIN CHARACTERS;
+    TITLE second_chars;
+    LINK TAXA = second;
+    DIMENSIONS NChar=45;
+    FORMAT Datatype=RNA  Gap=-;
+Matrix
+P._fimbriata       YRCUCGGCUUAACGAACCUCGGCUUAACGAACCUCGGCUUAACGA
+X._robusta         NCCUCGGCUUAACCAACCUCGGCUUAACGAACCUCGGCUUAACGA
+P._americana       ACGUCGCUUUCA---ACGUCGCUUUCACCAACGUCGCUUUCACCA
+N._myriophylla     ACGUCGCUUUCA---ACGUCGCUUUCACCAACGUC?CUUUCACCA
+P._polygama        ACGUCGCUCUCACCAACGUCGCUUUCACCAACGUC?CUUUCACCA
+P._macrophylla     ACGUCGCUCUCACCAACGUCGCUUUCACCAACGUCGCUUUCACCA
+;
+END;
+BEGIN TREES;
+    TITLE first_trees;
+    LINK TAXA = second;
+    TRANSLATE
+        1 P._fimbriata,
+        2 X._robusta,
+        3 P._americana,
+        4 N._myriophylla,
+        5 P._polygama,
+        6 P._macrophylla;
+    TREE one = [&U](1,2,(3,4)5,6);
+END;
+BEGIN TREES;
+    TITLE second_trees;
+    LINK TAXA = firstt;
+    TRANSLATE
+        1 P._fimbriata,
+        2 P._robusta,
+        3 P._americana,
+        4 P._myriophylla,
+        5 P._polygama,
+        6 P._macrophylla;
+    TREE one = [&U](1,2,(3,4));
+END;
+BEGIN SETS;
+    LINK CHARACTERS = firstchars;
+    CHARSET p = 2-7 9-12 14-24 \ 2 44 45;
+    CHARSET r = 2-12 15-24 \ 3 44 45;
+END;
+BEGIN SETS;
+    LINK TAXA = second;
+    TAXSET p = 1-5 \ 2;
+END;
+BEGIN SETS;
+    TITLE mixedupassump;
+    LINK TAXA = firstt CHARACTERS = second_chars;
+    TAXSET o = 1 2;
+    CHARSET o = 1-5 7-11 \ 2 12-24 \ 2 30-45 \ 5;
+END;
+BEGIN SETS;
+    TITLE explicit;
+    LINK TAXA = firstt CHARACTERS = second_chars;
+    TAXSET o = 1 2;
+    CHARSET oe = 1-5 7-11 \ 2 12-24 \ 2 30-45 \ 5;
+END;
+BEGIN SETS;
+    TITLE explicit2;
+    LINK TAXA = second CHARACTERS = firstchars;
+    TAXSET pe = 1-3 5;
+    CHARSET pe = 2-7 9-12 14-24 \ 2 44 45;
+END;

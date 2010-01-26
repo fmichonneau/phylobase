@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<link rel="stylesheet" type="text/css" href="stylesheets/styleguide.css">
+<style type="text/css"> 
+<!--
+@import url(stylesheets/styleguidextra.css);
+-->
+</style>
+<title>NCL/Phorest Source Code Style Guide</title>
+</head>
+
+<body>
+
+<h1>NCL/Phorest Source Code Style Guide</h1>
+
+<a name="topofpage">
+<h2>Index</h2>
+</a>
+
+<p>
+<br><a href="#primedirectives"> Prime Directives		</a>
+<br><a href="#largespecial">    Large special comments	</a>
+<br><a href="#smallspecial">    Small special comments	</a>
+<br><a href="#uncaptured">      Uncaptured comments		</a>
+<br><a href="#accessors">		Accessor Functions		</a>
+<br><a href="#"></a>
+<br><a href="#"></a>
+<br><a href="#"></a>
+</p>
+
+<a name="primedirectives">
+<!-- ******************************************************************************************************************* -->
+<h2> The Prime Directives </h2>
+<!-- ******************************************************************************************************************* -->
+</a>
+
+The following prime directives have been used to establish this style guide.
+
+<ul>
+<li>As much as possible, documentation should be done automatically by gleaning information from the source code itself.
+It is so easy to forget to update a comment when the function arguments change names, types, default values, etc. that
+we deemed it best to not even specify such things in comments to begin with. The only information included in the 
+special documentation comments is information that cannot be gleaned from the actual source code itself, such as the
+reasoning that went into designing the function or using the data member.</li>
+<li></li>
+</ul>
+
+<a name="largespecial">
+<!-- ******************************************************************************************************************* -->
+<h2> Large special comments </h2>
+<!-- ******************************************************************************************************************* -->
+</a>
+
+<p>Large special comments precede class declarations (in header files) and function bodies (in source code files).
+They should be C-style comments formatted exactly like the example below from NxsToken::AppendToToken:</p>
+
+<pre>
+/*----------------------------------------------------------------------------------------------------------------------
+|	Adds `ch' to end of current token.
+*/
+</pre>
+
+<p>Specific instructions:</p>
+
+<ul>
+<li>Comment should begin with <code>/*</code> followed by hyphens out to a total width of 120 characters. 
+    The only thing on this line should be these 120 characters, followed by an EOL.</li>
+<li>Each line of comment should begin with vertical bar character followed by a tab character. 
+    The characters on each of these lines should not extend past the 120 character boundary established 
+    by the first line of the comment.</li>
+<li>Comment should end with the <code>*/</code> that normally closes a C-style comment, but this should be the only
+    two chcaraters on this line except for the terminating EOL.</li>
+<li>Data members and function arguments mentioned by name in the comment should be surrounded by paired
+    single quotes, like <code>`this'</code>. Note that the opening quote is different than the closing quote. 
+    The reason for the initial backquote is that it is often necessary to surround text that does not
+    represent a function argument or data member in single quotes (e.g. <code>'\n'</code>).</li>
+<li>If the special comment is documenting a member function, and that member function uses asserts to catch
+    problems in debugging mode, used the phrase &quot;Assumes ...&quot; to let the reader know everything that is being 
+    assumed when using this member function. For example, if <code>assert(i >= 0 && i < ncols);</code> appears at the 
+    beginning of the function body to test whether the argument <code>i</code> has been specified correctly,
+    write &quot;Assumes `i' is in the range [0..`ncols').&quot; in your explanatory special comment.</li>
+</ul>
+
+<p>If it is necessary to include a source code example (or other pre-formatted text that should be 
+displayed in a fixed-width font), bracket this section of the comment using the special string <code>|></code> 
+(vertical bar followed by the greater than symbol). The example below is from UniformDistribution::GetRelativeLnPDF:</p>
+
+<pre>
+/*------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|	The probability density function of the uniform distribution is 
+|>
+|		f(y) = 1 / (b - a)
+|>
+|	This function returns the natural log of the non-normalized density function at x, which is just 0.0 because the denominator is the normalizing factor and is 
+|	ignored. Assumes `x' is in the interval [a, b].
+*/
+</pre>
+
+<p>If it is necessary to include an itemized list, bracket this section of the comment using lines containing only 
+the special string <code>|~</code> (vertical bar followed by a tilde). Each item in the itemized list should begin 
+with a lower-case letter O (<code>o</code>), followed immediately by a single space (not a tab), but otherwise these lines 
+are exactly as they are for other comment lines (e.g. beginning with the upright bar followed by a tab). The example below 
+is from NxsToken::GetNextChar:</p>
+
+<pre>
+/*----------------------------------------------------------------------------------------------------------------------
+|	Reads next character from in and does all of the following before returning it to the calling function:
+|~
+|	o if character read is either a carriage return or line feed, the variable line is incremented by one and the
+|	  variable col is reset to zero
+|	o if character read is a carriage return, and a peek at the next character to be read reveals that it is a line
+|	  feed, then the next (line feed) character is read
+|	o if either a carriage return or line feed is read, the character returned to the calling function is '\n' if 
+|	  character read is neither a carriage return nor a line feed, col is incremented by one and the character is
+|	  returned as is to the calling function
+|	o in all cases, the variable filepos is updated using a call to the tellg function of istream.
+|~
+*/
+</pre>
+
+<p><a href="#topofpage">Back to the index</a></p>
+
+<a name="uncaptured">
+<!-- ******************************************************************************************************************* -->
+<h2> Uncaptured comments </h2>
+<!-- ******************************************************************************************************************* -->
+</a>
+
+<p>Uncaptured comments are C++-style comments within the body of a function that are not intended to be
+made part of the published documentation. These should be complete sentences, starting with a capitalized
+word and ending with a period. An empty comment line should follow the last line of the comment to provide
+visual separation of the comment from subsequent source code. The following example is from NxsToken::GetComment:</p>
+
+<pre>
+if (printing)
+	{
+	// Allow output comment to be printed or displayed in most appropriate
+	// manner for target operating system.
+	//
+	OutputComment(comment);
+
+	// Now that we are done with it, free the memory used to store the comment.
+	//
+	comment = "";
+	}
+</pre>
+
+<p><a href="#topofpage">Back to the index</a></p>
+
+<a name="smallspecial">
+<!-- ******************************************************************************************************************* -->
+<h2> Small special comments </h2>
+<!-- ******************************************************************************************************************* -->
+</a>
+
+<p>Small special comments are short comments used to document data members, enums and enum items (in class declarations
+in header files), and function arguments (in source code files). These are C-style comments that are entirely contained on
+a single line, regardless of how long that line needs to be in order to accommodate the comment. These comments are 
+set off from the object they document by at least one tab, and comments should be aligned vertically using extra preceding
+tab characters if necessry. The following example of small special comments used to document function arguments is from
+NxsToken::Equals:</p>
+
+<pre>
+bool NxsToken::Equals(
+  NxsString s,			/* the string for comparison to the string currently stored in this token */
+  bool respect_case)	/* if true, comparison will be case-sensitive */
+	{
+	...
+	}
+</pre>
+
+<p>Note that even though the respect_case argument has a default value specified in the class declaration, 
+the default value should not be mentioned in the comment because default argument values are 
+documented automatically. Note also how the arguments are indented two spaces from the left edge and
+their comments are aligned vertically using tab characters.</p>
+
+<p>The next example shows the comments describing data members of the class NxsException:</p>
+
+<pre>
+class NxsException
+	{
+	public:
+		NxsString	msg;	/* NxsString to hold message */
+		file_pos	pos;	/* current file position */
+		long		line;	/* current line in file */
+		long		col;	/* column of current line */
+
+		NxsException(NxsString s, file_pos fp = 0, long fl = 0L, long fc = 0L);
+		NxsException(const NxsString &s, const NxsToken &t);
+	};
+</pre>
+
+<p>Note that the data member names are aligned vertically (using tabs) as are the left edges of the
+comments describing these data members.
+
+<p><a href="#topofpage">Back to the index</a></p>
+
+<a name="accessors">
+<!-- ******************************************************************************************************************* -->
+<h2> Accessor Functions</h2>
+<!-- ******************************************************************************************************************* -->
+</a>
+
+<p>Accessor functions are tiny public const member functions that do nothing but return the value of a private or protected
+data member. TODO: COMMENT ON COMMENTS</p>
+
+<pre>
+</pre>
+
+<p><a href="#topofpage">Back to the index</a></p>
+
+<a name="template">
+<!-- ******************************************************************************************************************* -->
+<h2> Template </h2>
+<!-- ******************************************************************************************************************* -->
+</a>
+
+<p></p>
+
+<pre>
+</pre>
+
+<p><a href="#topofpage">Back to the index</a></p>
+
+<a name="template">
+<!-- ******************************************************************************************************************* -->
+<h2> Template </h2>
+<!-- ******************************************************************************************************************* -->
+</a>
+
+<p></p>
+
+<pre>
+</pre>
+
+<p><a href="#topofpage">Back to the index</a></p>
+
+<a name="template">
+<!-- ******************************************************************************************************************* -->
+<h2> Template </h2>
+<!-- ******************************************************************************************************************* -->
+</a>
+
+<p></p>
+
+<pre>
+</pre>
+
+<p><a href="#topofpage">Back to the index</a></p>
+
+<a name="template">
+<!-- ******************************************************************************************************************* -->
+<h2> Template </h2>
+<!-- ******************************************************************************************************************* -->
+</a>
+
+<p></p>
+
+<pre>
+</pre>
+
+<p><a href="#topofpage">Back to the index</a></p>
+
+<a name="template">
+<!-- ******************************************************************************************************************* -->
+<h2> Template </h2>
+<!-- ******************************************************************************************************************* -->
+</a>
+
+<p></p>
+
+<pre>
+</pre>
+
+<p><a href="#topofpage">Back to the index</a></p>
+
+<p>&nbsp</p>
+<p class="footer">&copy; 2002 The Phoresters</p>
+<p class="footer">Comments and suggestions are welcome, and should be directed to 
+<a href="mailto:paul.lewis@uconn.edu">Paul O. Lewis</a></p>
+<p class="footer">Best viewed using Opera 5.x, Explorer 5.x and Netscape 6.x.</p>
+<p class="footer">Last modified: December 30, 2002</p>
+<p class="footer">
+  <a href="http://validator.w3.org/check/referer"><img style="border:0;width:88px;height:31px" src="images/valid-html401.gif" alt="Valid HTML 4.01!"></a>
+  <a href="http://jigsaw.w3.org/css-validator/check/referer"><img style="border:0;width:88px;height:31px" src="images/valid-css.gif"     alt="Valid CSS!"></a>
+  </p>
+
+</body>
+</html>
+

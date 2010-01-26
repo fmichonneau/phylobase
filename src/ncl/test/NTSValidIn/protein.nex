@@ -1,0 +1,32 @@
+#nexus
+
+begin taxa;
+  dimensions ntax=6;
+  taxlabels
+	'P. fimbriata'
+	'P. robusta'
+	'P. americana'
+	'P. myriophylla'
+	'P. polygama'
+	'P. macrophylla'
+  ;
+end;
+begin characters;
+   dimensions nchar= 90;
+   format datatype=protein missing=? gap=- matchchar=.  interleave=yes;
+   MATRIX  
+	P._fimbriata    {a, G}Rctcggcttaacgaacctcggcttaacgaacctcggcttaacga
+	P._robusta      (a, , C)cctcggcttaaccaacctcggcttaacgaacctcggcttaacga
+	P._americana    ACDEFGHIKLMNPQRSTVWY*BZAAAAAAAAAAtcgctttcacca
+	P._myriophylla  acgtcgctttca---acgtcgctttcaccaacgtc?ctttca.ca
+	P._polygama     a.gtcgctctcaccaacgtcgctttcaccaacgtc?ctttcacca
+	P._macrophylla  acgtcgctctcaccaacgtcgctttcaccaacgtcgctttcacca
+
+	P._fimbriata    Rcctcggcttaacgaacctcggcttaacgaacctcggcttaacga
+	P._robusta      (a, , C)cctcggcttaaccaacctcggcttaacgaacctcggcttaacga
+	P._americana    rcgtcgctttca---acgtcgctttcaccaacgtcgctttcacca
+	P._myriophylla  acgtcgctttca---acgtcgct.tcaccaacgtc?ctttcacca
+	P._polygama     acgtcgctctcaccaacgtcgctttcaccaacgtc?ctttcacca
+	P._macrophylla  acgtcgctctcaccaacgtcgct..caccaacgtcgctttcacca
+  ;
+end;

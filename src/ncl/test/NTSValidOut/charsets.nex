@@ -1,0 +1,40 @@
+#NEXUS
+BEGIN TAXA;
+    TITLE Untitled_TAXA_Block_1;
+    DIMENSIONS NTax = 6;
+    TAXLABELS P._fimbriata P._robusta P._americana P._myriophylla P._polygama P._macrophylla;
+    blockid bogus;
+END;
+BEGIN CHARACTERS;
+    TITLE dna_forty_five;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    DIMENSIONS NChar=45;
+    FORMAT Datatype=DNA  Gap=-;
+    CHARLABELS labone labtwo labthree labfour labfive labsix labseven;
+Matrix
+P._fimbriata       RCCTCGGCTTAACGAACCTCGGCTTAACGAACCTCGGCTTAACGA
+P._robusta         (AC)CCTCGGCTTAACCAACCTCGGCTTAACGAACCTCGGCTTAACGA
+P._americana       RCGTCGCTTTCA---ACGTCGCTTTCACCAACGTCGCTTTCACCA
+P._myriophylla     ACGTCGCTTTCA---ACGTCGCTTTCACCAACGTC?CTTTCACCA
+P._polygama        ACGTCGCTCTCACCAACGTCGCTTTCACCAACGTC?CTTTCACCA
+P._macrophylla     ACGTCGCTCTCACCAACGTCGCTTTCACCAACGTCGCTTTCACCA
+;
+END;
+BEGIN SETS;
+    LINK CHARACTERS = dna_forty_five;
+    CHARSET csfive = 1-5 10-18 \ 2 40-45;
+    CHARSET csfour = 1-43 \ 3;
+    CHARSET csone = 1-3;
+    CHARSET cssix = 1-7 10-43 \ 3;
+    CHARSET csthree = 1-5;
+    CHARSET cstwo = 1-3;
+END;
+BEGIN ASSUMPTIONS;
+    LINK CHARACTERS = dna_forty_five;
+    EXSET csfive = 1-5 10-18 \ 2 40-45;
+    EXSET * csfour = 1-43 \ 3;
+    EXSET csone = 1-3;
+    EXSET cssix = 1-7 10-43 \ 3;
+    EXSET csthree = 1-5;
+    EXSET cstwo = 1-3;
+END;

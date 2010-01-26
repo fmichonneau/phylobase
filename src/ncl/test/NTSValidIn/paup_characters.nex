@@ -1,0 +1,28 @@
+#nexus
+
+begin taxa;
+  dimensions ntax=6;
+  taxlabels
+	'P. fimbriata'
+	'P. robusta'
+	'P. americana'
+	'P. myriophylla'
+	'P. polygama'
+	'P. macrophylla'
+  ;
+  blockid bogus;
+end;
+
+begin characters;
+  dimensions nchar=45;
+  format datatype=dna missing=? symbols="01" gap=-;
+  title paup_multi;
+  matrix
+	P._fimbriata    {a, G}  cctcggcttaac 1    aacctcggcttaacgaacctcggcttaacga
+	P._robusta      (a, , C)cctcggcttaac 0    aacctcggcttaacgaacctcggcttaacga
+	P._americana    m       cgtcgctttca- -    -acgtcgctttcaccaacgtcgctttcacca
+	P._myriophylla  a       cgtcgctttca- -    -acgtcgctttcaccaacgtc?ctttcacca
+	P._polygama     a       cgtcgctctcac ?    aacgtcgctttcaccaacgtc?ctttcacca
+	P._macrop[i]hylla  a    cgtcgctctca? {01} aacgtcgctttcaccaacgtcgctttcacca
+  ;
+end;

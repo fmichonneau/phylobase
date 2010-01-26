@@ -1,0 +1,18 @@
+#NEXUS
+BEGIN TAXA;
+    TITLE Untitled_TAXA_Block_1;
+    DIMENSIONS NTax = 5;
+    TAXLABELS temporariaDMH84R1 boyliiMVZ148929 luteiventris_MT_MVZ191016 luteiventris_WA_MVZ225749 muscosaMVZ149006;
+END;
+BEGIN TREES;
+    TITLE Untitled_TREES_Block_1;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    TRANSLATE
+        1 temporariaDMH84R1,
+        2 boyliiMVZ148929,
+        3 luteiventris_MT_MVZ191016,
+        4 luteiventris_WA_MVZ225749,
+        5 muscosaMVZ149006;
+    TREE a = [&U](1,4,(2,3));
+    TREE b = [&U](1,4,(2,3));
+END;

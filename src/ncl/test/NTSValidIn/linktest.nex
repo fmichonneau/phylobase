@@ -1,0 +1,101 @@
+#nexus
+begin taxa;
+  dimensions ntax=6;
+  title firstt;
+  taxlabels
+	P._fimbriata
+	'P. robusta'
+	'P. americana'
+	'P. myriophylla'
+	'P. polygama'
+	'P. macrophylla'
+  ;
+  blockid bogus;
+end;
+
+begin taxa;
+  dimensions ntax=6;
+  title second;
+  taxlabels
+	'P. fimbriata'
+	'X. robusta'
+	'P. americana'
+	'N. myriophylla'
+	'P. polygama'
+	'P. macrophylla'
+  ;
+  blockid bogus2;
+end;
+
+begin characters;
+	LINK TAXA= firstt;
+  dimensions nchar=45;
+  format datatype=dna missing=? gap=-;
+  title firstchars;
+  matrix
+	P._fimbriata    {a, G}cctcggcttaacgaacctcggcttaacgaacctcggcttaacga
+	P._robusta      (a, , C)cctcggcttaaccaacctcggcttaacgaacctcggcttaacga
+	P._americana    rcgtcgctttca---acgtcgctttcaccaacgtcgctttcacca
+	P._myriophylla  acgtcgctttca---acgtcgctttcaccaacgtc?ctttcacca
+	P._polygama     acgtcgctctcaccaacgtcgctttcaccaacgtc?ctttcacca
+	P._macrophylla  acgtcgctctcaccaacgtcgctttcaccaacgtcgctttcacca
+  ;
+end;
+
+begin characters;
+LINK TAXA= second;
+  title second_chars;
+	dimensions nchar=45;
+  format datatype=rna missing=? gap=-;
+  matrix
+	P._fimbriata    YRcucggcuuaacgaaccucggcuuaacgaaccucggcuuaacga
+	X._robusta      Nccucggcuuaaccaaccucggcuuaacgaaccucggcuuaacga
+	P._americana    acgucgcuuuca---acgucgcuuucaccaacgucgcuuucacca
+	N._myriophylla  acgucgcuuuca---acgucgcuuucaccaacguc?cuuucacca
+	P._polygama     acgucgcucucaccaacgucgcuuucaccaacguc?cuuucacca
+	P._macrophylla  acgucgcucucaccaacgucgcuuucaccaacgucgcuuucacca
+  ;
+end;
+begin trees;
+	title first_trees;
+LINK TAXA= second characters = bogus; 
+	tree one = [&U] ('P. fimbriata',
+	'X. robusta',
+	(		'P. americana',
+		'N. myriophylla'
+	)
+	'P. polygama',
+	'P. macrophylla');
+end;
+begin trees;
+LINK TAXA= firstt characters = bogus; 
+	title second_trees;
+	tree one = [&U] ('P. fimbriata',
+	'P. robusta',
+	(		'P. americana',
+		'P. myriophylla'
+	));
+end;
+begin assumptions;
+	title mixedupassump;
+	TAXSET  o(TAXA=firstt) = P._fimbriata P._robusta  ;
+	CHARSET o (Characters=second_chars)= 1-5 7 9 11 12-24\2  30-.\5;
+	CHARSET p  (Characters=firstchars Standard) = 2- 7 9-11 12-24\2  44-. ;
+	TAXSET  p (Standard TAXA=second) = 1 - . \2;
+	CHARSET r  (Characters=firstchars) = 2- 8 9-11   44-.  12-24\3;
+end;
+begin assumptions;
+	title explicit;
+    LINK TAXA = firstt CHARACTERS = 'second chars';
+	TAXSET o = P._fimbriata P._robusta  ;
+	CHARSET oe = 1-5 7 9 11 12-24\2  30-.\5;
+end;
+begin assumptions;
+	title explicit2;
+    LINK TAXA = second CHARACTERS = firstchars;
+	CHARSET pe = 2- 7 9-11 12-24\2  44-. ;
+	TAXSET pe = p 2;
+	
+end;
+
+

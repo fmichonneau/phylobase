@@ -1,0 +1,10 @@
+#NEXUS
+Begin Trees;
+  Translate 1 temporariaDMH84R1 ,
+  2 boyliiMVZ148929 ,
+  3 'luteiventris MT MVZ191016' ,
+  4 'luteiventris WA MVZ225749' ,
+  5 muscosaMVZ149006 ;
+ Tree a = [&U] (temporariaDMH84R1,'luteiventris WA MVZ225749',(boyliiMVZ148929,'luteiventris MT MVZ191016')) ;
+ TREE b = [&U](1,4,(2,3));
+End;

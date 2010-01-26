@@ -1,0 +1,148 @@
+#nexus
+
+begin taxa;
+  dimensions ntax=6;
+  taxlabels
+	'P. fimbriata'
+	'P. robusta'
+	'P. americana'
+	'P. myriophylla'
+	'P. polygama'
+	'P. macrophylla'
+  ;
+  blockid bogus;
+end;
+
+[!
+*************
+* dna       *
+*************
+]
+begin characters;
+  dimensions nchar=45;
+  format  missing=? gap=- datatype=dna Equate="Q=(AC)";
+  title dna_forty_five;
+  matrix
+	P._fimbriata    {a, G}cctcggcttaacgaacctcggcttaacgaacctcggcttaacga
+	P._robusta      (a, , C)cctcggcttaaccaacctcggcttaacgaacctcggcttaacga
+	P._americana    Qcgtcgctttca---acgtcgctttcaccaacgtcgctttcacca
+	P._myriophylla  acgtcgctttca---acgtcgctttcaccaacgtc?ctttcacca
+	P._polygama     acgtcgctctcaccaacgtcgctttcaccaacgtc?ctttcacca
+	P._macrop[i]hylla  acgtcgctctcaccaacgtcgctttcaccaacgtcgctttcacca
+  ;
+end;
+
+[!
+*************
+* rna       *
+*************
+]
+begin characters;
+  dimensions nchar=45;
+  format datatype=rna missing=? gap=-;
+  title rna_forty_five;
+  matrix
+	P._fimbriata    YR?ucggcuuaacgaaccucggcuuaacgaaccucggcuuaacga
+	P._robusta      Nc{ACGU-}ucggcuuaaccaaccucggcuuaacgaaccucggcuuaacga
+	P._americana    acgucgcuuuca---acgucgcuuucaccaacgucgcuuucacca
+	P._myriophylla  acgucgcuuuca---acgucgcuuucaccaacguc?cuuucacca
+	P._polygama     acgucgcucucaccaacgucgcuuucaccaacguc?cuuucacca
+	P._macrophylla  acgucgcucucaccaacgucgcuuucaccaacgucgcuuucacca
+  ;
+end;
+
+[!
+**********
+* Tokens *
+**********
+]
+begin characters;
+  dimensions nchar=3;
+  charstatelabels
+	1 'leaf margins' / entire fimbriate,
+	2 'flower color' / 'white to cream' crimson,
+	3 'breeding system' / hermaphroditic gynomonoecious gynodioecious dioecious
+  ;
+  format tokens;
+  matrix
+	P._fimbriata    fimbriate  crimson         gynomonoecious
+	P._robusta      fimbriate  crimson         gynomonoecious
+	P._americana    entire     white_to_cream  hermaphroditic
+	P._myriophylla  entire     white_to_cream  hermaphroditic
+	P._polygama     entire     white_to_cream  dioecious
+	P._macrophylla  entire     crimson         gynodioecious
+  ;
+end;
+
+[!
+***********
+* Symbols *
+***********
+]
+begin characters;
+  dimensions nchar=3;
+  charstatelabels
+	1 'leaf margins' / entire fimbriate,
+	2 'flower color' / 'white to cream' crimson,
+	3 'breeding system' / hermaphroditic gynomonoecious gynodioecious dioecious
+  ;
+  format notokens symbols="0123";
+  matrix
+	P._fimbriata    111
+	P._robusta      111
+	P._americana    000
+	P._myriophylla  000
+	P._polygama     003
+	P._macrophylla  012
+  ;
+end;
+
+[!
+*****************************
+* Interleaved, missing taxa *
+*****************************
+]
+begin characters;
+  dimensions ntax=4 nchar=15;
+  format datatype=dna interleave;
+  matrix
+	P._fimbriata    acctcggc
+	P._robusta      acctcggc
+	P._americana    acgtcgct
+	P._myriophylla  acgtcgct
+
+	P._fimbriata    ttaacga
+	P._robusta      ttaacca
+	P._americana    ctcacca
+	P._myriophylla  ttcacca
+  ;
+end;
+
+[!
+****************
+** transposed **
+****************
+]
+
+begin characters;
+  dimensions nchar=15;
+  format datatype=dna transpose;
+  matrix
+      site_1   aaaaaa
+      site_2   cccccc
+      site_3   ccggcc
+      site_4   tttttt
+      site_5   cccccc
+      site_6   gggggg
+      site_7   ggcccc
+      site_8   cctttt
+      site_9   ttcttt
+      site_10  tttttt
+      site_11  aacccc
+      site_12  aaaaaa
+      site_13  cccccc
+      site_14  gcccgg
+      site_15  aaaaaa
+  ;
+end;
+

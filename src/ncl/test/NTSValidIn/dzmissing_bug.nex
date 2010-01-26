@@ -1,0 +1,99 @@
+#NEXUS 
+[MacClade 4.08 registered to Joey Slowik, University of Alaska, Fairbanks]
+
+
+BEGIN DATA;
+	DIMENSIONS  NTAX=19 NCHAR=49;
+	FORMAT MISSING=? GAP=- ;
+MATRIX
+[                           10        20        30        40        ]
+[                           .         .         .         .         ]
+
+_I._princeps       0010000011001010010100?01000101100--?--1000011000
+_D._bidentata      001000100??01010001000?00??0000000--?--0100011010
+T._digitatus       100?001010?01110000001100??000011110?001001111000
+T._uintanus        1010001010?01110000101100??0001110--?--1000???000
+E._psychrophila    0011100011101000011010?1100010011110?001010011001
+T._tolli           001000000??01001001011100??01001010-?-01000010111
+W._directa         1010000010?00-00000001110??010110111000100010?011
+G._rubens          101001000??10--1010001111100101110--?--1110010011
+G._rufipes         10101001-??10-11110001101100101101110001000010111
+O._gibosus         10100011-??10-11010001110??01001110-?-00001110111
+S._montigenus      110?1111-??10-11111101110??0100011110001000011000
+S._quoylei         11101111-??10-11111101110??0100011110001000011000
+S._panopeus        11100111-??10-11110101010??0100011111001000011000
+S._montanus        11100111-??10-111100010110?0100011111001000011000
+S._crossoclavis    11110111-??10-111101010110?0110011111001100011000
+S._cynthiae        11111111-??10-111100010110?0110011111011100011000
+S._orites          11111111-??10-111100011110?0110011111111100011000
+S._nesides         11111111-??10-111100011110?1110011111111100011000
+S._aenigmaticus    ?????????????????????11111111100111111111???11?00
+;
+END;
+
+
+BEGIN ASSUMPTIONS;
+	OPTIONS  DEFTYPE=unord PolyTcount=MINSTEPS ;
+END;
+
+
+BEGIN MacClade;
+	Version 4.0  87;
+	LastModified -972251376;
+	FileSettings editor  '0' '0' '1' '1';
+	Singles 100;
+	Editor 00011001111111100100010010 '0' '24' Geneva '9' '100' '1' all;
+	EditorPosition  '46' '53' '819' '1371';
+	TreeWindowPosition  '46' '6' '835' '1390';
+	ListWindow Characters closed Geneva '9' '50' '10' '273' '352' 000;
+	ListWindow Taxa closed Geneva '9' '50' '10' '273' '490' 100000000;
+	ListWindow Trees closed Geneva '9' '50' '10' '276' '490' ;
+	ListWindow TypeSets closed Geneva '9' '50' '10' '276' '490' ;
+	ListWindow WtSets closed Geneva '9' '50' '10' '276' '490' ;
+	ListWindow ExSets closed Geneva '9' '50' '10' '276' '490' ;
+	ListWindow CharSets closed Geneva '9' '50' '10' '276' '490' ;
+	ListWindow TaxSets closed Geneva '9' '50' '10' '276' '490' ;
+	ListWindow CharPartitions closed Geneva '9' '50' '10' '276' '490' ;
+	ListWindow CharPartNames closed Geneva '9' '50' '10' '276' '490' ;
+	ListWindow WtSets closed Geneva '9' '50' '10' '276' '490' ;
+	ChartWindowPosition  '52' '30' '818' '1380';
+	StateNamesSymbols closed Geneva '9' '10' '50' '30' '148' '220';
+	WindowOrder  Data;
+	OtherSymbols &/ 00 ?-;
+	Correlation  '0' '0' '1000' '0' '0' 10011010;
+	Salmo 00000001;
+	EditorFile  '2';
+	ExportHTML _ MOSS  '100' 110000;
+	PrettyPrint 10;
+	EditorToolsPosition  '707' '93' '115' '165';
+	TreeWindowProgram 10;
+	TreeWindow 0000;
+	Continuous  '0' '3' 1;
+	Calculations 0000001;
+	SummaryMode  '0' '0' 0;
+	Charts  Geneva '9' (normal) 0010;
+	NexusOptions  '0' '0' '50' 001011001;
+	TipLabel  '1';
+	TreeFont  Geneva '9' (normal);
+	TreeShape  1.0 1.0 0100;
+	TraceLabels 0101;
+	ChartColors  '0' '0' '65535' '9' '0' 1;
+	ChartBiggestSpot 1;
+	ChartPercent 10;
+	ChartBarWidth  '10' 1;
+	ChartVerticalAxis 10101;
+	ChartMinMax  '0';
+	TraceAllChangesDisplay  '1' 1;
+	BarsOnBranchesDisplay  '0' '0' '60000' '10000' '10000' '10000' '10000' '60000' '65000' '65000' '65000' '6' '1' 0000101;
+	ContinuousBranchLabels 0;
+	AllStatesBranchLabels 1;
+	IndexNotation  '2' 1;
+	PrintTree  10.00 '2' '2' '2' '2' '2' '2' '2' '2' '2' '2' '2' Geneva '9' (normal) Geneva '10' (normal) Geneva '9' (normal) Geneva '9' (normal) Geneva '9' (bold ) Geneva '9' (normal) Geneva '9' (normal) '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '0' '1' '1' '1' '1' '0' '-8193' '-39' '4' '-40' '0' '1' '2' '1' '8' '0' '0' '0' '2' 1000111000000000000100000111000;
+	MatchChar 00 .;
+	EntryInterpretation 01;
+	ColorOptions 00;
+	TreeTools  '0' '5' '4' '0' '10' '4' '0' 00100111111101110;
+	EditorTools  '0' '0' '0' '1000' '0' '0' '6' '3' '1' 100010101110011;
+	PairAlign  '2' '2' '3' '2' '1' '1' '2' '1' '3' 1010;
+	BothTools  '1';
+END;
