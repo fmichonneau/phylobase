@@ -24,6 +24,7 @@
 #include "ncl.h"
 #include "NCLInterface.h"
 #include <sstream>
+#include <cassert>
 
 /*----------------------------------------------------------------------------------------------------------------------
  |	The constructor simply passes along `i' to the base class constructor. Nothing else needs to be done.
