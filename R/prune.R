@@ -26,7 +26,6 @@ setMethod("prune","phylo4", function(x, tips.exclude,
         if (edgeOrder(x) == "postorder") {
             edge.post <- edges(x)
         } else {
-            browser()
             edge.post <- edges(reorder(x, "postorder"))
         }
         for (i in seq_along(edge.post[,2])) {
@@ -60,7 +59,6 @@ setMethod("prune","phylo4", function(x, tips.exclude,
         edge.length.new <- edge.length.new[-match(edge.names.drop,
             names(edge.length.new))]
         edge.label.new[edge.name.new] <- NA
-        browser()
         edge.label.new <- edge.label.new[-match(edge.names.drop,
             names(edge.label.new))]
 

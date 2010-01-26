@@ -507,7 +507,6 @@ setMethod("summary", signature(object="phylo4"),
 
 orderIndex <- function(x, order=c("preorder", "postorder")) {
 
-    browser()
     order <- match.arg(order)
     if(!isRooted(x)){
         stop("Tree must be rooted to reorder")
@@ -597,7 +596,7 @@ setMethod("reorder", signature(x="phylo4"),
     order   <- match.arg(order)
     index   <- orderIndex(x, order)
     x@order <- order
-    x@edge  <- edges(x)[index, ]
+    x@edge  <- x@edge[index, ]
     if(hasEdgeLabels(x)) {
         x@edge.label  <- x@edge.label[index]
     }

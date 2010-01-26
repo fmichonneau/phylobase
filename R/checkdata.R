@@ -84,7 +84,7 @@ checkTree <- function(object,
     if (is.null(names(object@label))) {
         stop(c("Tip and node labels must have names matching node IDs. ",
             lab.msg))
-
+             
     } else {
         if (!all(tips %in% names(na.omit(object@label)))) {
             stop(c("All tips must have associated tip labels. ",
@@ -123,11 +123,11 @@ checkTree <- function(object,
     }
 
     ## make sure that tip and node labels are unique
-    #lb <- labels(object, "all")
-    #lb <- lb[nchar(lb) > 0]
-    #lb <- na.omit(lb)
-    #if(any(table(lb) > 1))
-    #    stop("All labels must be unique")
+    lb <- labels(object, "all")
+    lb <- lb[nchar(lb) > 0]
+    lb <- na.omit(lb)
+    if(any(table(lb) > 1))
+        stop("All labels must be unique")
 
     ## all done with fatal errors.  Now construct a list
     ##  of warnings and paste them together
