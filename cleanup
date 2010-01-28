@@ -1,5 +1,6 @@
 rm -f confdefs.h config.log config.status a.out.dSYM
 rm -f src/Makevars
+rm -rf src/bin
 rm -f src/*.o src/*.so
 rm -f src/RcppSrc/*.o src/RcppSrc/*.a inst/Rcpp-version.txt
 rm -f inst/doc/*.cpp inst/doc/*.hpp inst/doc/*.R 
@@ -15,6 +16,45 @@ rm -f libtool
 rm -f configure.lineno
 rm -f Makefile
 rm -rf ncl/.deps autom4te.cache
+rm -f nclv2.1.pc config.log config.status config.h
+cd example
+rm -f Makefile
+cd gapcode
+rm -rf .deps
+rm -f Makefile
+cd ..
+cd normalizer
+rm -rf .deps
+rm -f Makefile
+cd ..
+cd patristic
+rm -rf .deps
+rm -f Makefile
+cd ..
+cd splitsinfile
+rm -rf .deps
+rm -f Makefile
+cd ..
+cd basicfactory
+rm -rf .deps
+rm -f Makefile
+cd ..
+cd ncltest
+rm -rf .deps
+rm -f Makefile
+cd ..
+cd basiccmdline
+rm -rf .deps
+rm -f Makefile
+cd ..
+cd nclsimplest
+rm -rf .deps
+rm -f Makefile
+cd ..
+cd translate
+rm -rf .deps
+rm -f Makefile
+cd ../..
 cd ncl
 rm -f Makefile
 cd ../../..
