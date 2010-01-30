@@ -60,3 +60,45 @@ rm -f Makefile
 cd ../../..
 find . -name \*~ -exec rm {} \;
 find . -name \*.flc -exec rm {} \;
+rm -f src/ncl/config.log
+rm -f src/ncl/config.h
+rm -f src/ncl/Makefile
+rm -f src/ncl/nclv2.1.pc
+rm -f src/ncl/config.status
+rm -f src/ncl/stamp-h1
+rm -f src/ncl/libtool
+rm -f src/ncl/example/Makefile
+rm -f src/ncl/example/gapcode/NEXUSgapcode
+rm -f src/ncl/example/gapcode/.deps
+rm -f src/ncl/example/gapcode/Makefile
+rm -f src/ncl/example/normalizer/NEXUSinspector
+rm -f src/ncl/example/normalizer/NCLconverter
+rm -f src/ncl/example/normalizer/NEXUSnormalizer
+rm -f src/ncl/example/normalizer/NEXUSvalidator
+rm -f src/ncl/example/normalizer/.deps
+rm -f src/ncl/example/normalizer/NEXUSunion
+rm -f src/ncl/example/normalizer/NEX_us2ml
+rm -f src/ncl/example/normalizer/Makefile
+rm -f src/ncl/example/patristic/patristicmat
+rm -f src/ncl/example/patristic/.deps
+rm -f src/ncl/example/patristic/Makefile
+rm -f src/ncl/example/splitsinfile/NEXUStosplits
+rm -f src/ncl/example/splitsinfile/.deps
+rm -f src/ncl/example/splitsinfile/Makefile
+rm -f src/ncl/example/basicfactory/basicfactory
+rm -f src/ncl/example/basicfactory/.deps
+rm -f src/ncl/example/basicfactory/Makefile
+rm -f src/ncl/example/ncltest/.deps
+rm -f src/ncl/example/ncltest/ncltest
+rm -f src/ncl/example/ncltest/Makefile
+rm -f src/ncl/example/basiccmdline/.deps
+rm -f src/ncl/example/basiccmdline/basiccmdline
+rm -f src/ncl/example/basiccmdline/Makefile
+rm -f src/ncl/example/nclsimplest/.deps
+rm -f src/ncl/example/nclsimplest/Makefile
+rm -f src/ncl/example/nclsimplest/nclsimplest
+rm -f src/ncl/example/translate/NEXUStranslate
+rm -f src/ncl/example/translate/.deps
+rm -f src/ncl/example/translate/Makefile
+rm -f src/ncl/ncl/.deps
+rm -f src/ncl/ncl/Makefile
