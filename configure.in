@@ -45,16 +45,16 @@ else
 fi
 
 ## configure include/load flags and copy sample source to inst/doc
-AC_SUBST([CPPFLAGS],["${CPPFLAGS} ${rcpp_cxxflags} -Iinclude/ncl"])
+AC_SUBST([CPPFLAGS],["${CPPFLAGS} ${rcpp_cxxflags} -Iinclude"])
 AC_SUBST([LDFLAGS],["${LDFLAGS} ${rcpp_ldflags} -Llib/ncl -lncl"])
 
-AC_MSG_NOTICE([starting to build libncl.a in ncl])
+AC_MSG_NOTICE([starting to build libncl.a in src/ncl])
 cd src/ncl
 ./configure --quiet --enable-static --disable-shared --prefix=`pwd`/..
-make
-make install
+make 2>&1 > /dev/null
+make install 2>&1 > /dev/null
 cd ../..
-AC_MSG_NOTICE([finished building libncl.a in ncl])
+AC_MSG_NOTICE([finished building libncl.a in src/ncl])
 
 if test \! -d inst
 then

@@ -34,7 +34,7 @@
 //     used here three times
 #define  Rf_length length
 
-#include "ncl.h"
+#include <ncl/ncl.h>
 #include "NCLInterface.h"
 
 using namespace std;
@@ -219,64 +219,4 @@ RcppExport SEXP ReadCharsWithNCL(SEXP params) {
 }
 
 
-/*
- * Sample function illustrates how to use the Rcpp R/C++ interface library.
- */
-/*
-RcppExport SEXP Rcpp_Example(SEXP params, SEXP nlist, 
-			     SEXP numvec, SEXP nummat,
-			     SEXP df, SEXP datevec, SEXP stringvec,
-			     SEXP fnvec, SEXP fnlist) {
 
-    SEXP  rl=R_NilValue; // Use this when there is nothing to be returned.
-    char* exceptionMesg=NULL;
-}
-*/
-
-
-/*
- * The following class definitions employ advanced features of the Rcpp
- * library and R, permitting the C++ programmer to call user-defined functions
- * on the R side. They should be skipped on first reading.
- */
-
-/*
- * Define a class that can be used to call an R function that expects a
- * real vector argument and returns a scalar. The R function is defined in
- * the example section of the documentation page for RcppExample (see
- * RcppExample.Rd).
- */
-class MyRVectorFunc : public RcppFunction {
-public:
-    MyRVectorFunc(SEXP fn) : RcppFunction(fn) {}
-
-    // This trivial function will use an R function to compute the
-    // sum of the elements of v!
-    double getSum(vector<double>& v) {
-
-	// Turn vector into a SEXP that can be passed to R as an argument.
-	setRVector(v);
-
-	// Call the R function that was passed in as the paramter fn, with
-	// the SEXP vector that was just set as its argument.
-	SEXP result = vectorCall();
-
-	// Assuming that the R function simply returns a real number we
-	// pass it back to the C++ user as follows. If the R function returns
-	// something more complicated transform result into a C++ object to
-	// be returned, and  clear the part of the protection stack due to
-	// this object before returning (to prevent protection stack overflow).
-	// Note that it is unsafe to do this if the returned result depends
-	// on PROTECT-ed SEXP's. For example, result should not be 
-	// wrapped in a class like RcppParams where objects hold onto the
-	// the PROTECT-ed SEXP that was used to construct them.
-
-	double value = REAL(result)[0];
-
-	// Safe now to clear the contribution of this function to the
-	// protection stack.
-	clearProtectionStack();
-
-	return value;
-    }
-};
