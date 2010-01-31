@@ -1,2 +1,2 @@
-PKG_LIBS = -s `Rscript -e 'Rcpp:::LdFlags()'` -L"$(RHOME)/bin" -lR -L ncl/ncl -lncl --no-export-all-symbols --add-stdcall-alias
-PKG_CXXFLAGS = `Rscript -e 'Rcpp:::CxxFlags()'` -I ncl/ncl 
+PKG_LIBS = -s `Rscript -e 'Rcpp:::LdFlags()'` -L"$(RHOME)/bin" -lR -Lncl/ncl -lncl --no-export-all-symbols --add-stdcall-alias
+PKG_CXXFLAGS = `Rscript -e 'Rcpp:::CxxFlags()'` -Incl/
