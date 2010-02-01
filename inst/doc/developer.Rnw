@@ -117,7 +117,7 @@ The NEWS file can then be updated by going through the RecentChanges.txt file an
 
 \section{Unit testing with RUnit}
 
-We are in the process of moving our testing infrastructure to the \code{RUnit}\footnote{\url{http://cran.r-project.org/web/packages/RUnit/index.html}} framework.  New contributions and bug fixes should be accompanied by unit tests which test the basic functionality of the code as well as edge cases (e.g what happens when the function is passed an empty string or negative number -- even when those inputs don't make sense.)  Unit tests are stored in the \code{inst/unitTests/} directory and are named according to the source file they correspond to.  See the included tests and the \code{RUnit} documentation for further details. \code{RUnit} has a few advantages over the other testing frameworks in \code{R}, namely the examples in documentation, vignettes,  
+We are in the process of moving our testing infrastructure to the \code{RUnit}\footnote{\url{http://cran.r-project.org/web/packages/RUnit/index.html}} framework.  New contributions and bug fixes should be accompanied by unit tests which test the basic functionality of the code as well as edge cases (e.g what happens when the function is passed an empty string or negative number -- even when those inputs don't make sense.)  Unit tests are stored in the \code{inst/unitTests/} directory and are named according to the source file they correspond to.  See the included tests and the \code{RUnit} documentation for further details. \code{RUnit} has a few advantages over the other testing frameworks in \code{R}, namely the examples in documentation, vignettes,
 
 \section{Non-exported functions}
 
@@ -151,11 +151,33 @@ These functions are for internal use in \code{phylobase} not exported.  Since mo
 
     \addcontentsline{toc}{subsection}{orderIndex}
     \item[\code{orderIndex}] This function is called from the \code{reorder} method.  It takes a \code{phylo4} or \code{phylo4d} object and a string indicating the desired tree ordering, currently one of ``preorder'' or ``postorder''.  It's value is a vector indicating the respective ordering of the edge matrix from top to bottom (i.e. in postorder the first edge in the edge matrix would terminate in a tip, while in preorder the first edge would be the root edge.
-    
+
 \end{description}
 
 \section{The Nexus Class Library and Rcpp}
 
+\subsection{Organization of the repository}
+We manage NCL source code as a ``Vendor branch'' as described in the ``SVN
+book''. You should refer to this section of the SVN book before upgrading to a
+newer version of NCL.
+
+The original copies of NCL are stored at the root of the repository in the
+folder \code{libncl/}.
+
+When a new version of NCL is released:
+\begin{enumerate}
+  \item the newest tarball should be unpacked in the folder with the appropriate version number;
+  \item this new directory should then be copied over the \code{current/} folder
+    (using \code{svn copy});
+  \item the potential new files should be added with \code{svn add}, and the
+    missing files removed with \code{svn delete}. At this stage, the changes can
+    be commited.
+  \item The new version of NCL can then be tagged.
+  \item The new version of NCL can finally be merged in the \code{pkg/src} directory.
+\end{enumerate}
+
+For more information look at the section ``General Vendor Branch Management'' in
+the SVN book\footnote{\url{http://svnbook.red-bean.com/en/1.5/svn.advanced.vendorbr.html}}.
 
 \section{S4 classes and methods}
 
@@ -199,6 +221,7 @@ Case in point: \code{ape} is not entirely consistent in its internal representat
 The \code{phylobase} subversion repository is organized with four top level directories
 \begin{itemize}
     \item \code{branches/} where changes that will result in large disruption of the package take place
+    \item \code{libncl/} where we keep unaltered source of NCL.
     \item \code{pkg/} where the main trunk of the project exists.  This directory is built and available through the R-Forge install mechanism so it is important that it passes \code{R CMD check}
     \item \code{tags/} where copies of previous \code{phylobase} releases are kept
     \item \code{www/} where the R-Forge webpage for phylobase is maintained.  This must be kept and the top level for R-Forge to find it
@@ -214,7 +237,7 @@ svn checkout \
 svn://svn.r-forge.r-project.org/svnroot/phylobase
 \end{verbatim}
 
-If you would like to make commits directly to the source repository you need to register with R-Forge and be added to the \code{phylobase} project as a developer.  Once you've done this, you’ll need to have the ssh key set up in your R-Forge account.  These terminal commands will make a copy of the folder ``phylobase'', and all the source files for the package, in whatever directory you are in (in this case ``\code{~/Code}''), change ``\code{[name]}'' to your R-Forge username. 
+If you would like to make commits directly to the source repository you need to register with R-Forge and be added to the \code{phylobase} project as a developer.  Once you've done this, you’ll need to have the ssh key set up in your R-Forge account.  These terminal commands will make a copy of the folder ``phylobase'', and all the source files for the package, in whatever directory you are in (in this case ``\code{~/Code}''), change ``\code{[name]}'' to your R-Forge username.
 
 \begin{verbatim}
 cd ~/Code/
