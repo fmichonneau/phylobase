@@ -2502,18 +2502,19 @@ else
 fi
 
 ## configure include/load flags and copy sample source to inst/doc
-CPPFLAGS="${CPPFLAGS} ${rcpp_cxxflags} -Iinclude"
+CPPFLAGS="${CPPFLAGS} ${rcpp_cxxflags} -Incl"
 
-LDFLAGS="${LDFLAGS} ${rcpp_ldflags} -Llib/ncl -lncl"
+LDFLAGS="${LDFLAGS} ${rcpp_ldflags} -Lncl/ncl -lncl"
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: starting to build libncl.a in src/ncl" >&5
 $as_echo "$as_me: starting to build libncl.a in src/ncl" >&6;}
-cd src/ncl
-./configure --quiet --enable-static --disable-shared --prefix=`pwd`/..
-make 2>&1 > /dev/null
-make install 2>&1 > /dev/null
-cd ../..
+cd src/ncl/ncl
+#./configure --quiet --enable-static --disable-shared --prefix=`pwd`/..
+#make 2>&1 > /dev/null
+make -f Makefile.unix
+#make install 2>&1 > /dev/null
+cd ../../..
 { $as_echo "$as_me:${as_lineno-$LINENO}: finished building libncl.a in src/ncl" >&5
 $as_echo "$as_me: finished building libncl.a in src/ncl" >&6;}
 

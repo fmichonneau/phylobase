@@ -1,0 +1,63 @@
+##
+
+SRC = \
+	nxsassumptionsblock.cpp \
+	nxsblock.cpp \
+	nxscharactersblock.cpp \
+	nxscxxdiscretematrix.cpp \
+	nxsdatablock.cpp \
+	nxsdistancedatum.cpp \
+	nxsdistancesblock.cpp \
+	nxsexception.cpp \
+	nxsmultiformat.cpp \
+	nxspublicblocks.cpp \
+	nxsreader.cpp \
+	nxssetreader.cpp \
+	nxsstring.cpp \
+	nxstaxablock.cpp \
+	nxstoken.cpp \
+	nxstreesblock.cpp \
+	nxsunalignedblock.cpp 
+
+## nxsemptyblock.cpp 
+
+OBJ = \
+	nxsassumptionsblock.o \
+	nxsblock.o \
+	nxscharactersblock.o \
+	nxscxxdiscretematrix.o \
+	nxsdatablock.o \
+	nxsdistancedatum.o \
+	nxsdistancesblock.o \
+	nxsexception.o \
+	nxsmultiformat.o \
+	nxspublicblocks.o \
+	nxsreader.o \
+	nxssetreader.o \
+	nxsstring.o \
+	nxstaxablock.o \
+	nxstoken.o \
+	nxstreesblock.o \
+	nxsunalignedblock.o 
+
+LINKOBJ = $(OBJ) $(RES)
+
+LIB  = libncl.a
+CXXFLAGS = $(CPPFLAGS) -fPIC -Wall -O2 -I..
+RM = rm -f
+	
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before libncl.a  all-after
+
+clean: clean-custom
+	${RM} $(LINKOBJ) $(LIB)
+
+$(OBJ): $(SRC)
+	$(CXX) -c $*.cpp -o $*.o $(CXXFLAGS)
+	
+$(LIB): $(LINKOBJ)
+	ar r $(LIB) $(OBJ)
+	ranlib $(LIB)
+	rm $(OBJ)
+
