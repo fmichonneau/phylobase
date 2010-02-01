@@ -17,47 +17,6 @@ rm -f configure.lineno
 rm -f Makefile
 rm -rf ncl/.deps autom4te.cache
 rm -f nclv2.1.pc config.log config.status config.h
-cd example
-rm -f Makefile
-cd gapcode
-rm -rf .deps
-rm -f Makefile
-cd ..
-cd normalizer
-rm -rf .deps
-rm -f Makefile
-cd ..
-cd patristic
-rm -rf .deps
-rm -f Makefile
-cd ..
-cd splitsinfile
-rm -rf .deps
-rm -f Makefile
-cd ..
-cd basicfactory
-rm -rf .deps
-rm -f Makefile
-cd ..
-cd ncltest
-rm -rf .deps
-rm -f Makefile
-cd ..
-cd basiccmdline
-rm -rf .deps
-rm -f Makefile
-cd ..
-cd nclsimplest
-rm -rf .deps
-rm -f Makefile
-cd ..
-cd translate
-rm -rf .deps
-rm -f Makefile
-cd ../..
-cd ncl
-rm -f Makefile
-cd ../../..
 find . -name \*~ -exec rm {} \;
 find . -name \*.flc -exec rm {} \;
 rm -f src/ncl/config.log
