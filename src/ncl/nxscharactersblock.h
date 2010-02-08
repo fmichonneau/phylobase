@@ -926,7 +926,7 @@ class NxsDiscreteDatatypeMapper
 		/* will return NXS_INVALID_STATE_CODE if the char is unknown */
 		int				 GetStateCodeStored(char currChar) const 
 			{
-			return cLookup[currChar];
+			  return cLookup[static_cast<int>(currChar)];
 			}
 		bool			 IsPolymorphic(int stateCode) const;
 		int				 PositionInSymbols(const char currChar) const;

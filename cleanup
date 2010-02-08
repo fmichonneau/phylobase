@@ -1,5 +1,4 @@
 rm -f confdefs.h config.log config.status a.out.dSYM
-rm -f src/Makevars
 rm -rf src/bin
 rm -f src/*.o src/*.so
 rm -f src/RcppSrc/*.o src/RcppSrc/*.a inst/Rcpp-version.txt

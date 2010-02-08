@@ -19,6 +19,9 @@
 
 #include "ncl/ncl.h"
 
+// not used in phylobase
+#if 0
+
 using namespace std;
 /*----------------------------------------------------------------------------------------------------------------------
 |	Sets the base class data member `id' to the name of the block (i.e. "EMPTY") in NEXUS data files.
@@ -120,3 +123,5 @@ unsigned NxsEmptyBlock::TaxonLabelToNumber(
 	return 0;
 	}
 
+
+#endif

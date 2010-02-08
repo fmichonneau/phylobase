@@ -1,5 +1,0 @@
-echo "Configuring phylobase -- starting to build NCL"
-cd src/ncl/ncl
-make -f Makefile.win
-echo "Configuring phylobase -- finished building NCL"
-cd ../../..

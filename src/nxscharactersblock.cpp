@@ -926,7 +926,7 @@ std::vector<int> getGeneticCodeIndicesAAOrder(const NxsGeneticCodesEnum codeInde
 	aaInd[62] = 9;
 	aaInd[63] = 4;
 	if (codeIndex == NXS_GCODE_VERT_MITO) {
-		aaInd[8] = 20;
+	        aaInd[8] = 20;
 		aaInd[10] = 20;
 		aaInd[12] = 10;
 		aaInd[56] = 18;
@@ -2840,7 +2840,7 @@ int NxsDiscreteDatatypeMapper::StateCodeForNexusChar(
   const NxsDiscreteStateRow * firstTaxonRow, 
   const NxsString & nameStr) const
   	{
-  	int currState = cLookup[currChar];
+	int currState = cLookup[static_cast<int>(currChar)];
 	if (currState == NXS_INVALID_STATE_CODE)
 		{
 		NxsString emsg;
