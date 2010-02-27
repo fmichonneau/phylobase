@@ -1,4 +1,0 @@
-#NEXUS
-begin trees;
-	tree test = [&U] (a ,(b,c),d);
-end;
