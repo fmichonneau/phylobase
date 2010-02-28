@@ -5,7 +5,8 @@
 \usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
 \usepackage{graphicx}       % for jpeg and pdf figure support
 \usepackage[usenames,dvipsnames]{color} % loads colors w/ easy names for coloring our links
-\usepackage[colorlinks=true,urlcolor=Blue,linkcolor=BrickRed,bookmarks=true]{hyperref}
+\definecolor{DarkBlue}{rgb}{0,0,0.56}
+\usepackage[colorlinks=true,urlcolor=DarkBlue,linkcolor=BrickRed,bookmarks=true]{hyperref}
 \usepackage{url}
 \usepackage[noae]{Sweave}
 
@@ -25,6 +26,14 @@
 \date{\today}
 
 \begin{document}
+%% inspired by the adephylo vignette
+\DefineVerbatimEnvironment{Sinput}{Verbatim}
+{formatcom={\color{BrickRed}},fontsize=\footnotesize, baselinestretch=0.75}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}
+{formatcom={\color{DarkBlue}},fontsize=\footnotesize, baselinestretch=0.75}
+
+\SweaveOpts{fig=FALSE, eps=FALSE, pdf=TRUE, width=6, height=6}
+
 \maketitle
 
 \tableofcontents
@@ -99,7 +108,7 @@ The NEWS file can then be updated by going through the RecentChanges.txt file an
 ~$ pdflatex developer.tex
 ~$ pdflatex developer.tex
 
-~$ rm rm *.toc *.out *.log *.aux *.tex
+~$ rm *.toc *.out *.log *.aux *.tex
 \end{verbatim}
 
     \item Code freeze.  Before the package can be submitted to CRAN it must pass the R-Forge build and check process which happens every night.  The easiest way to handle this is to freeze the the code for a day or two after the NEWS, DESCRIPTION and PDF files have been updated.

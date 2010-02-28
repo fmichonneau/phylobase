@@ -5,8 +5,19 @@
 \usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
 \usepackage{graphicx}
 \usepackage{array}
-\usepackage{color}
-\usepackage[colorlinks=true,urlcolor=blue,bookmarks=true]{hyperref}
+\usepackage[usenames,dvipsnames]{color}
+\definecolor{DarkBlue}{rgb}{0,0,0.56}
+\usepackage[colorlinks=true,urlcolor=DarkBlue,linkcolor=BrickRed,bookmarks=true]{hyperref}
+\usepackage{url}
+\usepackage[noae]{Sweave}
+
+%% Use a little bit more of the page
+%% borrowed from Rd.sty, of r-project.org
+\addtolength{\textheight}{12mm}
+\addtolength{\topmargin}{-9mm}   % still fits on US paper
+\addtolength{\textwidth}{24mm}   % still fits on US paper
+\setlength{\oddsidemargin}{10mm}
+\setlength{\evensidemargin}{\oddsidemargin}
 
 \newcommand{\code}[1]{{{\tt #1}}}
 
@@ -15,6 +26,15 @@
 \date{\today}
 
 \begin{document}
+
+%% inspired by the adephylo vignette
+\DefineVerbatimEnvironment{Sinput}{Verbatim}
+{formatcom={\color{BrickRed}},fontsize=\footnotesize, baselinestretch=0.75}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}
+{formatcom={\color{DarkBlue}},fontsize=\footnotesize, baselinestretch=0.75}
+
+\SweaveOpts{fig=FALSE, eps=FALSE, pdf=TRUE, width=6, height=6}
+
 \maketitle
 \tableofcontents
 
@@ -373,9 +393,10 @@ the \code{phylo4} class are:
     (default), describing the order of rows in the edge matrix.  , ``pruningwise'' and ``cladewise'' are accepted for compatibility with \code{ape}}
 \end{description}
 
-The edge matrix must not contain \code{NA}s, with the exception of the root node, which has an \code{NA} for \code{ancestor}. \code{phylobase} does not enforce an order on the rows of the edge matrix, but it stores information on the current ordering in the \code{@order} slot --- current allowable values are ``unknown'' (the default), ``preorder'' (equivalent to ``cladewise'' in \code{ape}) or ``postorder'': see \url{http://en.wikipedia.org/wiki/Tree_traversal} for more information on orderings. (\code{ape}'s ``pruningwise'' is ``bottom-up'' ordering.)
+The edge matrix must not contain \code{NA}s, with the exception of the root node, which has an \code{NA} for \code{ancestor}. \code{phylobase} does not enforce an order on the rows of the edge matrix, but it stores information on the current ordering in the \code{@order} slot --- current allowable values are ``unknown'' (the default), ``preorder'' (equivalent to ``cladewise'' in \code{ape}) or ``postorder''
+\footnote{see \url{http://en.wikipedia.org/wiki/Tree_traversal} for more information on orderings. (\code{ape}'s ``pruningwise'' is ``bottom-up'' ordering).}.
 
-The basic criteria for the edge matrix are taken from \code{ape}, as documented in \url{ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf}. This is a modified version of those rules, for a tree with $n$ tips and $m$ internal nodes:
+The basic criteria for the edge matrix are similar to those of \code{ape}, as documented it's tree specification\footnote{\url{ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf}}. This is a modified version of those rules, for a tree with $n$ tips and $m$ internal nodes:
 
 \begin{itemize}
 \item Tips (no descendants) are coded $1,\ldots, n$,
@@ -403,20 +424,20 @@ The \code{phylo4d} class extends \code{phylo4} with data. Tip data, and (interna
 \subsection{multiphylo4}
 
 
-% hack removed ...
-%
-%\section{Hacks/backward compatibility}
-%
-%There is a way to hack the \verb+$+ operator so that it would provide %backward compatibility with code that is extracting internal elements %of a \code{phylo4}. The basic recipe is:
-
-<<echo=FALSE,eval=FALSE>>=
-setMethod("$", "phylo4", function(x, name) { attr(x, name)})
-@
-
-%but this has to be hacked slightly to intercept calls to elements %that might be missing.  For example, \code{ape} detects whether %log-likelihood, root edges, node labels, etc. are missing by testing %whether they are \code{NULL}, whereas missing items are represented %in \code{phylo4} by zero-length vectors in the slots (or \code{NA} %for the root edge) --- so we need code like
-<<echo=FALSE,eval=FALSE>>=
-if(!hasNodeLabels(x)) NULL else x@node.label
-@
-%to handle these cases.
+% % hack removed ...
+% %
+% %\section{Hacks/backward compatibility}
+% %
+% %There is a way to hack the \verb+$+ operator so that it would provide %backward compatibility with code that is extracting internal elements %of a \code{phylo4}. The basic recipe is:
+% 
+% <<echo=FALSE,eval=FALSE>>=
+% setMethod("$", "phylo4", function(x, name) { attr(x, name)})
+% @
+% 
+% %but this has to be hacked slightly to intercept calls to elements %that might be missing.  For example, \code{ape} detects whether %log-likelihood, root edges, node labels, etc. are missing by testing %whether they are \code{NULL}, whereas missing items are represented %in \code{phylo4} by zero-length vectors in the slots (or \code{NA} %for the root edge) --- so we need code like
+% <<echo=FALSE,eval=FALSE>>=
+% if(!hasNodeLabels(x)) NULL else x@node.label
+% @
+% %to handle these cases.
 
 \end{document}
