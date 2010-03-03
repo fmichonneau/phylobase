@@ -17,27 +17,141 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
-#ifndef NCL_BASICCMDLINE_H
-#define NCL_BASICCMDLINE_H
+#ifndef NCL_INTERFACE_H
+#define NCL_INTERFACE_H
+
+
+#define NEW_NCL_INTERFACE
+
+
+#if defined(NEW_NCL_INTERFACE)
+
+//  Copyright (C) 2007-2008 Brian O'Meara & Derrick Zwickl
+//	Copyright (C) 2007-2008 Mark T. Holder
+//
+//	This file is part of NCL (Nexus Class Library).
+//
+//	NCL is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//
+//	NCL is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//	GNU General Public License for more details.
+//
+//	You should have received a copy of the GNU General Public License
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
+//	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+//
+
+/*******************************************************************************
+ * This file merges content NEXUSnormalizer and phylobase NCLInterface.{h,cpp}
+ by  Brian O'Meara & Derrick Zwickl
+
+
+ */
+#include "ncl/ncl.h"
+#include "ncl/nxsblock.h"
+#include "ncl/nxspublicblocks.h"
+#include "ncl/nxsmultiformat.h"
+#include <cassert>
+
+
+class BASICCMDLINE {
+		enum MessageLevel {
+			DEBUG_MESSAGE_LEVEL = 0,
+			STATUS_MESSAGE_LEVEL = 1,
+			REPORT_MESSAGE_LEVEL = 2,
+			WARNING_MESSAGE_LEVEL = 3,
+			ERROR_MESSAGE_LEVEL = 4
+		};
+	public:
+		BASICCMDLINE()
+			: nexusReader(0L),
+			verboseLevel(REPORT_MESSAGE_LEVEL),
+			fmt(MultiFormatReader::NEXUS_FORMAT),
+			gStrictLevel(2),
+			warningLevel(NxsReader::SUPPRESS_WARNINGS_LEVEL)
+			{}
+		~BASICCMDLINE(){
+			Clear();
+		}
+
+		// verbosity level here refers to facets of the NxsReader::NxsWarnLevel enum (not the MessageLevel above)
+		void Initialize(char *infile_name, int verbosityLevel=8) {
+			if (verbosityLevel >= NxsReader::SUPPRESS_WARNINGS_LEVEL) {
+				this->warningLevel = NxsReader::SUPPRESS_WARNINGS_LEVEL;
+				this->verboseLevel = WARNING_MESSAGE_LEVEL;
+			}
+			else if (verbosityLevel >= 0) {
+				this->warningLevel = NxsReader::NxsWarnLevel(verboseLevel);
+			}
+			processFilepath(infile_name);
+		}
+		void Clear();
+
+		void RReturnCharacters(NxsString & nexuscharacters, bool allchar, bool polymorphictomissing, bool levelsall);
+		void RReturnTrees(NxsString & nexustrees);
+		void RReturnDistances(NxsString & nexusdistances);
+
+		std::string TestRunning();
+
+
+	private:
+		NxsString			RemoveUnderscoresAndSpaces(NxsString input) const;
+
+		void AppendRContent(
+				  NxsString & nexuscharacters,
+				  NxsCharactersBlock &characters,
+				  bool allchar,
+				  bool polymorphictomissing,
+				  bool levelsall) const;
+		void AppendRContent(NxsString & nexuscharacters,  NxsTreesBlock &treesB) const;
+
+		void AppendRContent(NxsString & nexuscharacters, NxsDistancesBlock &distancesB) const;
+
+		void processFilepath(const char * filename);
+		void statusMessage(const std::string & m)  const{
+			this->writeMessage(STATUS_MESSAGE_LEVEL, m);
+		}
+		void errorMessage(const std::string & m)  const{
+			this->writeMessage(ERROR_MESSAGE_LEVEL, m);
+		}
+		void writeMessage(MessageLevel level, const std::string & m) const;
+
+		MultiFormatReader * nexusReader;
+		int verboseLevel;
+		MultiFormatReader::DataFormatType fmt;
+		long gStrictLevel;
+		NxsReader::NxsWarnLevel warningLevel; // passed to NxsReader to discriminate between different levels of NexusWarning
+};
+
+#else // NEW_NCL_INTERFACE
+
+
+
+
 
 #define COMMAND_MAXLEN  255
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	BASICCMDLINE provides a template for creating a program that reads NEXUS data files and provides a basic command 
-|	line. After compiling BASICCMDLINE, you will already have a program that understands the following commands, either 
+|	BASICCMDLINE provides a template for creating a program that reads NEXUS data files and provides a basic command
+|	line. After compiling BASICCMDLINE, you will already have a program that understands the following commands, either
 |	typed in at the console or provided in a BASICCMDLINE block in a NEXUS data file (exception is the execute command,
 |	which can only be entered at the console). Keywords in the descriptions below are given in uppercase, however the
-|	commands themselves are case-insensitive. Lower-case indicates a parameter supplied by the user (e.g., "filename" 
+|	commands themselves are case-insensitive. Lower-case indicates a parameter supplied by the user (e.g., "filename"
 |	would be replaced by the actual name of the file). Square brackets indicate optional keywords or subcommands.
 |>
 |	EXECUTE filename;
-|	
+|
 |	LOG [options];
-|	
+|
 |	  Option         Action
 |	  ------------------------------------------------------
 |	  FILE=filename  specifies name of log file to start
@@ -45,23 +159,23 @@
 |	  STOP           indicates logging is to be stopped
 |	  APPEND         append to log file if it already exists
 |	  REPLACE        replace log file without asking
-|	
+|
 |	QUIT;
 |>
 |	See the Read function for details and to add other commands.
-|	
-|	To change the name of the program (which is also the prompt name and the name of the program's private NEXUS 
-|	block), replace all occurrences of BASICCMDLINE with the name of your program (also search for the string 
-|	"basiccmdline" and replace with an appropriate string at each occurrence).
-|	
-|	This class handles reading and storage for the NxsReader block BASICCMDLINE. It also serves as the main class for 
-|	the program BASICCMDLINE, acting as both a NxsReader object (in order to be capable of parsing data files) as well 
-|	as a NxsBlock object (in order to be able to process commands in a BASICCMDLINE block). 
 |
-|	Acting as a NxsBlock, it overrides the member functions Read and Reset, which are virtual functions in the base 
-|	class NxsBlock. Acting as a NxsReader object, it overrides the member functions EnteringBlock, SkippingBlock, and 
+|	To change the name of the program (which is also the prompt name and the name of the program's private NEXUS
+|	block), replace all occurrences of BASICCMDLINE with the name of your program (also search for the string
+|	"basiccmdline" and replace with an appropriate string at each occurrence).
+|
+|	This class handles reading and storage for the NxsReader block BASICCMDLINE. It also serves as the main class for
+|	the program BASICCMDLINE, acting as both a NxsReader object (in order to be capable of parsing data files) as well
+|	as a NxsBlock object (in order to be able to process commands in a BASICCMDLINE block).
+|
+|	Acting as a NxsBlock, it overrides the member functions Read and Reset, which are virtual functions in the base
+|	class NxsBlock. Acting as a NxsReader object, it overrides the member functions EnteringBlock, SkippingBlock, and
 |	NexusError.
-|	
+|
 |	Adding a new data member? Don't forget to:
 |~
 |	o Describe it in the class header comment at the top of "basiccmdline.h"
@@ -99,7 +213,7 @@ class BASICCMDLINE
 		void				PrintMessage(bool linefeed = true);
 		virtual void		Report(ostream &out);
 		void				Run(char *infile_name);
-		void				Initialize(char *infile_name);
+		void				Initialize(char *infile_name); //@@should be const char * !!! it is not being modified, but changing will break phylobase's ReadWithNCL
 		void				SkippingBlock(NxsString blockName);
 		void				SkippingCommand(NxsString commandName);
 		void				SkippingDisabledBlock(NxsString blockName);
@@ -111,7 +225,8 @@ class BASICCMDLINE
 		void				RReturnTrees(NxsString & nexustrees);
 		void				RReturnDistances(NxsString & nexusdistances);
 		string				TestRunning();
-		
+
+		void 				ReadFilePath(const char * fn);
 	protected:
 
 		bool				inf_open;			/* true if `inf' is currently open */
@@ -175,14 +290,14 @@ inline void BASICCMDLINE::ExecuteStopping()
 /*----------------------------------------------------------------------------------------------------------------------
 |	Called if an "output comment" is encountered in a NEXUS data file. An output comment is a comment [text enclosed in
 |	square brackets] that begins with an exclamation point. [!This is an example of a NEXUS output comment]. Output
-|	comments are supposed to be displayed when encountered. Modify this function's body to display output comments, 
+|	comments are supposed to be displayed when encountered. Modify this function's body to display output comments,
 |	which are made available as they are encountered via the `msg' argument.
 */
 inline void	BASICCMDLINE::OutputComment(const NxsString &)
 	{
 	}
 
-
+#endif //NEW_NCL_INTERFACE
 
 #endif
 

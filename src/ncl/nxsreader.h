@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -38,14 +38,14 @@ typedef std::map<std::string, BlockReaderList> BlockTypeToBlockList;
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	This is the class that orchestrates the reading of a NEXUS data file. 
-|	
+|	This is the class that orchestrates the reading of a NEXUS data file.
+|
 |	In the "classic" NCL API:
 |		1. An NxsReader is created.
-|		2. pointers to instances of NxsBlocks that are expected to be needed should be added to `blockList' using the 
-|			NxsReader::Add() member function. 
-|		3. NxsReader::Execute() is then called, which reads the data file until encountering a block name, at which 
-|			point the correct block is looked up in `blockList' and that object's NxsBlock::Read() method is called. 
+|		2. pointers to instances of NxsBlocks that are expected to be needed should be added to `blockList' using the
+|			NxsReader::Add() member function.
+|		3. NxsReader::Execute() is then called, which reads the data file until encountering a block name, at which
+|			point the correct block is looked up in `blockList' and that object's NxsBlock::Read() method is called.
 |		4. NxsReader::PostBlockReadingHook(NxsBlock) is called after a block is successfully read.  This allows one to gather
 |			the parsed data from the NxsBlock.  If another block of the same type is encountered, then NxsBlock::Reset()
 |			will be called and the same NxsBlock instance will be used to read the next block.
@@ -57,10 +57,10 @@ typedef std::map<std::string, BlockReaderList> BlockTypeToBlockList;
 |			the factories are asked to create a block for the current block name.  The first non-NULL block pointer
 |			returned is used.
 |		4b. PostBlockReadingHook is still called, but blocks created by a factory will not be "recycled" later in the
-|			NxsReader::Execute(), so it is not necessary to pull all of the data out of them.  
-|		4c 	If a block created by a factory is skipped or has an error, then the factory will be notified using 
-|			NxsBlockFactory::BlockError(NxsBlock *) or NxsBlockFactory::BlockSkipped(NxsBlock *).  In the event of 
-|			skipping or an error, NxsReader will never refer to that instance of the factory-created block again.  
+|			NxsReader::Execute(), so it is not necessary to pull all of the data out of them.
+|		4c 	If a block created by a factory is skipped or has an error, then the factory will be notified using
+|			NxsBlockFactory::BlockError(NxsBlock *) or NxsBlockFactory::BlockSkipped(NxsBlock *).  In the event of
+|			skipping or an error, NxsReader will never refer to that instance of the factory-created block again.
 |			Hence the base class behavior of BlockError() and BlockSkipped() is to delete the instance.
 |		5	Every time a NxsBlock successfully reads a NEXUS block, the NxsBlock is added to container of "used" blocks.
 |			When a block is Reset() it is removed from this container.  NxsReader::GetUsedBlocks() can be called at any
@@ -69,16 +69,16 @@ typedef std::map<std::string, BlockReaderList> BlockTypeToBlockList;
 |			factories rather than blocks added using NxsReader::Add() method), then the GetUsedBlocks will contain binary
 |			representation of every block parsed.
 |
-|		See basicfactory for an example of this API.	
+|		See basicfactory for an example of this API.
 |
-|	Important: The use of the factories that are supplied with NCL can trigger casts of pointers. This can be unsafe if 
-|		you create NxsBlocks that do not have the expected inheritance.  For example, if you create a class to 
-|		read Taxa blocks, but do NOT derive this class from NxsTaxaBlockAPI then the casts will be unsafe.  If you 
+|	Important: The use of the factories that are supplied with NCL can trigger casts of pointers. This can be unsafe if
+|		you create NxsBlocks that do not have the expected inheritance.  For example, if you create a class to
+|		read Taxa blocks, but do NOT derive this class from NxsTaxaBlockAPI then the casts will be unsafe.  If you
 |		do this, and you wish to use the factory API then you must write your own factories.
 |
 |	Note:
-|			- NxsReader does not call delete on any of the blocks that it uses.  
-|	
+|			- NxsReader does not call delete on any of the blocks that it uses.
+|
 |
 */
 class NxsReader
@@ -105,9 +105,10 @@ class NxsReader
 			AMBIGUOUS_CONTENT_WARNING = 4,
 			ILLEGAL_CONTENT_WARNING = 5,
 			PROBABLY_INCORRECT_CONTENT_WARNING = 6,
-			FATAL_WARNING = 7
+			FATAL_WARNING = 7,
+			SUPPRESS_WARNINGS_LEVEL = 8 // if the NxsReader's warning level is set to this, then warnings will be suppressed
 			};
-			
+
 		static void installNCLSignalHandler();
 		static void uninstallNCLSignalHandler();
 		static void setNCLCatchesSignals(bool);
@@ -143,7 +144,7 @@ class NxsReader
 
 		virtual void	OutputComment(const NxsString &comment);
 		/*The default NexusWarn behavior is to generate a NexusException for any
-			warnLevel >= PROBABLY_INCORRECT_CONTENT_WARNING 
+			warnLevel >= PROBABLY_INCORRECT_CONTENT_WARNING
 		 	and to ignore all other warnings.
 		*/
 		virtual void	NexusWarn(const std::string &s, NxsWarnLevel warnLevel, file_pos pos, long line, long col)
@@ -168,7 +169,7 @@ class NxsReader
 		virtual void	SkippingDisabledBlock(NxsString blockName);
 		virtual void	SkippingBlock(NxsString blockName);
 
-		
+
 		virtual void			ClearUsedBlockList();
 		NxsBlock 			   *CreateBlockFromFactories(const std::string & currBlockName, NxsToken &token, NxsBlockFactory **sourceOfBlock = NULL);
 		BlockReaderList 		GetUsedBlocksInOrder();
@@ -196,12 +197,12 @@ class NxsReader
 		unsigned		RemoveBlockFromUsedBlockList(NxsBlock *);
 
 		// throws away references to all blocks that that have been read. If the block
-		// was registered with the reader, then "Reset" is called on the block. 
+		// was registered with the reader, then "Reset" is called on the block.
 		//	If the block came from a factory then the reference to the block is
-		//		removed from the reader (resulting in a memory leak if the client 
+		//		removed from the reader (resulting in a memory leak if the client
 		//		code does not delete the block).
 		// This can be called if the client would like to store the information
-		//	from the NEXUS file, and get rid of the blocks to save memory (but 
+		//	from the NEXUS file, and get rid of the blocks to save memory (but
 		//	still maintain things like factories that were registered with the
 		//	NxsReader and tweaks to the default settings).
 		virtual void	ClearContent();
@@ -221,11 +222,11 @@ class NxsReader
 			{
 			this->BlockReadHook(blockID, block);
 			}
-		
+
 		///////////////////////////////////////////////////////////////////////
 		//	Call cullIdenticalTaxaBlocks(true) before reading a file if you want
-		// the reader to discard a TaxaBlock that is identical to a previous 
-		// taxa block.  Use of this assumes that the reader of taxa blocks is 
+		// the reader to discard a TaxaBlock that is identical to a previous
+		// taxa block.  Use of this assumes that the reader of taxa blocks is
 		// a NxsTaxaBlockAPI instance.
 		///////////////////////////////////////////////////////////////////////
 		void cullIdenticalTaxaBlocks(bool v=true)
@@ -233,6 +234,17 @@ class NxsReader
 			this->destroyRepeatedTaxaBlocks = v;
 			}
 		std::vector<std::string> GetAllTitlesForBlock(const NxsBlock *b) const;
+
+		void SetAlwaysReportStatusMessages(bool v) {
+			this->alwaysReportStatusMessages = v;
+		}
+		void SetWarningOutputLevel(NxsWarnLevel lev) {
+			currentWarningLevel = lev;
+		}
+		NxsWarnLevel GetWarningOutputLevel() const {
+			return currentWarningLevel;
+		}
+		virtual void statusMessage(const std::string & m) const;
 	protected:
 		static 			BlockReaderList parseFileWithReader(NxsReader & reader, const char *filepath, bool parsePrivateBlocks=true, bool storeTokenInfo=true);
 		static bool nclCatchesSignals; // default False;
@@ -240,7 +252,7 @@ class NxsReader
 		static SignalHandlerFuncPtr prevSignalCatcher; // the signal handler that was installed before NCL's signal handler
 		static unsigned numSigIntsCaught;
 		static bool prevSignalStored ;
-		
+
 		void			CoreExecutionTasks(NxsToken& token, bool notifyStartStop = true);
 
 
@@ -259,7 +271,9 @@ class NxsReader
 		NxsTaxaBlockFactory *taxaBlockFactory;
 		BlockFactoryList factories; /* list of pointers to factories capable of creating NxsBlock objects*/
 		bool destroyRepeatedTaxaBlocks;
-		
+		NxsWarnLevel currentWarningLevel;
+		bool alwaysReportStatusMessages;
+
 	private:
 		NxsBlock 		*FindBlockOfTypeByTitle(const std::string &btype, const char *title, unsigned *nMatches);
 		NxsBlock		*FindBlockByTitle(const BlockReaderList & chosenBlockList, const char *title, unsigned *nMatches);
@@ -267,7 +281,7 @@ class NxsReader
 		void 			NewBlockTitleCheckHook(const std::string &blockname, NxsBlock *p, NxsToken *token);
 		void			AddBlockToUsedBlockList(const std::string &, NxsBlock *, NxsToken *);
 		bool 			ReadUntilEndblock(NxsToken &token, const std::string & currBlockName);
-		
+
 		BlockReaderList blocksInOrder;
 		BlockReaderList lastExecuteBlocksInOrder;
 		BlockTypeToBlockList blockTypeToBlockList;
@@ -275,6 +289,7 @@ class NxsReader
 		typedef std::map<std::string, NxsBlockTitleHistory > NxsBlockTitleHistoryMap;
 		NxsBlockTitleHistoryMap blockTitleHistoryMap;
 		std::map<const NxsBlock *, std::list<std::string> > blockTitleAliases; // to deal with culling blocks and then using the titles of culled copies
+
 
 	};
 
@@ -288,23 +303,23 @@ class ExceptionRaisingNxsReader : public NxsReader
 			:warnMode(mode),
 			warningToErrorThreshold(PROBABLY_INCORRECT_CONTENT_WARNING)
 			{}
-		static BlockReaderList parseFileOrThrow(const char *filepath, 
-												NxsReader::WarningHandlingMode mode = NxsReader::WARNINGS_TO_STDERR, 
-												bool parsePrivateBlocks=true, 
+		static BlockReaderList parseFileOrThrow(const char *filepath,
+												NxsReader::WarningHandlingMode mode = NxsReader::WARNINGS_TO_STDERR,
+												bool parsePrivateBlocks=true,
 												bool storeTokenInfo=true);
 		void NexusError(NxsString msg, file_pos pos, long line, long col)
 			{
 			throw NxsException(msg, pos, line, col);
 			}
-		virtual void NexusWarn(const std::string & msg, NxsWarnLevel level, file_pos pos, long line, long col);		
-	
+		virtual void NexusWarn(const std::string & msg, NxsWarnLevel level, file_pos pos, long line, long col);
+
 		void SkippingBlock(NxsString blockName);
 		void SkippingDisabledBlock(NxsString blockName);
 		void SetWarningToErrorThreshold(int t)
 			{
 			warningToErrorThreshold = t;
 			}
-		virtual void ClearContent() 
+		virtual void ClearContent()
 			{
 			NxsReader::ClearContent();
 			}
@@ -326,12 +341,12 @@ class DefaultErrorReportNxsReader : public NxsReader
 			}
 
 		virtual ~DefaultErrorReportNxsReader() {}
-	
+
 		virtual bool EnteringBlock(NxsString )
 			{
-			return true;	
+			return true;
 			}
-	
+
 		void SkippingBlock(NxsString blockName)
 			{
 			if (stdOut != 0L)
@@ -341,7 +356,7 @@ class DefaultErrorReportNxsReader : public NxsReader
 				}
 			}
 
-		void SkippingDisabledBlock(NxsString blockName) 
+		void SkippingDisabledBlock(NxsString blockName)
 			{
 			if (stdOut != 0L)
 				{
@@ -352,12 +367,13 @@ class DefaultErrorReportNxsReader : public NxsReader
 
 		void NexusWarn(const std::string & msg, NxsWarnLevel warnLevel, file_pos pos, long line, long col)
 			{
+			if (warnLevel < currentWarningLevel)
+				return;
 			if (warnLevel >= PROBABLY_INCORRECT_CONTENT_WARNING)
 				{
 				NxsString e(msg.c_str());
 				throw NxsException(e, pos, line, col);
 				}
-
 			if (errOut != 0)
 				{
 				*errOut << "\nWarning:  ";
@@ -373,7 +389,7 @@ class DefaultErrorReportNxsReader : public NxsReader
 				*stdOut  << msg << std::endl;
 				}
 			}
-			
+
 		void NexusError(NxsString msg, file_pos pos, long line, long col)
 			{
 			NexusWarn(msg, NxsReader::FATAL_WARNING, pos, line, col);
@@ -385,9 +401,9 @@ class DefaultErrorReportNxsReader : public NxsReader
 	};
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Returns a map from all block ids that have been read to all instances that the NxsReader knows have been read and 
+|	Returns a map from all block ids that have been read to all instances that the NxsReader knows have been read and
 |		have NOT been cleared.
-|	NOTE:  If the factory interface to NCL is not being used this may not be a complete list of all of the blocks that 
+|	NOTE:  If the factory interface to NCL is not being used this may not be a complete list of all of the blocks that
 |		have been read!!!
 */
 inline BlockTypeToBlockList NxsReader::GetUsedBlocks()
@@ -403,14 +419,14 @@ inline bool NxsReader::IsRepeatedTaxaBlock(const NxsTaxaBlockAPI * testB) const
 
 /*----------------------------------------------------------------------------------------------------------------------
 |	Returns a list of  all blocks  that the NxsReader knows have been read and have NOT been cleared.
-|	NOTE:  If the factory interface to NCL is not being used this may not be a complete list of all of the blocks that 
+|	NOTE:  If the factory interface to NCL is not being used this may not be a complete list of all of the blocks that
 |		have been read!!!
 */
 inline BlockReaderList NxsReader::GetUsedBlocksInOrder()
 	{
 	return blocksInOrder;
 	}
-	
+
 inline BlockReaderList NxsReader::GetBlocksFromLastExecuteInOrder()
 	{
 	return lastExecuteBlocksInOrder;
@@ -425,7 +441,7 @@ inline void NxsReader::ClearUsedBlockList()
 	{
 	blockTypeToBlockList.clear();
 	}
-	
+
 inline NxsTaxaBlockFactory * NxsReader::GetTaxaBlockFactory()
 	{
 	return this->taxaBlockFactory;

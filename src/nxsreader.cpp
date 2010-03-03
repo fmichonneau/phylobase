@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 #include <csignal>
@@ -35,7 +35,7 @@ using namespace std;
 	{
 		return 1;
 	}
-	
+
 #endif
 
 
@@ -45,8 +45,8 @@ NxsReader::SignalHandlerFuncPtr NxsReader::prevSignalCatcher = 0L;
 bool NxsReader::nclCatchesSignals = false;
 unsigned NxsReader::numSigIntsCaught = 0;
 bool NxsReader::prevSignalStored = true;
-		
-unsigned NxsReader::getNumSignalIntsCaught() 
+
+unsigned NxsReader::getNumSignalIntsCaught()
 	{
 	return NxsReader::numSigIntsCaught;
 	}
@@ -56,18 +56,18 @@ void NxsReader::setNumSignalsIntsCaught(unsigned n)
 	NxsReader::numSigIntsCaught = n;
 	}
 
-void NxsReader::setNCLCatchesSignals(bool v) 
+void NxsReader::setNCLCatchesSignals(bool v)
 	{
 	NxsReader::nclCatchesSignals = v;
 	}
 
-bool NxsReader::getNCLCatchesSignals() 
+bool NxsReader::getNCLCatchesSignals()
 	{
 	return NxsReader::nclCatchesSignals;
 	}
 
 
-void NxsHandleSignalCallback(int) 
+void NxsHandleSignalCallback(int)
 	{
 	unsigned nc = NxsReader::getNumSignalIntsCaught();
 	NxsReader::setNumSignalsIntsCaught(1 + nc);
@@ -76,7 +76,7 @@ void NxsHandleSignalCallback(int)
 void NxsReader::installNCLSignalHandler()
 	{
 	NxsReader::SignalHandlerFuncPtr prev = std::signal(SIGINT, SIG_IGN);
-	if (prev != SIG_IGN) 
+	if (prev != SIG_IGN)
 		{
 		NxsReader::prevSignalCatcher = prev;
 		NxsReader::prevSignalStored = true;
@@ -121,7 +121,7 @@ void NxsReader::ReadFilepath(const char *filename)
 	}
 
 
-void NxsReader::ReadStringAsNexusContent(const std::string & s) 
+void NxsReader::ReadStringAsNexusContent(const std::string & s)
 	{
 	std::istringstream inf(s);
 	this->ReadFilestream(inf);
@@ -132,7 +132,7 @@ void NxsReader::ReadStringAsNexusContent(const std::string & s)
 */
 void NxsReader::ReadFilestream(std::istream & inf)
 	{
-	NxsToken token(inf);	
+	NxsToken token(inf);
 	this->Execute(token);
 	}
 
@@ -148,16 +148,16 @@ void NxsReader::DeleteBlocksFromFactories()
 		else
 			todel.insert(b);
 		}
-	for (std::set<NxsBlock *>::iterator d = todel.begin(); d != todel.end(); ++d) 
+	for (std::set<NxsBlock *>::iterator d = todel.begin(); d != todel.end(); ++d)
 		{
-		
+
 		delete *d;
 		}
 	blocksInOrder = saved;
 	lastExecuteBlocksInOrder = saved;
 	}
-	
-bool NxsReader::BlockIsASingeltonReader(NxsBlock *b) const 
+
+bool NxsReader::BlockIsASingeltonReader(NxsBlock *b) const
 	{
 	NxsBlock * sb = blockList;
 	while (sb)
@@ -170,7 +170,7 @@ bool NxsReader::BlockIsASingeltonReader(NxsBlock *b) const
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Returns a NxsBlock from `chosenBlockList` with a Title that matches `title`. 
+|	Returns a NxsBlock from `chosenBlockList` with a Title that matches `title`.
 |	In the event of ties, the most recently read block is returned.
 |	If `title` is NULL, then any block is considered a match.
 |	On output *nMatches will be the number of matches (if `nMatches` is not NULL).
@@ -196,7 +196,7 @@ NxsBlock *NxsReader::FindBlockByTitle(const BlockReaderList & chosenBlockList, c
 		{
 		bool isMatch = false;
 		std::vector<std::string> v = this->GetAllTitlesForBlock(*cblIt);
-		for (std::vector<std::string>::const_iterator vIt = v.begin(); vIt != v.end(); ++vIt) 
+		for (std::vector<std::string>::const_iterator vIt = v.begin(); vIt != v.end(); ++vIt)
 			{
 			const std::string & n = *vIt;
 			if ((emptyTitle && n.empty()) || (NxsString::case_insensitive_equals(title, n.c_str())))
@@ -205,7 +205,7 @@ NxsBlock *NxsReader::FindBlockByTitle(const BlockReaderList & chosenBlockList, c
 				break;
 				}
 			}
-		if (isMatch) 
+		if (isMatch)
 			{
 			if (toReturn)
 				*nMatches = *nMatches + 1;
@@ -252,8 +252,8 @@ NxsBlock *NxsReader::FindBlockOfTypeByTitle(const std::string &btype, const char
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	NOTE: cast to NxsTaxaBlockAPI *.  This is only called by NCL when factories and the Link API are in effect.	 
-|	When using these APIs, block readers that read "TAXA" blocks in a NEXUS file must inherit from 
+|	NOTE: cast to NxsTaxaBlockAPI *.  This is only called by NCL when factories and the Link API are in effect.
+|	When using these APIs, block readers that read "TAXA" blocks in a NEXUS file must inherit from
 |	NxsTaxaBlockAPI, or the behavior will be undefined.
 |	This requirement also applies to "implied" taxa blocks that are returned from CHARACTERS (or other) blocks.
 */
@@ -264,8 +264,8 @@ NxsTaxaBlockAPI *NxsReader::GetTaxaBlockByTitle(const char *title, unsigned *nMa
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	NOTE: cast to NxsCharactersBlockAPI *.	This is only called by NCL when factories and the Link API are in effect.  
-|	When using these APIs, block readers that read "CHARACTERS" or "DATA" blocks in a NEXUS file must inherit from 
+|	NOTE: cast to NxsCharactersBlockAPI *.	This is only called by NCL when factories and the Link API are in effect.
+|	When using these APIs, block readers that read "CHARACTERS" or "DATA" blocks in a NEXUS file must inherit from
 |	NxsCharactersBlockAPI, or the behavior will be undefined.
 */
 NxsCharactersBlockAPI	*NxsReader::GetCharBlockByTitle(const char *title, unsigned *nMatches)
@@ -287,7 +287,7 @@ NxsTreesBlockAPI *NxsReader::GetTreesBlockByTitle(const char *title, unsigned *n
 /*----------------------------------------------------------------------------------------------------------------------
 |	Initializes both `blockList' and `currBlock' to NULL.
 */
-NxsReader::NxsReader()
+NxsReader::NxsReader() : currentWarningLevel(UNCOMMON_SYNTAX_WARNING), alwaysReportStatusMessages(false)
 	{
 	blockList	= NULL;
 	currBlock	= NULL;
@@ -312,7 +312,7 @@ NxsReader::~NxsReader()
 		if ((*b)->GetNexus() == this)
 			(*b)->SetNexus(NULL);
 		}
-	
+
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
@@ -335,7 +335,7 @@ void NxsReader::RemoveFactory(NxsBlockFactory *f)
 /*----------------------------------------------------------------------------------------------------------------------
 |	Adds `newBlock' to the end of the list of NxsBlock objects growing from `blockList'. If `blockList' points to NULL,
 |	this function sets `blockList' to point to `newBlock'. Calls SetNexus method of `newBlock' to inform `newBlock' of
-|	the NxsReader object that now owns it. This is useful when the `newBlock' object needs to communicate with the 
+|	the NxsReader object that now owns it. This is useful when the `newBlock' object needs to communicate with the
 |	outside world through the NxsReader object, such as when it issues progress reports as it is reading the contents
 |	of its block.
 */
@@ -385,8 +385,8 @@ unsigned NxsReader::PositionInBlockList(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Reassign should be called if a block (`oldb') is about to be deleted (perhaps to make way for new data). Create 
-|	the new block (`newb') before deleting `oldb', then call Reassign to replace `oldb' in `blockList' with `newb'. 
+|	Reassign should be called if a block (`oldb') is about to be deleted (perhaps to make way for new data). Create
+|	the new block (`newb') before deleting `oldb', then call Reassign to replace `oldb' in `blockList' with `newb'.
 |	Assumes `oldb' exists and is in `blockList'.
 */
 void NxsReader::Reassign(
@@ -408,9 +408,9 @@ void NxsReader::Reassign(
 	NCL_ASSERT(curr != NULL);
 
 	newb->next = curr->next;
-	if (prev == NULL) 
+	if (prev == NULL)
 		blockList = newb;
-	else 
+	else
 		prev->next = newb;
 	curr->next = NULL;
 	curr->SetNexus(NULL);
@@ -428,13 +428,13 @@ bool NxsReader::BlockListEmpty()
 /*----------------------------------------------------------------------------------------------------------------------
 |	This function was created for purposes of debugging a new NxsBlock. This version does nothing; to create an active
 |	DebugReportBlock function, override this version in the derived class and call the Report function of `nexusBlock'.
-|	This function is called whenever the main NxsReader Execute function encounters the [&spillall] command comment 
-|	between blocks in the data file. The Execute function goes through all blocks and passes them, in turn, to this 
+|	This function is called whenever the main NxsReader Execute function encounters the [&spillall] command comment
+|	between blocks in the data file. The Execute function goes through all blocks and passes them, in turn, to this
 |	DebugReportBlock function so that their contents are displayed. Placing the [&spillall] command comment between
-|	different versions of a block allows multiple blocks of the same type to be tested using one long data file. Say 
-|	you are interested in testing whether the normal, transpose, and interleave format of a matrix can all be read 
+|	different versions of a block allows multiple blocks of the same type to be tested using one long data file. Say
+|	you are interested in testing whether the normal, transpose, and interleave format of a matrix can all be read
 |	correctly. If you put three versions of the block in the data file one after the other, the second one will wipe out
-|	the first, and the third one will wipe out the second, unless you have a way to report on each one before the next 
+|	the first, and the third one will wipe out the second, unless you have a way to report on each one before the next
 |	one is read. This function provides that ability.
 */
 void NxsReader::DebugReportBlock(
@@ -443,11 +443,11 @@ void NxsReader::DebugReportBlock(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Detaches `oldBlock' from the list of NxsBlock objects growing from `blockList'. If `blockList' itself points to 
-|	`oldBlock', this function sets `blockList' to point to `oldBlock->next'. Note: the object pointed to by `oldBlock' 
-|	is not deleted, it is simply detached from the linked list. No harm is done in Detaching a block pointer that has 
-|	already been detached previously; if `oldBlock' is not found in the block list, Detach simply returns quietly. If 
-|	`oldBlock' is found, its SetNexus object is called to set the NxsReader pointer to NULL, indicating that it is no 
+|	Detaches `oldBlock' from the list of NxsBlock objects growing from `blockList'. If `blockList' itself points to
+|	`oldBlock', this function sets `blockList' to point to `oldBlock->next'. Note: the object pointed to by `oldBlock'
+|	is not deleted, it is simply detached from the linked list. No harm is done in Detaching a block pointer that has
+|	already been detached previously; if `oldBlock' is not found in the block list, Detach simply returns quietly. If
+|	`oldBlock' is found, its SetNexus object is called to set the NxsReader pointer to NULL, indicating that it is no
 |	longer owned by (i.e., attached to) a NxsReader object.
 */
 void NxsReader::Detach(
@@ -460,12 +460,12 @@ void NxsReader::Detach(
 	if (blockList == NULL)
 		return;
 
-	if (blockList == oldBlock) 
+	if (blockList == oldBlock)
 		{
 		blockList = oldBlock->next;
 		oldBlock->SetNexus(NULL);
 		}
-	else 
+	else
 		{
 		// Bug fix MTH 6/17/2002: old version detached intervening blocks as well
 		//
@@ -473,7 +473,7 @@ void NxsReader::Detach(
 		for (; curr->next != NULL && curr->next != oldBlock;)
 			curr = curr->next;
 
-		// Line below can be uncommented to find cases where Detach function is 
+		// Line below can be uncommented to find cases where Detach function is
 		// called for pointers that are not in the linked list. If line below is
 		// uncommented, the part of the descriptive comment that precedes this
 		// function about "...simply returns quietly" will be incorrect (at least
@@ -481,7 +481,7 @@ void NxsReader::Detach(
 		//
 		//NCL_ASSERT(curr->next == oldBlock);
 
-		if (curr->next == oldBlock) 
+		if (curr->next == oldBlock)
 			{
 			curr->next = oldBlock->next;
 			oldBlock->SetNexus(NULL);
@@ -510,7 +510,7 @@ void NxsReader::ExitingBlock(
   NxsString )	/* the name of the block being exited */
 	{
 	}
-	
+
 /*----------------------------------------------------------------------------------------------------------------------
 |	Called after `block' has returned from NxsBlock::Read()
 */
@@ -545,15 +545,15 @@ NxsBlock *NxsReader::CreateBlockFromFactories(const std::string & currBlockName,
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Reads the NxsReader data file from the input stream provided by `token'. This function is responsible for reading 
-|	through the name of a each block. Once it has read a block name, it searches `blockList' for a block object to 
-|	handle reading the remainder of the block's contents. The block object is responsible for reading the END or 
-|	ENDBLOCK command as well as the trailing semicolon. This function also handles reading comments that are outside 
-|	of blocks, as well as the initial "#NEXUS" keyword. The `notifyStartStop' argument is provided in case you do not 
-|	wish the ExecuteStart and ExecuteStop functions to be called. These functions are primarily used for creating and 
-|	destroying a dialog box to show progress, and nested Execute calls can thus cause problems (e.g., a dialog box is 
-|	destroyed when the inner Execute calls ExecuteStop and the outer Execute still expects the dialog box to be 
-|	available). Specifying `notifyStartStop' false for all the nested Execute calls thus allows the outermost Execute 
+|	Reads the NxsReader data file from the input stream provided by `token'. This function is responsible for reading
+|	through the name of a each block. Once it has read a block name, it searches `blockList' for a block object to
+|	handle reading the remainder of the block's contents. The block object is responsible for reading the END or
+|	ENDBLOCK command as well as the trailing semicolon. This function also handles reading comments that are outside
+|	of blocks, as well as the initial "#NEXUS" keyword. The `notifyStartStop' argument is provided in case you do not
+|	wish the ExecuteStart and ExecuteStop functions to be called. These functions are primarily used for creating and
+|	destroying a dialog box to show progress, and nested Execute calls can thus cause problems (e.g., a dialog box is
+|	destroyed when the inner Execute calls ExecuteStop and the outer Execute still expects the dialog box to be
+|	available). Specifying `notifyStartStop' false for all the nested Execute calls thus allows the outermost Execute
 |	call to control creation and destruction of the dialog box.
 */
 void NxsReader::Execute(
@@ -603,7 +603,7 @@ void NxsReader::CoreExecutionTasks(
 		return;
 		}
 
-	if (token.Equals("#NEXUS")) 
+	if (token.Equals("#NEXUS"))
 		{
 		token.SetLabileFlagBit(NxsToken::saveCommandComments);
 		token.GetNextToken();
@@ -643,11 +643,11 @@ void NxsReader::CoreExecutionTasks(
 			NxsBlockFactory * sourceOfBlock = NULL;
 			if (currBlock == NULL)
 				{
-				try 
+				try
 					{
 					currBlock = CreateBlockFromFactories(currBlockName, token, &sourceOfBlock);
 					}
-				catch (NxsException x) 
+				catch (NxsException x)
 					{
 					NexusError(x.msg, x.pos, x.line, x.col);
 					token.SetBlockName(0L);
@@ -665,7 +665,7 @@ void NxsReader::CoreExecutionTasks(
 					return;
 					}
 				}
-			else if (currBlock->IsEnabled()) 
+			else if (currBlock->IsEnabled())
 				keepReading = ExecuteBlock(token, currBlockName, currBlock, sourceOfBlock);
 			else
 				{
@@ -716,7 +716,7 @@ void NxsReader::ClearContent()
 	blockTitleHistoryMap.clear();
 	blockTitleAliases.clear();
 	}
-	
+
 
 NxsTaxaBlockAPI * NxsReader::GetOriginalTaxaBlock(const NxsTaxaBlockAPI * testB) const
 	{
@@ -738,7 +738,7 @@ NxsTaxaBlockAPI * NxsReader::GetOriginalTaxaBlock(const NxsTaxaBlockAPI * testB)
 			const std::vector<std::string> prevL = prev->GetAllLabels();
 			std::vector<std::string>::const_iterator pIt = prevL.begin();
 			std::vector<std::string>::const_iterator testIt = testL.begin();
-			
+
 			for (; (testIt != testL.end()) && (pIt != prevL.end()) ; ++testIt, ++pIt)
 				{
 				if (!NxsString::case_insensitive_equals(testIt->c_str(), pIt->c_str()))
@@ -748,7 +748,7 @@ NxsTaxaBlockAPI * NxsReader::GetOriginalTaxaBlock(const NxsTaxaBlockAPI * testB)
 				return const_cast<NxsTaxaBlockAPI *>(prev);
 			}
 		}
-	
+
 	return 0L;
 	}
 
@@ -771,14 +771,14 @@ bool NxsReader::ExecuteBlock(NxsToken &token, const NxsString &currBlockName, Nx
 	this->RemoveBlockFromUsedBlockList(currentBlock);
 	currentBlock->Reset();
 	// We need to back up currentBlock, because the Read statement might trigger
-	// a recursive call to Execute (if the block contains instructions to execute 
+	// a recursive call to Execute (if the block contains instructions to execute
 	// another file, then the same NxsReader object may be used and any member fields (e.g. currentBlock)
 	//	could be trashed.
 	//
 	bool eofFound = false;
-	try 
+	try
 		{
-		try 
+		try
 			{
 			currentBlock->Read(token);
 			}
@@ -805,7 +805,7 @@ bool NxsReader::ExecuteBlock(NxsToken &token, const NxsString &currBlockName, Nx
 			}
 		BlockReadHook(currBlockName, currentBlock, &token);
 		}
-	catch (NxsException &x) 
+	catch (NxsException &x)
 		{
 		if (currentBlock->errormsg.length() > 0)
 			NexusError(currentBlock->errormsg, x.pos, x.line, x.col);
@@ -818,7 +818,7 @@ bool NxsReader::ExecuteBlock(NxsToken &token, const NxsString &currBlockName, Nx
 		token.SetEOFAllowed(true);
 		currentBlock = NULL;
 		return false;
-		}	// catch (NxsException x) 
+		}	// catch (NxsException x)
 	ExitingBlock(currBlockName);
 	PostBlockReadingHook(*currentBlock);
 	return !eofFound;
@@ -845,21 +845,25 @@ void NxsReader::BlockReadHook(const NxsString &currBlockName, NxsBlock *currentB
 					{
 					delete nb;
 					}
-				
+
 				}
 			}
-		if (storeBlock) 
+		if (storeBlock)
 			{
-			std::cerr << "storing implied block: " << impID << std::endl;
+			NxsString m;
+			m << "storing implied block: " << impID;
+			this->statusMessage(m);
 			this->AddBlockToUsedBlockList(impID, nb, token);
 			}
 		}
-	std::cerr << "storing read block: " << currentBlock->GetID() << std::endl;
+	NxsString s;
+	s << "storing read block: " << currentBlock->GetID();
+	this->statusMessage(s);
 	this->AddBlockToUsedBlockList(currBlockName, currentBlock, token);
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Returns a string containing the copyright notice for the NxsReader Class Library, useful for reporting the use of 
+|	Returns a string containing the copyright notice for the NxsReader Class Library, useful for reporting the use of
 |	this library by programs that interact with the user.
 */
 const char * NxsReader::NCLCopyrightNotice()
@@ -876,7 +880,7 @@ const char * NxsReader::NCLHomePageURL()
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Returns a string containing the name and current version of the NxsReader Class Library, useful for reporting the 
+|	Returns a string containing the name and current version of the NxsReader Class Library, useful for reporting the
 |	use of this library by programs that interact with the user.
 */
 const char * NxsReader::NCLNameAndVersion()
@@ -885,11 +889,11 @@ const char * NxsReader::NCLNameAndVersion()
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Called just after Execute member function reads the opening "#NEXUS" token in a NEXUS data file. Override this 
+|	Called just after Execute member function reads the opening "#NEXUS" token in a NEXUS data file. Override this
 |	virtual base class function if your application needs to do anything at this point in the execution of a NEXUS data
 |	file (e.g. good opportunity to pop up a dialog box showing progress). Be sure to call the Execute function with the
 |	`notifyStartStop' argument set to true, otherwise ExecuteStarting will not be called.
-|	
+|
 */
 void NxsReader::ExecuteStarting()
 	{
@@ -897,9 +901,9 @@ void NxsReader::ExecuteStarting()
 
 /*----------------------------------------------------------------------------------------------------------------------
 |	Called when Execute member function encounters the end of the NEXUS data file, or the special comment [&LEAVE] is
-|	found between NEXUS blocks. Override this virtual base class function if your application needs to do anything at 
-|	this point in the execution of a NEXUS data file (e.g. good opportunity to hide or destroy a dialog box showing 
-|	progress). Be sure to call the Execute function with the `notifyStartStop' argument set to true, otherwise 
+|	found between NEXUS blocks. Override this virtual base class function if your application needs to do anything at
+|	this point in the execution of a NEXUS data file (e.g. good opportunity to hide or destroy a dialog box showing
+|	progress). Be sure to call the Execute function with the `notifyStartStop' argument set to true, otherwise
 |	ExecuteStopping will not be called.
 */
 void NxsReader::ExecuteStopping()
@@ -907,7 +911,7 @@ void NxsReader::ExecuteStopping()
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Called when an error is encountered in a NEXUS file. Allows program to give user details of the error as well as 
+|	Called when an error is encountered in a NEXUS file. Allows program to give user details of the error as well as
 |	the precise location of the error.
 */
 void NxsReader::NexusError(
@@ -919,15 +923,15 @@ void NxsReader::NexusError(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	This function may be used to report progess while reading through a file. For example, the NxsAllelesBlock class 
-|	uses this function to report the name of the population it is currently reading so the user doesn't think the 
+|	This function may be used to report progess while reading through a file. For example, the NxsAllelesBlock class
+|	uses this function to report the name of the population it is currently reading so the user doesn't think the
 |	program has hung on large data sets.
 */
 void NxsReader::OutputComment(
   const NxsString &)	/* a comment to be shown on the output */
 	{
 	}
-	
+
 /*----------------------------------------------------------------------------------------------------------------------
 |	This function is called when an unknown block named `blockName' is about to be skipped. Override this pure virtual
 |	function to provide an indication of progress as the NEXUS file is being read.
@@ -939,7 +943,7 @@ void NxsReader::SkippingBlock(
 
 /*----------------------------------------------------------------------------------------------------------------------
 |	This function is called when a disabled block named `blockName' is encountered in a NEXUS data file being executed.
-|	Override this pure virtual function to handle this event in an appropriate manner. For example, the program may 
+|	Override this pure virtual function to handle this event in an appropriate manner. For example, the program may
 |	wish to inform the user that a data block was encountered in what is supposed to be a tree file.
 */
 void NxsReader::SkippingDisabledBlock(
@@ -952,10 +956,10 @@ bool NxsReader::ReadUntilEndblock(NxsToken &token, const std::string & )
 	for (;;)
 		{
 		token.GetNextToken();
-		if (token.Equals("END") || token.Equals("ENDBLOCK")) 
+		if (token.Equals("END") || token.Equals("ENDBLOCK"))
 			{
 			token.GetNextToken();
-			if (!token.Equals(";")) 
+			if (!token.Equals(";"))
 				{
 				std::string errormsg = "Expecting ';' after END or ENDBLOCK command, but found ";
 				errormsg += token.GetToken();
@@ -1121,7 +1125,7 @@ unsigned NxsReader::RemoveBlockFromUsedBlockList(NxsBlock *p)
 	lastExecuteBlocksInOrder.remove(p);
 	std::string blockID =  p->GetID();
 	NxsBlockTitleHistoryMap::iterator mIt = blockTitleHistoryMap.find(blockID);
-	if (mIt != blockTitleHistoryMap.end()) 
+	if (mIt != blockTitleHistoryMap.end())
 		{
 		std::string blockName = p->GetTitle();
 		NxsBlockTitleHistory & titleHist = mIt->second;
@@ -1135,7 +1139,7 @@ unsigned NxsReader::RemoveBlockFromUsedBlockList(NxsBlock *p)
 				 ++ptIt;
 			}
 		}
-	
+
 
 	return totalDel;
 	}
@@ -1153,6 +1157,8 @@ std::set<NxsBlock*> NxsReader::GetSetOfAllUsedBlocks()
 
 void ExceptionRaisingNxsReader::NexusWarn(const std::string &msg, NxsWarnLevel warnLevel, file_pos pos, long line, long col)
 	{
+	if (warnLevel < currentWarningLevel)
+		return;
 	if (warnLevel >= this->warningToErrorThreshold)
 		{
 		NxsString e(msg.c_str());
@@ -1205,3 +1211,9 @@ void ExceptionRaisingNxsReader::SkippingDisabledBlock(NxsString blockName)
 		std::cout << "[!Skipping disabled block (" << blockName << ")...]" << std::endl;
 	}
 
+void NxsReader::statusMessage(const std::string & m) const
+{
+	if (alwaysReportStatusMessages || currentWarningLevel == UNCOMMON_SYNTAX_WARNING) {
+		std::cerr << m << std::endl;
+	}
+}

@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -37,7 +37,7 @@ NxsTaxaBlock * PublicNexusReader::RegisterTaxa(const std::vector<std::string> & 
 
 BlockReaderList ExceptionRaisingNxsReader::parseFileOrThrow(
     const char *filepath, /* path of file to parse */
-    NxsReader::WarningHandlingMode mode, 
+    NxsReader::WarningHandlingMode mode,
     bool parsePrivateBlocks, /* true to store the commands found in  private blocks */
     bool storeTokenInfo)
     {
@@ -47,7 +47,7 @@ BlockReaderList ExceptionRaisingNxsReader::parseFileOrThrow(
 
 BlockReaderList DefaultErrorReportNxsReader::parseFile(
     const char *filepath, /* path of file to parse */
-    std::ostream * stdOutstream, 
+    std::ostream * stdOutstream,
     std::ostream * errOutstream,
     bool parsePrivateBlocks, /* true to store the commands found in  private blocks */
     bool storeTokenInfo)
@@ -76,15 +76,15 @@ BlockReaderList NxsReader::parseFileWithReader(
         err << "Could not parse the file \"" << filepath <<"\"";
         nexusReader.NexusError(err, 0, -1, -1);
         }
-    cerr << "Creating token" <<endl;
-	NxsToken token(inf);	
+    nexusReader.statusMessage("Creating token");
+	NxsToken token(inf);
 	NxsDefaultPublicBlockFactory factory(parsePrivateBlocks, storeTokenInfo);
 	nexusReader.AddFactory(&factory);
 	try {
-        cerr << "Executing" <<endl;
+        nexusReader.statusMessage("Executing");
 	    nexusReader.Execute(token);
 	    }
-	catch(...) 
+	catch(...)
 	    {
         nexusReader.RemoveFactory(&factory);
         throw;
@@ -143,7 +143,7 @@ void NxsStoreTokensBlockReader::ReadCommand(
 			justTokens.push_back(justString);
 		}
 	}
-	
+
 void NxsStoreTokensBlockReader::Read(
   NxsToken &token)	/* the token used to read from in */
 	{
@@ -160,7 +160,7 @@ void NxsStoreTokensBlockReader::Read(
             {
             HandleEndblock(token);
             return ;
-            }        
+            }
 		this->ReadCommand(token);
 		}
 	}
@@ -230,11 +230,11 @@ PublicNexusReader::PublicNexusReader(const int blocksToRead, NxsReader::WarningH
 	unalignedBlockTemplate(0L)
 {
 	this->AddFactory(&cloneFactory);
-	
+
 	taxaBlockTemplate = new NxsTaxaBlock();
 	taxaBlockTemplate->SetImplementsLinkAPI(false);
 	cloneFactory.AddPrototype(taxaBlockTemplate);
-			
+
 	if (blocksToRead & NEXUS_ASSUMPTIONS_BLOCK_BIT)
 		{
 		assumptionsBlockTemplate = new NxsAssumptionsBlock(0L);
@@ -261,7 +261,7 @@ PublicNexusReader::PublicNexusReader(const int blocksToRead, NxsReader::WarningH
 		charactersBlockTemplate->SetImplementsLinkAPI(true);
 		charactersBlockTemplate->SetSupportMixedDatatype(true);
 		charactersBlockTemplate->SetConvertAugmentedToMixed(true);
-		
+
 		dataBlockTemplate = new NxsDataBlock(NULL, NULL);
 		dataBlockTemplate->SetCreateImpliedBlock(true);
 		dataBlockTemplate->SetImplementsLinkAPI(true);
@@ -298,7 +298,7 @@ void PublicNexusReader::Execute(NxsToken& token, bool notifyStartStop)
 	NxsReader::Execute(token, notifyStartStop);
 	PostExecuteHook();
 }
-				
+
 void PublicNexusReader::PostExecuteHook()
 {
 	BlockReaderList blocks = GetBlocksFromLastExecuteInOrder();
@@ -320,7 +320,7 @@ void PublicNexusReader::PostExecuteHook()
 			distancesBlockVec.push_back(static_cast<NxsDistancesBlock *>(b));
 		else if (strcmp(capIdP, "UNALIGNED") == 0)
 			unalignedBlockVec.push_back(static_cast<NxsUnalignedBlock *>(b));
-		else 
+		else
 			{
 			storerBlockVec.push_back(static_cast<NxsStoreTokensBlockReader *>(b));
 			}
@@ -362,7 +362,7 @@ unsigned PublicNexusReader::GetNumAssumptionsBlocks(const NxsTaxaBlock *taxa) co
 		}
 	return n;
 	}
-	
+
 NxsAssumptionsBlock * PublicNexusReader::GetAssumptionsBlock(const NxsTaxaBlock *taxa, unsigned index) const
 	{
 	unsigned n = 0;
@@ -392,7 +392,7 @@ unsigned PublicNexusReader::GetNumAssumptionsBlocks( const NxsCharactersBlock * 
 		}
 	return n;
 	}
-	
+
 NxsAssumptionsBlock * PublicNexusReader::GetAssumptionsBlock(const NxsCharactersBlock * chars, unsigned index) const
 	{
 	unsigned n = 0;
@@ -422,7 +422,7 @@ unsigned PublicNexusReader::GetNumAssumptionsBlocks(const NxsTreesBlock *tree) c
 		}
 	return n;
 	}
-	
+
 NxsAssumptionsBlock * PublicNexusReader::GetAssumptionsBlock(const NxsTreesBlock *tree, unsigned index) const
 	{
 	unsigned n = 0;
@@ -451,7 +451,7 @@ unsigned PublicNexusReader::GetNumCharactersBlocks(const NxsTaxaBlock *taxa) con
 		}
 	return n;
 	}
-	
+
 NxsCharactersBlock * PublicNexusReader::GetCharactersBlock(const NxsTaxaBlock *taxa, unsigned index) const
 	{
 	unsigned n = 0;
@@ -481,7 +481,7 @@ unsigned PublicNexusReader::GetNumDistancesBlocks(const NxsTaxaBlock *taxa) cons
 		}
 	return n;
 	}
-	
+
 NxsDistancesBlock * PublicNexusReader::GetDistancesBlock(const NxsTaxaBlock *taxa, unsigned index) const
 	{
 	unsigned n = 0;
@@ -511,7 +511,7 @@ unsigned PublicNexusReader::GetNumUnalignedBlocks(const NxsTaxaBlock *taxa) cons
 		}
 	return n;
 	}
-	
+
 NxsUnalignedBlock * PublicNexusReader::GetUnalignedBlock(const NxsTaxaBlock *taxa, unsigned index) const
 	{
 	unsigned n = 0;
@@ -542,7 +542,7 @@ unsigned PublicNexusReader::GetNumTreesBlocks(const NxsTaxaBlock *taxa) const
 		}
 	return n;
 	}
-	
+
 NxsTreesBlock * PublicNexusReader::GetTreesBlock(const NxsTaxaBlock *taxa, unsigned index) const
 	{
 	unsigned n = 0;
@@ -564,7 +564,7 @@ unsigned PublicNexusReader::GetNumUnknownBlocks() const
 	{
 	return (unsigned)storerBlockVec.size();
 	}
-	
+
 NxsStoreTokensBlockReader * PublicNexusReader::GetUnknownBlock(unsigned index) const
 	{
 	if (index < storerBlockVec.size())
@@ -576,7 +576,7 @@ unsigned PublicNexusReader::GetNumTaxaBlocks() const
 	{
 	return (unsigned)taxaBlockVec.size();
 	}
-	
+
 NxsTaxaBlock * PublicNexusReader::GetTaxaBlock(unsigned index) const
 	{
 	if (index < taxaBlockVec.size())
@@ -596,8 +596,8 @@ void PublicNexusReader::ClearUsedBlockList()
 	treesBlockVec.clear();
 	unalignedBlockVec.clear();
 	}
-	
-	
+
+
 
 
 bool fileExists(const std::string &fn);
@@ -617,7 +617,7 @@ std::string NxsConversionOutputRecord::getUniqueFilenameWithLowestIndex(const ch
 	NxsString fn;
 	fn.assign(prefix);
 	const unsigned MAX_SUFFIX =  10000;
-	for (unsigned i = 1; i <= MAX_SUFFIX ; ++i) 
+	for (unsigned i = 1; i <= MAX_SUFFIX ; ++i)
 		{
 		if (!fileExists(fn))
 			return fn;
@@ -630,14 +630,14 @@ std::string NxsConversionOutputRecord::getUniqueFilenameWithLowestIndex(const ch
 }
 
 // writes the name pairs separated by newlines to a file whose filepath is specified
-//	by fn. 
+//	by fn.
 void NxsConversionOutputRecord::writeTaxonNameTranslationFilepath(const char * fn, const std::vector<NxsNameToNameTrans> & nameTrans, const NxsTaxaBlockAPI *tb, bool verbose)
 {
 	std::ofstream tnf;
 	tnf.open(fn);
-	if (!tnf.good()) 
+	if (!tnf.good())
 		{
-		NxsString msg; 
+		NxsString msg;
 		msg << "Could not open the file " << fn << " for writing translation of names";
 		throw NxsException(msg);
 		}
@@ -667,7 +667,7 @@ void NxsConversionOutputRecord::writeTaxonNameTranslationStream(std::ostream & t
 	tnf << "</taxa>\n";
 }
 
-void NxsConversionOutputRecord::writeNameTranslation(std::vector<NxsNameToNameTrans> nameTrans, const NxsTaxaBlockAPI * taxa)	
+void NxsConversionOutputRecord::writeNameTranslation(std::vector<NxsNameToNameTrans> nameTrans, const NxsTaxaBlockAPI * taxa)
 	{
 	if (taxaBlocksToConversionFiles.find(taxa) != taxaBlocksToConversionFiles.end())
 		return;
@@ -684,9 +684,9 @@ void writeAttributeValue(ostream & out, const std::string & v)
 	{
 	if (v.c_str() == NULL)
 		out << "\'\'";
-	else 
+	else
 		{
-		
+
 		if (v.find_first_of("\'\"&") != string::npos)
 			{
 			if (strchr(v.c_str(), '\'') != NULL)
@@ -699,11 +699,11 @@ void writeAttributeValue(ostream & out, const std::string & v)
 						out << "&quot;";
 					else if (c == '&')
 						out << "&amp;";
-					else 
+					else
 						out << c;
 					}
 				out << '\"';
-				
+
 				}
 			else
 				{
@@ -713,7 +713,7 @@ void writeAttributeValue(ostream & out, const std::string & v)
 					const char & c = *cIt;
 					if (c == '&')
 						out << "&amp;";
-					else 
+					else
 						out << c;
 					}
 				out << '\'';

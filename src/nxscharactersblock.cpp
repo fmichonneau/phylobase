@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 /**
@@ -82,9 +82,9 @@ std::pair<int, int> NxsCodonTriplet::getSingleMut(const NxsCodonTriplet & other)
 
 
 /*******************************************************************************
- * deletes "fundamental" states (rather than gaps or ambiguity codes) from a 
+ * deletes "fundamental" states (rather than gaps or ambiguity codes) from a
  * datatype mapper.
- * Equates (default or user-defined) are not supported in the current version of the function 
+ * Equates (default or user-defined) are not supported in the current version of the function
  *	(so this will only work on standard or codons data).
  */
 
@@ -112,9 +112,9 @@ void NxsDiscreteDatatypeMapper::DeleteStateIndices(const std::set<int> & deleted
 	const unsigned oldNStates = nStates;
 	std::vector<NxsDiscreteStateSetInfo> oldStateSetsVec = this->stateSetsVec;
 	symbols = nsym;
-	
+
 	this->RefreshMappings(0L);
-	
+
 	for (unsigned i = oldNStates - sclOffset; i < oldStateSetsVec.size(); ++i)
 		{
 		const NxsDiscreteStateSetInfo & ssi = oldStateSetsVec[i];
@@ -415,7 +415,7 @@ CodonRecodingStruct NxsCharactersBlock::RemoveStopCodons(NxsGeneticCodesEnum gCo
 		throw NxsException("Characters block must be of the type codons when RemoveStopCodons is called");
 	if (mapper->geneticCode != NXS_GCODE_NO_CODE)
 		throw NxsException("Characters block must be an uncompressed codons type when RemoveStopCodons is called");
-	
+
 	const std::vector<int> v = getToCodonRecodingMapper(gCode);
 	CodonRecodingStruct c = getCodonRecodingStruct(gCode);
 	const unsigned nRS = c.compressedCodonIndToAllCodonsInd.size();
@@ -480,7 +480,7 @@ unsigned NxsCharactersBlock::NumAmbigInTaxon(const unsigned taxInd, const NxsUns
 					if (c == NXS_MISSING_CODE)
 						nAmbig++;
 					}
-				else 
+				else
 					{
 					if (c != NXS_GAP_STATE_CODE || treatGapsAsMissing)
 						nAmbig++;
@@ -502,7 +502,7 @@ unsigned NxsCharactersBlock::NumAmbigInTaxon(const unsigned taxInd, const NxsUns
 					if (sc == NXS_MISSING_CODE)
 						nAmbig++;
 					}
-				else 
+				else
 					{
 					if (sc != NXS_GAP_STATE_CODE || treatGapsAsMissing)
 						nAmbig++;
@@ -514,9 +514,9 @@ unsigned NxsCharactersBlock::NumAmbigInTaxon(const unsigned taxInd, const NxsUns
 }
 
 bool NxsCharactersBlock::FirstTaxonStatesAreSubsetOfSecond(
-  const unsigned firstTaxonInd, 
-  const unsigned secondTaxonInd, 
-  const NxsUnsignedSet * charIndices, 
+  const unsigned firstTaxonInd,
+  const unsigned secondTaxonInd,
+  const NxsUnsignedSet * charIndices,
   const bool treatAmbigAsMissing,
   const bool treatGapAsMissing) const
 {
@@ -565,9 +565,9 @@ bool NxsCharactersBlock::FirstTaxonStatesAreSubsetOfSecond(
 }
 
 std::pair<unsigned, unsigned> NxsCharactersBlock::GetPairwiseDist(
-  const unsigned firstTaxonInd, 
-  const unsigned secondTaxonInd, 
-  const NxsUnsignedSet * charIndices, 
+  const unsigned firstTaxonInd,
+  const unsigned secondTaxonInd,
+  const NxsUnsignedSet * charIndices,
   const bool treatAmbigAsMissing,
   const bool treatGapAsMissing) const
 {
@@ -663,11 +663,11 @@ void NxsDiscreteDatatypeMapper::BuildStateSubsetMatrix() const
 void NxsDiscreteDatatypeMapper::BuildStateIntersectionMatrix() const
 {
 	const std::set<int> emptySet;
-	
+
 	stateIntersectionMatrix.clear();
-	
+
 	const unsigned nsPlus = stateSetsVec.size();
-	const unsigned offset = (unsigned)(sclOffset + 2); 
+	const unsigned offset = (unsigned)(sclOffset + 2);
 	StateIntersectionRow emptyRow(nsPlus, emptySet);
 	stateIntersectionMatrix.assign(nsPlus, emptyRow);
 	for (unsigned i = offset; i < nsPlus; ++i)
@@ -685,7 +685,7 @@ void NxsDiscreteDatatypeMapper::BuildStateIntersectionMatrix() const
 				stateIntersectionMatrix[j - NXS_GAP_STATE_CODE][i - NXS_GAP_STATE_CODE] = stateIntersectionMatrix[i - NXS_GAP_STATE_CODE][j - NXS_GAP_STATE_CODE];
 			}
 		}
-	
+
 	std::set<int> tmpSet;
 	NCL_ASSERT(1 == NXS_MISSING_CODE - NXS_GAP_STATE_CODE);
 	tmpSet.insert(NXS_GAP_STATE_CODE);
@@ -1005,17 +1005,17 @@ void NxsCharactersBlock::CodonPosPartitionToPosList(const NxsPartition &codonPos
 	const NxsUnsignedSet * thirdPos = 0L;
 	for (NxsPartition::const_iterator pIt = codonPos.begin(); pIt != codonPos.end(); ++pIt)
 		{
-		if (pIt->first == "1") 
+		if (pIt->first == "1")
 			{
 			NCL_ASSERT(firstPos == 0L);
 			firstPos = &(pIt->second);
 			}
-		else if (pIt->first == "2") 
+		else if (pIt->first == "2")
 			{
 			NCL_ASSERT(secondPos == 0L);
 			secondPos = &(pIt->second);
 			}
-		else if (pIt->first == "3") 
+		else if (pIt->first == "3")
 			{
 			NCL_ASSERT(thirdPos == 0L);
 			thirdPos = &(pIt->second);
@@ -1040,7 +1040,7 @@ void NxsCharactersBlock::CodonPosPartitionToPosList(const NxsPartition &codonPos
 /* allocates a new charaters block with amino acids for the codons in the characters block (which should have datatype = codon).
 */
 NxsCharactersBlock * NxsCharactersBlock::NewProteinCharactersBlock(
-  const NxsCharactersBlock * codonBlock, 
+  const NxsCharactersBlock * codonBlock,
   bool mapPartialAmbigToUnknown,
   bool gapToUnknown,
   NxsGeneticCodesEnum codeIndex)
@@ -1054,7 +1054,7 @@ NxsCharactersBlock * NxsCharactersBlock::NewProteinCharactersBlock(
 
 */
 NxsCharactersBlock * NxsCharactersBlock::NewProteinCharactersBlock(
-  const NxsCharactersBlock * codonBlock, 
+  const NxsCharactersBlock * codonBlock,
   bool mapPartialAmbigToUnknown,
   bool gapToUnknown,
   const std::vector<int> & aaIndices) /** the index of the amino acid symbols for the codon (where the order of codons is alphabetical: AAA, AAC, AAG, AAT, ACA, ...TTT **/
@@ -1062,9 +1062,9 @@ NxsCharactersBlock * NxsCharactersBlock::NewProteinCharactersBlock(
 	if (!codonBlock)
 		return NULL;
 	if (codonBlock->GetDataType() != NxsCharactersBlock::codon)
-		throw NxsException("NewProteinCharactersBlock must be called with a block of codon datatype"); 
+		throw NxsException("NewProteinCharactersBlock must be called with a block of codon datatype");
 	const unsigned nc = codonBlock->GetNCharTotal();
-	
+
 	/* create a new characters block with the same TAXA, but no ASSUMPTIONS block */
 	NxsTaxaBlockAPI * taxa = codonBlock->GetTaxaBlockPtr(NULL);
 	NxsCharactersBlock * aaBlock = new NxsCharactersBlock(taxa, NULL);
@@ -1115,26 +1115,26 @@ NxsCharactersBlock * NxsCharactersBlock::NewProteinCharactersBlock(
 		}
 	else
 		{
-		throw NxsException("NewProteinCharactersBlock is not implemented for cases in which you are not mapping any ambiguity to the missing state code."); 
+		throw NxsException("NewProteinCharactersBlock is not implemented for cases in which you are not mapping any ambiguity to the missing state code.");
 		}
 	return aaBlock;
 }
 
 
-/* allocates a new charaters block with all of the active characters in `charBlock` 
+/* allocates a new charaters block with all of the active characters in `charBlock`
 	but with a 64-state codon datatype. The order of codons is:
 	 0   1   2   3   4   5  ... 63
 	AAA AAC AAG AAT ACA ACC ... TTT
 	The caller is responsible for deleting the new NxsCharactersBlock object
-	
-	If honorCharActive is true, then inactive characters are simply skipped in the reading 
+
+	If honorCharActive is true, then inactive characters are simply skipped in the reading
 	frame (treated as if they were introns) rather than being treated as missing.
 */
 NxsCharactersBlock * NxsCharactersBlock::NewCodonsCharactersBlock(
-  const NxsCharactersBlock * dnaBlock, 
-  bool mapPartialAmbigToUnknown, 
+  const NxsCharactersBlock * dnaBlock,
+  bool mapPartialAmbigToUnknown,
   bool gapsToUnknown,
-  bool honorCharActive, 
+  bool honorCharActive,
   const std::list<int> * charIndices,
   NxsCharactersBlock ** spareNucs)
 {
@@ -1147,20 +1147,20 @@ NxsCharactersBlock * NxsCharactersBlock::NewCodonsCharactersBlock(
 	const std::list<int> * sourceChars;
 	std::list<int> culled;
 	NxsUnsignedSet untranslated;
-	
-		
-	
+
+
+
 	unsigned nc = dnaBlock->GetNCharTotal();
 
 	if (charIndices == NULL)
 		{
-		for (unsigned i = 0; i < nc; ++i) 
+		for (unsigned i = 0; i < nc; ++i)
 			charInds.push_back((int)i);
 		sourceChars = &charInds;
 		}
 	else
 		sourceChars = charIndices;
-	
+
 	if (honorCharActive)
 		{
 		for (std::list<int>::const_iterator cIt = sourceChars->begin(); cIt != sourceChars->end(); ++cIt)
@@ -1184,12 +1184,12 @@ NxsCharactersBlock * NxsCharactersBlock::NewCodonsCharactersBlock(
 		for (unsigned c = 0; c < nc; ++c)
 			untranslated.insert(c);
 		}
-	
+
 	const unsigned nnucs = (const unsigned)sourceChars->size();
 	if (nnucs % 3)
-		throw NxsException("Cannot create a codons block with a number of characters that is not a multiple of 3"); 
+		throw NxsException("Cannot create a codons block with a number of characters that is not a multiple of 3");
 	const unsigned ncodons = nnucs/3;
-	
+
 	/* create a new characters block with the same TAXA, but no ASSUMPTIONS block */
 	NxsTaxaBlockAPI * taxa = dnaBlock->GetTaxaBlockPtr(NULL);
 	NxsCharactersBlock * codonsBlock = new NxsCharactersBlock(taxa, NULL);
@@ -1201,9 +1201,9 @@ NxsCharactersBlock * NxsCharactersBlock::NewCodonsCharactersBlock(
 	codonsBlock->symbols.assign(64, '\0');
 	codonsBlock->tokens = false;
 	const char * gsl[] = {"AAA",  "AAC",  "AAG",  "AAT",  "ACA",  "ACC",  "ACG",  "ACT",  "AGA",  "AGC",  "AGG",  "AGT",  "ATA",  "ATC",  "ATG",  "ATT",  "CAA",  "CAC",  "CAG",  "CAT",  "CCA",  "CCC",  "CCG",  "CCT",  "CGA",  "CGC",  "CGG",  "CGT",  "CTA",  "CTC",  "CTG",  "CTT",  "GAA",  "GAC",  "GAG",  "GAT",  "GCA",  "GCC",  "GCG",  "GCT",  "GGA",  "GGC",  "GGG",  "GGT",  "GTA",  "GTC",  "GTG",  "GTT",  "TAA",  "TAC",  "TAG",  "TAT",  "TCA",  "TCC",  "TCG",  "TCT",  "TGA",  "TGC",  "TGG",  "TGT",  "TTA",  "TTC",  "TTG",  "TTT"};
-	
+
 	codonsBlock->globalStateLabels.reserve(64);
-	for (unsigned i = 0 ; i < 64; ++i)	
+	for (unsigned i = 0 ; i < 64; ++i)
 		codonsBlock->globalStateLabels.push_back(NxsString(gsl[i]));
 
 	/* equivalent of HandleFormat */
@@ -1268,12 +1268,12 @@ NxsCharactersBlock * NxsCharactersBlock::NewCodonsCharactersBlock(
 		}
 	else
 		{
-		throw NxsException("NewCodonsCharactersBlock is not implemented for cases in which you are not mapping any ambiguity to the missing state code."); 
+		throw NxsException("NewCodonsCharactersBlock is not implemented for cases in which you are not mapping any ambiguity to the missing state code.");
 		}
 	if (!untranslated.empty())
 		{
 		const unsigned nunt = (const unsigned)untranslated.size();
-			
+
 		NxsCharactersBlock * untBlock = new NxsCharactersBlock(taxa, NULL);
 		untBlock->SetNChar(nunt);
 		untBlock->SetNTax(ntax);
@@ -1284,8 +1284,8 @@ NxsCharactersBlock * NxsCharactersBlock::NewCodonsCharactersBlock(
 		untBlock->originalDatatype = dnaBlock->originalDatatype;
 		untBlock->ResetSymbols();
 		untBlock->tokens = false;
-	
-	
+
+
 		untBlock->CreateDatatypeMapperObjects(dummy, dummyVec);
 		untBlock->datatypeReadFromFormat = false;
 		untBlock->statesFormat = STATES_PRESENT;
@@ -1293,8 +1293,8 @@ NxsCharactersBlock * NxsCharactersBlock::NewCodonsCharactersBlock(
 		untBlock->supportMixedDatatype = false;
 		untBlock->convertAugmentedToMixed = false;
 		untBlock->writeInterleaveLen = INT_MAX;
-	
-	
+
+
 		NxsDiscreteStateRow umatRow(nunt, 0);
 		untBlock->discreteMatrix.assign(ntax, umatRow);
 		if (mapPartialAmbigToUnknown && (gapsToUnknown || dnaBlock->GetGapSymbol() != '\0'))
@@ -1313,7 +1313,7 @@ NxsCharactersBlock * NxsCharactersBlock::NewCodonsCharactersBlock(
 			}
 		else
 			{
-			throw NxsException("NewProteinCharactersBlock is not implemented for cases in which you are not mapping any ambiguity to the missing state code."); 
+			throw NxsException("NewProteinCharactersBlock is not implemented for cases in which you are not mapping any ambiguity to the missing state code.");
 			}
 		*spareNucs = untBlock;
 		}
@@ -1325,7 +1325,7 @@ NxsCharactersBlock * NxsCharactersBlock::NewCodonsCharactersBlock(
 
 std::vector<double>  NxsTransformationManager::GetDoubleWeights(const std::string &set_name) const
 	{
-	std::vector<double> r; 
+	std::vector<double> r;
 	const ListOfDblWeights *p = 0L;
 	std::map<std::string, ListOfDblWeights>::const_iterator dIt = dblWtSets.begin();
 	for (; dIt != dblWtSets.end(); ++dIt)
@@ -1359,7 +1359,7 @@ std::vector<double>  NxsTransformationManager::GetDoubleWeights(const std::strin
 
 std::vector<int> NxsTransformationManager::GetIntWeights(const std::string &set_name) const
 	{
-	std::vector<int> r; 
+	std::vector<int> r;
 	const ListOfIntWeights *p = 0L;
 	std::map<std::string, ListOfIntWeights>::const_iterator dIt = intWtSets.begin();
 	for (; dIt != intWtSets.end(); ++dIt)
@@ -1392,12 +1392,12 @@ std::vector<int> NxsTransformationManager::GetIntWeights(const std::string &set_
 	}
 
 NxsDiscreteDatatypeMapper::NxsDiscreteDatatypeMapper(
-	NxsCharactersBlock::DataTypesEnum datatypeE, 
+	NxsCharactersBlock::DataTypesEnum datatypeE,
 	const std::string & symbolsStr,
-	char missingChar, 
-	char gap, 
+	char missingChar,
+	char gap,
 	char matchingChar,
-	bool respectingCase, 
+	bool respectingCase,
 	const std::map<char, NxsString> & moreEquates)
 	:geneticCode(NXS_GCODE_NO_CODE),
 	cLookup(NULL),
@@ -1456,7 +1456,7 @@ void NxsDiscreteDatatypeMapper::DebugPrint(std::ostream & out) const
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Takes the parsed settings that pertain to the datatype and converts them into a set of NxsDiscreteDatatypeMapper 
+|	Takes the parsed settings that pertain to the datatype and converts them into a set of NxsDiscreteDatatypeMapper
 |	objects to be used to encode the characters.
 */
 void NxsCharactersBlock::CreateDatatypeMapperObjects(const NxsPartition & dtParts, const std::vector<DataTypesEnum> & dtcodes)
@@ -1465,7 +1465,7 @@ void NxsCharactersBlock::CreateDatatypeMapperObjects(const NxsPartition & dtPart
 	if (datatype != mixed)
 		{
 		NxsDiscreteDatatypeMapper d(datatype, symbols, missing, gap, matchchar, respectingCase, userEquates);
-		datatype = d.GetDatatype();	
+		datatype = d.GetDatatype();
 		DatatypeMapperAndIndexSet das(d, NxsUnsignedSet());
 		datatypeMapperVec.clear();
 		datatypeMapperVec.push_back(das);
@@ -1497,11 +1497,11 @@ void NxsCharactersBlock::CreateDatatypeMapperObjects(const NxsPartition & dtPart
 
 /*----------------------------------------------------------------------------------------------------------------------
 |	If you say FORMAT DATATYPE=DNA SYMBOLS="01" ; then the valid symbols become "ACGT01"
-|	
+|
 |	AugmentedSymbolsToMixed tries to split such a matrix into a datatype=mixed(dna:charset_dna,standard:charset_std)
 |	by inferring the charpartition (charset_dna,charset_std).  It does this by using GetNamedStateSetOfColumn to
 |	detect which states were listed in a column.
-|	
+|
 |	Returns true if the translation to mixed was performed.  This will only occur if GetOriginalDataType() == GetDataType()
 | 	because this is the symptom that there was symbol augmentation of a built in datatype.
 |
@@ -1510,13 +1510,13 @@ void NxsCharactersBlock::CreateDatatypeMapperObjects(const NxsPartition & dtPart
 |	Matrix 1:                     Matrix 2:
 |	s   ACGT10{ACGT01-}           s   ACGT10?
 |	t   ACGT100                   t   ACGT100
-|		The last character of the first taxon would be parsed as having the potential to have states {ACGT01-}. 
+|		The last character of the first taxon would be parsed as having the potential to have states {ACGT01-}.
 |		But when interperted with GetNamedStateSetOfColumn, Matrix 2 can be "explained" by four DNA columns, and three
 |		Standard (01) columns.  Matrix 1, on the other hand would be found to have four DNA columns, and two
 |		Standard (01) columns, and one standard ("ACGT01") column.
-|	Note: this function ignores the gap mode setting and treats gaps as newstates for the purposes of 
+|	Note: this function ignores the gap mode setting and treats gaps as newstates for the purposes of
 |		the conversion.
-| 
+|
 |	Temporary:  Will return false if userDefinedEquatesBeforeConversion is true
 */
 bool NxsCharactersBlock::AugmentedSymbolsToMixed()
@@ -1536,7 +1536,7 @@ bool NxsCharactersBlock::AugmentedSymbolsToMixed()
 		if (!isdigit(*a))
 			return false;
 		}
-	
+
 	NxsUnsignedSet stdTypeChars;
 	NxsUnsignedSet origTypeChars;
 	std::set<int> torigStateInds;
@@ -1581,7 +1581,7 @@ bool NxsCharactersBlock::AugmentedSymbolsToMixed()
 		}
 	this->gapMode = cached_gap_mode;
 	/* If we get here then the mapping to mixed type will succeed */
-	
+
 	/* copy the incoming matrix and mapper */
 	VecDatatypeMapperAndIndexSet mdm = datatypeMapperVec;
 	const NxsDiscreteDatatypeMapper & oldMapper = mdm[0].first;
@@ -1595,8 +1595,8 @@ bool NxsCharactersBlock::AugmentedSymbolsToMixed()
 	datatypeMapperVec.push_back(DatatypeMapperAndIndexSet(o, origTypeChars));
 	NxsDiscreteDatatypeMapper s(NxsCharactersBlock::standard, augmentSymbols, missing, gap, matchchar, respectingCase, noEquates);
 	datatypeMapperVec.push_back(DatatypeMapperAndIndexSet(s, stdTypeChars));
-	
-	
+
+
 	NxsDiscreteDatatypeMapper & newOrigTMapper = datatypeMapperVec[0].first;
 	NxsDiscreteDatatypeMapper & newStdTMapper = datatypeMapperVec[1].first;
 
@@ -1611,7 +1611,7 @@ bool NxsCharactersBlock::AugmentedSymbolsToMixed()
 		for (NxsDiscreteStateRow::iterator cell = row.begin(); cell != row.end(); ++cell, ++column)
 			{
 			const int initStateCode = *cell;
-			if (initStateCode  >= 0 ) //gap and missing codes do not need translation 
+			if (initStateCode  >= 0 ) //gap and missing codes do not need translation
 				{
 				std::map<int, int>::const_iterator otnIt = oldToNewStateCode.find(initStateCode);
 				if (otnIt == oldToNewStateCode.end())
@@ -1623,7 +1623,7 @@ bool NxsCharactersBlock::AugmentedSymbolsToMixed()
 					const bool isPoly =  oldMapper.IsPolymorphic(initStateCode);
 					int newStateCode ;
 					if (isOrigT)
-						{ //old symbol indices will still be the new symbol indices 
+						{ //old symbol indices will still be the new symbol indices
 						newStateCode = newOrigTMapper.StateCodeForStateSet(oldSymbols, isPoly, true, oldNexusChar);
 						newOrigTMapper.StateCodeToNexusString(newStateCode);
 						}
@@ -1638,7 +1638,7 @@ bool NxsCharactersBlock::AugmentedSymbolsToMixed()
 								{
 								NCL_ASSERT(*sIt < 0);
 								transSymbols.insert(*sIt);
-								}	
+								}
 							}
 						newStateCode = newStdTMapper.StateCodeForStateSet(transSymbols, isPoly, true, oldNexusChar);
 						newStdTMapper.StateCodeToNexusString(newStateCode);
@@ -1655,7 +1655,7 @@ bool NxsCharactersBlock::AugmentedSymbolsToMixed()
 	return true;
 	}
 /*----------------------------------------------------------------------------------------------------------------------
-|	Called when FORMAT command needs to be parsed from within the DIMENSIONS block. Deals with everything after the 
+|	Called when FORMAT command needs to be parsed from within the DIMENSIONS block. Deals with everything after the
 |	token FORMAT up to and including the semicolon that terminates the FORMAT command.
 */
 void NxsCharactersBlock::HandleFormat(
@@ -1767,7 +1767,7 @@ void NxsCharactersBlock::HandleFormat(
 								dtv.push_back(nucleotide);
 							else if (name == "PROTEIN")
 								dtv.push_back(protein);
-							else 
+							else
 								{
 								errormsg << pIt->first <<  " is not a valid DATATYPE within a " <<  id << " block";
 								throw NxsException(errormsg, *wIt);
@@ -1798,10 +1798,10 @@ void NxsCharactersBlock::HandleFormat(
 		}
 	for (ProcessedNxsCommand::const_iterator wIt = tokenVec.begin(); wIt != tvEnd; ++wIt)
 		{
-		
+
 		if (wIt->Equals("DATATYPE"))// we should have already processed this
 			{
-			ProcessedNxsToken::IncrementNotLast(wIt, tvEnd, "after DATATYPE in FORMAT command"); // = 
+			ProcessedNxsToken::IncrementNotLast(wIt, tvEnd, "after DATATYPE in FORMAT command"); // =
 			ProcessedNxsToken::IncrementNotLast(wIt, tvEnd, "after DATATYPE = in FORMAT command"); // datatype
 			}
 		else if (wIt->Equals("RESPECTCASE"))
@@ -1815,7 +1815,7 @@ void NxsCharactersBlock::HandleFormat(
 		else if (wIt->Equals("MISSING"))
 			{
 			DemandEquals(wIt, tvEnd, "after keyword MISSING");
-			ProcessedNxsToken::IncrementNotLast(wIt, tvEnd, "after \"MISSING = \" in FORMAT command");			
+			ProcessedNxsToken::IncrementNotLast(wIt, tvEnd, "after \"MISSING = \" in FORMAT command");
 			const std::string t = wIt->GetToken();
 			if (t.length() != 1)
 				{
@@ -1837,7 +1837,7 @@ void NxsCharactersBlock::HandleFormat(
 		else if (wIt->Equals("GAP"))
 			{
 			DemandEquals(wIt, tvEnd, "after keyword GAP");
-			ProcessedNxsToken::IncrementNotLast(wIt, tvEnd, "after \"GAP = \" in FORMAT command");		
+			ProcessedNxsToken::IncrementNotLast(wIt, tvEnd, "after \"GAP = \" in FORMAT command");
 			const std::string t = wIt->GetToken();
 			if (t.length() != 1)
 				{
@@ -1859,7 +1859,7 @@ void NxsCharactersBlock::HandleFormat(
 		else if (wIt->Equals("MATCHCHAR"))
 			{
 			DemandEquals(wIt, tvEnd, "after keyword MATCHCHAR");
-			ProcessedNxsToken::IncrementNotLast(wIt, tvEnd, "after \"MATCHCHAR = \" in FORMAT command");		
+			ProcessedNxsToken::IncrementNotLast(wIt, tvEnd, "after \"MATCHCHAR = \" in FORMAT command");
 			const std::string t = wIt->GetToken();
 			if (t.length() != 1)
 				{
@@ -1919,7 +1919,7 @@ void NxsCharactersBlock::HandleFormat(
 				s += wIt->GetToken().c_str();
 				ProcessedNxsToken::IncrementNotLast(wIt, tvEnd, "closing \" of symbols list");
 				}
-				
+
 			const std::string tos = NxsString::strip_whitespace(s);
 			const char * to = tos.c_str();
 			unsigned tlen = (unsigned)tos.length();
@@ -1941,7 +1941,7 @@ void NxsCharactersBlock::HandleFormat(
 						errormsg << "A ~ in a SYMBOLS list is interpreted as a range of symbols.  The ~ cannot be the first or last character in the symbols list";
 						throw NxsException(errormsg, token);
 						}
-					const int jj = i - 1 ; 
+					const int jj = i - 1 ;
 					const char prevChar = to[jj];
 					const char nextChar = to[i+1];
 					if ((isdigit(prevChar) && isdigit(nextChar)) || (isalpha(prevChar) && isalpha(nextChar)))
@@ -1991,7 +1991,7 @@ void NxsCharactersBlock::HandleFormat(
 				else
 					processedS += *pp;
 				}
-			if (!processedS.empty()) 
+			if (!processedS.empty())
 				{
 				if (this->datatype == dna || this->datatype == rna || this->restrictionDataype || this->datatype == protein)
 					{
@@ -2059,7 +2059,7 @@ void NxsCharactersBlock::HandleFormat(
 					errormsg << "EQUATE symbol specified (" << wIt->GetToken() <<  ") is not valid; An Equate symbol cannot be a state symbol or identical to the  missing,  gap, or matchchar symbols.";
 					throw NxsException(errormsg, *wIt);
 					}
-				
+
 				DemandEquals(wIt, tvEnd, " in EQUATE definition");
 				ProcessedNxsToken::IncrementNotLast(wIt, tvEnd, "State or set of states in Equate definition");
 				NxsString s;
@@ -2122,7 +2122,7 @@ void NxsCharactersBlock::HandleFormat(
 					items.push_back(std::string(s.c_str()));
 					}
 				}
-			else 
+			else
 				{
 				if (!wIt->Equals("STATES"))
 					throw NxsException("Sorry, only ITEMS=STATES is supported for discrete datatypes at this time", *wIt);
@@ -2172,7 +2172,7 @@ void NxsCharactersBlock::HandleFormat(
 		errormsg << "The \"gap\" character \'" << gap << "\' may not be included in the SYMBOLS list.";
 		throw NxsException(errormsg, *tokenVec.begin());
 		}
-		
+
 	if (matchchar != '\0')
 		{
 		if ((matchchar == gap) || (!respectingCase && toupper(matchchar) == toupper(gap)))
@@ -2191,7 +2191,7 @@ void NxsCharactersBlock::HandleFormat(
 		errormsg << "Gap symbol and Missing symbol cannot be identical!  Both were set to " << missing;
 		throw NxsException(errormsg, *tokenVec.begin());
 		}
-	
+
 	// Perform some last checks before leaving the FORMAT command
 	//
 	if (!tokens && datatype == continuous)
@@ -2232,7 +2232,7 @@ NxsDiscreteDatatypeMapper::NxsDiscreteDatatypeMapper()
 
 NxsDiscreteDatatypeMapper & NxsDiscreteDatatypeMapper::operator=(const NxsDiscreteDatatypeMapper& other)
 	{
-	symbols = other.symbols; 
+	symbols = other.symbols;
 	lcsymbols = other.lcsymbols;
 	nStates = other.nStates;
 	matchChar = other.matchChar;
@@ -2253,7 +2253,7 @@ NxsDiscreteDatatypeMapper & NxsDiscreteDatatypeMapper::operator=(const NxsDiscre
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Must be called when the symbols list changes. 
+|	Must be called when the symbols list changes.
 |	Uses symbols, gap, missing, respectCase,  extraEquates, and datatype fields to establish new mappings.
 |	token can be NULL if the call is not triggered by the reading of a NEXUS token.
 */
@@ -2278,40 +2278,40 @@ void NxsDiscreteDatatypeMapper::RefreshMappings(NxsToken *token)
 
 	if (missing == '\0')
 		throw NxsException("Cannot create a datatype mapper with no missing data symbol");
-	
+
 	charToStateCodeLookup.assign(384, NXS_INVALID_STATE_CODE); /*256+128 = 384 -- this way we can deal with signed or unsigned chars by pointing cLookup to element 128*/
 	cLookup = &charToStateCodeLookup[127];
 	stateIntersectionMatrix.clear();
 	isStateSubsetMatrix.clear();
 	isStateSubsetMatrixGapsMissing.clear();
-	
+
 	stateSetsVec.clear();
 	stateCodeLookupPtr = 0L;
 	sclOffset = (gapChar == '\0' ? -1 : -2);
-	
+
 	std::string bogus;
 	std::istringstream bogusStream(bogus);
 	NxsToken bogusToken(bogusStream);
 	token = (token == NULL ? &bogusToken : token);
-	
+
 	/* add the "fundamental" states. */
 	std::set<int> stSet;
 	std::set<int> missingSet;
 	if (gapChar != '\0')
 		{
 		stSet.insert(NXS_GAP_STATE_CODE);
-		/* this is the one of only 2 times that  we don't call AddStateSet to add a state set 
+		/* this is the one of only 2 times that  we don't call AddStateSet to add a state set
 			we do this to avoid illegal indexing of stateSets[1] when there
 			is only one element in the vector.
 		*/
 		stateSetsVec.push_back(NxsDiscreteStateSetInfo(stSet, false, gapChar));
 		cLookup[(int) gapChar] = NXS_GAP_STATE_CODE;
-		
+
 		missingSet.insert(NXS_GAP_STATE_CODE);
 		}
-	
-	
-		/* 
+
+
+		/*
 			Add the missing state code
 			this is the other time that we don't call AddStateSet (to avoid illegal indexing).
 		*/
@@ -2319,7 +2319,7 @@ void NxsDiscreteDatatypeMapper::RefreshMappings(NxsToken *token)
 	NCL_ASSERT(nStates > 0);
 	for (int s = 0; s < (int) nStates; ++s)
 		missingSet.insert(s);
-	
+
 	char sym = (respectCase ? missing : (char) toupper(missing));
 	stateSetsVec.push_back(NxsDiscreteStateSetInfo(missingSet, false, sym));
 	const int stateCode = (const int)stateSetsVec.size() + sclOffset - 1;
@@ -2338,7 +2338,7 @@ void NxsDiscreteDatatypeMapper::RefreshMappings(NxsToken *token)
 		stSet.insert(s);
 		AddStateSet(stSet, symbols[s], respectCase, false);
 		}
-	
+
 	/* add the default equates */
 	std::map<char, NxsString> defEq = NxsCharactersBlock::GetDefaultEquates(datatype);
 
@@ -2356,8 +2356,8 @@ void NxsDiscreteDatatypeMapper::RefreshMappings(NxsToken *token)
 		defEq.insert(extraEquates.begin(), extraEquates.end());
 		extraEquates.clear();
 		defEq.swap(extraEquates);
-		/* respectcase is only "applicable" to Standard datatype 
-			Any symbol extension will be at the end of the symbols list, 
+		/* respectcase is only "applicable" to Standard datatype
+			Any symbol extension will be at the end of the symbols list,
 			so here we add the lower case symbols as equates.
 		*/
 		if (respectCase)
@@ -2398,7 +2398,7 @@ void NxsDiscreteDatatypeMapper::RefreshMappings(NxsToken *token)
 			cLookup[(int) c] = sc;
 			}
 		}
-	
+
 
 	/* add user-defined equates, and only retain the new ones (those that are not datatype defaults). */
 	std::map<char, NxsString> neededExtraEquates;
@@ -2429,17 +2429,17 @@ void NxsDiscreteDatatypeMapper::RefreshMappings(NxsToken *token)
 			}
 		}
 	extraEquates = neededExtraEquates;
-	}   
+	}
 
 /*----------------------------------------------------------------------------------------------------------------------
 |	Returns the state code of a (possible new state set) `sset`.  This may trigger the reallocation of mapping info.
 |	nexusSymbol can be '\0' if there is not a single-character symbol that represents this state set.
 |
 |	if `addToLookup` is false and the state set is not found then NXS_INVALID_STATE_CODE will be returned.
-|	
-|	if the stateset is added with a `nexusSymbol` then the new "symbol" will be case-sensitive 
+|
+|	if the stateset is added with a `nexusSymbol` then the new "symbol" will be case-sensitive
 |	(this is an mechanism for entering equates and equates are always case sensitive).
-|	
+|
 |	New "fundamental" states can NOT be introduced using this function -- if unknown states are encountered, an exception will be generated.
 */
 int NxsDiscreteDatatypeMapper::StateCodeForStateSet(const std::set<int> & sset, bool isPolymorphic, bool addToLookup, char nexusSymbol)
@@ -2450,12 +2450,12 @@ int NxsDiscreteDatatypeMapper::StateCodeForStateSet(const std::set<int> & sset, 
 		ValidateStateIndex(c);
 		return c;
 		}
-	NCL_ASSERT(stateCodeLookupPtr); 
+	NCL_ASSERT(stateCodeLookupPtr);
 	NxsDiscreteStateSetInfo *sclStart = stateCodeLookupPtr + nStates;
 	const int nCodes = (int)stateSetsVec.size();
 
 	/*we can start at nStates, because < nStates will be handled in the sset.size() == 1 above */
-	for (int i = nStates - sclOffset; i < nCodes; ++i) 
+	for (int i = nStates - sclOffset; i < nCodes; ++i)
 		{
 		NxsDiscreteStateSetInfo & stateSetInfo = *sclStart++;
 		if (sset == stateSetInfo.states && isPolymorphic == stateSetInfo.isPolymorphic)
@@ -2471,11 +2471,11 @@ int NxsDiscreteDatatypeMapper::StateCodeForStateSet(const std::set<int> & sset, 
 		}
 	if (!addToLookup)
 		return NXS_INVALID_STATE_CODE;
-	return AddStateSet(sset, nexusSymbol, true, isPolymorphic); 
+	return AddStateSet(sset, nexusSymbol, true, isPolymorphic);
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Adds a new state set and returns its code. 
+|	Adds a new state set and returns its code.
 |	Does NOT check if the state set is present.
 |	It is also MANDATORY that this function be called with the fundamental states first (and in order) before
 |	 being called with any multi state sets (this is done by RefreshMappings)
@@ -2485,12 +2485,12 @@ int NxsDiscreteDatatypeMapper::AddStateSet(const std::set<int> & states, char ne
 	stateIntersectionMatrix.clear();
 	isStateSubsetMatrix.clear();
 	isStateSubsetMatrixGapsMissing.clear();
-		
+
 
 	bool reallyIsPoly = (states.size() > 1 && isPolymorphic);
 	char sym = (symRespectCase ? nexusSymbol : (char) toupper(nexusSymbol));
 	stateSetsVec.push_back(NxsDiscreteStateSetInfo(states, reallyIsPoly, sym));
-	/* if we have gaps, then the sclOffset is -1 and we want to enable 
+	/* if we have gaps, then the sclOffset is -1 and we want to enable
 		stateCodeLookup[-1], so we set stateCodeLookup to &stateSets[1]
 		hence the -sclOffset below
 	*/
@@ -2531,12 +2531,12 @@ void NxsDiscreteDatatypeMapper::ValidateStateIndex(int c) const
 		}
 	else if (c >= (int) nStates)
 		throw NxsNCLAPIException("Illegal usage of state index >= the number of states");
-	}	
+	}
 
 /*----------------------------------------------------------------------------------------------------------------------
 |	Throws an NxsNCLAPIException  if `c` is not a valid state code.
 */
-void NxsDiscreteDatatypeMapper::ValidateStateCode(int c) const 
+void NxsDiscreteDatatypeMapper::ValidateStateCode(int c) const
 	{
 	if (c < sclOffset)
 		{
@@ -2548,10 +2548,10 @@ void NxsDiscreteDatatypeMapper::ValidateStateCode(int c) const
 		}
 	else if (c >= (((int) stateSetsVec.size()) + sclOffset))
 		throw NxsNCLAPIException("Illegal usage of state code > the highest state code");
-	}	
+	}
 
-	
-void NxsDiscreteDatatypeMapper::GenerateNxsExceptionMatrixReading(char const* message, unsigned int taxInd, unsigned int charInd, 
+
+void NxsDiscreteDatatypeMapper::GenerateNxsExceptionMatrixReading(char const* message, unsigned int taxInd, unsigned int charInd,
 NxsToken& token, const NxsString &nameStr)
 	{
 	NxsString e = "Error reading character ";
@@ -2566,7 +2566,7 @@ NxsToken& token, const NxsString &nameStr)
 	e << ":\n" << message;
 	throw NxsException(e, token);
 	}
-	
+
 /*----------------------------------------------------------------------------------------------------------------------
 |	Returns true if the state code maps to a collection of states that were flagged as polymorphic.
 |	generates a NxsNCLAPIException if `c` is not a valid state code
@@ -2578,11 +2578,11 @@ bool NxsDiscreteDatatypeMapper::IsPolymorphic(int c) const
 	return stateCodeLookupPtr[c].isPolymorphic;
 	}
 
-	
+
 /*----------------------------------------------------------------------------------------------------------------------
 |	Returns NXS_INVALID_STATE_CODE or the index of `c` in the symbols list.
 |	case-sensitivity is controlled by this->respectCase attribute.
-|	
+|
 |	NOTE: the gap "state" and missing characters are NOT in the symbols list.
 */
 int NxsDiscreteDatatypeMapper::PositionInSymbols(char c) const
@@ -2598,21 +2598,21 @@ int NxsDiscreteDatatypeMapper::PositionInSymbols(char c) const
 		}
 	return NXS_INVALID_STATE_CODE;
 	}
-	
+
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Returns the NEXUS reperesenation of the state code `scode` which may be a 
+|	Returns the NEXUS reperesenation of the state code `scode` which may be a
 |	multiple character string such as {DNY}
 |   Generates a NxsNCLAPIException if `c` is not a valid state code.
 |	If the string cannot be expressed (insufficient symbols are defined) then
-|	`demandSymbols` controls the behavior.  If `demandSymbols` is true than a 
+|	`demandSymbols` controls the behavior.  If `demandSymbols` is true than a
 |	NxsNCLAPIException is thrown. If `demandSymbols` is false then no output is
 |	written.
 */
 void NxsDiscreteDatatypeMapper::WriteStateCodeAsNexusString(std::ostream & out, int scode, bool demandSymbols) const
 	{
 	ValidateStateCode(scode);
-	const NxsDiscreteStateSetInfo * ssi = &(stateSetsVec.at(scode-sclOffset)); 
+	const NxsDiscreteStateSetInfo * ssi = &(stateSetsVec.at(scode-sclOffset));
 	const NxsDiscreteStateSetInfo & stateSetInfo =  stateCodeLookupPtr[scode];
 	NCL_ASSERT (ssi == &stateSetInfo);
 	char c = stateSetInfo.nexusSymbol;
@@ -2640,7 +2640,7 @@ void NxsDiscreteDatatypeMapper::WriteStateCodeAsNexusString(std::ostream & out, 
 		else
 			return;
 		}
-		
+
 	out <<	(stateSetInfo.isPolymorphic ? '(' : '{');
 	out << towrite;
 	out <<	(stateSetInfo.isPolymorphic ? ')' : '}');
@@ -2671,7 +2671,7 @@ void NxsDiscreteDatatypeMapper::WriteStartOfFormatCommand(std::ostream & out) co
 		unsigned numDefStates = 4;
 		if (this->datatype == NxsCharactersBlock::protein)
 			numDefStates = 21;
-		else if (this->datatype == NxsCharactersBlock::standard)	
+		else if (this->datatype == NxsCharactersBlock::standard)
 			numDefStates = 0;
 		unsigned nSym = (unsigned)this->symbols.length();
 		if (nSym > numDefStates && this->datatype != NxsCharactersBlock::codon)
@@ -2721,7 +2721,7 @@ bool NxsCharactersBlock::HandleNextContinuousState(NxsToken &token, unsigned tax
 		return false;
 	if (token.Equals("("))
 		{
-		token.SetLabileFlagBit(NxsToken::hyphenNotPunctuation);		   
+		token.SetLabileFlagBit(NxsToken::hyphenNotPunctuation);
 		token.GetNextToken();
 		while (!token.Equals(")"))
 			{
@@ -2743,7 +2743,7 @@ bool NxsCharactersBlock::HandleNextContinuousState(NxsToken &token, unsigned tax
 				v.push_back(t.ConvertToDouble());
 				scored.push_back(1);
 				}
-			token.SetLabileFlagBit(NxsToken::hyphenNotPunctuation);		   
+			token.SetLabileFlagBit(NxsToken::hyphenNotPunctuation);
 			token.GetNextToken();
 			}
 		}
@@ -2837,7 +2837,7 @@ int NxsDiscreteDatatypeMapper::StateCodeForNexusChar(
   NxsToken &token,
   unsigned taxNum,		/* the taxon index, in range [0..`ntax') */
   unsigned charNum,		/* the character index, in range [0..`nChar') */
-  const NxsDiscreteStateRow * firstTaxonRow, 
+  const NxsDiscreteStateRow * firstTaxonRow,
   const NxsString & nameStr) const
   	{
 	int currState = cLookup[static_cast<int>(currChar)];
@@ -2865,12 +2865,12 @@ int NxsDiscreteDatatypeMapper::StateCodeForNexusChar(
 	}
 
 bool NxsCharactersBlock::HandleNextDiscreteState(
-  NxsToken &token, 
-  unsigned taxNum, 
-  unsigned charNum, 
-  NxsDiscreteStateRow & row, 
-  NxsDiscreteDatatypeMapper &mapper, 
-  const NxsDiscreteStateRow * firstTaxonRow, 
+  NxsToken &token,
+  unsigned taxNum,
+  unsigned charNum,
+  NxsDiscreteStateRow & row,
+  NxsDiscreteDatatypeMapper &mapper,
+  const NxsDiscreteStateRow * firstTaxonRow,
   const NxsString & nameStr)
   	{
   	if (interleaving)
@@ -2887,7 +2887,7 @@ bool NxsCharactersBlock::HandleNextDiscreteState(
 	const NxsString &stateAsNexus = token.GetTokenReference();
 	int sc =  mapper.EncodeNexusStateString(stateAsNexus, token, taxNum, charNum, firstTaxonRow, nameStr);
 	NCL_ASSERT(charNum < row.size());
-	row[charNum] = sc; 
+	row[charNum] = sc;
 	return true;
 	}
 
@@ -2909,7 +2909,7 @@ int NxsDiscreteDatatypeMapper::StateCodeForNexusPossibleMultiStateSet(
 		emsg << "Expecting  {} or () around a multiple character state set.  Found " << stateAsNexus << " for taxon " << nameStr;
 		GenerateNxsExceptionMatrixReading(emsg, taxNum, charNum, token, nameStr);
 		}
-		
+
 	int currState = StateCodeForNexusChar(firstChar, token, taxNum, charNum, firstTaxonRow, nameStr);
 	cLookup[(int) nexusSymbol] = currState;
 	return currState;
@@ -2946,7 +2946,7 @@ int NxsDiscreteDatatypeMapper::StateCodeForNexusMultiStateSet(
 		if ((strchr("\n\r \t", currChar) == NULL) && currChar != ',')
 			{
 			if (currChar == '~')
-				{				
+				{
 				if (prevState < 0 || prevState >= (int)nStates)
 					{
 					emsg << "A state range cannot start with " << prevChar;
@@ -2982,7 +2982,7 @@ int NxsDiscreteDatatypeMapper::StateCodeForNexusMultiStateSet(
 					}
 				prevState = currState;
 				prevChar = currChar;
-				} 
+				}
 			}
 		}
 	if (prevChar == '~')
@@ -3001,19 +3001,19 @@ int NxsDiscreteDatatypeMapper::StateCodeForNexusMultiStateSet(
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Called from HandleNextState to read in the next state when TOKENS was specified. Looks up state in character 
-|	states listed for the character to make sure it is a valid state, and returns state's value (0, 1, 2, ...). Note: 
+|	Called from HandleNextState to read in the next state when TOKENS was specified. Looks up state in character
+|	states listed for the character to make sure it is a valid state, and returns state's value (0, 1, 2, ...). Note:
 |	does NOT handle adding the state's value to matrix. Save the return value (call it k) and use the following command
 |	to add it to matrix: matrix->AddState(i, j, k);
 */
 bool NxsCharactersBlock::HandleNextTokenState(
-  NxsToken &token, 
-  unsigned taxNum, 
-  unsigned charNum, 
-  NxsDiscreteStateRow & row, 
-  NxsDiscreteDatatypeMapper &mapper, 
-  const NxsDiscreteStateRow * firstTaxonRow, 
-  const NxsString & nameStr)	
+  NxsToken &token,
+  unsigned taxNum,
+  unsigned charNum,
+  NxsDiscreteStateRow & row,
+  NxsDiscreteDatatypeMapper &mapper,
+  const NxsDiscreteStateRow * firstTaxonRow,
+  const NxsString & nameStr)
   {
 	if (interleaving)
 		token.SetLabileFlagBit(NxsToken::newlineIsToken);
@@ -3030,13 +3030,13 @@ bool NxsCharactersBlock::HandleNextTokenState(
 		row[charNum] = HandleTokenState(token, taxNum, charNum, mapper, firstTaxonRow, nameStr);
 		return true;
 		}
-		
-	/*TODO - supporting this requires more bookeeping to allow the mapper to deal with 
+
+	/*TODO - supporting this requires more bookeeping to allow the mapper to deal with
 	anonymous fundamental states  -- difficult because we don't know the number of symbols in TOKENS mode.*/
 	errormsg = "Currently polymorphism and ambiguity are not supported for matrices in TOKENS mode: ";
 	errormsg << token.GetToken() << " found while reading character " << charNum + 1 << " of taxon \"" << nameStr << '\"';
 	throw NxsException(errormsg, token);
-	
+
 	bool tildeFound = false;
 	int prevState = NXS_INVALID_STATE_CODE;
 	std::string prevToken = token.GetToken();
@@ -3066,7 +3066,7 @@ bool NxsCharactersBlock::HandleNextTokenState(
 
 			}
 		else if (uncertainty)
-			{ 
+			{
 			if (token.Equals("}"))
 				{
 				if (tildeFound)
@@ -3086,7 +3086,7 @@ bool NxsCharactersBlock::HandleNextTokenState(
 				}
 			tildeFound = true;
 			}
-		else 
+		else
 			{
 			int currState;
 			if (tildeFound)
@@ -3131,12 +3131,12 @@ bool NxsCharactersBlock::HandleNextTokenState(
 	row[charNum] = mapper.StateCodeForStateSet(sset, (const bool)(polymorphism != 0), true, '\0');
 	return true;
 	}
-	
+
 int NxsCharactersBlock::HandleTokenState(
   NxsToken &token,	/* the token used to read from `in' */
   unsigned taxNum,
   unsigned charNum,
-  NxsDiscreteDatatypeMapper &, 
+  NxsDiscreteDatatypeMapper &,
   const NxsDiscreteStateRow * ,
   const NxsString & nameStr)
   	{
@@ -3182,7 +3182,7 @@ unsigned NxsCharactersBlock::GetMaxIndex() const
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-| Returns the number of indices that correspond to the label (and the number 
+| Returns the number of indices that correspond to the label (and the number
 | of items that would be added to *inds if inds points to an empty set).
 */
 unsigned NxsCharactersBlock::GetIndicesForLabel(const std::string &label, NxsUnsignedSet *inds) const
@@ -3295,11 +3295,11 @@ bool NxsCharactersBlock::AddNewExSet(const std::string &label, const NxsUnsigned
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Initializes `id' to "CHARACTERS", `taxa' to `tb', `assumptionsBlock' to `ab', `ntax', `ntaxTotal', `nChar' and 
-|	`nChar' to 0, `newchar' to true, `newtaxa', `interleaving', `transposing', `respectingCase', `tokens' and 
+|	Initializes `id' to "CHARACTERS", `taxa' to `tb', `assumptionsBlock' to `ab', `ntax', `ntaxTotal', `nChar' and
+|	`nChar' to 0, `newchar' to true, `newtaxa', `interleaving', `transposing', `respectingCase', `tokens' and
 |	`datatype' to `NxsCharactersBlock::standard', `missing' to '?', `gap' and `matchchar'
-|	to '\0', and `matrix', `charPos', `taxonPos', `activeTaxon', and `activeChar' to NULL. The ResetSymbols member 
-|	function is called to reset the `symbols' data member. Assumes that `tb' and `ab' point to valid NxsTaxaBlockAPI and 
+|	to '\0', and `matrix', `charPos', `taxonPos', `activeTaxon', and `activeChar' to NULL. The ResetSymbols member
+|	function is called to reset the `symbols' data member. Assumes that `tb' and `ab' point to valid NxsTaxaBlockAPI and
 |	NxsAssumptionsBlockAPI objects, respectively.
 */
 NxsCharactersBlock::NxsCharactersBlock(
@@ -3316,7 +3316,7 @@ NxsCharactersBlock::NxsCharactersBlock(
 	Reset();
 	}
 /*----------------------------------------------------------------------------------------------------------------------
-|	Excludes characters whose indices are contained in the set `exset'. 
+|	Excludes characters whose indices are contained in the set `exset'.
 |	Returns number of characters actually excluded (some may have already been excluded).
 */
 unsigned NxsCharactersBlock::ApplyExset(
@@ -3356,10 +3356,10 @@ unsigned NxsCharactersBlock::CharLabelToNumber(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Transfers all data from `other' to this object, leaving `other' completely empty. Used to convert a NxsDataBlock 
-|	object to a NxsCharactersBlock object in programs where it is desirable to just have a NxsCharactersBlock for 
-|	storage but also allow users to enter the information in the form of the deprecated NxsDataBlock. This function 
-|	does not make a copy of such things as the data matrix, instead just transferring the pointer to that object from 
+|	Transfers all data from `other' to this object, leaving `other' completely empty. Used to convert a NxsDataBlock
+|	object to a NxsCharactersBlock object in programs where it is desirable to just have a NxsCharactersBlock for
+|	storage but also allow users to enter the information in the form of the deprecated NxsDataBlock. This function
+|	does not make a copy of such things as the data matrix, instead just transferring the pointer to that object from
 |	other to this. This is whay it was named Consume rather than CopyFrom.
 */
 void NxsCharactersBlock::Consume(
@@ -3371,7 +3371,7 @@ void NxsCharactersBlock::Consume(
 	other.assumptionsBlock = NULL;
 	if (assumptionsBlock)
 		assumptionsBlock->SetCallback(this);
-	
+
 	nChar = other.nChar;
 	nTaxWithData = other.nTaxWithData;
 	matchchar = other.matchchar;
@@ -3412,7 +3412,7 @@ void NxsCharactersBlock::Consume(
 	other.Reset();
 	transfMgr.Reset();
 	}
-	
+
 
 void NxsCharactersBlock::WriteStatesForTaxonAsNexus(
   std::ostream &out,			/* output stream on which to print matrix */
@@ -3420,7 +3420,7 @@ void NxsCharactersBlock::WriteStatesForTaxonAsNexus(
   unsigned beginCharInd,
   unsigned endCharInd) const	{
   	NCL_ASSERT(endCharInd <= this->nChar);
-  	
+
 	if (datatype == continuous)
 		{
 		const ContinuousCharRow & row = GetContinuousMatrixRow(taxNum);
@@ -3450,7 +3450,7 @@ void NxsCharactersBlock::WriteStatesForTaxonAsNexus(
 						out << gap << gap << gap;
 					else if (sc >= 0 && sc < (int) globalStateLabels.size())
 						out << globalStateLabels[sc];
-					else 
+					else
 						out << missing << missing << missing;
 					}
 				}
@@ -3461,7 +3461,7 @@ void NxsCharactersBlock::WriteStatesForTaxonAsNexus(
 					throw NxsNCLAPIException("No DatatypeMapper in WriteStatesForTaxonAsNexus");
 				if (IsMixedType())
 					{
-					
+
 					for (unsigned charInd = beginCharInd; charInd < endCharInd; ++charInd)
 						{
 						dm = GetDatatypeMapperForChar(charInd);
@@ -3485,7 +3485,7 @@ void NxsCharactersBlock::WriteStatesForTaxonAsNexus(
 							out << ' ';
 							if (sc == NXS_GAP_STATE_CODE)
 								out << gap;
-							else 
+							else
 								{
 								NxsString sl = GetStateLabel(charInd, sc);
 								if (sl == " ")
@@ -3514,11 +3514,11 @@ void NxsCharactersBlock::WriteStatesForTaxonAsNexus(
 			}
 		}
 	}
-	
+
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Provides a dump of the contents of the `matrix' variable. Useful for testing whether data is being read as 
-|	expected. If marginText is NULL, matrix output is placed flush left. If each line of output should be prefaced with 
+|	Provides a dump of the contents of the `matrix' variable. Useful for testing whether data is being read as
+|	expected. If marginText is NULL, matrix output is placed flush left. If each line of output should be prefaced with
 |	a tab character, specify "\t" for `marginText'.
 */
 void NxsCharactersBlock::DebugShowMatrix(
@@ -3543,7 +3543,7 @@ void NxsCharactersBlock::DebugShowMatrix(
 			const NxsDiscreteStateRow & row = GetDiscreteMatrixRow(i);
 			skip = row.empty();
 			}
-		if (!skip)	
+		if (!skip)
 			{
 			if (marginText != NULL)
 				out << marginText;
@@ -3560,12 +3560,12 @@ void NxsCharactersBlock::DebugShowMatrix(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Returns the maximum observed number of states for any character. Note: this function is rather slow, as it must 
-|	walk through each row of each column, adding the states encountered to a set,  then finally returning the size of 
-|	the set. Thus, if this function is called often, it would be advisable to initialize an array using this function, 
-|	then refer to the array subsequently. 
+|	Returns the maximum observed number of states for any character. Note: this function is rather slow, as it must
+|	walk through each row of each column, adding the states encountered to a set,  then finally returning the size of
+|	the set. Thus, if this function is called often, it would be advisable to initialize an array using this function,
+|	then refer to the array subsequently.
 */
-unsigned NxsCharactersBlock::GetMaxObsNumStates(bool countMissingStates /*= true*/) NCL_COULD_BE_CONST 
+unsigned NxsCharactersBlock::GetMaxObsNumStates(bool countMissingStates /*= true*/) NCL_COULD_BE_CONST
 	{
 	unsigned maxN = 1;
 	for (unsigned j = 0; j < nChar; j++)
@@ -3576,7 +3576,7 @@ unsigned NxsCharactersBlock::GetMaxObsNumStates(bool countMissingStates /*= true
 /*----------------------------------------------------------------------------------------------------------------------
 |	Performs a count of the number of active characters.
 */
-unsigned NxsCharactersBlock::GetNumActiveChar() NCL_COULD_BE_CONST 
+unsigned NxsCharactersBlock::GetNumActiveChar() NCL_COULD_BE_CONST
 	{
 	unsigned num_active_char = 0;
 	for (unsigned i = 0; i < nChar; i++)
@@ -3590,7 +3590,7 @@ unsigned NxsCharactersBlock::GetNumActiveChar() NCL_COULD_BE_CONST
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Returns label for character state `j' at character `i', if a label has been specified. If no label was specified, 
+|	Returns label for character state `j' at character `i', if a label has been specified. If no label was specified,
 |	returns string containing a single blank (i.e., " ").
 */
 NxsString NxsCharactersBlock::GetStateLabelImpl(
@@ -3608,7 +3608,7 @@ NxsString NxsCharactersBlock::GetStateLabelImpl(
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if `ch' can be found in the `symbols' array. The value of `respectingCase' is used to determine 
+|	Returns true if `ch' can be found in the `symbols' array. The value of `respectingCase' is used to determine
 |	whether or not the search should be case sensitive. Assumes `symbols' is non-NULL.
 */
 bool NxsCharactersBlock::IsInSymbols(
@@ -3625,8 +3625,8 @@ bool NxsCharactersBlock::IsInSymbols(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Called when CHARLABELS command needs to be parsed from within the DIMENSIONS block. Deals with everything after 
-|	the token CHARLABELS up to and including the semicolon that terminates the CHARLABELS command. If an ELIMINATE 
+|	Called when CHARLABELS command needs to be parsed from within the DIMENSIONS block. Deals with everything after
+|	the token CHARLABELS up to and including the semicolon that terminates the CHARLABELS command. If an ELIMINATE
 |	command has been processed, labels for eliminated characters will not be stored.
 */
 void NxsCharactersBlock::HandleCharlabels(
@@ -3657,10 +3657,10 @@ void NxsCharactersBlock::HandleCharlabels(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Called when CHARSTATELABELS command needs to be parsed from within the CHARACTERS block. Deals with everything 
-|	after the token CHARSTATELABELS up to and including the semicolon that terminates the CHARSTATELABELS command. 
-|	CharLabels data structures  will store labels only for characters that have not been eliminated, and likewise for 
-|	`charStates'. Specifically, `charStates[0]' refers to the vector of character state labels for the first 
+|	Called when CHARSTATELABELS command needs to be parsed from within the CHARACTERS block. Deals with everything
+|	after the token CHARSTATELABELS up to and including the semicolon that terminates the CHARSTATELABELS command.
+|	CharLabels data structures  will store labels only for characters that have not been eliminated, and likewise for
+|	`charStates'. Specifically, `charStates[0]' refers to the vector of character state labels for the first
 |	non-eliminated character.
 */
 void NxsCharactersBlock::HandleCharstatelabels(
@@ -3674,7 +3674,7 @@ void NxsCharactersBlock::HandleCharstatelabels(
 	charStates.clear();
 	ucCharLabelToIndex.clear();
 	indToCharLabel.clear();
-	
+
 	for (;;)
 		{
 		save = true;
@@ -3702,11 +3702,11 @@ void NxsCharactersBlock::HandleCharstatelabels(
 			throw NxsException(errormsg, token.GetFilePosition(), token.GetFileLine(), token.GetFileColumn());
 			}
 
-		currChar = n; 
+		currChar = n;
 
 		token.GetNextToken();
 
-		// Token should be the character label or / if there is no label 
+		// Token should be the character label or / if there is no label
 		//	' ' is a placeholder for no label.
 		//
 		if (save)
@@ -3722,9 +3722,9 @@ void NxsCharactersBlock::HandleCharstatelabels(
 		if (!token.Equals("/"))
 			token.GetNextToken();
 
-		// Token should be a slash character if state labels were provided for this character; otherwise, 
+		// Token should be a slash character if state labels were provided for this character; otherwise,
 		// token should be one of the following:
-		// 1) the comma separating information for different characters, in which case we read in the 
+		// 1) the comma separating information for different characters, in which case we read in the
 		//	  next token (which should be the next character number)
 		// 2) the semicolon indicating the end of the command
 		//
@@ -3773,10 +3773,10 @@ void NxsCharactersBlock::HandleCharstatelabels(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Called when DIMENSIONS command needs to be parsed from within the CHARACTERS block. Deals with everything after 
-|	the token DIMENSIONS up to and including the semicolon that terminates the DIMENSIONs command. `newtaxaLabel', 
-|	`ntaxLabel' and `ncharLabel' are simply "NEWTAXA", "NTAX" and "NCHAR" for this class, but may be different for 
-|	derived classes that use `newtaxa', `ntax' and `nChar' for other things (e.g., ntax is number of populations in 
+|	Called when DIMENSIONS command needs to be parsed from within the CHARACTERS block. Deals with everything after
+|	the token DIMENSIONS up to and including the semicolon that terminates the DIMENSIONs command. `newtaxaLabel',
+|	`ntaxLabel' and `ncharLabel' are simply "NEWTAXA", "NTAX" and "NCHAR" for this class, but may be different for
+|	derived classes that use `newtaxa', `ntax' and `nChar' for other things (e.g., ntax is number of populations in
 |	an ALLELES block)
 */
 void NxsCharactersBlock::HandleDimensions(
@@ -3792,12 +3792,12 @@ void NxsCharactersBlock::HandleDimensions(
 		token.GetNextToken();
 		if (token.Equals(newtaxaLabel))
 			newtaxa = true;
-		else if (token.Equals(ntaxLabel)) 
+		else if (token.Equals(ntaxLabel))
 			{
 			DemandEquals(token, "after NTAX in DIMENSIONS command");
 			ntaxRead = DemandPositiveInt(token, ntaxLabel.c_str());
 			}
-		else if (token.Equals(ncharLabel)) 
+		else if (token.Equals(ncharLabel))
 			{
 			DemandEquals(token, "in DIMENSIONS command");
 			nChar = DemandPositiveInt(token, ncharLabel.c_str());
@@ -3853,13 +3853,13 @@ void NxsCharactersBlock::HandleDimensions(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Called when ELIMINATE command needs to be parsed from within the CHARACTERS block. Deals with everything after the 
-|	token ELIMINATE up to and including the semicolon that terminates the ELIMINATE command. Any character numbers 
-|	or ranges of character numbers specified are stored in the NxsUnsignedSet `eliminated', which remains empty until 
-|	an ELIMINATE command is processed. Note that like all sets the character ranges are adjusted so that their offset 
-|	is 0. For example, given "eliminate 4-7;" in the data file, the eliminate array would contain the values 3, 4, 5 
-|	and 6 (not 4, 5, 6 and 7). It is assumed that the ELIMINATE command comes before character labels and/or character 
-|	state labels have been specified; an error message is generated if the user attempts to use ELIMINATE after a 
+|	Called when ELIMINATE command needs to be parsed from within the CHARACTERS block. Deals with everything after the
+|	token ELIMINATE up to and including the semicolon that terminates the ELIMINATE command. Any character numbers
+|	or ranges of character numbers specified are stored in the NxsUnsignedSet `eliminated', which remains empty until
+|	an ELIMINATE command is processed. Note that like all sets the character ranges are adjusted so that their offset
+|	is 0. For example, given "eliminate 4-7;" in the data file, the eliminate array would contain the values 3, 4, 5
+|	and 6 (not 4, 5, 6 and 7). It is assumed that the ELIMINATE command comes before character labels and/or character
+|	state labels have been specified; an error message is generated if the user attempts to use ELIMINATE after a
 |	CHARLABELS, CHARSTATELABELS, or STATELABELS command.
 */
 void NxsCharactersBlock::HandleEliminate(
@@ -3875,7 +3875,7 @@ void NxsCharactersBlock::HandleEliminate(
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Called from HandleMatrix function to read in a standard (i.e., non-transposed) matrix. Interleaving, if 
+|	Called from HandleMatrix function to read in a standard (i.e., non-transposed) matrix. Interleaving, if
 |	applicable, is dealt with herein.
 */
 void NxsCharactersBlock::HandleStdMatrix(
@@ -3907,7 +3907,7 @@ void NxsCharactersBlock::HandleStdMatrix(
 	const bool isContinuous = (datatype == NxsCharactersBlock::continuous);
 	if (isContinuous)
 		emptyContRow.resize(nChar);
-	else 
+	else
 		emptyDiscRow.assign(nChar, NXS_INVALID_STATE_CODE);
 	std::vector<unsigned> toInMem(nTaxWithData, UINT_MAX);
 	std::vector<unsigned> nCharsRead(nTaxWithData, 0);
@@ -3924,7 +3924,7 @@ void NxsCharactersBlock::HandleStdMatrix(
 				{
 				if (datatype == NxsCharactersBlock::continuous)
 					continuousMatrix.clear();
-				else 
+				else
 					discreteMatrix.clear();
 				throw NxsSignalCanceledParseException("Reading Characters Block");
 				}
@@ -3970,7 +3970,7 @@ void NxsCharactersBlock::HandleStdMatrix(
 					NCL_ASSERT(indOfTaxInMemory < continuousMatrix.size());
 					continuousMatrix[indOfTaxInMemory] = emptyContRow;
 					}
-				else 
+				else
 					{
 					NCL_ASSERT(indOfTaxInMemory < discreteMatrix.size());
 					discreteMatrix[indOfTaxInMemory] = emptyDiscRow;
@@ -3989,7 +3989,7 @@ void NxsCharactersBlock::HandleStdMatrix(
 					errormsg << "Ordering of taxa must be identical to that in first interleave page. Taxon \"" << nameStr << "\" was not expected.";
 					throw NxsException(errormsg, token);
 					}
-				}		
+				}
 
 			if (firstChar > 0 && nCharsRead[indOfTaxInCommand] >= firstChar)
 				{
@@ -4002,13 +4002,13 @@ void NxsCharactersBlock::HandleStdMatrix(
 				if (ftDiscRowPtr == NULL)
 					ftContRowPtr = contRowPtr;
 				}
-			else 
+			else
 				{
 				discRowPtr = &discreteMatrix[indOfTaxInMemory];
 				if (ftDiscRowPtr == NULL)
 					ftDiscRowPtr = discRowPtr;
 				}
-			
+
 			//******************************************************
 			//******** Beginning of loop through characters ********
 			//******************************************************
@@ -4023,7 +4023,7 @@ void NxsCharactersBlock::HandleStdMatrix(
 							{
 							if (datatype == NxsCharactersBlock::continuous)
 								continuousMatrix.clear();
-							else 
+							else
 								discreteMatrix.clear();
 							throw NxsSignalCanceledParseException("Reading Characters Block");
 							}
@@ -4049,14 +4049,14 @@ void NxsCharactersBlock::HandleStdMatrix(
 					{
 					if (lastChar < nChar && currChar != lastChar)
 						{
-						errormsg << "Each line within an interleave page must comprise the same number of characters.  Error reading taxon \"" << nameStr << '\"'; 
+						errormsg << "Each line within an interleave page must comprise the same number of characters.  Error reading taxon \"" << nameStr << '\"';
 						throw NxsException(errormsg, token);
 						}
 
 					// currChar should be firstChar in next go around
 					nextFirst = currChar;
 
-					// Set lastChar to currChar so that we can check to make sure the remaining lines 
+					// Set lastChar to currChar so that we can check to make sure the remaining lines
 					// in this interleave page end at the same place
 					lastChar = currChar;
 					}
@@ -4079,7 +4079,7 @@ void NxsCharactersBlock::HandleStdMatrix(
 				if (indOfTaxInCommand > 0 && (!atEOL) && (strchr(";[\n\r \t", nextch) == NULL) && nexusReader)
 					{
 					errormsg << "Expecting a whitespace character at the end of the characters for taxon \""<< nameStr << "\" but found " << nextch;
-					nexusReader->NexusWarnToken(errormsg, NxsReader::UNCOMMON_SYNTAX_WARNING, token); 
+					nexusReader->NexusWarnToken(errormsg, NxsReader::UNCOMMON_SYNTAX_WARNING, token);
 					errormsg.clear();
 					}
 				}
@@ -4112,7 +4112,7 @@ void NxsCharactersBlock::HandleTransposedMatrix(
 		for (unsigned i = 0; i < nTaxWithData; ++ i)
 			continuousMatrix[i] = emptyContRow;
 		}
-	else 
+	else
 		{
 		NxsDiscreteStateRow emptyDiscRow(nChar, NXS_INVALID_STATE_CODE);
 		for (unsigned i = 0; i < nTaxWithData; ++ i)
@@ -4157,9 +4157,9 @@ void NxsCharactersBlock::HandleTransposedMatrix(
 					indOfCharInMemory = iter->second;
 					}
 				}
-			else 
+			else
 				indOfCharInMemory = indOfCharInCommand;
-			
+
 			if (page == 0)
 				{
 				if (toInMem[indOfCharInCommand] != UINT_MAX)
@@ -4190,7 +4190,7 @@ void NxsCharactersBlock::HandleTransposedMatrix(
 				}
 
 			NxsDiscreteDatatypeMapper * currMapper =  GetMutableDatatypeMapperForChar(indOfCharInMemory);
-				
+
 			for (currTaxon = firstTaxon; currTaxon < lastTaxon; currTaxon++)
 				{
 				bool atEOL = false;
@@ -4234,7 +4234,7 @@ void NxsCharactersBlock::HandleTransposedMatrix(
 					errormsg << "Expecting the end of a line, but found " << token.GetToken();
 					throw NxsException(errormsg, token);
 					}
-				}			
+				}
 			}
 		firstTaxon = nextFirst;
 		lastTaxon = nTaxWithData;
@@ -4245,7 +4245,7 @@ void NxsCharactersBlock::HandleTransposedMatrix(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Called when MATRIX command needs to be parsed from within the CHARACTERS block. Deals with everything after the 
+|	Called when MATRIX command needs to be parsed from within the CHARACTERS block. Deals with everything after the
 |	token MATRIX up to and including the semicolon that terminates the MATRIX command.
 */
 void NxsCharactersBlock::HandleMatrix(
@@ -4257,13 +4257,13 @@ void NxsCharactersBlock::HandleMatrix(
 		CreateDatatypeMapperObjects(dtParts, dtv);
 	if (taxa == NULL)
 		AssureTaxaBlock(false, token, "Matrix");
-	
+
 	if (tokens && GetDataType() == standard)
 		{
-		/* we can run into trouble here because the number of states can be larger than the 
+		/* we can run into trouble here because the number of states can be larger than the
 		symbols list in the NxsDiscreteDatatypeMapper object (because CharState labels can be
 		used in a matrix, and symbols don't have to be introduced for each character).
-		
+
 		We deal with that here, by introducing \0 symbols
 		*/
 		const unsigned nStatesWSymbols = (const unsigned)symbols.length();
@@ -4288,7 +4288,7 @@ void NxsCharactersBlock::HandleMatrix(
 		errormsg << id << " block with a TAXA block or specify NEWTAXA and NTAX in the DIMENSIONS command";
 		throw NxsException(errormsg, token.GetFilePosition(), token.GetFileLine(), token.GetFileColumn());
 		}
-	
+
 	discreteMatrix.clear();
 	continuousMatrix.clear();
 
@@ -4297,7 +4297,7 @@ void NxsCharactersBlock::HandleMatrix(
 		continuousMatrix.clear();
 		continuousMatrix.resize(ntax);
 		}
-	else 
+	else
 		{
 		discreteMatrix.clear();
 		discreteMatrix.resize(ntax);
@@ -4320,9 +4320,9 @@ void NxsCharactersBlock::HandleMatrix(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Called when STATELABELS command needs to be parsed from within the DIMENSIONS block. Deals with everything after 
-|	the token STATELABELS up to and including the semicolon that terminates the STATELABELS command. Note that the 
-|	numbers of states are shifted back one before being stored so that the character numbers in the NxsStringVectorMap 
+|	Called when STATELABELS command needs to be parsed from within the DIMENSIONS block. Deals with everything after
+|	the token STATELABELS up to and including the semicolon that terminates the STATELABELS command. Note that the
+|	numbers of states are shifted back one before being stored so that the character numbers in the NxsStringVectorMap
 |	objects are 0-offset rather than being 1-offset as in the NxsReader data file.
 */
 void NxsCharactersBlock::HandleStatelabels(
@@ -4351,13 +4351,13 @@ void NxsCharactersBlock::HandleStatelabels(
 			if (token.Equals(";") || token.Equals(","))
 				break;
 			v.push_back(token.GetToken());
-			} 
-		} 
+			}
+		}
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	This function provides the ability to read everything following the block name (which is read by the NxsReader 
-|	object) to the END or ENDBLOCK statement. Characters are read from the input stream `in'. Overrides the abstract 
+|	This function provides the ability to read everything following the block name (which is read by the NxsReader
+|	object) to the END or ENDBLOCK statement. Characters are read from the input stream `in'. Overrides the abstract
 |	virtual function in the base class.
 */
 void NxsCharactersBlock::Read(
@@ -4411,7 +4411,7 @@ void NxsCharactersBlock::Read(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	This function outputs a brief report of the contents of this CHARACTERS block. Overrides the abstract virtual 
+|	This function outputs a brief report of the contents of this CHARACTERS block. Overrides the abstract virtual
 |	function in the base class.
 */
 void NxsCharactersBlock::Report(
@@ -4434,7 +4434,7 @@ void NxsCharactersBlock::Report(
 	out << endl;
 
 	out << "  Data type is \"" << this->GetDatatypeName() << "\"" << endl;
-	
+
 	if (respectingCase)
 		out << "  Respecting case" << endl;
 	else
@@ -4455,7 +4455,7 @@ void NxsCharactersBlock::Report(
 	if (!indToCharLabel.empty())
 		{
 		out << "  Character and character state labels:" << endl;
-		for (unsigned k = 0; k < nChar; k++) 
+		for (unsigned k = 0; k < nChar; k++)
 			{
 			const std::map<unsigned, std::string>::const_iterator toLit = indToCharLabel.find(k);
 			const unsigned kNum = 1 + k;
@@ -4529,7 +4529,7 @@ void NxsCharactersBlock::Report(
 			}
 		}
 
-	
+
 	if (excluded.empty())
 		out << "  no characters excluded" << endl;
 	else
@@ -4608,7 +4608,7 @@ void NxsCharactersBlock::WriteMatrixCommand(
 				unsigned diff = width - currTaxonLabelLen;
 				for (unsigned k = 0; k < diff+5; k++)
 					out << ' ';
-	
+
 				WriteStatesForMatrixRow(out, i, UINT_MAX, begChar, endChar);
 				out << '\n';
 				}
@@ -4638,7 +4638,7 @@ void NxsCharactersBlock::WriteStatesForMatrixRow(
 	{
 	WriteStatesForTaxonAsNexus(out, currTaxonIndex, beginChar, endChar);
 	}
-	
+
 
 void NxsCharactersBlock::WriteCharLabelsCommand(std::ostream &out) const
 	{
@@ -4696,7 +4696,7 @@ void NxsCharactersBlock::WriteCharStateLabelsCommand(std::ostream &out) const
 			const NxsStringVector & stateLabelsVec = cib->second;
 			unsigned ns = (int)stateLabelsVec.size();
 			if (!escapedCLabel.empty())
-				out << escapedCLabel;				
+				out << escapedCLabel;
 			out << " / ";
 			for (unsigned m = 0; m < ns; m++)
 				out << " " << NxsString::GetEscaped(stateLabelsVec[m]);
@@ -4732,9 +4732,9 @@ void NxsCharactersBlock::WriteFormatCommand(std::ostream &out) const
 		}
 	else
 		mapper->WriteStartOfFormatCommand(out);
-		
+
 	if (this->respectingCase)
-		out << " RespectCase"; 
+		out << " RespectCase";
 
 	if (this->matchchar != '\0')
 		out << "  MatchChar=" << this->matchchar;
@@ -4742,14 +4742,14 @@ void NxsCharactersBlock::WriteFormatCommand(std::ostream &out) const
 		{
 		out << " Items = (";
 		for (vector<std::string>::const_iterator iIt = items.begin(); iIt != items.end(); ++iIt)
-			out << *iIt << ' '; 
+			out << *iIt << ' ';
 		out << ")";
 		if (this->statesFormat == STATES_PRESENT)
 			out << " StatesFormat=StatesPresent";
 		}
 	else if (this->statesFormat == INDIVIDUALS)
 			out << " StatesFormat=Individuals";
-	
+
 	if (this->tokens && this->datatype != NxsCharactersBlock::continuous) /*TOKENS is the only choice for continuous data*/
 		out << " Tokens";
 	if (this->writeInterleaveLen > 1 && (this->nChar > (unsigned)this->writeInterleaveLen ))
@@ -4779,7 +4779,7 @@ std::map<char, NxsString> NxsCharactersBlock::GetDefaultEquates(DataTypesEnum dt
 			defEquates['N'] = NxsString("{ACGT}");
 			defEquates['X'] = NxsString("{ACGT}");
 			if (dt == NxsCharactersBlock::nucleotide)
-				defEquates['U'] ='T';			
+				defEquates['U'] ='T';
 			}
 		else
 			{
@@ -4799,7 +4799,7 @@ std::map<char, NxsString> NxsCharactersBlock::GetDefaultEquates(DataTypesEnum dt
 		defEquates['Z'] = NxsString("{EQ}");
 		defEquates['X'] = NxsString("{ACDEFGHIKLMNPQRSTVWY*}");
 		}
-	/* molecular datatypes are the only datatypes with default equates and 
+	/* molecular datatypes are the only datatypes with default equates and
 		keys of either case are equivalent.
 	*/
 	NxsString upperKeys;
@@ -4861,7 +4861,7 @@ void NxsCharactersBlock::Reset()
 	matchchar			= '\0';
 	symbols.clear();
 	ResetSymbols();
-	
+
 	ucCharLabelToIndex.clear();
 	indToCharLabel.clear();
 	charSets.clear();
@@ -4902,7 +4902,7 @@ std::string NxsCharactersBlock::GetDefaultSymbolsForType(NxsCharactersBlock::Dat
 	return std::string();
 	}
 /*----------------------------------------------------------------------------------------------------------------------
-|	Resets standard symbol set after a change in `datatype' is made. Also flushes equates list and installs standard 
+|	Resets standard symbol set after a change in `datatype' is made. Also flushes equates list and installs standard
 |	equate macros for the current `datatype'.
 */
 void NxsCharactersBlock::ResetSymbols()
@@ -4914,9 +4914,9 @@ void NxsCharactersBlock::ResetSymbols()
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Looks up the state(s) at row `i', column `charNum' of matrix and writes it (or them) to out. If there is uncertainty or 
-|	polymorphism, the list of states is surrounded by the appropriate set of symbols (i.e., parentheses for 
-|	polymorphism, curly brackets for uncertainty). If TOKENS was specified, the output takes the form of the defined 
+|	Looks up the state(s) at row `i', column `charNum' of matrix and writes it (or them) to out. If there is uncertainty or
+|	polymorphism, the list of states is surrounded by the appropriate set of symbols (i.e., parentheses for
+|	polymorphism, curly brackets for uncertainty). If TOKENS was specified, the output takes the form of the defined
 |	state labels; otherwise, the correct symbol is looked up in `symbols' and output.
 */
 void NxsCharactersBlock::ShowStateLabels(
@@ -4997,9 +4997,9 @@ void NxsCharactersBlock::ShowStateLabels(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Writes out the state (or states) stored in this NxsDiscreteDatum object to the buffer `s' using the symbols array 
-|	to do the necessary translation of the numeric state values to state symbols. In the case of polymorphism or 
-|	uncertainty, the list of states will be surrounded by brackets or parentheses (respectively). Assumes `s' is 
+|	Writes out the state (or states) stored in this NxsDiscreteDatum object to the buffer `s' using the symbols array
+|	to do the necessary translation of the numeric state values to state symbols. In the case of polymorphism or
+|	uncertainty, the list of states will be surrounded by brackets or parentheses (respectively). Assumes `s' is
 |	non-NULL and long enough to hold everything printed.
 */
 void NxsCharactersBlock::WriteStates(
@@ -5016,7 +5016,7 @@ void NxsCharactersBlock::WriteStates(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	This function is no longer the most efficient way to access parsed data (see notes on NxsCharacterBlock and 
+|	This function is no longer the most efficient way to access parsed data (see notes on NxsCharacterBlock and
 |	GetMatrix() and GetMatrixDecoder() methods.
 |
 |	Returns the number of states for taxon `i', character `j'.
@@ -5032,7 +5032,7 @@ unsigned NxsCharactersBlock::GetNumStates(
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Excludes character whose 0-offset current index is `i'. If character has already been excluded, this function has 
+|	Excludes character whose 0-offset current index is `i'. If character has already been excluded, this function has
 |	no effect.
 */
 void NxsCharactersBlock::ExcludeCharacter(
@@ -5068,6 +5068,8 @@ bool NxsCharactersBlock::IsGapState(
   unsigned taxInd,	/* the taxon, in range [0..`ntax') */
   unsigned charInd) NCL_COULD_BE_CONST /* the character, in range [0..`nChar') */
 	{
+	if (this->datatype == continuous)
+		return false;
 	const NxsDiscreteStateRow & row = discreteMatrix.at(taxInd);
 	return (row.size() > charInd && row[charInd] == NXS_GAP_STATE_CODE);
 	}
@@ -5078,6 +5080,10 @@ bool NxsCharactersBlock::IsMissingState(
   unsigned taxInd,	/* the taxon, in range [0..`ntax') */
   unsigned charInd) NCL_COULD_BE_CONST /* the character, in range [0..`nChar') */
 	{
+	if (this->datatype == continuous)
+		{
+		return !continuousMatrix.at(taxInd).empty();
+		}
 	const NxsDiscreteStateRow & row = discreteMatrix.at(taxInd);
 	return (row.size() <= charInd || (row[charInd] == NXS_MISSING_CODE));
 	}
@@ -5091,7 +5097,7 @@ void NxsCharactersBlock::FindConstantCharacters(NxsUnsignedSet &c) const
 		const NxsDiscreteDatatypeMapper * mapper = GetDatatypeMapperForChar(colIndex);
 		if (mapper == NULL)
 			throw NxsNCLAPIException("No DatatypeMapper in FindConstantCharacters");
-		
+
 		std::set<int> intersectionSet = mapper->GetStateSetForCode(NXS_MISSING_CODE);
 		for (NxsDiscreteStateMatrix::const_iterator rowIt = discreteMatrix.begin(); rowIt != discreteMatrix.end(); ++rowIt)
 			{
@@ -5123,7 +5129,7 @@ void NxsCharactersBlock::FindGappedCharacters(NxsUnsignedSet &c) const
 			const NxsDiscreteStateRow & row = *rowIt;
 			if (row.size() > colIndex && row[colIndex] == NXS_GAP_STATE_CODE)
 				{
-				c.insert(colIndex); 
+				c.insert(colIndex);
 				break;
 				}
 			}
@@ -5192,8 +5198,8 @@ std::set<int> NxsCharactersBlock::GetMaximalStateSetOfColumn(const unsigned colI
 	}
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if taxon `i' is polymorphic for character `j', false otherwise. Assumes `matrix' is non-NULL. Note 
-|	that return value will be false if there is only one state (i.e., one cannot tell whether there is uncertainty 
+|	Returns true if taxon `i' is polymorphic for character `j', false otherwise. Assumes `matrix' is non-NULL. Note
+|	that return value will be false if there is only one state (i.e., one cannot tell whether there is uncertainty
 |	using this function).
 */
  bool NxsCharactersBlock::IsPolymorphic(
@@ -5212,8 +5218,8 @@ std::set<int> NxsCharactersBlock::GetMaximalStateSetOfColumn(const unsigned colI
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-|	Shows the states for taxon `i', character `j', on the stream `out'. Uses `symbols' array to translate the states 
-|	from the way they are stored (as integers) to the symbol used in the original data matrix. Assumes `i' is in the 
+|	Shows the states for taxon `i', character `j', on the stream `out'. Uses `symbols' array to translate the states
+|	from the way they are stored (as integers) to the symbol used in the original data matrix. Assumes `i' is in the
 |	range [0..`ntax') and `j' is in the range [0..`nChar'). Also assumes `matrix' is non-NULL.
 */
 void NxsCharactersBlock::ShowStates(
@@ -5284,15 +5290,15 @@ NxsCharactersBlock *NxsCharactersBlockFactory::GetBlockReaderForID(const std::st
 
 // returns a vector of vectors of  the states for each state code.
 // 	The second to the last element will be empty to correspond to  NXS_GAP_STATE_CODE = -2
-// 	The last element will be empty to correspond to NXS_MISSING_CODE = -1 
+// 	The last element will be empty to correspond to NXS_MISSING_CODE = -1
 
-std::vector<std::vector<int> > NxsDiscreteDatatypeMapper::GetPythonicStateVectors() const 
+std::vector<std::vector<int> > NxsDiscreteDatatypeMapper::GetPythonicStateVectors() const
 	{
 
 	std::vector<std::vector<int> > pv(this->GetNumStateCodes());
-	
+
 	const int endIndex = (((int) stateSetsVec.size()) + sclOffset);
-	for (int i = 0; i < endIndex; ++i) 
+	for (int i = 0; i < endIndex; ++i)
 		pv[i] = this->GetStateVectorForCode(i);
 	return pv;
 	}
