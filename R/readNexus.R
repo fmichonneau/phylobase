@@ -1,4 +1,4 @@
-readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
+readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
                        char.all=FALSE, polymorphic.convert=TRUE,
                        levels.uniform=TRUE, quiet=TRUE,
                        check.node.labels=c("keep", "drop", "asdata"), ...) {
@@ -52,8 +52,8 @@ readNexus <- function (file, simplify=TRUE, type=c("all", "tree", "data"),
         intreesstring <- .Call("ReadTreesWithNCL", params,
                                PACKAGE="phylobase")
         if(!quiet) print(intreesstring)
-        intreesphylolist <- read.nexustreestring(intreesstring);
-        if (length(intreesphylolist)>1 || !simplify) {
+        intreesphylolist <- read.nexustreestring(intreesstring)
+        if (length(intreesphylolist)>1 && !simplify) {
             trees <- list()
             for (i in 1:length(intreesphylolist)) {
                 if(identical(check.node.labels, "asdata")) {

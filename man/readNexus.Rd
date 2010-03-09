@@ -11,7 +11,7 @@
    }
  }
  \usage{
-	readNexus(file, simplify=TRUE, type=c("all", "tree", "data"),
+	readNexus(file, simplify=FALSE, type=c("all", "tree", "data"),
 char.all=FALSE, polymorphic.convert=TRUE, levels.uniform=TRUE,
 quiet=TRUE, check.node.labels=c("keep", "drop", "asdata"), ...)
  }
