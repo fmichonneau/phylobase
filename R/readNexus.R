@@ -101,7 +101,7 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
             output <- tipdata
         }
         else {
-            if (length(intreesphylolist) > 1 || !simplify) {
+            if (length(intreesphylolist) > 1 && !simplify) {
                 output <- list()
                 for (i in 1:length(intreesphylolist)) {
                     output[[i]] <- phylo4d(intreesphylolist[[i]],
