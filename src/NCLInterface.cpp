@@ -46,7 +46,8 @@ void BASICCMDLINE::AppendRContent(
   NxsCharactersBlock &characters,
   bool allchar,
   bool polymorphictomissing,
-  bool levelsall) const
+  bool levelsall,
+  bool returnlabels) const
 {
 
 	int nchartoreturn = 0;
@@ -97,37 +98,29 @@ void BASICCMDLINE::AppendRContent(
 							nexuscharacters+="NA";
 						}
 						else {
+							nexuscharacters+='"';
 							nexuscharacters+='{';
 							for (unsigned int k=0;k<characters.GetNumStates(taxon,character);k++) {
-								nexuscharacters+=characters.GetInternalRepresentation(taxon,character,0);
+								nexuscharacters+=characters.GetInternalRepresentation(taxon,character,k);	
 								if (k+1<characters.GetNumStates(taxon,character)) {
 									nexuscharacters+=',';
 								}
 							}
 							nexuscharacters+='}';
+							nexuscharacters+='"';
 						}
 					}
 					else {
+						nexuscharacters+='"';
 						nexuscharacters+=statenumber;
+						nexuscharacters+='"';
 					}
 					if (taxon+1<ntax) {
 						nexuscharacters+=',';
 					}
 				}
 				nexuscharacters+=')';
-				if (levelsall) {
-					nexuscharacters+=", levels=c(";
-					for (unsigned int l=0;l<characters.GetMaxObsNumStates(); l++) {
-						nexuscharacters+=l;
-						if (l+1<characters.GetMaxObsNumStates()) {
-							nexuscharacters+=',';
-						}
-					}
-					nexuscharacters+=')';
-				}
-				else {
-
-					NxsString levels=", levels=c(";
+				if (returnlabels) {
 					NxsString labels=", labels=c(";
 					unsigned int totallabellength=0;
 					for (unsigned int l=0;l<characters.GetObsNumStates(character); l++) {
@@ -135,20 +128,49 @@ void BASICCMDLINE::AppendRContent(
 						labels+= characters.GetStateLabel(character,l);
 						totallabellength+=(characters.GetStateLabel(character,l)).length();
 						labels+='"';
-						levels+= l;
 						if (l+1<characters.GetObsNumStates(character)) {
-							labels+=',';
-							levels+=',';
+								labels+=',';
 						}
 					}
-					levels+=')';
 					labels+=')';
-					//cout<<"labels.length="<<labels.length()<<endl<<"levels.length="<<levels.length()<<endl<<"total label length="<<totallabellength<<endl;
 					if (totallabellength>characters.GetObsNumStates(character)) {
-						nexuscharacters+=levels;
 						nexuscharacters+=labels;
 					}
 				}
+				//if (levelsall) {
+				//	nexuscharacters+=", levels=c(";
+				//	for (unsigned int l=0;l<characters.GetMaxObsNumStates(); l++) {
+				//		nexuscharacters+=l;
+				//		if (l+1<characters.GetMaxObsNumStates()) {
+				//			nexuscharacters+=',';
+				//		}
+				//	}
+				//	nexuscharacters+=')';
+				//}
+				//else {
+				//
+				//	NxsString levels=", levels=c(";
+				//	NxsString labels=", labels=c(";
+				//	unsigned int totallabellength=0;
+				//	for (unsigned int l=0;l<characters.GetObsNumStates(character); l++) {
+				//		labels+='"';
+				//		labels+= characters.GetStateLabel(character,l);
+				//		totallabellength+=(characters.GetStateLabel(character,l)).length();
+				//		labels+='"';
+				//		levels+= l;
+				//		if (l+1<characters.GetObsNumStates(character)) {
+				//			labels+=',';
+				//			levels+=',';
+				//		}
+				//	}
+				//	levels+=')';
+				//	labels+=')';
+					//cout<<"labels.length="<<labels.length()<<endl<<"levels.length="<<levels.length()<<endl<<"total label length="<<totallabellength<<endl;
+				//	if (totallabellength>characters.GetObsNumStates(character)) {
+				//		nexuscharacters+=levels;
+				//		nexuscharacters+=labels;
+				//	}
+				//}
 				nexuscharacters+=")\n";
 			}
 			nexuscharacters+=", row.names=c(";
@@ -452,7 +474,7 @@ void BASICCMDLINE::AppendRContent(
 }
 
 
-void BASICCMDLINE::RReturnCharacters(NxsString & outputstring, bool allchar, bool polymorphictomissing, bool levelsall)
+void BASICCMDLINE::RReturnCharacters(NxsString & outputstring, bool allchar, bool polymorphictomissing, bool levelsall, bool returnlabels)
 {
 	if (!nexusReader)
 		return;
@@ -465,7 +487,7 @@ void BASICCMDLINE::RReturnCharacters(NxsString & outputstring, bool allchar, boo
 		for (unsigned i = 0; i < nCharBlocks; ++i) {
 			NxsCharactersBlock * cb = nexusReader->GetCharactersBlock(tb, i);
 			if (cb) {
-				AppendRContent(outputstring, *cb, allchar, polymorphictomissing, levelsall);
+				AppendRContent(outputstring, *cb, allchar, polymorphictomissing, levelsall, returnlabels);
 			}
 		}
 	}
@@ -2211,7 +2233,7 @@ int main(int argc, char *argv[])
 		basiccmdline.Initialize(argv[i]);
 	}
 	NxsString t;
-	basiccmdline.RReturnCharacters(t, true, false, false);
+	basiccmdline.RReturnCharacters(t, true, false, false, false);
 	if (!t.empty())
 		cout << t << '\n';
 	t.clear();
