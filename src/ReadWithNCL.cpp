@@ -79,7 +79,7 @@ RcppExport SEXP ReadWithNCL(SEXP params) {
 		//string discreteString = "This was passed in the discrete string";
 
 		NxsString characterStringNxs;
-		reader.RReturnCharacters(characterStringNxs,false, true, false);
+		reader.RReturnCharacters(characterStringNxs,false, true, false, false);
 		//string characterString=characterStringNxs.c_str();
 
 		string continuousString = "This was passed in the continuous string";
@@ -194,6 +194,7 @@ RcppExport SEXP ReadCharsWithNCL(SEXP params) {
 		bool allchar = rparam.getBoolValue("allchar");
 		bool levelsall=rparam.getBoolValue("levelsall");
 		bool polymorphictomissing=rparam.getBoolValue("polymorphictomissing");
+		bool returnlabels=rparam.getBoolValue("returnlabels");
 
 		BASICCMDLINE reader;
 
@@ -203,7 +204,7 @@ RcppExport SEXP ReadCharsWithNCL(SEXP params) {
 		reader.Initialize(const_cast < char* > (filename.c_str()));
 
 		NxsString charStringNxs;
-		reader.RReturnCharacters(charStringNxs,allchar, polymorphictomissing, levelsall);
+		reader.RReturnCharacters(charStringNxs,allchar, polymorphictomissing, levelsall, returnlabels);
 		string charString=charStringNxs.c_str();
 
 		// Build result set to be returned as a list to R.
