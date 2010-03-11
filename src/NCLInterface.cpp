@@ -68,7 +68,7 @@ void BASICCMDLINE::AppendRContent(
 				nchartoreturn=characters.GetNCharTotal();
 			}
 			else {
-				nchartoreturn=characters.GetNChar();
+				nchartoreturn=characters.GetNumIncludedChars();
 			}
 			for (int character=0; character<nchartoreturn; character++) { //We only pass the non-eliminated chars
 				NxsString charlabel=characters.GetCharLabel(character);
@@ -202,7 +202,7 @@ void BASICCMDLINE::AppendRContent(
 				nchartoreturn=characters.GetNCharTotal();
 			}
 			else {
-				nchartoreturn=characters.GetNChar();
+				nchartoreturn=characters.GetNumIncludedChars();
 			}
 			for (int taxon=0;taxon<ntax;taxon++) {
 				nexuscharacters+='"';
@@ -305,7 +305,7 @@ void BASICCMDLINE::AppendRContent(
 				nchartoreturn=characters.GetNCharTotal();
 			}
 			else {
-				nchartoreturn=characters.GetNChar();
+				nchartoreturn=characters.GetNumIncludedChars();
 			}
 			for (int taxon=0;taxon<ntax;taxon++) {
 				nexuscharacters+='"';
@@ -348,7 +348,7 @@ void BASICCMDLINE::AppendRContent(
 				nchartoreturn=characters.GetNCharTotal();
 			}
 			else {
-				nchartoreturn=characters.GetNChar();
+				nchartoreturn=characters.GetNumIncludedChars();
 			}
 			for (int character=0; character<nchartoreturn; character++) { //We only pass the non-eliminated chars
 				NxsString charlabel=characters.GetCharLabel(character);
@@ -880,7 +880,7 @@ void BASICCMDLINE::RReturnCharacters(NxsString & nexuscharacters, bool allchar, 
 				nchartoreturn=characters->GetNCharTotal();
 			}
 			else {
-				nchartoreturn=characters->GetNChar();
+				nchartoreturn=characters->GetNumIncludedChars();
 			}
 			for (int character=0; character<nchartoreturn; character++) { //We only pass the non-eliminated chars
 				NxsString charlabel=characters->GetCharLabel(character);
@@ -993,7 +993,7 @@ void BASICCMDLINE::RReturnCharacters(NxsString & nexuscharacters, bool allchar, 
 				nchartoreturn=characters->GetNCharTotal();
 			}
 			else {
-				nchartoreturn=characters->GetNChar();
+				nchartoreturn=characters->GetNumIncludedChars();
 			}
 			for (int taxon=0;taxon<ntax;taxon++) {
 				nexuscharacters+='"';
@@ -1096,7 +1096,7 @@ void BASICCMDLINE::RReturnCharacters(NxsString & nexuscharacters, bool allchar, 
 				nchartoreturn=characters->GetNCharTotal();
 			}
 			else {
-				nchartoreturn=characters->GetNChar();
+				nchartoreturn=characters->GetNumIncludedChars();
 			}
 			for (int taxon=0;taxon<ntax;taxon++) {
 				nexuscharacters+='"';
@@ -1139,7 +1139,7 @@ void BASICCMDLINE::RReturnCharacters(NxsString & nexuscharacters, bool allchar, 
 				nchartoreturn=characters->GetNCharTotal();
 			}
 			else {
-				nchartoreturn=characters->GetNChar();
+				nchartoreturn=characters->GetNumIncludedChars();
 			}
 			for (int character=0; character<nchartoreturn; character++) { //We only pass the non-eliminated chars
 				NxsString charlabel=characters->GetCharLabel(character);
@@ -1286,7 +1286,7 @@ NxsString BASICCMDLINE::ReturnDataForR(bool allchar, bool polymorphictomissing, 
 			nchartoreturn=characters->GetNCharTotal();
 		}
 		else {
-			nchartoreturn=characters->GetNChar();
+			nchartoreturn=characters->GetNumIncludedChars();
 		}
 		for (int character=0; character<nchartoreturn; character++) { //We only pass the non-eliminated chars
 			NxsString charlabel=characters->GetCharLabel(character);
