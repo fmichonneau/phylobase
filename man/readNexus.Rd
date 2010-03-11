@@ -13,7 +13,7 @@
  \usage{
 	readNexus(file, simplify=FALSE, type=c("all", "tree", "data"),
 char.all=FALSE, polymorphic.convert=TRUE, levels.uniform=TRUE,
-quiet=TRUE, check.node.labels=c("keep", "drop", "asdata"), ...)
+quiet=TRUE, check.node.labels=c("keep", "drop", "asdata"), return.labels=TRUE, ...)
  }
 \arguments{
   \item{file}{a Nexus file}
@@ -31,7 +31,9 @@ quiet=TRUE, check.node.labels=c("keep", "drop", "asdata"), ...)
     process if the tree is big or there are many trees in the file.}
   \item{check.node.labels}{Determines how the node labels in the Nexus
     files should be treated in the phylo4 object, see Details for more
-    information.} 
+    information.}
+  \item{return.labels}{Determines whether state names (if TRUE) or state
+    codes should be returned.}
   \item{\dots}{Additional arguments to be passed to phylo4 or phylo4d
     constructor (see details)}
 }

@@ -1,7 +1,8 @@
 readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
                        char.all=FALSE, polymorphic.convert=TRUE,
                        levels.uniform=TRUE, quiet=TRUE,
-                       check.node.labels=c("keep", "drop", "asdata"), ...) {
+                       check.node.labels=c("keep", "drop", "asdata"),
+                       return.labels=TRUE, ...) {
 
     ## file = input nexus file
     ## simplify = if TRUE only keeps the first tree, if several trees are found in
@@ -16,6 +17,8 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
     ##                       characters
     ## levels.uniform = if TRUE, categorical data are loaded with the same levels,
     ##                  even if one character is missing a state
+    ## return.labels = if TRUE, returns the names of the states instead of the
+    ##                 the internal codes
     ## quiet = if TRUE, returns the object without printing tree strings (printing
     ##         makes readNexus very slow in the cases of very big trees)
     ## check.node.labels = how to deal with node labels, to be passed to phylo4d
@@ -28,16 +31,40 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
     if (type == "all" || type == "data") {
         params <- list(filename=file, allchar=char.all,
                        polymorphictomissing=polymorphic.convert,
-                       levelsall=levels.uniform)
+                       levelsall=levels.uniform,
+                       returnlabels=return.labels)
 
         ## Check that params is properly formatted.
         if(!is.list(params) || length(params) == 0) {
             stop("The params parameter must be a non-empty list")
         }
-
-        incharsstring <- .Call("ReadCharsWithNCL",params,
+        incharsstring <- .Call("ReadCharsWithNCL", params,
                                PACKAGE="phylobase")
+        ## Remove empty labels for factors
+        incharsstring$charstring <- gsub("\\\"\\\"", "", incharsstring$charstring)
+        incharsstring$charstring <- gsub(",+)", ")", incharsstring$charstring)
+
+        ## For now, we can't deal with polymorphic characters and their labels
+        if (length(grep("\\{", incharsstring$charstring)) > 0 &&
+            return.labels) {
+            stop("At this stage, it's not possible to use the combination:",
+                 "return.labels=TRUE for datasets that contain polymorphic",
+                 "characters.")
+        }
+
+        ## Convert the string to data frame
         tipdata <- eval(parse(text=incharsstring))
+
+        ## if levels.uniform=TRUE apply the same levels to all characters
+        if (levels.uniform && length(tipdata) > 0) {
+            allLevels <- character(0)
+            for (i in 1:ncol(tipdata)) {
+                allLevels <- union(allLevels, levels(tipdata[,i]))
+            }
+            for (i in 1:ncol(tipdata)) {
+                levels(tipdata[,i]) <- allLevels
+            }
+        }
     }
     if (type == "all" || type == "tree") {
         trees <- c("Failure");
