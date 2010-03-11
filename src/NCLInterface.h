@@ -96,7 +96,7 @@ class BASICCMDLINE {
 		}
 		void Clear();
 
-		void RReturnCharacters(NxsString & nexuscharacters, bool allchar, bool polymorphictomissing, bool levelsall);
+		void RReturnCharacters(NxsString & nexuscharacters, bool allchar, bool polymorphictomissing, bool levelsall, bool returnlabels);
 		void RReturnTrees(NxsString & nexustrees);
 		void RReturnDistances(NxsString & nexusdistances);
 
@@ -111,7 +111,8 @@ class BASICCMDLINE {
 				  NxsCharactersBlock &characters,
 				  bool allchar,
 				  bool polymorphictomissing,
-				  bool levelsall) const;
+				  bool levelsall,
+				  bool returnlabels) const;
 		void AppendRContent(NxsString & nexuscharacters,  NxsTreesBlock &treesB) const;
 
 		void AppendRContent(NxsString & nexuscharacters, NxsDistancesBlock &distancesB) const;
