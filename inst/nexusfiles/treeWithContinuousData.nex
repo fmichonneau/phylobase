@@ -11,7 +11,7 @@ END;
 
 
 BEGIN CHARACTERS;
-	TITLE  'Matrix in file "treepluscharV01.nex"';
+	TITLE  'Morphology';
 	DIMENSIONS NCHAR=32;
 	FORMAT DATATYPE = CONTINUOUS;
 CHARSTATELABELS 
@@ -71,53 +71,7 @@ CHARSTATELABELS
 
 END;
 
-BEGIN CHARACTERS;
-	TITLE  Foraging;
-	DIMENSIONS  NCHAR=2;
-	FORMAT DATATYPE = STANDARD GAP = - MISSING = ? SYMBOLS = "  0 1 2";
-	CHARSTATELABELS 
-		1 time /  diurnal crepuscular nocturnal, 2 subgenus /  Endiodioctes Eremnocystus Myrmecocystus ; 
-	MATRIX
-	Myrmecocystuscfnavajo   22
 
-	Myrmecocystuscreightoni  11
-
-	Myrmecocystusdepilis     00
-
-	Myrmecocystuskathjuli    00
-
-	Myrmecocystuskennedyi    00
-
-	Myrmecocystusmendax      00
-
-	Myrmecocystusmexicanus   22
-
-	Myrmecocystusmimicus     00
-
-	Myrmecocystusnavajo      22
-
-	Myrmecocystusnequazcatl  00
-
-	Myrmecocystusplacodops   00
-
-	Myrmecocystusromainei    00
-
-	Myrmecocystussemirufus   00
-
-	Myrmecocystussnellingi   11
-
-	Myrmecocystustenuinodis  11
-
-	Myrmecocystustestaceus   12
-
-	Myrmecocystuswheeleri    00
-
-	Myrmecocystusyuma        11
-
-
-;
-
-END;
 
 BEGIN TREES;
 	TRANSLATE
@@ -143,17 +97,11 @@ BEGIN TREES;
 
 END;
 
-
 BEGIN ASSUMPTIONS;
-	TYPESET * UNTITLED  (CHARACTERS = 'Matrix in file "treepluscharV01.nex"')  =  Squared:  1 -  32;
-TYPESET * UNTITLED  (CHARACTERS = Foraging)  =  unord:  1 -  2;
-
+	TYPESET * UNTITLED  (CHARACTERS = 'Morphology')  =  Squared:  1 -  32;
 END;
 
-BEGIN MESQUITECHARMODELS;
-	ProbModelSet * UNTITLED  (CHARACTERS = 'Matrix in file "treepluscharV01.nex"')  =  Browniandefault:  1 -  32;
-ProbModelSet * UNTITLED  (CHARACTERS = Foraging)  =  'Mk1 (est.)':  1 -  2;
-END;
+
 
 Begin MESQUITE;
 		MESQUITESCRIPTVERSION 2;
