@@ -58,6 +58,9 @@ void BASICCMDLINE::AppendRContent(
 
 	if (!characters.IsEmpty())
 		{
+		nexuscharacters+="|";
+		nexuscharacters+=characters.GetNameOfDatatype(characters.GetDataType());
+		nexuscharacters+="|";
 		//characters.Report(cerr);
 		if (1==characters.GetDataType()) { //standard datatype
 		//if((characters.GetDatatypeName())=="standard") {
@@ -341,7 +344,7 @@ void BASICCMDLINE::AppendRContent(
 			}
 			nexuscharacters+="), stringsAsFactors=FALSE)";
 		}
-		else if (6==characters.GetDataType()) { //continuousnexuscharacters+="data.frame(";
+		else if ("Continuous"==characters.GetNameOfDatatype(characters.GetDataType())) { //(6==characters.GetDataType()) { //continuousnexuscharacters+="data.frame(";
 			nexuscharacters+="data.frame(";
 
 			if (allchar) {
@@ -397,7 +400,9 @@ void BASICCMDLINE::AppendRContent(
 			//PrintMessage();
 		}
 		else {
-			std::string message="Error: character matrix loaded, but does not match any category (dna, standard, etc.)";
+			std::string message="Matrix loaded but datatype: ";
+			message+=characters.GetNameOfDatatype(characters.GetDataType());
+			message+=" is not supported (yet)"; //"Error: character matrix loaded, but does not match any category (dna, standard, etc.)";
 			errorMessage(message);
 		}
 		nexuscharacters=RemoveUnderscoresAndSpaces(nexuscharacters);

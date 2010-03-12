@@ -40,30 +40,60 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
         }
         incharsstring <- .Call("ReadCharsWithNCL", params,
                                PACKAGE="phylobase")
-        ## Remove empty labels for factors
-        incharsstring$charstring <- gsub("\\\"\\\"", "", incharsstring$charstring)
-        incharsstring$charstring <- gsub(",+)", ")", incharsstring$charstring)
+        if (length(incharsstring) > 0) {
+            incharsstring <- unlist(strsplit(incharsstring$charstring, "\\|"))
+            incharsstring <- incharsstring[nzchar(incharsstring)]
 
-        ## For now, we can't deal with polymorphic characters and their labels
-        if (length(grep("\\{", incharsstring$charstring)) > 0 &&
-            return.labels) {
-            stop("At this stage, it's not possible to use the combination:",
-                 "return.labels=TRUE for datasets that contain polymorphic",
-                 "characters.")
+            iDtType <- seq(from=1, to=length(incharsstring), by=2)
+            iCharStrg <- seq(from=2, to=length(incharsstring), by=2)
+
+            datatype <- incharsstring[iDtType]
+            charString <- incharsstring[iCharStrg]
+
+            tipdata <- list()
+            for (i in 1:length(charString)) {
+                if (datatype[i] == "Standard") {
+                    ## Remove empty labels for factors
+                    charString[i] <- gsub("\\\"\\\"", "", charString[i])
+                    charString[i] <- gsub(",+)", ")", charString[i])
+
+                    ## For now, we can't deal with polymorphic characters and their labels
+                    if (length(grep("\\{", charString[i])) > 0 &&
+                        return.labels) {
+                        stop("At this stage, it's not possible to use the combination: ",
+                             "return.labels=TRUE for datasets that contain polymorphic ",
+                             "characters.")
+                    }
+
+                    ## Convert the string to data frame
+                    tipdata[[i]] <- eval(parse(text=charString[i]))
+
+                    ## if levels.uniform=TRUE apply the same levels to all characters
+                    if (levels.uniform && length(tipdata[[i]]) > 0) {
+                        allLevels <- character(0)
+                        for (j in 1:ncol(tipdata[[i]])) {
+                            allLevels <- union(allLevels, levels(tipdata[[i]][,j]))
+                        }
+                        for (j in 1:ncol(tipdata[[i]])) {
+                            levels(tipdata[[i]][,j]) <- allLevels
+                        }
+                    }
+                }
+                else {
+                    ## Just convert string to data frame for other datatype
+                    tipdata[[i]] <- eval(parse(text=charString[i]))
+                }
+            }
+            finalTipdata <- tipdata[[1]]
+            if (length(tipdata) > 1) {
+                for(td in tipdata) {
+                    finalTipdata <- cbind(finalTipdata, td)
+                }
+            }
+            tipdata <- finalTipdata
         }
-
-        ## Convert the string to data frame
-        tipdata <- eval(parse(text=incharsstring))
-
-        ## if levels.uniform=TRUE apply the same levels to all characters
-        if (levels.uniform && length(tipdata) > 0) {
-            allLevels <- character(0)
-            for (i in 1:ncol(tipdata)) {
-                allLevels <- union(allLevels, levels(tipdata[,i]))
-            }
-            for (i in 1:ncol(tipdata)) {
-                levels(tipdata[,i]) <- allLevels
-            }
+        else {
+            tipdata <- NULL
         }
     }
     if (type == "all" || type == "tree") {
@@ -78,6 +108,7 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
         ## Finally ready to make the call...
         intreesstring <- .Call("ReadTreesWithNCL", params,
                                PACKAGE="phylobase")
+        ## Display the string returned by NCL if quiet=FALSE
         if(!quiet) print(intreesstring)
         intreesphylolist <- read.nexustreestring(intreesstring)
         if (length(intreesphylolist)>1 && !simplify) {
@@ -120,7 +151,7 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
             }
         }
     }
-    if (type == "tree" || length(tipdata) == 0 ) {
+    if (type == "tree" || (type == "all" && length(tipdata) == 0 )) {
         output <- trees
     }
     else {
