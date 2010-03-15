@@ -86,7 +86,7 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
             }
             finalTipdata <- tipdata[[1]]
             if (length(tipdata) > 1) {
-                for(td in tipdata) {
+                for(td in tipdata[-1]) {
                     finalTipdata <- cbind(finalTipdata, td)
                 }
             }
