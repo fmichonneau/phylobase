@@ -25,6 +25,10 @@ treePolyDt <- file.path(pth, "treeWithPolyExcludedData.nex")
 ## treeWithContinuousData.nex -- Mesquite file with continuous characters
 treeContDt <- file.path(pth, "treeWithContinuousData.nex")
 
+## treeWithDiscAndContData.nex -- Mesquite file with both discrete and
+##    continuous data
+treeDiscCont <- file.path(pth, "treeWithDiscAndContData.nex")
+
 ## Contains correct (as of 2010-03-08) phylo4 representation of one of the tree
 ## stored in the nexus file
 mlFile <- file.path(pth, "multiLines.Rdata")
@@ -38,7 +42,9 @@ stopifnot(file.exists(multiLinesFile))
 stopifnot(file.exists(mlFile))
 stopifnot(file.exists(treePolyDt))
 stopifnot(file.exists(treeContDt))
+stopifnot(file.exists(treeDiscCont))
 stopifnot(file.exists(ExContDataFile))
+
 
 test.readNexus <- function() {
     ## function (file, simplify=TRUE, type=c("all", "tree", "data"),
@@ -387,5 +393,18 @@ test.readNexus <- function() {
     checkIdentical(edgeLength(trDtCont), eTr) # check edge lengths
     checkIdentical(nodeType(trDtCont), nTtr)  # check node types
     checkIdentical(class(trDtCont), p4d)      # check class
+
+    ## ########## Tree + Data -- both types (Discrete & Continuous)
+    dtDiscCont <- readNexus(file=treeDiscCont, type="data", levels.uniform=FALSE)
+    trDtDiscCont <- readNexus(file=treeDiscCont, type="all", levels.uniform=FALSE)
+    load(ExContDataFile)
+    dtDiscContTest <- cbind(ExContData, dtTest2[rownames(ExContData), ])
+    rm(ExContDataFile)
+    checkIdentical(dtDiscCont, dtDiscContTest[rownames(dtDiscCont), ])
+    checkIdentical(tdata(trDtDiscCont, "tip"), dtDiscContTest)
+    checkIdentical(labels(trDtDiscCont), labTr)   # check labels
+    checkIdentical(edgeLength(trDtDiscCont), eTr) # check edge lengths
+    checkIdentical(nodeType(trDtDiscCont), nTtr)  # check node types
+    checkIdentical(class(trDtDiscCont), p4d)      # check class
 }
 
