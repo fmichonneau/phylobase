@@ -86,6 +86,12 @@ setGeneric("labels<-",
                standardGeneric("labels<-")
            })
 
+## hasDuplicatedLabels
+setGeneric("hasDuplicatedLabels",
+           function(x, type) {
+               standardGeneric("hasDuplicatedLabels")
+           })
+
 ## hasNodeLabels
 setGeneric("hasNodeLabels", function(x) {
     standardGeneric("hasNodeLabels")
@@ -178,6 +184,16 @@ setGeneric("nodeData<-", function(x, ..., value) {
 setGeneric("addData", function(x, ...) {
     standardGeneric("addData")
 })
+
+## dimData
+## setGeneric("dimData", function(x, ...) {
+##     standardGeneric("dimData")
+## })
+
+## ## ncolData
+## setGeneric("ncolData", function(x, ...) {
+##     standardGeneric("ncolData")
+## })
 
 ## hasTipData
 setGeneric("hasTipData", function(x) {
