@@ -38,6 +38,8 @@ setClass("phylo4",
                          internal = seq(from=ntips+1, length=lgthRes),
                          all = 1:(ntips+nnodes))
 
+    ## Convert empty labels to NA
+    value[!nzchar(value)] <- NA
 
     ## if no values are provided
     if(missing(value) || is.null(value) || all(is.na(value))) {
