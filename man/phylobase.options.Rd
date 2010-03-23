@@ -6,7 +6,7 @@
   such as singletons, reticulated trees, polytomies, etc. 
 }
 \usage{
-phylobase.options()
+phylobase.options(\dots)
 }
 \arguments{
   \item{\dots}{a list may be given as the only argument, or any number

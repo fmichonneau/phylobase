@@ -4,6 +4,9 @@
 \alias{labels,phylo4-method}
 \alias{labels<-,phylo4,ANY,ANY,character-method}
 \alias{labels<-,phylo4d,ANY,ANY,character-method}
+\alias{hasDuplicatedLabels}
+\alias{hasDuplicatedLabels-methods}
+\alias{hasDuplicatedLabels,phylo4-method}
 \alias{hasNodeLabels}
 \alias{hasNodeLabels-methods}
 \alias{hasNodeLabels,phylo4-method}

@@ -13,14 +13,6 @@ checkPhylo4Data(object)
 }
 \arguments{
   \item{object}{A prospective phylo4 or phylo4d object}
-  \item{warn}{a character vector listing phenomena to warn about:
-    current options are [\code{"poly"} (polytomies),
-    \code{"retic"} (reticulations),
-    \code{"singleton"} ("singleton" nodes, i.e.
-    nodes with a single descendant), \code{"multiroot"}
-    (multiple roots) ]}
-  \item{err}{a character vector listing phenomena to trigger errors:
-    choices as above}
 }
 \value{
   As required by \code{\link[methods]{validObject}}, returns an
@@ -67,7 +59,9 @@ checkPhylo4Data(object)
   the \code{\link{phylo4}} constructor and \linkS4class{phylo4} class;
   \code{\link{formatData}},  the \code{\link{phylo4d}} constructor and
   the \linkS4class{phylo4d} class do checks for the data associated with trees.
-  See \code{\link{coerce-methods}} for translation functions.
+  See \code{\link{coerce-methods}} for translation functions and
+  \code{\link{phylobase.options} to change some of the default options
+  of the validator.}
 }
 \author{Ben Bolker, Steven Kembel, Francois Michonneau}
 \keyword{misc}

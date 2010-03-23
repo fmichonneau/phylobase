@@ -1,10 +1,8 @@
+### Modified code from package sm
 phylobase.options <- function (...) {
-    ## code from package sm
     if (nargs() == 0) return(.phylobase.Options)
     current <- .phylobase.Options
-    if (is.character(...))
-        temp <- eval(parse(text = paste(c("list(", ..., ")"))))
-    else temp <- list(...)
+    temp <- list(...)
     if (length(temp) == 1 && is.null(names(temp))) {
         arg <- temp[[1]]
         switch(mode(arg),
@@ -15,8 +13,14 @@ phylobase.options <- function (...) {
     if (length(temp) == 0) return(current)
     n <- names(temp)
     if (is.null(n)) stop("options must be given by name")
+
+    if (!all(names(temp) %in% names(current)))
+        stop("Option name invalid: ", sQuote(names(temp)))
     changed <- current[n]
     current[n] <- temp
+    current <- lapply(current, function(foo) {
+        foo <- match.arg(foo, c("warn", "fail", "ok"))
+    })
     if (sys.parent() == 0) env <- asNamespace("phylobase") else env <- parent.frame()
     assign(".phylobase.Options", current, envir = env)
     invisible(current)
