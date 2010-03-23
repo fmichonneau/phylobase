@@ -8,9 +8,7 @@
 }
 \usage{
 checkPhylo4(object)
-checkTree(object,
-             warn=c("retic","singleton","multiroot"),
-             err=NULL)
+checkTree(object)
 checkPhylo4Data(object)
 }
 \arguments{
@@ -34,11 +32,11 @@ checkPhylo4Data(object)
   functions.
 
   \code{checkPhylo4} is an (inflexible) wrapper for
-  \code{checkTree}, which uses the default settings.
+  \code{checkTree}.
   The rules for \code{phylo4} objects essentially follow
   those for \code{phylo} objects from the \code{ape} package,
   which are in turn defined in
-  http://ape.mpl.ird.fr/misc/FormatTreeR_4Dec2006.pdf.
+  \url{http://ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf}.
   These are essentially that:
   \itemize{
     \item if the tree has edge lengths defined, the number of edge
@@ -54,6 +52,9 @@ checkPhylo4Data(object)
     numbers they document)
     \item tip and node labels must be unique
   }
+
+  You can alter some of the default options by using the function
+  \code{phylobase.options}.
 
   For \code{phylo4d} objects, \code{checkTree} also calls
   \code{checkPhylo4Data} to check the validity of the data associated

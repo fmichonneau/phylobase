@@ -80,6 +80,9 @@ export(printphylo4)
 # misc objects
 export(phylo4_orderings)
 
+## options
+export(phylobase.options)
+
 ## commented out in source code, probably should be omitted here
 #export(phyloStripchart)
 #export(internEdges, terminEdges, isPoly)

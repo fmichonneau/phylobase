@@ -1,4 +1,3 @@
-
 ## REQUIRED for all trees
 checkPhylo4 <- function(object) {
     ct <- checkTree(object)
@@ -10,14 +9,15 @@ checkPhylo4 <- function(object) {
     return(ct)
 }
 
-checkTree <- function(object,
-                      warn=c("retic","singleton","multiroot"),
-                      err=NULL) {
+checkTree <- function(object) {
 
     ## case of empty phylo4 object
     if(nrow(object@edge) == 0 && length(object@edge.length) == 0 &&
        length(object@label) == 0 && length(object@edge.label) == 0)
         return(TRUE)
+
+    ## get options
+    opt <- phylobase.options()
 
     ## FIXME: check for cyclicity?
     nedges <- nrow(object@edge)
@@ -35,10 +35,7 @@ checkTree <- function(object,
       if (any(object@edge.length[!is.na(object@edge.length)] < 0))
         return("edge lengths must be non-negative")
     }
-    ##TODO fix this up somehow, or remove? (Nnode slot no longer exists)
-    ## if (length(object@tip.label)+object@Nnode-1 != N) # does not work with multifurcations
-    ##  return("number of tip labels not consistent with number of edges and nodes")
-    ## check: tip numbers = (m+1):(m+n)
+
     ntips <- nTips(object)
     E <- edges(object)
     tips <- unique(sort(E[,2][!E[,2] %in% E[,1]]))
@@ -46,7 +43,6 @@ checkTree <- function(object,
     intnodes <- nodes[!nodes %in% tips]
     roots <- E[which(is.na(E[,1])),2]
     nRoots <- length(roots)
-
     if (!(all(tips==1:ntips) && all(nodes=(ntips+1):(ntips+length(intnodes)))))
       return("tips and nodes incorrectly numbered")
 
@@ -67,7 +63,9 @@ checkTree <- function(object,
         return("root node must be first row of edge matrix")
     }
 
-    ##
+    if (!all(nDesc[(nTips+1):(nTips+nNodes(object))]>0))
+        return("nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
+
     ## how do we identify loops???
     ## EXPERIMENTAL: could be time-consuming for large trees?
     if (FALSE) {
@@ -84,7 +82,7 @@ checkTree <- function(object,
     if (is.null(names(object@label))) {
         stop(c("Tip and node labels must have names matching node IDs. ",
             lab.msg))
-             
+
     } else {
         if (!all(tips %in% names(na.omit(object@label)))) {
             stop(c("All tips must have associated tip labels. ",
@@ -122,56 +120,55 @@ checkTree <- function(object,
         }
     }
 
-    ## make sure that tip and node labels are unique
-    lb <- labels(object, "all")
-    lb <- lb[nchar(lb) > 0]
-    lb <- na.omit(lb)
-    if(any(table(lb) > 1))
-        stop("All labels must be unique")
-
     ## all done with fatal errors.  Now construct a list
     ##  of warnings and paste them together
     msg <- character(0)
 
-    ##fixme following check fails for unrooted trees
-    ##if (!all(nDesc[(nTips+1):(nTips+nNodes(object))]>0))
-    ##  return("nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
+    ## make sure that tip and node labels are unique
+    if (hasDuplicatedLabels(object)) {
+        currmsg <- "Labels are not unique"
+        if (opt$allow.duplicated.labels == "fail")
+            return(currmsg)
+        if (opt$allow.duplicated.labels == "warn")
+            msg <- c(msg, currmsg)
+    }
+
     if (any(nDesc>2)) {
         currmsg <- "tree includes polytomies"
-        if ("poly" %in% err)
-          return(currmsg)
-        if ("poly" %in% warn)
-          msg <- c(msg,currmsg)
+        if (opt$poly == "fail")
+            return(currmsg)
+        if (opt$poly == "warn")
+            msg <- c(msg, currmsg)
       }
 
     if (nRoots>1) {
         currmsg <- "tree has more than one root"
-        if ("multiroot" %in% err)
-          return(currmsg)
-        if ("multiroot" %in% warn)
-          msg <- c(msg,currmsg)
-      }
+        if (opt$multiroot == "fail")
+            return(currmsg)
+        if (opt$multiroot == "warn")
+            msg <- c(msg,currmsg)
+    }
     if (any(nDesc==1)) {
         currmsg <- "tree contains singleton nodes"
-          if ("singleton" %in% err)
+        if (opt$singleton == "fail")
             return(currmsg)
-          if ("singleton" %in% warn)
-            msg <- c(msg,currmsg)
-      }
+        if (opt$singleton == "warn")
+            msg <- c(msg, currmsg)
+    }
     if (any(nAncest>1)) {
       currmsg <- paste("tree is reticulated [most functions in phylobase haven't",
                        "been tested with reticulated trees]")
-      if ("retic" %in% err)
-        return(currmsg)
-      if ("retic" %in% warn)
-        msg <- c(msg,currmsg)
+      if (opt$retic == "fail")
+          return(currmsg)
+      if (opt$retic == "warn")
+          msg <- c(msg, currmsg)
     }
     if (length(msg)>0) {
-      msg <- paste(msg,collapse=", ")
+      msg <- paste(msg, collapse=", ")
       warning(msg)
     }
     return(TRUE)
-  }
+}
 
 checkPhylo4Data <- function(object) {
 

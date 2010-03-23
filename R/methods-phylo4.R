@@ -95,7 +95,7 @@ setMethod("nodeType", signature(x="phylo4"),
         ## strip out the root ancestor
         nodesVect <- as.vector(edges(x))
         nodesVect <- nodesVect[nodesVect != 0]
-        ## get a sorted list of the unique nodes 
+        ## get a sorted list of the unique nodes
         listNodes <- sort(unique(nodesVect))
         t <- rep("internal", length(listNodes)) # FM: internal is default (I think it's safer)
         names(t) <- listNodes
@@ -301,6 +301,17 @@ setReplaceMethod("labels",
        else
            return(x)
    })
+
+### Duplicated Labels
+setMethod("hasDuplicatedLabels", signature(x="phylo4", type="ANY"),
+  function(x, type=c("all", "tip", "internal")) {
+      ## Default options
+      if (missing(type)) {
+          type <- "all"
+      }
+      type <- match.arg(type)
+      any(duplicated(labels(x, type)))
+})
 
 
 ### Node Labels
@@ -596,7 +607,7 @@ setMethod("reorder", signature(x="phylo4"),
     order   <- match.arg(order)
     index   <- orderIndex(x, order)
     x@order <- order
-    x@edge  <- x@edge[index, ]
+    x@edge  <- edges(x)[index, ]
     if(hasEdgeLabels(x)) {
         x@edge.label  <- x@edge.label[index]
     }
