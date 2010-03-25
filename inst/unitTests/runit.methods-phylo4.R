@@ -1,7 +1,7 @@
 #
 # --- Test methods-phylo4.R ---
 #
- 
+
 # create ape::phylo version of a simple tree for testing
 nwk <- "((t1:0.1,t2:0.2)n7:0.7,(t3:0.3,(t4:0.4,t5:0.5)n9:0.9)n8:0.8)n6:0.6;"
 tr <- read.tree(text=nwk)
@@ -38,6 +38,7 @@ eid <- eid[c(6:9, 1:5)]
 elen <- elen[c(6:9, 1:5)]
 elab <- elab[c(6:9, 1:5)]
 
+op <- phylobase.options()
 #-----------------------------------------------------------------------
 
 test.nTips.phylo4 <- function() {
@@ -248,8 +249,15 @@ test.Replace.labels.phylo4 <- function() {
   labels(phy.alt)["9"] <- "n9"
   checkIdentical(labels(phy.alt), setNames(lab.all, nid.all))
   # error to produce duplicate tip or internal label
+  phylobase.options(allow.duplicated.labels="fail")
   checkException(labels(phy.alt)[1] <- "t2")
   checkException(labels(phy.alt)[6] <- "n7")
+  # no error in allow.duplicated.labels is ok
+  phylobase.options(allow.duplicated.labels="ok")
+  labels(phy.alt)[1] <- "t2"
+  labels(phy.alt)[6] <- "n7"
+  checkIdentical(tipLabels(phy.alt), setNames(c("t2", "t2", "t3", "t4", "t5"), nid.tip))
+  checkIdentical(nodeLabels(phy.alt), setNames(c("n7", "n7", "n8", "n9"), nid.int))
   # error to add labels for nodes that don't exist
   checkException(labels(phy.alt)["fake"] <- "xxx")
   checkException(labels(phy.alt)[999] <- "xxx")
@@ -285,7 +293,13 @@ test.Replace.nodeLabels.phylo4 <- function() {
   nodeLabels(phy.alt)["9"] <- "n9"
   checkIdentical(labels(phy.alt), setNames(lab.all, nid.all))
   # error to produce duplicate internal label
+  phylobase.options(allow.duplicated.labels="fail")
   checkException(nodeLabels(phy.alt)["6"] <- "n7")
+  phylobase.options(op)
+  phylobase.options(allow.duplicated.labels="ok")
+  nodeLabels(phy.alt)["6"] <- "n7"
+  checkIdentical(nodeLabels(phy.alt), setNames(c("n7", "n7", "n8", "n9"), nid.int))
+  phylobase.options(op)
   # error to add labels for nodes that don't exist
   checkException(nodeLabels(phy.alt)["fake"] <- "xxx")
   checkException(nodeLabels(phy.alt)[999] <- "xxx")
@@ -313,7 +327,13 @@ test.Replace.tipLabels.phylo4 <- function() {
   tipLabels(phy.alt)["5"] <- "t5"
   checkIdentical(labels(phy.alt), setNames(lab.all, nid.all))
   # error to produce duplicate tip or internal label
+  phylobase.options(allow.duplicated.labels="fail")
   checkException(tipLabels(phy.alt)[1] <- "t2")
+  phylobase.options(op)
+  phylobase.options(allow.duplicated.labels="ok")
+  tipLabels(phy.alt)[1] <- "t2"
+  checkIdentical(tipLabels(phy.alt), setNames(c("t2", "t2", "t3", "t4", "t5"), nid.tip))
+  phylobase.options(op)
   # error to add labels for nodes that don't exist
   checkException(tipLabels(phy.alt)["fake"] <- "xxx")
   checkException(tipLabels(phy.alt)[999] <- "xxx")
@@ -427,4 +447,4 @@ test.reorder.phylo4 <- function() {
   #TODO
 }
 
-
+phylobase.options(op)

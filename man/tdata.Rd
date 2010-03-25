@@ -19,7 +19,7 @@
 \alias{nodeData<-,phylo4d,ANY-method}
 \title{Retrieving or updating tip and node data in phylo4d objects}
 \description{
-  Method to retrieve or update tip, node or all data associated with a
+  Methods to retrieve or update tip, node or all data associated with a
   phylogenetic tree stored as a phylo4d object
 }
 \usage{

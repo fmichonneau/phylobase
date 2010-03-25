@@ -45,6 +45,7 @@ stopifnot(file.exists(treeContDt))
 stopifnot(file.exists(treeDiscCont))
 stopifnot(file.exists(ExContDataFile))
 
+op <- phylobase.options()
 
 test.readNexus <- function() {
     ## function (file, simplify=TRUE, type=c("all", "tree", "data"),
@@ -94,7 +95,14 @@ test.readNexus <- function() {
     checkIdentical(as(co1, "data.frame")$labelValues, lVco1)  # check label values
 
     ## Check option check.node.labels
+    phylobase.options(allow.duplicated.labels="fail")
     checkException(readNexus(file=co1File, check.node.labels="keep")) # fail because labels aren't unique
+    phylobase.options(op)
+    phylobase.options(allow.duplicated.labels="ok")
+    co1 <- readNexus(file=co1File, check.node.labels="keep", simplify=TRUE)
+    checkIdentical(nodeLabels(co1), setNames(c(NA, "0.93", "0.88", "0.99", "1.00", "0.76", "1.00", "1.00"),
+                                             11:18))
+    phylobase.options(op)
     co1 <- readNexus(file=co1File, check.node.labels="drop", simplify=TRUE)
     checkIdentical(labels(co1), labCo1)          # check labels
     checkIdentical(edgeLength(co1), eLco1)       # check edge lengths
@@ -174,9 +182,6 @@ test.readNexus <- function() {
     ## Tree + Data
     trDt1 <- readNexus(file=treeDiscDt, type="all", return.labels=FALSE,
                        levels.uniform=FALSE)
-    str(trDt1)
-    print(labels(trDt1))
-    print(labTr)
     checkIdentical(labels(trDt1), labTr)   # check labels
     checkIdentical(edgeLength(trDt1), eTr) # check edge lengths
     checkIdentical(nodeType(trDt1), nTtr)  # check node types

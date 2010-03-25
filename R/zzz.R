@@ -8,8 +8,8 @@
     list(retic = "warn",
          singleton = "warn",
          multiroot = "warn",
-         poly = "warn",
-         allow.duplicated.labels = "fail")
+         poly = "ok",
+         allow.duplicated.labels = "warn")
 
 # use this with a namespace
 .onLoad <- function(lib, pkg) {

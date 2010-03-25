@@ -44,7 +44,7 @@ row.names(tipDt) <- nid.tip.r
 row.names(nodDt) <- nid.int.r
 
 #-----------------------------------------------------------------------
- 
+
 test.phylo4d.phylo4 <- function() {
 
     ## case 1: add data matching only on row position
@@ -254,22 +254,18 @@ test.phylo4d.phylo <- function() {
     phyd <- phylo4d(tr)
     checkTrue(!hasNodeLabels(phyd))
 
-    # case 1: can't currently keep arbitrary character labels as data
+    # case 1: convert character labels as data
     tr$node.label <- paste("n", 1:4, sep="")
     phyd <- phylo4d(tr, check.node.labels="asdata")
     checkTrue(!hasNodeLabels(phyd))
-    checkTrue(all(is.na(tdata(phyd, "internal")$labelValues)))
-    # the above should've produced a warning:
-    opt <- options(warn=3)
-    checkException(phylo4d(tr, check.node.labels="asdata"))
-    options(opt)
+    checkEquals(tdata(phyd, "internal")$labelValues, as.factor(tr$node.label))
 
     # case 2: convert number-like characters labels to numeric data
     tr$node.label <- as.character(1:4)
     phyd <- phylo4d(tr, check.node.labels="asdata")
     checkTrue(!hasNodeLabels(phyd))
     checkIdentical(tdata(phyd, "internal")$labelValues,
-        as.numeric(tr$node.label)) 
+        as.numeric(tr$node.label))
 
     # case 3: convert numeric labels to numeric data
     tr$node.label <- as.numeric(1:4)
@@ -279,11 +275,11 @@ test.phylo4d.phylo <- function() {
 
     # case 4: non-unique labels can be converted to data
     tr$node.label <- rep(99, 4)
-    checkException(phylo4d(tr))
+    phyd <- phylo4d(tr)
+    checkIdentical(unname(nodeLabels(phyd)), as.character(tr$node.label))
     phyd <- phylo4d(tr, check.node.labels="asdata")
     checkTrue(!hasNodeLabels(phyd))
-    checkIdentical(tdata(phyd, "internal")$labelValues, tr$node.label)
-
+    checkIdentical(tdata(phyd, "internal", label.type="column")$labelValues, tr$node.label)
 }
 
 ## phylo4d->phylo4d is currently unallowed

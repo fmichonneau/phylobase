@@ -1,4 +1,3 @@
-
 ## matching node labels with node numbers ...
 ## e.g.
 ## 14 tips, 13 int nodes
@@ -20,7 +19,9 @@ getNode <- function(x, node, type=c("all", "tip", "internal"),
 
     ## match node to tree
     if (is.character(node)) {
-        irval <- match(node, labels(x, type))
+        ndTmp <- paste("^", node, "$", sep="")
+        irval <- lapply(ndTmp, function(ND) grep(ND, labels(x, type)))
+        irval <- unlist(irval)
     } else if (is.numeric(node) && all(floor(node) == node, na.rm=TRUE)) {
         irval <- match(as.character(node), names(labels(x, type)))
     } else {
@@ -293,7 +294,7 @@ getEdge <- function(x, node, type=c("descendant", "ancestor"),
             ## hack to return NA for tip nodes when type='ancestor'
             if(length(res)==0) res <- NA
             names(res) <- rep(nid, length(res))
-        }   
+        }
         names(res) <- rep(nid, length(res))
         res
     })

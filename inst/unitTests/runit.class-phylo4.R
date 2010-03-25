@@ -2,13 +2,15 @@
 # --- Test class-phylo4.R ---
 #
 
+op <- phylobase.options()
+
 test.phylo4.matrix <- function() {
     edge <- structure(c(6L, 7L, 8L, 8L, 9L, 9L, 7L, 6L, 7L, 8L, 1L, 9L,
       2L, 3L, 4L, 5L), .Dim = c(8, 2))
     edge.length <- c(0.2, 0.5, 0.2, 0.15, 0.1, 0.1, 0.7, 1)
     tip.label <- paste("t", 1:5, sep="")
     node.label <- paste("n", 1:4, sep="")
-    edge.label <- paste("e", 1:8, sep="") 
+    edge.label <- paste("e", 1:8, sep="")
     order="preorder"
     annote <- list(x="annotation")
     phy <- phylo4(edge, edge.length=edge.length, tip.label=tip.label,
@@ -34,11 +36,13 @@ test.phylo4.matrix <- function() {
     checkException(phylo4(edge, annote="invalid annotation"))
 }
 
+
 # note: this method mostly just wraps phylo->phylo4 coercion, which is
 # tested more thoroughly in runit.setAs-methods.R; focus here is on
 # annote and check.node.labels arguments
 test.phylo4.phylo <- function() {
     tr <- read.tree(text="(((t1:0.2,(t2:0.1,t3:0.1):0.15):0.5,t4:0.7):0.2,t5:1):0.4;")
+
 
     ##
     ## annote
@@ -75,10 +79,21 @@ test.phylo4.phylo <- function() {
 
     # case 4: must drop non-unique labels
     tr$node.label <- rep("x", 4)
+    ## with options allow.duplicated.labels="fail"
+    phylobase.options(allow.duplicated.labels="fail")
     checkException(phylo4(tr))
     checkException(phylo4(tr, check.node.labels="keep"))
-    # test dropping node labels
+    phylobase.options(op)
+    ## test dropping node labels
     phy <- phylo4(tr, check.node.labels="drop")
     checkTrue(!hasNodeLabels(phy))
-
+    ## with options allow.duplicated.labels="ok"
+    phylobase.options(allow.duplicated.labels="ok")
+    phy <- phylo4(tr)
+    checkIdentical(unname(nodeLabels(phy)), tr$node.label)
+    phy <- phylo4(tr, check.node.labels="keep")
+    checkIdentical(unname(nodeLabels(phy)), tr$node.label)
+    phy <- phylo4(tr, check.node.labels="drop")
+    checkTrue(!hasNodeLabels(phy))
+    phylobase.options(op)
 }

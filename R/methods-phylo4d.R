@@ -153,6 +153,11 @@ setMethod("addData", signature(x="phylo4"),
             merge.data=merge.data, ...)
 })
 
+### Get dimensions of the data
+setMethod("nData", signature(x="phylo4d"), function(x, ...) {
+    ncol(x@data)
+})
+
 ## Alternative phylo4d summary method, using phylo4 summary
 ## Marguerite Butler & Peter Cowan
 setMethod("summary", signature(object="phylo4d"),

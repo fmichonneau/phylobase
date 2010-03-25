@@ -21,7 +21,8 @@ phylobase.options <- function (...) {
     current <- lapply(current, function(foo) {
         foo <- match.arg(foo, c("warn", "fail", "ok"))
     })
-    if (sys.parent() == 0) env <- asNamespace("phylobase") else env <- parent.frame()
+    ## options are always global
+    env <- asNamespace("phylobase")
     assign(".phylobase.Options", current, envir = env)
     invisible(current)
 }

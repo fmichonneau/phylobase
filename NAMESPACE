@@ -37,7 +37,7 @@ exportMethods(nodeId, nodeType)
 
 # tree data methods
 exportMethods(tdata, "tdata<-", tipData, "tipData<-", nodeData,
-    "nodeData<-", hasTipData, hasNodeData, addData)
+    "nodeData<-", hasTipData, hasNodeData, addData, nData)
 
 # subset methods
 exportMethods(subset, prune, "[")
@@ -48,7 +48,7 @@ exportMethods("[<-", "[[", "[[<-")
 # label methods
 exportMethods(labels, "labels<-", nodeLabels, "nodeLabels<-",
     tipLabels, "tipLabels<-", edgeLabels, "edgeLabels<-",
-    hasNodeLabels, hasEdgeLabels)
+    hasNodeLabels, hasEdgeLabels, hasDuplicatedLabels)
 
 #----------------------------------------------------------------------
 

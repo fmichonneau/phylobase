@@ -161,6 +161,11 @@ test.Replace.nodeData.phylo4d <- function() {
         row.names=lab.int))
 }
 
+
+test.nData <- function() {
+    checkIdentical(nData(phyd.alt), ncol(eAllDt))
+}
+
 test.addData.phylo4d <- function() {
     # function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
     #   pos=c("after", "before"), merge.data=TRUE, match.data=TRUE, ...)

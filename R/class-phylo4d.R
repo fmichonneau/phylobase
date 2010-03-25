@@ -134,7 +134,14 @@ setMethod("phylo4d", "phylo",
         x$node.label <- NULL
         nlab.data[!nzchar(nlab.data)] <- NA
 
-        nlab.data <- data.frame(labelValues=as.numeric(nlab.data))
+        ## convert number-like labels to numeric, other keep as it is
+        nlab.data.test <- gsub("[0-9]|\\.", "", nlab.data[!is.na(nlab.data)])
+        if (all(nchar(nlab.data.test) == 0 )) {
+            nlab.data <- data.frame(labelValues=as.numeric(nlab.data))
+        }
+        else {
+            nlab.data <- data.frame(labelValues=nlab.data)
+        }
 
         tree <- phylo4(x, check.node.labels="drop", annote=annote)
         res <- phylo4d(tree, tip.data=tip.data, node.data=node.data,

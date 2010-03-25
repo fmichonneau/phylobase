@@ -31,9 +31,16 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
     if (any(dim(dt)==0)) {
         return(data.frame(row.names=ids.out))
     }
-        
+
     label.type <- match.arg(label.type)
-    stopifnot(label.column %in% 1:ncol(dt))
+    ## Make sure the column specified for the labels is appropriate
+    if (label.type == "column") {
+        if (is.numeric(label.column))
+            stopifnot(label.column %in% 1:ncol(dt))
+        else
+            stopifnot(label.column %in% names(dt))
+    }
+
     missing.data <- match.arg(missing.data)
     extra.data <- match.arg(extra.data)
 
@@ -42,18 +49,23 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
         ndNames <- switch(label.type,
                           rownames = rownames(dt),
                           column = dt[,label.column])
-        ## either force matching on labels, or match on node
-        ## numbers for any number-like elements and labels otherwise
         if (rownamesAsLabels) {
-            ids.in <- getNode(phy, as.character(ndNames), missing="OK")
-        } else {
-            ids.in <- as.numeric(rep(NA, length(ndNames)))
-            treatAsNumber <- nchar(gsub("[0-9]", "", ndNames))==0
-            ids.in[treatAsNumber] <- getNode(phy,
-                as.integer(ndNames[treatAsNumber]), missing="OK")
-            ids.in[!treatAsNumber] <- getNode(phy,
-                as.character(ndNames[!treatAsNumber]), missing="OK")
+            ids.in <- lapply(ndNames, function(ndnm) {
+                getNode(phy, as.character(ndnm), missing="OK")
+            })
         }
+        else {
+           ids.in <- lapply(ndNames, function(ndnm) {
+                if (nchar(gsub("[0-9]", "", ndnm)) == 0) {
+                    getNode(phy, as.integer(ndnm), missing="OK")
+                }
+                else {
+                    getNode(phy, as.character(ndnm), missing="OK")
+                }
+            })
+        }
+        ids.list <- ids.in
+        ids.in <- unlist(ids.in)
 
         ## Make sure that data are matched to appropriate nodes
         if (type=="tip" && any(na.omit(ids.in) %in% nodeId(phy,
@@ -69,7 +81,7 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
                 "are correct.")
         }
 
-        ## Check differences
+        ## Check differences between tree and data
         mssng <- setdiff(nodeId(phy, type), ids.in)
         if(length(mssng) > 0 && missing.data != "OK") {
             ## provide label if it exists and node number otherwise
@@ -89,15 +101,31 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
                    warn = warning(msg),
                    fail = stop(msg))
         }
+
         ## Format data to have correct dimensions
+        ids.list <- ids.list[!is.na(ids.list)]
         dt <- dt[!is.na(ids.in), , drop=FALSE]
+        if (hasDuplicatedLabels(phy)) {
+            dtTmp <- array(, dim=c(length(ids.in[!is.na(ids.in)]), ncol(dt)),
+                           dimnames=list(ids.in[!is.na(ids.in)], names(dt)))
+            dtTmp <- data.frame(dtTmp)
+            j <- 1
+            for (i in 1:length(ids.list)) {
+                for (k in 1:length(ids.list[[i]])) {
+                    dtTmp[j, ] <- dt[i, , drop=FALSE]
+                    j <- j + 1
+                }
+            }
+            dt <- dtTmp
+        }
         rownames(dt) <- ids.in[!is.na(ids.in)]
         dt.out <- dt[match(ids.out, rownames(dt)), , drop=FALSE]
         rownames(dt.out) <- ids.out
-        if(label.type == "column") dt.out <- dt.out[, -label.column, drop=FALSE]
+        if(label.type == "column") {
+            dt.out <- subset(dt.out, select=-eval(parse(text=label.column)))
+        }
 
     } else {
-
         ## Check if too many or not enough rows in input data
         expected.nrow <- length(nodeId(phy, type))
         diffNr <- nrow(dt) - expected.nrow

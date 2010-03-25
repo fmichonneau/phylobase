@@ -185,15 +185,10 @@ setGeneric("addData", function(x, ...) {
     standardGeneric("addData")
 })
 
-## dimData
-## setGeneric("dimData", function(x, ...) {
-##     standardGeneric("dimData")
-## })
-
-## ## ncolData
-## setGeneric("ncolData", function(x, ...) {
-##     standardGeneric("ncolData")
-## })
+## nData
+setGeneric("nData", function(x, ...) {
+     standardGeneric("nData")
+})
 
 ## hasTipData
 setGeneric("hasTipData", function(x) {
