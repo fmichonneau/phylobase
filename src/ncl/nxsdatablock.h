@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -21,9 +21,9 @@
 #define NCL_NXSDATABLOCK_H
 
 #include "ncl/nxscharactersblock.h"
-/*----------------------------------------------------------------------------------------------------------------------
-|	This class handles reading and storage for the NEXUS block DATA. It is derived from the NxsCharactersBlock class, 
-|	and differs from NxsCharactersBlock only in name and the fact that `newtaxa' is initially true rather than false.
+/*!
+	This class handles reading and storage for the NEXUS block DATA. It is derived from the NxsCharactersBlock class,
+	and differs from NxsCharactersBlock only in name and the fact that `newtaxa' is initially true rather than false.
 */
 class NxsDataBlock
   : public NxsCharactersBlock
@@ -49,7 +49,7 @@ class NxsDataBlock
 			*a = *this;
 			return a;
 			}
-			
+
 		void TransferTo(NxsCharactersBlock &charactersblock);
 		void Reset();
 	private:

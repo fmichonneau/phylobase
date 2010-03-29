@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -33,7 +33,7 @@
 	 management more cleanly. This is intended to be an alternate, low-level way
 	 to get character data out of a NxsCharactersBlock
 	 */
-class NxsCXXDiscreteMatrix 
+class NxsCXXDiscreteMatrix
 	{
 	public:
 		NxsCXXDiscreteMatrix()
@@ -42,7 +42,7 @@ class NxsCXXDiscreteMatrix
 			}
 		NxsCXXDiscreteMatrix(const NxsCDiscreteMatrix & );
 		NxsCXXDiscreteMatrix(const NxsCharactersBlock & cb, bool convertGapsToMissing);
-		
+
 		void Initialize(const NxsCharactersBlock * cb, bool convertGapsToMissing);
 
 		const NxsCDiscreteMatrix & getConstNativeC() const
@@ -70,7 +70,7 @@ class NxsCXXDiscreteMatrix
 			return nativeCMatrix.nStates;
 			}
 
-		const char *	getSymbolsList() const   //POL added 15-Nov-2005 
+		const char *	getSymbolsList() const   //POL added 15-Nov-2005
 			{
 			return nativeCMatrix.symbolsList;
 			}
@@ -85,13 +85,13 @@ class NxsCXXDiscreteMatrix
 			return stateListPosAlias;
 			}
 
-		const NxsCDiscreteStateSet *getRow(unsigned i) const 
+		const NxsCDiscreteStateSet *getRow(unsigned i) const
 			{
 			NCL_ASSERT(i < nativeCMatrix.nTax);
 			return nativeCMatrix.matrix[i];
 			}
 
-		const std::vector<int8_t> getRowAsVector(unsigned i) const 
+		const std::vector<int8_t> getRowAsVector(unsigned i) const
 			{
 			NCL_ASSERT(i < nativeCMatrix.nTax);
 			std::vector<int8_t> v;
@@ -102,7 +102,7 @@ class NxsCXXDiscreteMatrix
 			return v;
 			}
 
-		const NxsCDiscreteStateSet * const * getMatrix() const 
+		const NxsCDiscreteStateSet * const * getMatrix() const
 			{
 			return nativeCMatrix.matrix;
 			}
@@ -121,7 +121,7 @@ class NxsCXXDiscreteMatrix
 			{
 			return !(intWts.empty());
 			}
-		
+
 		bool hasDblWeights() const
 			{
 			return !(dblWts.empty());
@@ -159,7 +159,7 @@ class NxsCXXDiscreteMatrix
 
 	private:
 		typedef ScopedTwoDMatrix<NxsCDiscreteStateSet> ScopedStateSetTwoDMatrix;
-		
+
 		NxsCDiscreteMatrix			nativeCMatrix; 		/** taxa x characters matrix in a C struct*/
 		std::string					symbolsStringAlias;	/** memory management alias to symbols field of nativeCMatrix */
 		ScopedStateSetTwoDMatrix	matrixAlias;		/** memory management alias to matrix field of nativeCMatrix */

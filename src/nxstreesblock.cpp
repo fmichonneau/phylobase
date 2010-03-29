@@ -41,7 +41,7 @@ NxsSimpleNode * NxsSimpleNode::FindTaxonIndex(unsigned leafIndex)
 	if (leafIndex == taxIndex)
 		return this;
 	NxsSimpleNode *n = lChild;
-	while (n) 
+	while (n)
 		{
 		NxsSimpleNode * r = n->FindTaxonIndex(leafIndex);
 		if (r)
@@ -102,19 +102,19 @@ void NxsSimpleTree::FlipRootsChildToRoot(NxsSimpleNode *subRoot)
 			}
 		delete root;
 		root = subRoot;
-		subRoot->edgeToPar.parent = NULL;		
+		subRoot->edgeToPar.parent = NULL;
 		return;
 		}
 
 	if (rc.size() == 2)
 		{
 		/* root has degree 2 delete it */
-		
+
 		NxsSimpleNode * formerSib = subRoot->rSib;
 		if (formerSib == NULL)
 			formerSib = root->lChild;
 		NCL_ASSERT(formerSib != subRoot);
-		
+
 		std::vector<NxsSimpleNode *> tmp;
 		tmp.swap(allNodes);
 		allNodes.reserve(tmp.size() - 1);
@@ -125,9 +125,9 @@ void NxsSimpleTree::FlipRootsChildToRoot(NxsSimpleNode *subRoot)
 			}
 		delete root;
 		root = NULL;
-		
+
 		formerSib->edgeToPar.parent = subRoot;
-		if (formerSib->edgeToPar.defaultEdgeLen) 
+		if (formerSib->edgeToPar.defaultEdgeLen)
 			{
 			if (!subRoot->edgeToPar.defaultEdgeLen)
 				{
@@ -151,7 +151,7 @@ void NxsSimpleTree::FlipRootsChildToRoot(NxsSimpleNode *subRoot)
 						formerSib->edgeToPar.dEdgeLen = subRoot->edgeToPar.dEdgeLen + (double) formerSib->edgeToPar.iEdgeLen;
 						}
 					}
-				else 
+				else
 					{
 					if (subRoot->edgeToPar.hasIntEdgeLens)
 						formerSib->edgeToPar.dEdgeLen += (double)subRoot->edgeToPar.iEdgeLen;
@@ -161,21 +161,21 @@ void NxsSimpleTree::FlipRootsChildToRoot(NxsSimpleNode *subRoot)
 				}
 			}
 		NxsSimpleNode * subRootRChild = subRoot->GetLastChild();
-		if (subRootRChild == NULL)	
+		if (subRootRChild == NULL)
 			subRoot->lChild = formerSib;
 		else
 			subRootRChild->rSib = formerSib;
 		subRoot->rSib = NULL;
 		root = subRoot;
-		subRoot->edgeToPar.parent = NULL;		
+		subRoot->edgeToPar.parent = NULL;
 		}
-	else 
+	else
 		{
 		/* root has degree > 2, preserve it */
 		root->edgeToPar = subRoot->edgeToPar;
 		std::swap(root->edgeToPar.child, root->edgeToPar.parent);
 		NxsSimpleNode * subRootRChild = subRoot->GetLastChild();
-		if (subRootRChild == NULL)	
+		if (subRootRChild == NULL)
 			subRoot->lChild = root;
 		else
 			subRootRChild->rSib = root;
@@ -197,7 +197,7 @@ void NxsSimpleTree::FlipRootsChildToRoot(NxsSimpleNode *subRoot)
 			}
 		subRoot->rSib = NULL;
 		root = subRoot;
-		subRoot->edgeToPar.parent = NULL;		
+		subRoot->edgeToPar.parent = NULL;
 		}
 }
 
@@ -253,11 +253,9 @@ void NxsSimpleNode::WriteAsNewick(std::ostream &out, bool nhx, bool useLeafNames
 		NCL_ASSERT (taxIndex != UINT_MAX);
 		if (useLeafNames)
 			{
-			//std::cerr << "useLeafNames = " << useLeafNames << " name = " << name << std::endl;
 			if (name.empty() && taxa)
 				{
 				std::string n = taxa->GetTaxonLabel(taxIndex);
-				//std::cerr << "n = " << n << std::endl;
 				if (escapeNames)
 					out << NxsString::GetEscaped(n);
 				else
@@ -293,7 +291,7 @@ std::vector<const NxsSimpleNode *> NxsSimpleTree::GetPreorderTraversal() const
 	std::vector<const NxsSimpleNode *> p;
 	if (root)
 		root->AddSelfAndDesToPreorder(p);
-	return p;	
+	return p;
 	}
 
 std::vector<std::vector<int> > NxsSimpleTree::GetIntPathDistances(bool toMRCA) const
@@ -301,10 +299,10 @@ std::vector<std::vector<int> > NxsSimpleTree::GetIntPathDistances(bool toMRCA) c
 	if (root == NULL || root->lChild == NULL)
 		return std::vector<std::vector<int> >();
 
-	typedef std::map<unsigned, int> TaxonIndToDistMap; 
+	typedef std::map<unsigned, int> TaxonIndToDistMap;
 	typedef std::map<unsigned, TaxonIndToDistMap> PairwiseDistMap;
 	typedef PairwiseDistMap::iterator PairwiseDistRow;
-	
+
 	std::map<const NxsSimpleNode *,  TaxonIndToDistMap > ndToDist;
 	const std::vector<const NxsSimpleNode *> preord = GetPreorderTraversal();
 	unsigned maxIndex = 0;
@@ -357,10 +355,10 @@ std::vector<std::vector<int> > NxsSimpleTree::GetIntPathDistances(bool toMRCA) c
 							NCL_ASSERT(iRow == pairwiseDist.end() || (iRow->second.find(jIndex) == iRow->second.end()));
 							NCL_ASSERT(jRow == pairwiseDist.end() || (jRow->second.find(iIndex) == jRow->second.end()));
 							pairwiseDist[iIndex][jIndex] = idist;
-							pairwiseDist[jIndex][iIndex] = ndToJDist;							
+							pairwiseDist[jIndex][iIndex] = ndToJDist;
 							}
 						else
-							{						
+							{
 							const unsigned fIndex = (iIndex < jIndex ? iIndex : jIndex);
 							const unsigned sIndex = (iIndex < jIndex ? jIndex : iIndex);
 							PairwiseDistRow  r = pairwiseDist.find(fIndex);
@@ -382,7 +380,7 @@ std::vector<std::vector<int> > NxsSimpleTree::GetIntPathDistances(bool toMRCA) c
 	std::vector<std::vector<int> > pathDistMat(maxIndex+1, toTipDistRow);
 	for (unsigned diagInd = 0; diagInd <= maxIndex; ++diagInd)
 		pathDistMat[diagInd][diagInd] = 0;
-		
+
 	for (PairwiseDistMap::const_iterator iit = pairwiseDist.begin(); iit != pairwiseDist.end(); ++iit)
 		{
 		const unsigned iInd = iit->first;
@@ -402,16 +400,16 @@ std::vector<std::vector<int> > NxsSimpleTree::GetIntPathDistances(bool toMRCA) c
 	return pathDistMat;
 	}
 
-/* if toMRCA is true the the row i col j element will be the distanc from tip i 
- to the MRCA of (i and j) 
+/* if toMRCA is true the the row i col j element will be the distanc from tip i
+ to the MRCA of (i and j)
 */
 std::vector<std::vector<double> > NxsSimpleTree::GetDblPathDistances(bool toMRCA) const
 	{
 	if (root == NULL || root->lChild == NULL)
 		return std::vector<std::vector<double> >();
 
-	typedef std::map<unsigned, double> TaxonIndToDistMap; 
-	typedef std::map<unsigned, TaxonIndToDistMap> PairwiseDistMap; 
+	typedef std::map<unsigned, double> TaxonIndToDistMap;
+	typedef std::map<unsigned, TaxonIndToDistMap> PairwiseDistMap;
 	typedef PairwiseDistMap::iterator PairwiseDistRow;
 
 	std::map<const NxsSimpleNode *,  TaxonIndToDistMap > ndToDist;
@@ -469,7 +467,7 @@ std::vector<std::vector<double> > NxsSimpleTree::GetDblPathDistances(bool toMRCA
 							NCL_ASSERT(iRow == pairwiseDist.end() || (iRow->second.find(jIndex) == iRow->second.end()));
 							NCL_ASSERT(jRow == pairwiseDist.end() || (jRow->second.find(iIndex) == jRow->second.end()));
 							pairwiseDist[iIndex][jIndex] = idist;
-							pairwiseDist[jIndex][iIndex] = ndToJDist;							
+							pairwiseDist[jIndex][iIndex] = ndToJDist;
 							}
 						else
 							{
@@ -494,7 +492,7 @@ std::vector<std::vector<double> > NxsSimpleTree::GetDblPathDistances(bool toMRCA
 	std::vector<std::vector<double> > pathDistMat(maxIndex+1, toTipDistRow);
 	for (unsigned diagInd = 0; diagInd <= maxIndex; ++diagInd)
 		pathDistMat[diagInd][diagInd] = 0.0;
-		
+
 
 	for (PairwiseDistMap::const_iterator iit = pairwiseDist.begin(); iit != pairwiseDist.end(); ++iit)
 		{
@@ -514,10 +512,10 @@ std::vector<std::vector<double> > NxsSimpleTree::GetDblPathDistances(bool toMRCA
 	return pathDistMat;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Fills `infoMap` with the key value pairs parsed from a comment that starts with
-|		&&NHX
-| returns unparsed component
+/*!
+	Fills `infoMap` with the key value pairs parsed from a comment that starts with
+		&&NHX
+ returns unparsed component
 */
 std::string parseNHXComment(const std::string comment, std::map<std::string, std::string> *infoMap)
 	{
@@ -545,7 +543,7 @@ std::string parseNHXComment(const std::string comment, std::map<std::string, std
 				(*infoMap)[key] = lastVal;
 			return std::string();
 			}
-		else 
+		else
 			{
 			std::string value = comment.substr(eqPos + 1, colonPos - eqPos - 1);
 			if (infoMap)
@@ -680,7 +678,7 @@ void NxsSimpleTree::Initialize(const NxsFullTreeDescription & td)
 				currNd = tmpNode;
 				currEdge = &(currNd->edgeToPar);
 				}
-			else 
+			else
 				handled = false;
 			}
 		if (!handled)
@@ -729,9 +727,9 @@ unsigned NxsTreesBlock::GetMaxIndex() const
 		return UINT_MAX;
 	return (unsigned)trees.size() - 1;
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-| Returns the number of indices that correspond to the label (and the number
-| of items that would be added to *inds if inds points to an empty set).
+/*!
+ Returns the number of indices that correspond to the label (and the number
+ of items that would be added to *inds if inds points to an empty set).
 */
 unsigned NxsTreesBlock::GetIndicesForLabel(const std::string &label, NxsUnsignedSet *inds) const
 	{
@@ -752,8 +750,8 @@ bool NxsTreesBlock::AddNewIndexSet(const std::string &label, const NxsUnsignedSe
 	treeSets[nlabel] = inds;
 	return replaced;
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if this set replaces an older definition.
+/*!
+	Returns true if this set replaces an older definition.
 */
 bool NxsTreesBlock::AddNewPartition(const std::string &label, const NxsPartition & inds)
 	{
@@ -762,8 +760,8 @@ bool NxsTreesBlock::AddNewPartition(const std::string &label, const NxsPartition
 	treePartitions[ls] = inds;
 	return replaced;
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Initializes `id' to "TREES", `ntrees' to 0, `defaultTree' to 0, and `taxa' to `tb'. Assumes `tb' is non-NULL.
+/*!
+	Initializes `id' to "TREES", `ntrees' to 0, `defaultTree' to 0, and `taxa' to `tb'. Assumes `tb' is non-NULL.
 */
 NxsTreesBlock::NxsTreesBlock(
   NxsTaxaBlockAPI *tb)	/* the NxsTaxaBlockAPI object to be queried for taxon names appearing in tree descriptions */
@@ -778,15 +776,15 @@ NxsTreesBlock::NxsTreesBlock(
 	processAllTreesDuringParse = true;
 	writeFromNodeEdgeDataStructure = false;
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Clears `translateList', `rooted', `treeName' and `treeDescription'.
+/*!
+	Clears `translateList', `rooted', `treeName' and `treeDescription'.
 */
 NxsTreesBlock::~NxsTreesBlock()
 	{
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Makes data member `taxa' point to `tb' rather than the NxsTaxaBlockAPI object it was previously pointing to. Assumes
-|	`tb' is non-NULL.
+/*!
+	Makes data member `taxa' point to `tb' rather than the NxsTaxaBlockAPI object it was previously pointing to. Assumes
+	`tb' is non-NULL.
 */
 void NxsTreesBlock::ReplaceTaxaBlockPtr(
   NxsTaxaBlockAPI *tb)		/* pointer to new NxsTaxaBlockAPI object (does not attempt to delete the object previously pointed to) */
@@ -794,36 +792,36 @@ void NxsTreesBlock::ReplaceTaxaBlockPtr(
 	NCL_ASSERT(tb != NULL);
 	taxa = tb;
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the description of the tree stored at position `i' in `treeDescription'. Assumes that `i' will be in the
-|	range [0..`ntrees').
+/*!
+	Returns the description of the tree stored at position `i' in `treeDescription'. Assumes that `i' will be in the
+	range [0..`ntrees').
 */
 NxsString NxsTreesBlock::GetTreeDescription(
   unsigned i)	/* the index of the tree for which the description is to be returned */
 	{
 	return NxsString(GetFullTreeDescription(i).GetNewick().c_str());
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if the `i'th tree (0-offset) is rooted, false otherwise. Assumes that `i' will be in the
-|	range [0..ntrees).
+/*!
+	Returns true if the `i'th tree (0-offset) is rooted, false otherwise. Assumes that `i' will be in the
+	range [0..ntrees).
 */
 bool NxsTreesBlock::IsRootedTree(
   unsigned i)	/* the index of the tree in question */
   	{
 	return GetFullTreeDescription(i).IsRooted();
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the name of the tree stored at position `i' in `treeName'. Assumes that `i' will be in the range
-|	[0..`ntrees').
+/*!
+	Returns the name of the tree stored at position `i' in `treeName'. Assumes that `i' will be in the range
+	[0..`ntrees').
 */
 NxsString NxsTreesBlock::GetTreeName(
   unsigned i)	/* the index of the tree for which the name is to be returned */
 	{
 	return NxsString(GetFullTreeDescription(i).GetName().c_str());
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if the `i'th tree (0-offset) is the default tree, false otherwise. Assumes that `i' will be in the
-|	range [0..ntrees).
+/*!
+	Returns true if the `i'th tree (0-offset) is the default tree, false otherwise. Assumes that `i' will be in the
+	range [0..ntrees).
 */
 bool NxsTreesBlock::IsDefaultTree(
   unsigned i)	/* the index of the tree in question */
@@ -835,12 +833,12 @@ const NxsFullTreeDescription & NxsTreesBlock::GetFullTreeDescription(unsigned i)
 	NCL_ASSERT(i < trees.size());
 	return trees.at(i);
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function outputs a brief report of the contents of this block. Overrides the abstract virtual function in the
-|	base class.
+/*!
+	This function outputs a brief report of the contents of this block. Overrides the abstract virtual function in the
+	base class.
 */
 void NxsTreesBlock::Report(
-  std::ostream &out) NCL_COULD_BE_CONST /* the output stream to which to write the report */
+  std::ostream &out) NCL_COULD_BE_CONST /* the output stream to which to write the report */ /*v2.1to2.2 1 */
 	{
 	const unsigned ntrees = GetNumTrees();
 	out << '\n' <<  id << " block contains ";
@@ -868,15 +866,15 @@ void NxsTreesBlock::Report(
 			out << ')' << endl;
 		}
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Outputs a brief description of this block's contents to the referenced NxsString. An example of the output of this
-|	command is shown below:
-|>
-|	TREES block contains 102 trees
-|>
+/*!
+	Outputs a brief description of this block's contents to the referenced NxsString. An example of the output of this
+	command is shown below:
+>
+	TREES block contains 102 trees
+>
 */
 void NxsTreesBlock::BriefReport(
-  NxsString &s) NCL_COULD_BE_CONST /* reference to the string in which to store the contents of the brief report */
+  NxsString &s) NCL_COULD_BE_CONST /* reference to the string in which to store the contents of the brief report */ /*v2.1to2.2 1 */
 	{
 	const unsigned ntrees = GetNumTrees();
 	s << "\n\n" << id << " block contains ";
@@ -887,9 +885,9 @@ void NxsTreesBlock::BriefReport(
 	else
 		s << ntrees << " trees\n";
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Flushes `treeName', `treeDescription', `translateList' and `rooted', and sets `ntrees' and `defaultTree' both to 0
-|	in preparation for reading a new TREES block.
+/*!
+	Flushes `treeName', `treeDescription', `translateList' and `rooted', and sets `ntrees' and `defaultTree' both to 0
+	in preparation for reading a new TREES block.
 */
 void NxsTreesBlock::Reset()
 	{
@@ -903,24 +901,24 @@ void NxsTreesBlock::Reset()
 	constructingTaxaBlock = false;
 	newtaxa = false;
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the 0-offset index of the default tree, which will be 0 if there is only one tree stored or no trees
-|	stored. If more than one tree is stored, the default tree will be the one specifically indicated by the user (using
-|	an asterisk in the data file), or 0 if the user failed to specify.
+/*!
+	Returns the 0-offset index of the default tree, which will be 0 if there is only one tree stored or no trees
+	stored. If more than one tree is stored, the default tree will be the one specifically indicated by the user (using
+	an asterisk in the data file), or 0 if the user failed to specify.
 */
 unsigned NxsTreesBlock::GetNumDefaultTree()
 	{
 	return (defaultTreeInd == UINT_MAX ? 0 : defaultTreeInd);
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of trees stored in this NxsTreesBlock object.
+/*!
+	Returns the number of trees stored in this NxsTreesBlock object.
 */
 unsigned NxsTreesBlock::GetNumTrees() const
 	{
 	return (unsigned)trees.size();
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of trees stored in this NxsTreesBlock object.
+/*!
+	Returns the number of trees stored in this NxsTreesBlock object.
 */
 unsigned NxsTreesBlock::GetNumTrees()
 	{
@@ -977,8 +975,8 @@ void NxsTreesBlock::WriteTreesCommand(std::ostream & out) const
 		out << ";\n";
 		}
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Writes contents of this block in NEXUS format to `out'.
+/*!
+	Writes contents of this block in NEXUS format to `out'.
 */
 void NxsTreesBlock::WriteAsNexus(std::ostream &out) const
 	{
@@ -1031,7 +1029,7 @@ void NxsTreesBlock::ConstructDefaultTranslateTable(NxsToken &token, const char *
 			NxsString s;
 			s += (i + 1);
 			capNameToInd[s] = i;
-			NxsString t = taxa->GetTaxonLabel(i);
+			NxsString t(taxa->GetTaxonLabel(i).c_str());
 			t.ToUpper();
 			capNameToInd[t] = i;
 			}
@@ -1067,7 +1065,7 @@ void NxsTreesBlock::HandleTranslateCommand(NxsToken &token)
 				value.ToUpper();
 				if (capNameToInd.find(value) == capNameToInd.end())
 					capNameToInd[value] = newVal;
-					
+
 				}
 			else if (nexusReader)
 				{
@@ -1100,7 +1098,7 @@ void NxsTreesBlock::HandleTranslateCommand(NxsToken &token)
 	}
 
 /*
-| Converts to a Nexus token (and thus loses some of the file position information).
+ Converts to a Nexus token (and thus loses some of the file position information).
 */
 void NxsTreesBlock::ProcessTokenVecIntoTree(
   const ProcessedNxsCommand & tokenVec,
@@ -1241,7 +1239,7 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 						nexusReader->NexusWarnToken(errormsg, NxsReader::PROBABLY_INCORRECT_CONTENT_WARNING, token);
 					else
 						throw NxsException(errormsg, token);
-					/* if we did not throw an excection, then we are in relaxed parsing mode.  
+					/* if we did not throw an excection, then we are in relaxed parsing mode.
 						We'll add the implied ,
 					*/
 					if (!someMissingEdgeLens && (prevToken == NXS_TREE_CLOSE_PARENS_TOKEN || prevToken == NXS_TREE_CLADE_NAME_TOKEN))
@@ -1492,11 +1490,6 @@ void NxsTreesBlock::HandleTreeCommand(NxsToken &token, bool rooted)
 		token.GetNextToken();
 		}
 	NxsString treeName = token.GetToken();
-#	if defined(DEBUGGING_TREES_BLOCK) && DEBUGGING_TREES_BLOCK
-		for (std::map<std::string, unsigned>::const_iterator tt =  capNameToInd.begin(); tt != capNameToInd.end(); ++tt)
-			std::cerr << tt->first << " ==> " << 1+tt->second << '\n';
-		std::cerr <<   '\n';
-#	endif
 	DemandEquals(token, "after tree name in TREE command");
 	file_pos fp = 0;
 	int fline = token.GetFileLine();
@@ -1544,7 +1537,7 @@ void NxsTreesBlock::HandleTreeCommand(NxsToken &token, bool rooted)
 	NxsFullTreeDescription & td = trees[trees.size() -1];
 	ReadTreeFromOpenParensToken(td, token);
 	}
-	
+
 void NxsTreesBlock::ReadTreeFromOpenParensToken(NxsFullTreeDescription &td, NxsToken & token)
 	{
 	file_pos fp = 0;
@@ -1587,10 +1580,10 @@ void NxsTreesBlock::ReadTreeFromOpenParensToken(NxsFullTreeDescription &td, NxsT
 			}
 		}
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function provides the ability to read everything following the block name (which is read by the NxsReader
-|	object) to the END or ENDBLOCK command. Characters are read from the input stream `in'. Overrides the abstract
-|	virtual function in the base class.
+/*!
+	This function provides the ability to read everything following the block name (which is read by the NxsReader
+	object) to the END or ENDBLOCK command. Characters are read from the input stream `in'. Overrides the abstract
+	virtual function in the base class.
 */
 void NxsTreesBlock::Read(
   NxsToken &token)	/* the token used to read from `in' */
@@ -1658,10 +1651,10 @@ void NxsTreesBlock::Read(
 			}
 		}
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the description of the tree with index `i' where i is in [0..ntrees).
-|	Node numbers will be translated to names in the resulting tree description.
-|	Use GetTreeDescription if translation is not desired.
+/*!
+	Returns the description of the tree with index `i' where i is in [0..ntrees).
+	Node numbers will be translated to names in the resulting tree description.
+	Use GetTreeDescription if translation is not desired.
 */
 NxsString NxsTreesBlock::GetTranslatedTreeDescription(
   unsigned i)	/* the index of the tree for which the description is to be returned */
@@ -1800,8 +1793,8 @@ void NxsTreesBlock::ReadPhylipTreeFile(NxsToken & token)
 	catch (NxsX_UnexpectedEOF &)
 		{
 		allowImplicitNames = prevAIN;
-		token.SetEOFAllowed(prevEOFAllowed);	
-		if (firstTree) 
+		token.SetEOFAllowed(prevEOFAllowed);
+		if (firstTree)
 			{
 			errormsg << "Unexpected end of file in tree description.\n";
 			errormsg << "This probably indicates that the parentheses in the newick description are not balanced, and one or more closing parentheses are needed.";
@@ -1811,10 +1804,10 @@ void NxsTreesBlock::ReadPhylipTreeFile(NxsToken & token)
 	catch (...)
 		{
 		allowImplicitNames = prevAIN;
-		token.SetEOFAllowed(prevEOFAllowed);	
+		token.SetEOFAllowed(prevEOFAllowed);
 		throw;
 		}
-	token.SetEOFAllowed(prevEOFAllowed);	
+	token.SetEOFAllowed(prevEOFAllowed);
 	allowImplicitNames = prevAIN;
 	}
 

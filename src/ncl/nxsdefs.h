@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 #ifndef NCL_NXSDEFS_H
@@ -28,17 +28,17 @@
 
 #define NCL_MAJOR_VERSION 2
 #define NCL_MINOR_VERSION 1
-#define NCL_NAME_AND_VERSION  "NCL version 2.1.08"
-#define NCL_COPYRIGHT         "Copyright (c) 1999-2009 by Paul O. Lewis"
+#define NCL_NAME_AND_VERSION  "NCL version 2.1.10"
+#define NCL_COPYRIGHT         "Copyright (c) 1999-2010 by Paul O. Lewis"
 #define NCL_HOMEPAGEURL       "http://sourceforge.net/projects/ncl"
 
 
-// NCL_COULD_BE_CONST is a mechanism for declaring some old (v < 2.1) functions 
+// NCL_COULD_BE_CONST is a mechanism for declaring some old (v < 2.1) functions
 // 	to be const without breaking old client code.
 // If you would like your code to be more const-correct, then define NCL_CONST_FUNCS
 //	when you compile NCL and your code.  This will cause several functions that
 //	should have been declared as const to be declared that way in your code.
-// By default NCL_CONST_FUNCS will not be defined and these functions will not 
+// By default NCL_CONST_FUNCS will not be defined and these functions will not
 //	be defined as const member functions.
 #if defined(NCL_CONST_FUNCS) && NCL_CONST_FUNCS
 #	define NCL_COULD_BE_CONST const

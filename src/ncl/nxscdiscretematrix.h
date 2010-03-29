@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 // This code is based on code developed by Mark Holder for the CIPRES project
@@ -55,35 +55,35 @@
 	/* For size_t */
 #if defined(HAVE_STDDEF_H)
 #	include <stddef.h>
-#endif 
+#endif
 
 
 #ifdef __cplusplus
-extern "C" 
+extern "C"
 {
 #endif
 
-	
-typedef int8_t NxsCDiscreteState_t; /** type used to enumerate possible states.	
+
+typedef int8_t NxsCDiscreteState_t; /** type used to enumerate possible states.
 								-1 is used for gaps, other negative flags may be added later.
 								This size limits the maximum number of states allowed. */
 typedef int8_t NxsCDiscreteStateSet; /** type used to refer to unique combinations of states (the "fundamental" states and ambiguity codes)
 								-1 is used for gaps.  To handle all possible data sets, this must be large enough to hold
 								2^(nStates + 1) values if the datatype allows gaps.  Thus using int8_t limits us to 8 states */
 
-/* 
+/*
 The following enum is a cropping of the NxsCharactersBlock::DataTypesEnum
 which includes all of the datatypes (and only those) that can be expressed
-in a NxsCDiscreteMatrix. Each of the enum facets will have the same 
-value as in  NxsCharactersBlock::DataTypesEnum. 
+in a NxsCDiscreteMatrix. Each of the enum facets will have the same
+value as in  NxsCharactersBlock::DataTypesEnum.
 
 This enum is also handy because it is accessible via C.
 */
 typedef enum {
 			  NxsAltGeneric_Datatype = 1,
-			  NxsAltDNA_Datatype = 2, 
-			  NxsAltRNA_Datatype = 3, 
-			  NxsAltNuc_Datatype = 4, 
+			  NxsAltDNA_Datatype = 2,
+			  NxsAltRNA_Datatype = 3,
+			  NxsAltNuc_Datatype = 4,
 			  NxsAltAA_Datatype = 5,
 			  NxsAltCodon_Datatype = 6
 			  } NxsAltDatatypes;
@@ -92,7 +92,7 @@ const int HighestNxsCDatatype = 6;
 
 typedef struct NxsCDiscreteMatrixStruct
 	{
-	NxsCDiscreteState_t 	  *stateList; 		/** Flattened array of array of observed states.  If more than one state was observed, then the first element is the number of states observed.  
+	NxsCDiscreteState_t 	  *stateList; 		/** Flattened array of array of observed states.  If more than one state was observed, then the first element is the number of states observed.
 											  Exceptions: -1 is for gaps, nStates is for missing. */
 	unsigned * stateListPos;  	/** Maps a state set code (the elements of the matrix) to the index in stateList where the states are listed */
 	NxsCDiscreteStateSet ** matrix;			/** taxa x characters matrix of indices of state sets */
@@ -100,13 +100,13 @@ typedef struct NxsCDiscreteMatrixStruct
 	unsigned nStates;
 	unsigned nChar;
 	unsigned nTax;
-	unsigned nObservedStateSets; /* the length of stateListPos */ 
+	unsigned nObservedStateSets; /* the length of stateListPos */
 	NxsAltDatatypes datatype;
 	} NxsCDiscreteMatrix;
 
 
 #ifdef __cplusplus
-}	
+}
 #endif
 
 #endif /* __TREEINFER_HELPER_H */

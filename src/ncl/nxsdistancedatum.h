@@ -13,16 +13,16 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
 #ifndef NCL_NXSDISTANCEDATUM_H
 #define NCL_NXSDISTANCEDATUM_H
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This class stores pairwise distance values. It has no public access functions, reflecting the fact that it is 
-|	manipulated strictly by its only friend class, the NxsDistancesBlock class.
+/*!
+	This class stores pairwise distance values. It has no public access functions, reflecting the fact that it is
+	manipulated strictly by its only friend class, the NxsDistancesBlock class.
 */
 class NxsDistanceDatum
 	{

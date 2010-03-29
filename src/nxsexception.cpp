@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -22,9 +22,9 @@
 #include "ncl/nxstoken.h"
 
 using namespace std;
-/*----------------------------------------------------------------------------------------------------------------------
-|	Copies 's' to msg and sets line, col and pos to the current line, column and position in the file where parsing
-|	stopped.
+/*!
+	Copies 's' to msg and sets line, col and pos to the current line, column and position in the file where parsing
+	stopped.
 */
 NxsException::NxsException(
   const std::string & s,	/* the message for the user */
@@ -38,14 +38,14 @@ NxsException::NxsException(
 	msg.assign(s);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Creates a NxsException object with the specified message, getting file position information from the NxsToken.
+/*!
+	Creates a NxsException object with the specified message, getting file position information from the NxsToken.
 */
 NxsException::NxsException(
   const std::string &s,		/* message that describes the error */
   const NxsToken &t)		/* NxsToken that was supplied the last token (the token that caused the error) */
 	{
-	msg		= NxsString(s.c_str()); 
+	msg		= NxsString(s.c_str());
 	pos		= t.GetFilePosition();
 	line	= t.GetFileLine();
 	col		= t.GetFileColumn();
@@ -53,7 +53,7 @@ NxsException::NxsException(
 
 NxsException::NxsException(const std::string &s, const ProcessedNxsToken &t)
 	{
-	msg		= NxsString(s.c_str()); 
+	msg		= NxsString(s.c_str());
 	pos		= t.GetFilePosition();
 	line	= t.GetLineNumber();
 	col		= t.GetColumnNumber();
@@ -61,7 +61,7 @@ NxsException::NxsException(const std::string &s, const ProcessedNxsToken &t)
 
 NxsException::NxsException(const std::string &s, const NxsTokenPosInfo &t)
 	{
-	msg		= NxsString(s.c_str()); 
+	msg		= NxsString(s.c_str());
 	pos		= t.GetFilePosition();
 	line	= t.GetLineNumber();
 	col		= t.GetColumnNumber();

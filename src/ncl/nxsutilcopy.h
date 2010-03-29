@@ -13,12 +13,12 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
 // This code is based on code developed by Mark Holder for the CIPRES project
-// Much of this file comes from Andrei Alexandrescu "Modern C++ Design" 
+// Much of this file comes from Andrei Alexandrescu "Modern C++ Design"
 
 #if !defined NXS_UTIL_COPY_H
 #define NXS_UTIL_COPY_H
@@ -32,12 +32,12 @@
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
-///	Int2Type<compile time constant integer> defines a unique (and stateless) 
-///		class associated with a given integer.  Used for compile time dispatching 
+///	Int2Type<compile time constant integer> defines a unique (and stateless)
+///		class associated with a given integer.  Used for compile time dispatching
 ///		of function calls or creation of appropriate templated classes.
 ///
-///	defines an unnamed enum "value" that is equal to the integer used to 
-///		define the class. 
+///	defines an unnamed enum "value" that is equal to the integer used to
+///		define the class.
 ///	\author	Andrei Alexandrescu "Modern C++ Design"
 //////////
 
@@ -55,7 +55,7 @@ typedef Int2Type<false> FalseAsAType;
 ///	Type2Type<typename> defines a unique (and stateless) class for each type
 ///		that is specified as the template argument.
 ///	This is useful in controlling the return type of templated functions in
-///		lieu of partial template specialization of templated functions (which is 
+///		lieu of partial template specialization of templated functions (which is
 ///		not allowed by the C++ standard)
 ///	Defines the typedef OriginalType which corresponds to the template argument
 ///	\author	Andrei Alexandrescu "Modern C++ Design"
@@ -73,16 +73,12 @@ namespace ncl
 {
 namespace hidden
 {
-////////////////////////////////////////////////////////////////////////////////
-/// used by #COMPILE_TIME_ASSERT
-//////////
+// used by #COMPILE_TIME_ASSERT
 template<bool> struct CompileTimeChecker
 	{
-	CompileTimeChecker(...); //default 
+	CompileTimeChecker(...); //default
 	};
-////////////////////////////////////////////////////////////////////////////////
-/// used by #COMPILE_TIME_ASSERT
-//////////
+// used by #COMPILE_TIME_ASSERT
 template<> struct CompileTimeChecker<false>{};
 }
 }
@@ -98,12 +94,12 @@ template<> struct CompileTimeChecker<false>{};
 ///	\note	The error_clue must be one alphanumeric word (no spaces of punctaution).
 ///	The condition to test must be known at compile time (if not a cryptic message such as "illegal non-type template argument"
 ///	error will be generated.
-///	If the compile time assertion evaluates to false, a message such as "Illegal conversion 
+///	If the compile time assertion evaluates to false, a message such as "Illegal conversion
 ///		from ERROR_error_clue to CompileTimeChecker<false> ..." will be generated.
 ///
 ///	Implementation Details:
 ///
-///		ncl::hidden::CompileTimeChecker is a boolean-templated class.  
+///		ncl::hidden::CompileTimeChecker is a boolean-templated class.
 ///		The constructor of ncl::hidden::CompileTimeChecker<true> accepts any type
 ///		The the only constructor for ncl::hidden::CompileTimeChecker<false> is the default constructor
 ///		The macro COMPILE_TIME_ASSERT(condition, msg):
@@ -111,13 +107,13 @@ template<> struct CompileTimeChecker<false>{};
 ///			2	checks if it can instantiate CompileTimeChecker<condition> from an ERROR_msg type object.
 ///		If the condition is true, the construction will succeed, if not the error message will be generated
 ///		Note that while the  CompileTimeChecker exists in ncl::hidden:: namespace.  The macro is visible
-///		by any file that includes compile_assert.h and the class such as ERROR_msg will be added to the global 
+///		by any file that includes compile_assert.h and the class such as ERROR_msg will be added to the global
 ///		namespace.
 ///		The resultign code is not affected by the insertion of COMPILE_TIME_ASSERT because the entire construction
 ///		is inside a sizeof() so no objects are really instantiated.
-///	
+///
 ///	\author	Andrei Alexandrescu "Modern C++ Design"
-///	
+///
 //////////
 #define COMPILE_TIME_ASSERT(condition, msg) {class ERROR_##msg {}; (void)sizeof(ncl::hidden::CompileTimeChecker<(condition)>(ERROR_##msg()));}
 
@@ -144,7 +140,7 @@ template<> struct SupportsBitwiseCopy<long double> {	enum {kResult = true}; 	};
 //  has the statement template<> struct SupportsBitwiseCopy<CLASS> {	enum {kResult = true}; 	};
 //	because of potential portability issues with TypeList, primitive types are
 //	have SupportsBitwiseCopy specialized here by brute force enumeration
-	
+
 
 class NullType {};
 
@@ -161,14 +157,14 @@ class TypeTraits
 		template <class U> struct PointerTraits<U*>
 			{
 				enum {kResult = true};
-				enum {kCopyWithMemCopy = SupportsBitwiseCopy<U>::kResult};	
-				enum {kSizeOfPointee = sizeof(U)};	
+				enum {kCopyWithMemCopy = SupportsBitwiseCopy<U>::kResult};
+				enum {kSizeOfPointee = sizeof(U)};
 			};
 		template <class U> struct PointerTraits<const U*>
 			{
 				enum {kResult = true};
-				enum {kCopyWithMemCopy = SupportsBitwiseCopy<U>::kResult};	
-				enum {kSizeOfPointee = sizeof(U)};	
+				enum {kCopyWithMemCopy = SupportsBitwiseCopy<U>::kResult};
+				enum {kSizeOfPointee = sizeof(U)};
 			};
 	public:
 		enum {kIsPointer = PointerTraits<T>::kResult};
@@ -176,38 +172,38 @@ class TypeTraits
 		enum {kPointeeSize = PointerTraits<T>::kSizeOfPointee}; //only valid if kIsPointer !!
 	//	typedef PointerTraits<T>::PointeeType  PointeeType;
 	};
-	
-template<class T, class U> 
+
+template<class T, class U>
 class Conversion
 	{
 	public:
 		enum {kSameType = false};
 	};
 
-template<class T> 
+template<class T>
 class Conversion<T,T>
 	{
 	public:
 		enum {kSameType = true};
 	};
 
-template<class T> 
+template<class T>
 class Conversion<const T*,T*>
 	{
 	public:
 		enum {kSameType = true};
 	};
 
-template<class T> 
+template<class T>
 class Conversion<T*, const T*>
 	{
 	public:
 		enum {kSameType = true};
 	};
 
-enum CopyAlgoSeclector 
+enum CopyAlgoSeclector
 	{
-		kConservative, 
+		kConservative,
 		kFast
 	};
 
@@ -216,17 +212,17 @@ inline OutIt CopyImpl(InIt first, InIt last, OutIt resultP, Int2Type<kConservati
 	{
 	return std::copy(first, last, resultP);
 	}
-	
+
 template <typename InIt, typename OutIt>
 inline OutIt CopyImpl(InIt first, InIt last, OutIt resultP, Int2Type<kFast>)
-	{	
+	{
 	return (OutIt) std::memcpy(resultP, first,  ((std::size_t) (last - first)) * sizeof(*first));
 	}
-	
+
 template <typename InIt, typename OutIt>
 OutIt ncl_copy(InIt first, InIt last, OutIt resultP)
 	{
-		enum { kUseMemCpy =(TypeTraits<InIt>::kIsPointer && 
+		enum { kUseMemCpy =(TypeTraits<InIt>::kIsPointer &&
 							TypeTraits<OutIt>::kIsPointer &&
 							TypeTraits<InIt>::kCanUseMemCpyOnPointee &&
 							TypeTraits<OutIt>::kCanUseMemCpyOnPointee &&
@@ -235,7 +231,7 @@ OutIt ncl_copy(InIt first, InIt last, OutIt resultP)
 	}
 
 #else //HAVE_COMPILE_TIME_DISPATCH
-	
+
 template <typename InIt, typename OutIt>
 inline OutIt ncl_copy(InIt first, InIt last, OutIt resultP)
 	{
@@ -245,7 +241,7 @@ inline OutIt ncl_copy(InIt first, InIt last, OutIt resultP)
 #endif //HAVE_COMPILE_TIME_DISPATCH
 
 
-//adds an element from the first -> last array to the corresponding element in the result array 
+//adds an element from the first -> last array to the corresponding element in the result array
 template <typename InIt, typename OutIt>
 inline OutIt ncl_iadd(InIt first, InIt last, OutIt resultP)
 	{
@@ -254,7 +250,7 @@ inline OutIt ncl_iadd(InIt first, InIt last, OutIt resultP)
 	return resultP;
 	}
 
-//adds each element in resultP array with the correcpsonding element from the first -> last array 
+//adds each element in resultP array with the correcpsonding element from the first -> last array
 template <typename InIt, typename OutIt>
 inline OutIt ncl_imult(InIt first, InIt last, OutIt resultP)
 	{

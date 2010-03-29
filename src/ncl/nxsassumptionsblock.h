@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -38,16 +38,20 @@ class NxsAssumptionsBlockAPI
 	{
 	public:
   		virtual void	SetCallback(NxsCharactersBlockAPI *p) = 0;
-  		
 
-		
+
+
 		virtual void SetCharBlockPtr(NxsCharactersBlockAPI * c, NxsBlockLinkStatus s) = 0;
 		virtual void SetTaxaBlockPtr(NxsTaxaBlockAPI *, NxsBlockLinkStatus s) = 0;
 		virtual void SetTreesBlockPtr(NxsTreesBlockAPI *, NxsBlockLinkStatus s) = 0;
 
-		virtual NxsCharactersBlockAPI * GetCharBlockPtr(int *status=NULL) = 0;
-		virtual NxsTaxaBlockAPI * GetTaxaBlockPtr(int *status=NULL) = 0;
-		virtual NxsTreesBlockAPI * GetTreesBlockPtr(int *status=NULL) = 0;
+		virtual NxsCharactersBlockAPI * GetCharBlockPtr(int *status=NULL) = 0; /*v2.1to2.2 13 */
+		virtual NxsTaxaBlockAPI * GetTaxaBlockPtr(int *status=NULL) = 0; /*v2.1to2.2 13 */
+		virtual NxsTreesBlockAPI * GetTreesBlockPtr(int *status=NULL) = 0; /*v2.1to2.2 13 */
+
+		/* i14 */ /*v2.1to2.2 14 */
+		/* i15 */ /*v2.1to2.2 15 */
+		/* i16 */ /*v2.1to2.2 16 */
 
 		virtual void AddCharPartition(const std::string & name, const NxsPartition &) = 0;
 		virtual void AddTaxPartition(const std::string & name, const NxsPartition &) = 0;
@@ -69,17 +73,17 @@ class NxsAssumptionsBlockAPI
 		virtual void SetGapsAsNewstate(bool v) = 0;
  	};
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This class handles reading and storage for the NxsReader block ASSUMPTIONS. It overrides the member functions Read 
-|	and Reset, which are abstract virtual functions in the base class NxsBlock. Adding a new data member? Don't forget
-|	to:
-|~
-|	o Describe it in the class declaration using a C-style comment.
-|	o Initialize it (unless it is self-initializing) in the constructor and re-initialize it in the Reset function.
-|	o Describe the initial state in the constructor documentation.
-|	o Delete memory allocated to it in both the destructor and Reset function.
-|	o Report it in some way in the Report function.
-|~
+/*!
+	This class handles reading and storage for the NxsReader block ASSUMPTIONS. It overrides the member functions Read
+	and Reset, which are abstract virtual functions in the base class NxsBlock. Adding a new data member? Don't forget
+	to:
+~
+	o Describe it in the class declaration using a C-style comment.
+	o Initialize it (unless it is self-initializing) in the constructor and re-initialize it in the Reset function.
+	o Describe the initial state in the constructor documentation.
+	o Delete memory allocated to it in both the destructor and Reset function.
+	o Report it in some way in the Report function.
+~
 */
 class NxsAssumptionsBlock
   : public NxsAssumptionsBlockAPI
@@ -91,8 +95,8 @@ class NxsAssumptionsBlock
 		SETS_BLOCK_READ,
 		CODONS_BLOCK_READ
 		};
-		
-	
+
+
 	public:
 							NxsAssumptionsBlock(NxsTaxaBlockAPI *t);
 		virtual				~NxsAssumptionsBlock();
@@ -103,25 +107,26 @@ class NxsAssumptionsBlock
 		void				SetCallback(NxsCharactersBlockAPI *p);
 
 		int					GetNumCharSets() const;
-		void				GetCharSetNames(NxsStringVector &names) const;
-		const NxsUnsignedSet *GetCharSet(NxsString nm) const;
+		/* i17 */ /*v2.1to2.2 17 */
+		void				GetCharSetNames(NxsStringVector &names) const; /*v2.1to2.2 3 */
+		const NxsUnsignedSet *GetCharSet(NxsString nm) const; /*v2.1to2.2 4 */
 
-		int					GetNumCharPartitions();
-		void				GetCharPartitionNames(vector<std::string> &names);
+		int					GetNumCharPartitions(); /*v2.1to2.2 6 */
+		void				GetCharPartitionNames(vector<std::string> &names); /*v2.1to2.2 6 */
 		const NxsPartition		*GetCharPartition(std::string nm) const;
 
-		int					GetNumTaxSets();
-		void				GetTaxSetNames(NxsStringVector &names);
-		NxsUnsignedSet		&GetTaxSet(NxsString nm);
+		int					GetNumTaxSets(); /*v2.1to2.2 6 */
+		void				GetTaxSetNames(NxsStringVector &names); /*v2.1to2.2 3 */ /*v2.1to2.2 6 */
+		NxsUnsignedSet &	GetTaxSet(NxsString nm); /*v2.1to2.2 6 */ /*v2.1to2.2 8 */ /*v2.1to2.2 4 */
 
-		int					GetNumExSets();
-		void				GetExSetNames(NxsStringVector &names);
-		NxsUnsignedSet		&GetExSet(NxsString nm);
-		NxsString			GetDefExSetName();
-		void				ApplyExset(NxsString nm);
+		int					GetNumExSets();/*v2.1to2.2 6 */
+		void				GetExSetNames(NxsStringVector &names); /*v2.1to2.2 3 */ /*v2.1to2.2 6 */
+		NxsUnsignedSet &	GetExSet(NxsString nm); /*v2.1to2.2 6 */ /*v2.1to2.2 8 */ /*v2.1to2.2 4 */
+		NxsString			GetDefExSetName(); /*v2.1to2.2 6 */ /*v2.1to2.2 4 */
+		void				ApplyExset(NxsString nm); /*v2.1to2.2 4 */
 
 		virtual void		Read(NxsToken& token);
-		virtual void		Report(std::ostream& out) NCL_COULD_BE_CONST ;
+		virtual void		Report(std::ostream& out) NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
 		virtual void		Reset();
 		virtual void 		WriteAsNexus(std::ostream &out) const;
 
@@ -145,13 +150,13 @@ class NxsAssumptionsBlock
 		void				SetCharLinkStatus(NxsBlockLinkStatus s);
 		void				SetTaxaLinkStatus(NxsBlockLinkStatus s);
 		void				SetTreesLinkStatus(NxsBlockLinkStatus s);
-		
+
 		void				SetCharBlockPtr(NxsCharactersBlockAPI * c, NxsBlockLinkStatus s);
 		void				SetTaxaBlockPtr(NxsTaxaBlockAPI *, NxsBlockLinkStatus s);
 		void				SetTreesBlockPtr(NxsTreesBlockAPI *, NxsBlockLinkStatus s);
-		NxsCharactersBlockAPI * GetCharBlockPtr(int *status=NULL);
-		NxsTaxaBlockAPI *	GetTaxaBlockPtr(int *status=NULL);
-		NxsTreesBlockAPI *	GetTreesBlockPtr(int *status=NULL);
+		NxsCharactersBlockAPI * GetCharBlockPtr(int *status=NULL); /*v2.1to2.2 13 */
+		NxsTaxaBlockAPI *	GetTaxaBlockPtr(int *status=NULL); /*v2.1to2.2 13 */
+		NxsTreesBlockAPI *	GetTreesBlockPtr(int *status=NULL); /*v2.1to2.2 13 */
 
 		NxsTransformationManager & GetNxsTransformationManagerRef()
 			{
@@ -160,13 +165,13 @@ class NxsAssumptionsBlock
 		NxsGeneticCodesManager & GetNxsGeneticCodesManagerRef()
 			{
 			return codesMgr;
-			}			
+			}
 		virtual void AddCharPartition(const std::string & name, const NxsPartition &);
 		virtual void AddTaxPartition(const std::string & name, const NxsPartition &);
 		virtual void AddTreePartition(const std::string & name, const NxsPartition &);
 		virtual void AddCodeSet(const std::string & name, const NxsPartition &, bool asterisked);
 		virtual void AddCodonPosSet(const std::string & name, const NxsPartition &, bool asterisked);
-		
+
 		/*---------------------------------------------------------------------------------------
 		| Results in aliasing of the taxa, trees, and characters blocks!
 		*/
@@ -180,7 +185,7 @@ class NxsAssumptionsBlock
 		/*---------------------------------------------------------------------------------------
 		| Results in aliasing of the taxa, trees, and characters blocks!
 		|
-		| passedRefOfOwnedBlock is set to this->true to avoid double deletion (other 
+		| passedRefOfOwnedBlock is set to this->true to avoid double deletion (other
 		|	retains ownership of these blocks
 		*/
 		virtual void CopyAssumptionsContents(const NxsAssumptionsBlock &other)
@@ -222,7 +227,7 @@ class NxsAssumptionsBlock
 			{
 			gapsAsNewstate = v;
 			}
-		
+
 
 	protected:
 		typedef std::vector<NxsAssumptionsBlockAPI *> VecAssumpBlockPtr;
@@ -234,7 +239,7 @@ class NxsAssumptionsBlock
 
 
 		VecBlockPtr 		GetCreatedTaxaBlocks();
-		virtual unsigned	TaxonLabelToNumber(NxsString s) const;
+		virtual unsigned	TaxonLabelToNumber(NxsString s) const; /*v2.1to2.2 4 */
 
 		void				HandleCharPartition(NxsToken& token);
 		void				HandleCharSet(NxsToken& token);
@@ -249,7 +254,7 @@ class NxsAssumptionsBlock
 		void				HandleTypeSet(NxsToken& token);
 		void				HandleUserType(NxsToken& token);
 		void				HandleWeightSet(NxsToken& token);
-		
+
 		void				WriteCharSet(std::ostream &out) const
 			{
 			NxsWriteSetCommand("CHARSET", charsets, out);
@@ -287,16 +292,19 @@ class NxsAssumptionsBlock
 			{
 			NxsWritePartitionCommand("CodonPosSet", codonPosSets, out, def_codonPosSet.c_str());
 			}
-
+		NameOfAssumpBlockAsRead	GetIDOfBlockTypeIDFromParse() const
+			{
+			return readAs;
+			}
 	private:
 		NxsAssumptionsBlockAPI  *GetAssumptionsBlockForCharTitle(const char *title, NxsToken &token, const char *cmd);
 		NxsAssumptionsBlockAPI  *GetAssumptionsBlockForTaxaTitle(const char *title, NxsToken &token, const char *cmd);
 		NxsAssumptionsBlockAPI  *GetAssumptionsBlockForTreesTitle(const char *title, NxsToken &token, const char *cmd);
-		
+
 		NxsAssumptionsBlockAPI  *GetAssumptionsBlockForCharBlock(NxsCharactersBlockAPI *, NxsBlockLinkStatus, NxsToken &token);
 		NxsAssumptionsBlockAPI  *GetAssumptionsBlockForTaxaBlock(NxsTaxaBlockAPI *, NxsBlockLinkStatus, NxsToken &token);
 		NxsAssumptionsBlockAPI  *GetAssumptionsBlockForTreesBlock(NxsTreesBlockAPI *, NxsBlockLinkStatus, NxsToken &token);
-		
+
 		NxsAssumptionsBlockAPI  *CreateNewAssumptionsBlock(NxsToken &token);
 		NxsAssumptionsBlockAPI *DealWithPossibleParensInCharDependentCmd(NxsToken &token, const char *cmd, const std::vector<std::string> *unsupported = NULL, bool * isVect = false);
 		bool					HasAssumptionsBlockCommands() const;
@@ -314,18 +322,18 @@ class NxsAssumptionsBlock
 		NxsUnsignedSetMap	taxsets;
 		NxsUnsignedSetMap	treesets;
 		NxsUnsignedSetMap	exsets;
-		
+
 		NxsPartitionsByName charPartitions;
 		NxsPartitionsByName taxPartitions;
 		NxsPartitionsByName treePartitions;
 
 		NxsString			def_exset;			/* the default exset */
-		
+
 		NxsPartitionsByName codonPosSets;
 		NxsString			def_codonPosSet;	/* the default codonPosSet */
 		NxsPartitionsByName codeSets;
 		NxsString			def_codeSet;		/* the default codeSet */
-	
+
 		int					charLinkStatus;
 		int					taxaLinkStatus;
 		int					treesLinkStatus;

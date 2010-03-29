@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 #include <iomanip>
@@ -72,29 +72,29 @@ void NxsDistancesBlock::WriteAsNexus(std::ostream &out) const
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	See Reset() for defaults
+/*!
+	See Reset() for defaults
 */
 NxsDistancesBlock::NxsDistancesBlock(
   NxsTaxaBlockAPI *t)	/* the NxsTaxaBlockAPI that will keep track of taxon labels */
-  : NxsBlock(), 
+  : NxsBlock(),
   NxsTaxaBlockSurrogate(t, NULL)
 	{
 	id = "DISTANCES";
 	Reset();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Deletes `matrix' and `taxonPos' arrays.
+/*!
+	Deletes `matrix' and `taxonPos' arrays.
 */
 NxsDistancesBlock::~NxsDistancesBlock()
 	{
 	Reset();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called when DIMENSIONS command needs to be parsed from within the DISTANCES block. Deals with everything after the 
-|	token DIMENSIONS up to and including the semicolon that terminates the DIMENSIONS command.
+/*!
+	Called when DIMENSIONS command needs to be parsed from within the DISTANCES block. Deals with everything after the
+	token DIMENSIONS up to and including the semicolon that terminates the DIMENSIONS command.
 */
 void NxsDistancesBlock::HandleDimensionsCommand(
   NxsToken &token)	/* the token used to read from `in' */
@@ -106,12 +106,12 @@ void NxsDistancesBlock::HandleDimensionsCommand(
 		token.GetNextToken();
 		if (token.Equals("NEWTAXA"))
 			newtaxa = true;
-		else if (token.Equals("NTAX")) 
+		else if (token.Equals("NTAX"))
 			{
 			DemandEquals(token, "after NTAX in DIMENSIONS command");
 			ntaxRead = DemandPositiveInt(token, "NTAX");
 			}
-		else if (token.Equals("NCHAR")) 
+		else if (token.Equals("NCHAR"))
 			{
 			DemandEquals(token, "in DIMENSIONS command");
 			nchar = DemandPositiveInt(token, "NCHAR");
@@ -155,9 +155,9 @@ void NxsDistancesBlock::HandleDimensionsCommand(
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called when FORMAT command needs to be parsed from within the DISTANCES block. Deals with everything after the 
-|	token FORMAT up to and including the semicolon that terminates the FORMAT command.
+/*!
+	Called when FORMAT command needs to be parsed from within the DISTANCES block. Deals with everything after the
+	token FORMAT up to and including the semicolon that terminates the FORMAT command.
 */
 void NxsDistancesBlock::HandleFormatCommand(
   NxsToken &token)	/* the token used to read from `in' */
@@ -220,18 +220,18 @@ void NxsDistancesBlock::HandleFormatCommand(
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called from within HandleMatrix, this function is used to deal with interleaved matrices. It is called once for 
-|	each pass through the taxa. The local variable `jmax' records the number of columns read in the current interleaved 
-|	page and is used to determine the offset used for j in subsequent pages.
+/*!
+	Called from within HandleMatrix, this function is used to deal with interleaved matrices. It is called once for
+	each pass through the taxa. The local variable `jmax' records the number of columns read in the current interleaved
+	page and is used to determine the offset used for j in subsequent pages.
 */
 bool NxsDistancesBlock::HandleNextPass(
   NxsToken &token,	/* the token we are using for reading the data file */
   unsigned &offset,	/* the offset */
-  vector<unsigned> & fileMatrixCmdOrderToTaxInd, 
+  vector<unsigned> & fileMatrixCmdOrderToTaxInd,
   set<unsigned> & taxIndsRead)
 	{
-	unsigned jmax = 0; 
+	unsigned jmax = 0;
 	bool done = false;
 
 	unsigned i_first = 0;
@@ -394,9 +394,9 @@ void NxsDistancesBlock::CopyDistancesContents(const NxsDistancesBlock &other)
 	matrix = other.matrix;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called when MATRIX command needs to be parsed from within the DISTANCES block. Deals with everything after the 
-|	token MATRIX up to and including the semicolon that terminates the MATRIX command.
+/*!
+	Called when MATRIX command needs to be parsed from within the DISTANCES block. Deals with everything after the
+	token MATRIX up to and including the semicolon that terminates the MATRIX command.
 */
 void NxsDistancesBlock::HandleMatrixCommand(
   NxsToken &token)	/* the token used to read from `in' */
@@ -440,10 +440,10 @@ void NxsDistancesBlock::HandleMatrixCommand(
 	DemandEndSemicolon(token, "MATRIX");
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function provides the ability to read everything following the block name (which is read by the NEXUS object)
-|	to the end or endblock statement. Characters are read from the input stream in. Overrides the abstract virtual 
-|	function in the base class.
+/*!
+	This function provides the ability to read everything following the block name (which is read by the NEXUS object)
+	to the end or endblock statement. Characters are read from the input stream in. Overrides the abstract virtual
+	function in the base class.
 */
 void NxsDistancesBlock::Read(
   NxsToken &token)	/* the token used to read from `in' */
@@ -474,12 +474,12 @@ void NxsDistancesBlock::Read(
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function outputs a brief report of the contents of this taxa block. Overrides the abstract virtual function in 
-|	the base class.
+/*!
+	This function outputs a brief report of the contents of this taxa block. Overrides the abstract virtual function in
+	the base class.
 */
 void NxsDistancesBlock::Report(
-  std::ostream &out) NCL_COULD_BE_CONST /* the output stream to which to write the report */
+  std::ostream &out) NCL_COULD_BE_CONST /* the output stream to which to write the report */ /*v2.1to2.2 1 */
 	{
 	const unsigned ntaxTotal = taxa->GetNumTaxonLabels();
 
@@ -503,7 +503,7 @@ void NxsDistancesBlock::Report(
 
 	if (IsInterleave())
 		out << "  Matrix is interleaved" << endl;
-	else 
+	else
 		out << "  Matrix is non-interleaved" << endl;
 
 	if (IsLabels())
@@ -513,7 +513,7 @@ void NxsDistancesBlock::Report(
 
 	if (IsDiagonal())
 		out << "  Diagonal elements specified" << endl;
-	else 
+	else
 		out << "  Diagonal elements not specified" << endl;
 
 	out << "  Missing data symbol is " << missing << endl;
@@ -550,14 +550,14 @@ void NxsDistancesBlock::Report(
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Flushes taxonLabels and sets ntax to 0 in preparation for reading a new TAXA block.
-|	`triangle' to `NxsDistancesBlockEnum::lower', 
-|	`missing' to '?', 
-|	`labels' and `diagonal' to true, 
-|	`newtaxa' and `interleave' to false, 
-|	`expectedNtax' and `nchar' to 0. 
-|	and clears the matrix.
+/*!
+	Flushes taxonLabels and sets ntax to 0 in preparation for reading a new TAXA block.
+	`triangle' to `NxsDistancesBlockEnum::lower',
+	`missing' to '?',
+	`labels' and `diagonal' to true,
+	`newtaxa' and `interleave' to false,
+	`expectedNtax' and `nchar' to 0.
+	and clears the matrix.
 */
 void NxsDistancesBlock::Reset()
 	{
@@ -573,17 +573,17 @@ void NxsDistancesBlock::Reset()
 	triangle    = NxsDistancesBlockEnum(lower);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the value of nchar.
+/*!
+	Returns the value of nchar.
 */
-unsigned NxsDistancesBlock::GetNchar() NCL_COULD_BE_CONST 
+unsigned NxsDistancesBlock::GetNchar() NCL_COULD_BE_CONST /*v2.1to2.2 1 */
 	{
 	return nchar;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the value of the (`i', `j')th element of `matrix'. Assumes `i' and `j' are both in the range [0..`ntax') 
-|	and the distance stored at `matrix[i][j]' is not missing. Also assumes `matrix' is not NULL.
+/*!
+	Returns the value of the (`i', `j')th element of `matrix'. Assumes `i' and `j' are both in the range [0..`ntax')
+	and the distance stored at `matrix[i][j]' is not missing. Also assumes `matrix' is not NULL.
 */
 double NxsDistancesBlock::GetDistance(
   unsigned i,	/* the row */
@@ -592,73 +592,73 @@ double NxsDistancesBlock::GetDistance(
 	return GetCell(i,j).value;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the value of `missing'.
+/*!
+	Returns the value of `missing'.
 */
-char NxsDistancesBlock::GetMissingSymbol() NCL_COULD_BE_CONST 
+char NxsDistancesBlock::GetMissingSymbol() NCL_COULD_BE_CONST /*v2.1to2.2 1 */
 	{
 	return missing;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the value of `triangle'.
+/*!
+	Returns the value of `triangle'.
 */
-unsigned NxsDistancesBlock::GetTriangle() NCL_COULD_BE_CONST 
+unsigned NxsDistancesBlock::GetTriangle() NCL_COULD_BE_CONST /*v2.1to2.2 1 */
 	{
 	return triangle;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if the value of `triangle' is NxsDistancesBlockEnum(both), false otherwise.
+/*!
+	Returns true if the value of `triangle' is NxsDistancesBlockEnum(both), false otherwise.
 */
-bool NxsDistancesBlock::IsRectangular() NCL_COULD_BE_CONST 
+bool NxsDistancesBlock::IsRectangular() NCL_COULD_BE_CONST /*v2.1to2.2 1 */
 	{
 	return (triangle == NxsDistancesBlockEnum(both) ? true : false);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if the value of triangle is NxsDistancesBlockEnum(upper), false otherwise.
+/*!
+	Returns true if the value of triangle is NxsDistancesBlockEnum(upper), false otherwise.
 */
-bool NxsDistancesBlock::IsUpperTriangular() NCL_COULD_BE_CONST 
+bool NxsDistancesBlock::IsUpperTriangular() NCL_COULD_BE_CONST /*v2.1to2.2 1 */
 	{
 	return (triangle == NxsDistancesBlockEnum(upper) ? true : false);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if the value of triangle is NxsDistancesBlockEnum(lower), false otherwise.
+/*!
+	Returns true if the value of triangle is NxsDistancesBlockEnum(lower), false otherwise.
 */
-bool NxsDistancesBlock::IsLowerTriangular() NCL_COULD_BE_CONST 
+bool NxsDistancesBlock::IsLowerTriangular() NCL_COULD_BE_CONST /*v2.1to2.2 1 */
 	{
 	return (triangle == NxsDistancesBlockEnum(lower) ? true : false);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the value of diagonal.
+/*!
+	Returns the value of diagonal.
 */
-bool NxsDistancesBlock::IsDiagonal() NCL_COULD_BE_CONST 
+bool NxsDistancesBlock::IsDiagonal() NCL_COULD_BE_CONST /*v2.1to2.2 1 */
 	{
 	return diagonal;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the value of interleave.
+/*!
+	Returns the value of interleave.
 */
-bool NxsDistancesBlock::IsInterleave() NCL_COULD_BE_CONST 
+bool NxsDistancesBlock::IsInterleave() NCL_COULD_BE_CONST /*v2.1to2.2 1 */
 	{
 	return interleave;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the value of labels.
+/*!
+	Returns the value of labels.
 */
-bool NxsDistancesBlock::IsLabels() NCL_COULD_BE_CONST 
+bool NxsDistancesBlock::IsLabels() NCL_COULD_BE_CONST /*v2.1to2.2 1 */
 	{
 	return labels;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if the (`i',`j')th distance is missing. Assumes `i' and `j' are both in the range [0..`ntax') and 
-|	`matrix' is not NULL.
+/*!
+	Returns true if the (`i',`j')th distance is missing. Assumes `i' and `j' are both in the range [0..`ntax') and
+	`matrix' is not NULL.
 */
 bool NxsDistancesBlock::IsMissing(
   unsigned i,	/* the row */
@@ -667,9 +667,9 @@ bool NxsDistancesBlock::IsMissing(
 	return (bool)(GetCell(i,j).missing);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Sets the value of the (`i',`j')th matrix element to `d' and `missing' to false . Assumes `i' and `j' are both in 
-|	the range [0..`ntax') and `matrix' is not NULL.
+/*!
+	Sets the value of the (`i',`j')th matrix element to `d' and `missing' to false . Assumes `i' and `j' are both in
+	the range [0..`ntax') and `matrix' is not NULL.
 */
 void NxsDistancesBlock::SetDistance(
   unsigned i,	/* the row */
@@ -681,9 +681,9 @@ void NxsDistancesBlock::SetDistance(
 	c.missing = false;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Sets the value of the (`i', `j')th `matrix' element to missing. Assumes `i' and `j' are both in the range 
-|	[0..`ntax') and `matrix' is not NULL.
+/*!
+	Sets the value of the (`i', `j')th `matrix' element to missing. Assumes `i' and `j' are both in the range
+	[0..`ntax') and `matrix' is not NULL.
 */
 void NxsDistancesBlock::SetMissing(
   unsigned i,	/* the row */
@@ -694,8 +694,8 @@ void NxsDistancesBlock::SetMissing(
 	c.value = 0.0;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Sets `nchar' to `n'.
+/*!
+	Sets `nchar' to `n'.
 */
 void NxsDistancesBlock::SetNchar(
   unsigned n)	/* the number of characters */

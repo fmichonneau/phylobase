@@ -28,6 +28,7 @@
 #include "ncl/nxscharactersblock.h"
 #include "ncl/nxstaxablock.h"
 #include "ncl/nxstreesblock.h"
+
 using namespace std;
 
 #if defined(NCL_CONST_FUNCS) && NCL_CONST_FUNCS
@@ -96,9 +97,7 @@ void NxsReader::uninstallNCLSignalHandler()
 
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads a filename with NxsToken object. Calls NexusError on failures
-*/
+/*! Reads a filename with NxsToken object. Calls NexusError on failures */
 void NxsReader::ReadFilepath(const char *filename)
 	{
 	std::ifstream inf;
@@ -121,42 +120,57 @@ void NxsReader::ReadFilepath(const char *filename)
 	}
 
 
+/*! Reads the content of string `s` as if it were NEXUS. */
 void NxsReader::ReadStringAsNexusContent(const std::string & s)
 	{
 	std::istringstream inf(s);
 	this->ReadFilestream(inf);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads a filename with NxsToken object. Calls NexusError on failures
-*/
+/*! Reads the istream `inf` by creating a NxsToken object and then calling NxsReader::Execute() */
 void NxsReader::ReadFilestream(std::istream & inf)
 	{
 	NxsToken token(inf);
 	this->Execute(token);
 	}
 
-void NxsReader::DeleteBlocksFromFactories()
+/*! Returns the set of blocks that have been created from factories, and
+	removes reference to from the NxsReader's collections.
+*/
+std::set<NxsBlock *> NxsReader::RemoveBlocksFromFactoriesFromUsedBlockLists()
 	{
-	BlockReaderList saved;
 	std::set<NxsBlock *> todel;
+	BlockReaderList saved;
 	for (BlockReaderList::iterator bIt = blocksInOrder.begin(); bIt != blocksInOrder.end(); ++bIt)
 		{
 		NxsBlock * b  = *bIt;
 		if (BlockIsASingeltonReader(b))
 			saved.push_back(b);
 		else
+			{
 			todel.insert(b);
+			}
 		}
 	for (std::set<NxsBlock *>::iterator d = todel.begin(); d != todel.end(); ++d)
 		{
-
-		delete *d;
+		RemoveBlockFromUsedBlockList(*d);
 		}
-	blocksInOrder = saved;
-	lastExecuteBlocksInOrder = saved;
+	return todel;
 	}
 
+/*! Deletes the set of blocks that have been created from factories and
+	removes reference to from the NxsReader's collections.
+*/
+void NxsReader::DeleteBlocksFromFactories()
+	{
+	std::set<NxsBlock *> todel = RemoveBlocksFromFactoriesFromUsedBlockLists();
+	for (std::set<NxsBlock *>::iterator d = todel.begin(); d != todel.end(); ++d)
+		delete *d;
+	}
+
+/*! \returns true if the block `b` is one of the registered block readers (rather
+	than a block from a factory).
+*/
 bool NxsReader::BlockIsASingeltonReader(NxsBlock *b) const
 	{
 	NxsBlock * sb = blockList;
@@ -169,59 +183,81 @@ bool NxsReader::BlockIsASingeltonReader(NxsBlock *b) const
 	return false;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns a NxsBlock from `chosenBlockList` with a Title that matches `title`.
-|	In the event of ties, the most recently read block is returned.
-|	If `title` is NULL, then any block is considered a match.
-|	On output *nMatches will be the number of matches (if `nMatches` is not NULL).
-|	NULL will be returned if there are no matches.
+/*! \returns a NxsBlock from `chosenBlockList` with a Title that matches `title`.
+	In the event of ties, the most recently read block is returned.
+	If `title` is NULL, then any block is considered a match.
+	On output *nMatches will be the number of matches (if `nMatches` is not NULL).
+	NULL will be returned if there are no matches.
 */
 NxsBlock *NxsReader::FindBlockByTitle(const BlockReaderList & chosenBlockList, const char *title, unsigned *nMatches)
 	{
-	if (chosenBlockList.empty())
+	BlockReaderList  found = FindAllBlocksByTitle(chosenBlockList, title);
+
+	if (found.empty())
 		{
 		if (nMatches)
 			*nMatches = 0;
 		return NULL;
 		}
-	if (title == NULL)
-		{
-		if (nMatches)
-			*nMatches = (unsigned)chosenBlockList.size();
-		return static_cast<NxsTaxaBlockAPI *>(chosenBlockList.front());
-		}
-	NxsBlock * toReturn = NULL;
-	bool emptyTitle = strlen(title) == 0;
-	for (BlockReaderList::const_iterator cblIt = chosenBlockList.begin(); cblIt != chosenBlockList.end(); ++cblIt)
-		{
-		bool isMatch = false;
-		std::vector<std::string> v = this->GetAllTitlesForBlock(*cblIt);
-		for (std::vector<std::string>::const_iterator vIt = v.begin(); vIt != v.end(); ++vIt)
-			{
-			const std::string & n = *vIt;
-			if ((emptyTitle && n.empty()) || (NxsString::case_insensitive_equals(title, n.c_str())))
-				{
-				isMatch = true;
-				break;
-				}
-			}
-		if (isMatch)
-			{
-			if (toReturn)
-				*nMatches = *nMatches + 1;
-			else
-				{
-				toReturn = *cblIt;
-				if (nMatches)
-					*nMatches = 1;
-				else
-					break;
-				}
-			}
-		}
-	return toReturn;
+	if (nMatches)
+		*nMatches = (unsigned)found.size();
+	return (NxsBlock *) found.front();
 	}
 
+
+
+BlockReaderList NxsReader::FindAllBlocksByTitle(const BlockReaderList & chosenBlockList, const char *title)
+	{
+	BlockReaderList found = FindAllBlocksByTitleNoPrioritization(chosenBlockList, title);
+	if (found.empty())
+		return found;
+	map<int, BlockReaderList> byPriority;
+	for (BlockReaderList::const_iterator fIt = found.begin(); fIt != found.end(); ++fIt)
+		{
+		NxsBlock * b = *fIt;
+		int priority = GetBlockPriority(b);
+		byPriority[priority].push_back(b);
+		}
+	NCL_ASSERT(!byPriority.empty());
+	return byPriority.rbegin()->second;
+	}
+
+BlockReaderList NxsReader::FindAllBlocksByTitleNoPrioritization(const BlockReaderList & chosenBlockList, const char *title)
+	{
+	BlockReaderList found;
+	if (chosenBlockList.empty() || title == NULL)
+		{
+		found = chosenBlockList;
+		}
+	else
+		{
+		bool emptyTitle = strlen(title) == 0;
+		for (BlockReaderList::const_iterator cblIt = chosenBlockList.begin(); cblIt != chosenBlockList.end(); ++cblIt)
+			{
+			NxsBlock * b = *cblIt;
+			std::vector<std::string> v = this->GetAllTitlesForBlock(b);
+			for (std::vector<std::string>::const_iterator vIt = v.begin(); vIt != v.end(); ++vIt)
+				{
+				const std::string & n = *vIt;
+				if ((emptyTitle && n.empty()) || (NxsString::case_insensitive_equals(title, n.c_str())))
+					{
+					found.push_back(b);
+					break;
+					}
+				}
+			}
+		}
+	return found;
+
+	}
+
+/*! 	\returns all of the TITLEs that have been used for the same block.
+
+	Identical blocks with the different titles can be stored once with all of the
+titles stored a list of "alias titles"
+
+	This will only happen for TAXA blocks, currently.
+*/
 std::vector<std::string> NxsReader::GetAllTitlesForBlock(const NxsBlock *b) const
 	{
 	std::vector<std::string> v;
@@ -232,12 +268,18 @@ std::vector<std::string> NxsReader::GetAllTitlesForBlock(const NxsBlock *b) cons
 	return v;
 	}
 
+/*! 	used internally to register a new "alias title" for a block */
 void NxsReader::RegisterAltTitle(const NxsBlock * b, std::string t)
 	{
 	std::list<std::string> & v = blockTitleAliases[b];
 	v.push_back(t);
 	}
 
+/*! \returns the pointer to the block with type ID (TAXA, CHARACTERS, ...) matching `btype`
+	 and title matching `title` or 0L if there is no such block.
+	 on output `nMatches` (if it is not 0L) will list the number of blocks that match this
+	 criteria.
+*/
 NxsBlock *NxsReader::FindBlockOfTypeByTitle(const std::string &btype, const char *title, unsigned *nMatches)
 	{
 	BlockTypeToBlockList::const_iterator btblIt = blockTypeToBlockList.find(btype);
@@ -251,11 +293,11 @@ NxsBlock *NxsReader::FindBlockOfTypeByTitle(const std::string &btype, const char
 	return FindBlockByTitle(chosenBlockList, title, nMatches);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	NOTE: cast to NxsTaxaBlockAPI *.  This is only called by NCL when factories and the Link API are in effect.
-|	When using these APIs, block readers that read "TAXA" blocks in a NEXUS file must inherit from
-|	NxsTaxaBlockAPI, or the behavior will be undefined.
-|	This requirement also applies to "implied" taxa blocks that are returned from CHARACTERS (or other) blocks.
+/*!
+	NOTE: cast to NxsTaxaBlockAPI *.  This should only called by NCL when factories and the Link API are in effect.
+	When using these APIs, block readers that read "TAXA" blocks in a NEXUS file must inherit from
+	NxsTaxaBlockAPI, or the behavior will be undefined.
+	This requirement also applies to "implied" taxa blocks that are returned from CHARACTERS (or other) blocks.
 */
 NxsTaxaBlockAPI *NxsReader::GetTaxaBlockByTitle(const char *title, unsigned *nMatches)
 	{
@@ -263,20 +305,20 @@ NxsTaxaBlockAPI *NxsReader::GetTaxaBlockByTitle(const char *title, unsigned *nMa
 	return static_cast<NxsTaxaBlockAPI *>(FindBlockOfTypeByTitle(btype, title, nMatches));
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	NOTE: cast to NxsCharactersBlockAPI *.	This is only called by NCL when factories and the Link API are in effect.
-|	When using these APIs, block readers that read "CHARACTERS" or "DATA" blocks in a NEXUS file must inherit from
-|	NxsCharactersBlockAPI, or the behavior will be undefined.
+/*!
+	NOTE: cast to NxsCharactersBlockAPI *.	This should only called by NCL when factories and the Link API are in effect.
+	When using these APIs, block readers that read "CHARACTERS" or "DATA" blocks in a NEXUS file must inherit from
+	NxsCharactersBlockAPI, or the behavior will be undefined.
 */
 NxsCharactersBlockAPI	*NxsReader::GetCharBlockByTitle(const char *title, unsigned *nMatches)
 	{
 	const std::string btype("CHARACTERS");
 	return static_cast<NxsCharactersBlockAPI *>(FindBlockOfTypeByTitle(btype, title, nMatches));
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	NOTE: cast to NxsTreesBlockAPI *.  This is only called by NCL when factories and the Link API are in effect.  In
-|	this case block readers that read "TREES" blocks in a NEXUS file must inherit from NxsTaxaBlockAPI, or the
-|	behavior will be undefined.
+/*!
+	NOTE: cast to NxsTreesBlockAPI *.  This should only called by NCL when factories and the Link API are in effect.  In
+	this case block readers that read "TREES" blocks in a NEXUS file must inherit from NxsTaxaBlockAPI, or the
+	behavior will be undefined.
 */
 NxsTreesBlockAPI *NxsReader::GetTreesBlockByTitle(const char *title, unsigned *nMatches)
 	{
@@ -284,8 +326,7 @@ NxsTreesBlockAPI *NxsReader::GetTreesBlockByTitle(const char *title, unsigned *n
 	return static_cast<NxsTreesBlockAPI *>(FindBlockOfTypeByTitle(btype, title, nMatches));
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Initializes both `blockList' and `currBlock' to NULL.
+/*! Initializes both `blockList' and `currBlock' to NULL.
 */
 NxsReader::NxsReader() : currentWarningLevel(UNCOMMON_SYNTAX_WARNING), alwaysReportStatusMessages(false)
 	{
@@ -295,9 +336,6 @@ NxsReader::NxsReader() : currentWarningLevel(UNCOMMON_SYNTAX_WARNING), alwaysRep
 	destroyRepeatedTaxaBlocks = false;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Nothing to be done.
-*/
 NxsReader::~NxsReader()
 	{
 	NxsBlock *curr;
@@ -315,16 +353,16 @@ NxsReader::~NxsReader()
 
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Add a factory for NEXUS block readers to the front of the factories list.
+/*!
+	Add a factory for NEXUS block readers to the front of the factories list.
 */
 void NxsReader::AddFactory(NxsBlockFactory *f)
 	{
 	if (f)
 		factories.push_front(f);
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Remove a factory for NEXUS block readers.
+/*!
+	Remove a factory for NEXUS block readers.
 */
 void NxsReader::RemoveFactory(NxsBlockFactory *f)
 	{
@@ -332,12 +370,12 @@ void NxsReader::RemoveFactory(NxsBlockFactory *f)
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Adds `newBlock' to the end of the list of NxsBlock objects growing from `blockList'. If `blockList' points to NULL,
-|	this function sets `blockList' to point to `newBlock'. Calls SetNexus method of `newBlock' to inform `newBlock' of
-|	the NxsReader object that now owns it. This is useful when the `newBlock' object needs to communicate with the
-|	outside world through the NxsReader object, such as when it issues progress reports as it is reading the contents
-|	of its block.
+/*!
+	Adds `newBlock' to the end of the list of NxsBlock objects growing from `blockList'. If `blockList' points to NULL,
+	this function sets `blockList' to point to `newBlock'. Calls SetNexus method of `newBlock' to inform `newBlock' of
+	the NxsReader object that now owns it. This is useful when the `newBlock' object needs to communicate with the
+	outside world through the NxsReader object, such as when it issues progress reports as it is reading the contents
+	of its block.
 */
 void NxsReader::Add(
   NxsBlock *newBlock)	/* a pointer to an existing block object */
@@ -360,9 +398,10 @@ void NxsReader::Add(
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns position (first block has position 0) of block `b' in `blockList'. Returns UINT_MAX if `b' cannot be found
-|	in `blockList'.
+/*!
+	\deprecated
+	Returns position (first block has position 0) of block `b' in `blockList'. Returns UINT_MAX if `b' cannot be found
+	in `blockList'.
 */
 unsigned NxsReader::PositionInBlockList(
   NxsBlock *b)	/* a pointer to an existing block object */
@@ -384,10 +423,13 @@ unsigned NxsReader::PositionInBlockList(
 	return pos;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reassign should be called if a block (`oldb') is about to be deleted (perhaps to make way for new data). Create
-|	the new block (`newb') before deleting `oldb', then call Reassign to replace `oldb' in `blockList' with `newb'.
-|	Assumes `oldb' exists and is in `blockList'.
+/*!
+	Reassign should be called if a block (`oldb') is about to be deleted (perhaps to make way for new data). Create
+	the new block (`newb') before deleting `oldb', then call Reassign to replace `oldb' in `blockList' with `newb'.
+	Assumes `oldb' exists and is in `blockList'.
+
+	This function is necessary in v2.0, but replacement of blocks is more easily done
+	with block factories in NCL v2.1 and higher.
 */
 void NxsReader::Reassign(
   NxsBlock *oldb,	/* a pointer to the block object soon to be deleted */
@@ -416,39 +458,35 @@ void NxsReader::Reassign(
 	curr->SetNexus(NULL);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	If `blockList' data member still equals NULL, returns true; otherwise, returns false. `blockList' will not be equal
-|	to NULL if the Add function has been called to add a block object to the list.
-*/
 bool NxsReader::BlockListEmpty()
 	{
 	return (blockList == NULL ? true : false);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function was created for purposes of debugging a new NxsBlock. This version does nothing; to create an active
-|	DebugReportBlock function, override this version in the derived class and call the Report function of `nexusBlock'.
-|	This function is called whenever the main NxsReader Execute function encounters the [&spillall] command comment
-|	between blocks in the data file. The Execute function goes through all blocks and passes them, in turn, to this
-|	DebugReportBlock function so that their contents are displayed. Placing the [&spillall] command comment between
-|	different versions of a block allows multiple blocks of the same type to be tested using one long data file. Say
-|	you are interested in testing whether the normal, transpose, and interleave format of a matrix can all be read
-|	correctly. If you put three versions of the block in the data file one after the other, the second one will wipe out
-|	the first, and the third one will wipe out the second, unless you have a way to report on each one before the next
-|	one is read. This function provides that ability.
+/*!
+	This function was created for purposes of debugging a new NxsBlock. This version does nothing; to create an active
+	DebugReportBlock function, override this version in the derived class and call the Report function of `nexusBlock'.
+	This function is called whenever the main NxsReader Execute function encounters the [&spillall] command comment
+	between blocks in the data file. The Execute function goes through all blocks and passes them, in turn, to this
+	DebugReportBlock function so that their contents are displayed. Placing the [&spillall] command comment between
+	different versions of a block allows multiple blocks of the same type to be tested using one long data file. Say
+	you are interested in testing whether the normal, transpose, and interleave format of a matrix can all be read
+	correctly. If you put three versions of the block in the data file one after the other, the second one will wipe out
+	the first, and the third one will wipe out the second, unless you have a way to report on each one before the next
+	one is read. This function provides that ability.
 */
 void NxsReader::DebugReportBlock(
   NxsBlock &)	/* the block that should be reported */
 	{
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Detaches `oldBlock' from the list of NxsBlock objects growing from `blockList'. If `blockList' itself points to
-|	`oldBlock', this function sets `blockList' to point to `oldBlock->next'. Note: the object pointed to by `oldBlock'
-|	is not deleted, it is simply detached from the linked list. No harm is done in Detaching a block pointer that has
-|	already been detached previously; if `oldBlock' is not found in the block list, Detach simply returns quietly. If
-|	`oldBlock' is found, its SetNexus object is called to set the NxsReader pointer to NULL, indicating that it is no
-|	longer owned by (i.e., attached to) a NxsReader object.
+/*!
+	Detaches `oldBlock' from the list of NxsBlock objects growing from `blockList'. If `blockList' itself points to
+	`oldBlock', this function sets `blockList' to point to `oldBlock->next'. Note: the object pointed to by `oldBlock'
+	is not deleted, it is simply detached from the linked list. No harm is done in Detaching a block pointer that has
+	already been detached previously; if `oldBlock' is not found in the block list, Detach simply returns quietly. If
+	`oldBlock' is found, its SetNexus object is called to set the NxsReader pointer to NULL, indicating that it is no
+	longer owned by (i.e., attached to) a NxsReader object.
 */
 void NxsReader::Detach(
   NxsBlock *oldBlock)	/* a pointer to an existing block object */
@@ -489,12 +527,12 @@ void NxsReader::Detach(
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called by the NxsReader object when a block named `blockName' is entered. Allows derived class overriding this
-|	function to notify user of progress in parsing the NEXUS file. Also gives program the opportunity to ask user if it
-|	is ok to purge data currently contained in this block. If user is asked whether existing data should be deleted, and
-|	the answer comes back no, then then the overrided function should return false, otherwise it should return true.
-|	This (base class) version always returns true.
+/*!
+	Called by the NxsReader object when a block named `blockName' is entered. Allows derived class overriding this
+	function to notify user of progress in parsing the NEXUS file. Also gives program the opportunity to ask user if it
+	is ok to purge data currently contained in this block. If user is asked whether existing data should be deleted, and
+	the answer comes back no, then then the overrided function should return false, otherwise it should return true.
+	This (base class) version always returns true.
 */
 bool NxsReader::EnteringBlock(
   NxsString )	/* the name of the block just entered */
@@ -502,27 +540,26 @@ bool NxsReader::EnteringBlock(
 	return true;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called by the NxsReader object when a block named `blockName' is being exited. Allows derived class overriding this
-|	function to notify user of progress in parsing the NEXUS file.
+/*!
+	Called by the NxsReader object when a block named `blockName' is being exited. Allows derived class overriding this
+	function to notify user of progress in parsing the NEXUS file.
 */
 void NxsReader::ExitingBlock(
   NxsString )	/* the name of the block being exited */
 	{
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called after `block' has returned from NxsBlock::Read()
+/*!
+	Called after `block' has returned from NxsBlock::Read()
 */
 void NxsReader::PostBlockReadingHook(
   NxsBlock & /*block*/) /// the block that was just read
 	{
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Uses the registered Factories to spawn a reader for blocks with the name "currBlockName."
-|	if sourceOfBlock is not NULL, then *sourceOfBlock will alias to the NxsBlockFactory used.
-|	Returns NULL (and does not modify *sourceOfBlock), if no Factory is found that returns a block
+/*! Uses the registered Factories to spawn a reader for blocks with the name "currBlockName."
+	if sourceOfBlock is not NULL, then *sourceOfBlock will alias to the NxsBlockFactory used.
+	Returns NULL (and does not modify *sourceOfBlock), if no Factory is found that returns a block
 */
 NxsBlock *NxsReader::CreateBlockFromFactories(const std::string & currBlockName, NxsToken &token, NxsBlockFactory **sourceOfBlock)
 	{
@@ -544,25 +581,39 @@ NxsBlock *NxsReader::CreateBlockFromFactories(const std::string & currBlockName,
 	return NULL;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads the NxsReader data file from the input stream provided by `token'. This function is responsible for reading
-|	through the name of a each block. Once it has read a block name, it searches `blockList' for a block object to
-|	handle reading the remainder of the block's contents. The block object is responsible for reading the END or
-|	ENDBLOCK command as well as the trailing semicolon. This function also handles reading comments that are outside
-|	of blocks, as well as the initial "#NEXUS" keyword. The `notifyStartStop' argument is provided in case you do not
-|	wish the ExecuteStart and ExecuteStop functions to be called. These functions are primarily used for creating and
-|	destroying a dialog box to show progress, and nested Execute calls can thus cause problems (e.g., a dialog box is
-|	destroyed when the inner Execute calls ExecuteStop and the outer Execute still expects the dialog box to be
-|	available). Specifying `notifyStartStop' false for all the nested Execute calls thus allows the outermost Execute
-|	call to control creation and destruction of the dialog box.
+/*!
+	Reads the NxsReader data file from the input stream provided by `token'. This function is responsible for reading
+	through the name of a each block. Once it has read a block name, it searches for a block reader to
+	handle reading the remainder of the block's contents.
+
+	The block object's Read() method is responsible for reading the END or ENDBLOCK command as well as the trailing semicolon.
+
+	Execute() handles reading comments that are outside of blocks, as well as the initial "#NEXUS" keyword.
+
+	As discussed in \ref NexusErrors exceptions raised during parsing result in calls to ::NexusError()
+
+	If `notifyStartStop' is false then ExecuteStart and ExecuteStop functions will not to be called.
+
+	The order of operations is:
+		-# Read until next Begin command.
+		-# Search through the registered block instances to find one that returns
+			true from NxsBlock::CanReadBlockType()
+		-# If none is found then CreateBlockFromFactories is called.
+		-# If no appropriate block reader has been created, then SkippingBlock hook will
+			be called (and the NxsReader will call ReadUntilEndblock to read until
+			the END of the block before returning to step 1.
+		-# If an appropriate block reader was found in steps 2 or 3 then ExecuteBlock() will be called.
+
 */
 void NxsReader::Execute(
-  NxsToken	&token,				/* the token object used to grab NxsReader tokens */
-  bool		notifyStartStop)	/* if true, ExecuteStarting and ExecuteStopping will be called */
+  NxsToken	&token,				/*!< the token object used to grab NxsReader tokens */
+  bool		notifyStartStop)	/*!< if true, ExecuteStarting and ExecuteStopping will be called */
 	{
 	bool signalHandlerInstalled = false;
+	unsigned numSigInts = 0;
 	if (NxsReader::nclCatchesSignals)
 		{
+		numSigInts = getNumSignalIntsCaught();
 		installNCLSignalHandler();
 		signalHandlerInstalled = true;
 		}
@@ -576,9 +627,14 @@ void NxsReader::Execute(
 		throw;
 		}
 	if (signalHandlerInstalled)
+		{
 		uninstallNCLSignalHandler();
+		if (numSigInts != getNumSignalIntsCaught())
+			throw NxsSignalCanceledParseException("Reading NEXUS content");
+		}
 	}
 
+/*! used internally to  do most of the work of Execute() */
 void NxsReader::CoreExecutionTasks(
   NxsToken	&token,				/* the token object used to grab NxsReader tokens */
   bool		notifyStartStop)	/* if true, ExecuteStarting and ExecuteStopping will be called */
@@ -711,6 +767,7 @@ void NxsReader::ClearContent()
 		}
 	currBlock = blockList;
 	blocksInOrder.clear();
+	blockPriorities.clear();
 	lastExecuteBlocksInOrder.clear();
 	blockTypeToBlockList.clear();
 	blockTitleHistoryMap.clear();
@@ -718,14 +775,28 @@ void NxsReader::ClearContent()
 	}
 
 
+/*! \returns a pointer to a previously process  NxsTaxaBlock with the same taxon
+	labels. The comparison of labels is case-insensitive and not affected by the
+	ordering of taxa within the block.
+
+	TAXA blocks are often repeated in sets of NEXUS files (because a bare TREES block
+	constitutes an illegal NEXUS file, and because NCL spawns implied Taxa blocks
+	if it reads just a Trees block).
+
+	If NxsReader::cullIdenticalTaxaBlocks(true) has been called then NxsReader::GetOriginalTaxaBlock
+	will be called as part of determining whether or not a taxa block should be deleted.
+
+	\warning: this is a hole in the const-correctness because the caller could (but shouldn't
+		modify the Taxa block).
+*/
 NxsTaxaBlockAPI * NxsReader::GetOriginalTaxaBlock(const NxsTaxaBlockAPI * testB) const
 	{
 	if (!testB)
-		return false;
+		return 0L;
 	const std::string idstring("TAXA");
 	BlockTypeToBlockList::const_iterator bttblIt = blockTypeToBlockList.find(idstring);
 	if (bttblIt == blockTypeToBlockList.end())
-		return false;
+		return 0L;
 	const BlockReaderList & brl = bttblIt->second;
 	const unsigned ntt = testB->GetNumTaxonLabels();
 	const std::vector<std::string> testL = testB->GetAllLabels();
@@ -753,6 +824,39 @@ NxsTaxaBlockAPI * NxsReader::GetOriginalTaxaBlock(const NxsTaxaBlockAPI * testB)
 	}
 
 
+/*! Called internally when the NxsReader has found the correct NxsBlock to read
+	a block in a file.
+
+	`token` will be at the block ID.
+	`currBlockName` will be the block ID as a string.
+	`currentBlock` will be the block reader to be used
+	`sourceOfBlock` is the factory  that created the block (or 0L). If sourceOfBlock
+		is not NULL then it will be alerted if the block is skipped (BlockSkipped() method)
+		or there was an error in the read (BlockError() method). The factory is expected
+		to delete the block instances in these cases (NxsReader will not refer to those
+		instances again).
+
+
+
+	The following steps occur:
+		- the EnteringBlock hook is called (if it returns false, the block will be skipped by calling
+			NxsReader::SkippingBlock
+		- NxsBlock::Reset() is called on the reader block
+		- NxsBlock::Read() method of the reader block is called
+		- If an exception is generated, the NexusError is called.
+		- If no exception is generated by Read then the block is processed:
+			- if NxsReader::cullIdenticalTaxaBlocks(true) has been called before Execute and this
+				is a repeated TAXA block, the block will be deleted.
+			- the BlockReadHook() will store all of the implied blocks
+				(by calling NxsBlock::GetImpliedBlocks()) and the block itself.
+			- if one of the implied blocks is a repeated TAXA block and
+				NxsReader::cullIdenticalTaxaBlocks(true) has been called, then
+				the blocks NxsBlock::SwapEquivalentTaxaBlock() method will determine
+				whether or not the duplicate taxa block can be deleted.
+			- each stored block will generate a call to NxsReader::AddBlockToUsedBlockList()
+		- ExitingBlock() is called
+		- PostBlockReadingHook() is called
+*/
 bool NxsReader::ExecuteBlock(NxsToken &token, const NxsString &currBlockName, NxsBlock *currentBlock, NxsBlockFactory * sourceOfBlock)
 	{
 	if (!EnteringBlock(currBlockName))
@@ -807,16 +911,23 @@ bool NxsReader::ExecuteBlock(NxsToken &token, const NxsString &currBlockName, Nx
 		}
 	catch (NxsException &x)
 		{
+		NxsString m;
 		if (currentBlock->errormsg.length() > 0)
-			NexusError(currentBlock->errormsg, x.pos, x.line, x.col);
+			m = currentBlock->errormsg;
 		else
-			NexusError(x.msg, x.pos, x.line, x.col);
+			m = x.msg;
 		currentBlock->Reset();
-		if (sourceOfBlock)
+		if (sourceOfBlock != 0)
+			{
+
 			sourceOfBlock->BlockError(currentBlock);
+			}
+		else
+
 		token.SetBlockName(0L);
 		token.SetEOFAllowed(true);
 		currentBlock = NULL;
+		NexusError(m, x.pos, x.line, x.col);
 		return false;
 		}	// catch (NxsException x)
 	ExitingBlock(currBlockName);
@@ -824,6 +935,7 @@ bool NxsReader::ExecuteBlock(NxsToken &token, const NxsString &currBlockName, Nx
 	return !eofFound;
 	}
 
+/*! Called by NxsReader::ExecuteBlock() to store the block and its implied blocks \ref NxsReader::ExecuteBlock()*/
 void NxsReader::BlockReadHook(const NxsString &currBlockName, NxsBlock *currentBlock, NxsToken * token)
 	{
 	VecBlockPtr implied = currentBlock->GetImpliedBlocks();
@@ -862,57 +974,57 @@ void NxsReader::BlockReadHook(const NxsString &currBlockName, NxsBlock *currentB
 	this->AddBlockToUsedBlockList(currBlockName, currentBlock, token);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns a string containing the copyright notice for the NxsReader Class Library, useful for reporting the use of
-|	this library by programs that interact with the user.
+/*!
+	Returns a string containing the copyright notice for the NxsReader Class Library, useful for reporting the use of
+	this library by programs that interact with the user.
 */
 const char * NxsReader::NCLCopyrightNotice()
 	{
 	return NCL_COPYRIGHT;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns a string containing the URL for the NxsReader Class Library internet home page.
+/*!
+	Returns a string containing the URL for the NxsReader Class Library internet home page.
 */
 const char * NxsReader::NCLHomePageURL()
 	{
 	return NCL_HOMEPAGEURL;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns a string containing the name and current version of the NxsReader Class Library, useful for reporting the
-|	use of this library by programs that interact with the user.
+/*!
+	Returns a string containing the name and current version of the NxsReader Class Library, useful for reporting the
+	use of this library by programs that interact with the user.
 */
 const char * NxsReader::NCLNameAndVersion()
 	{
 	return NCL_NAME_AND_VERSION;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called just after Execute member function reads the opening "#NEXUS" token in a NEXUS data file. Override this
-|	virtual base class function if your application needs to do anything at this point in the execution of a NEXUS data
-|	file (e.g. good opportunity to pop up a dialog box showing progress). Be sure to call the Execute function with the
-|	`notifyStartStop' argument set to true, otherwise ExecuteStarting will not be called.
-|
+/*!
+	Called just after Execute member function reads the opening "#NEXUS" token in a NEXUS data file. Override this
+	virtual base class function if your application needs to do anything at this point in the execution of a NEXUS data
+	file (e.g. good opportunity to pop up a dialog box showing progress). Be sure to call the Execute function with the
+	`notifyStartStop' argument set to true, otherwise ExecuteStarting will not be called.
+
 */
 void NxsReader::ExecuteStarting()
 	{
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called when Execute member function encounters the end of the NEXUS data file, or the special comment [&LEAVE] is
-|	found between NEXUS blocks. Override this virtual base class function if your application needs to do anything at
-|	this point in the execution of a NEXUS data file (e.g. good opportunity to hide or destroy a dialog box showing
-|	progress). Be sure to call the Execute function with the `notifyStartStop' argument set to true, otherwise
-|	ExecuteStopping will not be called.
+/*!
+	Called when Execute member function encounters the end of the NEXUS data file, or the special comment [&LEAVE] is
+	found between NEXUS blocks. Override this virtual base class function if your application needs to do anything at
+	this point in the execution of a NEXUS data file (e.g. good opportunity to hide or destroy a dialog box showing
+	progress). Be sure to call the Execute function with the `notifyStartStop' argument set to true, otherwise
+	ExecuteStopping will not be called.
 */
 void NxsReader::ExecuteStopping()
 	{
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called when an error is encountered in a NEXUS file. Allows program to give user details of the error as well as
-|	the precise location of the error.
+/*!
+	Called when an error is encountered in a NEXUS file. Allows program to give user details of the error as well as
+	the precise location of the error.
 */
 void NxsReader::NexusError(
   NxsString ,	/* the error message to be displayed */
@@ -922,35 +1034,37 @@ void NxsReader::NexusError(
 	{
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function may be used to report progess while reading through a file. For example, the NxsAllelesBlock class
-|	uses this function to report the name of the population it is currently reading so the user doesn't think the
-|	program has hung on large data sets.
+/*!
+	This function may be used to report progess while reading through a file. For example, the NxsAllelesBlock class
+	uses this function to report the name of the population it is currently reading so the user doesn't think the
+	program has hung on large data sets.
 */
 void NxsReader::OutputComment(
   const NxsString &)	/* a comment to be shown on the output */
 	{
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function is called when an unknown block named `blockName' is about to be skipped. Override this pure virtual
-|	function to provide an indication of progress as the NEXUS file is being read.
+/*!
+	This function is called when an unknown block named `blockName' is about to be skipped. Override this pure virtual
+	function to provide an indication of progress as the NEXUS file is being read.
 */
 void NxsReader::SkippingBlock(
   NxsString )	/* the name of the block being skipped */
 	{
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function is called when a disabled block named `blockName' is encountered in a NEXUS data file being executed.
-|	Override this pure virtual function to handle this event in an appropriate manner. For example, the program may
-|	wish to inform the user that a data block was encountered in what is supposed to be a tree file.
+/*!
+	This function is called when a disabled block named `blockName' is encountered in a NEXUS data file being executed.
+	Override this pure virtual function to handle this event in an appropriate manner. For example, the program may
+	wish to inform the user that a data block was encountered in what is supposed to be a tree file.
 */
 void NxsReader::SkippingDisabledBlock(
   NxsString )	/* the name of the disabled block being skipped */
 	{
 	}
 
+
+/*! Used internally to skip until teh END; or ENDBLOCK; command. */
 bool NxsReader::ReadUntilEndblock(NxsToken &token, const std::string & )
 	{
 	for (;;)
@@ -969,9 +1083,12 @@ bool NxsReader::ReadUntilEndblock(NxsToken &token, const std::string & )
 				}
 			return true;
 			}
+		else
+			token.ProcessAsCommand(NULL);
 		}
 	}
 
+/*! Convenience function for setting the NxsTaxaBlockFactory */
 void NxsReader::SetTaxaBlockFactory(NxsTaxaBlockFactory *f)
 	{
 	if (this->taxaBlockFactory)
@@ -980,23 +1097,10 @@ void NxsReader::SetTaxaBlockFactory(NxsTaxaBlockFactory *f)
 	if (taxaBlockFactory)
 		this->AddFactory(this->taxaBlockFactory);
 	}
-/*
-void NxsReader::SetCharBlockFactory(NxsCharactersBlockFactory *f)
-	{
-	if (this->charBlockFactory)
-		this->RemoveFactory(this->charBlockFactory);
-	this->charBlockFactory = f;
-	if (charBlockFactory)
-		this->AddFactory(this->charBlockFactory);
-	}
-void NxsReader::SetTreesBlockFactory(NxsTreesBlockFactory *f)
-	{
-	if (this->treesBlockFactory)
-		this->RemoveFactory(this->treesBlockFactory);
-	this->treesBlockFactory = f;
-	if (treesBlockFactory)
-		this->AddFactory(this->treesBlockFactory);
-	}
+/*! \returns the last TAXA block.
+	\warning: This should only called when the client knows that the TAXA block
+	inherits from NxsTaxaBlockAPI (static_cast is used). This will be true if the
+	client code has not derived its own NxsBlock for reading TAXA blocks
 */
 NxsTaxaBlockAPI *NxsReader::GetLastStoredTaxaBlock()
 	{
@@ -1005,6 +1109,11 @@ NxsTaxaBlockAPI *NxsReader::GetLastStoredTaxaBlock()
 	return static_cast<NxsTaxaBlockAPI *>(nb); //dynamic_cast<NxsTaxaBlockAPI *>(nb);
 	}
 
+/*! \returns the last CHARACTERS/DATA block.
+	\warning: This should only called when the client knows that the TAXA block
+	inherits from NxsTaxaBlockAPI (static_cast is used). This will be true if the
+	client code has not derived its own NxsBlock for reading TAXA blocks
+*/
 NxsCharactersBlockAPI *NxsReader::GetLastStoredCharactersBlock()
 	{
 	const std::string idstring("CHARACTERS");
@@ -1012,12 +1121,20 @@ NxsCharactersBlockAPI *NxsReader::GetLastStoredCharactersBlock()
 	return static_cast<NxsCharactersBlockAPI *>(nb); //dynamic_cast<NxsCharactersBlockAPI *>(nb);
 	}
 
+/*! \returns the last TREES block.
+	\warning: This should only called when the client knows that the TAXA block
+	inherits from NxsTaxaBlockAPI (static_cast is used). This will be true if the
+	client code has not derived its own NxsBlock for reading TAXA blocks
+*/
 NxsTreesBlockAPI *NxsReader::GetLastStoredTreesBlock()
 	{
 	const std::string idstring("TREES");
 	NxsBlock * nb = GetLastStoredBlockByID(idstring);
 	return static_cast<NxsTreesBlockAPI *>(nb); //dynamic_cast<NxsTreesBlockAPI *>(nb);
 	}
+
+/*! \returns the last block with block ID ("TAXA", "DATA"...) indicated by key
+*/
 
 NxsBlock *NxsReader::GetLastStoredBlockByID(const std::string &key)
 	{
@@ -1027,7 +1144,12 @@ NxsBlock *NxsReader::GetLastStoredBlockByID(const std::string &key)
 	return bttblIt->second.back();
 	}
 
+/*! Used internally. Called by AddBlockToUsedBlockList() this function will generate
+	a NxsException if the block's title is found in another block of the same block ID type (TAXA, CHARACTERS, ...)
 
+	If the block has no title, an automatically generated title will be supplied with the form
+		Untitled <block type ID> Block #
+*/
 void NxsReader::NewBlockTitleCheckHook(const std::string &blockname, NxsBlock *p, NxsToken *token)
 	{
 	NxsBlockTitleHistoryMap::iterator mIt = blockTitleHistoryMap.find(blockname);
@@ -1084,14 +1206,19 @@ void NxsReader::NewBlockTitleCheckHook(const std::string &blockname, NxsBlock *p
 	previousTitles.push_back(pTitle);
 	}
 
-void NxsReader::AddBlockToUsedBlockList(const std::string &instring, NxsBlock *p, NxsToken *token)
+/*! Used internally to store the correctly read block `p`
+	`token` is the token that is being parsed (or 0L).
+
+	\warning This can generate NxsExceptions if there are clashes in the block title
+*/
+void NxsReader::AddBlockToUsedBlockList(const std::string &blockTypeID, NxsBlock *p, NxsToken *token)
 	{
 	NCL_ASSERT(p);
 	std::string n;
-	if (instring == "DATA")
+	if (blockTypeID == "DATA")
 		n = std::string("CHARACTERS");
 	else
-		n = instring;
+		n = blockTypeID;
 	NewBlockTitleCheckHook(n, p, token);
 	BlockTypeToBlockList::iterator bttblIt = blockTypeToBlockList.find(n);
 	if (bttblIt == blockTypeToBlockList.end())
@@ -1100,10 +1227,17 @@ void NxsReader::AddBlockToUsedBlockList(const std::string &instring, NxsBlock *p
 		bttblIt->second.push_back(p);
 	blocksInOrder.remove(p);
 	blocksInOrder.push_back(p);
+	if (this->GetBlockPriority(p) < 0)
+		AssignBlockPriority(p, 0);
+
 	lastExecuteBlocksInOrder.remove(p);
 	lastExecuteBlocksInOrder.push_back(p);
 	}
 
+/*! Removes a block from the NxsReader's records. Does NOT delete the block!
+	\returns the number of times the block was in the reader's block lists (usually
+		either 0 or 1).
+*/
 unsigned NxsReader::RemoveBlockFromUsedBlockList(NxsBlock *p)
 	{
 	unsigned totalDel = 0;
@@ -1122,6 +1256,7 @@ unsigned NxsReader::RemoveBlockFromUsedBlockList(NxsBlock *p)
 	for (std::vector<std::string>::const_iterator keyIt = keysToDel.begin(); keyIt != keysToDel.end(); ++keyIt)
 		blockTypeToBlockList.erase(*keyIt);
 	blocksInOrder.remove(p);
+	blockPriorities.erase(p);
 	lastExecuteBlocksInOrder.remove(p);
 	std::string blockID =  p->GetID();
 	NxsBlockTitleHistoryMap::iterator mIt = blockTitleHistoryMap.find(blockID);
@@ -1139,11 +1274,11 @@ unsigned NxsReader::RemoveBlockFromUsedBlockList(NxsBlock *p)
 				 ++ptIt;
 			}
 		}
-
-
 	return totalDel;
 	}
 
+/*! Returns a set of all of the blocks that have been successfully read.
+*/
 std::set<NxsBlock*> NxsReader::GetSetOfAllUsedBlocks()
 	{
 	std::set<NxsBlock*> s;
@@ -1217,3 +1352,45 @@ void NxsReader::statusMessage(const std::string & m) const
 		std::cerr << m << std::endl;
 	}
 }
+
+/*! Clears the lists of all of the blocks that have been read.
+	NOTE: does NOT free any memory or call Reset() on any blocks"!!
+
+	This call can be used to "tell" a reader instance that you have taken
+	over the memory management for all of the blocks that it has read (or created).
+*/
+void NxsReader::ClearUsedBlockList()
+	{
+	RemoveBlocksFromFactoriesFromUsedBlockLists();
+	blocksInOrder.clear();
+	blockPriorities.clear();
+	lastExecuteBlocksInOrder.clear();
+	blockTypeToBlockList.clear();
+	}
+
+void NxsReader::AssignBlockPriority(NxsBlock *b, int priorityLevel)
+	{
+	blockPriorities[b] = priorityLevel;
+	}
+
+int	NxsReader::GetBlockPriority(NxsBlock *b) const
+	{
+	std::map<NxsBlock *, int>::const_iterator bIt = blockPriorities.find(b);
+	if (bIt == blockPriorities.end())
+		return 0;
+	return bIt->second;
+	}
+
+void NxsReader::DemoteBlocks(int priorityLevel)
+	{
+	BlockReaderList brl = GetUsedBlocksInOrder();
+	BlockReaderList::iterator brlIt = brl.begin();
+	for (; brlIt != brl.end(); ++brlIt)
+		{
+		NxsBlock * b = *brlIt;
+		AssignBlockPriority(b, priorityLevel);
+		}
+	}
+
+
+

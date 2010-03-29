@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 #include <iomanip>
@@ -43,7 +43,7 @@ class BogusToIndMapper: public NxsLabelToIndicesMapper
 			e << "The symbol " << label << " was not recognized";
 			throw NxsException(e);
 			}
-			
+
 		virtual unsigned GetIndexSet(const std::string &, NxsUnsignedSet * ) const
 			{
 			return 0;
@@ -65,7 +65,7 @@ class BogusToIndMapper: public NxsLabelToIndicesMapper
 			e << "The symbol " << label << " was not recognized";
 			throw NxsException(e);
 			}
-			
+
 		std::vector<std::string> GetLabels() const
 			{
 			queried=true;
@@ -74,7 +74,7 @@ class BogusToIndMapper: public NxsLabelToIndicesMapper
 			}
 		mutable bool queried;
 	};
-	
+
 
 void NxsTransformationManager::Reset()
 	{
@@ -137,7 +137,7 @@ void NxsTransformationManager::WriteUserType(std::ostream &out) const
 						n += "i";
 					else
 						n += el;
-					out << "   " << NxsString::GetEscaped(n); 
+					out << "   " << NxsString::GetEscaped(n);
 					}
 				}
 			}
@@ -175,7 +175,7 @@ void NxsTransformationManager::WriteUserType(std::ostream &out) const
 						n.clear();
 						n += el;
 						}
-					out << "   " << NxsString::GetEscaped(n); 
+					out << "   " << NxsString::GetEscaped(n);
 					}
 				}
 			}
@@ -229,8 +229,8 @@ void NxsTransformationManager::WriteWtSet(std::ostream &out) const
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns -1 if `index` is not in `wtset`
+/*!
+	Returns -1 if `index` is not in `wtset`
 */
 void NxsTransformationManager::SetDefaultTypeName(const std::string &n)
 	{
@@ -246,15 +246,15 @@ void NxsTransformationManager::SetDefaultTypeName(const std::string &n)
 
 bool NxsTransformationManager::IsEmpty() const
 	{
-	return (userTypeNames.empty() 
-			&& dblWtSets.empty() 
-			&& intWtSets.empty() 
-			&& typeSets.empty() 
+	return (userTypeNames.empty()
+			&& dblWtSets.empty()
+			&& intWtSets.empty()
+			&& typeSets.empty()
 			&& (def_type.empty() || !NxsString::case_insensitive_equals(def_type.c_str(), "ORD")));
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns -1 if `index` is not in `wtset`
+/*!
+	Returns -1 if `index` is not in `wtset`
 */
 double NxsTransformationManager::GetWeightForIndex(const ListOfDblWeights & wtset, unsigned index)
 	{
@@ -266,8 +266,8 @@ double NxsTransformationManager::GetWeightForIndex(const ListOfDblWeights & wtse
 	return -1.0;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns -1 if `index` is not in `wtset`
+/*!
+	Returns -1 if `index` is not in `wtset`
 */
 int NxsTransformationManager::GetWeightForIndex(const ListOfIntWeights & wtset, unsigned index)
 	{
@@ -279,8 +279,8 @@ int NxsTransformationManager::GetWeightForIndex(const ListOfIntWeights & wtset, 
 	return 1;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Raises an NxsNCLAPIException if the `n` is not a type name.
+/*!
+	Raises an NxsNCLAPIException if the `n` is not a type name.
 */
 bool NxsTransformationManager::IsIntType(const std::string & n) const
 	{
@@ -298,8 +298,8 @@ bool NxsTransformationManager::IsIntType(const std::string & n) const
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if `n` is the name of a known type (standard or user type) -- not case-sensitive.
+/*!
+	Returns true if `n` is the name of a known type (standard or user type) -- not case-sensitive.
 */
 bool NxsTransformationManager::IsValidTypeName(const std::string & n) const
 	{
@@ -308,8 +308,8 @@ bool NxsTransformationManager::IsValidTypeName(const std::string & n) const
 	return (allTypeNames.count(capName) > 0);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Raises an NxsNCLAPIException if the `n` is not a type name.
+/*!
+	Raises an NxsNCLAPIException if the `n` is not a type name.
 */
 bool NxsTransformationManager::IsStandardType(const std::string & n) const
 	{
@@ -318,8 +318,10 @@ bool NxsTransformationManager::IsStandardType(const std::string & n) const
 	return (standardTypeNames.count(capName) > 0);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Raises an NxsNCLAPIException if the `n` is not a type name.
+/*! Returns the Stepmatrix for User Type with the name `n`
+
+	Raises an NxsNCLAPIException if the `n` is not a type name or is the name of
+		a builtin type (like "ORDERED")
 */
 const NxsIntStepMatrix & NxsTransformationManager::GetIntType(const std::string & n) const
 	{
@@ -336,8 +338,10 @@ const NxsIntStepMatrix & NxsTransformationManager::GetIntType(const std::string 
 	throw NxsNCLAPIException(errormsg);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Raises an NxsNCLAPIException if the `n` is not a type name.
+/*! Returns the Stepmatrix for User Type with the name `n`
+
+	Raises an NxsNCLAPIException if the `n` is not a type name or is the name of
+		a builtin type (like "ORDERED")
 */
 const NxsRealStepMatrix & NxsTransformationManager::GetRealType(const std::string & n) const
 	{
@@ -378,9 +382,9 @@ const NxsIntStepMatrix::IntMatrix NxsTransformationManager::GetUnorderedType(uns
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Raises an NxsNCLAPIException if the `name` is the name of a "standard" type.
-|	Returns true if another user type was replaced.
+/*!
+	Raises an NxsNCLAPIException if the `name` is the name of a "standard" type.
+	Returns true if another user type was replaced.
 */
 bool NxsTransformationManager::AddIntType(const std::string &name, const NxsIntStepMatrix &s)
 	{
@@ -404,9 +408,9 @@ bool NxsTransformationManager::AddIntType(const std::string &name, const NxsIntS
 	return replacing;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Raises an NxsNCLAPIException if the `name` is the name of a "standard" type.
-|	Returns true if another user type was replaced.
+/*!
+	Raises an NxsNCLAPIException if the `name` is the name of a "standard" type.
+	Returns true if another user type was replaced.
 */
 bool NxsTransformationManager::AddRealType(const std::string &name, const NxsRealStepMatrix &s)
 	{
@@ -463,7 +467,7 @@ bool NxsTransformationManager::AddRealWeightSet(const std::string &name, const N
 		}
 	return replacing;
 	}
-	
+
 bool NxsTransformationManager::AddTypeSet(const std::string &name, const NxsPartition &ts, bool isDefault)
 	{
 	std::string capName(name.c_str());
@@ -527,11 +531,11 @@ void NxsAssumptionsBlock::AddCodonPosSet(const std::string & name, const NxsPart
 		def_codonPosSet.assign(name.c_str());
 	}
 
-	
+
 void NxsAssumptionsBlock::WriteOptions(std::ostream & out) const
 	{
 	const std::string d = transfMgr.GetDefaultTypeName();
-	if ((!d.empty() && !NxsString::case_insensitive_equals(d.c_str(), "ORD")) 
+	if ((!d.empty() && !NxsString::case_insensitive_equals(d.c_str(), "ORD"))
 		|| gapsAsNewstate || polyTCountValue != POLY_T_COUNT_UNKNOWN)
 		{
 		out << "    OPTIONS";
@@ -546,17 +550,17 @@ void NxsAssumptionsBlock::WriteOptions(std::ostream & out) const
 		out << ";\n";
 		}
 	}
-	
+
 bool NxsAssumptionsBlock::HasAssumptionsBlockCommands() const
 	{
-	return (gapsAsNewstate 
+	return (gapsAsNewstate
 			|| !transfMgr.IsEmpty()
-			|| !exsets.empty() 
+			|| !exsets.empty()
 			||  polyTCountValue != POLY_T_COUNT_UNKNOWN);
 	}
 bool NxsAssumptionsBlock::HasSetsBlockCommands() const
 	{
-	return (!charsets.empty() || !taxsets.empty() || !treesets.empty() 
+	return (!charsets.empty() || !taxsets.empty() || !treesets.empty()
 			||!charPartitions.empty() || !taxPartitions.empty() || !treePartitions.empty() );
 	}
 bool NxsAssumptionsBlock::HasCodonsBlockCommands() const
@@ -607,7 +611,7 @@ void NxsAssumptionsBlock::WriteAsNexus(std::ostream &out) const
 		else if (HasSetsBlockCommands())
 			treatAs = SETS_BLOCK_READ;
 		}
-	try 
+	try
 		{
 		if (HasSetsBlockCommands())
 			{
@@ -722,7 +726,7 @@ NxsAssumptionsBlockAPI	*NxsAssumptionsBlock::GetAssumptionsBlockForCharBlock(Nxs
 		{
 		int f = cbstatus & NxsBlock::BLOCK_LINK_UNUSED_MASK;
 		if (f == status)
-			return this;	
+			return this;
 		if (!(cbstatus & NxsBlock::BLOCK_LINK_USED))
 			{
 			if (cbstatus == BLOCK_LINK_UNINITIALIZED || cbstatus == BLOCK_LINK_UNKNOWN_STATUS)
@@ -765,7 +769,7 @@ NxsAssumptionsBlockAPI	*NxsAssumptionsBlock::GetAssumptionsBlockForTaxaBlock(Nxs
 		{
 		int f = cbstatus & NxsBlock::BLOCK_LINK_UNUSED_MASK;
 		if (f == status)
-			return this;	
+			return this;
 		if (!(cbstatus & NxsBlock::BLOCK_LINK_USED))
 			{
 			if (cbstatus == BLOCK_LINK_UNINITIALIZED || cbstatus == BLOCK_LINK_UNKNOWN_STATUS)
@@ -807,7 +811,7 @@ NxsAssumptionsBlockAPI	*NxsAssumptionsBlock::GetAssumptionsBlockForTreesBlock(Nx
 		{
 		int f = cbstatus & NxsBlock::BLOCK_LINK_UNUSED_MASK;
 		if (f == status)
-			return this;	
+			return this;
 		if (!(cbstatus & NxsBlock::BLOCK_LINK_USED))
 			{
 			if (cbstatus == BLOCK_LINK_UNINITIALIZED || cbstatus == BLOCK_LINK_UNKNOWN_STATUS)
@@ -862,7 +866,7 @@ NxsAssumptionsBlockAPI	*NxsAssumptionsBlock::GetAssumptionsBlockForCharTitle(con
 				if (charTitle == NULL)
 					effectiveB = this;
 				}
-			else 
+			else
 				{
 				if (NxsString::case_insensitive_equals(charTitle, t.c_str()))
 					effectiveB = this;
@@ -885,11 +889,11 @@ NxsAssumptionsBlockAPI	*NxsAssumptionsBlock::GetAssumptionsBlockForCharTitle(con
 		errormsg += cmd;
 		errormsg += " command was found which does not specify which CHARACTERS block it uses.   The most recent CHARACTERS block will be used.";
 		if (nexusReader)
-			nexusReader->NexusWarnToken(errormsg, NxsReader::AMBIGUOUS_CONTENT_WARNING, token); 
+			nexusReader->NexusWarnToken(errormsg, NxsReader::AMBIGUOUS_CONTENT_WARNING, token);
 		errormsg.clear();
 		effectiveB = GetAssumptionsBlockForCharBlock(cb, NxsBlock::BLOCK_LINK_TO_MOST_RECENT, token);
 		}
-	else 
+	else
 		{
 		NxsBlockLinkStatus statusRequested = (charTitle == NULL ? NxsBlock::BLOCK_LINK_TO_ONLY_CHOICE : NxsBlock::BLOCK_LINK_FROM_LINK_CMD);
 		effectiveB = GetAssumptionsBlockForCharBlock(cb, statusRequested, token);
@@ -923,7 +927,7 @@ NxsAssumptionsBlockAPI	*NxsAssumptionsBlock::GetAssumptionsBlockForTaxaTitle(con
 				if (taxTitle == NULL)
 					effectiveB = this;
 				}
-			else 
+			else
 				{
 				if (NxsString::case_insensitive_equals(taxTitle, t.c_str()))
 					effectiveB = this;
@@ -949,7 +953,7 @@ NxsAssumptionsBlockAPI	*NxsAssumptionsBlock::GetAssumptionsBlockForTaxaTitle(con
 		errormsg.clear();
 		effectiveB = GetAssumptionsBlockForTaxaBlock(cb, NxsBlock::BLOCK_LINK_TO_MOST_RECENT, token);
 		}
-	else 
+	else
 		{
 		NxsBlockLinkStatus statusRequested = (taxTitle == NULL ? NxsBlock::BLOCK_LINK_TO_ONLY_CHOICE : NxsBlock::BLOCK_LINK_FROM_LINK_CMD);
 		effectiveB = GetAssumptionsBlockForTaxaBlock(cb, statusRequested, token);
@@ -983,7 +987,7 @@ NxsAssumptionsBlockAPI	*NxsAssumptionsBlock::GetAssumptionsBlockForTreesTitle(co
 				if (treesTitle == NULL)
 					effectiveB = this;
 				}
-			else 
+			else
 				{
 				if (NxsString::case_insensitive_equals(treesTitle, t.c_str()))
 					effectiveB = this;
@@ -1009,7 +1013,7 @@ NxsAssumptionsBlockAPI	*NxsAssumptionsBlock::GetAssumptionsBlockForTreesTitle(co
 		errormsg.clear();
 		effectiveB = GetAssumptionsBlockForTreesBlock(cb, NxsBlock::BLOCK_LINK_TO_MOST_RECENT, token);
 		}
-	else 
+	else
 		{
 		NxsBlockLinkStatus statusRequested = (treesTitle == NULL ? NxsBlock::BLOCK_LINK_TO_ONLY_CHOICE : NxsBlock::BLOCK_LINK_FROM_LINK_CMD);
 		effectiveB = GetAssumptionsBlockForTreesBlock(cb, statusRequested, token);
@@ -1051,20 +1055,20 @@ void NxsAssumptionsBlock::SetCharBlockPtr(NxsCharactersBlockAPI * c, NxsBlockLin
 	charBlockPtr = c;
 	}
 
-void NxsAssumptionsBlock::SetTaxaBlockPtr(NxsTaxaBlockAPI *c, NxsBlockLinkStatus s) 
+void NxsAssumptionsBlock::SetTaxaBlockPtr(NxsTaxaBlockAPI *c, NxsBlockLinkStatus s)
 	{
 	SetTaxaLinkStatus(s);
 	taxa = c;
 	}
 
-void NxsAssumptionsBlock::SetTreesBlockPtr(NxsTreesBlockAPI * c, NxsBlockLinkStatus s) 
+void NxsAssumptionsBlock::SetTreesBlockPtr(NxsTreesBlockAPI * c, NxsBlockLinkStatus s)
 	{
 	SetTreesLinkStatus(s);
 	treesBlockPtr = c;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Sets id = "ASSUMPTIONS", charBlockPtr = NULL, and taxa = t. Assumes taxa is non-NULL.
+/*!
+	Sets id = "ASSUMPTIONS", charBlockPtr = NULL, and taxa = t. Assumes taxa is non-NULL.
 */
 NxsAssumptionsBlock::NxsAssumptionsBlock(
   NxsTaxaBlockAPI *t)	/* pointer to the taxa block */
@@ -1081,17 +1085,17 @@ NxsAssumptionsBlock::NxsAssumptionsBlock(
 	Reset();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Nothing needs to be done in the destructor.
+/*!
+	Nothing needs to be done in the destructor.
 */
 NxsAssumptionsBlock::~NxsAssumptionsBlock()
 	{
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Makes data member taxa point to 'tb'. Assumes tb is non-NULL.
-|	NOTEAPICHANGE: In v2.1 this can throw a NxsNCLAPIException if the Assumptions block has been used, but not reset 
-|	before the pointer is reassigned.
+/*!
+	Makes data member taxa point to 'tb'. Assumes tb is non-NULL.
+	NOTEAPICHANGE: In v2.1 this can throw a NxsNCLAPIException if the Assumptions block has been used, but not reset
+	before the pointer is reassigned.
 */
 void NxsAssumptionsBlock::ReplaceTaxaBlockPtr(
   NxsTaxaBlockAPI *tb)	/* pointer to new NxsTaxaBlockAPI object */
@@ -1101,19 +1105,19 @@ void NxsAssumptionsBlock::ReplaceTaxaBlockPtr(
 		SetTaxaBlockPtr(tb, NxsBlock::BLOCK_LINK_UNKNOWN_STATUS);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of character sets stored.
+/*!
+	Returns the number of character sets stored.
 */
 int NxsAssumptionsBlock::GetNumCharSets() const
 	{
 	return (int)charsets.size();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Erases 'names' vector, then fills 'names' with the names of all stored character sets.
+/*!
+	Erases 'names' vector, then fills 'names' with the names of all stored character sets.
 */
 void NxsAssumptionsBlock::GetCharSetNames(
-  NxsStringVector &names) const	/* the vector in which to store the names */
+  NxsStringVector &names) const	/* the vector in which to store the names */ /*v2.1to2.2 3 */
 	{
 	names.erase(names.begin(), names.end());
 	NxsUnsignedSetMap::const_iterator i;
@@ -1121,31 +1125,31 @@ void NxsAssumptionsBlock::GetCharSetNames(
 		names.push_back((*i).first);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns pointer to character set having name 'nm'.
+/*!
+	Returns pointer to character set having name 'nm'.
 */
 const NxsUnsignedSet *NxsAssumptionsBlock::GetCharSet(
-  NxsString nm) const /* the name of the character set to return */
+  NxsString n) const /* the name of the character set to return */ /*v2.1to2.2 4 */
 	{
-	NxsUnsignedSetMap::const_iterator it = charsets.find(nm);
+	NxsUnsignedSetMap::const_iterator it = charsets.find(n); /*v2.1to2.2 5 */
 	if (it == charsets.end())
 		return NULL;
 	return &(it->second);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of character partitions stored.
+/*!
+	Returns the number of character partitions stored.
 */
-int NxsAssumptionsBlock::GetNumCharPartitions()
+int NxsAssumptionsBlock::GetNumCharPartitions() /*v2.1to2.2 6 */
 	{
 	return (int)charPartitions.size();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Erases 'names' vector, then fills 'names' with the names of all stored character partitions.
+/*!
+	Erases 'names' vector, then fills 'names' with the names of all stored character partitions.
 */
 void NxsAssumptionsBlock::GetCharPartitionNames(
-	vector<std::string> &names)	/* the vector in which to store the names */
+	vector<std::string> &names)	/* the vector in which to store the names */ /*v2.1to2.2 6 */
 	{
 	names.erase(names.begin(), names.end());
 	NxsPartitionsByName::const_iterator i;
@@ -1153,8 +1157,8 @@ void NxsAssumptionsBlock::GetCharPartitionNames(
 	names.push_back((*i).first);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns pointer to character partition having name 'nm'.
+/*!
+	Returns pointer to character partition having name 'nm'.
 */
 const NxsPartition *NxsAssumptionsBlock::GetCharPartition(
 	std::string nm) const /* the name of the character set to return */
@@ -1165,19 +1169,19 @@ const NxsPartition *NxsAssumptionsBlock::GetCharPartition(
 	return &(it->second);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of taxon sets stored.
+/*!
+	Returns the number of taxon sets stored.
 */
-int NxsAssumptionsBlock::GetNumTaxSets()
+int NxsAssumptionsBlock::GetNumTaxSets()/*v2.1to2.2 6 */
 	{
 	return (int)taxsets.size();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Erases 'names' vector, then fills 'names' with the names of all stored taxon sets.
+/*!
+	Erases 'names' vector, then fills 'names' with the names of all stored taxon sets.
 */
 void NxsAssumptionsBlock::GetTaxSetNames(
-  NxsStringVector &names)	/* the vector in which to store the names */
+  NxsStringVector &names)	/* the vector in which to store the names */ /*v2.1to2.2 7 */
 	{
 	names.erase(names.begin(), names.end());
 	NxsUnsignedSetMap::const_iterator i;
@@ -1185,29 +1189,29 @@ void NxsAssumptionsBlock::GetTaxSetNames(
 		names.push_back((*i).first);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns reference to taxon set having name 'nm'.
+/*!
+	Returns reference to taxon set having name 'nm'.
 */
-NxsUnsignedSet &NxsAssumptionsBlock::GetTaxSet(
-  NxsString nm) /* the name of the taxon set to return */
+NxsUnsignedSet &NxsAssumptionsBlock::GetTaxSet( /*v2.1to2.2 8 */
+  NxsString nm) /* the name of the taxon set to return */ /*v2.1to2.2 9 */
 	{
-	return taxsets[nm];
+	return taxsets[nm]; /*v2.1to2.2 10 */
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of exclusion sets stored.
+/*!
+	Returns the number of exclusion sets stored.
 */
-int NxsAssumptionsBlock::GetNumExSets()
+int NxsAssumptionsBlock::GetNumExSets() /*v2.1to2.2 6 */
 	{
 	return (int)exsets.size();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Erases names, then fills names with the names of all stored exclusion sets.
+/*!
+	Erases names, then fills names with the names of all stored exclusion sets.
 */
 void NxsAssumptionsBlock::GetExSetNames(
-  NxsStringVector &names)	/* the vector in which to store the names */
+  NxsStringVector &names)	/* the vector in which to store the names */ /*v2.1to2.2 7 */
 	{
 	names.erase(names.begin(), names.end());
 	NxsUnsignedSetMap::const_iterator i;
@@ -1215,32 +1219,33 @@ void NxsAssumptionsBlock::GetExSetNames(
 		names.push_back((*i).first);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns reference to exclusion set having name 'nm'.
+/*!
+	Returns reference to exclusion set having name 'nm'.
 */
-NxsUnsignedSet &NxsAssumptionsBlock::GetExSet(
-  NxsString nm) /* the name of the exclusion set to return */
+NxsUnsignedSet &NxsAssumptionsBlock::GetExSet( /*v2.1to2.2 8 */
+  NxsString nm) /* the name of the exclusion set to return */ /*v2.1to2.2 9 */
 	{
-	return exsets[nm];
+	return exsets[nm]; /*v2.1to2.2 11 */
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns name of default exclusion set. If returned string has zero length, then no default exclusion set was defined
-|	in the data set.
+/*!
+	Returns name of default exclusion set. If returned string has zero length, then no default exclusion set was defined
+	in the data set.
 */
-NxsString NxsAssumptionsBlock::GetDefExSetName()
+NxsString NxsAssumptionsBlock::GetDefExSetName() /*v2.1to2.2 12 */
 	{
 	return def_exset;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Applies exclusion set having name 'nm' by calling the ApplyExset method of the NxsCharactersBlockAPI or 
-|	NxsCharactersBlockAPI-derived object stored in the charBlockPtr pointer (which will be whichever block last called the 
-|	NxsAssumptionsBlock::SetCallback method).
+/*!
+	Applies exclusion set having name 'nm' by calling the ApplyExset method of the NxsCharactersBlockAPI or
+	NxsCharactersBlockAPI-derived object stored in the charBlockPtr pointer (which will be whichever block last called the
+	NxsAssumptionsBlock::SetCallback method).
 */
 void NxsAssumptionsBlock::ApplyExset(
-  NxsString nm) /* the name of the exclusion set to apply */
+  NxsString n) /* the name of the exclusion set to apply */ /*v2.1to2.2 4 */
 	{
+	NxsString nm(n.c_str()); // null-op needed for ease of generation of v2.2 from 2.1 code
 	NCL_ASSERT(charBlockPtr != NULL);
 	charBlockPtr->ApplyExset(exsets[nm]);
 	}
@@ -1256,7 +1261,7 @@ NxsAssumptionsBlockAPI *NxsAssumptionsBlock::DealWithPossibleParensInCharDepende
 		{
 		token.GetNextToken();
 		while (!token.Equals(")"))
-			{		 
+			{
 			if (token.Equals("CHARACTERS"))
 				{
 				NxsString t;
@@ -1319,8 +1324,8 @@ NxsAssumptionsBlockAPI *NxsAssumptionsBlock::DealWithPossibleParensInCharDepende
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads and stores information contained in the command TypeSet within an ASSUMPTIONS block.
+/*!
+	Reads and stores information contained in the command TypeSet within an ASSUMPTIONS block.
 */
 void NxsAssumptionsBlock::HandleTypeSet(
   NxsToken &token)	/* the token used to read from in */
@@ -1379,7 +1384,7 @@ void NxsAssumptionsBlock::HandleUserType(NxsToken& token)
 		{
 		token.GetNextToken();
 		while (!token.Equals(")"))
-			{		 
+			{
 			if (token.Equals("CHARACTERS"))
 				{
 				NxsString t;
@@ -1418,18 +1423,18 @@ void NxsAssumptionsBlock::HandleUserType(NxsToken& token)
 		token.GetNextToken();
 		}
 	DemandIsAtEquals(token, "in UserType definition");
-	
+
 	const char *cbn = (charblock_name.empty() ? NULL : charblock_name.c_str());
 	NxsAssumptionsBlockAPI * effectiveAssumpBlock =  this->GetAssumptionsBlockForCharTitle(cbn, token, "UserType");
 	NCL_ASSERT(effectiveAssumpBlock);
 	NxsCharactersBlockAPI *cbp = effectiveAssumpBlock->GetCharBlockPtr();
 	NCL_ASSERT(cbp);
-	
-	NxsRealStepMatrix::DblMatrix dm; 
+
+	NxsRealStepMatrix::DblMatrix dm;
 	NxsIntStepMatrix::IntMatrix im;
 	std::vector<std::string> symbolsOrder;
 	const std::vector<const NxsDiscreteDatatypeMapper *> mappers = cbp->GetAllDatatypeMappers();
-		
+
 	if (cstreeform)
 		{
 		bool success = false;
@@ -1501,9 +1506,9 @@ void NxsAssumptionsBlock::HandleUserType(NxsToken& token)
 			}
 		const bool respectCase = cbp->IsRespectCase();
 		unsigned nStates = (unsigned) longNstates;
-		NxsRealStepMatrix::DblVec dv(nStates, DBL_MAX); 
-		NxsIntStepMatrix::IntVec iv(nStates, INT_MAX); 
-		dm.assign(nStates, dv); 
+		NxsRealStepMatrix::DblVec dv(nStates, DBL_MAX);
+		NxsIntStepMatrix::IntVec iv(nStates, INT_MAX);
+		dm.assign(nStates, dv);
 		im.assign(nStates, iv);
 		std::set<char> symbolsSet;
 		for (unsigned i = 0; i < nStates;)
@@ -1544,10 +1549,10 @@ void NxsAssumptionsBlock::HandleUserType(NxsToken& token)
 				symbolsOrder.push_back(std::string(1,s));
 				}
 			}
-		
+
 		double currDblWt;
 		long currLongWt;
-		
+
 		for (unsigned i = 0; i < nStates; ++i)
 			{
 			for (unsigned j = 0; j < nStates; ++j)
@@ -1592,7 +1597,7 @@ void NxsAssumptionsBlock::HandleUserType(NxsToken& token)
 			throw NxsException(t, token);
 			}
 		}
-	
+
 	NxsTransformationManager &ctm = cbp->GetNxsTransformationManagerRef();
 	NxsTransformationManager &tm = effectiveAssumpBlock->GetNxsTransformationManagerRef();
 	if (floatMat)
@@ -1627,8 +1632,8 @@ bool NxsGeneticCodesManager::IsValidCodeName(const std::string &n) const
 	NxsString::to_upper(capName);
 	return (standardCodeNames.count(capName) > 0) || (userDefinedCodeNames.count(capName) > 0);
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads and stores information contained in the command TypeSet within an ASSUMPTIONS block.
+/*!
+	Reads and stores information contained in the command TypeSet within an ASSUMPTIONS block.
 */
 void NxsAssumptionsBlock::HandleCodeSet(
   NxsToken &token)	/* the token used to read from in */
@@ -1664,8 +1669,8 @@ void NxsAssumptionsBlock::HandleCodeSet(
 	effectiveAssumpBlock->AddCodeSet(codeset_name, newPartition, asterisked);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads and stores information contained in the command TypeSet within an ASSUMPTIONS block.
+/*!
+	Reads and stores information contained in the command TypeSet within an ASSUMPTIONS block.
 */
 void NxsAssumptionsBlock::HandleCodonPosSet(
   NxsToken &token)	/* the token used to read from in */
@@ -1711,7 +1716,7 @@ class NxsSetVectorItemValidator
 		virtual ~NxsSetVectorItemValidator(){};
 		virtual std::string convert(NxsToken &) = 0;
 	};
-	
+
 class WtSetVectorItemValidator: public NxsSetVectorItemValidator
 	{
 	public:
@@ -1728,11 +1733,11 @@ class WtSetVectorItemValidator: public NxsSetVectorItemValidator
 			errormsg << "Expecting a number as a character weight.  Found \"" << c << "\" instead.";
 			throw NxsException(errormsg, token);
 			}
-		
+
 	};
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads and stores information contained in the command TypeSet within an ASSUMPTIONS block.
+/*!
+	Reads and stores information contained in the command TypeSet within an ASSUMPTIONS block.
 */
 void NxsAssumptionsBlock::HandleWeightSet(
   NxsToken &token)	/* the token used to read from in */
@@ -1755,7 +1760,7 @@ void NxsAssumptionsBlock::HandleWeightSet(
 	NCL_ASSERT(cbp);
 	if (isVect)
 		{
-		WtSetVectorItemValidator validator; 
+		WtSetVectorItemValidator validator;
 		effectiveAssumpBlock->ReadVectorPartitionDef(newPartition, *cbp, wtset_name, "Character", "WtSet", token, false, true, validator);
 		}
 	else
@@ -1797,8 +1802,8 @@ void NxsAssumptionsBlock::HandleWeightSet(
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads and stores information contained in the command CharPartition within an ASSUMPTIONS block.
+/*!
+	Reads and stores information contained in the command CharPartition within an ASSUMPTIONS block.
 */
 void NxsAssumptionsBlock::HandleCharPartition(
   NxsToken &token)	/* the token used to read from in */
@@ -1822,8 +1827,8 @@ void NxsAssumptionsBlock::HandleCharPartition(
 	effectiveAssumpBlock->AddCharPartition(charpart_name, newPartition);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads and stores information contained in the command CHARSET within an ASSUMPTIONS block.
+/*!
+	Reads and stores information contained in the command CHARSET within an ASSUMPTIONS block.
 */
 void NxsAssumptionsBlock::HandleCharSet(
   NxsToken &token)	/* the token used to read from in */
@@ -1842,8 +1847,8 @@ void NxsAssumptionsBlock::HandleCharSet(
 	effectiveAssumpBlock->ReadCharsetDef(charset_name, token, asterisked);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called after verifying that the correct Char block pointer is set.
+/*!
+	Called after verifying that the correct Char block pointer is set.
 */
 void NxsAssumptionsBlock::ReadCharsetDef(NxsString charset_name, NxsToken &token, bool asterisked)
 	{
@@ -1868,13 +1873,13 @@ void NxsAssumptionsBlock::ReadCharsetDef(NxsString charset_name, NxsToken &token
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads and stores information contained in the command CHARSET within an ASSUMPTIONS block.
+/*!
+	Reads and stores information contained in the command CHARSET within an ASSUMPTIONS block.
 */
 void NxsAssumptionsBlock::HandleExSet(
   NxsToken &token)	/* the token used to read from in */
 	{
-	
+
 	bool asterisked = false;
 	token.GetNextToken();
 	if (token.Equals("*"))
@@ -1889,8 +1894,8 @@ void NxsAssumptionsBlock::HandleExSet(
 	effectiveAssumpBlock->ReadExsetDef(exset_name, token, asterisked);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called after verifying that the correct Char block pointer is set.
+/*!
+	Called after verifying that the correct Char block pointer is set.
 */
 void NxsAssumptionsBlock::ReadExsetDef(NxsString charset_name, NxsToken &token, bool asterisked)
 	{
@@ -1915,8 +1920,8 @@ void NxsAssumptionsBlock::ReadExsetDef(NxsString charset_name, NxsToken &token, 
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads and stores information contained in the command TaxPartition within an ASSUMPTIONS block.
+/*!
+	Reads and stores information contained in the command TaxPartition within an ASSUMPTIONS block.
 */
 void NxsAssumptionsBlock::HandleTaxPartition(
   NxsToken &token)	/* the token used to read from in */
@@ -1939,7 +1944,7 @@ void NxsAssumptionsBlock::HandleTaxPartition(
 		{
 		token.GetNextToken();
 		while (!token.Equals(")"))
-			{		 
+			{
 			if (token.Equals("TAXA"))
 				{
 				DemandEquals(token, "after \"(Taxa\" in a TaxPartition command");
@@ -1972,8 +1977,8 @@ void NxsAssumptionsBlock::HandleTaxPartition(
 	effectiveAssumpBlock->ReadPartitionDef(newPartition, *taxa, taxpart_name, "Taxa", "TaxPartition", token, asterisked, false, true);
 	effectiveAssumpBlock->AddTaxPartition(taxpart_name, newPartition);
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads and stores information contained in the command TreePartition within an ASSUMPTIONS block.
+/*!
+	Reads and stores information contained in the command TreePartition within an ASSUMPTIONS block.
 */
 void NxsAssumptionsBlock::HandleTreePartition(
   NxsToken &token)	/* the token used to read from in */
@@ -1995,7 +2000,7 @@ void NxsAssumptionsBlock::HandleTreePartition(
 		{
 		token.GetNextToken();
 		while (!token.Equals(")"))
-			{		 
+			{
 			if (token.Equals("TREES"))
 				{
 				DemandEquals(token, "after \"(Trees\" in a TreePartition command");
@@ -2030,14 +2035,14 @@ void NxsAssumptionsBlock::HandleTreePartition(
 	}
 
 void NxsBlock::ReadPartitionDef(
-  NxsPartition &np, 
-  NxsLabelToIndicesMapper &ltm, 
-  const std::string & partName, 
-  const char * ptype, 
-  const char * cmd, 
-  NxsToken & token, 
-  bool warnAsterisked, 
-  bool demandAllInds, 
+  NxsPartition &np,
+  NxsLabelToIndicesMapper &ltm,
+  const std::string & partName,
+  const char * ptype,
+  const char * cmd,
+  NxsToken & token,
+  bool warnAsterisked,
+  bool demandAllInds,
   bool storeAsPartition)
 	{
 	NxsUnsignedSet allInds;
@@ -2059,7 +2064,7 @@ void NxsBlock::ReadPartitionDef(
 		token.GetNextToken();
 		if (!token.Equals(":"))
 			{
-			errormsg << "Expecting a : after the subset name " << groupN << " in the " << cmd  << " definition of " << partName << ". Found " << token.GetToken(); 
+			errormsg << "Expecting a : after the subset name " << groupN << " in the " << cmd  << " definition of " << partName << ". Found " << token.GetToken();
 			throw NxsException(errormsg, token);
 			}
 		token.GetNextToken();
@@ -2070,11 +2075,11 @@ void NxsBlock::ReadPartitionDef(
 		if (token.Equals(";"))
 			break;
 		NCL_ASSERT(token.Equals(","));
-		 // this flag allows us to deal with sci. not. in WtSet commands. 
+		 // this flag allows us to deal with sci. not. in WtSet commands.
 		 //	It shouldn't hurt in other contexts, though the parser will be
 		 //		more lax than it should (and will accept unquoted tokens-like-this as names).
 		token.SetLabileFlagBit(NxsToken::hyphenNotPunctuation);
-		token.GetNextToken();	
+		token.GetNextToken();
 		}
 	if (allInds.size() < total)
 		{
@@ -2201,8 +2206,8 @@ void NxsWritePartitionCommand(const char *cmd, const NxsPartitionsByName & usetm
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads and stores information contained in the command TAXSET within an ASSUMPTIONS block.
+/*!
+	Reads and stores information contained in the command TAXSET within an ASSUMPTIONS block.
 */
 void NxsAssumptionsBlock::HandleTaxSet(
   NxsToken &token)	/* the token used to read from in */
@@ -2223,7 +2228,7 @@ void NxsAssumptionsBlock::HandleTaxSet(
 		{
 		token.GetNextToken();
 		while (!token.Equals(")"))
-			{		 
+			{
 			if (token.Equals("TAXA"))
 				{
 				DemandEquals(token, "after \"(Taxa\" in a TaxSet command");
@@ -2252,8 +2257,8 @@ void NxsAssumptionsBlock::HandleTaxSet(
 	effectiveAssumpBlock->ReadTaxsetDef(taxset_name, token, asterisked);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called after verifying that the correct taxa block pointer is set.
+/*!
+	Called after verifying that the correct taxa block pointer is set.
 */
 void NxsAssumptionsBlock::ReadTaxsetDef(NxsString taxset_name, NxsToken &token, bool asterisked)
 	{
@@ -2277,8 +2282,8 @@ void NxsAssumptionsBlock::ReadTaxsetDef(NxsString taxset_name, NxsToken &token, 
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads and stores information contained in the command TAXSET within an ASSUMPTIONS block.
+/*!
+	Reads and stores information contained in the command TAXSET within an ASSUMPTIONS block.
 */
 void NxsAssumptionsBlock::HandleTreeSet(
   NxsToken &token)	/* the token used to read from in */
@@ -2299,7 +2304,7 @@ void NxsAssumptionsBlock::HandleTreeSet(
 		{
 		token.GetNextToken();
 		while (!token.Equals(")"))
-			{		 
+			{
 			if (token.Equals("TREES"))
 				{
 				DemandEquals(token, "after \"(Trees\" in a TreeSet command");
@@ -2328,8 +2333,8 @@ void NxsAssumptionsBlock::HandleTreeSet(
 	effectiveAssumpBlock->ReadTreesetDef(treeset_name, token, asterisked);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called after verifying that the correct trees block pointer is set.
+/*!
+	Called after verifying that the correct trees block pointer is set.
 */
 void NxsAssumptionsBlock::ReadTreesetDef(NxsString treeset_name, NxsToken &token, bool asterisked)
 	{
@@ -2353,10 +2358,10 @@ void NxsAssumptionsBlock::ReadTreesetDef(NxsString treeset_name, NxsToken &token
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function provides the ability to read everything following the block name (which is read by the NxsReader 
-|	object) to the end or ENDBLOCK statement. Characters are read from the input stream in. Overrides the pure virtual
-|	function in the base class.
+/*!
+	This function provides the ability to read everything following the block name (which is read by the NxsReader
+	object) to the end or ENDBLOCK statement. Characters are read from the input stream in. Overrides the pure virtual
+	function in the base class.
 */
 void NxsAssumptionsBlock::Read(
   NxsToken &token)	/* the token used to read from in */
@@ -2430,7 +2435,7 @@ void NxsAssumptionsBlock::HandleOptions(NxsToken &token)
 					errormsg << ' ' << NxsString::GetEscaped(*tnIt);
 				throw NxsException(errormsg, token);
 				}
-			try 
+			try
 				{
 				tmRef.SetDefaultTypeName(kvIt->second);
 				NxsTransformationManager & etmRef  = effAssumpB->GetNxsTransformationManagerRef();
@@ -2483,9 +2488,9 @@ void NxsAssumptionsBlock::HandleOptions(NxsToken &token)
 			}
 		}
 	}
-	
-/*----------------------------------------------------------------------------------------------------------------------
-|	Prepares for reading a new ASSUMPTIONS block. Overrides the pure virtual function in the base class.
+
+/*!
+	Prepares for reading a new ASSUMPTIONS block. Overrides the pure virtual function in the base class.
 */
 void NxsAssumptionsBlock::Reset()
 	{
@@ -2528,12 +2533,12 @@ void NxsAssumptionsBlock::Reset()
 	def_codeSet.clear();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function outputs a brief report of the contents of this ASSUMPTIONS block. Overrides the pure virtual function
-|	in the base class.
+/*!
+	This function outputs a brief report of the contents of this ASSUMPTIONS block. Overrides the pure virtual function
+	in the base class.
 */
 void NxsAssumptionsBlock::Report(
-  std::ostream &out)  NCL_COULD_BE_CONST /* the output stream to which to write the report */
+  std::ostream &out)  NCL_COULD_BE_CONST /* the output stream to which to write the report */ /*v2.1to2.2 1 */
 	{
 	out << endl;
 	out << id << " block contains the following:" << endl;
@@ -2609,11 +2614,11 @@ void NxsAssumptionsBlock::Report(
 	out << endl;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	A CHARACTERS, DATA, or ALLELES block can call this function to specify that it is to receive notification when the 
-|	current taxon or character set changes (e.g., an "EXSET *" command is read or a program requests that one of the 
-|	predefined taxon sets, character sets, or exsets be applied). Normally, a NxsCharactersBlockAPI-derived object calls 
-|	this function upon entering its MATRIX command, since when that happens it becomes the primary data-containing block.
+/*!
+	A CHARACTERS, DATA, or ALLELES block can call this function to specify that it is to receive notification when the
+	current taxon or character set changes (e.g., an "EXSET *" command is read or a program requests that one of the
+	predefined taxon sets, character sets, or exsets be applied). Normally, a NxsCharactersBlockAPI-derived object calls
+	this function upon entering its MATRIX command, since when that happens it becomes the primary data-containing block.
 */
 void NxsAssumptionsBlock::SetCallback(
   NxsCharactersBlockAPI* p) /* the object to be called in the event of a change in character status */
@@ -2622,13 +2627,13 @@ void NxsAssumptionsBlock::SetCallback(
 	SetCharLinkStatus(NxsBlock::BLOCK_LINK_TO_MOST_RECENT);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Converts a taxon label to a number corresponding to the taxon's position within the list maintained by the 
-|	NxsTaxaBlockAPI object. This method overrides the virtual function of the same name in the NxsBlock base class. If s 
-|	is not a valid taxon label, returns the value 0.
+/*!
+	Converts a taxon label to a number corresponding to the taxon's position within the list maintained by the
+	NxsTaxaBlockAPI object. This method overrides the virtual function of the same name in the NxsBlock base class. If s
+	is not a valid taxon label, returns the value 0.
 */
 unsigned NxsAssumptionsBlock::TaxonLabelToNumber(
-  NxsString s)	const /* the taxon label to convert */
+  NxsString s)	const /* the taxon label to convert */ /*v2.1to2.2 4 */
 	{
 	NCL_ASSERT(taxa != NULL);
 	int i;
@@ -2680,7 +2685,7 @@ void NxsAssumptionsBlock::HandleLinkCommand(NxsToken & token)
 					throw NxsException(errormsg, token);
 					}
 				SetTaxaBlockPtr(cb, NxsBlock::BLOCK_LINK_FROM_LINK_CMD);
-				}				
+				}
 			}
 		else if (key == "CHARACTERS")
 			{
@@ -2704,7 +2709,7 @@ void NxsAssumptionsBlock::HandleLinkCommand(NxsToken & token)
 					throw NxsException(errormsg, token);
 					}
 				SetCharBlockPtr(cb, NxsBlock::BLOCK_LINK_FROM_LINK_CMD);
-				}				
+				}
 			}
 		else if (key == "TREES")
 			{
@@ -2728,7 +2733,7 @@ void NxsAssumptionsBlock::HandleLinkCommand(NxsToken & token)
 					throw NxsException(errormsg, token);
 					}
 				SetTreesBlockPtr(cb, NxsBlock::BLOCK_LINK_FROM_LINK_CMD);
-				}				
+				}
 			}
 		else
 			{
@@ -2755,7 +2760,7 @@ void NxsAssumptionsBlock::WriteLinkCommand(std::ostream &out) const
 		out << ";\n";
 		}
 	}
-	
+
 VecBlockPtr NxsAssumptionsBlock::GetCreatedTaxaBlocks()
 	{
 	passedRefOfOwnedBlock = true;

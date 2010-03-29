@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -25,11 +25,11 @@ using namespace std;
 
 //@POL Note: This file is not yet ready for use (Paul Lewis, 19-May-2007)
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Initializes `id' to "UNALIGNED", `taxa' to `tb', `assumptionsBlock' to `ab', `ntax' and `ntaxTotal' to 0, `newtaxa' 
-|	and `respectingCase' to false, `labels' to true, `datatype' to `NxsUnalignedBlock::standard', `missing' to '?', and
-|	`taxonPos' and `activeTaxon' to NULL. The `equates' map and `uMatrix' vector are both cleared. The ResetSymbols 
-|	function is called to reset the `symbols' data member. 
+/*!
+	Initializes `id' to "UNALIGNED", `taxa' to `tb', `assumptionsBlock' to `ab', `ntax' and `ntaxTotal' to 0, `newtaxa'
+	and `respectingCase' to false, `labels' to true, `datatype' to `NxsUnalignedBlock::standard', `missing' to '?', and
+	`taxonPos' and `activeTaxon' to NULL. The `equates' map and `uMatrix' vector are both cleared. The ResetSymbols
+	function is called to reset the `symbols' data member.
 */
 NxsUnalignedBlock::NxsUnalignedBlock(
   NxsTaxaBlockAPI * tb)			/* is the taxa block object to consult for taxon labels */
@@ -40,21 +40,21 @@ NxsUnalignedBlock::NxsUnalignedBlock(
 	Reset();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Deletes any memory allocated to the arrays `symbols', `taxonPos' and `activeTaxon'. Flushes the containers 
-|	`equates', and `uMatrix'.
+/*!
+	Deletes any memory allocated to the arrays `symbols', `taxonPos' and `activeTaxon'. Flushes the containers
+	`equates', and `uMatrix'.
 */
 NxsUnalignedBlock::~NxsUnalignedBlock()
 	{
 	Reset();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns NxsUnalignedBlock object to the state it was in when first created. See NxsUnalignedBlock constructor for
-|	details.
+/*!
+	Returns NxsUnalignedBlock object to the state it was in when first created. See NxsUnalignedBlock constructor for
+	details.
 */
 void NxsUnalignedBlock::Reset()
-	{ 
+	{
 	NxsBlock::Reset();
 	ResetSurrogate();
 	nTaxWithData = 0;
@@ -72,11 +72,11 @@ void NxsUnalignedBlock::Reset()
 void NxsUnalignedBlock::ResetDatatypeMapper()
 	{
 	mapper = NxsDiscreteDatatypeMapper(datatype, symbols, missing, '\0', matchchar, respectingCase, equates);
-	datatype = mapper.GetDatatype(); 
+	datatype = mapper.GetDatatype();
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Resets standard symbol set after a change in `datatype' is made. Also flushes equates list and installs standard 
-|	equate macros for the current `datatype'.
+/*!
+	Resets standard symbol set after a change in `datatype' is made. Also flushes equates list and installs standard
+	equate macros for the current `datatype'.
 */
 void NxsUnalignedBlock::ResetSymbols()
 	{
@@ -103,14 +103,14 @@ void NxsUnalignedBlock::ResetSymbols()
 	this->equates = NxsCharactersBlock::GetDefaultEquates(datatype);
 	ResetDatatypeMapper();
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Provides a dump of the contents of the `uMatrix' variable. Useful for testing whether data is being read as 
-|	expected. If `marginText' is NULL, output is flush left. If each line of output should be prefaced with 
-|	a tab character, specify "\t" for `marginText'.
+/*!
+	Provides a dump of the contents of the `uMatrix' variable. Useful for testing whether data is being read as
+	expected. If `marginText' is NULL, output is flush left. If each line of output should be prefaced with
+	a tab character, specify "\t" for `marginText'.
 */
 void NxsUnalignedBlock::DebugShowMatrix(
   std::ostream & out,		/* is the output stream on which to print */
-  const char * marginText) NCL_COULD_BE_CONST /* is text printed first on each line */
+  const char * marginText) NCL_COULD_BE_CONST /* is text printed first on each line */ /*v2.1to2.2 1 */
 	{
 	if (!taxa)
 		return;
@@ -124,7 +124,7 @@ void NxsUnalignedBlock::DebugShowMatrix(
 			{
 			if (marginText != NULL)
 				out << marginText;
-			const NxsString currTaxonLabel = taxa->GetTaxonLabel(i);
+			const NxsString currTaxonLabel = taxa->GetTaxonLabel(i); /*v2.1to2.2 4 */
 			out << currTaxonLabel;
 			unsigned currTaxonLabelLen = (unsigned)currTaxonLabel.size();
 			unsigned diff = width - currTaxonLabelLen;
@@ -135,8 +135,8 @@ void NxsUnalignedBlock::DebugShowMatrix(
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns a string containing a formatted representation of the state `x'. 
+/*!
+	Returns a string containing a formatted representation of the state `x'.
 */
 std::string NxsUnalignedBlock::FormatState(
   NxsDiscreteDatum d)		/* is the element of `uMatrix' to format */
@@ -150,9 +150,9 @@ std::string NxsUnalignedBlock::FormatState(
 	return mapper.StateCodeToNexusString(row[d.charInd]);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if `ch' can be found in the `symbols' array. The value of `respectingCase' is used to determine 
-|	whether or not the search should be case sensitive. Assumes `symbols' is non-NULL.
+/*!
+	Returns true if `ch' can be found in the `symbols' array. The value of `respectingCase' is used to determine
+	whether or not the search should be case sensitive. Assumes `symbols' is non-NULL.
 */
 bool NxsUnalignedBlock::IsInSymbols(
   char ch)	/* the symbol character to search for */
@@ -167,9 +167,9 @@ bool NxsUnalignedBlock::IsInSymbols(
 	return false;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called when DIMENSIONS command needs to be parsed from within the UNALIGNED block. Deals with everything after the 
-|	token DIMENSIONS up to and including the semicolon that terminates the DIMENSIONS command.
+/*!
+	Called when DIMENSIONS command needs to be parsed from within the UNALIGNED block. Deals with everything after the
+	token DIMENSIONS up to and including the semicolon that terminates the DIMENSIONS command.
 */
 void NxsUnalignedBlock::HandleDimensions(
   NxsToken & token)			/* the token used to read from `in' */
@@ -180,7 +180,7 @@ void NxsUnalignedBlock::HandleDimensions(
 		token.GetNextToken();
 		if (token.Equals("NEWTAXA"))
 			newtaxa = true;
-		else if (token.Equals("NTAX")) 
+		else if (token.Equals("NTAX"))
 			{
 			DemandEquals(token, "after NTAX in DIMENSIONS command");
 			ntaxRead = DemandPositiveInt(token, "NTAX");
@@ -223,12 +223,12 @@ void NxsUnalignedBlock::HandleDimensions(
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called when the END or ENDBLOCK command needs to be parsed from within the UNALIGNED block. Does two things: 
-|~
-|	o checks to make sure the next token in the data file is a semicolon
-|	o eliminates character labels and character state labels for characters that have been eliminated
-|~
+/*!
+	Called when the END or ENDBLOCK command needs to be parsed from within the UNALIGNED block. Does two things:
+~
+	o checks to make sure the next token in the data file is a semicolon
+	o eliminates character labels and character state labels for characters that have been eliminated
+~
 */
 void NxsUnalignedBlock::HandleEndblock(
   NxsToken & token)		/* the token used to read from `in' */
@@ -236,9 +236,9 @@ void NxsUnalignedBlock::HandleEndblock(
 	DemandEndSemicolon(token, "END or ENDBLOCK");
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called when FORMAT command needs to be parsed from within the DIMENSIONS block. Deals with everything after the 
-|	token FORMAT up to and including the semicolon that terminates the FORMAT command.
+/*!
+	Called when FORMAT command needs to be parsed from within the DIMENSIONS block. Deals with everything after the
+	token FORMAT up to and including the semicolon that terminates the FORMAT command.
 */
 void NxsUnalignedBlock::HandleFormat(
   NxsToken & token)	/* is the token used to read from `in' */
@@ -327,7 +327,7 @@ void NxsUnalignedBlock::HandleFormat(
 			}
 		else if (token.Equals("SYMBOLS") || token.Equals("SYMBOL"))
 			{
-			int numDefStates;
+			NxsDiscreteStateCell numDefStates;
 			unsigned maxNewStates;
 			switch(datatype)
 				{
@@ -416,7 +416,7 @@ void NxsUnalignedBlock::HandleFormat(
 				if (token.Equals("\""))
 					break;
 
-				// If token is not a double-quote character, then it must be the equate symbol (i.e., the 
+				// If token is not a double-quote character, then it must be the equate symbol (i.e., the
 				// character to be replaced in the data matrix)
 				if (token.GetTokenLength() != 1)
 					{
@@ -458,7 +458,7 @@ void NxsUnalignedBlock::HandleFormat(
 				NxsString k = token.GetToken();
 
 				DemandEquals(token, "in EQUATE definition");
-				
+
 				// This should be the token to be substituted in for the equate symbol
 				token.SetLabileFlagBit(NxsToken::parentheticalToken);
 				token.SetLabileFlagBit(NxsToken::curlyBracketedToken);
@@ -489,9 +489,9 @@ void NxsUnalignedBlock::HandleFormat(
 	ResetDatatypeMapper();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called from HandleMatrix function to read in the next state. Returns true if next token encountered is a comma, 
-|	false otherwise. A comma signals the end of data for the current taxon in an UNALIGNED block.
+/*!
+	Called from HandleMatrix function to read in the next state. Returns true if next token encountered is a comma,
+	false otherwise. A comma signals the end of data for the current taxon in an UNALIGNED block.
 */
 bool NxsUnalignedBlock::HandleNextState(
   NxsToken & token,			/* is the token used to read from `in' */
@@ -508,7 +508,7 @@ bool NxsUnalignedBlock::HandleNextState(
 	if (token.Equals(",") || token.Equals(";"))
 		return false;
 	const NxsString stateAsNexus = token.GetToken();
-	const int stateCode = mapper.EncodeNexusStateString(stateAsNexus, token, taxNum, charNum, NULL, nameStr);
+	const NxsDiscreteStateCell stateCode = mapper.EncodeNexusStateString(stateAsNexus, token, taxNum, charNum, NULL, nameStr);
 	if (charNum < row.size())
 		row[charNum] = stateCode;
 	else
@@ -520,9 +520,9 @@ bool NxsUnalignedBlock::HandleNextState(
 	return true;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Called when MATRIX command needs to be parsed from within the UNALIGNED block. Deals with everything after the 
-|	token MATRIX up to and including the semicolon that terminates the MATRIX command.
+/*!
+	Called when MATRIX command needs to be parsed from within the UNALIGNED block. Deals with everything after the
+	token MATRIX up to and including the semicolon that terminates the MATRIX command.
 */
 void NxsUnalignedBlock::HandleMatrix(
   NxsToken & token)	/* is the token used to read from `in' */
@@ -601,10 +601,10 @@ void NxsUnalignedBlock::HandleMatrix(
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function provides the ability to read everything following the block name (which is read by the NxsReader 
-|	object) to the END or ENDBLOCK statement. Characters are read from the input stream `in'. Overrides the abstract 
-|	virtual function in the base class.
+/*!
+	This function provides the ability to read everything following the block name (which is read by the NxsReader
+	object) to the END or ENDBLOCK statement. Characters are read from the input stream `in'. Overrides the abstract
+	virtual function in the base class.
 */
 void NxsUnalignedBlock::Read(
   NxsToken & token)	/* is the token used to read from `in' */
@@ -613,7 +613,7 @@ void NxsUnalignedBlock::Read(
 	isUserSupplied = true;
 
 	// This should be the semicolon after the block name
-	token.GetNextToken(); 
+	token.GetNextToken();
 	if (!token.Equals(";"))
 		{
 		errormsg = "Expecting ';' after ";
@@ -647,12 +647,12 @@ void NxsUnalignedBlock::Read(
 		}	// for (;;)
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This function outputs a brief report of the contents of this UNALIGNED block. Overrides the abstract virtual 
-|	function in the base class.
+/*!
+	This function outputs a brief report of the contents of this UNALIGNED block. Overrides the abstract virtual
+	function in the base class.
 */
 void NxsUnalignedBlock::Report(
-  std::ostream & out) NCL_COULD_BE_CONST /* is the output stream to which to write the report */
+  std::ostream & out) NCL_COULD_BE_CONST /* is the output stream to which to write the report */ /*v2.1to2.2 1 */
 	{
 	out << '\n' << id << " block contains ";
 	if (nTaxWithData == 0)
@@ -663,7 +663,7 @@ void NxsUnalignedBlock::Report(
 		out << nTaxWithData << " taxa";
 
 	out << "\n  Data type is \"" << this->GetDatatypeName() << "\"" << endl;
-	
+
 	if (respectingCase)
 		out << "  Respecting case" << endl;
 	else
@@ -694,12 +694,12 @@ void NxsUnalignedBlock::Report(
 	DebugShowMatrix(out, "    ");
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Writes out the information in this block in NEXUS format to the specified std::ostream.
+/*!
+	Writes out the information in this block in NEXUS format to the specified std::ostream.
 */
 void NxsUnalignedBlock::WriteAsNexus(
   std::ostream & out)	/* is the output stream on which to write */
-  const 
+  const
 	{
 	out << "BEGIN UNALIGNED;\n";
 	WriteBasicBlockCommands(out);
@@ -712,8 +712,8 @@ void NxsUnalignedBlock::WriteAsNexus(
 	out << "END;\n";
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Writes out the information in the MATRIX command in NEXUS format to the specified std::ostream.
+/*!
+	Writes out the information in the MATRIX command in NEXUS format to the specified std::ostream.
 */
 void NxsUnalignedBlock::WriteMatrixCommand(
   std::ostream & out)	/* is the output stream on which to print the matrix */
@@ -723,7 +723,7 @@ void NxsUnalignedBlock::WriteMatrixCommand(
 	const unsigned ntax = taxa->GetNTax();
 	unsigned width = taxa->GetMaxTaxonLabelLength();
 	out << "Matrix";
-	
+
 	//std::vector<unsigned> origIndexVec = this->GetOrigMatrixIndicesToWrite();
 	bool first = true;
 	for (unsigned i = 0; i < ntax; ++i)
@@ -735,17 +735,17 @@ void NxsUnalignedBlock::WriteMatrixCommand(
 			else
 				out << ",\n";
 			first = false;
-			NxsString nm = taxa->GetTaxonLabel(i);
+			NxsString nm = taxa->GetTaxonLabel(i); /*v2.1to2.2 4 */
 			std::string s = nm.c_str();
 			const std::string currTaxonLabel = NxsString::GetEscaped(taxa->GetTaxonLabel(i));
 			out << currTaxonLabel;
-	
+
 			// Print out enough spaces to even up the left edge of the matrix output
 			unsigned currTaxonLabelLen = (unsigned)currTaxonLabel.size();
 			unsigned diff = width - currTaxonLabelLen;
 			for (unsigned k = 0; k < diff + 5; k++)
 				out << ' ';
-	
+
 			WriteStatesForMatrixRow(out, i);
 			}
 		}
@@ -760,16 +760,16 @@ void NxsUnalignedBlock::WriteStatesForMatrixRow(
 	for (NxsDiscreteStateRow::const_iterator rIt = row.begin(); rIt != row.end(); ++rIt)
 		mapper.WriteStateCodeAsNexusString(out, *rIt);
 	}
-	
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Writes out the information in the FORMAT command in NEXUS format to the specified std::ostream.
+
+/*!
+	Writes out the information in the FORMAT command in NEXUS format to the specified std::ostream.
 */
 void NxsUnalignedBlock::WriteFormatCommand(std::ostream &out) const
 	{
 	mapper.WriteStartOfFormatCommand(out);
 	if (this->respectingCase)
-		out << " RespectCase"; 
+		out << " RespectCase";
 	// Output terminating semicolon
 	out << ";\n";
 	}
@@ -784,20 +784,20 @@ NxsUnalignedBlock *NxsUnalignedBlockFactory::GetBlockReaderForID(const std::stri
 	return nb;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns internal representation of the state for taxon `i', character `j', as a vector of integer values. In the 
-|	normal situation, there is only one state with no uncertainty or polymorphism and the vector returned will contain
-|	only a single, positive integer value. If there are multiple states, the vector will contain k values, where k
-|	equals the number of states plus 1. The first value in the vector will be either 0 (indicating ambiguity) or 1
-|	(meaning polymorphism), and the remaining values will be positive integers each of which is an index into the 
-|	symbols array. In the case of missing data, an empty vector will be returned. In an UNALIGNED block, there are a
-|	different number of characters for each taxon. Use NumCharsForTaxon before calling this function to make sure you
-|	do not ask for a character beyond the end. If that happens, a NxsUnalignedBlock::NxsX_NoSuchCharacter exception 
-|	will be thrown. If no data is stored for taxon `i' in this UNALIGNED block, a NxsUnalignedBlock::NxsX_NoDataForTaxon
-|	exception will be thrown, with the exception object storing the offending taxon index in its public data member
-|	`taxon_index'.
+/*!
+	Returns internal representation of the state for taxon `i', character `j', as a vector of integer values. In the
+	normal situation, there is only one state with no uncertainty or polymorphism and the vector returned will contain
+	only a single, positive integer value. If there are multiple states, the vector will contain k values, where k
+	equals the number of states plus 1. The first value in the vector will be either 0 (indicating ambiguity) or 1
+	(meaning polymorphism), and the remaining values will be positive integers each of which is an index into the
+	symbols array. In the case of missing data, an empty vector will be returned. In an UNALIGNED block, there are a
+	different number of characters for each taxon. Use NumCharsForTaxon before calling this function to make sure you
+	do not ask for a character beyond the end. If that happens, a NxsUnalignedBlock::NxsX_NoSuchCharacter exception
+	will be thrown. If no data is stored for taxon `i' in this UNALIGNED block, a NxsUnalignedBlock::NxsX_NoDataForTaxon
+	exception will be thrown, with the exception object storing the offending taxon index in its public data member
+	`taxon_index'.
 */
-NxsIntVector NxsUnalignedBlock::GetInternalRepresentation(
+NxsDiscreteStateRow NxsUnalignedBlock::GetInternalRepresentation(
   unsigned taxInd,	/* is the index of the taxon in the TAXA block in range [0..`ntaxTotal') */
   unsigned charInd)	/* is the character index (greater than or equal to 0) */
 	{
@@ -805,17 +805,17 @@ NxsIntVector NxsUnalignedBlock::GetInternalRepresentation(
 		throw NxsUnalignedBlock::NxsX_NoDataForTaxon(taxInd);
 	NxsDiscreteStateRow & row = uMatrix[taxInd];
 	if (charInd >= (unsigned)row.size())
-		return NxsIntVector();
+		return NxsDiscreteStateRow();
 	return mapper.GetStateVectorForCode(row[charInd]);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns number of characters stored for taxon whose index in the TAXA block is `i'. In an UNALIGNED block, 
-|	each taxon can have a different number of characters, and this function can be used to find out how many characters
-|	are stored for any particular taxon. Note that `i' should be the index of the taxon of interest as it appears in
-|	the TAXA block. Because there may be fewer taxa in this UNALIGNED block (`ntax') than there are in the TAXA block
-|	(`ntaxTotal'), it is possible that no data were stored for the taxon having index `i', in which case a
-|	NxsUnalignedBlock::NxsX_NoDataForTaxon exception is thrown.
+/*!
+	Returns number of characters stored for taxon whose index in the TAXA block is `i'. In an UNALIGNED block,
+	each taxon can have a different number of characters, and this function can be used to find out how many characters
+	are stored for any particular taxon. Note that `i' should be the index of the taxon of interest as it appears in
+	the TAXA block. Because there may be fewer taxa in this UNALIGNED block (`ntax') than there are in the TAXA block
+	(`ntaxTotal'), it is possible that no data were stored for the taxon having index `i', in which case a
+	NxsUnalignedBlock::NxsX_NoDataForTaxon exception is thrown.
 */
 unsigned NxsUnalignedBlock::NumCharsForTaxon(
   unsigned taxInd)	/* is the index of the taxon in range [0..`ntaxTotal') */
@@ -826,13 +826,13 @@ unsigned NxsUnalignedBlock::NumCharsForTaxon(
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of states for taxon `i', character `j'. If `j' is equal to or greater than the number of 
-|	characters for taxon `i', returns UINT_MAX. If there is missing data, the return value is 0, otherwise a positive
-|	integer will be returned. An alternative is to use the function GetInternalRepresentation to obtain a vector of all
-|	states, and the size of that vector could be used to determine both the number and the identity of the states. If
-|	no data was stored for the taxon having index i in the UNALIGNED block, a NxsUnalignedBlock::NxsX_NoDataForTaxon 
-|	exception is thrown.
+/*!
+	Returns the number of states for taxon `i', character `j'. If `j' is equal to or greater than the number of
+	characters for taxon `i', returns UINT_MAX. If there is missing data, the return value is 0, otherwise a positive
+	integer will be returned. An alternative is to use the function GetInternalRepresentation to obtain a vector of all
+	states, and the size of that vector could be used to determine both the number and the identity of the states. If
+	no data was stored for the taxon having index i in the UNALIGNED block, a NxsUnalignedBlock::NxsX_NoDataForTaxon
+	exception is thrown.
 */
 unsigned NxsUnalignedBlock::GetNumStates(
   unsigned taxInd,	/* the taxon in range [0..`ntaxTotal') */
@@ -846,13 +846,13 @@ unsigned NxsUnalignedBlock::GetNumStates(
 	return mapper.GetNumStatesInStateCode(row[charInd]);
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if the state at taxon `taxInd', character `j' is the missing state, false otherwise. Throws NxsException if
-|	`j' is too large (i.e. specifies a character beyond the last character for `uMatrix' row `taxInd'). Calls 
-|	NxsUnalignedBlock::GetInternalRepresentation, so unless all you need is information about missing data, it is more
-|	efficient to simply call GetInternalRepresentation and see if the returned vector is empty. Note that `taxInd' should be
-|	the index of the taxon in the TAXA block. If data for that taxon has not been stored in this UNALIGNED block, then
-|	a NxsUnalignedBlock::NxsX_NoDataForTaxon exception will be thrown by GetInternalRepresentation.
+/*!
+	Returns true if the state at taxon `taxInd', character `j' is the missing state, false otherwise. Throws NxsException if
+	`j' is too large (i.e. specifies a character beyond the last character for `uMatrix' row `taxInd'). Calls
+	NxsUnalignedBlock::GetInternalRepresentation, so unless all you need is information about missing data, it is more
+	efficient to simply call GetInternalRepresentation and see if the returned vector is empty. Note that `taxInd' should be
+	the index of the taxon in the TAXA block. If data for that taxon has not been stored in this UNALIGNED block, then
+	a NxsUnalignedBlock::NxsX_NoDataForTaxon exception will be thrown by GetInternalRepresentation.
 */
 bool NxsUnalignedBlock::IsMissingState(
   unsigned taxInd,	/* the taxon, in range [0..`ntaxTotal') */
@@ -866,14 +866,14 @@ bool NxsUnalignedBlock::IsMissingState(
 	return mapper.GetNumStates()  == (unsigned) row[charInd];
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if taxon `taxInd' is polymorphic for character `j', false otherwise. Throws NxsException if `j' is too large
-|	(i.e. specifies a character beyond the last character for `uMatrix' row `taxInd'). Calls 
-|	NxsUnalignedBlock::GetInternalRepresentation, so unless all you need is information about polymorphism, it is more
-|	efficient to simply call GetInternalRepresentation and extract the information you need from the returned vector.
-|	Note that `taxInd' should be the index of the taxon in the TAXA block. If data for that taxon has not been stored in this
-|	UNALIGNED block, then a NxsUnalignedBlock::NxsX_NoDataForTaxon exception will be thrown by 
-|	GetInternalRepresentation.
+/*!
+	Returns true if taxon `taxInd' is polymorphic for character `j', false otherwise. Throws NxsException if `j' is too large
+	(i.e. specifies a character beyond the last character for `uMatrix' row `taxInd'). Calls
+	NxsUnalignedBlock::GetInternalRepresentation, so unless all you need is information about polymorphism, it is more
+	efficient to simply call GetInternalRepresentation and extract the information you need from the returned vector.
+	Note that `taxInd' should be the index of the taxon in the TAXA block. If data for that taxon has not been stored in this
+	UNALIGNED block, then a NxsUnalignedBlock::NxsX_NoDataForTaxon exception will be thrown by
+	GetInternalRepresentation.
 */
 bool NxsUnalignedBlock::IsPolymorphic(
   unsigned taxInd,	/* the taxon in range [0..`ntaxTotal') */

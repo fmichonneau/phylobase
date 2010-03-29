@@ -13,20 +13,20 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
 #ifndef NCL_NXSDISCRETEDATUM_H
 #define NCL_NXSDISCRETEDATUM_H
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reference to a cell in a DiscreteMatrix.  This class has been deprecated and is retained in NCL >= 2.1 for backward
-|	compatibility only.
-|	It no longer stores the data for a cell, but can refer to the cell in a matrix in the context in which the 
-|	matrix is at hand. The only time that NxsDiscreteDatum appears in the public NCL interface is as an argument to
-|	NxsCharactersBlock::WriteStates().  The new implementation of NxsDiscreteDatum should continue to work in this 
-|	context because the NxsCharactersBlock holds the matrix
+/*!
+	Reference to a cell in a DiscreteMatrix.  This class has been deprecated and is retained in NCL >= 2.1 for backward
+	compatibility only.
+	It no longer stores the data for a cell, but can refer to the cell in a matrix in the context in which the
+	matrix is at hand. The only time that NxsDiscreteDatum appears in the public NCL interface is as an argument to
+	NxsCharactersBlock::WriteStates().  The new implementation of NxsDiscreteDatum should continue to work in this
+	context because the NxsCharactersBlock holds the matrix
 */
 class NxsDiscreteDatum
 	{
@@ -40,13 +40,13 @@ class NxsDiscreteDatum
 
 		unsigned taxInd; /*row of the matrix */
 		unsigned charInd; /*col of the matrix */
-		
+
 	};
 
 typedef NxsDiscreteDatum DiscreteDatum;
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This assignment operator calls the CopyFrom member function to make a copy of the NxsDiscreteDatum object `other'.
+/*!
+	This assignment operator calls the CopyFrom member function to make a copy of the NxsDiscreteDatum object `other'.
 */
 inline void NxsDiscreteDatum::CopyFrom(
   const NxsDiscreteDatum & other)	/* is the object to be copied */

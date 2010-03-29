@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -30,7 +30,7 @@ NxsCXXDiscreteMatrix::NxsCXXDiscreteMatrix(const NxsCharactersBlock & cb, bool g
 	{
 	Initialize(&cb, gapsToMissing);
 	}
-	
+
 void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsToMissing)
 {
 	this->nativeCMatrix.stateList = 0L;
@@ -56,7 +56,7 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 		throw NxsException("too many mappers");
 	if (mappers.empty() || mappers[0] == NULL)
 		throw NxsException("no mappers");
-		
+
 	const NxsDiscreteDatatypeMapper & mapper = *mappers[0];
 	const NxsDiscreteStateMatrix & rawMatrix = cb->GetRawDiscreteMatrixRef();
 
@@ -68,14 +68,20 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 	const std::string fundamentalSymbols = mapper.GetSymbols();
 	const std::string fundamentalSymbolsPlusGaps = mapper.GetSymbolsWithGapChar();
 	const bool hadGaps = !(fundamentalSymbols == fundamentalSymbolsPlusGaps);
-	
+
 	this->symbolsStringAlias = fundamentalSymbols;
-	char missingSym = cb->GetMissingSymbol();	
+	char missingSym = cb->GetMissingSymbol();
 	NxsCDiscreteState_t newMissingStateCode = this->nativeCMatrix.nStates;
 	NCL_ASSERT((int)NXS_MISSING_CODE < 0);
 	NCL_ASSERT((int)NXS_GAP_STATE_CODE < 0);
-	const int sclOffset = (hadGaps ? std::min( (int)NXS_GAP_STATE_CODE, (int)NXS_MISSING_CODE) : NXS_MISSING_CODE);
-	const int negSCLOffset = -sclOffset;
+	NxsDiscreteStateCell sclOffsetV;
+	if (hadGaps)
+		sclOffsetV = std::min((NxsDiscreteStateCell)NXS_GAP_STATE_CODE, (NxsDiscreteStateCell)NXS_MISSING_CODE);
+	else
+		sclOffsetV = NXS_MISSING_CODE;
+	const NxsDiscreteStateCell sclOffset(sclOffsetV);
+
+	const NxsDiscreteStateCell negSCLOffset = -sclOffset;
 	const unsigned nMapperStateCodes = mapper.GetNumStateCodes();
 	const unsigned recodeVecLen = nMapperStateCodes;
 	const unsigned nMapperPosStateCodes = nMapperStateCodes + sclOffset;
@@ -87,13 +93,12 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 	const unsigned nfun_sym = (const unsigned)fundamentalSymbols.length();
 	for (NxsCDiscreteState_t i = 0; i < (NxsCDiscreteState_t)this->nativeCMatrix.nStates; ++i)
 		{
-		if (i < (NxsCDiscreteState_t)nfun_sym && (NxsCDiscreteState_t)fundamentalSymbols[i] == '\0' && mapper.PositionInSymbols(fundamentalSymbols[i]) != (int) i)
+		if (i < (NxsCDiscreteState_t)nfun_sym && (NxsCDiscreteState_t)fundamentalSymbols[i] == '\0' && mapper.PositionInSymbols(fundamentalSymbols[i]) != (NxsDiscreteStateCell) i)
 			{
-			//std::cerr << "i=" << int(i)  << "\nfundamentalSymbols = " << fundamentalSymbols << "\n" << nfun_sym << " symbols.\n";
-			NCL_ASSERT(i >= (NxsCDiscreteState_t)nfun_sym || fundamentalSymbols[i] == '\0' || mapper.PositionInSymbols(fundamentalSymbols[i]) == (int) i);
+			NCL_ASSERT(i >= (NxsCDiscreteState_t)nfun_sym || fundamentalSymbols[i] == '\0' || mapper.PositionInSymbols(fundamentalSymbols[i]) == (NxsDiscreteStateCell) i);
 			}
 #		if defined (NDEBUG)
-			const std::set<int>	 & ss =  mapper.GetStateSetForCode(i);
+			const std::set<NxsDiscreteStateCell>	 & ss =  mapper.GetStateSetForCode(i);
 			NCL_ASSERT(ss.size() == 1);
 			NCL_ASSERT(*ss.begin() == i);
 #		endif
@@ -107,7 +112,7 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 
 	if (hadGaps)
 		recodeArr[NXS_GAP_STATE_CODE] = ((hadGaps && gapsToMissing)? newMissingStateCode : -1);
-		
+
 	if (missingSym == '\0')
 		missingSym = (hadGaps ? mapper.GetGapSymbol() : '?');
 	else
@@ -123,11 +128,11 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 		stateListAlias.push_back(-1);
 	for (NxsCDiscreteState_t i = 0; i < (NxsCDiscreteState_t)this->nativeCMatrix.nStates; ++i)
 		stateListAlias.push_back(i);
-	
+
 	NxsCDiscreteState_t nextStateCode = newMissingStateCode + 1;
-	for (int i = (int)this->nativeCMatrix.nStates; i < (int) nMapperPosStateCodes; ++i)
+	for (NxsDiscreteStateCell i = (NxsDiscreteStateCell)this->nativeCMatrix.nStates; i < (NxsDiscreteStateCell) nMapperPosStateCodes; ++i)
 		{
-		const std::set<int>	 &ss = mapper.GetStateSetForCode( i);
+		const std::set<NxsDiscreteStateCell>	 &ss = mapper.GetStateSetForCode( i);
 		const unsigned ns = (const unsigned)ss.size();
 		const bool mapToMissing  = (!mapper.IsPolymorphic(i) && (nCodesInMissing + 1 == ns || nCodesInMissing == ns));
 		if (mapToMissing)
@@ -137,19 +142,19 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 			recodeArr[i] = nextStateCode++;
 			stateListPosAlias.push_back((unsigned)stateListAlias.size());
 			stateListAlias.push_back(ns);
-			for (std::set<int>::const_iterator sIt = ss.begin(); sIt != ss.end(); ++sIt)
+			for (std::set<NxsDiscreteStateCell>::const_iterator sIt = ss.begin(); sIt != ss.end(); ++sIt)
 				stateListAlias.push_back((NxsCDiscreteState_t) *sIt);
 			std::string stateName = mapper.StateCodeToNexusString(i);
 			if (stateName.length() != 1)
 				this->symbolsStringAlias.append(1, ' ');
 			else
-				this->symbolsStringAlias.append(1, stateName[0]); 
+				this->symbolsStringAlias.append(1, stateName[0]);
 			}
 		}
 	NCL_ASSERT(stateListPosAlias.size() == (unsigned)nextStateCode);
 	NCL_ASSERT(symbolsStringAlias.size() == (unsigned)nextStateCode);
 	this->nativeCMatrix.nObservedStateSets = nextStateCode;
-	
+
 	this->nativeCMatrix.nTax = (unsigned)rawMatrix.size();
 	this->nativeCMatrix.nChar = (this->nativeCMatrix.nTax == 0 ? 0 : (unsigned)rawMatrix[0].size());
 	this->matrixAlias.Initialize(this->nativeCMatrix.nTax, this->nativeCMatrix.nChar);
@@ -159,31 +164,28 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 	for (unsigned r = 0; r < nt; ++r)
 		{
 		NxsCDiscreteStateSet	 * recodedRow = nativeCMatrix.matrix[r];
-		const std::vector<int> & rawRowVec = rawMatrix[r];
-		//std::cerr <<"row  " << r << '\n';
+		const std::vector<NxsDiscreteStateCell> & rawRowVec = rawMatrix[r];
 		if (rawRowVec.empty())
 			{
 			NxsCDiscreteState_t recodedMissing = recodeArr[NXS_MISSING_CODE];
 			for (unsigned c = 0; c < nc; ++c)
 				*recodedRow++ = recodedMissing;
 			}
-		else 
+		else
 			{
 			NCL_ASSERT(rawRowVec.size() == nc);
-			const int * rawRow = &rawRowVec[0];
+			const NxsDiscreteStateCell * rawRow = &rawRowVec[0];
 			for (unsigned c = 0; c < nc; ++c)
 				{
-				const int rawC = *rawRow++;
+				const NxsDiscreteStateCell rawC = *rawRow++;
 				if ((unsigned)(rawC +  negSCLOffset) >= recodeVecLen)
 					{
-					//std::cerr << int(rawC) << '\n' << negSCLOffset<< '\n' << recodeVecLen << '\n' << mapper.GetNumStates();
 					NCL_ASSERT((unsigned)(rawC +  negSCLOffset) < recodeVecLen);
 					}
 				NCL_ASSERT(rawC >= sclOffset);
 				const NxsCDiscreteState_t recodedC = recodeArr[rawC];
 				NCL_ASSERT(recodedC > -2);
 				NCL_ASSERT(recodedC < nextStateCode);
-				//std::cerr << "c" << c << ": " << rawC << " => " << (int) recodedC << '\n';
 				*recodedRow++ = recodedC;
 				}
 			}
@@ -191,8 +193,7 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 	nativeCMatrix.symbolsList = symbolsStringAlias.c_str();
 	nativeCMatrix.stateListPos = &stateListPosAlias[0];
 	nativeCMatrix.stateList = &stateListAlias[0];
-	//std::cerr <<"done with NxsCXXDiscreteMatrix ctor\n";
-	
+
 	intWts.clear();
 	dblWts.clear();
 	const NxsTransformationManager &tm = cb->GetNxsTransformationManagerRef();
@@ -208,7 +209,7 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
  */
 NxsCXXDiscreteMatrix::NxsCXXDiscreteMatrix(const NxsCDiscreteMatrix & mat)
 	:nativeCMatrix(mat),//aliases pointers, but we'll fix this below
-	symbolsStringAlias(mat.symbolsList), 
+	symbolsStringAlias(mat.symbolsList),
 	matrixAlias(mat.nTax, mat.nChar),
 	stateListPosAlias(mat.stateListPos, (mat.stateListPos + mat.nObservedStateSets))
 	{
@@ -224,13 +225,13 @@ NxsCXXDiscreteMatrix::NxsCXXDiscreteMatrix(const NxsCDiscreteMatrix & mat)
 		}
 	nativeCMatrix.stateList = &stateListAlias[0];
 	nativeCMatrix.matrix = matrixAlias.GetAlias();
-	
+
 	// cout << "Matrix in NxsCXXDiscreteMatrix ctor:" << mat.nTax << ' '<< mat.nChar<< endl;
 	for (unsigned i = 0; i < mat.nTax; ++i)
 		{
 		if (mat.nChar > 0)
 			ncl_copy(mat.matrix[i], mat.matrix[i] + mat.nChar, nativeCMatrix.matrix[i]);
 		}
-	
+
 	}
-			
+

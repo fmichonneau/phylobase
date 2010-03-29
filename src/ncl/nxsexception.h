@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -25,8 +25,8 @@
 class NxsToken;
 class ProcessedNxsToken;
 class NxsTokenPosInfo;
-/*----------------------------------------------------------------------------------------------------------------------
-|	Exception class that conveys a message specific to the problem encountered.
+/*!
+	Exception class that conveys a message specific to the problem encountered.
 */
 class NxsException: public std::exception
 	{
@@ -52,8 +52,8 @@ class NxsException: public std::exception
 
 typedef NxsException XNexus;
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Thrown when a programming error (a violation of one of the APIs used in NCL) is revealed.
+/*!
+	Thrown when a programming error (a violation of one of the APIs used in NCL) is revealed.
 */
 class NxsNCLAPIException: public NxsException
 	{
@@ -62,8 +62,8 @@ class NxsNCLAPIException: public NxsException
 		NxsNCLAPIException(NxsString s, NxsToken &t) :NxsException(s, t){}
 	};
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Thrown when an unimplemented method is called.
+/*!
+	Thrown when an unimplemented method is called.
 */
 class NxsUnimplementedException: public NxsNCLAPIException
 	{
@@ -78,12 +78,12 @@ class DuplicatedLabelNxsException: public NxsException
 	public:
 		DuplicatedLabelNxsException(const std::string & s):NxsException(s){}
 	};
-	
+
 
 /*------------------------------------------------------------------------------
-| This exception will be thrown if NCL signal handling is activated (static
-|	methods in NxsReader control this) and a SIGINT is detected during a
-|	parse.
+ This exception will be thrown if NCL signal handling is activated (static
+	methods in NxsReader control this) and a SIGINT is detected during a
+	parse.
 */
 class NxsSignalCanceledParseException: public NxsException
 	{

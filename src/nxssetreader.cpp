@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 #include <climits>
@@ -43,12 +43,12 @@ void NxsSetReader::AddRangeToSet(unsigned first, unsigned last, unsigned stride,
 	}
 
 /**
-|	returns the number of indices added.
+	returns the number of indices added.
 */
-unsigned NxsSetReader::InterpretTokenAsIndices(NxsToken &token, 
-  const NxsLabelToIndicesMapper & mapper, 
-  const char * setType, 
-  const char * cmdName, 
+unsigned NxsSetReader::InterpretTokenAsIndices(NxsToken &token,
+  const NxsLabelToIndicesMapper & mapper,
+  const char * setType,
+  const char * cmdName,
   NxsUnsignedSet * destination)
 	{
 	try {
@@ -81,10 +81,10 @@ unsigned NxsSetReader::InterpretTokenAsIndices(NxsToken &token,
 	}
 
 void NxsSetReader::ReadSetDefinition(
-  NxsToken &token, 
-  const NxsLabelToIndicesMapper & mapper, 
-  const char * setType, /* "TAXON" or "CHARACTER" -- for error messages only */ 
-  const char * cmdName, /* command name -- "TAXSET" or "EXSET"-- for error messages only */ 
+  NxsToken &token,
+  const NxsLabelToIndicesMapper & mapper,
+  const char * setType, /* "TAXON" or "CHARACTER" -- for error messages only */
+  const char * cmdName, /* command name -- "TAXSET" or "EXSET"-- for error messages only */
   NxsUnsignedSet * destination, /** to be filled */
   const NxsUnsignedSet * taboo)
 	{
@@ -140,7 +140,7 @@ void NxsSetReader::ReadSetDefinition(
 			if (token.Equals("\\"))
 				{
 				token.GetNextToken();
-				NxsString t = token.GetToken(); 
+				NxsString t = token.GetToken();
 				unsigned stride = 0;
 				try
 					{
@@ -162,7 +162,7 @@ void NxsSetReader::ReadSetDefinition(
 				AddRangeToSet(previousInd, endpoint, 1, destination, taboo, token);
 			previousInd = UINT_MAX;
 			}
-		else 
+		else
 			{
 			tmpset.clear();
 			const unsigned nAdded = NxsSetReader::InterpretTokenAsIndices(token, mapper, setType, cmdName, &tmpset);
@@ -190,9 +190,9 @@ void NxsSetReader::ReadSetDefinition(
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Initializes `max' to maxValue, `settype' to `type', `token' to `t', `block' to `nxsblk' and `nxsset' to `iset', 
-|	then clears `nxsset'.
+/*!
+	Initializes `max' to maxValue, `settype' to `type', `token' to `t', `block' to `nxsblk' and `nxsset' to `iset',
+	then clears `nxsset'.
 */
 NxsSetReader::NxsSetReader(
   NxsToken			&t,			/* reference to the NxsToken being used to read in the NEXUS data file */
@@ -207,13 +207,13 @@ NxsSetReader::NxsSetReader(
 	nxsset.clear();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Adds the range specified by `first', `last', and `modulus' to the set. If `modulus' is zero it is ignored. The 
-|	parameters `first' and `last' refer to numbers found in the data file itself, and thus have range [1..`max']. They 
-|	are stored in `nxsset', however, with offset 0. For example, if the data file says "4-10\2" this function would be
-|	called with `first' = 4, `last' = 10 and `modulus' = 2, and the values stored in `nxsset' would be 3, 5, 7, 9. The
-|	return value is true unless `last' is greater than `max', `first' is less than 1, or `first' is greater than `last':
-|	in any of these cases, the return value is false to indicate failure to store this range.
+/*!
+	Adds the range specified by `first', `last', and `modulus' to the set. If `modulus' is zero it is ignored. The
+	parameters `first' and `last' refer to numbers found in the data file itself, and thus have range [1..`max']. They
+	are stored in `nxsset', however, with offset 0. For example, if the data file says "4-10\2" this function would be
+	called with `first' = 4, `last' = 10 and `modulus' = 2, and the values stored in `nxsset' would be 3, 5, 7, 9. The
+	return value is true unless `last' is greater than `max', `first' is less than 1, or `first' is greater than `last':
+	in any of these cases, the return value is false to indicate failure to store this range.
 */
 bool NxsSetReader::AddRange(
   unsigned first,		/* the first member of the range (inclusive, offset 1) */
@@ -234,9 +234,9 @@ bool NxsSetReader::AddRange(
 	return true;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Tries to interpret `token' as a number. Failing that, tries to interpret `token' as a character or taxon label, 
-|	which it then converts to a number. Failing that, it throws a NxsException exception.
+/*!
+	Tries to interpret `token' as a number. Failing that, tries to interpret `token' as a character or taxon label,
+	which it then converts to a number. Failing that, it throws a NxsException exception.
 */
 unsigned NxsSetReader::GetTokenValue()
 	{
@@ -354,8 +354,8 @@ void NxsSetReader::WriteSetAsNexusValue(const NxsUnsignedSet & nxsset, std::ostr
 	else
 		out << ' ' << prev << ' ' << curr;
 	}
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads in a set from a NEXUS data file. Returns true if the set was terminated by a semicolon, false otherwise.
+/*!
+	Reads in a set from a NEXUS data file. Returns true if the set was terminated by a semicolon, false otherwise.
 */
 bool NxsSetReader::Run()
 	{

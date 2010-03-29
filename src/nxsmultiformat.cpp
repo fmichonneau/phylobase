@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -32,14 +32,14 @@
  * 3.6.5 (see copyright above) tweaked by Mark Holder to output NEXUS.
  *
  * This file was created by concatenating the headers, and .c files:
- *	phylip.h, 
+ *	phylip.h,
  *	seq.h,
- *	discrete.h 
+ *	discrete.h
  *	phylip.c
- *	seq.c, 
- *	pars.c, and 
- *	discrete.c concatenated 
- *	followed by removal of code that is unused in this simple program, and 
+ *	seq.c,
+ *	pars.c, and
+ *	discrete.c concatenated
+ *	followed by removal of code that is unused in this simple program, and
  * the addition of routines for printing out NEXUS.
  */
 
@@ -98,28 +98,120 @@ std::vector<std::string> MultiFormatReader::getFormatNames()
 	return v;
 	}
 
-void MultiFormatReader::ReadFilepath(const char * filepath, const char * formatName) 
+
+
+class FileToCharBuffer
+{
+		char prevChar;
+		std::istream & inf;
+		unsigned remaining;
+		unsigned pos;
+	public:
+		unsigned totalSize;
+	protected:
+		unsigned lineNumber;
+		unsigned prevNewlinePos;
+	public:
+		/* reads at most MAX_BUFFER_SIZE characters from inf into the buffer that is
+		returned. The caller must delete the buffer.  On exit `len` will store the
+		length of the buffer.
+		*/
+
+		FileToCharBuffer(std::istream & instream);
+
+		/* reads at most maxLen characters from `inf` into the `buffer`
+		Returns false if no characters are read.
+		If true is returned then `maxLen` will indicate the number of characters read.
+		*/
+		bool refillBuffer(unsigned offset);
+		char current() const
+			{
+			return buffer[pos];
+			}
+		bool advance()
+			{
+			if (pos + 1 >= inbuffer)
+				{
+				if (!refillBuffer(0))
+					return false;
+				}
+			else
+				++pos;
+			const char c = current();
+			if (c == 13)
+				{
+				++lineNumber;
+				prevNewlinePos = position();
+				}
+			else if (c == 10)
+				{
+				if (prev() != 13)
+					++lineNumber;
+				prevNewlinePos = position();
+				}
+			return true;
+			}
+		bool advance_then_store(char & c)
+			{
+			if (!this->advance())
+				return false;
+			c = this->current();
+			return true;
+			}
+		bool skip_to_beginning_of_line(char & next);
+		char prev() const
+			{
+			if (pos == 0)
+				return prevChar;
+			return buffer[pos - 1];
+			}
+		~FileToCharBuffer()
+			{
+			delete [] buffer;
+			}
+		unsigned position() const
+			{
+			return totalSize +  pos - remaining - inbuffer;
+			}
+		unsigned line() const
+			{
+			return lineNumber;
+			}
+		unsigned column() const
+			{
+			unsigned p = position();
+			if (p < prevNewlinePos)
+				return 0;
+			return p - prevNewlinePos;
+			}
+		char * buffer;
+		unsigned inbuffer;
+
+};
+
+
+void MultiFormatReader::ReadFilepath(const char * filepath, const char * formatName)
 	{
 	if (!formatName)
 		return;
 	DataFormatType f =  formatNameToCode(formatName);
 	if (f == UNSUPPORTED_FORMAT)
 		{
-		NxsString m; 
+		NxsString m;
 		m << "Unsupported format: " << formatName;
 		throw NxsException(m);
 		}
 	this->ReadFilepath(filepath, f);
 	}
 
-void MultiFormatReader::ReadStream(std::istream & inf, const char * formatName) 
+void MultiFormatReader::ReadStream(std::istream & inf, const char * formatName)
 	{
 	if (!formatName)
 		return;
 	DataFormatType f =  formatNameToCode(formatName);
 	if (f == UNSUPPORTED_FORMAT)
 		{
-		NxsString m; 
+		NxsString m;
 		m << "Unsupported format: " << formatName;
 		throw NxsException(m);
 		}
@@ -138,7 +230,7 @@ FileToCharBuffer::FileToCharBuffer(std::istream & instream)
 	std::streampos s = inf.tellg();
 	inf.seekg (0, std::ios::end);
 	std::streampos e = inf.tellg();
-	if (e <= s) 
+	if (e <= s)
 		{
 		inbuffer = 0;
 		remaining = 0;
@@ -158,12 +250,12 @@ FileToCharBuffer::FileToCharBuffer(std::istream & instream)
 		}
 	else if (c == 10)
 		{
-		if (prev() != 13) 
+		if (prev() != 13)
 			++lineNumber;
 		prevNewlinePos = position();
 		}
 	}
-	
+
 bool FileToCharBuffer::refillBuffer(unsigned offset)
 	{
 	if (remaining  == 0)
@@ -188,16 +280,16 @@ MultiFormatReader::DataFormatType MultiFormatReader::formatNameToCode(const std:
 	NCL_ASSERT(ind < UNSUPPORTED_FORMAT);
 	return MultiFormatReader::DataFormatType(ind);
 	}
-	
 
 
-/* Assumes that `contents` was returned from readFileToMemory() has been called 
-	with `inf` and the `len` refers the size of the buffer allocated by 
-	readFileToMemory 
+
+/* Assumes that `contents` was returned from readFileToMemory() has been called
+	with `inf` and the `len` refers the size of the buffer allocated by
+	readFileToMemory
 */
 bool  MultiFormatReader::readFastaSequences(
 	FileToCharBuffer & ftcb,
-	const NxsDiscreteDatatypeMapper &dm, 
+	const NxsDiscreteDatatypeMapper &dm,
 	std::list<std::string> & taxaNames,
 	std::list<NxsDiscreteStateRow> & matList,
 	size_t & longest)
@@ -223,7 +315,7 @@ bool  MultiFormatReader::readFastaSequences(
 				}
 			std::string nameStripped = NxsString::strip_surrounding_whitespace(n);
 			taxaNames.push_back(nameStripped);
-			
+
 			matList.push_back(NxsDiscreteStateRow());
 			if (!ftcb.advance())
 				break;
@@ -278,7 +370,7 @@ std::string  MultiFormatReader::readPhylipName(FileToCharBuffer & ftcb, unsigned
 			if (!ftcb.advance())
 				{
 				err << "End of file found when reading the name of taxon " << i+1 << ", \"" << n << "\"";
-				throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());	
+				throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 				}
 			}
 		while (isgraph(ftcb.current()));
@@ -287,7 +379,7 @@ std::string  MultiFormatReader::readPhylipName(FileToCharBuffer & ftcb, unsigned
 			if (!ftcb.advance())
 				{
 				err << "End of file found when expecting the beginning of the data for taxon " << i+1 << ", \"" << n << "\"";
-				throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());	
+				throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 				}
 			}
 		}
@@ -308,7 +400,7 @@ std::string  MultiFormatReader::readPhylipName(FileToCharBuffer & ftcb, unsigned
 			if (!ftcb.advance())
 				{
 				err << "End of file found when reading the name for taxon " << i+1 << ", \"" << n << "\"";
-				throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());	
+				throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 				}
 			}
 		}
@@ -317,7 +409,7 @@ std::string  MultiFormatReader::readPhylipName(FileToCharBuffer & ftcb, unsigned
 
 void  MultiFormatReader::readPhylipData(
 	FileToCharBuffer & ftcb,
-	const NxsDiscreteDatatypeMapper &dm, 
+	const NxsDiscreteDatatypeMapper &dm,
 	std::list<std::string> & taxaNames,
 	std::list<NxsDiscreteStateRow> & matList,
 	const unsigned n_taxa,
@@ -334,8 +426,8 @@ void  MultiFormatReader::readPhylipData(
 		if (!ftcb.advance())
 			goto funcExit;
 		}
-	
-	for (unsigned i = 0; i < n_taxa; ++i) 
+
+	for (unsigned i = 0; i < n_taxa; ++i)
 		{
 		std::string n = readPhylipName(ftcb, i, relaxedNames);
 		taxaNames.push_back(n);
@@ -347,7 +439,7 @@ void  MultiFormatReader::readPhylipData(
 			for (;;)
 				{
 				const char c = ftcb.current();
-				if (isgraph(c)) 
+				if (isgraph(c))
 					{
 					if (isdigit(c))// I don't know why PHYLIP allows digits in the midst of the sequence, but it seems to.
 						{
@@ -423,7 +515,7 @@ void  MultiFormatReader::readPhylipData(
 
 void  MultiFormatReader::readInterleavedPhylipData(
 	FileToCharBuffer & ftcb,
-	const NxsDiscreteDatatypeMapper &dm, 
+	const NxsDiscreteDatatypeMapper &dm,
 	std::list<std::string> & taxaNames,
 	std::list<NxsDiscreteStateRow> & matList,
 	const unsigned n_taxa,
@@ -444,7 +536,7 @@ void  MultiFormatReader::readInterleavedPhylipData(
 		}
 	while (startCharIndex < n_char)
 		{
-		for (unsigned i = 0; i < n_taxa; ++i) 
+		for (unsigned i = 0; i < n_taxa; ++i)
 			{
 			if (startCharIndex == 0)
 				{
@@ -459,7 +551,7 @@ void  MultiFormatReader::readInterleavedPhylipData(
 			for (;;)
 				{
 				const char c = ftcb.current();
-				if (isgraph(c)) 
+				if (isgraph(c))
 					{
 					if (j >= endCharIndex)
 						{
@@ -501,7 +593,7 @@ void  MultiFormatReader::readInterleavedPhylipData(
 								NxsDiscreteStateRow & firstRow = *(matList.begin());
 								row[j] = firstRow.at(j);
 								}
-							else 
+							else
 								{
 								std::list<std::string>::const_iterator nIt = taxaNames.begin();
 								for (unsigned q = 0; q < i ; ++q)
@@ -576,7 +668,7 @@ bool FileToCharBuffer::skip_to_beginning_of_line(char & next)
 
 bool  MultiFormatReader::readAlnData(
 	FileToCharBuffer & ftcb,
-	const NxsDiscreteDatatypeMapper &dm, 
+	const NxsDiscreteDatatypeMapper &dm,
 	std::list<std::string> & taxaNames,
 	std::list<NxsDiscreteStateRow> & matList)
 	{
@@ -602,11 +694,11 @@ bool  MultiFormatReader::readAlnData(
 			throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 			}
 		++index;
-		c = ftcb.current();		
+		c = ftcb.current();
 		}
 	do {
 		if (!ftcb.skip_to_beginning_of_line(c))
-			throw NxsException("Expecting multi-line file",ftcb.position(), ftcb.line(), ftcb.column());		
+			throw NxsException("Expecting multi-line file",ftcb.position(), ftcb.line(), ftcb.column());
 	} while (!isgraph(c));
 	bool readingFirstBlock = true;
 	for (;;)
@@ -654,7 +746,7 @@ bool  MultiFormatReader::readAlnData(
 				err << "Expecting a line beginning with whitespace (or a blank line), but found \"" << n << "\"";
 				throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 				}
-			else 
+			else
 				{
 				std::string prev_name = *taxNameIt++;
 				if (!NxsString::case_insensitive_equals(prev_name.c_str(), n.c_str()))
@@ -664,8 +756,8 @@ bool  MultiFormatReader::readAlnData(
 					}
 				row = &(*matRowIt++);
 				}
-			
-			
+
+
 			while (ftcb.advance_then_store(c))
 				{
 				if (isgraph(c))
@@ -687,7 +779,7 @@ bool  MultiFormatReader::readAlnData(
 						{
 						if (!ftcb.skip_to_beginning_of_line(c))
 							{
-							if (!readingFirstBlock && (curr_tax_ind + 1) != taxaNames.size()) 
+							if (!readingFirstBlock && (curr_tax_ind + 1) != taxaNames.size())
 								{
 								err << "Unexpected End of file. Expecting data for " << taxaNames.size() << " sequences";
 								throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
@@ -727,7 +819,7 @@ bool  MultiFormatReader::readAlnData(
 					}
 				if (eof)
 					{
-					if (!readingFirstBlock && (curr_tax_ind + 1) != taxaNames.size()) 
+					if (!readingFirstBlock && (curr_tax_ind + 1) != taxaNames.size())
 						{
 						err << "Unexpected End of file. Expecting data for " << taxaNames.size() << " sequences";
 						throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
@@ -773,7 +865,7 @@ void MultiFormatReader::addTaxaNames(const std::list<std::string> & taxaNames, N
 	std::vector<NxsNameToNameTrans> nameTrans;
 	bool nameTransNeeded = false;
 	NxsString t;
-				
+
 	for (; nIt != taxaNames.end(); ++nIt)
 		{
 		std::string name = *nIt;
@@ -784,7 +876,7 @@ void MultiFormatReader::addTaxaNames(const std::list<std::string> & taxaNames, N
 				taxa->AddTaxonLabel(name);
 				break;
 				}
-			catch (DuplicatedLabelNxsException & x) 
+			catch (DuplicatedLabelNxsException & x)
 				{
 				if (!this->conversionOutputRecord.addNumbersToDisambiguateNames)
 					throw;
@@ -798,8 +890,8 @@ void MultiFormatReader::addTaxaNames(const std::list<std::string> & taxaNames, N
 		if (this->conversionOutputRecord.addNumbersToDisambiguateNames)
 			nameTrans.push_back(trans);
 		}
-	
-	
+
+
 	// write out a name translation file if we need to
 	if (nameTransNeeded)
 		this->conversionOutputRecord.writeNameTranslation(nameTrans, taxa);
@@ -872,9 +964,9 @@ void  MultiFormatReader::readFastaFile(std::istream & inf, NxsCharactersBlock::D
 		NxsPartition dtParts;
 		std::vector<NxsCharactersBlock::DataTypesEnum> dtv;
 		dataB->CreateDatatypeMapperObjects(dtParts, dtv);
-		
+
 		const NxsDiscreteDatatypeMapper * dm = dataB->GetDatatypeMapperForChar(0);
-		
+
 		std::list<std::string> taxaNames;
 		std::list<NxsDiscreteStateRow> matList;
 		size_t longest = 0;
@@ -887,7 +979,7 @@ void  MultiFormatReader::readFastaFile(std::istream & inf, NxsCharactersBlock::D
 			cloneFactory.BlockError(dataB);
 			throw;
 			}
-		
+
 		if (aligned)
 			{
 			moveDataToDataBlock(taxaNames, matList, longest, dataB);
@@ -923,13 +1015,13 @@ void  MultiFormatReader::readFastaFile(std::istream & inf, NxsCharactersBlock::D
 		}
 	}
 
-void  MultiFormatReader::ReadFilepath(const char * filepath, DataFormatType format) 
+void  MultiFormatReader::ReadFilepath(const char * filepath, DataFormatType format)
 	{
 	if (format == NEXUS_FORMAT)
 		{
 		NxsReader::ReadFilepath(filepath);
 		}
-	else 
+	else
 		{
 		std::ifstream inf;
 		try{
@@ -957,7 +1049,7 @@ void  MultiFormatReader::ReadStream(std::istream & inf, DataFormatType format, c
 		{
 		NxsReader::ReadFilestream(inf);
 		}
-	else 
+	else
 		{
 		if (format == FASTA_DNA_FORMAT)
 			readFastaFile(inf, NxsCharactersBlock::dna);
@@ -1021,7 +1113,7 @@ void  MultiFormatReader::ReadStream(std::istream & inf, DataFormatType format, c
 		}
 	}
 // More tolerant than strict PHYLIP (tolerates any amount of whitespace before or
-// between ntax and nchar.  
+// between ntax and nchar.
 // throws a NxsException if the header cannot be read.
 // returns the file position.
 unsigned MultiFormatReader::readPhylipHeader(std::istream & inf, unsigned & ntax, unsigned & nchar)
@@ -1047,11 +1139,11 @@ void MultiFormatReader::readPhylipTreeFile(std::istream & inf, bool relaxedNames
 		return;
 	nb->SetNexus(this);
 
-	/* this should be safe because we know that the PublicNexusReader has a 
-		NxsTreesBlock assigned to "TREES" -- unless the caller has replaced that 
+	/* this should be safe because we know that the PublicNexusReader has a
+		NxsTreesBlock assigned to "TREES" -- unless the caller has replaced that
 		clone template (gulp)
 	*/
-	NxsTreesBlock * treesB = static_cast<NxsTreesBlock *>(nb); 
+	NxsTreesBlock * treesB = static_cast<NxsTreesBlock *>(nb);
 	NxsString err;
 	try {
 		treesB->Reset();
@@ -1095,12 +1187,12 @@ void MultiFormatReader::readAlnFile(std::istream & inf, NxsCharactersBlock::Data
 	if (!nb)
 		return;
 	nb->SetNexus(this);
-	/* this should be safe because we know that the PublicNexusReader has a 
-		DataBlock assigned to "DATA" -- unless the caller has replaced that 
+	/* this should be safe because we know that the PublicNexusReader has a
+		DataBlock assigned to "DATA" -- unless the caller has replaced that
 		clone template (gulp)
 	*/
-	NxsDataBlock * dataB = static_cast<NxsDataBlock *>(nb); 
-		
+	NxsDataBlock * dataB = static_cast<NxsDataBlock *>(nb);
+
 	try {
 		dataB->Reset();
 		dataB->datatype = dt;
@@ -1109,7 +1201,7 @@ void MultiFormatReader::readAlnFile(std::istream & inf, NxsCharactersBlock::Data
 		NxsPartition dtParts;
 		std::vector<NxsCharactersBlock::DataTypesEnum> dtv;
 		dataB->CreateDatatypeMapperObjects(dtParts, dtv);
-		
+
 		const NxsDiscreteDatatypeMapper * dm = dataB->GetDatatypeMapperForChar(0);
 		NCL_ASSERT(dm);
 		FileToCharBuffer ftcb(inf);
@@ -1142,12 +1234,12 @@ void MultiFormatReader::readPhylipFile(std::istream & inf, NxsCharactersBlock::D
 	if (!nb)
 		return;
 	nb->SetNexus(this);
-	/* this should be safe because we know that the PublicNexusReader has a 
-		DataBlock assigned to "DATA" -- unless the caller has replaced that 
+	/* this should be safe because we know that the PublicNexusReader has a
+		DataBlock assigned to "DATA" -- unless the caller has replaced that
 		clone template (gulp)
 	*/
-	NxsDataBlock * dataB = static_cast<NxsDataBlock *>(nb); 
-		
+	NxsDataBlock * dataB = static_cast<NxsDataBlock *>(nb);
+
 	try {
 		dataB->Reset();
 		dataB->datatype = dt;
@@ -1156,7 +1248,7 @@ void MultiFormatReader::readPhylipFile(std::istream & inf, NxsCharactersBlock::D
 		NxsPartition dtParts;
 		std::vector<NxsCharactersBlock::DataTypesEnum> dtv;
 		dataB->CreateDatatypeMapperObjects(dtParts, dtv);
-		
+
 		const NxsDiscreteDatatypeMapper * dm = dataB->GetDatatypeMapperForChar(0);
 		NCL_ASSERT(dm);
 		unsigned ntax, nchar;

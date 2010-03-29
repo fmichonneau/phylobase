@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -48,7 +48,7 @@ class NxsSimpleEdge
 			return defaultEdgeLen;
 			}
 
-		bool IsIntEdgeLen() const 
+		bool IsIntEdgeLen() const
 			{
 			return hasIntEdgeLens;
 			}
@@ -58,7 +58,7 @@ class NxsSimpleEdge
 			return hasIntEdgeLens ? (double) iEdgeLen : dEdgeLen ;
 			}
 
-		int GetIntEdgeLen() const 
+		int GetIntEdgeLen() const
 			{
 			return hasIntEdgeLens ? iEdgeLen : (int) dEdgeLen ;
 			}
@@ -69,7 +69,7 @@ class NxsSimpleEdge
 			}
 
 		/// returns true if `key` was processed from a comment.
-		///	If found, (and value is not NULL), the *value will hold the 
+		///	If found, (and value is not NULL), the *value will hold the
 		///		value on exit
 		bool GetInfo(const std::string &key, std::string *value) const
 			{
@@ -93,17 +93,17 @@ class NxsSimpleEdge
 		void SetDblEdgeLen(double e, const char *asString)
 			{
 			defaultEdgeLen = false;
-			hasIntEdgeLens = false; 
+			hasIntEdgeLens = false;
 			dEdgeLen = e;
 			if (asString)
 				lenAsString.assign(asString);
 
 			}
-		
-		void SetIntEdgeLen(int e, const char *asString) 
+
+		void SetIntEdgeLen(int e, const char *asString)
 			{
 			defaultEdgeLen = false;
-			hasIntEdgeLens = true; 
+			hasIntEdgeLens = true;
 			iEdgeLen = e;
 			if (asString)
 				lenAsString.assign(asString);
@@ -137,7 +137,7 @@ class NxsSimpleEdge
 			{
 			return parent;
 			}
-		
+
 		NxsSimpleNode * parent;
 		NxsSimpleNode * child;
 		bool			defaultEdgeLen;
@@ -158,7 +158,7 @@ class NxsSimpleNode
 			{
 			return edgeToPar;
 			}
-		
+
 		NxsSimpleNode *GetFirstChild() const
 			{
 			return lChild;
@@ -180,7 +180,7 @@ class NxsSimpleNode
 				}
 			return currNode;
 			}
-		
+
 		std::vector<NxsSimpleNode *> GetChildren() const
 			{
 			std::vector<NxsSimpleNode *> children;
@@ -197,21 +197,21 @@ class NxsSimpleNode
 			{
 			return taxIndex;
 			}
-			
+
 		// non-empty only for internals that are labelled with names that are NOT taxLabels
 		std::string GetName() const
 			{
 			return name;
 			}
-		void SetName(const std::string &n) 
+		void SetName(const std::string &n)
 			{
 			name = n;
 			}
 		mutable void * scratch;
 	private:
 		void WriteAsNewick(std::ostream &out, bool nhx, bool useLeafNames, bool escapeNames, const NxsTaxaBlockAPI *taxa=0L) const;
-			
-		
+
+
 		NxsSimpleNode(NxsSimpleNode *par, double edgeLen)
 			:scratch(0L),
 			lChild(0L),
@@ -281,8 +281,8 @@ class NxsSimpleTree
 			Clear();
 			}
 		void Initialize(const NxsFullTreeDescription &);
-			
-		
+
+
 		std::vector<const NxsSimpleNode *> GetPreorderTraversal() const;
 		std::vector<NxsSimpleNode *> & GetLeavesRef()
 			{
@@ -290,7 +290,7 @@ class NxsSimpleTree
 			}
 		std::vector<std::vector<int> > GetIntPathDistances(bool toMRCA=false) const;
 		std::vector<std::vector<double> > GetDblPathDistances(bool toMRCA=false) const;
-		
+
 		/** Writes just the newick description with numbers for leaf labels.
 			Neither the tree name or NEXUS ; are written
 		*/
@@ -300,8 +300,8 @@ class NxsSimpleTree
 				root->WriteAsNewick(out, nhx, useLeafNames, escapeNames, taxa);
 			}
 		void RerootAt(unsigned leafIndex);
-		
-		const NxsSimpleNode * GetRootConst() const 
+
+		const NxsSimpleNode * GetRootConst() const
 			{
 			return root;
 			}
@@ -323,7 +323,7 @@ class NxsSimpleTree
 			allNodes.push_back(nd);
 			return nd;
 			}
-		
+
 		void Clear()
 			{
 			root = NULL;
@@ -340,11 +340,11 @@ class NxsSimpleTree
 class NxsFullTreeDescription
 	{
 	public:
-		enum TreeDescFlags 
+		enum TreeDescFlags
 			{ 	NXS_IS_ROOTED_BIT					= 0x0001,
 				NXS_HAS_SOME_EDGE_LENGTHS_BIT		= 0x0002,
 				NXS_MISSING_SOME_EDGE_LENGTHS_BIT	= 0x0004,
-				NXS_EDGE_LENGTH_UNION 				= 0x0006, 
+				NXS_EDGE_LENGTH_UNION 				= 0x0006,
 				NXS_INT_EDGE_LENGTHS_BIT 			= 0x0008,
 				NXS_HAS_ALL_TAXA_BIT				= 0x0010,
 				NXS_HAS_NHX_BIT 					= 0x0020,
@@ -352,9 +352,9 @@ class NxsFullTreeDescription
 				NXS_HAS_POLYTOMY_BIT				= 0x0080,
 				NXS_HAS_INTERNAL_NAMES_BIT			= 0x0100,
 				NXS_HAS_NEW_INTERNAL_NAMES_BIT		= 0x0200,
-				NXS_KNOWN_INTERNAL_NAMES_BIT		= 0x0400, 
-				NXS_SOME_ZERO_EDGE_LEN_BIT			= 0x0800, 
-				NXS_SOME_NEGATIVE_EDGE_LEN_BIT		= 0x1000, 
+				NXS_KNOWN_INTERNAL_NAMES_BIT		= 0x0400,
+				NXS_SOME_ZERO_EDGE_LEN_BIT			= 0x0800,
+				NXS_SOME_NEGATIVE_EDGE_LEN_BIT		= 0x1000,
 				NXS_TREE_PROCESSED 					= 0x2000
 			};
 		NxsFullTreeDescription(const std::string & newickStr, const std::string &treeName, int infoFlags)
@@ -365,36 +365,36 @@ class NxsFullTreeDescription
 			minDblEdgeLen(DBL_MAX)
 			{}
 		std::vector<std::string> GetTreeTokens() const;
-	
+
 		/** returns a newick string with 1-based numbers corresponding to (1 + Taxa block's index of taxon)*/
 		const std::string &	GetNewick() const
 			{
 			return newick;
 			}
-		const std::string &	GetName() const 
+		const std::string &	GetName() const
 			{
 			return name;
 			}
-		bool IsProcessed() const 
+		bool IsProcessed() const
 			{
 			return (flags&NXS_TREE_PROCESSED) != 0;
 			}
-		void AssertProcessed() const 
+		void AssertProcessed() const
 			{
 			if (!IsProcessed())
 				throw NxsNCLAPIException("Tree description queries are only supported on processed tree descriptions.");
 			}
-		bool IsRooted() const 
+		bool IsRooted() const
 			{
 			AssertProcessed();
 			return (flags&NXS_IS_ROOTED_BIT) != 0;
 			}
-		bool AllEdgesHaveLengths() const 
+		bool AllEdgesHaveLengths() const
 			{
 			AssertProcessed();
 			return (flags&NXS_EDGE_LENGTH_UNION) == NXS_HAS_SOME_EDGE_LENGTHS_BIT;
 			}
-		bool SomeEdgesHaveLengths() const 
+		bool SomeEdgesHaveLengths() const
 			{
 			AssertProcessed();
 			return (flags&NXS_HAS_SOME_EDGE_LENGTHS_BIT) != 0;
@@ -425,8 +425,8 @@ class NxsFullTreeDescription
 			return (flags&NXS_HAS_DEG_TWO_NODES_BIT) != 0;
 			}
 		/**---------------------------------------------------------------------
-		|	If EdgeLengthsAreAllIntegers returns true then this will return the 
-		|	shortest edge length in the tree (useful as means of checking for 
+		|	If EdgeLengthsAreAllIntegers returns true then this will return the
+		|	shortest edge length in the tree (useful as means of checking for
 		|	constraints by programs that prohibit 0 or negative branch lengths)
 		*/
 		int smallestIntEdgeLength() const
@@ -434,8 +434,8 @@ class NxsFullTreeDescription
 			return minIntEdgeLen;
 			}
 		/**---------------------------------------------------------------------
-		|	If EdgeLengthsAreAllIntegers returns false then this will return the 
-		|	shortest edge length in the tree (useful as means of checking for 
+		|	If EdgeLengthsAreAllIntegers returns false then this will return the
+		|	shortest edge length in the tree (useful as means of checking for
 		|	constraints by programs that prohibit 0 or negative branch lengths)
 		*/
 		double smallestRealEdgeLength() const
@@ -453,32 +453,32 @@ class NxsFullTreeDescription
 	};
 class NxsTreesBlock;
 typedef bool (* ProcessedTreeValidationFunction)(NxsFullTreeDescription &, void *, NxsTreesBlock *);
-/*----------------------------------------------------------------------------------------------------------------------
-|	This class handles reading and storage for the NEXUS block TREES. It overrides the member functions Read and Reset,
-|	which are abstract virtual functions in the base class NxsBlock. The translation table (if one is supplied) is 
-|	stored in the `translateList'. The tree names are stored in `treeName' and the tree descriptions in 
-|	`treeDescription'. Information about rooting of trees is stored in `rooted'. Note that no checking is done to 
-|	ensure that the tree descriptions are valid. The validity of the tree descriptions could be checked after the TREES
-|	block has been read (but before the next block in the file has been read) by overriding the NxsReader::ExitingBlock
-|	member function, but no functionality for this is provided by the NCL. Below is a table showing the correspondence
-|	between the elements of a TREES block and the variables and member functions that can be used to access each piece 
-|	of information stored. 
-|>
-|	NEXUS command     Data members    Member functions
-|	-----------------------------------------------------
-|	TRANSLATE         translateList
-|	
-|	TREE              treeName        GetTreeName
-|	                                  GetTreeDescription
-|	                                  GetNumTrees
-|	                                  GetNumDefaultTree
-|	                                  IsDefaultTree
-|	
-|	                  rooted          IsRootedTree
-|	-----------------------------------------------------
-|>
+/*!
+	This class handles reading and storage for the NEXUS block TREES. It overrides the member functions Read and Reset,
+	which are abstract virtual functions in the base class NxsBlock. The translation table (if one is supplied) is
+	stored in the `translateList'. The tree names are stored in `treeName' and the tree descriptions in
+	`treeDescription'. Information about rooting of trees is stored in `rooted'. Note that no checking is done to
+	ensure that the tree descriptions are valid. The validity of the tree descriptions could be checked after the TREES
+	block has been read (but before the next block in the file has been read) by overriding the NxsReader::ExitingBlock
+	member function, but no functionality for this is provided by the NCL. Below is a table showing the correspondence
+	between the elements of a TREES block and the variables and member functions that can be used to access each piece
+	of information stored.
+>
+	NEXUS command     Data members    Member functions
+	-----------------------------------------------------
+	TRANSLATE         translateList
+
+	TREE              treeName        GetTreeName
+	                                  GetTreeDescription
+	                                  GetNumTrees
+	                                  GetNumDefaultTree
+	                                  IsDefaultTree
+
+	                  rooted          IsRootedTree
+	-----------------------------------------------------
+>
 */
-class NxsTreesBlock 
+class NxsTreesBlock
   : public NxsTreesBlockAPI, public NxsTaxaBlockSurrogate
 	{
  	public:
@@ -501,14 +501,15 @@ class NxsTreesBlock
 		NxsString	GetTranslatedTreeDescription(unsigned i);
 		bool		IsDefaultTree(unsigned i);
 		bool		IsRootedTree(unsigned i);
-		virtual void		Report(std::ostream &out) NCL_COULD_BE_CONST ;
-		virtual void		BriefReport(NxsString &s) NCL_COULD_BE_CONST ;
+		virtual void		Report(std::ostream &out) NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
+		virtual void		BriefReport(NxsString &s) NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
 		virtual void		Reset();
 		void				SetNexus(NxsReader *nxsptr)
 			{
 			NxsBlock::SetNexus(nxsptr);
 			NxsTaxaBlockSurrogate::SetNexusReader(nxsptr);
 			}
+		/*! \ref BlockTypeIDDiscussion */
         virtual const std::string & GetBlockName() const
             {
             return id;
@@ -536,16 +537,16 @@ class NxsTreesBlock
 		bool AddNewIndexSet(const std::string &label, const NxsUnsignedSet & inds);
 		bool AddNewPartition(const std::string &label, const NxsPartition & inds);
 
-		bool GetAllowImplicitNames() const 
+		bool GetAllowImplicitNames() const
 			{
 			return allowImplicitNames;
 			}
-		bool GetProcessAllTreesDuringParse() const 
+		bool GetProcessAllTreesDuringParse() const
 			{
 			return processAllTreesDuringParse;
 			}
-		void SetAllowImplicitNames(bool s) 
-			{	
+		void SetAllowImplicitNames(bool s)
+			{
 			allowImplicitNames = s;
 			}
 		void SetProcessAllTreesDuringParse(bool s)
@@ -597,7 +598,7 @@ class NxsTreesBlock
 			ptvArg = other.ptvArg;
 			}
 
-		virtual NxsTreesBlock * Clone() const 
+		virtual NxsTreesBlock * Clone() const
 			{
 			NxsTreesBlock * a = new NxsTreesBlock(taxa);
 			*a = *this;
@@ -605,7 +606,7 @@ class NxsTreesBlock
 			}
 		static void ProcessTokenVecIntoTree(const ProcessedNxsCommand & token, NxsFullTreeDescription & ftd, NxsLabelToIndicesMapper *, std::map<std::string, unsigned> &capNameToInd, bool allowNewTaxa, NxsReader * nexusReader, const bool respectCase=false);
 		static void ProcessTokenStreamIntoTree(NxsToken & token, NxsFullTreeDescription & ftd, NxsLabelToIndicesMapper *, std::map<std::string, unsigned> &capNameToInd, bool allowNewTaxa, NxsReader * nexusReader, const bool respectCase=false);
-		
+
 		void SetWriteFromNodeEdgeDataStructure(bool v)
 			{
 			writeFromNodeEdgeDataStructure = v;
@@ -618,17 +619,46 @@ class NxsTreesBlock
 			ProcessAllTrees();
 			return trees;
 			}
-		void setValidationCallbacks(ProcessedTreeValidationFunction func, void * arg)
+
+		/*! This function allows you to register a callback function that is called after each tree is parsed.
+
+			The signature of your function should be:\n
+				\code
+				bool someFunctionName(NxsFullTreeDescription &treeDesc, void * blob, NxsTreesBlock * treesB);
+				\endcode
+			where:
+				- treeDesc is the NxsFullTreeDescription for the tree that was just read.
+				- blob is pointer to any object or 0L. You supply this blob of data as an argument in
+					setValidationCallbacks and the NxsTreesBlock passes it every time that it calls the callback.
+					By passing in your own object, you can do bookkeeping between calls without using global variables
+					(though you will have to cast the pointer to the blob of data, of course).
+				- treesB is a pointer to the block that is conducting the parse.
+
+			If your function returns false, then the trees block will not store.
+			If your callback function returns true, then the tree will be stored.
+			In either case the NxsTreesBlock will continue parsing after your function returns.
+
+			This Callback hook is convenient for rejecting unwanted trees to save on memory, but it can also
+			be used as an optimization.
+
+			See the example executable in example/splitsinfile.  This NCL client, uses this callback to store
+			the splits from a trees as the TREES block is being parsed.  It returns false in each case, so that
+			the trees are not stored after they are used.
+		*/
+
+		void setValidationCallbacks(
+			ProcessedTreeValidationFunction func, /*!< your pointer to your callback function */
+			void * blob) /*!< pointer to any object that you would like to access during parse */
 			{
 			this->processedTreeValidationFunction = func;
-			this->ptvArg = arg;
+			this->ptvArg = blob;
 			}
 		bool 		SwapEquivalentTaxaBlock(NxsTaxaBlockAPI * tb)
 		{
 			return SurrogateSwapEquivalentTaxaBlock(tb);
 		}
 		void ReadPhylipTreeFile(NxsToken & token);
-		void setWriteTranslateTable(bool wtt) 
+		void setWriteTranslateTable(bool wtt)
 		{
 			this->writeTranslateTable = wtt;
 		}
@@ -647,14 +677,14 @@ class NxsTreesBlock
 		mutable std::vector<NxsFullTreeDescription> trees;
 		mutable std::map<std::string, unsigned> capNameToInd;
 		unsigned			defaultTreeInd;		/* 0-offset index of default tree specified by user, or 0 if user failed to specify a default tree using an asterisk in the NEXUS data file */
-		NxsUnsignedSetMap 	treeSets;		
-		NxsPartitionsByName treePartitions;	
+		NxsUnsignedSetMap 	treeSets;
+		NxsPartitionsByName treePartitions;
 
 		bool writeTranslateTable ; // only affects writing to NEXUS. Default is true
 
 		ProcessedTreeValidationFunction processedTreeValidationFunction;
 		void * ptvArg;
-		
+
 		virtual	void		Read(NxsToken &token);
 		void				HandleTranslateCommand(NxsToken &token);
 		void				HandleTreeCommand(NxsToken &token, bool rooted);

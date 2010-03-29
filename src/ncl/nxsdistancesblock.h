@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -25,43 +25,43 @@
 #include "ncl/nxstaxablock.h"
 #include "ncl/nxsdistancedatum.h"
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This class handles reading and storage for the NEXUS block DISTANCES. It overrides the member functions Read and 
-|	Reset, which are abstract virtual functions in the base class NxsBlock. Below is a table showing the correspondence 
-|	between the elements of a DISTANCES block and the variables and member functions that can be used to access each 
-|	piece of information stored.
-|>
-|	NEXUS command   Command attribute  Data Members        Member Functions
-|	------------------------------------------------------------------------
-|	DIMENSIONS      NEWTAXA            newtaxa
-|	
-|	                NTAX               ntax                GetNtax 
-|	
-|	                NCHAR              nchar               GetNchar
-|	
-|	FORMAT          TRIANGLE           triangle            GetTriangle
-|	                                                       IsUpperTriangular
-|	                                                       IsLowerTriangular
-|	                                                       IsRectangular
-|	
-|	                [NO]DIAGONAL       diagonal            IsDiagonal
-|	
-|	                [NO]LABELS         labels              IsLabels
-|	
-|	                MISSING            missing             GetMissingSymbol
-|	
-|	                INTERLEAVE         interleave          IsInterleave
-|	
-|	                TAXLABELS          (stored in the      (access through
-|					                   NxsTaxaBlockAPI        data member taxa)
-|									   object)  
-|	
-|	MATRIX                             matrix              GetDistance
-|	                                                       IsMissing
-|	                                                       SetMissing
-|	                                                       SetDistance
-|	------------------------------------------------------------------------
-|>
+/*!
+	This class handles reading and storage for the NEXUS block DISTANCES. It overrides the member functions Read and
+	Reset, which are abstract virtual functions in the base class NxsBlock. Below is a table showing the correspondence
+	between the elements of a DISTANCES block and the variables and member functions that can be used to access each
+	piece of information stored.
+>
+	NEXUS command   Command attribute  Data Members        Member Functions
+	------------------------------------------------------------------------
+	DIMENSIONS      NEWTAXA            newtaxa
+
+	                NTAX               ntax                GetNtax
+
+	                NCHAR              nchar               GetNchar
+
+	FORMAT          TRIANGLE           triangle            GetTriangle
+	                                                       IsUpperTriangular
+	                                                       IsLowerTriangular
+	                                                       IsRectangular
+
+	                [NO]DIAGONAL       diagonal            IsDiagonal
+
+	                [NO]LABELS         labels              IsLabels
+
+	                MISSING            missing             GetMissingSymbol
+
+	                INTERLEAVE         interleave          IsInterleave
+
+	                TAXLABELS          (stored in the      (access through
+					                   NxsTaxaBlockAPI        data member taxa)
+									   object)
+
+	MATRIX                             matrix              GetDistance
+	                                                       IsMissing
+	                                                       SetMissing
+	                                                       SetDistance
+	------------------------------------------------------------------------
+>
 */
 class NxsDistancesBlock
   : public NxsBlock, public NxsTaxaBlockSurrogate
@@ -71,18 +71,18 @@ class NxsDistancesBlock
 		virtual				~NxsDistancesBlock();
 
 		double				GetDistance(unsigned i, unsigned j) const;
-		char				GetMissingSymbol() NCL_COULD_BE_CONST ;
-		unsigned			GetNchar() NCL_COULD_BE_CONST ;
-		unsigned			GetTriangle() NCL_COULD_BE_CONST ;
-		bool				IsRectangular() NCL_COULD_BE_CONST ;
-		bool				IsBoth() NCL_COULD_BE_CONST ;
-		bool				IsDiagonal() NCL_COULD_BE_CONST ;
-		bool				IsInterleave() NCL_COULD_BE_CONST ;
-		bool				IsLabels() NCL_COULD_BE_CONST ;
-		bool				IsLowerTriangular() NCL_COULD_BE_CONST ;
+		char				GetMissingSymbol() NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
+		unsigned			GetNchar() NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
+		unsigned			GetTriangle() NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
+		bool				IsRectangular() NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
+		bool				IsBoth() NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
+		bool				IsDiagonal() NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
+		bool				IsInterleave() NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
+		bool				IsLabels() NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
+		bool				IsLowerTriangular() NCL_COULD_BE_CONST ;  /*v2.1to2.2 1 */
 		bool				IsMissing(unsigned i, unsigned j) const;
-		bool				IsUpperTriangular() NCL_COULD_BE_CONST ;
-		virtual void		Report(std::ostream &out) NCL_COULD_BE_CONST ;
+		bool				IsUpperTriangular() NCL_COULD_BE_CONST ;  /*v2.1to2.2 1 */
+		virtual void		Report(std::ostream &out) NCL_COULD_BE_CONST ;  /*v2.1to2.2 1 */
 		virtual void		Reset();
 		void				SetDistance(unsigned i, unsigned j, double d);
 		void				SetMissing(unsigned i, unsigned j);
@@ -92,6 +92,7 @@ class NxsDistancesBlock
 			NxsBlock::SetNexus(nxsptr);
 			NxsTaxaBlockSurrogate::SetNexusReader(nxsptr);
 			}
+			/*! \ref BlockTypeIDDiscussion */
         virtual const std::string & GetBlockName() const
             {
             return id;
@@ -163,7 +164,7 @@ class NxsDistancesBlock
 			}
 		typedef std::vector<NxsDistanceDatum> NxsDistanceDatumRow;
 		typedef std::vector<NxsDistanceDatumRow> NxsDistanceDatumMatrix;
-		
+
 		unsigned			expectedNtax;		/* number of taxa (determines dimensions of the matrix) */
 		unsigned			nchar;		/* the number of characters used in generating the pairwise distances */
 
@@ -188,10 +189,10 @@ class NxsDistancesBlockFactory
 		virtual NxsDistancesBlock  *	GetBlockReaderForID(const std::string & id, NxsReader *reader, NxsToken *token);
 	};
 
-inline bool NxsDistancesBlock::IsBoth() NCL_COULD_BE_CONST 
+inline bool NxsDistancesBlock::IsBoth() NCL_COULD_BE_CONST /*v2.1to2.2 1 */
 	{
 	return this->IsRectangular();
 	}
-		
+
 #endif
 

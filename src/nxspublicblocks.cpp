@@ -25,7 +25,18 @@
 #include "ncl/nxsreader.h"
 using namespace std;
 
+
+/*! Registers the strings is the vector as taxon labels.
+
+	This is is a convenience function that creates a NxsTaxaBlock, fills it, and
+	then calls AddReadTaxaBlock.
+
+	\returns the block created.
+*/
 NxsTaxaBlock * PublicNexusReader::RegisterTaxa(const std::vector<std::string> & tl) {
+	if (tl.empty()) {
+		return 0L;
+	}
 	NxsTaxaBlock *tb = new NxsTaxaBlock();
 	tb->SetNtax(tl.size());
 	for (std::vector<std::string>::const_iterator labelIt = tl.begin(); labelIt != tl.end(); ++labelIt)
@@ -34,14 +45,14 @@ NxsTaxaBlock * PublicNexusReader::RegisterTaxa(const std::vector<std::string> & 
 	return tb;
 }
 
-
-BlockReaderList ExceptionRaisingNxsReader::parseFileOrThrow(
+/*! A convenience function to get a list of NxsBlocks from a file path without having to create and dispose of a  PublicNexusReader object*/
+BlockReaderList PublicNexusReader::parseFileOrThrow(
     const char *filepath, /* path of file to parse */
     NxsReader::WarningHandlingMode mode,
     bool parsePrivateBlocks, /* true to store the commands found in  private blocks */
     bool storeTokenInfo)
     {
-    ExceptionRaisingNxsReader nexusReader(mode);
+    PublicNexusReader nexusReader(mode);
     return NxsReader::parseFileWithReader(nexusReader, filepath, parsePrivateBlocks, storeTokenInfo);
     }
 
@@ -56,16 +67,16 @@ BlockReaderList DefaultErrorReportNxsReader::parseFile(
     return NxsReader::parseFileWithReader(nexusReader, filepath, parsePrivateBlocks, storeTokenInfo);
     }
 
-/*==============================================================================
-|   Returns a list of NxsBlock pointers (which the caller must delete)
-|   corresponding to the NxsBlocks found in the file.
-|   Raises NxsExceptions on errors.
+/*! Convenience function for reading a filepath.
+   Returns a list of NxsBlock pointers (which the caller must delete)
+   corresponding to the NxsBlocks found in the file.
+   Raises NxsExceptions on errors.
 */
 BlockReaderList NxsReader::parseFileWithReader(
     NxsReader & nexusReader,
-    const char *filepath, /* path of file to parse */
-    bool parsePrivateBlocks, /* true to store the commands found in  private blocks */
-    bool storeTokenInfo) /* true for storage of full token info (such as file position) for private blocks */
+    const char *filepath, /*!< path of file to parse */
+    bool parsePrivateBlocks, /*!< true to store the commands found in  private blocks */
+    bool storeTokenInfo) /*!< true for storage of full token info (such as file position) for private blocks */
     {
     if (!filepath)
         nexusReader.NexusError("Invalid (NULL) file specified to be parsed", 0, -1, -1);
@@ -192,8 +203,12 @@ void NxsStoreTokensBlockReader::WriteAsNexus(std::ostream &out) const
 	out << "END;\n";
 	}
 
-
-NxsBlock  *NxsDefaultPublicBlockFactory::GetBlockReaderForID(const std::string & id, NxsReader *reader, NxsToken *token)
+/*! Returns a new instance of a block  for the appropriate block type id. \ref BlockTypeIDDiscussion
+*/
+NxsBlock  *NxsDefaultPublicBlockFactory::GetBlockReaderForID(
+  const std::string & id, /*! \ref BlockTypeIDDiscussion */
+  NxsReader *reader,
+  NxsToken *token)
 	{
 	if (id == "ASSUMPTIONS" || id == "SETS")
 		return assumpBlockFact.GetBlockReaderForID(id, reader, token);
@@ -218,8 +233,21 @@ NxsBlock  *NxsDefaultPublicBlockFactory::GetBlockReaderForID(const std::string &
 	return NULL;
 	}
 
-PublicNexusReader::PublicNexusReader(const int blocksToRead, NxsReader::WarningHandlingMode warnModeArg)
+/*! Creates a reader for the specified blocks.
+	The first argument is integer with bits that is composed of bits from PublicNexusReader::NexusBlocksToRead,
+		indicating which of the public blocks should be read. Either compose the
+		argument by ORing together bits (such as NEXUS_TREES_BLOCK_BIT|NEXUS_TAXA_BLOCK_BIT)
+		or simply pass in -1 to read all public blocks.
+	The "standard" NCL NxsBlock (NxsCharactersBlock, NxsTaxaBlock...) instances will be
+		created as initial clone block templates in the contained NxsCloneBlockFactory.
+		These instances can be altered by using getting pointers to them using the
+		GetAssumptionsBlockTemplate(), GetTaxaBlockTemplate()... methods.
+*/
+PublicNexusReader::PublicNexusReader(
+  const int blocksToRead, /*!< integer with bits that is composed of bits from PublicNexusReader::NexusBlocksToRead, indicating which of the public blocks should be read*/
+  NxsReader::WarningHandlingMode warnModeArg) /*!< warning mode (passed to ExceptionRaisingNxsReader::ExceptionRaisingNxsReader() */
 	:ExceptionRaisingNxsReader(warnModeArg),
+	bitsForBlocksToRead(blocksToRead),
 	assumptionsBlockTemplate(0L),
 	charactersBlockTemplate(0L),
 	dataBlockTemplate(0L),
@@ -293,12 +321,22 @@ PublicNexusReader::PublicNexusReader(const int blocksToRead, NxsReader::WarningH
 		}
 }
 
+/*! \ref NxsReader::Execute().  This method calls PostExecuteHook() after NxsReader::Execute
+		is completed.
+*/
 void PublicNexusReader::Execute(NxsToken& token, bool notifyStartStop)
 {
 	NxsReader::Execute(token, notifyStartStop);
 	PostExecuteHook();
 }
 
+/*! \ref Called after successful execute.
+	in the PublicNexusReader, this function up-casts blocks to the type that
+	they should be.
+
+	\warn if you derive from PublicNexusReader and change the type of the clone templates, then
+	you must override this function so that the casts in this function will be safe.
+*/
 void PublicNexusReader::PostExecuteHook()
 {
 	BlockReaderList blocks = GetBlocksFromLastExecuteInOrder();

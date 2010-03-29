@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -23,101 +23,26 @@
 
 #include "ncl/nxsdefs.h"
 #include "ncl/nxspublicblocks.h"
-
-
-class FileToCharBuffer
-{
-		char prevChar;
-		std::istream & inf;
-		unsigned remaining;
-		unsigned pos;
-	public:
-		unsigned totalSize;
-	protected:
-		unsigned lineNumber;
-		unsigned prevNewlinePos;
-	public:
-		/* reads at most MAX_BUFFER_SIZE characters from inf into the buffer that is
-		returned. The caller must delete the buffer.  On exit `len` will store the 
-		length of the buffer.
-		*/
-
-		FileToCharBuffer(std::istream & instream);
-
-		/* reads at most maxLen characters from `inf` into the `buffer`
-		Returns false if no characters are read.
-		If true is returned then `maxLen` will indicate the number of characters read.
-		*/
-		bool refillBuffer(unsigned offset);
-		char current() const
-			{
-			return buffer[pos];
-			}
-		bool advance()
-			{
-			if (pos + 1 >= inbuffer)
-				{
-				if (!refillBuffer(0))
-					return false;
-				}
-			else
-				++pos;
-			const char c = current();
-			if (c == 13)
-				{
-				++lineNumber;
-				prevNewlinePos = position();
-				}
-			else if (c == 10)
-				{
-				if (prev() != 13) 
-					++lineNumber;
-				prevNewlinePos = position();
-				}
-			return true;
-			}
-		bool advance_then_store(char & c)
-			{
-			if (!this->advance())
-				return false;
-			c = this->current();
-			return true;
-			}
-		bool skip_to_beginning_of_line(char & next);
-		char prev() const
-			{
-			if (pos == 0)
-				return prevChar;
-			return buffer[pos - 1];
-			}
-		~FileToCharBuffer()
-			{
-			delete [] buffer;
-			}
-		unsigned position() const
-			{
-			return totalSize +  pos - remaining - inbuffer;
-			}
-		unsigned line() const
-			{
-			return lineNumber;
-			}
-		unsigned column() const
-			{
-			unsigned p = position();
-			if (p < prevNewlinePos)
-				return 0;
-			return p - prevNewlinePos;
-			}
-		char * buffer;
-		unsigned inbuffer; 
-		
-};
-
+class FileToCharBuffer;
+/*!
+	A special class of PublicNexusReader, that can parse
+		\li PHYLIP,
+		\li relaxed PHYLIP,
+		\li FASTA, and
+		\li ALN
+	formatted files in addition to NEXUS.  Non-NEXUS files are parsed and the
+	information from these files is added to the appropriate NxsBlock object.
+	So the parser essentially creates a the normal NCL interface even if the
+	input is not NEXUS
+*/
 class MultiFormatReader: public PublicNexusReader
 {
 	public:
-		static std::vector<std::string> getFormatNames();
+		/*! enumeration of all of the formats supported by MultiFormatReader
+
+			This enumeration type is used in calls to ReadStream and ReadFilepath
+			so that the reader knows what type of data to expect.
+		*/
 		enum DataFormatType
 			{
 				NEXUS_FORMAT,
@@ -148,18 +73,59 @@ class MultiFormatReader: public PublicNexusReader
 				NEXML_FORMAT,
 				UNSUPPORTED_FORMAT // keep this last
 			};
+
+		/*! \returns a vector with the "official" format names that can be used with formatNameToCode
+
+		Currently this list is:  {"nexus", "dnafasta", "aafasta", "rnafasta", "dnaphylip", "rnaphylip", "aaphylip", "discretephylip", "dnaphylipinterleaved", "rnaphylipinterleaved", "aaphylipinterleaved", "discretephylipinterleaved", "dnarelaxedphylip", "rnarelaxedphylip", "aarelaxedphylip", "discreterelaxedphylip", "dnarelaxedphylipinterleaved", "rnarelaxedphylipinterleaved", "aarelaxedphylipinterleaved", "discreterelaxedphylipinterleaved", "dnaaln", "rnaaln", "aaaln", "phyliptree", "relaxedphyliptree", "nexml"}
+
+		*/
+		static std::vector<std::string> getFormatNames();
+		/*! Converts a string such as "nexus" to the corresponding facet of the DataForamType enum.
+
+			Format names are not case sensitive
+		*/
 		static DataFormatType formatNameToCode(const std::string &);
-		
-		
+
+
+		/*!	Creates a new MultiFormatReader
+			\arg blocksToRead -1 indicates that every block type should be read.
+				alternatively, the caller can OR-together bits of the PublicNexusReader::NexusBlocksToRead enum
+				to indicate which blocks should be processed.
+			\arg mode should be a facet of the NxsReader::WarningHandlingMode enum
+				that indicates where warning messages should be directed.
+		*/
 		MultiFormatReader(const int blocksToRead = -1, NxsReader::WarningHandlingMode mode=NxsReader::WARNINGS_TO_STDERR)
 			:PublicNexusReader(blocksToRead, mode)
 			{}
 		virtual ~MultiFormatReader(){}
+		/*! Read the specified format
+			\arg inp the input stream
+			\arg formatName the "official" format name (list of legal choices is available from getFormatNames())
+		*/
 		void ReadStream(std::istream & inp, const char * formatName);
+		/*! Read the specified format
+			\arg inp the input stream
+			\arg format a facet of DataFormatType indicating the file format
+		*/
 		void ReadStream(std::istream & inp, DataFormatType format, const char * filepath=0L);
+
+		/*! Read a file of the specified format
+			\arg filepath the file path to open and read
+			\arg formatName the "official" format name (list of legal choices is available from getFormatNames())
+		*/
 		void ReadFilepath(const char * filepath, const char * formatName);
+		/*! Read a file of the specified format
+			\arg filepath the file path to open and read
+			\arg format a facet of DataFormatType indicating the file format
+		*/
 		void ReadFilepath(const char * filepath, DataFormatType format);
+
+		/*! A convenience function for reading FASTA files
+			\arg inf the input stream to read
+			\arg dt a facet of  NxsCharactersBlock::DataTypesEnum that indicates the expected datatype
+		*/
 		void readFastaFile(std::istream & inf, NxsCharactersBlock::DataTypesEnum dt);
+
 	private:
 		void addTaxaNames(const std::list<std::string> & taxaName, NxsTaxaBlockAPI * taxa);
 		void moveDataToDataBlock(const std::list<std::string> & taxaNames, std::list<NxsDiscreteStateRow> & matList, const unsigned nchar, NxsDataBlock * dataB);
@@ -175,9 +141,97 @@ class MultiFormatReader: public PublicNexusReader
 		void readPhylipData(FileToCharBuffer & ftcb, const NxsDiscreteDatatypeMapper &dm, std::list<std::string> & taxaNames, std::list<NxsDiscreteStateRow> & matList, const unsigned n_taxa, const unsigned n_char, bool relaxedNames);
 		void readInterleavedPhylipData(FileToCharBuffer & ftcb, const NxsDiscreteDatatypeMapper &dm, std::list<std::string> & taxaNames, std::list<NxsDiscreteStateRow> & matList, const unsigned n_taxa, const unsigned n_char, bool relaxedNames);
 		std::string readPhylipName(FileToCharBuffer & ftcb, unsigned i, bool relaxedNames);
-		
-		
+
+
 };
+
+/*! \enum MultiFormatReader::DataFormatType
+An enumeration of all of the formats supported by MultiFormatReader
+
+This enumeration type is used in calls to ReadStream and ReadFilepath
+so that the reader knows what type of data to expect.
+*/
+/*! var MultiFormatReader::NEXUS_FORMAT
+ read any NCL supported NEXUS block
+*/
+/*! var MultiFormatReader::FASTA_DNA_FORMAT
+ DNA sequence data in FASTA format
+*/
+/*! var MultiFormatReader::FASTA_AA_FORMAT
+ amino acid sequence data in FASTA format
+*/
+/*! var MultiFormatReader::FASTA_RNA_FORMAT
+ RNA sequence data in FASTA format
+*/
+/*! var MultiFormatReader::PHYLIP_DNA_FORMAT
+ DNA sequence data in non-interleaved PHYLIP format
+*/
+/*! var MultiFormatReader::PHYLIP_RNA_FORMAT
+ RNA sequence data in non-interleaved PHYLIP format
+*/
+/*! var MultiFormatReader::PHYLIP_AA_FORMAT
+ amino acid sequence data in non-interleaved PHYLIP format
+*/
+/*! var MultiFormatReader::PHYLIP_DISC_FORMAT
+ Discrete data (like the NEXUS "standard" format) in non-interleaved PHYLIP format
+*/
+/*! var MultiFormatReader::INTERLEAVED_PHYLIP_DNA_FORMAT
+ DNA sequence data in interleaved PHYLIP format
+*/
+/*! var MultiFormatReader::INTERLEAVED_PHYLIP_RNA_FORMAT
+ RNA sequence data in interleaved PHYLIP format
+*/
+/*! var MultiFormatReader::INTERLEAVED_PHYLIP_AA_FORMAT
+ amino acid sequence data in interleaved PHYLIP format
+*/
+/*! var MultiFormatReader::INTERLEAVED_PHYLIP_DISC_FORMAT
+ Discrete data (like the NEXUS "standard" format) data in interleaved PHYLIP format
+*/
+/*! var MultiFormatReader::RELAXED_PHYLIP_DNA_FORMAT
+ DNA sequence data in non-interleaved relaxed PHYLIP format
+*/
+/*! var MultiFormatReader::RELAXED_PHYLIP_RNA_FORMAT
+ RNA sequence data in non-interleaved relaxed PHYLIP format
+*/
+/*! var MultiFormatReader::RELAXED_PHYLIP_AA_FORMAT
+ amino acid sequence data in non-interleaved relaxed PHYLIP format
+*/
+/*! var MultiFormatReader::RELAXED_PHYLIP_DISC_FORMAT
+ Discrete data (like the NEXUS "standard" format) data in non-interleaved relaxed PHYLIP format
+*/
+/*! var MultiFormatReader::INTERLEAVED_RELAXED_PHYLIP_DNA_FORMAT
+ DNA sequence data in interleaved relaxed PHYLIP format
+*/
+/*! var MultiFormatReader::INTERLEAVED_RELAXED_PHYLIP_RNA_FORMAT
+ RNA sequence data in interleaved relaxed PHYLIP format
+*/
+/*! var MultiFormatReader::INTERLEAVED_RELAXED_PHYLIP_AA_FORMAT
+ Amino acid sequence data in interleaved relaxed PHYLIP format
+*/
+/*! var MultiFormatReader::INTERLEAVED_RELAXED_PHYLIP_DISC_FORMAT
+ Discrete data (like the NEXUS "standard" format) data in interleaved relaxed PHYLIP format
+*/
+/*! var MultiFormatReader::ALN_DNA_FORMAT
+ DNA sequence data in ALN format
+*/
+/*! var MultiFormatReader::ALN_RNA_FORMAT
+ RNA sequence data in ALN format
+*/
+/*! var MultiFormatReader::ALN_AA_FORMAT
+ Amino acid sequence data in ALN format
+*/
+/*! var MultiFormatReader::PHYLIP_TREE_FORMAT
+ Trees in NEWICK (PHYLIP) format
+*/
+/*! var MultiFormatReader::RELAXED_PHYLIP_TREE_FORMAT
+ Trees in NEWICK  format with relaxed phylip names
+*/
+/*! var MultiFormatReader::NEXML_FORMAT
+ NEXML formatted file currently unsupported, but support is planned
+*/
+/*! var MultiFormatReader::UNSUPPORTED_FORMAT
+For NCL internal use only ( to mark the end of the DataFormatType enum).
+*/
 
 #endif
 

@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
@@ -27,43 +27,43 @@
 
 class NxsTaxaBlockAPI;
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	This class handles reading and storage for the NEXUS block UNALIGNED. It overrides the member functions Read and 
-|	Reset, which are abstract virtual functions in the base class NxsBlock.
-|>
-|	Below is a table showing the correspondence between the elements of an UNALIGNED block in a NEXUS file and the
-|	variables and member functions of the NxsUnalignedBlock class that can be used to access each piece of information
-|	stored. Items in parenthesis should be viewed as "see also" items.
-|>
-|	NEXUS		  Command		 Data			Member
-|	Command		  Atribute		 Member			Functions
-|	---------------------------------------------------------------------
-|	DIMENSIONS	  NEWTAXA		 newtaxa
-|	
-|				  NTAX			 ntax			GetNTax
-|	
-|	FORMAT		  DATATYPE		 datatype		GetDataType
-|	
-|				  RESPECTCASE	 respectingCase IsRespectCase
-|	
-|				  MISSING		 missing		GetMissingSymbol
-|	
-|				  SYMBOLS		 symbols		GetSymbols
-|	
-|				  EQUATE		 equates		GetEquateKey
-|												GetEquateValue
-|												GetNumEquates
-|	
-|				  (NO)LABELS	 labels			IsLabels
-|	
-|	TAXLABELS					 taxonLabels	GetTaxonLabels
+/*!
+	This class handles reading and storage for the NEXUS block UNALIGNED. It overrides the member functions Read and
+	Reset, which are abstract virtual functions in the base class NxsBlock.
+>
+	Below is a table showing the correspondence between the elements of an UNALIGNED block in a NEXUS file and the
+	variables and member functions of the NxsUnalignedBlock class that can be used to access each piece of information
+	stored. Items in parenthesis should be viewed as "see also" items.
+>
+	NEXUS		  Command		 Data			Member
+	Command		  Atribute		 Member			Functions
+	---------------------------------------------------------------------
+	DIMENSIONS	  NEWTAXA		 newtaxa
 
-|	MATRIX						 matrix			GetState
-|												GetInternalRepresentation
-|												GetNumStates
-|												GetNumMatrixRows
-|												IsPolymorphic
-|>
+				  NTAX			 ntax			GetNTax
+
+	FORMAT		  DATATYPE		 datatype		GetDataType
+
+				  RESPECTCASE	 respectingCase IsRespectCase
+
+				  MISSING		 missing		GetMissingSymbol
+
+				  SYMBOLS		 symbols		GetSymbols
+
+				  EQUATE		 equates		GetEquateKey
+												GetEquateValue
+												GetNumEquates
+
+				  (NO)LABELS	 labels			IsLabels
+
+	TAXLABELS					 taxonLabels	GetTaxonLabels
+
+	MATRIX						 matrix			GetState
+												GetInternalRepresentation
+												GetNumStates
+												GetNumMatrixRows
+												IsPolymorphic
+>
 */
 class NxsUnalignedBlock
   : public NxsBlock, public NxsTaxaBlockSurrogate
@@ -89,7 +89,7 @@ class NxsUnalignedBlock
 				return NULL;
 			return &uMatrix[taxInd];
 			}
-		NxsIntVector			GetInternalRepresentation(unsigned i, unsigned j);
+		NxsDiscreteStateRow		GetInternalRepresentation(unsigned i, unsigned j);
 		unsigned				GetNTaxWithData();
 		unsigned				GetNTaxTotal();
 		unsigned				GetNTaxTotal() const;
@@ -104,8 +104,8 @@ class NxsUnalignedBlock
 		bool					IsRespectCase();
 		unsigned				GetStateSymbolIndex(unsigned i, unsigned j, unsigned k = 0);	// added by mth for standard data types
 		const char *			GetSymbols();
-		virtual void			DebugShowMatrix(std::ostream & out, const char * marginText = NULL) NCL_COULD_BE_CONST ;
-		virtual void			Report(std::ostream & out) NCL_COULD_BE_CONST ;
+		virtual void			DebugShowMatrix(std::ostream & out, const char * marginText = NULL) NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
+		virtual void			Report(std::ostream & out) NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
 		virtual void			Reset();
 		void					SetNexus(NxsReader *nxsptr)
 			{
@@ -172,7 +172,7 @@ class NxsUnalignedBlock
 			statesFormat = other.statesFormat;
 			}
 
-		virtual NxsUnalignedBlock * Clone() const 
+		virtual NxsUnalignedBlock * Clone() const
 			{
 			NxsUnalignedBlock * a = new NxsUnalignedBlock(taxa);
 			*a = *this;
@@ -198,7 +198,7 @@ class NxsUnalignedBlock
 
 		unsigned				nChar;				/* number of columns in matrix	*/
 		unsigned				nTaxWithData;		/* number of non empty rows in the matrix*/
-		
+
 		char					matchchar;			/* match symbol to use in matrix */
 		bool					respectingCase;		/* if true, RESPECTCASE keyword specified in FORMAT command */
 		bool					transposing;		/* indicates matrix will be in transposed format */
@@ -212,12 +212,12 @@ class NxsUnalignedBlock
 		NxsDiscreteDatatypeMapper mapper;
 		NxsDiscreteStateMatrix	uMatrix;		/* storage for unaligned data */
 
-	private:		
+	private:
 		NxsCharactersBlock::DataTypesEnum			datatype;			/* flag variable (see datatypes enum) */
 		NxsCharactersBlock::DataTypesEnum			originalDatatype;			/* flag variable (see datatypes enum) */
 		NxsCharactersBlock::StatesFormatEnum		statesFormat;
-		
-		int						GetStateIndex(unsigned i, unsigned j, unsigned k);
+
+		NxsDiscreteStateCell						GetStateIndex(unsigned i, unsigned j, unsigned k);
 		void					ResetDatatypeMapper();
 		bool					TaxonIndHasData(const unsigned ind) const;
 		friend class PublicNexusReader;
@@ -231,10 +231,10 @@ class NxsUnalignedBlockFactory
 		virtual NxsUnalignedBlock  *GetBlockReaderForID(const std::string & id, NxsReader *reader, NxsToken *token);
 	};
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns datatype listed in the CHARACTERS block.
-|	The original datatype can differ from the current datatype if the symbols list of a built in type was augmented
-|	(thus converting it to standard).
+/*!
+	Returns datatype listed in the CHARACTERS block.
+	The original datatype can differ from the current datatype if the symbols list of a built in type was augmented
+	(thus converting it to standard).
 */
 inline NxsCharactersBlock::DataTypesEnum NxsUnalignedBlock::GetOriginalDataType() const
 	{
@@ -242,9 +242,9 @@ inline NxsCharactersBlock::DataTypesEnum NxsUnalignedBlock::GetOriginalDataType(
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns value of `datatype' as an unsigned integer. If you want the name of the datatype, you should call 
-|	NxsUnalignedBlock::GetDatatypeName instead.
+/*!
+	Returns value of `datatype' as an unsigned integer. If you want the name of the datatype, you should call
+	NxsUnalignedBlock::GetDatatypeName instead.
 */
 inline NxsCharactersBlock::DataTypesEnum NxsUnalignedBlock::GetDataType() const
 	{
@@ -252,75 +252,75 @@ inline NxsCharactersBlock::DataTypesEnum NxsUnalignedBlock::GetDataType() const
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the missing data symbol currently in effect. If no missing data symbol specified, returns '\0'.
+/*!
+	Returns the missing data symbol currently in effect. If no missing data symbol specified, returns '\0'.
 */
 inline char NxsUnalignedBlock::GetMissingSymbol()
 	{
 	return missing;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of taxa that have data (or will have data according to the Dimensions command, if the matrix 
-|		has not been read.
+/*!
+	Returns the number of taxa that have data (or will have data according to the Dimensions command, if the matrix
+		has not been read.
 */
 inline unsigned NxsUnalignedBlock::GetNTaxWithData()
 	{
 	return nTaxWithData;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of taxa in the taxa block associated with the unaligned block.
+/*!
+	Returns the number of taxa in the taxa block associated with the unaligned block.
 */
 inline unsigned NxsUnalignedBlock::GetNTaxTotal()
 	{
 	return (unsigned)uMatrix.size();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of taxa in the taxa block associated with the unaligned block.
+/*!
+	Returns the number of taxa in the taxa block associated with the unaligned block.
 */
 inline unsigned NxsUnalignedBlock::GetNTaxTotal() const
 	{
 	return (unsigned)uMatrix.size();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of stored equate associations.
+/*!
+	Returns the number of stored equate associations.
 */
 inline unsigned NxsUnalignedBlock::GetNumEquates()
 	{
 	return (unsigned)equates.size();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns the number of actual rows in `matrix'. This number is equal to `ntax', and hence this function is identical
-|	to GetNTax. Note that `ntax' can be smaller than `ntaxTotal' since the user did not have to provide data for all 
-|	taxa specified in the TAXA block.
+/*!
+	Returns the number of actual rows in `matrix'. This number is equal to `ntax', and hence this function is identical
+	to GetNTax. Note that `ntax' can be smaller than `ntaxTotal' since the user did not have to provide data for all
+	taxa specified in the TAXA block.
 */
 inline unsigned NxsUnalignedBlock::GetNumMatrixRows()
 	{
 	return (unsigned)uMatrix.size();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns data member `symbols'. Warning: returned value may be NULL.
+/*!
+	Returns data member `symbols'. Warning: returned value may be NULL.
 */
 inline const char * NxsUnalignedBlock::GetSymbols()
 	{
 	return symbols.c_str();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if LABELS was specified in the FORMAT command, false otherwise.
+/*!
+	Returns true if LABELS was specified in the FORMAT command, false otherwise.
 */
 inline bool NxsUnalignedBlock::IsLabels()
 	{
 	return labels;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if RESPECTCASE was specified in the FORMAT command, false otherwise.
+/*!
+	Returns true if RESPECTCASE was specified in the FORMAT command, false otherwise.
 */
 inline bool NxsUnalignedBlock::IsRespectCase()
 	{

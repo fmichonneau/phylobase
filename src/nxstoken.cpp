@@ -13,7 +13,7 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 #include <cstdlib>
@@ -26,7 +26,7 @@ using namespace std;
 
 
 
-/*----------------------------------------------------------------------------------------------------------------------
+/*!
  * Parses a ProcessedNxsCommand assuming that it has the form:
  *		cmd_name opt_name = opt_val multi_opt_name = (opt_val_1 opt_val2) ;
  * Errors are produced if opt_names (or multi_opt_names) are repeated within a command.
@@ -38,8 +38,8 @@ NxsSimpleCommandStrings ProcessedNxsToken::ParseSimpleCmd(
 	NxsSimpleCommandStrings nscs;
 	if (pnc.empty())
 		return nscs;
-	
-	
+
+
 	std::vector<ProcessedNxsToken>::const_iterator wordIt = pnc.begin();
 
 	nscs.cmdName = wordIt->GetToken();
@@ -47,9 +47,9 @@ NxsSimpleCommandStrings ProcessedNxsToken::ParseSimpleCmd(
 		NxsString::to_lower(nscs.cmdName);
 	nscs.cmdPos = wordIt->GetFilePosInfoConstRef();
 	++wordIt;
-	
+
 	std::string key;
-	
+
 	NxsString errorMsg;
 	NxsTokenPosInfo keyPos = nscs.cmdPos;
 	bool eqRead = false;
@@ -70,7 +70,7 @@ NxsSimpleCommandStrings ProcessedNxsToken::ParseSimpleCmd(
 			}
 		else if (!eqRead)
 			{
-			if (w != "=") 
+			if (w != "=")
 				{
 				errorMsg << "Expecting an = after the  " << key << " command option of the  " << nscs.cmdName << " command.";
 				throw NxsException(errorMsg, wordIt->GetFilePosInfoConstRef());
@@ -78,13 +78,13 @@ NxsSimpleCommandStrings ProcessedNxsToken::ParseSimpleCmd(
 			eqRead = true;
 			}
 		else {
-			if (w == "(") 
+			if (w == "(")
 				{
 				++wordIt;
 				w = wordIt->GetToken();
 				std::vector<std::string> vals;
 				NxsSimpleCommandStrings::MatString mat;
-				if (w == "(") 
+				if (w == "(")
 					{
 					while (w != ")")
 						{
@@ -93,7 +93,7 @@ NxsSimpleCommandStrings ProcessedNxsToken::ParseSimpleCmd(
 							errorMsg << "Expecting a ( to begin another row of values in the " << key << " command option of the  " << nscs.cmdName << " command.";
 							throw NxsException(errorMsg, keyPos);
 							}
-							
+
 						++wordIt;
 						w = wordIt->GetToken();
 						while (wordIt != pnc.end())
@@ -177,9 +177,7 @@ NxsX_UnexpectedEOF::NxsX_UnexpectedEOF(NxsToken &token)
 		msg << " while reading " << t << " block.";
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-| Writes the command `c` (with all embedded comments) a terminating ; will be written if any tokens are written.
-*/
+/*! Writes the command `c` (with all embedded comments) a terminating ; will be written if any tokens are written. */
 bool WriteCommandAsNexus(std::ostream & out, const ProcessedNxsCommand &c)
 	{
 	if (c.empty())
@@ -193,14 +191,14 @@ bool WriteCommandAsNexus(std::ostream & out, const ProcessedNxsCommand &c)
 	out << ";";
 	return true;
 	}
-	
 
 
-/*--------------------------------------------------------------------------------------------------------------------------
-|	Convenience function.
-| 	Raises an aprropriate NxsException (by appending  `contextString` to the phrase Unexpected ; "), if incrementing 
-|		`tokIt` makes it equal to `endIt`
-*/	
+
+/*!
+	Convenience function.
+ 	Raises an aprropriate NxsException (by appending  `contextString` to the phrase Unexpected ; "), if incrementing
+		`tokIt` makes it equal to `endIt`
+*/
 void ProcessedNxsToken::IncrementNotLast(std::vector<ProcessedNxsToken>::const_iterator & tokIt, const std::vector<ProcessedNxsToken>::const_iterator &endIt, const char * contextString)
 	{
 	++tokIt;
@@ -213,10 +211,10 @@ void ProcessedNxsToken::IncrementNotLast(std::vector<ProcessedNxsToken>::const_i
 		throw NxsException(errormsg, *tokIt);
 		}
 	}
-/*--------------------------------------------------------------------------------------------------------------------------
-| 	Advance the stream and store it in nextCharInStream.  Deal with the 3 ways of specifying return charaters 
-|		(nextCharInStream will be set to \n if any of the return styles are found)
-*/	
+/*!
+ 	Advance the stream and store it in nextCharInStream.  Deal with the 3 ways of specifying return charaters
+		(nextCharInStream will be set to \n if any of the return styles are found)
+*/
 inline void NxsToken::AdvanceToNextCharInStream()
 	{
 	if (nextCharInStream == EOF)
@@ -239,20 +237,20 @@ inline void NxsToken::AdvanceToNextCharInStream()
 
 
 #if defined(NEW_NXS_TOKEN_READ_CHAR)
-/*--------------------------------------------------------------------------------------------------------------------------
-|	returns the character that had been stored in nextCharInStream, but also calls AdvanceToNextCharInStream() so 
-|	nextCharInStream is advanced.
-|	Does all of the fileposition bookkeeping.
-|	Throws an NxsX_UnexpectedEOF exception if eof is found but eofAllowed is false.
+/*!
+	returns the character that had been stored in nextCharInStream, but also calls AdvanceToNextCharInStream() so
+	nextCharInStream is advanced.
+	Does all of the fileposition bookkeeping.
+	Throws an NxsX_UnexpectedEOF exception if eof is found but eofAllowed is false.
 */
 inline char NxsToken::GetNextChar()
 	{
 	//
 	// 	Why this was changed:  calls to tellg seem slow and unnecessary - we're storing filepos in terms of the
 	//	number of times we call sbumpc().
-	//	if we go back to getting the filepos via in.tellg(), remember to call it 
+	//	if we go back to getting the filepos via in.tellg(), remember to call it
 	//	twice after both sgetc() calls in the case of the \13\10 endline
-	
+
 	signed char ch = nextCharInStream;
 	AdvanceToNextCharInStream();
 	if(ch == EOF)
@@ -279,18 +277,18 @@ inline char NxsToken::GetNextChar()
 
 #else //	if  !defined(NEW_NXS_TOKEN_READ_CHAR)
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads next character from in and does all of the following before returning it to the calling function:
-|~
-|	o if character read is either a carriage return or line feed, the variable line is incremented by one and the
-|	  variable col is reset to zero
-|	o if character read is a carriage return, and a peek at the next character to be read reveals that it is a line
-|	  feed, then the next (line feed) character is read
-|	o if either a carriage return or line feed is read, the character returned to the calling function is '\n' if 
-|	  character read is neither a carriage return nor a line feed, col is incremented by one and the character is
-|	  returned as is to the calling function
-|	o in all cases, the variable filepos is updated using a call to the tellg function of istream.
-|~
+/*!
+	Reads next character from in and does all of the following before returning it to the calling function:
+~
+	o if character read is either a carriage return or line feed, the variable line is incremented by one and the
+	  variable col is reset to zero
+	o if character read is a carriage return, and a peek at the next character to be read reveals that it is a line
+	  feed, then the next (line feed) character is read
+	o if either a carriage return or line feed is read, the character returned to the calling function is '\n' if
+	  character read is neither a carriage return nor a line feed, col is incremented by one and the character is
+	  returned as is to the calling function
+	o in all cases, the variable filepos is updated using a call to the tellg function of istream.
+~
 */
 inline char NxsToken::GetNextChar()
 	{
@@ -373,10 +371,10 @@ std::map<std::string, std::string> NxsToken::ParseAsSimpleKeyValuePairs(const Pr
 		}
 	return kv;
 	}
-/*-------------------------------------------------------------------------------------------------------------------------- 
-|	Reads until ";" and fills the vector of ProcessedNxsToken objects.
-|	Note the ";" is not included in the ProcessedNxsCommand, but it can be assumed that the semicolon followed.
-|	The NxsToken objects file position will reflect the location of the semicolon.
+/*!
+	Reads until ";" and fills the vector of ProcessedNxsToken objects.
+	Note the ";" is not included in the ProcessedNxsCommand, but it can be assumed that the semicolon followed.
+	The NxsToken objects file position will reflect the location of the semicolon.
 */
 void NxsToken::ProcessAsCommand(ProcessedNxsCommand *tokenVec)
 	{
@@ -388,13 +386,13 @@ void NxsToken::ProcessAsCommand(ProcessedNxsCommand *tokenVec)
 		this->GetNextToken();
 		}
 	}
-	
 
-/*-------------------------------------------------------------------------------------------------------------------------- 
-|	Returns copy of s but with quoting according to the NEXUS Standard (single quotes around the token and all internal
-|		single quotes replaced with a pair of single quotes.
+
+/*!
+	Returns copy of s but with quoting according to the NEXUS Standard (single quotes around the token and all internal
+		single quotes replaced with a pair of single quotes.
 */
-std::string NxsToken::GetQuoted(const std::string &s) 
+std::string NxsToken::GetQuoted(const std::string &s)
 	{
 	std::string withQuotes;
 	withQuotes.reserve(s.length() + 4);
@@ -409,12 +407,12 @@ std::string NxsToken::GetQuoted(const std::string &s)
 	return withQuotes;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Advances the token, and returns the unsigned int that the token represents
-|
-| 	Sets errormsg and raises a NxsException on failure.
-|	`contextString` is used in error messages:
-|		"${contextString} must be a number greater than 0"
+/*!
+	Advances the token, and returns the unsigned int that the token represents
+
+ 	Sets errormsg and raises a NxsException on failure.
+	`contextString` is used in error messages:
+		"${contextString} must be a number greater than 0"
 */
 unsigned NxsToken::DemandPositiveInt(NxsToken &token, NxsString & errormsg, const char *contextString)
 	{
@@ -432,12 +430,12 @@ unsigned NxsToken::DemandPositiveInt(NxsToken &token, NxsString & errormsg, cons
 	}
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Advances the token, and returns the unsigned int that the token represents
-|
-| 	Sets errormsg and raises a NxsException on failure.
-|	`contextString` is used in error messages:
-|		"Expecting ';' to terminate the ${contextString} command"
+/*!
+	Advances the token, and returns the unsigned int that the token represents
+
+ 	Sets errormsg and raises a NxsException on failure.
+	`contextString` is used in error messages:
+		"Expecting ';' to terminate the ${contextString} command"
 */
 void NxsToken::DemandEndSemicolon(NxsToken &token, NxsString & errormsg, const char *contextString)
 	{
@@ -452,9 +450,9 @@ void NxsToken::DemandEndSemicolon(NxsToken &token, NxsString & errormsg, const c
 		throw NxsException(errormsg, token.GetFilePosition(), token.GetFileLine(), token.GetFileColumn());
 		}
 	}
-/*-------------------------------------------------------------------------------------------------------------------------- 
-|	Returns copy of s but with quoting according to the NEXUS Standard (single quotes around the token and all internal
-|		single quotes replaced with a pair of single quotes.
+/*!
+	Returns copy of s but with quoting according to the NEXUS Standard (single quotes around the token and all internal
+		single quotes replaced with a pair of single quotes.
 */
 bool NxsToken::NeedsQuotes(const std::string &s)
 	{
@@ -476,10 +474,10 @@ bool NxsToken::NeedsQuotes(const std::string &s)
 
 
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Sets atEOF and atEOL to false, comment and token to the empty string, fileColumn and fileLine to 1, filepos to 0, 
-|	labileFlags to 0 and saved and special to the null character. Initializes the istream reference data 
-|	member in to the supplied istream `i'.
+/*!
+	Sets atEOF and atEOL to false, comment and token to the empty string, fileColumn and fileLine to 1, filepos to 0,
+	labileFlags to 0 and saved and special to the null character. Initializes the istream reference data
+	member in to the supplied istream `i'.
 */
 NxsToken::NxsToken(
   istream &i)	/* the istream object to which the token is to be associated */
@@ -495,7 +493,7 @@ NxsToken::NxsToken(
 	labileFlags	= 0;
 	saved		= '\0';
 	special		= '\0';
-	
+
 	whitespace[0]  = ' ';
 	whitespace[1]  = '\t';
 	whitespace[2]  = '\n';
@@ -506,21 +504,21 @@ NxsToken::NxsToken(
 #	endif
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Nothing needs to be done; all objects take care of deleting themselves.
+/*!
+	Nothing needs to be done; all objects take care of deleting themselves.
 */
 NxsToken::~NxsToken()
 	{
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads rest of comment (starting '[' already input) and acts accordingly. If comment is an output comment, and if 
-|	an output stream has been attached, writes the output comment to the output stream. Otherwise, output comments are 
-|	simply ignored like regular comments. 
-|	If the labileFlag bit saveCommandComments is in effect, and we are NOT in the middle of a token then the comment
-|		(without the [] braces) will be stored in token. 
-|	All other comments are stored as embeddedComments.
-|	Returns true if a command comment was read and stored as the token
+/*!
+	Reads rest of comment (starting '[' already input) and acts accordingly. If comment is an output comment, and if
+	an output stream has been attached, writes the output comment to the output stream. Otherwise, output comments are
+	simply ignored like regular comments.
+	If the labileFlag bit saveCommandComments is in effect, and we are NOT in the middle of a token then the comment
+		(without the [] braces) will be stored in token.
+	All other comments are stored as embeddedComments.
+	Returns true if a command comment was read and stored as the token
 */
 bool NxsToken::GetComment()
 	{
@@ -529,12 +527,12 @@ bool NxsToken::GetComment()
 	//
 	NxsString currentComment;
 	bool command = false;
-		
+
 	bool formerEOFAllowed = eofAllowed;
 	eofAllowed = false;
 	try
 		{
-		char ch = GetNextChar();	
+		char ch = GetNextChar();
 		// See if first character is the output comment symbol ('!')
 		// or command comment symbol (&)
 		//
@@ -560,7 +558,7 @@ bool NxsToken::GetComment()
 					level++;
 				currentComment.push_back(ch);
 				}
-		
+
 			if (printing)
 				{
 				// Allow output comment to be printed or displayed in most appropriate
@@ -586,9 +584,9 @@ bool NxsToken::GetComment()
 	return command;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads rest of a token surrounded with curly brackets (the starting '{' has already been input) up to and including
-|	the matching '}' character. All nested curly-bracketed phrases will be included.
+/*!
+	Reads rest of a token surrounded with curly brackets (the starting '{' has already been input) up to and including
+	the matching '}' character. All nested curly-bracketed phrases will be included.
 */
 void NxsToken::GetCurlyBracketedToken()
 	{
@@ -616,13 +614,13 @@ void NxsToken::GetCurlyBracketedToken()
 	eofAllowed = formerEOFAllowed ;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Gets remainder of a double-quoted NEXUS word (the first double quote character was read in already by GetNextToken).
-|	This function reads characters until the next double quote is encountered. Tandem double quotes within a 
-|	double-quoted NEXUS word are not allowed and will be treated as the end of the first word and the beginning of the 
-|	next double-quoted NEXUS word. Tandem single quotes inside a double-quoted NEXUS word are saved as two separate 
-|	single quote characters; to embed a single quote inside a double-quoted NEXUS word, simply use the single quote by 
-|	itself (not paired with another tandem single quote).
+/*!
+	Gets remainder of a double-quoted NEXUS word (the first double quote character was read in already by GetNextToken).
+	This function reads characters until the next double quote is encountered. Tandem double quotes within a
+	double-quoted NEXUS word are not allowed and will be treated as the end of the first word and the beginning of the
+	next double-quoted NEXUS word. Tandem single quotes inside a double-quoted NEXUS word are saved as two separate
+	single quote characters; to embed a single quote inside a double-quoted NEXUS word, simply use the single quote by
+	itself (not paired with another tandem single quote).
 */
 void NxsToken::GetDoubleQuotedToken()
 	{
@@ -648,11 +646,11 @@ void NxsToken::GetDoubleQuotedToken()
 	eofAllowed = formerEOFAllowed ;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Gets remainder of a quoted NEXUS word (the first single quote character was read in already by GetNextToken). This
-|	function reads characters until the next single quote is encountered. An exception occurs if two single quotes occur
-|	one after the other, in which case the function continues to gather characters until an isolated single quote is
-|	found. The tandem quotes are stored as a single quote character in the token NxsString.
+/*!
+	Gets remainder of a quoted NEXUS word (the first single quote character was read in already by GetNextToken). This
+	function reads characters until the next single quote is encountered. An exception occurs if two single quotes occur
+	one after the other, in which case the function continues to gather characters until an isolated single quote is
+	found. The tandem quotes are stored as a single quote character in the token NxsString.
 */
 void NxsToken::GetQuoted()
 	{
@@ -660,7 +658,7 @@ void NxsToken::GetQuoted()
 	eofAllowed = false;
 	long fl = fileLine;
 	long fc = fileColumn;
-		
+
 	try
 		{
 		for(;;)
@@ -690,9 +688,9 @@ void NxsToken::GetQuoted()
 	eofAllowed = formerEOFAllowed ;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads rest of parenthetical token (starting '(' already input) up to and including the matching ')' character.  All
-|	nested parenthetical phrases will be included.
+/*!
+	Reads rest of parenthetical token (starting '(' already input) up to and including the matching ')' character.  All
+	nested parenthetical phrases will be included.
 */
 void NxsToken::GetParentheticalToken()
 	{
@@ -720,11 +718,11 @@ void NxsToken::GetParentheticalToken()
 		}
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if token begins with the capitalized portion of `s' and, if token is longer than `s', the remaining 
-|	characters match those in the lower-case portion of `s'. The comparison is case insensitive. This function should be
-|	used instead of the Begins function if you wish to allow for abbreviations of commands and also want to ensure that 
-|	user does not type in a word that does not correspond to any command.
+/*!
+	Returns true if token begins with the capitalized portion of `s' and, if token is longer than `s', the remaining
+	characters match those in the lower-case portion of `s'. The comparison is case insensitive. This function should be
+	used instead of the Begins function if you wish to allow for abbreviations of commands and also want to ensure that
+	user does not type in a word that does not correspond to any command.
 */
 bool NxsToken::Abbreviation(
   NxsString s)	/* the comparison string */
@@ -779,9 +777,9 @@ bool NxsToken::Abbreviation(
 	return true;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Returns true if token NxsString begins with the NxsString `s'. This function should be used instead of the Equals 
-|	function if you wish to allow for abbreviations of commands.
+/*!
+	Returns true if token NxsString begins with the NxsString `s'. This function should be used instead of the Equals
+	function if you wish to allow for abbreviations of commands.
 */
 bool NxsToken::Begins(
   NxsString s,			/* the comparison string */
@@ -814,29 +812,29 @@ bool NxsToken::Begins(
 	return true;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Reads characters from in until a complete token has been read and stored in token. GetNextToken performs a number 
-|	of useful operations in the process of retrieving tokens:
-|~
-|	o any underscore characters encountered are stored as blank spaces (unless the labile flag bit preserveUnderscores
-|	  is set)
-|	o if the first character of the next token is an isolated single quote, then the entire quoted NxsString is saved 
-|	  as the next token
-|	o paired single quotes are automatically converted to single quotes before being stored
-|	o comments are handled automatically (normal comments are treated as whitespace and output comments are passed to 
-|	  the function OutputComment which does nothing in the NxsToken class but can be overridden in a derived class to 
-|	  handle these in an appropriate fashion)
-|	o leading whitespace (including comments) is automatically skipped
-|	o if the end of the file is reached on reading this token, the atEOF flag is set and may be queried using the AtEOF 
-|	  member function
-|	o punctuation characters are always returned as individual tokens (see the Maddison, Swofford, and Maddison paper 
-|	  for the definition of punctuation characters) unless the flag ignorePunctuation is set in labileFlags,
-|	  in which case the normal punctuation symbols are treated just like any other darkspace character.
-|~
-|	The behavior of GetNextToken may be altered by using labile flags. For example, the labile flag saveCommandComments 
-|	can be set using the member function SetLabileFlagBit. This will cause comments of the form [&X] to be saved as 
-|	tokens (without the square brackets), but only for the aquisition of the next token. Labile flags are cleared after 
-|	each application.
+/*!
+	Reads characters from in until a complete token has been read and stored in token. GetNextToken performs a number
+	of useful operations in the process of retrieving tokens:
+~
+	o any underscore characters encountered are stored as blank spaces (unless the labile flag bit preserveUnderscores
+	  is set)
+	o if the first character of the next token is an isolated single quote, then the entire quoted NxsString is saved
+	  as the next token
+	o paired single quotes are automatically converted to single quotes before being stored
+	o comments are handled automatically (normal comments are treated as whitespace and output comments are passed to
+	  the function OutputComment which does nothing in the NxsToken class but can be overridden in a derived class to
+	  handle these in an appropriate fashion)
+	o leading whitespace (including comments) is automatically skipped
+	o if the end of the file is reached on reading this token, the atEOF flag is set and may be queried using the AtEOF
+	  member function
+	o punctuation characters are always returned as individual tokens (see the Maddison, Swofford, and Maddison paper
+	  for the definition of punctuation characters) unless the flag ignorePunctuation is set in labileFlags,
+	  in which case the normal punctuation symbols are treated just like any other darkspace character.
+~
+	The behavior of GetNextToken may be altered by using labile flags. For example, the labile flag saveCommandComments
+	can be set using the member function SetLabileFlagBit. This will cause comments of the form [&X] to be saved as
+	tokens (without the square brackets), but only for the aquisition of the next token. Labile flags are cleared after
+	each application.
 */
 void NxsToken::GetNextToken()
 	{
@@ -846,7 +844,7 @@ void NxsToken::GetNextToken()
 	if (saved == '\0' || IsWhitespace(saved))
 		{
 		// Skip leading whitespace
-		
+
 		while( IsWhitespace(ch) && !atEOF)
 			ch = GetNextChar();
 		saved = ch;
@@ -884,7 +882,7 @@ void NxsToken::GetNextToken()
 					}
 				else
 					{
-					// Newline came after token, save newline until next time when it will be 
+					// Newline came after token, save newline until next time when it will be
 					// reported as a separate token.
 					//
 					atEOL = 0;
@@ -903,7 +901,7 @@ void NxsToken::GetNextToken()
 			}
 		else if (ch == '_')
 			{
-			// If underscores are discovered in unquoted tokens, they should be 
+			// If underscores are discovered in unquoted tokens, they should be
 			// automatically converted to spaces.
 			//
 			if (!(labileFlags & preserveUnderscores))
@@ -914,7 +912,7 @@ void NxsToken::GetNextToken()
 		else if (ch == '[')
 			{
 			// Get rest of comment and deal with it, but notice that we only break if the comment ends a token,
-			// not if it starts one (comment counts as whitespace). In the case of command comments 
+			// not if it starts one (comment counts as whitespace). In the case of command comments
 			// (if saveCommandComment) GetComment will add to the token NxsString, causing us to break because
 			// token.size() will be greater than 0.
 			comment.clear();
@@ -955,8 +953,8 @@ void NxsToken::GetNextToken()
 	labileFlags = 0;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Strips whitespace from currently-stored token. Removes leading, trailing, and embedded whitespace characters.
+/*!
+	Strips whitespace from currently-stored token. Removes leading, trailing, and embedded whitespace characters.
 */
 void NxsToken::StripWhitespace()
 	{
@@ -970,8 +968,8 @@ void NxsToken::StripWhitespace()
 	token = s;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Converts all alphabetical characters in token to upper case.
+/*!
+	Converts all alphabetical characters in token to upper case.
 */
 void NxsToken::ToUpper()
 	{

@@ -13,14 +13,14 @@
 //	GNU General Public License for more details.
 //
 //	You should have received a copy of the GNU General Public License
-//	along with NCL; if not, write to the Free Software Foundation, Inc., 
+//	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
 #include "ncl/nxsdatablock.h"
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Sets `id' to "DATA" and `newtaxa' to true, and calls the base class (NxsCharactersBlock) constructor.
+/*!
+	Sets `id' to "DATA" and `newtaxa' to true, and calls the base class (NxsCharactersBlock) constructor.
 */
 NxsDataBlock::NxsDataBlock(
   NxsTaxaBlockAPI *tb,			/* the taxa block object for storing taxon labels */
@@ -31,9 +31,9 @@ NxsDataBlock::NxsDataBlock(
 	Reset();
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Calls Reset function of the parent class (NxsCharactersBlock) and resets `newtaxa' to true in preparation for 
-|	reading another DATA block.
+/*!
+	Calls Reset function of the parent class (NxsCharactersBlock) and resets `newtaxa' to true in preparation for
+	reading another DATA block.
 */
 void NxsDataBlock::Reset()
 	{
@@ -41,9 +41,9 @@ void NxsDataBlock::Reset()
 	newtaxa = true;
 	}
 
-/*----------------------------------------------------------------------------------------------------------------------
-|	Converts this NxsDataBlock object into a NxsCharactersBlock object, storing the result in the supplied 
-|	NxsCharactersBlock object. This NxsDataBlock object will subsequently say it is empty when asked.
+/*!
+	Converts this NxsDataBlock object into a NxsCharactersBlock object, storing the result in the supplied
+	NxsCharactersBlock object. This NxsDataBlock object will subsequently say it is empty when asked.
 */
 void NxsDataBlock::TransferTo(
   NxsCharactersBlock &charactersblock)	/* the NxsCharactersBlock object that will receive all the data from this object */
