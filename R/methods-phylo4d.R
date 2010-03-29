@@ -154,7 +154,7 @@ setMethod("addData", signature(x="phylo4"),
 })
 
 ### Get dimensions of the data
-setMethod("nData", signature(x="phylo4d"), function(x, ...) {
+setMethod("nData", signature(x="phylo4d"), function(x) {
     ncol(x@data)
 })
 
