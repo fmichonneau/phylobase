@@ -2,11 +2,7 @@ library(phylobase)
 
 ## set.seed(1)
 ## t0A <- rcoal(5)
-t0 <- read.tree(textConnection("((t4:0.3210275554,
-(t2:0.2724586465,
- t3:0.2724586465):
-0.0485689089):0.1397952619,(t5:0.07551818331,
-t1:0.07551818331):0.385304634);"))
+t0 <- read.tree(text="((t4:0.3210275554,(t2:0.2724586465,t3:0.2724586465):0.0485689089):0.1397952619,(t5:0.07551818331,t1:0.07551818331):0.385304634);")
 ## hack around variability in ape:
 ##   read.tree() and rcoal() produce sets of
 ##     elements in different orders
