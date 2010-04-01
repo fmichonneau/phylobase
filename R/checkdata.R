@@ -19,23 +19,11 @@ checkTree <- function(object) {
     ## get options
     opt <- phylobase.options()
 
-    ## FIXME: check for cyclicity?
-    nedges <- nrow(object@edge)
+    ## Storage of error/warning messages
+    err <- wrn <- character(0)
 
-    if (hasEdgeLength(object)) {
-      if (length(object@edge.length) != nedges)
-        return("edge lengths do not match number of edges")
-      if(!is.numeric(object@edge.length))
-          return("edge lengths are not numeric")
-      ## presumably we shouldn't allow NAs mixed
-      ## with numeric branch lengths except at the root
-      if (sum(is.na(object@edge.length)) > 1)
-        return("NAs in edge lengths")
-      ## Strip root edge branch length (if set to NA)
-      if (any(object@edge.length[!is.na(object@edge.length)] < 0))
-        return("edge lengths must be non-negative")
-    }
-
+    ## Define variables
+    nedges <- nEdges(object)
     ntips <- nTips(object)
     E <- edges(object)
     tips <- unique(sort(E[,2][!E[,2] %in% E[,1]]))
@@ -43,28 +31,53 @@ checkTree <- function(object) {
     intnodes <- nodes[!nodes %in% tips]
     roots <- E[which(is.na(E[,1])),2]
     nRoots <- length(roots)
+
+    ## Check edge lengths
+    if (hasEdgeLength(object)) {
+        if (length(object@edge.length) != nedges)
+            err <- c(err, "edge lengths do not match number of edges")
+        if(!is.numeric(object@edge.length))
+            err <- c(err, "edge lengths are not numeric")
+        ## presumably we shouldn't allow NAs mixed
+        ## with numeric branch lengths except at the root
+        if (sum(is.na(object@edge.length)) > 1)
+            err <- c(err, "NAs in edge lengths")
+        ## Strip root edge branch length (if set to NA)
+        if (any(object@edge.length[!is.na(object@edge.length)] < 0))
+            err <- c(err, "edge lengths must be non-negative")
+        ## Check edge length labels
+        elen.msg <- "Use edgeLength<- to update them."
+        if (is.null(names(object@edge.length))) {
+            err <- c(err, paste("Edge lengths must have names matching edge IDs.",
+                                elen.msg))
+        }
+        if (!all(names(object@edge.length) %in% edgeId(object, "all"))) {
+            err <- c(err, paste("One or more edge lengths has an unmatched ID name.",
+                                elen.msg))
+        }
+    }
+
+    ## Make sure tips and
     if (!(all(tips==1:ntips) && all(nodes=(ntips+1):(ntips+length(intnodes)))))
-      return("tips and nodes incorrectly numbered")
+        err <- c(err, "tips and nodes incorrectly numbered")
 
     ##careful - nAncest does not work for counting nRoots in unrooted trees
     nAncest <- tabulate(na.omit(E)[, 2],nbins=max(nodes)) ## bug fix from Jim Regetz
     nDesc <- tabulate(na.omit(E[,1]))
     nTips <- sum(nDesc==0)
     if (!all(nDesc[1:nTips]==0))
-      return("nodes 1 to nTips must all be tips")
+        err <- c(err, "nodes 1 to nTips must all be tips")
 
     if (nRoots > 0) {
       if (sum(E[, 1] == 0) != 1) {
-        return("for a rooted tree, edge matrix must contain (exactly one) explicit root edge with ancestor==0")
+          err <- c(err, "for a rooted tree, edge matrix must contain (exactly one) explicit root edge with ancestor==0")
       }
       root.node <- unname(E[which(E[,1] == 0), 2])
-      if (!root.node == nTips + 1)
-        ## TODO this isn't actually a requirement
-        return("root node must be first row of edge matrix")
     }
 
+    ## Check that nodes are correctly numbered
     if (!all(nDesc[(nTips+1):(nTips+nNodes(object))]>0))
-        return("nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
+        err <- c(err, "nodes (nTips+1) to (nTips+nNodes) must all be internal nodes")
 
     ## how do we identify loops???
     ## EXPERIMENTAL: could be time-consuming for large trees?
@@ -73,37 +86,24 @@ checkTree <- function(object) {
       Emat[E] <- 1
     }
     if (!object@order %in% phylo4_orderings) {
-      stop("unknown order: allowed values are ",
-           paste(phylo4_orderings,collapse=","))
+      err <- c(err, paste("unknown order: allowed values are",
+               paste(phylo4_orderings,collapse=",")))
     }
 
     ## make sure tip/node labels have internal names that match node IDs
     lab.msg <- "Use tipLabels<- (and nodeLabels<- if needed) to update them."
     if (is.null(names(object@label))) {
-        stop(c("Tip and node labels must have names matching node IDs. ",
-            lab.msg))
+        err <- c(err, paste("Tip and node labels must have names matching node IDs.",
+                            lab.msg))
 
     } else {
         if (!all(tips %in% names(na.omit(object@label)))) {
-            stop(c("All tips must have associated tip labels. ",
-                lab.msg))
+            err <- c(err, paste("All tips must have associated tip labels.",
+                                lab.msg))
         }
         if (!all(names(object@label) %in% nodeId(object, "all"))) {
-            stop(c("One or more tip/node label has an unmatched ID name ",
-                lab.msg))
-        }
-    }
-
-    ## make sure edge lengths have internal names that match the edges
-    elen.msg <- "Use edgeLength<- to update them."
-    if(hasEdgeLength(object)) {
-        if (is.null(names(object@edge.length))) {
-            stop(c("Edge lengths must have names matching edge IDs. ",
-                elen.msg))
-        }
-        if (!all(names(object@edge.length) %in% edgeId(object, "all"))) {
-            stop(c("One or more edge lengths has an unmatched ID name. ",
-                elen.msg))
+            err <- c(err, paste("One or more tip/node label has an unmatched ID name",
+                                lab.msg))
         }
     }
 
@@ -111,82 +111,71 @@ checkTree <- function(object) {
     elab.msg <- "Use edgeLabels<- to update them."
     if(hasEdgeLabels(object)) {
         if (is.null(names(object@edge.label))) {
-            stop(c("Edge labels must have names matching edge IDs. ",
-                elab.msg))
+            err <- c(err, paste("Edge labels must have names matching edge IDs.",
+                                elab.msg))
         }
         if (!all(names(object@edge.label) %in% edgeId(object, "all"))) {
-            stop(c("One or more edge labels has an unmatched ID name. ",
-                elab.msg))
+            err <- c(err, paste("One or more edge labels has an unmatched ID name.",
+                                elab.msg))
         }
     }
-
-    ## all done with fatal errors.  Now construct a list
-    ##  of warnings and paste them together
-    msg <- character(0)
 
     ## make sure that tip and node labels are unique
     if (hasDuplicatedLabels(object)) {
         currmsg <- "Labels are not unique"
         if (opt$allow.duplicated.labels == "fail")
-            return(currmsg)
+            err <- c(err, currmsg)
         if (opt$allow.duplicated.labels == "warn")
-            msg <- c(msg, currmsg)
+            wrn <- c(wrn, currmsg)
     }
 
     if (any(nDesc>2)) {
         currmsg <- "tree includes polytomies"
         if (opt$poly == "fail")
-            return(currmsg)
+            err <- c(err, currmsg)
         if (opt$poly == "warn")
-            msg <- c(msg, currmsg)
+            wrn <- c(wrn, currmsg)
       }
 
     if (nRoots>1) {
         currmsg <- "tree has more than one root"
         if (opt$multiroot == "fail")
-            return(currmsg)
+            err <- c(err, currmsg)
         if (opt$multiroot == "warn")
-            msg <- c(msg,currmsg)
+            wrn <- c(wrn,currmsg)
     }
     if (any(nDesc==1)) {
         currmsg <- "tree contains singleton nodes"
         if (opt$singleton == "fail")
-            return(currmsg)
+            err <- c(err, currmsg)
         if (opt$singleton == "warn")
-            msg <- c(msg, currmsg)
+            wrn <- c(wrn, currmsg)
     }
     if (any(nAncest>1)) {
       currmsg <- paste("tree is reticulated [most functions in phylobase haven't",
                        "been tested with reticulated trees]")
       if (opt$retic == "fail")
-          return(currmsg)
+          err <- c(err, currmsg)
       if (opt$retic == "warn")
-          msg <- c(msg, currmsg)
+          wrn <- c(wrn, currmsg)
     }
-    if (length(msg)>0) {
-      msg <- paste(msg, collapse=", ")
-      warning(msg)
+    if (length(wrn) > 0) {
+        wrn <- paste(wrn, collapse=", ")
+        warning(wrn)
     }
-    return(TRUE)
+    if (length(err) > 0) {
+        err <- paste(err, collapse=", ")
+        return(err) #failures are returned as text
+    }
+    else {
+        return(TRUE)
+    }
 }
 
 checkPhylo4Data <- function(object) {
 
     ## These are just some basic tests to make sure that the user does not
     ## alter the object in a significant way
-
-# JR: I don't think this part is necessary. All that matters is that all
-# rows in the data have names corresponding to (valid) node numbers
-#    ntips <- nTips(object)
-#    nnodes <- nNodes(object)
-#
-#    ## Check dimensions
-#    if (nrow(object@tip.data) > 0 && nrow(object@tip.data) != ntips)
-#        stop("The number of tip data does not match the number ",
-#             "of tips in the tree")
-#    if (nrow(object@node.data) > 0 && nrow(object@node.data) != nnodes)
-#        stop("The number of node data does not match the number ",
-#             "of internal nodes in the tree")
 
     ## Check rownames
     if (nrow(object@data) > 0 &&
