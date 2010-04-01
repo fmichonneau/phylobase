@@ -17,6 +17,7 @@
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 #include <cstdlib>
+#include <cassert>
 #include "ncl/nxstoken.h"
 
 using namespace std;
@@ -698,24 +699,63 @@ void NxsToken::GetParentheticalToken()
 	// level by one, so that we know we can stop when level becomes 0.
 	//
 	int level = 1;
-
+	std::vector<NxsComment> prevEmbedded = embeddedComments;
+	embeddedComments.clear();
 	char ch;
+	ch = GetNextChar();
 	for(;;)
 		{
-		ch = GetNextChar();
 		if (atEOF)
 			break;
 
-		if (ch == ')')
-			level--;
-		else if (ch == '(')
-			level++;
+		if (ch == '\'')
+			{
+			AppendToToken('\'');
+			GetQuoted();
+			AppendToToken('\'');
+			ch = saved;
+			saved = '\0';
+			if (atEOF)
+				{
+				if (ch == ')' && level == 1)
+					{
+					AppendToToken(')');
+					break;
+					}
+				else
+					{
+					NxsX_UnexpectedEOF x(*this);
+					x.msg << "(end-of-file inside () statement)";
+					}
+				}
+			continue;
+			}
+		if (ch == '[')
+			{
+			GetComment();
+			assert(embeddedComments.size() == 1);
+			AppendToToken('[');
+			const std::string & body =  embeddedComments[0].GetText();
+			token.append(body.begin(), body.end());
+			AppendToToken(']');
+			embeddedComments.clear();
 
-		AppendToToken(ch);
+			}
+		else
+			{
+			if (ch == ')')
+				level--;
+			else if (ch == '(')
+				level++;
+
+			AppendToToken(ch);
+			}
 
 		if (level == 0)
 			break;
+		ch = GetNextChar();
 		}
+	embeddedComments = prevEmbedded;
 	}
 
 /*!

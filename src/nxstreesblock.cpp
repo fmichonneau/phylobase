@@ -512,11 +512,6 @@ std::vector<std::vector<double> > NxsSimpleTree::GetDblPathDistances(bool toMRCA
 	return pathDistMat;
 	}
 
-/*!
-	Fills `infoMap` with the key value pairs parsed from a comment that starts with
-		&&NHX
- returns unparsed component
-*/
 std::string parseNHXComment(const std::string comment, std::map<std::string, std::string> *infoMap)
 	{
 	if (comment.length() < 6 || comment[0] != '&' || comment[1] != '&' || comment[2] != 'N' ||comment[3] != 'H' || comment[4] != 'X' )
@@ -792,9 +787,11 @@ void NxsTreesBlock::ReplaceTaxaBlockPtr(
 	NCL_ASSERT(tb != NULL);
 	taxa = tb;
 	}
-/*!
-	Returns the description of the tree stored at position `i' in `treeDescription'. Assumes that `i' will be in the
+/*! \returns the description of the tree stored at position `i' in `treeDescription'. Assumes that `i' will be in the
 	range [0..`ntrees').
+
+	in NCL version 2.1 and greater, this newick string is guaranteed to use taxon numbers (1-based)
+	in the newick string.  This makes it easier to parse.
 */
 NxsString NxsTreesBlock::GetTreeDescription(
   unsigned i)	/* the index of the tree for which the description is to be returned */
@@ -1651,10 +1648,12 @@ void NxsTreesBlock::Read(
 			}
 		}
 	}
-/*!
-	Returns the description of the tree with index `i' where i is in [0..ntrees).
+/*! Returns the description of the tree with index `i' where i is in [0..ntrees).
 	Node numbers will be translated to names in the resulting tree description.
 	Use GetTreeDescription if translation is not desired.
+
+	Note that if the Names are complex they may complicate simple parses of the tree
+	For example "A (" is a valid NEXUS taxon name (though one that I hope no one is crazy enough to use.
 */
 NxsString NxsTreesBlock::GetTranslatedTreeDescription(
   unsigned i)	/* the index of the tree for which the description is to be returned */

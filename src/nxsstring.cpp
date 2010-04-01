@@ -17,12 +17,12 @@
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 #include <climits>
-#include "ncl/nxsdefs.h"
-#include "ncl/nxsstring.h"
 #include <cstdarg>
 #include <cmath>
 #include <cfloat>
-#include <stdlib.h>
+#include <cstdlib>
+#include "ncl/nxsdefs.h"
+#include "ncl/nxsstring.h"
 
 using namespace std;
 

@@ -36,10 +36,19 @@ class NxsTreesBlockAPI
 		virtual bool		IsDefaultTree(unsigned i) = 0;
 		virtual bool		IsRootedTree(unsigned i) = 0;
 	};
+/*! This function provides rudimentary support for parsing of NHX comments.
+	It is called during the creation of a NxsSimpleTree to handle any NHX comments
 
-std::string parseNHXComment(const std::string comment, std::map<std::string, std::string> *infoMap);
+	It fills `infoMap` with the key value pairs parsed from a comment that starts with
+		&&NHX
+	\returns the unparsed portion of the comment
+*/
+std::string parseNHXComment(const std::string comment, /*! the comment without the [] braces. If the comment does not start with &&NHX then the entire comment will be returned*/
+			std::map<std::string, std::string> *infoMap); /*!< the destination for key value pairs parsed out of the NHX comment */
 class NxsFullTreeDescription;
 class NxsSimpleNode;
+/*! The edge used by the NxsSimpleTree class.
+*/
 class NxsSimpleEdge
 	{
 	public:
@@ -68,9 +77,10 @@ class NxsSimpleEdge
 			return unprocessedComments;
 			}
 
-		/// returns true if `key` was processed from a comment.
-		///	If found, (and value is not NULL), the *value will hold the
-		///		value on exit
+		/*! \returns true if `key` was processed from a comment.
+			If the key was found and `value` pointer is not NULL, then the
+				*value will hold the value on exit
+		*/
 		bool GetInfo(const std::string &key, std::string *value) const
 			{
 			std::map<std::string, std::string>::const_iterator kvit = parsedInfo.find(key);
@@ -80,7 +90,16 @@ class NxsSimpleEdge
 				*value = kvit->second;
 			return true;
 			}
+		/*! Returns a reference to the map that stores information in a generic
+			key to value mapping where both elements are strings.
 
+			This map is populated by the information from NHX comments during the creation of
+			a NxsSimpleTree.
+		*/
+		const std::map<std::string, std::string> & GetInfo() const
+			{
+			return parsedInfo;
+			}
 		const NxsSimpleNode * GetParent() const
 			{
 			return parent;
@@ -151,6 +170,8 @@ class NxsSimpleEdge
 		friend class NxsSimpleNode;
 	};
 
+/*! The node used by the NxsSimpleTree class.
+*/
 class NxsSimpleNode
 	{
 	public:
@@ -260,7 +281,10 @@ class NxsSimpleNode
 		unsigned taxIndex; // present for every leaf. UINT_MAX for internals labeled with taxlabels
 		friend class NxsSimpleTree;
 	};
-
+/*! A simple tree class.
+	Internally NCL stores trees as newick strings with metadata (see the NxsFullTreeDescription class)
+	but you can create a NxsSimpleTree
+*/
 class NxsSimpleTree
 	{
 	public:
@@ -337,6 +361,25 @@ class NxsSimpleTree
 		NxsSimpleTree & operator=(const NxsSimpleTree &); //not defined.  Not copyable
 	};
 
+/*! A class that encapsulates a newick string description of a tree and metadata about the tree.
+
+	the NxsTreesBlock stores the trees as NxsFullTreeDescription because during its parse
+	and validation of a tree string.
+	By default, NCL will "process" each tree -- converting the taxon labels to
+		numbers for the taxa (the number will be 1 + the taxon index).
+		During this processing, the trees block detects things about the tree such as whether
+		there are branch lengths on the tree, whether there are polytomies...
+
+	This data about the tree is then stored in a NxsFullTreeDescription
+	so that the client code can access some information about a tree before it parses
+	the newick string.
+
+	If you do not want to parse the newick string yourself, you can construct a
+		NxsSimpleTree object from a NxsFullTreeDescription object if the NxsFullTreeDescription
+		is "processed"
+
+	If the NxsTreesBlock is configured NOT to process trees (see NxsTreesBlock::SetProcessAllTreesDuringParse())
+*/
 class NxsFullTreeDescription
 	{
 	public:
@@ -357,86 +400,125 @@ class NxsFullTreeDescription
 				NXS_SOME_NEGATIVE_EDGE_LEN_BIT		= 0x1000,
 				NXS_TREE_PROCESSED 					= 0x2000
 			};
-		NxsFullTreeDescription(const std::string & newickStr, const std::string &treeName, int infoFlags)
+		/*! Creates a Tree description from a newick string, name and int with bits that indicate
+			some metadata about the tree.
+		*/
+		NxsFullTreeDescription(const std::string & newickStr, /*!< the newick string */
+				const std::string &treeName, /*!< the name of the tree */
+				int infoFlags) /*!< union of the relevant bits from TreeDescFlags */
 			:newick(newickStr),
 			name(treeName),
 			flags(infoFlags),
 			minIntEdgeLen(INT_MAX),
 			minDblEdgeLen(DBL_MAX)
 			{}
+		/*! Tokenizes the tree into a vector of NEXUS tokens.
+			This makes it easier for to parse.
+		*/
 		std::vector<std::string> GetTreeTokens() const;
 
-		/** returns a newick string with 1-based numbers corresponding to (1 + Taxa block's index of taxon)*/
+		/** returns a newick string.
+			If the NxsFullTreeDescription is processed, then the string will have
+				1-based numbers corresponding to (1 + Taxa block's index of taxon)
+			If it is not processed, then it will correspond with the exact string
+				in the file. Handling unprocessed newick strings requires that the
+				client code consult the Translation table and implement NEXUS'
+				numeric interpretation of labels in order to decode correctly
+				decode all taxon labels
+		*/
 		const std::string &	GetNewick() const
 			{
 			return newick;
 			}
+		/*! \returns the name of the tree */
 		const std::string &	GetName() const
 			{
 			return name;
 			}
+		/*! \returns true if the newick string has been processed. */
 		bool IsProcessed() const
 			{
 			return (flags&NXS_TREE_PROCESSED) != 0;
 			}
+		/*! \throws a NxsNCLAPIException if the tree has not been "processed" */
 		void AssertProcessed() const
 			{
 			if (!IsProcessed())
 				throw NxsNCLAPIException("Tree description queries are only supported on processed tree descriptions.");
 			}
+		/*! \returns true if the tree was rooted.  */
 		bool IsRooted() const
 			{
 			AssertProcessed();
 			return (flags&NXS_IS_ROOTED_BIT) != 0;
 			}
+		/*! \returns true all of the edges in the tree have edge length.
+			\raises a NxsNCLAPIException if the tree has not been processed!
+		*/
 		bool AllEdgesHaveLengths() const
 			{
 			AssertProcessed();
 			return (flags&NXS_EDGE_LENGTH_UNION) == NXS_HAS_SOME_EDGE_LENGTHS_BIT;
 			}
+		/*! \returns true at least one edge in the tree have edge length
+			\raises a NxsNCLAPIException if the tree has not been processed!
+		*/
 		bool SomeEdgesHaveLengths() const
 			{
 			AssertProcessed();
 			return (flags&NXS_HAS_SOME_EDGE_LENGTHS_BIT) != 0;
 			}
+		/*! \returns true all of the edge lengths that are specified can be read as integers
+			\raises a NxsNCLAPIException if the tree has not been processed!
+		*/
 		bool EdgeLengthsAreAllIntegers() const
 			{
 			AssertProcessed();
 			return (flags&NXS_INT_EDGE_LENGTHS_BIT) != 0;
 			}
+		/*! \returns true if the tree contains all of the taxa listed in the NxsTaxaBlock associated with the trees block that generated this NxsFullTreeDescription
+			\raises a NxsNCLAPIException if the tree has not been processed!
+		*/
 		bool AllTaxaAreIncluded() const
 			{
 			AssertProcessed();
 			return (flags&NXS_HAS_ALL_TAXA_BIT) != 0;
 			}
+		/*! \returns true if some of the edges in the tree have New Hampshire Extended style comments  (see http://www.phylosoft.org/NHX)
+			\raises a NxsNCLAPIException if the tree has not been processed!
+		*/
 		bool HasNHXComments() const
 			{
 			AssertProcessed();
 			return (flags&NXS_HAS_NHX_BIT) != 0;
 			}
+		/*! \returns true if the tree has polytomies
+			\raises a NxsNCLAPIException if the tree has not been processed!
+		*/
 		bool HasPolytomies() const
 			{
 			AssertProcessed();
 			return (flags&NXS_HAS_POLYTOMY_BIT) != 0;
 			}
+		/*! \returns true if the tree some internal nodes that only have one child.
+			\raises a NxsNCLAPIException if the tree has not been processed!
+		*/
 		bool HasDegreeTwoNodes() const
 			{
 			AssertProcessed();
 			return (flags&NXS_HAS_DEG_TWO_NODES_BIT) != 0;
 			}
-		/**---------------------------------------------------------------------
-		|	If EdgeLengthsAreAllIntegers returns true then this will return the
-		|	shortest edge length in the tree (useful as means of checking for
-		|	constraints by programs that prohibit 0 or negative branch lengths)
+		/*! If EdgeLengthsAreAllIntegers returns true then this will return the
+			shortest edge length in the tree (useful as means of checking for
+			constraints by programs that prohibit 0 or negative branch lengths)
 		*/
 		int smallestIntEdgeLength() const
 			{
 			return minIntEdgeLen;
 			}
-		/**---------------------------------------------------------------------
-		|	If EdgeLengthsAreAllIntegers returns false then this will return the
-		|	shortest edge length in the tree (useful as means of checking for
-		|	constraints by programs that prohibit 0 or negative branch lengths)
+		/*!	If EdgeLengthsAreAllIntegers returns false then this will return the
+			shortest edge length in the tree (useful as means of checking for
+			constraints by programs that prohibit 0 or negative branch lengths)
 		*/
 		double smallestRealEdgeLength() const
 			{
@@ -454,29 +536,19 @@ class NxsFullTreeDescription
 class NxsTreesBlock;
 typedef bool (* ProcessedTreeValidationFunction)(NxsFullTreeDescription &, void *, NxsTreesBlock *);
 /*!
-	This class handles reading and storage for the NEXUS block TREES. It overrides the member functions Read and Reset,
-	which are abstract virtual functions in the base class NxsBlock. The translation table (if one is supplied) is
-	stored in the `translateList'. The tree names are stored in `treeName' and the tree descriptions in
-	`treeDescription'. Information about rooting of trees is stored in `rooted'. Note that no checking is done to
-	ensure that the tree descriptions are valid. The validity of the tree descriptions could be checked after the TREES
-	block has been read (but before the next block in the file has been read) by overriding the NxsReader::ExitingBlock
-	member function, but no functionality for this is provided by the NCL. Below is a table showing the correspondence
-	between the elements of a TREES block and the variables and member functions that can be used to access each piece
-	of information stored.
->
-	NEXUS command     Data members    Member functions
-	-----------------------------------------------------
-	TRANSLATE         translateList
+	This class handles reading and storage for the NEXUS block TREES.
+	The class can  read the TRANSLATE and TREE commands.
 
-	TREE              treeName        GetTreeName
-	                                  GetTreeDescription
-	                                  GetNumTrees
-	                                  GetNumDefaultTree
-	                                  IsDefaultTree
+	The tree is validated during the parse and then stored as a NxsFullTreeDescription
+		object which will hold the newick string. This newick string will have
+		numbers rather than names. The numbers in the tree string start at 1 (like other NEXUS numbering),
+		but they are simply 1 + the taxon index.
 
-	                  rooted          IsRootedTree
-	-----------------------------------------------------
->
+	In previous versions of NCL (before v2.1), the client code would have to use the translate
+		table to convert the newick string into the taxon numbers.
+
+	As of v2.1, NCL now does this translation.
+
 */
 class NxsTreesBlock
   : public NxsTreesBlockAPI, public NxsTaxaBlockSurrogate
@@ -491,15 +563,51 @@ class NxsTreesBlock
 			return NxsLabelToIndicesMapper::GetIndicesFromSets(label, toFill, treeSets);
 			}
 
+		/*! \returns the index of the default tree (the last tree in the TREES block with a * before its name)
+				if no default tree was specified than the first index (0) will be returned
+		*/
 		unsigned	GetNumDefaultTree();
+		/*! \returns the number of trees stored */
 		unsigned	GetNumTrees();
+		/*! \returns the number of trees stored */
 		unsigned	GetNumTrees() const;
+		/*! \returns the NxsFullTreeDescription for tree with index `i`
+		`i` should be in the range [0, num_trees)
+
+		If the NxsFullTreeDescription is processed (see NxsFullTreeDescription::IsProcessed())
+			then its newick string will have numbers rather than names. The numbers in the tree
+			string start at 1 (like other NEXUS numbering), but they are simply 1 + the taxon index.
+
+		In previous versions of NCL (before v2.1), the client code would have to use the translate
+			table to convert the newick string into the taxon numbers.
+
+
+		*/
 		const NxsFullTreeDescription & GetFullTreeDescription(unsigned i) const;
+		/*! \returns a 1-based number for the last tree read that has the name `name` */
 		unsigned	TreeLabelToNumber(const std::string & name) const;
+		/*! \returns the tree name for the tree with index `i`
+		i should be in the range [0, ntrees)
+		*/
 		NxsString	GetTreeName(unsigned i);
+		/*! \returns the tree description object for the tree with index `i`
+		i should be in the range [0, ntrees)
+		*/
 		NxsString	GetTreeDescription(unsigned i);
+		/*! \returns the newick string for the tree with index i. The string will have
+			the taxon names rather than numbers (or other translate table keys) in it.
+		i should be in the range [0, ntrees)
+		*/
 		NxsString	GetTranslatedTreeDescription(unsigned i);
+		/*! \returns true if the tree with index i is the default tree
+		i should be in the range [0, ntrees)
+		*/
 		bool		IsDefaultTree(unsigned i);
+		/*! \returns true if the tree is thought to be rooted (could be rooted
+			because this is NCL's default, or it could indicate that a [&R]
+			comment was encountered.
+		i should be in the range [0, ntrees)
+		*/
 		bool		IsRootedTree(unsigned i);
 		virtual void		Report(std::ostream &out) NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
 		virtual void		BriefReport(NxsString &s) NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
@@ -541,6 +649,13 @@ class NxsTreesBlock
 			{
 			return allowImplicitNames;
 			}
+		/*! \returns true if the block uses the v2.1 style of parsing in which the tree is interpretted and converted into
+				a newick string with standard taxon numbering
+			If false, then the NxsTreesBlock uses the v2.0 API in which the tree reader simply stores the tree string
+				as written in the file (so the client code has to check the translate table in order to interpret
+				the newick stream).
+			true by default.
+		*/
 		bool GetProcessAllTreesDuringParse() const
 			{
 			return processAllTreesDuringParse;
@@ -549,15 +664,42 @@ class NxsTreesBlock
 			{
 			allowImplicitNames = s;
 			}
+		/*! If true then the block will use the v2.1 style of parsing in which the tree is interpretted and converted into
+				a newick string with standard taxon numbering
+			If false, then the NxsTreesBlock will use the v2.0 API in which the tree reader simply stores the tree string
+				as written in the file (so the client code has to check the translate table in order to interpret
+				the newick stream).
+			true by default.
+		*/
 		void SetProcessAllTreesDuringParse(bool s)
 			{
 			processAllTreesDuringParse = s;
 			}
-		/*Interprets the newick string as a tree (builds trees as in memory
-			structures, which may reveal illegal newick strings that were not
-			detected as illegal on the parse).
+		/* Interprets the newick string as a tree. This converts the newick string
+			into one in which 1-based numbers are used for taxon labels (raw newick
+			strings can contain numbers, taxon labels, tax set names or translate
+			table keys as taxon identifiers).
+
+			\raises NxsException
+			This function builds trees as in memory. It may  reveal illegal newick strings that were not
+			detected as illegal on the parse, so NxsExceptions may  be raised.
+
+			Explicitly calling this function is not necessary unless
+			processAllTreesDuringParse is false (because of a previous call to
+			SetProcessAllTreesDuringParse()).
 		*/
 		void ProcessTree(NxsFullTreeDescription &treeDesc) const;
+		/* Convenience function that calls ProcessTree() one each stored
+			NxsFullTreeDescription instance.
+
+			\raises NxsException
+			This function builds trees as in memory. It may  reveal illegal newick strings that were not
+			detected as illegal on the parse, so NxsExceptions may  be raised.
+
+			Explicitly calling this function is not necessary unless
+			processAllTreesDuringParse is false (because of a previous call to
+			SetProcessAllTreesDuringParse()).
+		*/
 		void ProcessAllTrees() const
 			{
 			std::vector<NxsFullTreeDescription>::iterator trIt = trees.begin();
