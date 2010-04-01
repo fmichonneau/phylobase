@@ -47,4 +47,4 @@ Attaching package: 'phylobase'
 > 
 > proc.time()
    user  system elapsed 
-  1.264   0.040   1.311 
+  1.312   0.040   1.349 

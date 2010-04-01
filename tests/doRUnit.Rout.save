@@ -175,7 +175,7 @@ Error in switch(extra.data, warn = warning(msg), fail = stop(msg)) :
 
 
 Executing test function test.formatDataWithDup  ... [1] 10
-<environment: 0x9e777c4>
+<environment: 0x935e7c4>
 Error in formatData(phy.dup, phy.dup) : 
   phy.dup must be a vector, factor, matrix, or data frame
 Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
@@ -677,7 +677,7 @@ Executing test function test.siblings  ...  done successfully.
 
 ------------------- UNIT TEST SUMMARY ---------------------
 
-RUNIT TEST PROTOCOL -- Thu Apr  1 15:22:36 2010 
+RUNIT TEST PROTOCOL -- Thu Apr  1 16:01:34 2010 
 *********************************************** 
 Number of test functions: 101 
 Number of errors: 0 
@@ -689,4 +689,4 @@ phylobase unit testing - 101 test functions, 0 errors, 0 failures
 > 
 > proc.time()
    user  system elapsed 
- 10.712   0.144  10.940 
+ 11.060   0.216  11.483 

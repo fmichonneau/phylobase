@@ -79,4 +79,4 @@ In asMethod(object) : trees with unknown order may be unsafe in ape
 > 
 > proc.time()
    user  system elapsed 
-  1.256   0.020   1.269 
+  1.248   0.028   1.279 
