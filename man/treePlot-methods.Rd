@@ -29,7 +29,7 @@
   \item{type}{ A character string indicating the shape of plotted tree }
   \item{show.tip.label}{ Logical, indicating whether tip labels should be shown }
   \item{show.node.label}{ Logical, indicating whether node labels should be shown }
-  \item{tip.order}{A character vector of tip labels, indicating their order along the y axis (from top to bottom). Or, a numeric vector of tip node IDs indicating the order.}
+  \item{tip.order}{If NULL the tree is plotted with tips in preorder, if "rev" this is reversed. Otherwise, it is a character vector of tip labels, indicating their order along the y axis (from top to bottom). Or, a numeric vector of tip node IDs indicating the order.}
   \item{plot.data}{ Logical indicating whether \code{phylo4d} data should be plotted }
   \item{rot}{ Numeric indicating the rotation of the plot in degrees }
   \item{tip.plot.fun}{ A function used to generate plot at the each tip of the phylogenetic trees }

@@ -35,7 +35,7 @@
     type   <- match.arg(type)
     Nedges <- nEdges(phy)
     Ntips  <- nTips(phy)
-    if(!is.null(tip.order)) {
+    if(!is.null(tip.order) && tip.order!="rev") {
         if(length(tip.order) != Ntips) {stop('tip.order must be the same length as nTips(phy)')}
         if(is.numeric(tip.order)) {
             tip.order <- tip.order
@@ -44,8 +44,8 @@
                 tip.order <- as.numeric(names(tipLabels(phy))[match(tip.order, tipLabels(phy))])
             }
         }
+        tip.order <- rev(tip.order)
     }
-    tip.order <- rev(tip.order)
     ## TODO remove the false cladogram option?
     if(!hasEdgeLength(phy) || type == 'cladogram') {
         edgeLength(phy) <- rep(1, Nedges)
@@ -242,7 +242,12 @@ phyloXXYY <- function(phy, tip.order=NULL)
 
     ## Set y positions for terminal nodes and calculate remaining y positions
     if(!is.null(tip.order)) {
-        yy[tips][match(tip.order, edge2[tips])] <- seq(0, 1, length = Ntips)
+        if(tip.order=="rev") {
+            yy[tips] <- seq(1, 0, length = Ntips)
+            tip.order <- rev(edge2[edge2 <= Ntips])
+        } else {
+            yy[tips][match(tip.order, edge2[tips])] <- seq(0, 1, length = Ntips)
+        }
     } else {
         yy[tips] <- seq(0, 1, length = Ntips)
         tip.order <- edge2[edge2 <= Ntips]
