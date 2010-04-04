@@ -344,7 +344,7 @@ void BASICCMDLINE::AppendRContent(
 			}
 			nexuscharacters+="), stringsAsFactors=FALSE)";
 		}
-		else if ("Continuous"==characters.GetNameOfDatatype(characters.GetDataType())) { //(6==characters.GetDataType()) { //continuousnexuscharacters+="data.frame(";
+		else if (std::string("Continuous")==characters.GetNameOfDatatype(characters.GetDataType())) { //(6==characters.GetDataType()) { //continuousnexuscharacters+="data.frame(";
 			nexuscharacters+="data.frame(";
 
 			if (allchar) {
