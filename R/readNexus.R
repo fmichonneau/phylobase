@@ -44,6 +44,8 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
             incharsstring <- unlist(strsplit(incharsstring$charstring, "\\|"))
             incharsstring <- incharsstring[nzchar(incharsstring)]
 
+            if (!quiet) print(incharsstring)   # display character string if quiet is FALSE
+
             iDtType <- seq(from=1, to=length(incharsstring), by=2)
             iCharStrg <- seq(from=2, to=length(incharsstring), by=2)
 
