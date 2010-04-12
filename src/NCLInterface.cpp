@@ -377,7 +377,10 @@ void BASICCMDLINE::AppendRContent(
 							nexuscharacters+="NA";
 					}
 					else {
-						nexuscharacters+=state;
+					    //nexuscharacters+=state;
+					    char buffer[100];
+					    sprintf(buffer, "%.10f", state);
+					    nexuscharacters+=buffer; 
 					}
 
 					if (taxon+1<ntax) {
