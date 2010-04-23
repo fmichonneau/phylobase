@@ -112,72 +112,110 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
                                PACKAGE="phylobase")
         ## Display the string returned by NCL if quiet=FALSE
         if(!quiet) print(intreesstring)
-        intreesphylolist <- read.nexustreestring(intreesstring)
-        if (length(intreesphylolist)>1 && !simplify) {
-            trees <- list()
-            for (i in 1:length(intreesphylolist)) {
-                if(identical(check.node.labels, "asdata")) {
-                    if(is.null(intreesphylolist[[i]]$node.label)) {
-                        warning("Could not use value \"asdata\" for ",
-                                "check.node.labels because there are no ",
-                                "labels associated with the tree ", i)
-                        check.node.labels <- "drop"
-                    }
-                    trees[[i]] <- phylo4d(intreesphylolist[[i]],
-                                          check.node.labels=check.node.labels,
-                                          ...)
-                }
-                else {
-                    trees[[i]] <- phylo4(intreesphylolist[[i]],
-                                         check.node.labels=check.node.labels,
-                                         ...)
-                }
-            }
-        }
-        else {
-            if (identical(check.node.labels, "asdata")) {
-                if (is.null(intreesphylolist[[1]]$node.label)) {
-                    warning("Could not use value \"asdata\" for ",
-                            "check.node.labels because there are no ",
-                            "labels associated with the tree ", i)
-                    check.node.labels <- "drop"
-                }
-                trees <- phylo4d(intreesphylolist[[1]],
-                                 check.node.labels=check.node.labels,
-                                 ...)
-            }
-            else {
-                trees <- phylo4(intreesphylolist[[1]],
-                                check.node.labels=check.node.labels,
-                                ...)
-            }
-        }
+		if(length(intreesstring) > 0){
+	        intreesphylolist <- read.nexustreestring(intreesstring)
+	        if (length(intreesphylolist)>1 && !simplify) {
+	            trees <- list()
+	            for (i in 1:length(intreesphylolist)) {
+	                if(identical(check.node.labels, "asdata")) {
+	                    if(is.null(intreesphylolist[[i]]$node.label)) {
+	                        warning("Could not use value \"asdata\" for ",
+	                                "check.node.labels because there are no ",
+	                                "labels associated with the tree ", i)
+	                        check.node.labels <- "drop"
+	                    }
+	                    trees[[i]] <- phylo4d(intreesphylolist[[i]],
+	                                          check.node.labels=check.node.labels,
+	                                          ...)
+	                }
+	                else {
+	                    trees[[i]] <- phylo4(intreesphylolist[[i]],
+	                                         check.node.labels=check.node.labels,
+	                                         ...)
+	                }
+	            }
+	        }
+	        else {
+	            if (identical(check.node.labels, "asdata")) {
+	                if (is.null(intreesphylolist[[1]]$node.label)) {
+	                    warning("Could not use value \"asdata\" for ",
+	                            "check.node.labels because there are no ",
+	                            "labels associated with the tree ", i)
+	                    check.node.labels <- "drop"
+	                }
+	                trees <- phylo4d(intreesphylolist[[1]],
+	                                 check.node.labels=check.node.labels,
+	                                 ...)
+	            }
+	            else {
+	                trees <- phylo4(intreesphylolist[[1]],
+	                                check.node.labels=check.node.labels,
+	                                ...)
+	            }
+	        }
+		}
+		else {
+			trees <- NULL
+		}
     }
-    if (type == "tree" || (type == "all" && length(tipdata) == 0 )) {
-        output <- trees
-    }
-    else {
-        if (type == "data") {
-            output <- tipdata
-        }
-        else {
-            if (length(intreesphylolist) > 1 && !simplify) {
-                output <- list()
-                for (i in 1:length(intreesphylolist)) {
-                    output[[i]] <- phylo4d(intreesphylolist[[i]],
-                                           tip.data = tipdata,
-                                           check.node.labels=check.node.labels,
-                                           ...)
-                }
-            }
-            else {
-                output <- phylo4d(intreesphylolist[[1]],
-                                  tip.data=tipdata,
-                                  check.node.labels=check.node.labels,
-                                  ...)
-            }
-        }
-    }
+
+	## scheme of what you get back, given what you asked
+	## for and whether data or tree blocks are actually in
+	## the file
+	##                         
+	## in nexus file        type argument
+	## data     tree        all   data  trees
+	## TRUE     FALSE       df    df    NULL
+	## FALSE    TRUE        p4    NULL  p4
+	## TRUE     TRUE        p4d   df    p4
+	## FALSE    FALSE       NULL  NULL  NULL
+	
+	switch(type,
+		'data' = {
+			if(is.null(tipdata)){
+				output <- NULL
+			}
+			else {
+				output <- tipdata
+			}
+		},
+		'tree' = {
+			if(is.null(trees)){
+				output <- NULL
+			}
+			else {
+				output <- trees
+			}
+		},
+		'all' = {
+			if(is.null(tipdata) & is.null(trees)){
+				output <- NULL
+			}
+			else if (is.null(tipdata)){
+				output <- trees
+			}
+			else if (is.null(trees)){
+				output <- tipdata
+			}
+			else {
+	            if (length(intreesphylolist) > 1 && !simplify) {
+	                output <- list()
+	                for (i in 1:length(intreesphylolist)) {
+	                    output[[i]] <- phylo4d(intreesphylolist[[i]],
+	                                           tip.data = tipdata,
+	                                           check.node.labels=check.node.labels,
+	                                           ...)
+	                }
+	            }
+	            else {
+	                output <- phylo4d(intreesphylolist[[1]],
+	                                  tip.data=tipdata,
+	                                  check.node.labels=check.node.labels,
+	                                  ...)
+	            }
+			}		
+		})
+		
     output
 }
 
