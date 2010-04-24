@@ -61,10 +61,8 @@ void BASICCMDLINE::AppendRContent(
 		nexuscharacters+="|";
 		nexuscharacters+=characters.GetNameOfDatatype(characters.GetDataType());
 		nexuscharacters+="|";
-		//characters.Report(cerr);
-		if (1==characters.GetDataType()) { //standard datatype
-		//if((characters.GetDatatypeName())=="standard") {
-			//nexuscharacters=characters.GetDatatypeName();
+
+		if (std::string("Standard")==characters.GetNameOfDatatype(characters.GetDataType())) {
 			nexuscharacters+="data.frame(";
 
 			if (allchar) {
@@ -140,40 +138,6 @@ void BASICCMDLINE::AppendRContent(
 						nexuscharacters+=labels;
 					}
 				}
-				//if (levelsall) {
-				//	nexuscharacters+=", levels=c(";
-				//	for (unsigned int l=0;l<characters.GetMaxObsNumStates(); l++) {
-				//		nexuscharacters+=l;
-				//		if (l+1<characters.GetMaxObsNumStates()) {
-				//			nexuscharacters+=',';
-				//		}
-				//	}
-				//	nexuscharacters+=')';
-				//}
-				//else {
-				//
-				//	NxsString levels=", levels=c(";
-				//	NxsString labels=", labels=c(";
-				//	unsigned int totallabellength=0;
-				//	for (unsigned int l=0;l<characters.GetObsNumStates(character); l++) {
-				//		labels+='"';
-				//		labels+= characters.GetStateLabel(character,l);
-				//		totallabellength+=(characters.GetStateLabel(character,l)).length();
-				//		labels+='"';
-				//		levels+= l;
-				//		if (l+1<characters.GetObsNumStates(character)) {
-				//			labels+=',';
-				//			levels+=',';
-				//		}
-				//	}
-				//	levels+=')';
-				//	labels+=')';
-					//cout<<"labels.length="<<labels.length()<<endl<<"levels.length="<<levels.length()<<endl<<"total label length="<<totallabellength<<endl;
-				//	if (totallabellength>characters.GetObsNumStates(character)) {
-				//		nexuscharacters+=levels;
-				//		nexuscharacters+=labels;
-				//	}
-				//}
 				nexuscharacters+=")\n";
 			}
 			nexuscharacters+=", row.names=c(";
@@ -187,8 +151,9 @@ void BASICCMDLINE::AppendRContent(
 			}
 			nexuscharacters+="))";
 		}
-		else if (2==characters.GetDataType() || 3==characters.GetDataType() || 4==characters.GetDataType()) { //dna, rna, nucleotide
-	//	if((characters.GetDatatypeName())=="dna") {
+		else if (std::string("DNA")==characters.GetNameOfDatatype(characters.GetDataType()) ||
+		         std::string("RNA")==characters.GetNameOfDatatype(characters.GetDataType()) ||
+			 std::string("Nucleotide")==characters.GetNameOfDatatype(characters.GetDataType())) {
 
 			nexuscharacters+="data.frame(";
 			if (2==characters.GetDataType()) {
@@ -299,7 +264,7 @@ void BASICCMDLINE::AppendRContent(
 			nexuscharacters+="), stringsAsFactors=FALSE)";
 
 		}
-		else if (5==characters.GetDataType()) { //protein
+		else if (std::string("Protein")==characters.GetNameOfDatatype(characters.GetDataType())) {
 			nexuscharacters+="data.frame(";
 			nexuscharacters+="aa_alignment_1=c(";
 
@@ -344,7 +309,7 @@ void BASICCMDLINE::AppendRContent(
 			}
 			nexuscharacters+="), stringsAsFactors=FALSE)";
 		}
-		else if (std::string("Continuous")==characters.GetNameOfDatatype(characters.GetDataType())) { //(6==characters.GetDataType()) { //continuousnexuscharacters+="data.frame(";
+		else if (std::string("Continuous")==characters.GetNameOfDatatype(characters.GetDataType())) { 
 			nexuscharacters+="data.frame(";
 
 			if (allchar) {
@@ -376,8 +341,7 @@ void BASICCMDLINE::AppendRContent(
 					if (state==DBL_MAX) {
 							nexuscharacters+="NA";
 					}
-					else {
-					    //nexuscharacters+=state;
+					else {					    
 					    char buffer[100];
 					    sprintf(buffer, "%.10f", state);
 					    nexuscharacters+=buffer; 
@@ -398,9 +362,7 @@ void BASICCMDLINE::AppendRContent(
 					nexuscharacters+=',';
 				}
 			}
-			nexuscharacters+="))";
-			//message="Warning: Continuous characters do not work";
-			//PrintMessage();
+			nexuscharacters+="))";	      		
 		}
 		else {
 			std::string message="Matrix loaded but datatype: ";
