@@ -1,15 +1,15 @@
-`treePlot` <- function(phy, 
-                     type = c('phylogram', 'cladogram', 'fan'), 
+`treePlot` <- function(phy,
+                     type = c('phylogram', 'cladogram', 'fan'),
                      show.tip.label = TRUE,
-                     show.node.label = FALSE, 
+                     show.node.label = FALSE,
                      tip.order = NULL,
                      plot.data = is(phy, 'phylo4d'),
                      rot = 0,
                      tip.plot.fun = 'bubbles',
                      plot.at.tip = TRUE,
-                     edge.color = 'black', 
+                     edge.color = 'black',
                      node.color = 'black', # TODO what do with node.color parameter
-                     tip.color  = 'black', 
+                     tip.color  = 'black',
                      edge.width = 1, # TODO line-type modification hack
                      newpage = TRUE,
                      margins = c(1.1, 1.1, 1.1, 1.1), # number of lines, same as par(mar)
@@ -30,16 +30,17 @@
         warning("tree has no tip data to plot")
         plot.data <- FALSE
     }
-    
+
     if(newpage) grid.newpage()
     type   <- match.arg(type)
     Nedges <- nEdges(phy)
     Ntips  <- nTips(phy)
-    if(!is.null(tip.order) && tip.order!="rev") {
+    if(!is.null(tip.order) && length(tip.order) > 1) { ## if length of tip.order is more than 1 it can't be "rev"
         if(length(tip.order) != Ntips) {stop('tip.order must be the same length as nTips(phy)')}
         if(is.numeric(tip.order)) {
             tip.order <- tip.order
-        } else {
+        }
+        else {
             if(is.character(tip.order)) {
                 tip.order <- as.numeric(names(tipLabels(phy))[match(tip.order, tipLabels(phy))])
             }
@@ -54,26 +55,26 @@
     if(type == 'cladogram') {
         xxyy$xx[edges(xxyy$phy)[, 2] <= Ntips] <- 1
     }
-    
+
     ## plotViewport is a convience function that provides margins in lines
     pushViewport(plotViewport(margins=margins))
-    
+
     if(!plot.data) {
-        plotOneTree(xxyy, type, show.tip.label, show.node.label, edge.color, 
+        plotOneTree(xxyy, type, show.tip.label, show.node.label, edge.color,
                                 node.color, tip.color, edge.width, rot)
     } else {
         if(!is.function(tip.plot.fun)) {
             if(tip.plot.fun == "bubbles") {
                 phylobubbles(
-                    type = type, 
-                    show.node.label = show.node.label, 
-                    rot = 0, 
-                    edge.color = edge.color, 
+                    type = type,
+                    show.node.label = show.node.label,
+                    rot = 0,
+                    edge.color = edge.color,
                     node.color = node.color, # TODO what do with node.color parameter
-                    tip.color  = tip.color, 
+                    tip.color  = tip.color,
                     edge.width = edge.width, # TODO line-type modification hack
-                    newpage = TRUE, 
-                    ..., XXYY = xxyy 
+                    newpage = TRUE,
+                    ..., XXYY = xxyy
                 )
             } else {
                 stop(paste(tip.plot.fun, 'is neither a function or a recognized plot type'))
@@ -82,18 +83,18 @@
             ## plot.at.tip <- TRUE
             if (plot.at.tip) {
                 tip.data.plot(
-                    xxyy = xxyy, 
-                    type = type, 
-                    show.tip.label = show.tip.label, 
-                    show.node.label = show.node.label, 
-                    rot = 0, 
-                    tip.plot.fun = tip.plot.fun, 
-                    edge.color = edge.color, 
+                    xxyy = xxyy,
+                    type = type,
+                    show.tip.label = show.tip.label,
+                    show.node.label = show.node.label,
+                    rot = 0,
+                    tip.plot.fun = tip.plot.fun,
+                    edge.color = edge.color,
                     node.color = node.color, # TODO what do with node.color parameter
-                    tip.color  = tip.color, 
+                    tip.color  = tip.color,
                     edge.width = edge.width, # TODO line-type modification hack
-                    newpage = TRUE, 
-                    ... 
+                    newpage = TRUE,
+                    ...
                 )
                 return(invisible())
             } ## if (plot.at.tip)
@@ -102,8 +103,8 @@
     upViewport() # margins
 }
 
-plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color, 
-                        node.color, tip.color, edge.width, rot) 
+plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
+                        node.color, tip.color, edge.width, rot)
 {
     # TODO switch to phylobase abstractions
     phy    <- xxyy$phy
@@ -120,7 +121,7 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
         edge.color <- rep(edge.color, length.out = Nedges)
     }
     edge.color <- edge.color[eindex]
-    
+
     if(length(edge.width) != Nedges) {
         edge.width <- rep(edge.width, length.out = Nedges)
     }
@@ -135,8 +136,8 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
         ## calculate several lab dimesisions
         ## labw    -- a vector of string widths
         ## adjlabw -- the max width for adjusting the size of viewports
-        ## laboff  -- a vector of half string widths for 
-        ## offsetting center justified labels, handy for vp rotation 
+        ## laboff  -- a vector of half string widths for
+        ## offsetting center justified labels, handy for vp rotation
         labw    <- stringWidth(tipLabels(phy))
         adjlabw <- max(labw) + unit(0.1, 'inches')
         laboff  <- labw * 0.5 + unit(0.1, 'inches')
@@ -155,25 +156,25 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
     }
     # grid.show.layout(treelayout)
     pushViewport(viewport(
-        x = 0.5, y = 0.5, 
-        width = 1, height = 1, 
+        x = 0.5, y = 0.5,
+        width = 1, height = 1,
         layout = treelayout, angle = rot, name = 'treelayout'))
     pushViewport(viewport(
-        layout.pos.col = 1, 
+        layout.pos.col = 1,
         name = 'tree'))
     if (type == "fan") {
         dseg <- grid.segments( # draws diag lines
-            x0 = segs$v0x, y0 = segs$v0y, 
-            x1 = segs$h1x, y1 = segs$h1y, 
-            name = "diag", gp = gpar(col = edge.color, lwd = edge.width))     
+            x0 = segs$v0x, y0 = segs$v0y,
+            x1 = segs$h1x, y1 = segs$h1y,
+            name = "diag", gp = gpar(col = edge.color, lwd = edge.width))
     } else {
         vseg <- grid.segments( # draws vertical lines
-            x0 = segs$v0x, y0 = segs$v0y, 
-            x1 = segs$v1x, y1 = segs$v1y, 
-            name = "vert", gp = gpar(col = edge.color, lwd = edge.width)) 
+            x0 = segs$v0x, y0 = segs$v0y,
+            x1 = segs$v1x, y1 = segs$v1y,
+            name = "vert", gp = gpar(col = edge.color, lwd = edge.width))
         hseg <- grid.segments( # draws horizontal lines
-            x0 = segs$h0x, y0 = segs$h0y, 
-            x1 = segs$h1x, y1 = segs$h1y, 
+            x0 = segs$h0x, y0 = segs$h0y,
+            x1 = segs$h1x, y1 = segs$h1y,
             name = "horz", gp = gpar(col = edge.color, lwd = edge.width))
     }
     upViewport() # tree
@@ -181,7 +182,7 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
         pushViewport(viewport(layout.pos.col = 1,
             name = 'tiplabelvp'))
         labtext <- grid.text(
-            tipLabels(phy)[tindex], 
+            tipLabels(phy)[tindex],
             x = unit(xxyy$xx[pedges[, 2] %in% tindex], "native") + laboff[tindex],
             y = xxyy$yy[pedges[, 2] %in% tindex], rot = lrot,
             default.units = 'native', name = 'tiplabels',
@@ -196,9 +197,9 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
             # don't plot NAs
             theLabels[is.na(theLabels)] <- ""
         labtext <- grid.text(
-            theLabels, 
-            x = c(xxyy$xx[pedges[, 2] > Ntips]), 
-            y = c(xxyy$yy[pedges[, 2] > Ntips]), 
+            theLabels,
+            x = c(xxyy$xx[pedges[, 2] > Ntips]),
+            y = c(xxyy$yy[pedges[, 2] > Ntips]),
             default.units = 'npc', name = 'nodelabels', rot = -rot,
             just = 'center', gp = gpar(col = node.color)
         )
@@ -208,7 +209,7 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
     # grobTree(vseg, hseg, labtext)
 }
 
-phyloXXYY <- function(phy, tip.order=NULL) 
+phyloXXYY <- function(phy, tip.order=NULL)
 {
     phy.orig <- phy
     ## initalize the output
@@ -224,10 +225,10 @@ phyloXXYY <- function(phy, tip.order=NULL)
     treelen <- rep(NA, nEdges(phy))
     segs <- list(v0x = treelen, v0y = treelen, v1x = treelen, v1y = treelen,
                  h0x = treelen, h0y = treelen, h1x = treelen, h1y = treelen)
-    
+
     ## Set root x value to zero and calculate x positions
     xx[1] <- 0
-    segs$v0x[1] <- segs$v1x[1] <- segs$h0x[1] <- 0 
+    segs$v0x[1] <- segs$v1x[1] <- segs$h0x[1] <- 0
     edge1   <- as.integer(pedges[,1])
     edge2   <- as.integer(pedges[,2])
     edgeLen <- edgeLength(phy)
@@ -242,7 +243,7 @@ phyloXXYY <- function(phy, tip.order=NULL)
 
     ## Set y positions for terminal nodes and calculate remaining y positions
     if(!is.null(tip.order)) {
-        if(tip.order=="rev") {
+        if(length(tip.order) == 1 &&  tip.order == "rev") {
             yy[tips] <- seq(1, 0, length = Ntips)
             tip.order <- rev(edge2[edge2 <= Ntips])
         } else {
@@ -282,10 +283,10 @@ phyloXXYY <- function(phy, tip.order=NULL)
     Xmax <- max(xx)
     segs$v0x <- segs$v0x / Xmax
     xx <- xx / Xmax
-    
+
     segs$h1x <- xx
-    segs$v1x <- segs$h0x <- segs$v0x 
-    
+    segs$v1x <- segs$h0x <- segs$v0x
+
     # TODO return an index vector instead of a second phy object
     list(xx = xx, yy = yy, phy = phy, segs = segs, torder=tip.order, eorder=eindex)
 }
@@ -307,14 +308,14 @@ drawDetails.bubLegend <- function(x, ...) {
     seekViewport("bubble_plots")
         ## retreive the min and max non-zero bubbles as numerics not units
         bubrange <- convertUnit(
-                    unit(c(min(ts[ts != 0], na.rm=TRUE), max(ts[ts != 0], na.rm=TRUE)), "native"), 
+                    unit(c(min(ts[ts != 0], na.rm=TRUE), max(ts[ts != 0], na.rm=TRUE)), "native"),
                     "mm", valueOnly=TRUE)
     seekViewport("bubblelegend")
     ## grid.rect()
     ## Generate the sequence of legend bubble sizes and convert to grid mm units
     legcirS  <- unit(seq(bubrange[1], bubrange[2], length.out=leglen), "mm")
     ## get the corresponding sequence of actual data values
-    legcir   <- seq(min(tipdata[tipdata != 0], na.rm=TRUE), 
+    legcir   <- seq(min(tipdata[tipdata != 0], na.rm=TRUE),
                     max(tipdata[tipdata != 0], na.rm=TRUE), length.out=leglen)
     ccol     <- ifelse(legcir < 0, 'black', 'white')
 
@@ -323,23 +324,23 @@ drawDetails.bubLegend <- function(x, ...) {
     textsp   <- convertUnit(max(abs(legcirS)), axisFrom="y", axisTo="y", 'npc', valueOnly=TRUE)
     strsp    <- convertUnit(unit(1, "strheight", "TTT"), axisFrom="y", 'npc', valueOnly=TRUE)
     grid.circle(x=xloc, y=0.9 - textsp - strsp, r=legcirS, gp = gpar(fill=ccol), default.units = 'npc')
-    grid.text(as.character(signif(legcir, digits = 2)), 
-                x=xloc, y=0.75 - 2 * textsp - strsp, 
-                gp=gpar(cex=0.75), 
+    grid.text(as.character(signif(legcir, digits = 2)),
+                x=xloc, y=0.75 - 2 * textsp - strsp,
+                gp=gpar(cex=0.75),
                 default.units='npc'
     )
 }
 
 phylobubbles <- function(type = type,
-                        place.tip.label = "right", 
-                        show.node.label = show.node.label, 
+                        place.tip.label = "right",
+                        show.node.label = show.node.label,
                         rot = 0,
-                        edge.color = edge.color, 
+                        edge.color = edge.color,
                         node.color = node.color, # TODO what do with node.color parameter
-                        tip.color  = tip.color, 
+                        tip.color  = tip.color,
                         edge.width = edge.width, # TODO line-type modification hack
                         newpage = TRUE,
-                        ..., 
+                        ...,
                         XXYY, square = FALSE, grid = TRUE)
 {
     ## TODO add legend command
@@ -361,8 +362,8 @@ phylobubbles <- function(type = type,
 
     dlabwdth <- max(stringWidth(colnames(tipdata))) * 1.2
     if(convertWidth(dlabwdth, 'cm', valueOnly=TRUE) < 2) {dlabwdth <- unit(2, 'cm')}
-    phyplotlayout <- grid.layout(nrow = 2, ncol = 2, 
-        heights = unit.c(unit(1, 'null'), dlabwdth), 
+    phyplotlayout <- grid.layout(nrow = 2, ncol = 2,
+        heights = unit.c(unit(1, 'null'), dlabwdth),
         widths = unit(c(1, 1), c('null', 'null'), list(NULL, NULL)))
     pushViewport(viewport(layout = phyplotlayout, name = 'phyplotlayout'))
     pushViewport(viewport(layout.pos.row = 1:2, layout.pos.col = 2,
@@ -375,7 +376,7 @@ phylobubbles <- function(type = type,
     tys <- tys[match(names(tipLabels(phy))[tip.order], XXYY$torder)]
 
     maxr <- ifelse(ncol(tipdata) > nTips(phy), 1 / ncol(tipdata), 1 / nTips(phy))
-    tipdataS <- apply(tipdata, 2, 
+    tipdataS <- apply(tipdata, 2,
                     function(x) (maxr * x) / max(abs(x), na.rm = TRUE))
     if(nVars == 1) {
         xpos <- 0.5
@@ -386,10 +387,10 @@ phylobubbles <- function(type = type,
     ## rep coordinates for filling a matrix columnwise
     xrep <- rep(xpos, each = length(tys))
     yrep <- rep(tys, nVars)
-    ## color bubbles 
+    ## color bubbles
 
     ccol <- ifelse(tipdata < 0, 'black', 'white')
-    
+
     ## generate matrices of every x and y by filling the repd value columnwise
     ## then subset for datapoints that are NA
     naxs <- matrix(xrep, ncol = nVars)
@@ -399,7 +400,7 @@ phylobubbles <- function(type = type,
     nays <- nays[dnas]
     ## set the NA points to zero so that grid.circle doesn't crash
     tipdataS[is.na(tipdataS)] <- 0
-    
+
     ## get label widths
     if(lab.right) {
         tiplabwidth  <- max(stringWidth(tipLabels(phy)))
@@ -407,61 +408,61 @@ phylobubbles <- function(type = type,
 
     ## 2x2 layout -- room at the bottom for data labels, and legend
     bublayout <- grid.layout(nrow = 2, ncol = 2,
-        widths  = unit.c(unit(1, 'null', NULL), tiplabwidth), 
+        widths  = unit.c(unit(1, 'null', NULL), tiplabwidth),
         heights = unit.c(unit(1, 'null', NULL), dlabwdth))
     pushViewport(viewport(
-        x = 0.5, y = 0.5, 
-        width = 0.95, height = 1, 
+        x = 0.5, y = 0.5,
+        width = 0.95, height = 1,
         layout = bublayout, name = 'bublayout'
     ))
-    pushViewport(viewport( 
-        name = 'bubble_plots', 
-        layout = bublayout, 
-        layout.pos.col = 1, 
+    pushViewport(viewport(
+        name = 'bubble_plots',
+        layout = bublayout,
+        layout.pos.col = 1,
         layout.pos.row = 1
     ))
     if(grid) {
         ## draw light grey grid behind bubbles
-        grid.segments(x0 = 0,   x1 = 1, 
+        grid.segments(x0 = 0,   x1 = 1,
                       y0 = tys, y1 = tys, gp = gpar(col = 'grey'))
-        grid.segments(x0 = xpos, x1 = xpos, 
+        grid.segments(x0 = xpos, x1 = xpos,
                       y0 = 0,    y1 = 1, gp = gpar(col = 'grey'))
-    }    
+    }
     if (length(naxs) > 0) {
         ## if ther are missing values plot Xs
         grid.points(naxs, nays, pch = 4)
     }
-    
+
     if(square) {
         ## alternative to circles
         ## to keep the squares square, yet resize nicely use the square npc
         sqedge <- unit(unlist(tipdataS), 'snpc')
-        grid.rect(x = xrep, y = yrep, 
-            width = sqedge, 
-            height = sqedge, 
+        grid.rect(x = xrep, y = yrep,
+            width = sqedge,
+            height = sqedge,
             gp=gpar(fill = ccol))
     } else {
         ## plot bubbles
         grid.circle(xrep, yrep, r = unlist(tipdataS), gp = gpar(fill = ccol))
     }
     upViewport()
-    
+
     ## push view ports for tip and data labels fixed locations
     if(lab.right) {
-        pushViewport(viewport( 
-            name = 'bubble_tip_labels', 
-            layout = bublayout, 
-            layout.pos.col = 2, 
+        pushViewport(viewport(
+            name = 'bubble_tip_labels',
+            layout = bublayout,
+            layout.pos.col = 2,
             layout.pos.row = 1
         ))
-        tt <- tipLabels(phy)[tip.order] # phy@tip.label 
+        tt <- tipLabels(phy)[tip.order] # phy@tip.label
         grid.text(tt, 0.1, tys, just = 'left')
         upViewport()
     }
-    pushViewport(viewport( 
-        name = 'bubble_data_labels', 
-        layout = bublayout, 
-        layout.pos.col = 1, 
+    pushViewport(viewport(
+        name = 'bubble_data_labels',
+        layout = bublayout,
+        layout.pos.col = 1,
         layout.pos.row = 2
     ))
     ## ideas, for nicer sizing of the data labels
@@ -478,58 +479,58 @@ phylobubbles <- function(type = type,
     yyy <- .bubLegendGrob(tipdata, tipdataS)
     grid.draw(yyy)
     upViewport()
-    
+
     pushViewport(viewport(layout.pos.row = 1, layout.pos.col = 1,
                 name = 'tree'))
-        plotOneTree(XXYY, type, show.tip.label=lab.left, show.node.label, edge.color, 
+        plotOneTree(XXYY, type, show.tip.label=lab.left, show.node.label, edge.color,
                                 node.color, tip.color, edge.width, rot)
     upViewport(2)
-    
+
     # to make a nice legend, return the biggest smallest and a scaling factor
     # translate the scale of the current vp to a fixed value
     ## ensure the min is not a zero (or NA) that's replaced by a zero
     ## print(convertUnit(bubscale, 'inches', valueOnly = TRUE))
-    ## return(list(max = max(tipdata, na.rm = TRUE), 
+    ## return(list(max = max(tipdata, na.rm = TRUE),
     ##             min = min(tipdata[tipdata != 0], na.rm = TRUE),
     ##             has.na = length(naxs) > 0,
     ##             bubscale = bubscale))
 }
 
 tip.data.plot <- function(
-                     xxyy, 
-                     type = c('phylogram', 'cladogram', 'fan'), 
+                     xxyy,
+                     type = c('phylogram', 'cladogram', 'fan'),
                      show.tip.label = TRUE,
-                     show.node.label = FALSE, 
-                     rot = 0, 
-                     tip.plot.fun = grid.points, 
-                     edge.color = 'black', 
+                     show.node.label = FALSE,
+                     rot = 0,
+                     tip.plot.fun = grid.points,
+                     edge.color = 'black',
                      node.color = 'black', # TODO what do with node.color parameter
-                     tip.color  = 'black', 
+                     tip.color  = 'black',
                      edge.width = 1, # TODO line-type modification hack
-                     ...)    
+                     ...)
 {
     phy    <- xxyy$phy
     tip.order <- xxyy$torder
     pedges <- edges(phy)
     Ntips  <- nTips(phy)
     datalayout <- grid.layout(ncol = 2, width = unit(c(1, 1/Ntips), c('null', 'null')))
-    # TODO this is done multiple times, 
+    # TODO this is done multiple times,
     pushViewport(viewport(layout = datalayout, angle = rot,
                         name = 'datalayout'))
     pushViewport(viewport(
-        yscale = c(-0.5 / Ntips, 1 + 0.5 / Ntips), 
-        xscale = c(0, 1 + 1 / Ntips), 
-        layout.pos.col = 1, 
+        yscale = c(-0.5 / Ntips, 1 + 0.5 / Ntips),
+        xscale = c(0, 1 + 1 / Ntips),
+        layout.pos.col = 1,
         name = 'data_plots'))
     ## TODO should plots float at tips, or only along edge?
     hc <- convertY(unit(1 / Ntips, 'snpc'), 'npc')
     for(i in 1:Ntips) {
         pushViewport(viewport(
             y = xxyy$yy[pedges[, 2] == i],
-            x = 1 + 1 / (2 * Ntips), # xxyy$xx[phy@edge[, 2] == i], 
-            height = hc, 
-            width = hc, 
-            # default.units = 'native', 
+            x = 1 + 1 / (2 * Ntips), # xxyy$xx[phy@edge[, 2] == i],
+            height = hc,
+            width = hc,
+            # default.units = 'native',
             name = paste('data_plot', i),
             just = "center",
             angle = -rot
@@ -540,8 +541,8 @@ tip.data.plot <- function(
             if (!all(is.na(vals))) tip.plot.fun(vals, ...)
         upViewport() # loop viewports
     }
-    plotOneTree(xxyy, type, show.tip.label, show.node.label, edge.color, 
-                            node.color, tip.color, edge.width, rot)    
+    plotOneTree(xxyy, type, show.tip.label, show.node.label, edge.color,
+                            node.color, tip.color, edge.width, rot)
     upViewport(2) ## data_plot & datalayout
 }
 
