@@ -60,7 +60,8 @@ export(getNode, ancestor, children, descendants, siblings, ancestors,
     MRCA, shortestPath, getEdge)
 
 # Nexus functions
-export(readNexus, read.nexustreestring)
+export(readNexus)
+export(readNCL)
 
 # pdata functions
 export(pdata, check_pdata)

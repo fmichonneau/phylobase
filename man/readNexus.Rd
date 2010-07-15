@@ -1,3 +1,4 @@
+\alias{readNCL}
 \name{readNexus}
 \docType{methods}
 \alias{readNexus}

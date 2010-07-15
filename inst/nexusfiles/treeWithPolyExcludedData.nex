@@ -14,9 +14,9 @@ END;
 BEGIN CHARACTERS;
 	TITLE  testIncomplete;
 	DIMENSIONS  NCHAR=3;
-	FORMAT DATATYPE = STANDARD GAP = - MISSING = ? SYMBOLS = "  0 1 2";
+	FORMAT DATATYPE = STANDARD GAP = - MISSING = ? SYMBOLS = "0 1 2";
 	CHARSTATELABELS 
-		1 Test1 /  test1A test1B, 2 Test2 /  test2A test2B, 3 Test3 /  test3A test3B test3C ; 
+		1 Test1 /test1A test1B, 2 Test2 /test2A test2B, 3 Test3 /test3A test3B test3C; 
 	MATRIX
 	Myrmecocystuscfnavajo    1(0 1)(0 1 2)
 	Myrmecocystuscreightoni  ?(0 1)(0 1)

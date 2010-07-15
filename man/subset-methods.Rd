@@ -145,7 +145,7 @@ geospiza[c(1:6,14), c("wingL", "beakD")]
 edgeLength(geotree)['0-15'] <- 0.1
 geotree2 <- geotree[1:2]
 ## in subset tree, edge of new root extends back to the original root
-edgeLength(geotree2)['NA-3']
+edgeLength(geotree2)['0-3']
 ## edge length immediately ancestral to this node in the original tree
 edgeLength(geotree, MRCA(geotree, tipLabels(geotree2)))
 
