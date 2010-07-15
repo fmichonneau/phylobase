@@ -377,7 +377,7 @@ phylobubbles <- function(type = type,
 
     maxr <- ifelse(ncol(tipdata) > nTips(phy), 1 / ncol(tipdata), 1 / nTips(phy))
     tipdataS <- apply(tipdata, 2,
-                    function(x) (maxr * x) / max(abs(x), na.rm = TRUE))
+                      function(x) (maxr * x) / max(abs(x), na.rm = TRUE))
     if(nVars == 1) {
         xpos <- 0.5
     } else {
@@ -399,7 +399,7 @@ phylobubbles <- function(type = type,
     naxs <- naxs[dnas]
     nays <- nays[dnas]
     ## set the NA points to zero so that grid.circle doesn't crash
-    tipdataS[is.na(tipdataS)] <- 0
+    tipdataS[is.na(tipdataS)] <- 0 + 0.001  # workaround negative circles on PDF
 
     ## get label widths
     if(lab.right) {
