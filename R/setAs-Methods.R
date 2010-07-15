@@ -32,7 +32,7 @@ setAs("phylo", "phylo4", function(from, to) {
     } else if (oldorder=="cladewise") "preorder"
     else oldorder
     attr(from,"order") <- NULL
-    newobj <- phylo4(from$edge, from$edge.length, from$tip.label,
+    newobj <- phylo4(from$edge, from$edge.length, unname(from$tip.label),
                      node.label = from$node.label,
                      edge.label = from$edge.label,
                      order = neworder)
