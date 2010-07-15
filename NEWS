@@ -1,5 +1,64 @@
         *************************************************
         *                                               *
+        *               0.6 SERIES NEWS                 *
+        *                                               *
+        *************************************************
+
+                CHANGES IN phylobase VERSION 0.6
+                
+MAJOR CHANGES
+
+    *   Updated to the Nexus Class Library (NCL) 2.1.12.
+    
+    *   Changed the way NCL is built during the installation process.
+    
+    *   Complete rewrite of the function readNexus which brings many new
+        functionalities.
+        
+    *   Nodes labels do not have to be unique.
+    
+        
+NEW FEATURES
+   
+    *   In readNexus, the option return.labels gives the state labels of the
+        characters.
+        
+    *   It is now possible to import several types of  data blocks in a single
+        NEXUS file with readNexus.
+        
+    *   The function phylobase.options() provides global options to control the
+        behavior of the phylo4/phylo4d validator.
+        
+    *   The new method hasDuplicatedLabels() indicates whether any node labels
+        are duplicated.
+        
+    *   The new method nData() returns the number of datasets associated with
+        a tree.
+        
+    *   The column that contains the labels can now be specified by its name in
+        the function formatData()
+     
+CHANGES
+
+    *   The function getNode() has been modified to allow node matching in the
+        case of non-unique labels.
+        
+    *   Many new unit tests.
+    
+BUG FIXES
+
+    *   Far too many to document.  See the SVN log for details.
+
+KNOWN ISSUES
+
+    *   Unrooted trees are not supported by all functions, e.g. plot() and 
+        reorder().
+
+    *   Factors are not supported by the default plotting method.
+
+
+        *************************************************
+        *                                               *
         *               0.5 SERIES NEWS                 *
         *                                               *
         *************************************************
