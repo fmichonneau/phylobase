@@ -331,7 +331,12 @@ bool  MultiFormatReader::readFastaSequences(
 					int stateCode = dm.GetStateCodeStored(c);
 					if (stateCode == NXS_INVALID_STATE_CODE)
 						{
-						err << "Illegal state code \"" << c << "\" found when reading character " << row.size() << " for taxon " << n;
+						err << "Illegal state code \"";
+						err << c ;
+						err << "\" found when reading character ";
+						err << (unsigned long)row.size();
+						err << " for taxon ";
+						err << n;
 						throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 						}
 					row.push_back(stateCode);
@@ -501,13 +506,13 @@ void  MultiFormatReader::readPhylipData(
 	funcExit:
 		if (matList.size() != n_taxa)
 			{
-			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << matList.size();
+			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << (unsigned long)matList.size();
 			throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 			}
 		const NxsDiscreteStateRow & lastRow = *matList.rbegin();
 		if (lastRow.size() != n_char)
 			{
-			err << "Unexpected end of file.\nExpecting " << n_char << " characters for taxon " <<  *(taxaNames.rbegin()) << ", but only found " << lastRow.size() << " characters.";
+			err << "Unexpected end of file.\nExpecting " << n_char << " characters for taxon " <<  *(taxaNames.rbegin()) << ", but only found " << (unsigned long) lastRow.size() << " characters.";
 			throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 			}
 	}
@@ -636,13 +641,13 @@ void  MultiFormatReader::readInterleavedPhylipData(
 	funcExit:
 		if (matList.size() != n_taxa)
 			{
-			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << matList.size();
+			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << (unsigned long) matList.size();
 			throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 			}
 		const NxsDiscreteStateRow & lastRow = *matList.rbegin();
 		if (lastRow.size() != n_char)
 			{
-			err << "Unexpected end of file.\nExpecting " << n_char << " characters for taxon " <<  *(taxaNames.rbegin()) << ", but only found " << lastRow.size() << " characters.";
+			err << "Unexpected end of file.\nExpecting " << n_char << " characters for taxon " <<  *(taxaNames.rbegin()) << ", but only found " << (unsigned long)lastRow.size() << " characters.";
 			throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 			}
 	}
@@ -781,7 +786,7 @@ bool  MultiFormatReader::readAlnData(
 							{
 							if (!readingFirstBlock && (curr_tax_ind + 1) != taxaNames.size())
 								{
-								err << "Unexpected End of file. Expecting data for " << taxaNames.size() << " sequences";
+								err << "Unexpected End of file. Expecting data for " << (unsigned long) taxaNames.size() << " sequences";
 								throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 								}
 							goto funcExit;
@@ -793,7 +798,7 @@ bool  MultiFormatReader::readAlnData(
 						int stateCode = dm.GetStateCodeStored(c);
 						if (stateCode == NXS_INVALID_STATE_CODE)
 							{
-							err << "Illegal state code \"" << c << "\" found when reading character " << row->size() << " for taxon " << n;
+							err << "Illegal state code \"" << c << "\" found when reading character " << (unsigned long)row->size() << " for taxon " << n;
 							throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 							}
 						row->push_back(stateCode);
@@ -821,7 +826,7 @@ bool  MultiFormatReader::readAlnData(
 					{
 					if (!readingFirstBlock && (curr_tax_ind + 1) != taxaNames.size())
 						{
-						err << "Unexpected End of file. Expecting data for " << taxaNames.size() << " sequences";
+						err << "Unexpected End of file. Expecting data for " << (unsigned long) taxaNames.size() << " sequences";
 						throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 						}
 					goto funcExit;
@@ -833,7 +838,7 @@ bool  MultiFormatReader::readAlnData(
 				{
 				if (!readingFirstBlock && (1 + curr_tax_ind) != taxaNames.size())
 					{
-					err << "Unexpected line beginning with whitespace. Expecting data for " << taxaNames.size() << " sequences";
+					err << "Unexpected line beginning with whitespace. Expecting data for " << (unsigned long)taxaNames.size() << " sequences";
 					throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 					}
 				curr_tax_ind = 0;
@@ -915,7 +920,7 @@ void  MultiFormatReader::moveDataToDataBlock(const std::list<std::string> & taxa
 	{
 	NCL_ASSERT(dataB);
 	NxsString d;
-	d << "Dimensions ntax = " << matList.size() << " nchar = " << nchar << " ; ";
+	d << "Dimensions ntax = " << (unsigned long) matList.size() << " nchar = " << nchar << " ; ";
 	std::istringstream fakeDimStream(d);
 	NxsToken fakeDimToken(fakeDimStream);
 	NxsString newTaxLabel("NewTaxa");
@@ -933,7 +938,7 @@ void  MultiFormatReader::moveDataToUnalignedBlock(const std::list<std::string> &
 	{
 	NCL_ASSERT(uB);
 	NxsString d;
-	d << "Dimensions NewTaxa ntax = " << matList.size() << " ; ";
+	d << "Dimensions NewTaxa ntax = " << (unsigned long)matList.size() << " ; ";
 	std::istringstream fakeDimStream(d);
 	NxsToken fakeDimToken(fakeDimStream);
 	uB->HandleDimensions(fakeDimToken);
