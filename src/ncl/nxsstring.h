@@ -130,7 +130,7 @@ class NxsString
 		NxsString			&operator<<(char c);
 		NxsString			&operator<<(const std::string &s);
 		NxsString			&operator<<(const IndexSet &s);
-		NxsString			&operator<<(NxsString &(*funcPtr)(NxsString	&));
+		//NxsString			&operator<<(NxsString &(*funcPtr)(NxsString	&));
 
 		// Functions that should be in base class string but aren't
 		void				clear();
@@ -536,7 +536,7 @@ inline bool NxsString::Equals(
 		}
 	return false;
 	}
-
+#if 0
 /*!
 	Allows functions that take and return references to NxsString strings to be placed in a series of << operators.
 	See the NxsString endl function.
@@ -546,7 +546,7 @@ inline NxsString &NxsString::operator<<(
 	{
 	return funcPtr(*this);
 	}
-
+#endif
 /*!
 	Returns true if `c' is any Nexus punctuation character:
 >

@@ -831,7 +831,7 @@ long NxsString::ConvertToLong() const
 	if ((l == 0 && (endP - b) == 0))
 		throw NxsX_NotANumber();
 #else
-	if ((l == 0 && ((long) endP - (long) b) == 0))
+	if (l == 0 && endP == b)
 		throw NxsX_NotANumber();
 #endif
 	return l;
@@ -856,7 +856,7 @@ double NxsString::ConvertToDouble() const
 		if ((d == 0.0 && (endP - b) == 0))
 			throw NxsX_NotANumber();
 #else
-		if ((d == 0.0 && ((long) endP - (long) b) == 0))
+		if (d == 0.0 &&  endP == b)
 			throw NxsX_NotANumber();
 #endif
 		if (d == HUGE_VAL)
