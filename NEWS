@@ -1,8 +1,16 @@
+
+
+
         *************************************************
         *                                               *
         *               0.6 SERIES NEWS                 *
         *                                               *
         *************************************************
+
+                CHANGES IN phylobase VERSION 0.6.1
+
+   *   Fix bugs that prevented building on Windows 64-bit systems
+
 
                 CHANGES IN phylobase VERSION 0.6
                 
