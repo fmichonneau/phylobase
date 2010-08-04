@@ -83,6 +83,7 @@ extern "C" SEXP GetNCL(SEXP params, SEXP paramsVecR) {
     std::vector<std::string> trees;          //vector of Newick strings holding the names
     std::vector<std::string> treeNames;      //vector of tree names
     std::vector<std::string> taxaNames;      //vector of taxa names
+    std::string errorMsg;                    //error message
 
     std::vector<bool> test(3);
     test[0] = charall;
@@ -103,7 +104,14 @@ extern "C" SEXP GetNCL(SEXP params, SEXP paramsVecR) {
     nexusReader.cullIdenticalTaxaBlocks(true);
     /* End of making NCL less strict */
     
-    nexusReader.ReadFilepath(const_cast < char* > (filename.c_str()), MultiFormatReader::NEXUS_FORMAT);  
+    try {
+	nexusReader.ReadFilepath(const_cast < char* > (filename.c_str()), MultiFormatReader::NEXUS_FORMAT);  
+    }
+    catch (NxsException &x) {
+	errorMsg = x.msg;
+	Rcpp::List res = Rcpp::List::create(Rcpp::Named("ErrorMsg") = errorMsg);
+	return res;
+    }
 
     const unsigned nTaxaBlocks = nexusReader.GetNumTaxaBlocks();
     for (unsigned t = 0; t < nTaxaBlocks; ++t) {
