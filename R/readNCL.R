@@ -77,8 +77,16 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
            tipData[[i]] <- eval(parse(text=ncl$dataChr[i]))
            names(tipData)[i] <- ncl$charLabels[i]
            tipData[[i]] <- as.factor(tipData[[i]])
+          
+           lbl <- ncl$stateLabels[lblCounter]
            if (return.labels) {
-             levels(tipData[[i]]) <- ncl$stateLabels[lblCounter]
+             if (any(nchar(gsub(" ", "", lbl)) == 0)) {
+               warning("state labels are missing for \'", ncl$charLabels[i],
+                       "\', the option return.labels is thus ignored.")
+             }
+             else {
+               levels(tipData[[i]]) <- lbl
+             }
            }          
          }
          if (levels.uniform) {
