@@ -180,6 +180,10 @@ class NxsSimpleNode
 			return edgeToPar;
 			}
 
+		bool IsTip() const
+			{
+			return (lChild == 0L);
+			}
 		NxsSimpleNode *GetFirstChild() const
 			{
 			return lChild;
@@ -217,6 +221,12 @@ class NxsSimpleNode
 		unsigned GetTaxonIndex() const
 			{
 			return taxIndex;
+			}
+
+		// present for every leaf. UINT_MAX for internals labeled with taxlabels
+		void SetTaxonIndex(unsigned i)
+			{
+			taxIndex = i;
 			}
 
 		// non-empty only for internals that are labelled with names that are NOT taxLabels
@@ -728,6 +738,7 @@ class NxsTreesBlock
 			allowImplicitNames = other.allowImplicitNames;
 			processAllTreesDuringParse = other.processAllTreesDuringParse;
 			writeFromNodeEdgeDataStructure = other.writeFromNodeEdgeDataStructure;
+			validateInternalNodeLabels = other.validateInternalNodeLabels;
 			constructingTaxaBlock = other.constructingTaxaBlock;
 			newtaxa = other.newtaxa;
 			trees = other.trees;
@@ -746,8 +757,8 @@ class NxsTreesBlock
 			*a = *this;
 			return a;
 			}
-		static void ProcessTokenVecIntoTree(const ProcessedNxsCommand & token, NxsFullTreeDescription & ftd, NxsLabelToIndicesMapper *, std::map<std::string, unsigned> &capNameToInd, bool allowNewTaxa, NxsReader * nexusReader, const bool respectCase=false);
-		static void ProcessTokenStreamIntoTree(NxsToken & token, NxsFullTreeDescription & ftd, NxsLabelToIndicesMapper *, std::map<std::string, unsigned> &capNameToInd, bool allowNewTaxa, NxsReader * nexusReader, const bool respectCase=false);
+		static void ProcessTokenVecIntoTree(const ProcessedNxsCommand & token, NxsFullTreeDescription & ftd, NxsLabelToIndicesMapper *, std::map<std::string, unsigned> &capNameToInd, bool allowNewTaxa, NxsReader * nexusReader, const bool respectCase=false, const bool validateInternalNodeLabels=true);
+		static void ProcessTokenStreamIntoTree(NxsToken & token, NxsFullTreeDescription & ftd, NxsLabelToIndicesMapper *, std::map<std::string, unsigned> &capNameToInd, bool allowNewTaxa, NxsReader * nexusReader, const bool respectCase=false, const bool validateInternalNodeLabels=true);
 
 		void SetWriteFromNodeEdgeDataStructure(bool v)
 			{
@@ -804,6 +815,29 @@ class NxsTreesBlock
 		{
 			this->writeTranslateTable = wtt;
 		}
+		/*! Sets the boolean field that determines whether or not the trees
+			block will validate treat internal node labels
+			as taxon labels during the parse. In this case the labels will
+			checked against the taxa block (true is the default).
+
+			This can cause problems if the internal node names are integers that
+			are not intended to be taxon labels (eg. support statements for the
+			subtending branches).
+		*/
+		void setValidateInternalNodeLabels(bool x) {
+			this->validateInternalNodeLabels = x; /** if true then labels that occur for internal nodes will be validated via the taxa block (true is the default).  This can cause problems if the internal node names are integer that are not intended to be taxon labels. */
+		}
+		/*! \returns true if the block will validate treat internal node labels
+			as taxon labels during the parse. In this case the labels will
+			checked against the taxa block (true is the default).
+
+			This can cause problems if the internal node names are integers that
+			are not intended to be taxon labels (eg. support statements for the
+			subtending branches).
+		*/
+		bool getValidateInternalNodeLabels() const {
+			return this->validateInternalNodeLabels;
+		}
 	protected :
 		void ReadTreeFromOpenParensToken(NxsFullTreeDescription &td, NxsToken & token);
 
@@ -815,6 +849,7 @@ class NxsTreesBlock
 		bool processAllTreesDuringParse; /** true by default, false speeds processing but disables detection of errors*/
 		bool constructingTaxaBlock; /** true if new names are being tolerated */
 		bool writeFromNodeEdgeDataStructure; /**this will probably only ever be set to true in testing code. If true the WriteTrees function will convert each tree to NxsSimpleTree object to write the newick*/
+		bool validateInternalNodeLabels; /** if true then labels that occur for internal nodes will be validated via the taxa block (true is the default).  This can cause problems if the internal node names are integer that are not intended to be taxon labels. */
 
 		mutable std::vector<NxsFullTreeDescription> trees;
 		mutable std::map<std::string, unsigned> capNameToInd;

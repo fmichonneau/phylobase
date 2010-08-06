@@ -22,6 +22,7 @@
 #include <fstream>
 #include <climits>
 #include <sstream>
+#include <iterator>
 #include "ncl/nxsreader.h"
 #include "ncl/nxsdefs.h"
 

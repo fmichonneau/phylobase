@@ -28,6 +28,16 @@
 #include <string>
 #include "ncl/nxsdefs.h"
 
+
+
+
+
+// Define HAVE_NCL_NXSSTRING_ENDL if your code needs it
+#if ! defined (HAVE_NCL_NXSSTRING_ENDL)
+#   define HIDE_NCL_NXSSTRING_ENDL
+#else
+#   warning "use of endl with NxsString instances has been deprecated"
+#endif
 class IndexSet;
 
 /*!
@@ -130,7 +140,9 @@ class NxsString
 		NxsString			&operator<<(char c);
 		NxsString			&operator<<(const std::string &s);
 		NxsString			&operator<<(const IndexSet &s);
-		//NxsString			&operator<<(NxsString &(*funcPtr)(NxsString	&));
+#       if ! defined(HIDE_NCL_NXSSTRING_ENDL)
+            NxsString			&operator<<(NxsString &(*funcPtr)(NxsString	&));
+#       endif
 
 		// Functions that should be in base class string but aren't
 		void				clear();
@@ -536,17 +548,18 @@ inline bool NxsString::Equals(
 		}
 	return false;
 	}
-#if 0
-/*!
+
+# if ! defined(HIDE_NCL_NXSSTRING_ENDL)
+
 	Allows functions that take and return references to NxsString strings to be placed in a series of << operators.
 	See the NxsString endl function.
-*/
 inline NxsString &NxsString::operator<<(
   NxsString &(*funcPtr)(NxsString &))	/* pointer to a function returning a reference to a NxsString */
 	{
 	return funcPtr(*this);
 	}
 #endif
+
 /*!
 	Returns true if `c' is any Nexus punctuation character:
 >
@@ -648,6 +661,8 @@ inline NxsString &NxsString::operator<<(
 	return (*this += s);
 	}
 
+
+
 /*!
 	Returns string as a Pascal string (array of unsigned characters with the length in the first byte).
 */
@@ -659,6 +674,8 @@ inline unsigned char *NxsString::p_str(
 	buffer[0] = (unsigned char)length();
 	return buffer;
 	}
+
+
 
 // ############################# start of standalone functions ##########################
 

@@ -48,6 +48,10 @@ class NxsException: public std::exception
 			return msg.empty() ? "Unknown Nexus Exception" : msg.c_str();
 			}
 		const char * nxs_what () const;
+		void addPositionInfo(const NxsToken & t);
+		void addPositionInfo(const ProcessedNxsToken & t);
+		void addPositionInfo(const NxsTokenPosInfo & t);
+		void addPositionInfo(file_pos fp, long fl, long fc);
 	};
 
 typedef NxsException XNexus;

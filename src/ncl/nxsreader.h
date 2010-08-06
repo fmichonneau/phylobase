@@ -130,7 +130,7 @@ class NxsReader
 			};
 		/** Enum different levels of warnings.  See NxsReader::SetWarningOutputLevel*/
 		enum NxsWarnLevel
-			{
+			{ //TODO: we need another warning level for status messages.
 			UNCOMMON_SYNTAX_WARNING = 0,  /**< Legal but uncommon syntax that could indicate a typo */
 			SKIPPING_CONTENT_WARNING = 1, /**< Content is being skipped by NCL */
 			OVERWRITING_CONTENT_WARNING = 2, /**< New content is replacing old information (eg. CharSets with the same name as a previously defined CharSet)*/

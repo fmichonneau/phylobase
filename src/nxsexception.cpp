@@ -32,10 +32,8 @@ NxsException::NxsException(
   long fl,		/* the current file line */
   long fc)		/* the current file column */
 	{
-	pos		= fp;
-	line	= fl;
-	col		= fc;
 	msg.assign(s);
+	addPositionInfo(fp, fl, fc);
 	}
 
 /*!
@@ -46,25 +44,19 @@ NxsException::NxsException(
   const NxsToken &t)		/* NxsToken that was supplied the last token (the token that caused the error) */
 	{
 	msg		= NxsString(s.c_str());
-	pos		= t.GetFilePosition();
-	line	= t.GetFileLine();
-	col		= t.GetFileColumn();
+	this->addPositionInfo(t);
   	}
 
 NxsException::NxsException(const std::string &s, const ProcessedNxsToken &t)
 	{
 	msg		= NxsString(s.c_str());
-	pos		= t.GetFilePosition();
-	line	= t.GetLineNumber();
-	col		= t.GetColumnNumber();
+	this->addPositionInfo(t);
 	}
 
 NxsException::NxsException(const std::string &s, const NxsTokenPosInfo &t)
 	{
 	msg		= NxsString(s.c_str());
-	pos		= t.GetFilePosition();
-	line	= t.GetLineNumber();
-	col		= t.GetColumnNumber();
+	this->addPositionInfo(t);
 	}
 
 const char * NxsException::nxs_what () const
@@ -86,4 +78,30 @@ NxsSignalCanceledParseException::NxsSignalCanceledParseException(const std::stri
 	if (!s.empty())
 		msg << " in the processing step: " << s;
 	msg << '.';
+	}
+
+
+void NxsException::addPositionInfo(const NxsToken & t) 
+	{
+	pos = t.GetFilePosition();
+	line = t.GetFileLine();
+	col = t.GetFileColumn();
+	}
+void NxsException::addPositionInfo(const ProcessedNxsToken & t)
+	{
+	pos		= t.GetFilePosition();
+	line	= t.GetLineNumber();
+	col		= t.GetColumnNumber();
+	}
+void NxsException::addPositionInfo(const NxsTokenPosInfo & t)
+	{
+	pos		= t.GetFilePosition();
+	line	= t.GetLineNumber();
+	col		= t.GetColumnNumber();
+	}
+void NxsException::addPositionInfo(file_pos fp, long fl, long fc)
+	{
+	pos		= fp;
+	line	= fl;
+	col		= fc;
 	}

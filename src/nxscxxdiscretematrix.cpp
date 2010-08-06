@@ -16,7 +16,7 @@
 //	along with NCL; if not, write to the Free Software Foundation, Inc.,
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
-
+#include <iterator>
 #include "ncl/nxscxxdiscretematrix.h"
 #include "ncl/nxsutilcopy.h"
 #include <cassert>
@@ -26,12 +26,12 @@ using std::cout;
 using std::endl;
 
 
-NxsCXXDiscreteMatrix::NxsCXXDiscreteMatrix(const NxsCharactersBlock & cb, bool gapsToMissing)
+NxsCXXDiscreteMatrix::NxsCXXDiscreteMatrix(const NxsCharactersBlock & cb, bool gapsToMissing, const NxsUnsignedSet * toInclude)
 	{
-	Initialize(&cb, gapsToMissing);
+	Initialize(&cb, gapsToMissing, toInclude);
 	}
 
-void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsToMissing)
+void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsToMissing, const NxsUnsignedSet * toInclude)
 {
 	this->nativeCMatrix.stateList = 0L;
 	this->nativeCMatrix.stateListPos = 0L;
@@ -52,12 +52,31 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 	if (cb == NULL)
 		return;
 	std::vector<const NxsDiscreteDatatypeMapper *> mappers = cb->GetAllDatatypeMappers();
-	if (mappers.size() > 1)
-		throw NxsException("too many mappers");
 	if (mappers.empty() || mappers[0] == NULL)
 		throw NxsException("no mappers");
 
-	const NxsDiscreteDatatypeMapper & mapper = *mappers[0];
+	std::set <const NxsDiscreteDatatypeMapper * > usedMappers;
+	NxsUnsignedSet scratchSet;
+	if (toInclude == 0L)
+		{
+		for (unsigned i = 0; i < cb->GetNChar(); ++i)
+			scratchSet.insert(i);
+		toInclude = & scratchSet;
+	 	}
+	for (NxsUnsignedSet::const_iterator indIt = toInclude->begin(); indIt != toInclude->end(); ++indIt)
+		{
+		unsigned charIndex = *indIt;
+		usedMappers.insert(cb->GetDatatypeMapperForChar(charIndex));
+		}
+	
+	
+	if (usedMappers.size() > 1)
+		throw NxsException("too many mappers");
+	if (usedMappers.empty())
+		throw NxsException("no mappers - or empty charset");
+	
+
+	const NxsDiscreteDatatypeMapper & mapper = **usedMappers.begin();
 	const NxsDiscreteStateMatrix & rawMatrix = cb->GetRawDiscreteMatrixRef();
 
 	NxsCharactersBlock::DataTypesEnum inDatatype = mapper.GetDatatype();
@@ -97,7 +116,7 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 			{
 			NCL_ASSERT(i >= (NxsCDiscreteState_t)nfun_sym || fundamentalSymbols[i] == '\0' || mapper.PositionInSymbols(fundamentalSymbols[i]) == (NxsDiscreteStateCell) i);
 			}
-#		if defined (NDEBUG)
+#		if !defined (NDEBUG)
 			const std::set<NxsDiscreteStateCell>	 & ss =  mapper.GetStateSetForCode(i);
 			NCL_ASSERT(ss.size() == 1);
 			NCL_ASSERT(*ss.begin() == i);

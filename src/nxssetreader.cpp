@@ -20,6 +20,7 @@
 #include "ncl/nxssetreader.h"
 #include "ncl/nxstoken.h"
 #include <algorithm>
+#include <iterator>
 using namespace std;
 
 void NxsSetReader::AddRangeToSet(unsigned first, unsigned last, unsigned stride, NxsUnsignedSet * destination, const NxsUnsignedSet * taboo, NxsToken &token)
@@ -240,7 +241,17 @@ bool NxsSetReader::AddRange(
 */
 unsigned NxsSetReader::GetTokenValue()
 	{
-	unsigned v = atoi(token.GetToken().c_str());
+	int i = -1;
+	try {
+	    i = token.GetToken().ConvertToInt();
+	    }
+	catch (NxsString::NxsX_NotANumber &x)
+	    {
+	    }
+
+	unsigned v = 0;
+	if (i > 0)
+		v = (unsigned) i;
 
 	if (v == 0 && settype != NxsSetReader::generic)
 		{

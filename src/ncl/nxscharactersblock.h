@@ -487,13 +487,13 @@ class NxsCharactersBlock
 		enum DataTypesEnum /*! values used to represent different basic types of data stored in a CHARACTERS block, and used with the data member `datatype' */
 			{
 			standard = 1, /*! indicates `matrix' holds characters with arbitrarily-assigned, discrete states, such as discrete morphological data */
-			dna, /*! indicates `matrix' holds DNA sequences (states A, C, G, T) */
-			rna, /*! indicates `matrix' holds RNA sequences (states A, C, G, U) */
-			nucleotide, /*! indicates `matrix' holds nucleotide sequences */
-			protein, /*! indicates `matrix' holds amino acid sequences */
-			codon, /*! AAA=>0, AAC=1, AAAG=>2, AAU=>3, ACA=>4... UUU=>63 */
-			continuous, /*! indicates `matrix' holds continuous data */
-			mixed /*! indicates that there are multiple datatype mappers that must be used to decode the columns of the matrix (one mapper per column, but not one mapper per matrix). A MrBayes NEXUS feature*/
+			dna = 2, /*! indicates `matrix' holds DNA sequences (states A, C, G, T) */
+			rna = 3, /*! indicates `matrix' holds RNA sequences (states A, C, G, U) */
+			nucleotide = 4, /*! indicates `matrix' holds nucleotide sequences */
+			protein = 5, /*! indicates `matrix' holds amino acid sequences */
+			continuous = 6, /*! indicates `matrix' holds continuous data */
+			codon = 7, /*! AAA=>0, AAC=1, AAAG=>2, AAU=>3, ACA=>4... UUU=>63 */
+			mixed = 8 /*! indicates that there are multiple datatype mappers that must be used to decode the columns of the matrix (one mapper per column, but not one mapper per matrix). A MrBayes NEXUS feature*/
 			};
 		enum StatesFormatEnum
 			{
@@ -1002,6 +1002,15 @@ class NxsCharactersBlock
 			return SurrogateSwapEquivalentTaxaBlock(tb);
 		}
 
+		/*! Writes a range of characater states as NEXUS to out.
+
+		*/
+		void WriteStatesForMatrixRow(std::ostream &out, /*!< ostream that will be written to.*/
+									unsigned taxon, /*!< index of the row (taxon) to be written.  Should be in [0,ntax). */
+									unsigned first_taxon, /*!< UINT_MAX to avoid using the matchchar in output. Otherwise the [0,ntax) index of the taxon that is printed first. */
+									unsigned begChar, /*!< first character index to write. Should be in [0, nchar). */
+									unsigned endChar) const; /*!< end of character range. This index is one greater than the last index to be printed. Should be in the range (begChar, nchar] */
+
 
 	protected:
 		// This function should not be called to remove characters, it is only used in the creation of new char blocks from existing blocks
@@ -1016,7 +1025,6 @@ class NxsCharactersBlock
 			}
 
 		NxsString GetStateLabelImpl(unsigned i, unsigned j) const; /*v2.1to2.2 4 */
-		void WriteStatesForMatrixRow(std::ostream &out, unsigned taxon, unsigned first_taxon, unsigned begChar, unsigned endChar) const;
 
 		NxsDiscreteDatatypeMapper * GetMutableDatatypeMapperForChar(unsigned charIndex);
 		bool IsInSymbols(char ch) NCL_COULD_BE_CONST ; /*v2.1to2.2 1 */
@@ -1130,8 +1138,8 @@ class NxsDiscreteDatatypeMapper
 
 
 
-		static void GenerateNxsExceptionMatrixReading(const char *, unsigned taxInd, unsigned charInd, NxsToken &, const NxsString &nameStr);
-		static void GenerateNxsExceptionMatrixReading(const std::string &s, unsigned taxInd, unsigned charInd, NxsToken & token, const NxsString &nameStr)
+		static void GenerateNxsExceptionMatrixReading(const char *, unsigned taxInd, unsigned charInd, NxsToken *, const NxsString &nameStr);
+		static void GenerateNxsExceptionMatrixReading(const std::string &s, unsigned taxInd, unsigned charInd, NxsToken * token, const NxsString &nameStr)
 			{
 			GenerateNxsExceptionMatrixReading(s.c_str(), taxInd, charInd, token, nameStr);
 			}
@@ -1233,7 +1241,7 @@ class NxsDiscreteDatatypeMapper
 			return PositionInSymbols(currChar);
 			}
 		std::string StateCodeToNexusString(NxsDiscreteStateCell, bool demandSymbols = true) const;
-		NxsDiscreteStateCell StateCodeForNexusChar(const char currChar, NxsToken & token,
+		NxsDiscreteStateCell StateCodeForNexusChar(const char currChar, NxsToken * token,
 								  unsigned taxInd, unsigned charInd,
 								  const NxsDiscreteStateRow * firstTaxonRow, const NxsString &nameStr) const;
 		void WriteStartOfFormatCommand(std::ostream & out) const;
@@ -1286,7 +1294,7 @@ class NxsDiscreteDatatypeMapper
 		void DebugWriteMapperFields(std::ostream & out) const;
 	private:
 		NxsDiscreteStateCell AddStateSet(const std::set<NxsDiscreteStateCell> & states, char nexusSymbol, bool symRespectCase, bool isPolymorphic);
-		NxsDiscreteStateCell StateCodeForNexusMultiStateSet(const char nexusSymbol, const std::string & stateAsNexus, NxsToken & token,
+		NxsDiscreteStateCell StateCodeForNexusMultiStateSet(const char nexusSymbol, const std::string & stateAsNexus, NxsToken * token,
 								  unsigned taxInd, unsigned charInd,
 								  const NxsDiscreteStateRow * firstTaxonRow, const NxsString &nameStr);
 		NxsDiscreteStateCell StateCodeForNexusPossibleMultiStateSet(const char nexusSymbol, const std::string & stateAsNexus, NxsToken & token,
@@ -1326,6 +1334,7 @@ class NxsDiscreteDatatypeMapper
 		mutable IsStateSubsetMatrix isStateSubsetMatrixGapsMissing;
 
 		friend class NxsCharactersBlock;
+		friend class MultiFormatReader;
 	};
 
 inline unsigned NxsDiscreteDatatypeMapper::GetNumStatesIncludingGap() const
@@ -1412,10 +1421,10 @@ inline NxsDiscreteStateCell NxsDiscreteDatatypeMapper::EncodeNexusStateString(
 	{
 	const unsigned tlen = (unsigned) stateAsNexus.length();
 	if (tlen == 0)
-		GenerateNxsExceptionMatrixReading("Unexpected empty token encountered", taxInd, charInd, token, nameStr);
+		GenerateNxsExceptionMatrixReading("Unexpected empty token encountered", taxInd, charInd, &token, nameStr);
 	if (tlen == 1)
-		return StateCodeForNexusChar(stateAsNexus[0], token, taxInd, charInd, firstTaxonRow, nameStr);
-	return StateCodeForNexusMultiStateSet('\0', stateAsNexus, token, taxInd, charInd, firstTaxonRow, nameStr);
+		return StateCodeForNexusChar(stateAsNexus[0], &token, taxInd, charInd, firstTaxonRow, nameStr);
+	return StateCodeForNexusMultiStateSet('\0', stateAsNexus, &token, taxInd, charInd, firstTaxonRow, nameStr);
 	}
 
 /*! MrBayes introduced the datatype=restriction syntax for 01 symbols.

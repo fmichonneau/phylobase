@@ -41,9 +41,9 @@ class NxsCXXDiscreteMatrix
 			Initialize(0L, false);
 			}
 		NxsCXXDiscreteMatrix(const NxsCDiscreteMatrix & );
-		NxsCXXDiscreteMatrix(const NxsCharactersBlock & cb, bool convertGapsToMissing);
+		NxsCXXDiscreteMatrix(const NxsCharactersBlock & cb, bool convertGapsToMissing, const NxsUnsignedSet * toInclude = 0L);
 
-		void Initialize(const NxsCharactersBlock * cb, bool convertGapsToMissing);
+		void Initialize(const NxsCharactersBlock * cb, bool convertGapsToMissing, const NxsUnsignedSet * toInclude = 0L);
 
 		const NxsCDiscreteMatrix & getConstNativeC() const
 			{

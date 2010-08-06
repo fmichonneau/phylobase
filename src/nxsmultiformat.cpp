@@ -84,8 +84,11 @@ const char * gFormatNames[] = {	"nexus",
 								"phyliptree",
 								"relaxedphyliptree",
 								"nexml",
+								"dnafin",
+								"aafin",
+								"rnafin"
 							};
-const unsigned gNumFormats = 26;
+const unsigned gNumFormats = 29;
 const unsigned PHYLIP_NMLNGTH = 10;
 
 std::vector<std::string> MultiFormatReader::getFormatNames()
@@ -294,8 +297,7 @@ bool  MultiFormatReader::readFastaSequences(
 	std::list<NxsDiscreteStateRow> & matList,
 	size_t & longest)
 	{
-	char * contents = ftcb.buffer;
-	NCL_ASSERT(contents);
+	NCL_ASSERT(ftcb.buffer);
 	NxsString err;
 	for (;;)
 		{
@@ -328,15 +330,10 @@ bool  MultiFormatReader::readFastaSequences(
 					break;
 				if (isgraph(c))
 					{
-					int stateCode = dm.GetStateCodeStored(c);
+					NxsDiscreteStateCell stateCode = dm.GetStateCodeStored(c);
 					if (stateCode == NXS_INVALID_STATE_CODE)
 						{
-						err << "Illegal state code \"";
-						err << c ;
-						err << "\" found when reading character ";
-						err << (unsigned long)row.size();
-						err << " for taxon ";
-						err << n;
+						err << "Illegal state code \"" << c << "\" found when reading character " << (unsigned) row.size() << " for taxon " << n;
 						throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 						}
 					row.push_back(stateCode);
@@ -346,8 +343,16 @@ bool  MultiFormatReader::readFastaSequences(
 				}
 			longest = std::max(longest, row.size());
 			}
-		else if (!ftcb.advance())
-			break;
+		else 
+			{
+			if (isgraph(ftcb.current()))
+				{
+				err << "Illegal non-whitespace occurring outside of a name/sequence pair.  Expecting the first name to startwith < but found \"" << ftcb.current() << "\".";
+				throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+				}
+			if (!ftcb.advance())
+				break;
+			}
 		}
 	// pad with missing data to make even rows
 	std::list<NxsDiscreteStateRow>::iterator sIt = matList.begin();
@@ -454,7 +459,7 @@ void  MultiFormatReader::readPhylipData(
 						}
 					else
 						{
-						const int stateCode = dm.GetStateCodeStored(c);
+						const NxsDiscreteStateCell stateCode = dm.GetStateCodeStored(c);
 						if (stateCode == NXS_INVALID_STATE_CODE)
 							{
 							if (c == '.')
@@ -506,13 +511,13 @@ void  MultiFormatReader::readPhylipData(
 	funcExit:
 		if (matList.size() != n_taxa)
 			{
-			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << (unsigned long)matList.size();
+			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << (unsigned) matList.size();
 			throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 			}
 		const NxsDiscreteStateRow & lastRow = *matList.rbegin();
 		if (lastRow.size() != n_char)
 			{
-			err << "Unexpected end of file.\nExpecting " << n_char << " characters for taxon " <<  *(taxaNames.rbegin()) << ", but only found " << (unsigned long) lastRow.size() << " characters.";
+			err << "Unexpected end of file.\nExpecting " << n_char << " characters for taxon " <<  *(taxaNames.rbegin()) << ", but only found " << (unsigned) lastRow.size() << " characters.";
 			throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 			}
 	}
@@ -585,7 +590,7 @@ void  MultiFormatReader::readInterleavedPhylipData(
 						}
 					else
 						{
-						const int stateCode = dm.GetStateCodeStored(c);
+						const NxsDiscreteStateCell stateCode = dm.GetStateCodeStored(c);
 						if (stateCode == NXS_INVALID_STATE_CODE)
 							{
 							if (c == '.')
@@ -641,13 +646,13 @@ void  MultiFormatReader::readInterleavedPhylipData(
 	funcExit:
 		if (matList.size() != n_taxa)
 			{
-			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << (unsigned long) matList.size();
+			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << (unsigned) matList.size();
 			throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 			}
 		const NxsDiscreteStateRow & lastRow = *matList.rbegin();
 		if (lastRow.size() != n_char)
 			{
-			err << "Unexpected end of file.\nExpecting " << n_char << " characters for taxon " <<  *(taxaNames.rbegin()) << ", but only found " << (unsigned long)lastRow.size() << " characters.";
+			err << "Unexpected end of file.\nExpecting " << n_char << " characters for taxon " <<  *(taxaNames.rbegin()) << ", but only found " << (unsigned) lastRow.size() << " characters.";
 			throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 			}
 	}
@@ -678,8 +683,7 @@ bool  MultiFormatReader::readAlnData(
 	std::list<NxsDiscreteStateRow> & matList)
 	{
 	taxaNames.clear();
-	char * contents = ftcb.buffer;
-	NCL_ASSERT(contents);
+	NCL_ASSERT(ftcb.buffer);
 	NxsString err;
 	char c;
 	if (!ftcb.current())
@@ -786,7 +790,7 @@ bool  MultiFormatReader::readAlnData(
 							{
 							if (!readingFirstBlock && (curr_tax_ind + 1) != taxaNames.size())
 								{
-								err << "Unexpected End of file. Expecting data for " << (unsigned long) taxaNames.size() << " sequences";
+								err << "Unexpected End of file. Expecting data for " << (unsigned) taxaNames.size() << " sequences";
 								throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 								}
 							goto funcExit;
@@ -795,10 +799,10 @@ bool  MultiFormatReader::readAlnData(
 						}
 					else
 						{
-						int stateCode = dm.GetStateCodeStored(c);
+						NxsDiscreteStateCell stateCode = dm.GetStateCodeStored(c);
 						if (stateCode == NXS_INVALID_STATE_CODE)
 							{
-							err << "Illegal state code \"" << c << "\" found when reading character " << (unsigned long)row->size() << " for taxon " << n;
+							err << "Illegal state code \"" << c << "\" found when reading character " << row->size() << " for taxon " << n;
 							throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 							}
 						row->push_back(stateCode);
@@ -826,7 +830,7 @@ bool  MultiFormatReader::readAlnData(
 					{
 					if (!readingFirstBlock && (curr_tax_ind + 1) != taxaNames.size())
 						{
-						err << "Unexpected End of file. Expecting data for " << (unsigned long) taxaNames.size() << " sequences";
+						err << "Unexpected End of file. Expecting data for " << (unsigned) taxaNames.size() << " sequences";
 						throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 						}
 					goto funcExit;
@@ -838,7 +842,7 @@ bool  MultiFormatReader::readAlnData(
 				{
 				if (!readingFirstBlock && (1 + curr_tax_ind) != taxaNames.size())
 					{
-					err << "Unexpected line beginning with whitespace. Expecting data for " << (unsigned long)taxaNames.size() << " sequences";
+					err << "Unexpected line beginning with whitespace. Expecting data for " << (unsigned) taxaNames.size() << " sequences";
 					throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 					}
 				curr_tax_ind = 0;
@@ -920,7 +924,7 @@ void  MultiFormatReader::moveDataToDataBlock(const std::list<std::string> & taxa
 	{
 	NCL_ASSERT(dataB);
 	NxsString d;
-	d << "Dimensions ntax = " << (unsigned long) matList.size() << " nchar = " << nchar << " ; ";
+	d << "Dimensions ntax = " << (unsigned) matList.size() << " nchar = " << nchar << " ; ";
 	std::istringstream fakeDimStream(d);
 	NxsToken fakeDimToken(fakeDimStream);
 	NxsString newTaxLabel("NewTaxa");
@@ -938,7 +942,7 @@ void  MultiFormatReader::moveDataToUnalignedBlock(const std::list<std::string> &
 	{
 	NCL_ASSERT(uB);
 	NxsString d;
-	d << "Dimensions NewTaxa ntax = " << (unsigned long)matList.size() << " ; ";
+	d << "Dimensions NewTaxa ntax = " << (unsigned) matList.size() << " ; ";
 	std::istringstream fakeDimStream(d);
 	NxsToken fakeDimToken(fakeDimStream);
 	uB->HandleDimensions(fakeDimToken);
@@ -978,6 +982,259 @@ void  MultiFormatReader::readFastaFile(std::istream & inf, NxsCharactersBlock::D
 		bool aligned = true;
 		try {
 			aligned = readFastaSequences(ftcb, *dm, taxaNames, matList, longest);
+			
+			}
+		catch (...)
+			{
+			cloneFactory.BlockError(dataB);
+			throw;
+			}
+
+		if (aligned)
+			{
+			moveDataToDataBlock(taxaNames, matList, longest, dataB);
+			BlockReadHook(blockID, dataB);
+			}
+		else
+			{
+			cloneFactory.BlockError(dataB);
+			blockID.assign("UNALIGNED");
+			NxsBlock * nub = cloneFactory.GetBlockReaderForID(blockID, this, NULL);
+			if (!nub)
+				{
+				NCL_ASSERT(nub);
+				return;
+				}
+			nub->SetNexus(this);
+
+			NxsUnalignedBlock * unalignedB = static_cast<NxsUnalignedBlock *>(nub); // this should be safe because we know that the PublicNexusReader has a DataBlock assigned to "DATA" -- unless the caller has replaced that clone template (gulp)
+			unalignedB->Reset();
+			unalignedB->datatype = dt;
+			unalignedB->ResetSymbols();
+			unalignedB->ResetDatatypeMapper();
+			moveDataToUnalignedBlock(taxaNames, matList, unalignedB);
+			BlockReadHook(blockID, unalignedB);
+			}
+		}
+	else
+		{
+		cloneFactory.BlockError(dataB);
+		NxsString err;
+		err << "No Data read -- file appears to be empty";
+		this->NexusError(err, 0, -1, -1);
+		}
+	}
+
+
+/* Assumes that `contents` was returned from readFileToMemory() has been called
+	with `inf` and the `len` refers the size of the buffer allocated by
+	readFileToMemory
+*/
+bool  MultiFormatReader::readFinSequences(
+	FileToCharBuffer & ftcb,
+	NxsDiscreteDatatypeMapper &dm,
+	std::list<std::string> & taxaNames,
+	std::list<NxsDiscreteStateRow> & matList,
+	size_t & longest)
+	{
+	NCL_ASSERT(ftcb.buffer);
+	NxsString err;
+
+	std::string firstLine;
+	for (;;)
+		{
+		char c = ftcb.current();
+		if (c == '\n' || c == '\r')
+			break;
+		firstLine.append(1, c);
+		if (!ftcb.advance())
+			break;
+		}
+	std::string sfl = NxsString::strip_surrounding_whitespace(firstLine);
+	if (!NxsString::case_insensitive_equals(sfl.c_str(), "label data"))
+		{
+		err << "Expecting the first line of the file to contain just the words \"label data\", but found \"" << sfl << '\"';
+		throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+		}
+
+	for (;;)
+		{
+		const char cc = ftcb.current();
+		if (!isgraph(cc))
+			{
+			if (!ftcb.advance())
+				break;
+			}
+		else if (cc == '@')
+			break;
+		else 
+			{
+			std::string name;
+			bool commentLine= false;
+			if (ftcb.current() == '/')
+				{
+				if (!ftcb.advance())
+					{
+					err << "Unexpected end of file after / character";
+					throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+					}
+				if (ftcb.current() == '*')
+					{
+					commentLine = true;
+					bool prevStar = false;
+					for (;;)
+						{
+						if (!ftcb.advance())
+							{
+							err << "Unexpected end of file in comment";
+							throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+							}
+						char cmtc = ftcb.current();
+						if (prevStar && cmtc == '/')
+							break;
+						prevStar = (cmtc == '*');
+						}
+					if (!ftcb.advance())
+						break;
+					}
+				else
+					name.append(1, '/');
+				}
+			if (commentLine)
+				continue;
+			// read taxon name -- no escaping of characters will be done
+			for (;;)
+				{
+				char c = ftcb.current();
+				if (!isgraph(c))
+					break;
+				name.append(1, c);
+				if (!ftcb.advance())
+					break;
+				}
+			// skip ws
+			for (;;)
+				{
+				char sc = ftcb.current();
+				if (isgraph(sc))
+					break;
+				if (sc == '\n' || sc == '\r' || !ftcb.advance())
+					{
+					err << "Unexpected end of line (or end of file).  Expecting sequence for " << name;
+					throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+					}
+				}
+			taxaNames.push_back(name);
+			matList.push_back(NxsDiscreteStateRow());
+			NxsDiscreteStateRow & row = *(matList.rbegin());
+			row.reserve(longest);
+			// read sequence
+			for (;;)
+				{
+				char seqc = ftcb.current();
+				if (isgraph(seqc))
+					{
+					NxsDiscreteStateCell stateCode;
+					if (seqc == '[')
+						{
+						std::string recoded;
+						recoded.append(1, '{');
+						if (!ftcb.advance())
+							{
+							err << "Unexpected end of file is [ group!";
+							throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+							}
+						while (ftcb.current() != ']')
+							{
+							recoded.append(1, ftcb.current());
+							if (!ftcb.advance())
+								{
+								err << "Unexpected end of file is [ group!";
+								throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+								}
+							}
+						recoded.append(1, '}');
+						try{
+							NxsString nn;
+							nn << name;
+							stateCode = dm.StateCodeForNexusMultiStateSet('\0',
+  																	  recoded,
+  																	  0L,
+  																	  taxaNames.size(),
+  																	  row.size(),
+  																	  0L,
+  																	  nn);
+							}
+						catch (NxsException & x)
+							{
+							x.addPositionInfo(ftcb.position(), ftcb.line(), ftcb.column());
+							throw x;
+							}
+						}
+					else
+						{
+						stateCode = dm.GetStateCodeStored(seqc);
+						if (stateCode == NXS_INVALID_STATE_CODE)
+							{
+							err << "Illegal state code \"" << seqc << "\" found when reading character " << (unsigned) row.size() << " for taxon \"" << name << "\".";
+							throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+							}
+						}
+					row.push_back(stateCode);
+					}
+				else if (seqc == '\n' || seqc == '\r')
+					break;
+				if (!ftcb.advance())
+					break;
+				}
+			longest = std::max(longest, row.size());
+			}
+		}
+	// pad with missing data to make even rows
+	std::list<NxsDiscreteStateRow>::iterator sIt = matList.begin();
+	bool allSameLength = true;
+	for (; sIt != matList.end(); ++sIt)
+		{
+		NxsDiscreteStateRow & row = *sIt;
+		if (row.size() < longest)
+			{
+			allSameLength = false;
+			break;
+			}
+		}
+	return allSameLength;
+	}
+
+
+void  MultiFormatReader::readFinFile(std::istream & inf, NxsCharactersBlock::DataTypesEnum dt)
+	{
+	NxsString blockID("DATA");
+	NxsBlock *nb = cloneFactory.GetBlockReaderForID(blockID, this, NULL);
+	NCL_ASSERT(nb);
+	if (!nb)
+		return;
+	nb->SetNexus(this);
+
+	NxsDataBlock * dataB = static_cast<NxsDataBlock *>(nb); // this should be safe because we know that the PublicNexusReader has a DataBlock assigned to "DATA" -- unless the caller has replaced that clone template (gulp)
+	FileToCharBuffer ftcb(inf);
+	if (ftcb.buffer)
+		{
+		dataB->Reset();
+		dataB->datatype = dt;
+		dataB->ResetSymbols();
+		dataB->gap = '-';
+		NxsPartition dtParts;
+		std::vector<NxsCharactersBlock::DataTypesEnum> dtv;
+		dataB->CreateDatatypeMapperObjects(dtParts, dtv);
+
+		NxsDiscreteDatatypeMapper * dm = dataB->GetMutableDatatypeMapperForChar(0);
+
+		std::list<std::string> taxaNames;
+		std::list<NxsDiscreteStateRow> matList;
+		size_t longest = 0;
+		bool aligned = true;
+		try {
+			aligned = readFinSequences(ftcb, *dm, taxaNames, matList, longest);
 			}
 		catch (...)
 			{
@@ -1037,14 +1294,20 @@ void  MultiFormatReader::ReadFilepath(const char * filepath, DataFormatType form
 				err << "Could not open the file \"" << filepath <<"\"";
 				this->NexusError(err, 0, -1, -1);
 				}
+			else
+				this->ReadStream(inf, format, filepath);
+			}
+		catch (NxsException & x)
+			{
+			this->NexusError(x.msg, x.pos, x.line, x.col);
 			}
 		catch (...)
 			{
 			NxsString err;
-			err << '\"' << filepath <<"\" does not refer to a valid file." ;
+			err << "Unknown error occurred while reading \"" << filepath <<"\"." ;
 			this->NexusError(err, 0, -1, -1);
 			}
-		this->ReadStream(inf, format, filepath);
+		
 		}
 	}
 
@@ -1104,6 +1367,12 @@ void  MultiFormatReader::ReadStream(std::istream & inf, DataFormatType format, c
 			readPhylipTreeFile(inf, true);
 		else if (format == PHYLIP_TREE_FORMAT)
 			readPhylipTreeFile(inf, false);
+		else if (format == FIN_DNA_FORMAT)
+			readFinFile(inf, NxsCharactersBlock::dna);
+		else if (format == FIN_RNA_FORMAT)
+			readFinFile(inf, NxsCharactersBlock::rna);
+		else if (format == FIN_AA_FORMAT)
+			readFinFile(inf, NxsCharactersBlock::protein);
 		else
 			{
 			NxsString m;
@@ -1123,15 +1392,37 @@ void  MultiFormatReader::ReadStream(std::istream & inf, DataFormatType format, c
 // returns the file position.
 unsigned MultiFormatReader::readPhylipHeader(std::istream & inf, unsigned & ntax, unsigned & nchar)
 	{
+	int ntaxi = 0;
+	int nchari = 0;
 	if (inf.good())
-		inf >> ntax;
-	if (inf.good())
-		inf >> nchar;
-	if (!inf.good() || ntax == 0 || nchar == 0)
 		{
-		NxsString err("Expecting the file to start with the number of taxa then the number of characters.");
+		inf >> ntaxi;
+		}
+	else
+		{
+		NxsString err("Invalid file stream (this probably indicates an error occurred while opening the file).");
 		throw NxsException(err, 0, -1, -1);
 		}
+	
+	if (inf.good())
+		inf >> nchari;
+	else
+		{
+		NxsString err("A file error occurred while reading ntax.");
+		throw NxsException(err, 0, -1, -1);
+		}
+	if (!inf.good())
+		{
+		NxsString err("A file error occurred while reading ntax.");
+		throw NxsException(err, 0, -1, -1);
+		}
+	if (ntaxi < 1 || nchari < 1)
+		{
+		NxsString err("Expecting the file to start with positive number of taxa then the number of characters.");
+		throw NxsException(err, 0, -1, -1);
+		}
+	ntax = (unsigned) ntaxi;
+	nchar = (unsigned) nchari;
 	return (unsigned) inf.tellg();
 	}
 
@@ -1256,7 +1547,8 @@ void MultiFormatReader::readPhylipFile(std::istream & inf, NxsCharactersBlock::D
 
 		const NxsDiscreteDatatypeMapper * dm = dataB->GetDatatypeMapperForChar(0);
 		NCL_ASSERT(dm);
-		unsigned ntax, nchar;
+		unsigned ntax = 0;
+		unsigned nchar = 0;
 		unsigned headerLen = readPhylipHeader(inf, ntax, nchar);
 		FileToCharBuffer ftcb(inf);
 		ftcb.totalSize += headerLen;

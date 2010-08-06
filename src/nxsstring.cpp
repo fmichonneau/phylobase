@@ -247,6 +247,20 @@ NxsString &NxsString::AddTail(
 	return *this;
 	}
 
+#if defined(_MSC_VER)
+#	pragma warning(disable:4786)
+#	pragma warning(disable:4291)
+#	if _MSC_VER >= 1500
+#		include <cstdio>
+#		if !defined(vsnprintf)
+#			define vsnprintf _vsnprintf_s
+#		endif
+#		define sprintf sprintf_s
+#   else
+#       define vsnprintf _vsnprintf
+#   endif
+#endif
+
 
 /*!
 	Appends a printf-style formatted string onto the end of this NxsString and returns the number of characters added to the
@@ -856,7 +870,7 @@ double NxsString::ConvertToDouble() const
 		if ((d == 0.0 && (endP - b) == 0))
 			throw NxsX_NotANumber();
 #else
-		if (d == 0.0 &&  endP == b)
+		if (d == 0.0 && endP == b)
 			throw NxsX_NotANumber();
 #endif
 		if (d == HUGE_VAL)

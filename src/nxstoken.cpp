@@ -418,7 +418,14 @@ std::string NxsToken::GetQuoted(const std::string &s)
 unsigned NxsToken::DemandPositiveInt(NxsToken &token, NxsString & errormsg, const char *contextString)
 	{
 	token.GetNextToken();
-	int i = atoi(token.GetToken().c_str());
+	int i = -1;
+	try {
+	    i = token.GetToken().ConvertToInt();
+	    }
+	catch (NxsString::NxsX_NotANumber &x)
+	    {
+	    }
+//	int i = atoi(token.GetToken().c_str());
 	if (i <= 0)
 		{
 		errormsg.assign(contextString);

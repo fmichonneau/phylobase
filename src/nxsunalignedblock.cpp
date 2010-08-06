@@ -566,7 +566,19 @@ void NxsUnalignedBlock::HandleMatrix(
 					errormsg << "Data for this taxon (" << nameStr << ") has already been saved";
 					throw NxsException(errormsg, token);
 					}
-				indOfTaxInMemory = taxa->AddTaxonLabel(nameStr);
+				try {
+					indOfTaxInMemory = taxa->AddTaxonLabel(nameStr);
+					}
+				catch (NxsException &x)
+					{
+					if (nameStr == ";")
+						{
+						errormsg << "Unexpected ; after only " << indOfTaxInCommand << " taxa were read (expecting characters for " << nTaxWithData << " taxa).";
+						throw NxsException(errormsg, token);
+						}
+					x.addPositionInfo(token);
+					throw x;
+					}
 				}
 			else
 				{

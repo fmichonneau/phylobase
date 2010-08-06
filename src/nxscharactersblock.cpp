@@ -29,6 +29,7 @@
 #include "ncl/nxsassumptionsblock.h"
 #include "ncl/nxssetreader.h"
 #include <algorithm>
+#include <iterator>
 using namespace std;
 
 CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode);
@@ -206,87 +207,87 @@ std::vector<NxsDiscreteStateCell> getToCodonRecodingMapper(NxsGeneticCodesEnum g
 	std::vector<NxsDiscreteStateCell> v;
 	if(gCode == NXS_GCODE_STANDARD) {
 		const NxsDiscreteStateCell trnxs_gcode_standard[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, -1, 49, 50, 51, 52, 53, -1, 54, 55, 56, 57, 58, 59, 60};
-		std::copy(trnxs_gcode_standard, trnxs_gcode_standard + 64, back_inserter(v));
+		std::copy(trnxs_gcode_standard, trnxs_gcode_standard + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_VERT_MITO) {
 		const NxsDiscreteStateCell trnxs_gcode_vert_mito[] = {0, 1, 2, 3, 4, 5, 6, 7, -1, 8, -1, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, -1, 46, -1, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59};
-		std::copy(trnxs_gcode_vert_mito, trnxs_gcode_vert_mito + 64, back_inserter(v));
+		std::copy(trnxs_gcode_vert_mito, trnxs_gcode_vert_mito + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_YEAST_MITO) {
 		const NxsDiscreteStateCell trnxs_gcode_yeast_mito[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, -1, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61};
-		std::copy(trnxs_gcode_yeast_mito, trnxs_gcode_yeast_mito + 64, back_inserter(v));
+		std::copy(trnxs_gcode_yeast_mito, trnxs_gcode_yeast_mito + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_MOLD_MITO) {
 		const NxsDiscreteStateCell trnxs_gcode_mold_mito[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, -1, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61};
-		std::copy(trnxs_gcode_mold_mito, trnxs_gcode_mold_mito + 64, back_inserter(v));
+		std::copy(trnxs_gcode_mold_mito, trnxs_gcode_mold_mito + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_INVERT_MITO) {
 		const NxsDiscreteStateCell trnxs_gcode_invert_mito[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, -1, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61};
-		std::copy(trnxs_gcode_invert_mito, trnxs_gcode_invert_mito + 64, back_inserter(v));
+		std::copy(trnxs_gcode_invert_mito, trnxs_gcode_invert_mito + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_CILIATE) {
 		const NxsDiscreteStateCell trnxs_gcode_ciliate[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, -1, 56, 57, 58, 59, 60, 61, 62};
-		std::copy(trnxs_gcode_ciliate, trnxs_gcode_ciliate + 64, back_inserter(v));
+		std::copy(trnxs_gcode_ciliate, trnxs_gcode_ciliate + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_ECHINO_MITO) {
 		const NxsDiscreteStateCell trnxs_gcode_echino_mito[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, -1, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61};
-		std::copy(trnxs_gcode_echino_mito, trnxs_gcode_echino_mito + 64, back_inserter(v));
+		std::copy(trnxs_gcode_echino_mito, trnxs_gcode_echino_mito + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_EUPLOTID) {
 		const NxsDiscreteStateCell trnxs_gcode_euplotid[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, -1, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61};
-		std::copy(trnxs_gcode_euplotid, trnxs_gcode_euplotid + 64, back_inserter(v));
+		std::copy(trnxs_gcode_euplotid, trnxs_gcode_euplotid + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_PLANT_PLASTID) {
 		const NxsDiscreteStateCell trnxs_gcode_plant_plastid[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, -1, 49, 50, 51, 52, 53, -1, 54, 55, 56, 57, 58, 59, 60};
-		std::copy(trnxs_gcode_plant_plastid, trnxs_gcode_plant_plastid + 64, back_inserter(v));
+		std::copy(trnxs_gcode_plant_plastid, trnxs_gcode_plant_plastid + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_ALT_YEAST) {
 		const NxsDiscreteStateCell trnxs_gcode_alt_yeast[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, -1, 49, 50, 51, 52, 53, -1, 54, 55, 56, 57, 58, 59, 60};
-		std::copy(trnxs_gcode_alt_yeast, trnxs_gcode_alt_yeast + 64, back_inserter(v));
+		std::copy(trnxs_gcode_alt_yeast, trnxs_gcode_alt_yeast + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_ASCIDIAN_MITO) {
 		const NxsDiscreteStateCell trnxs_gcode_ascidian_mito[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, -1, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61};
-		std::copy(trnxs_gcode_ascidian_mito, trnxs_gcode_ascidian_mito + 64, back_inserter(v));
+		std::copy(trnxs_gcode_ascidian_mito, trnxs_gcode_ascidian_mito + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_ALT_FLATWORM_MITO) {
 		const NxsDiscreteStateCell trnxs_gcode_alt_flatworm_mito[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, -1, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62};
-		std::copy(trnxs_gcode_alt_flatworm_mito, trnxs_gcode_alt_flatworm_mito + 64, back_inserter(v));
+		std::copy(trnxs_gcode_alt_flatworm_mito, trnxs_gcode_alt_flatworm_mito + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_BLEPHARISMA_MACRO) {
 		const NxsDiscreteStateCell trnxs_gcode_blepharisma_macro[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, 49, 50, 51, 52, 53, 54, -1, 55, 56, 57, 58, 59, 60, 61};
-		std::copy(trnxs_gcode_blepharisma_macro, trnxs_gcode_blepharisma_macro + 64, back_inserter(v));
+		std::copy(trnxs_gcode_blepharisma_macro, trnxs_gcode_blepharisma_macro + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_CHLOROPHYCEAN_MITO) {
 		const NxsDiscreteStateCell trnxs_gcode_chlorophycean_mito[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, 49, 50, 51, 52, 53, 54, -1, 55, 56, 57, 58, 59, 60, 61};
-		std::copy(trnxs_gcode_chlorophycean_mito, trnxs_gcode_chlorophycean_mito + 64, back_inserter(v));
+		std::copy(trnxs_gcode_chlorophycean_mito, trnxs_gcode_chlorophycean_mito + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_TREMATODE_MITO) {
 		const NxsDiscreteStateCell trnxs_gcode_trematode_mito[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, -1, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61};
-		std::copy(trnxs_gcode_trematode_mito, trnxs_gcode_trematode_mito + 64, back_inserter(v));
+		std::copy(trnxs_gcode_trematode_mito, trnxs_gcode_trematode_mito + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_SCENEDESMUS_MITO) {
 		const NxsDiscreteStateCell trnxs_gcode_scenedesmus_mito[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, 49, 50, -1, 51, 52, 53, -1, 54, 55, 56, 57, 58, 59, 60};
-		std::copy(trnxs_gcode_scenedesmus_mito, trnxs_gcode_scenedesmus_mito + 64, back_inserter(v));
+		std::copy(trnxs_gcode_scenedesmus_mito, trnxs_gcode_scenedesmus_mito + 64, std::back_inserter(v));
 		return v;
 	}
 	if(gCode == NXS_GCODE_THRAUSTOCHYTRIUM_MITO) {
 		const NxsDiscreteStateCell trnxs_gcode_thraustochytrium_mito[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, -1, 48, -1, 49, 50, 51, 52, 53, -1, 54, 55, 56, -1, 57, 58, 59};
-		std::copy(trnxs_gcode_thraustochytrium_mito, trnxs_gcode_thraustochytrium_mito + 64, back_inserter(v));
+		std::copy(trnxs_gcode_thraustochytrium_mito, trnxs_gcode_thraustochytrium_mito + 64, std::back_inserter(v));
 		return v;
 	}
 	throw NxsException("Unrecognized genetic code.");
@@ -303,9 +304,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 61;
 		const int caaindnxs_gcode_standard[] = {8, 11, 8, 11, 16, 16, 16, 16, 14, 15, 14, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_standard[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_standard, ccitacnxs_gcode_standard + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_standard, caaindnxs_gcode_standard + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_standard, ccodstrnxs_gcode_standard + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_standard, ccitacnxs_gcode_standard + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_standard, caaindnxs_gcode_standard + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_standard, ccodstrnxs_gcode_standard + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_VERT_MITO) {
@@ -313,9 +314,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 60;
 		const int caaindnxs_gcode_vert_mito[] = {8, 11, 8, 11, 16, 16, 16, 16, 15, 15, 10, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 18, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_vert_mito[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGC", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGA", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_vert_mito, ccitacnxs_gcode_vert_mito + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_vert_mito, caaindnxs_gcode_vert_mito + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_vert_mito, ccodstrnxs_gcode_vert_mito + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_vert_mito, ccitacnxs_gcode_vert_mito + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_vert_mito, caaindnxs_gcode_vert_mito + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_vert_mito, ccodstrnxs_gcode_vert_mito + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_YEAST_MITO) {
@@ -323,9 +324,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 62;
 		const int caaindnxs_gcode_yeast_mito[] = {8, 11, 8, 11, 16, 16, 16, 16, 14, 15, 14, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 18, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_yeast_mito[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGA", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_yeast_mito, ccitacnxs_gcode_yeast_mito + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_yeast_mito, caaindnxs_gcode_yeast_mito + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_yeast_mito, ccodstrnxs_gcode_yeast_mito + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_yeast_mito, ccitacnxs_gcode_yeast_mito + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_yeast_mito, caaindnxs_gcode_yeast_mito + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_yeast_mito, ccodstrnxs_gcode_yeast_mito + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_MOLD_MITO) {
@@ -333,9 +334,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 62;
 		const int caaindnxs_gcode_mold_mito[] = {8, 11, 8, 11, 16, 16, 16, 16, 14, 15, 14, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 18, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_mold_mito[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGA", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_mold_mito, ccitacnxs_gcode_mold_mito + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_mold_mito, caaindnxs_gcode_mold_mito + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_mold_mito, ccodstrnxs_gcode_mold_mito + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_mold_mito, ccitacnxs_gcode_mold_mito + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_mold_mito, caaindnxs_gcode_mold_mito + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_mold_mito, ccodstrnxs_gcode_mold_mito + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_INVERT_MITO) {
@@ -343,9 +344,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 62;
 		const int caaindnxs_gcode_invert_mito[] = {8, 11, 8, 11, 16, 16, 16, 16, 15, 15, 15, 15, 10, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 18, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_invert_mito[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGA", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_invert_mito, ccitacnxs_gcode_invert_mito + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_invert_mito, caaindnxs_gcode_invert_mito + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_invert_mito, ccodstrnxs_gcode_invert_mito + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_invert_mito, ccitacnxs_gcode_invert_mito + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_invert_mito, caaindnxs_gcode_invert_mito + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_invert_mito, ccodstrnxs_gcode_invert_mito + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_CILIATE) {
@@ -353,9 +354,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 63;
 		const int caaindnxs_gcode_ciliate[] = {8, 11, 8, 11, 16, 16, 16, 16, 14, 15, 14, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 13, 19, 13, 19, 15, 15, 15, 15, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_ciliate[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAA", "TAC", "TAG", "TAT", "TCA", "TCC", "TCG", "TCT", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_ciliate, ccitacnxs_gcode_ciliate + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_ciliate, caaindnxs_gcode_ciliate + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_ciliate, ccodstrnxs_gcode_ciliate + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_ciliate, ccitacnxs_gcode_ciliate + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_ciliate, caaindnxs_gcode_ciliate + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_ciliate, ccodstrnxs_gcode_ciliate + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_ECHINO_MITO) {
@@ -363,9 +364,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 62;
 		const int caaindnxs_gcode_echino_mito[] = {11, 11, 8, 11, 16, 16, 16, 16, 15, 15, 15, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 18, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_echino_mito[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGA", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_echino_mito, ccitacnxs_gcode_echino_mito + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_echino_mito, caaindnxs_gcode_echino_mito + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_echino_mito, ccodstrnxs_gcode_echino_mito + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_echino_mito, ccitacnxs_gcode_echino_mito + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_echino_mito, caaindnxs_gcode_echino_mito + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_echino_mito, ccodstrnxs_gcode_echino_mito + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_EUPLOTID) {
@@ -373,9 +374,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 62;
 		const int caaindnxs_gcode_euplotid[] = {8, 11, 8, 11, 16, 16, 16, 16, 14, 15, 14, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 1, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_euplotid[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGA", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_euplotid, ccitacnxs_gcode_euplotid + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_euplotid, caaindnxs_gcode_euplotid + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_euplotid, ccodstrnxs_gcode_euplotid + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_euplotid, ccitacnxs_gcode_euplotid + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_euplotid, caaindnxs_gcode_euplotid + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_euplotid, ccodstrnxs_gcode_euplotid + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_PLANT_PLASTID) {
@@ -383,9 +384,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 61;
 		const int caaindnxs_gcode_plant_plastid[] = {8, 11, 8, 11, 16, 16, 16, 16, 14, 15, 14, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_plant_plastid[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_plant_plastid, ccitacnxs_gcode_plant_plastid + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_plant_plastid, caaindnxs_gcode_plant_plastid + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_plant_plastid, ccodstrnxs_gcode_plant_plastid + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_plant_plastid, ccitacnxs_gcode_plant_plastid + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_plant_plastid, caaindnxs_gcode_plant_plastid + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_plant_plastid, ccodstrnxs_gcode_plant_plastid + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_ALT_YEAST) {
@@ -393,9 +394,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 61;
 		const int caaindnxs_gcode_alt_yeast[] = {8, 11, 8, 11, 16, 16, 16, 16, 14, 15, 14, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 15, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_alt_yeast[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_alt_yeast, ccitacnxs_gcode_alt_yeast + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_alt_yeast, caaindnxs_gcode_alt_yeast + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_alt_yeast, ccodstrnxs_gcode_alt_yeast + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_alt_yeast, ccitacnxs_gcode_alt_yeast + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_alt_yeast, caaindnxs_gcode_alt_yeast + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_alt_yeast, ccodstrnxs_gcode_alt_yeast + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_ASCIDIAN_MITO) {
@@ -403,9 +404,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 62;
 		const int caaindnxs_gcode_ascidian_mito[] = {8, 11, 8, 11, 16, 16, 16, 16, 5, 15, 5, 15, 10, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 18, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_ascidian_mito[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGA", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_ascidian_mito, ccitacnxs_gcode_ascidian_mito + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_ascidian_mito, caaindnxs_gcode_ascidian_mito + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_ascidian_mito, ccodstrnxs_gcode_ascidian_mito + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_ascidian_mito, ccitacnxs_gcode_ascidian_mito + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_ascidian_mito, caaindnxs_gcode_ascidian_mito + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_ascidian_mito, ccodstrnxs_gcode_ascidian_mito + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_ALT_FLATWORM_MITO) {
@@ -413,9 +414,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 63;
 		const int caaindnxs_gcode_alt_flatworm_mito[] = {11, 11, 8, 11, 16, 16, 16, 16, 15, 15, 15, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 19, 15, 15, 15, 15, 18, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_alt_flatworm_mito[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAA", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGA", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_alt_flatworm_mito, ccitacnxs_gcode_alt_flatworm_mito + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_alt_flatworm_mito, caaindnxs_gcode_alt_flatworm_mito + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_alt_flatworm_mito, ccodstrnxs_gcode_alt_flatworm_mito + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_alt_flatworm_mito, ccitacnxs_gcode_alt_flatworm_mito + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_alt_flatworm_mito, caaindnxs_gcode_alt_flatworm_mito + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_alt_flatworm_mito, ccodstrnxs_gcode_alt_flatworm_mito + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_BLEPHARISMA_MACRO) {
@@ -423,9 +424,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 62;
 		const int caaindnxs_gcode_blepharisma_macro[] = {8, 11, 8, 11, 16, 16, 16, 16, 14, 15, 14, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 13, 19, 15, 15, 15, 15, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_blepharisma_macro[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAG", "TAT", "TCA", "TCC", "TCG", "TCT", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_blepharisma_macro, ccitacnxs_gcode_blepharisma_macro + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_blepharisma_macro, caaindnxs_gcode_blepharisma_macro + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_blepharisma_macro, ccodstrnxs_gcode_blepharisma_macro + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_blepharisma_macro, ccitacnxs_gcode_blepharisma_macro + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_blepharisma_macro, caaindnxs_gcode_blepharisma_macro + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_blepharisma_macro, ccodstrnxs_gcode_blepharisma_macro + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_CHLOROPHYCEAN_MITO) {
@@ -433,9 +434,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 62;
 		const int caaindnxs_gcode_chlorophycean_mito[] = {8, 11, 8, 11, 16, 16, 16, 16, 14, 15, 14, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 9, 19, 15, 15, 15, 15, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_chlorophycean_mito[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAG", "TAT", "TCA", "TCC", "TCG", "TCT", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_chlorophycean_mito, ccitacnxs_gcode_chlorophycean_mito + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_chlorophycean_mito, caaindnxs_gcode_chlorophycean_mito + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_chlorophycean_mito, ccodstrnxs_gcode_chlorophycean_mito + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_chlorophycean_mito, ccitacnxs_gcode_chlorophycean_mito + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_chlorophycean_mito, caaindnxs_gcode_chlorophycean_mito + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_chlorophycean_mito, ccodstrnxs_gcode_chlorophycean_mito + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_TREMATODE_MITO) {
@@ -443,9 +444,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 62;
 		const int caaindnxs_gcode_trematode_mito[] = {11, 11, 8, 11, 16, 16, 16, 16, 15, 15, 15, 15, 10, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 18, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_trematode_mito[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGA", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_trematode_mito, ccitacnxs_gcode_trematode_mito + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_trematode_mito, caaindnxs_gcode_trematode_mito + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_trematode_mito, ccodstrnxs_gcode_trematode_mito + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_trematode_mito, ccitacnxs_gcode_trematode_mito + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_trematode_mito, caaindnxs_gcode_trematode_mito + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_trematode_mito, ccodstrnxs_gcode_trematode_mito + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_SCENEDESMUS_MITO) {
@@ -453,9 +454,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 61;
 		const int caaindnxs_gcode_scenedesmus_mito[] = {8, 11, 8, 11, 16, 16, 16, 16, 14, 15, 14, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 9, 19, 15, 15, 15, 1, 18, 1, 9, 4, 9, 4};
 		const char * ccodstrnxs_gcode_scenedesmus_mito[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAG", "TAT", "TCC", "TCG", "TCT", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_scenedesmus_mito, ccitacnxs_gcode_scenedesmus_mito + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_scenedesmus_mito, caaindnxs_gcode_scenedesmus_mito + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_scenedesmus_mito, ccodstrnxs_gcode_scenedesmus_mito + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_scenedesmus_mito, ccitacnxs_gcode_scenedesmus_mito + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_scenedesmus_mito, caaindnxs_gcode_scenedesmus_mito + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_scenedesmus_mito, ccodstrnxs_gcode_scenedesmus_mito + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	if(gCode == NXS_GCODE_THRAUSTOCHYTRIUM_MITO) {
@@ -463,9 +464,9 @@ CodonRecodingStruct getCodonRecodingStruct(NxsGeneticCodesEnum gCode)
 		n = 60;
 		const int caaindnxs_gcode_thraustochytrium_mito[] = {8, 11, 8, 11, 16, 16, 16, 16, 14, 15, 14, 15, 7, 7, 10, 7, 13, 6, 13, 6, 12, 12, 12, 12, 14, 14, 14, 14, 9, 9, 9, 9, 3, 2, 3, 2, 0, 0, 0, 0, 5, 5, 5, 5, 17, 17, 17, 17, 19, 19, 15, 15, 15, 15, 1, 18, 1, 4, 9, 4};
 		const char * ccodstrnxs_gcode_thraustochytrium_mito[] = {"AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGC", "TGG", "TGT", "TTC", "TTG", "TTT"};
-		std::copy(ccitacnxs_gcode_thraustochytrium_mito, ccitacnxs_gcode_thraustochytrium_mito + n, back_inserter(c.compressedCodonIndToAllCodonsInd));
-		std::copy(caaindnxs_gcode_thraustochytrium_mito, caaindnxs_gcode_thraustochytrium_mito + n, back_inserter(c.aaInd));
-		std::copy(ccodstrnxs_gcode_thraustochytrium_mito, ccodstrnxs_gcode_thraustochytrium_mito + n, back_inserter(c.codonStrings));
+		std::copy(ccitacnxs_gcode_thraustochytrium_mito, ccitacnxs_gcode_thraustochytrium_mito + n, std::back_inserter(c.compressedCodonIndToAllCodonsInd));
+		std::copy(caaindnxs_gcode_thraustochytrium_mito, caaindnxs_gcode_thraustochytrium_mito + n, std::back_inserter(c.aaInd));
+		std::copy(ccodstrnxs_gcode_thraustochytrium_mito, ccodstrnxs_gcode_thraustochytrium_mito + n, std::back_inserter(c.codonStrings));
 		return c;
 	}
 	throw NxsException("Unrecognized genetic code.");
@@ -2331,9 +2332,15 @@ NxsDiscreteDatatypeMapper & NxsDiscreteDatatypeMapper::operator=(const NxsDiscre
 	geneticCode = other.geneticCode;
 	sclOffset = other.sclOffset;
 	stateSetsVec = other.stateSetsVec;
-	stateCodeLookupPtr = &stateSetsVec[-sclOffset];
+	if (stateSetsVec.empty())
+		stateCodeLookupPtr = 0L;
+	else
+		stateCodeLookupPtr = &stateSetsVec[-sclOffset];
 	charToStateCodeLookup = other.charToStateCodeLookup;
-	cLookup = &charToStateCodeLookup[127];
+	if (charToStateCodeLookup.empty())
+		cLookup = 0L;
+	else
+		cLookup = &charToStateCodeLookup[127];
 	restrictionDataype = other.restrictionDataype;
 	userDefinedEquatesBeforeConversion = other.userDefinedEquatesBeforeConversion;
 	return *this;
@@ -2737,7 +2744,7 @@ void NxsDiscreteDatatypeMapper::ValidateStateCode(NxsDiscreteStateCell c) const
 
 
 void NxsDiscreteDatatypeMapper::GenerateNxsExceptionMatrixReading(char const* message, unsigned int taxInd, unsigned int charInd,
-NxsToken& token, const NxsString &nameStr)
+NxsToken* token, const NxsString &nameStr)
 	{
 	NxsString e = "Error reading character ";
 	e << charInd + 1<<" for taxon " << taxInd + 1;
@@ -2749,7 +2756,10 @@ NxsToken& token, const NxsString &nameStr)
 			e << " (name \""<< nameStr <<"\")";
 		}
 	e << ":\n" << message;
-	throw NxsException(e, token);
+	if (token)
+		throw NxsException(e, *token);
+	else
+		throw NxsException(e);
 	}
 
 /*!
@@ -2797,9 +2807,8 @@ NxsDiscreteStateCell NxsDiscreteDatatypeMapper::PositionInSymbols(char c) const
 void NxsDiscreteDatatypeMapper::WriteStateCodeAsNexusString(std::ostream & out, NxsDiscreteStateCell scode, bool demandSymbols) const
 	{
 	ValidateStateCode(scode);
-	const NxsDiscreteStateSetInfo * ssi = &(stateSetsVec.at(scode-sclOffset));
 	const NxsDiscreteStateSetInfo & stateSetInfo =  stateCodeLookupPtr[scode];
-	NCL_ASSERT (ssi == &stateSetInfo);
+	NCL_ASSERT (&(stateSetsVec.at(scode-sclOffset)) == &stateSetInfo);
 	char c = stateSetInfo.nexusSymbol;
 	if (c != '\0')
 		{
@@ -3019,7 +3028,7 @@ bool NxsCharactersBlock::HandleNextContinuousState(NxsToken &token, unsigned tax
 
 NxsDiscreteStateCell NxsDiscreteDatatypeMapper::StateCodeForNexusChar(
   const char currChar,
-  NxsToken &token,
+  NxsToken *token,
   unsigned taxNum,		/* the taxon index, in range [0..`ntax') */
   unsigned charNum,		/* the character index, in range [0..`nChar') */
   const NxsDiscreteStateRow * firstTaxonRow,
@@ -3042,7 +3051,7 @@ NxsDiscreteStateCell NxsDiscreteDatatypeMapper::StateCodeForNexusChar(
 			}
 		else
 			{
-			emsg << "Invalid state specified \"" << token.GetToken() << "\"";
+			emsg << "Invalid state specified \"" << currChar << "\"";
 			GenerateNxsExceptionMatrixReading(emsg, taxNum, charNum, token, nameStr);
 			}
 		}
@@ -3087,15 +3096,15 @@ NxsDiscreteStateCell NxsDiscreteDatatypeMapper::StateCodeForNexusPossibleMultiSt
 	NCL_ASSERT(stateAsNexus.length() > 0);
 	const char firstChar = stateAsNexus[0];
 	if (firstChar == '(' || firstChar == '{')
-		return StateCodeForNexusMultiStateSet(nexusSymbol, stateAsNexus, token, taxNum, charNum, firstTaxonRow, nameStr);
+		return StateCodeForNexusMultiStateSet(nexusSymbol, stateAsNexus, &token, taxNum, charNum, firstTaxonRow, nameStr);
 	if (stateAsNexus.length() > 1)
 		{
 		NxsString emsg;
 		emsg << "Expecting  {} or () around a multiple character state set.  Found " << stateAsNexus << " for taxon " << nameStr;
-		GenerateNxsExceptionMatrixReading(emsg, taxNum, charNum, token, nameStr);
+		GenerateNxsExceptionMatrixReading(emsg, taxNum, charNum, &token, nameStr);
 		}
 
-	NxsDiscreteStateCell currState = StateCodeForNexusChar(firstChar, token, taxNum, charNum, firstTaxonRow, nameStr);
+	NxsDiscreteStateCell currState = StateCodeForNexusChar(firstChar, &token, taxNum, charNum, firstTaxonRow, nameStr);
 	cLookup[(int) nexusSymbol] = currState;
 	return currState;
 	}
@@ -3103,7 +3112,7 @@ NxsDiscreteStateCell NxsDiscreteDatatypeMapper::StateCodeForNexusPossibleMultiSt
 NxsDiscreteStateCell NxsDiscreteDatatypeMapper::StateCodeForNexusMultiStateSet(
   const char nexusSymbol,
   const std::string &stateAsNexus,
-  NxsToken & token,	/* the token used to read from `in' */
+  NxsToken * token,	/* the token used to read from `in' */
   const unsigned taxNum,		/* the taxon index, in range [0..`ntax') */
   const unsigned charNum,		/* the character index, in range [0..`nChar') */
   const NxsDiscreteStateRow * firstTaxonRow,
@@ -3243,11 +3252,11 @@ bool NxsCharactersBlock::HandleNextTokenState(
 			if (token.Equals(")"))
 				{
 				if (tildeFound)
-					mapper.GenerateNxsExceptionMatrixReading("Range of states still being specified when ')' encountered", taxNum, charNum, token, nameStr);
+					mapper.GenerateNxsExceptionMatrixReading("Range of states still being specified when ')' encountered", taxNum, charNum, &token, nameStr);
 				break;
 				}
 			if (token.Equals("{"))
-				mapper.GenerateNxsExceptionMatrixReading("Illegal range of states '{' found inside '()'", taxNum, charNum, token, nameStr);
+				mapper.GenerateNxsExceptionMatrixReading("Illegal range of states '{' found inside '()'", taxNum, charNum, &token, nameStr);
 
 			}
 		else if (uncertainty)
@@ -3255,11 +3264,11 @@ bool NxsCharactersBlock::HandleNextTokenState(
 			if (token.Equals("}"))
 				{
 				if (tildeFound)
-					mapper.GenerateNxsExceptionMatrixReading("Range of states still being specified when '}' encountered", taxNum, charNum, token, nameStr);
+					mapper.GenerateNxsExceptionMatrixReading("Range of states still being specified when '}' encountered", taxNum, charNum, &token, nameStr);
 				break;
 				}
 			if (token.Equals("("))
-				mapper.GenerateNxsExceptionMatrixReading("Illegal range of states '(' found inside '{}'", taxNum, charNum, token, nameStr);
+				mapper.GenerateNxsExceptionMatrixReading("Illegal range of states '(' found inside '{}'", taxNum, charNum, &token, nameStr);
 			}
 		else if (token.Equals("~"))
 			{
@@ -3267,7 +3276,7 @@ bool NxsCharactersBlock::HandleNextTokenState(
 				{
 				errormsg.clear();
 				errormsg << "A state range cannot start with " << prevToken;
-				mapper.GenerateNxsExceptionMatrixReading(errormsg, taxNum, charNum, token, nameStr);
+				mapper.GenerateNxsExceptionMatrixReading(errormsg, taxNum, charNum, &token, nameStr);
 				}
 			tildeFound = true;
 			}
@@ -3281,7 +3290,7 @@ bool NxsCharactersBlock::HandleNextTokenState(
 					{
 					errormsg = "Last state in specified range (";
 					errormsg << token.GetToken() << ") must be greater than the first";
-					mapper.GenerateNxsExceptionMatrixReading(errormsg, taxNum, charNum, token, nameStr);
+					mapper.GenerateNxsExceptionMatrixReading(errormsg, taxNum, charNum, &token, nameStr);
 					}
 				for (NxsDiscreteStateCell i = prevState; i <= currState; ++i)
 					sset.insert(i);
@@ -3305,13 +3314,13 @@ bool NxsCharactersBlock::HandleNextTokenState(
 		{
 		errormsg.clear();
 		errormsg << "State range not terminated -- ending in ~" << token.GetToken();
-		mapper.GenerateNxsExceptionMatrixReading(errormsg, taxNum, charNum, token, nameStr);
+		mapper.GenerateNxsExceptionMatrixReading(errormsg, taxNum, charNum, &token, nameStr);
 		}
 	if (sset.empty())
 		{
 		errormsg.clear();
 		errormsg << "An illegal (empty) state range -- either  {} or ()";
-		mapper.GenerateNxsExceptionMatrixReading(errormsg, taxNum, charNum, token, nameStr);
+		mapper.GenerateNxsExceptionMatrixReading(errormsg, taxNum, charNum, &token, nameStr);
 		}
 	row[charNum] = mapper.StateCodeForStateSet(sset, (const bool)(polymorphism != 0), true, '\0');
 	return true;
@@ -3866,7 +3875,13 @@ void NxsCharactersBlock::HandleCharstatelabels(
 
 		// Token should be the character number; create a new association
 		//
-		int sn = atoi(token.GetToken().c_str());
+		int sn = -1;
+        try {
+            sn = token.GetToken().ConvertToInt();
+            }
+        catch (NxsString::NxsX_NotANumber &x)
+            {
+            }
 		unsigned n = (unsigned)sn;
 		if (sn < 1 || n > nChar || n <= currChar)
 			{
@@ -4116,7 +4131,19 @@ void NxsCharactersBlock::HandleStdMatrix(
 						errormsg << "Data for this taxon (" << nameStr << ") has already been saved";
 						throw NxsException(errormsg, token);
 						}
-					indOfTaxInMemory = taxa->AddTaxonLabel(nameStr);
+					try {
+						indOfTaxInMemory = taxa->AddTaxonLabel(nameStr);
+						}
+					catch (NxsException &x)
+						{
+						if (nameStr == ";")
+							{
+							errormsg << "Unexpected ; after only " << indOfTaxInCommand << " taxa were read (expecting characters for " << nTaxWithData << " taxa).";
+							throw NxsException(errormsg, token);
+							}
+						x.addPositionInfo(token);
+						throw x;
+						}
 					}
 				else
 					{
@@ -4517,8 +4544,13 @@ void NxsCharactersBlock::HandleStatelabels(
 		token.GetNextToken();
 		if (token.Equals(";"))
 			break;
-
-		int n = atoi(token.GetToken().c_str());
+        int n = -1;
+        try {
+            n = token.GetToken().ConvertToInt();
+            }
+        catch (NxsString::NxsX_NotANumber &x)
+            {
+            }
 		if (n < 1 || n > (int)nChar)
 			{
 			errormsg = "Invalid character number (";
@@ -5012,7 +5044,7 @@ const char * NxsCharactersBlock::GetNameOfDatatype(DataTypesEnum datatype)
 		case NxsCharactersBlock::protein:
 			return "Protein";
 		case NxsCharactersBlock::continuous:
-			return "Continuous";
+			return "Continuous"; // do not change!  phylobase uses this!!!
 		default:
 			return "Standard";
 		}
@@ -5280,7 +5312,7 @@ void NxsCharactersBlock::FindConstantCharacters(NxsUnsignedSet &c) const
 				const NxsDiscreteStateCell sc = row[colIndex];
 				std::set<NxsDiscreteStateCell> currSet = mapper->GetStateSetForCode(sc);
 				iv.clear();
-				set_intersection(currSet.begin(), currSet.end(), intersectionSet.begin(), intersectionSet.end(), back_inserter(iv));
+				set_intersection(currSet.begin(), currSet.end(), intersectionSet.begin(), intersectionSet.end(), std::back_inserter(iv));
 				intersectionSet.clear();
 				if (iv.empty())
 					break;
