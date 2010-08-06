@@ -1,14 +1,19 @@
+### This file contains the source code for the functions:
+###  - readNCL (generic function)
+###  - readNexus (wrapper for readNCL importing Nexus files)
+###  - readNewick (wrapper for readNCL importing Newick files)
+
 readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
                     char.all=FALSE, polymorphic.convert=TRUE,
-                    levels.uniform=TRUE, quiet=TRUE,
+                    levels.uniform=FALSE, quiet=TRUE,
                     check.node.labels=c("keep", "drop", "asdata"),
-                    return.labels=TRUE, ...) {
+                    return.labels=TRUE, file.format=c("nexus", "newick"), ...) {
 
 
  type <- match.arg(type)
  check.node.labels <- match.arg(check.node.labels)
-
-
+ file.format <- match.arg(file.format)
+ if (file.format == "newick") file.format <- "relaxedphyliptree" 
  
  if (type == "all" || type == "data") {
    returnData <- TRUE
@@ -23,7 +28,7 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
    returnTrees <- FALSE
  }
 
- fileName <- list(fileName=file)
+ fileName <- list(fileName=file, fileFormat=file.format)
  parameters <- c(char.all, polymorphic.convert, levels.uniform, returnTrees, returnData)
 
  ## GetNCL returns a list containing:
@@ -141,7 +146,12 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
        tr <- phylo4(tr, check.node.labels=check.node.labels, ...)       
      }
      else {
-       tr <- phylo4d(tr, check.node.labels=check.node.labels, ...)
+       if (check.node.labels == "asdata") {
+         tr <- phylo4d(tr, check.node.labels=check.node.labels, ...)
+       }
+       else {
+         tr <- phylo4(tr, check.node.labels=check.node.labels, ...)
+       }
      }
    })
    if (length(listTrees) == 1 || simplify)
@@ -190,3 +200,21 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
  toRet
 }
  
+readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
+                       char.all=FALSE, polymorphic.convert=TRUE,
+                       levels.uniform=FALSE, quiet=TRUE,
+                       check.node.labels=c("keep", "drop", "asdata"),
+                       return.labels=TRUE, ...) {
+
+  return(readNCL(file=file, simplify=simplify, type=type, char.all=char.all,
+          polymorphic.convert=polymorphic.convert, levels.uniform=levels.uniform,
+          quiet=quiet, check.node.labels=check.node.labels,
+          return.labels=return.labels, file.format="nexus", ...))
+}
+
+readNewick <- function(file, simplify=FALSE, quiet=TRUE,
+                       check.node.labels=c("keep", "drop", "asdata"), ...) {
+
+  return(readNCL(file=file, simplify=simplify, quiet=quiet,
+                 check.node.labels=check.node.labels, file.format="newick", ...))
+}

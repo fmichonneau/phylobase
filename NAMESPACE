@@ -59,8 +59,9 @@ export(hasPoly, hasSingle, hasRetic)
 export(getNode, ancestor, children, descendants, siblings, ancestors,
     MRCA, shortestPath, getEdge)
 
-# Nexus functions
+# Import functions
 export(readNexus)
+export(readNewick)
 export(readNCL)
 
 # pdata functions
