@@ -107,8 +107,12 @@ readNewick(file, simplify=FALSE, quiet=TRUE,
  \code{missing.data} or \code{extra.data}. See the documentation of
  \link{phylo4-methods}, \link{phylo4d} and \link{formatData} for the
  complete list of options.
-
+ 
 }
+\note{Underscores in state labels (i.e. trait or taxon names)
+  will be translated to spaces when read by NCL; trait names will
+  be converted to valid R names (see \code{\link{make.names}}) on
+  input to R, so spaces will be translated to periods.}
 \value{
   Depending on the value of \code{type} and the contents of the file, 
   one of: a \code{data.frame}, a \linkS4class{phylo4} object,  a
