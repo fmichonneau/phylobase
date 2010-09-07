@@ -7,8 +7,11 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
                     char.all=FALSE, polymorphic.convert=TRUE,
                     levels.uniform=FALSE, quiet=TRUE,
                     check.node.labels=c("keep", "drop", "asdata"),
-                    return.labels=TRUE, file.format=c("nexus", "newick"), ...) {
+                    return.labels=TRUE, file.format=c("nexus", "newick"),
+                    check.names=TRUE, ...) {
 
+  ## turn on to TRUE to test new way of building trees in NCL
+ experimental <- FALSE
 
  type <- match.arg(type)
  check.node.labels <- match.arg(check.node.labels)
@@ -111,7 +114,7 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
        }
      }
    }
-   tipData <- data.frame(tipData)
+   tipData <- data.frame(tipData, check.names=check.names)
    if (length(ncl$taxaNames) == nrow(tipData)) {
      rownames(tipData) <- ncl$taxaNames
    }
@@ -123,39 +126,53 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
 
  if (returnTrees && length(ncl$trees) > 0) {
    listTrees <- vector("list", length(ncl$trees))
-   for (i in 1:length(ncl$trees)) {
-     if (length(grep(":", ncl$trees[i]))) {
-       listTrees[[i]] <- tree.build(ncl$trees[i])
-     }
-     else {
-       listTrees[[i]] <- clado.build(ncl$trees[i])
-     }
-   }
-   listTrees <- lapply(listTrees, function(tr) {       
-     if (length(ncl$taxaNames) == nTips(tr)) {
-       tr$tip.label <- ncl$taxaNames[as.numeric(tr$tip.label)]     
-     }
-     else stop("phylobase doesn't deal with multiple taxa block at this time.")
-     if (is.null(tr$node.label)) {
-       if (check.node.labels == "asdata") {
-         warning("Could not use value \"asdata\" for ",
-                 "check.node.labels because there are no ",
-                 "labels associated with the tree")
-         check.node.labels <- "drop"
-       }
-       tr <- phylo4(tr, check.node.labels=check.node.labels, ...)       
-     }
-     else {
-       if (check.node.labels == "asdata") {
-         tr <- phylo4d(tr, check.node.labels=check.node.labels, ...)
+   
+   if (!experimental) {
+     for (i in 1:length(ncl$trees)) {
+       if (length(grep(":", ncl$trees[i]))) {
+         listTrees[[i]] <- tree.build(ncl$trees[i])
        }
        else {
-         tr <- phylo4(tr, check.node.labels=check.node.labels, ...)
+         listTrees[[i]] <- clado.build(ncl$trees[i])
        }
      }
-   })
-   if (length(listTrees) == 1 || simplify)
-     listTrees <- listTrees[[1]]
+     listTrees <- lapply(listTrees, function(tr) {       
+       if (length(ncl$taxaNames) == nTips(tr)) {
+         tr$tip.label <- ncl$taxaNames[as.numeric(tr$tip.label)]     
+       }
+       else stop("phylobase doesn't deal with multiple taxa block at this time.")
+       if (is.null(tr$node.label)) {
+         if (check.node.labels == "asdata") {
+           warning("Could not use value \"asdata\" for ",
+                   "check.node.labels because there are no ",
+                   "labels associated with the tree")
+           check.node.labels <- "drop"
+         }
+         tr <- phylo4(tr, check.node.labels=check.node.labels, ...)       
+       }
+       else {
+         if (check.node.labels == "asdata") {
+           tr <- phylo4d(tr, check.node.labels=check.node.labels, ...)
+         }
+         else {
+           tr <- phylo4(tr, check.node.labels=check.node.labels, ...)
+         }
+       }
+     })
+     if (length(listTrees) == 1 || simplify)
+       listTrees <- listTrees[[1]]
+   }
+   else {
+     edgeMat <- cbind(ncl$parentVector, c(1:length(ncl$parentVector)))
+     edgeLgth <- ncl$branchLengthVector
+     edgeLgth[edgeLgth == -1] <- NA
+     if (length(ncl$taxaNames) != min(ncll$parentVector)-1) {
+       stop("phylobase doesn't deal with multiple taxa block at this time.")
+     }
+     ## TODO: code node labels in GetNCL
+     tr <- phylo4(x=edgeMat, edge.length=edgeLgth, tip.label=ncl$taxaNames,
+                  ...)
+   }
  }
  else {
    listTrees <- NULL
@@ -204,12 +221,13 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
                        char.all=FALSE, polymorphic.convert=TRUE,
                        levels.uniform=FALSE, quiet=TRUE,
                        check.node.labels=c("keep", "drop", "asdata"),
-                       return.labels=TRUE, ...) {
+                       return.labels=TRUE, check.names=TRUE, ...) {
 
   return(readNCL(file=file, simplify=simplify, type=type, char.all=char.all,
           polymorphic.convert=polymorphic.convert, levels.uniform=levels.uniform,
           quiet=quiet, check.node.labels=check.node.labels,
-          return.labels=return.labels, file.format="nexus", ...))
+          return.labels=return.labels, file.format="nexus",
+          check.names=check.names, ...))
 }
 
 readNewick <- function(file, simplify=FALSE, quiet=TRUE,

@@ -82,13 +82,10 @@ extern "C" SEXP GetNCL(SEXP params, SEXP paramsVecR) {
     std::vector<std::string> charLabels;     //labels for the characters
     std::vector<std::string> stateLabels;    //labels for the states
     std::vector<int> nbStates;               //number of states for each character (for Standard datatype)
-#   if defined (NEW_TREE_RETURN_TYPE)
-        std::vector<std::string> taxonLabelVector; //Index of the parent. 0 means no parent.
-        std::vector<unsigned> parentVector; //Index of the parent. 0 means no parent.
-        std::vector<double> branchLengthVector; 
-#   else
-        std::vector<std::string> trees;          //vector of Newick strings holding the names
-#   endif
+    Rcpp::List lTaxaLabelVector = Rcpp::List::create();
+    Rcpp::List lParentVector = Rcpp::List::create();
+    Rcpp::List lBranchLengthVector = Rcpp::List::create();
+    std::vector<std::string> trees;          //vector of Newick strings holding the names
     std::vector<std::string> treeNames;      //vector of tree names
     std::vector<std::string> taxaNames;      //vector of taxa names
     std::string errorMsg;                    //error message
@@ -182,11 +179,8 @@ fileFormatString should be one of these: 	"nexus",
 	    taxaNames.push_back (taxaBlock->GetTaxonLabel(j));
 	}
 
-#   if defined (NEW_TREE_RETURN_TYPE)
-        taxonLabelVector.reserve(nTax);
-        parentVector.reserve(2*nTax);
-        branchLengthVector.reserve(2*nTax);
-#   endif
+      
+
 	/* Get trees */
 	if (returnTrees) {
 	    if (nTreesBlocks == 0) {
@@ -196,77 +190,74 @@ fileFormatString should be one of these: 	"nexus",
 		NxsTreesBlock* treeBlock = nexusReader.GetTreesBlock(taxaBlock, i);
 		const unsigned nTrees = treeBlock->GetNumTrees();
 		if (nTrees > 0) {
+		    // lTaxaLabelVector.reserve(nTrees);
+		    // lParentVector.reserve(nTrees);
+		    // lBranchLengthVector.reserve(nTrees);
+
 		    for (unsigned k = 0; k < nTrees; k++) {
-#           if defined(NEW_TREE_RETURN_TYPE)
-                taxonLabelVector.clear();
-                parentVector.clear();
-                branchLengthVector.clear();
+
+			std::vector<std::string> taxonLabelVector; //Index of the parent. 0 means no parent.
+			std::vector<unsigned> parentVector;        //Index of the parent. 0 means no parent.
+			std::vector<double> branchLengthVector;   
+
+			taxonLabelVector.reserve(nTax);
+			parentVector.reserve(2*nTax);
+			branchLengthVector.reserve(2*nTax); 
+
+			taxonLabelVector.clear();
+			parentVector.clear();
+			branchLengthVector.clear();
                 
-                const NxsFullTreeDescription & ftd = treeBlock->GetFullTreeDescription(k); 
-                treeNames.push_back(ftd.GetName());
-                NxsSimpleTree simpleTree(ftd, -1, -1.0);
-                std::vector<const NxsSimpleNode *> ndVector =  simpleTree.GetPreorderTraversal();
-                unsigned internalNdIndex = nTax;
-                for (std::vector<const NxsSimpleNode *>::const_iterator ndIt = ndVector.begin(); ndIt != ndVector.end(); ++ndIt)
-                    {
-                    NxsSimpleNode * nd = (NxsSimpleNode *) *ndIt;
-                    unsigned nodeIndex;
-                    if (nd->IsTip())
-                        {
-                        nodeIndex = nd->GetTaxonIndex();
-                        taxonLabelVector.push_back(taxaNames[nodeIndex]);
-                        std::cout << " leaf node # = " <<  nodeIndex << '\n';
-                        }
-                    else
-                        {
-                        nodeIndex = internalNdIndex++;
-                        nd->SetTaxonIndex(nodeIndex);
-                        std::cout << " internal node # = " << nd->GetTaxonIndex()  << '\n';
-                        }
-                    if (parentVector.size() < nodeIndex + 1)
-                        {
-                        parentVector.resize(nodeIndex + 1);
-                        }
-                    if (branchLengthVector.size() < nodeIndex + 1)
-                        {
-                        branchLengthVector.resize(nodeIndex + 1);
-                        }
-                    NxsSimpleEdge edge = nd->GetEdgeToParent();
-    
-                    NxsSimpleNode * par = 0L;
-                    par = (NxsSimpleNode *) edge.GetParent();
-                    if (par != 0L)
-                        {
-                        parentVector[nodeIndex] = 1 + par->GetTaxonIndex();
-                        branchLengthVector[nodeIndex] = edge.GetDblEdgeLen();
-                        }
-                    else
-                        {
-                        parentVector[nodeIndex] = 0;
-                        branchLengthVector[nodeIndex] = -1.0;
-                        }
-                    }
-                std::cout << "Parents = [";
-                for (std::vector<unsigned>::const_iterator nIt = parentVector.begin(); nIt != parentVector.end(); ++nIt)
-                    {
-                    std::cout << *nIt << ", ";				
-                    }
-                std::cout << "]\nbranch lengths = [";
-                for (std::vector<double>::const_iterator nIt = branchLengthVector.begin(); nIt != branchLengthVector.end(); ++nIt)
-                    {
-                    std::cout << *nIt << ", ";				
-                    }
-                std::cout << "]\n";
+			const NxsFullTreeDescription & ftd = treeBlock->GetFullTreeDescription(k); 
+			treeNames.push_back(ftd.GetName());
+			NxsSimpleTree simpleTree(ftd, -1, -1.0);
+			std::vector<const NxsSimpleNode *> ndVector =  simpleTree.GetPreorderTraversal();
+			unsigned internalNdIndex = nTax;
+			for (std::vector<const NxsSimpleNode *>::const_iterator ndIt = ndVector.begin(); ndIt != ndVector.end(); ++ndIt)
+			{
+			    NxsSimpleNode * nd = (NxsSimpleNode *) *ndIt;
+			    unsigned nodeIndex;
+			    if (nd->IsTip())
+			    {
+				nodeIndex = nd->GetTaxonIndex();
+				taxonLabelVector.push_back(taxaNames[nodeIndex]);				
+			    }
+			    else {
+				nodeIndex = internalNdIndex++;
+				nd->SetTaxonIndex(nodeIndex);
+			    }
+			    if (parentVector.size() < nodeIndex + 1)
+			    {
+				parentVector.resize(nodeIndex + 1);
+			    }
+			    if (branchLengthVector.size() < nodeIndex + 1)
+			    {
+				branchLengthVector.resize(nodeIndex + 1);
+			    }
+			    NxsSimpleEdge edge = nd->GetEdgeToParent();
+			    
+			    NxsSimpleNode * par = 0L;
+			    par = (NxsSimpleNode *) edge.GetParent();
+			    if (par != 0L)
+			    {
+				parentVector[nodeIndex] = 1 + par->GetTaxonIndex();
+				branchLengthVector[nodeIndex] = edge.GetDblEdgeLen();
+			    }
+			    else
+			    {
+				parentVector[nodeIndex] = 0;
+				branchLengthVector[nodeIndex] = -1.0;
+			    }
+			}
 
+			NxsString trNm = treeBlock->GetTreeName(k);
+			treeNames.push_back (trNm);
+			NxsString ts = treeBlock->GetTreeDescription(k);
+			trees.push_back (ts);
 
-
-
-#           else
-    			NxsString trNm = treeBlock->GetTreeName(k);
-	    		treeNames.push_back(trNm);
-    			NxsString ts = treeBlock->GetTreeDescription(k);
-    			trees.push_back (ts);
-#           endif
+			lTaxaLabelVector.push_back (taxonLabelVector);
+			lParentVector.push_back (parentVector);
+			lBranchLengthVector.push_back (branchLengthVector);
 		    }
 		}
 		else {
@@ -361,13 +352,11 @@ fileFormatString should be one of these: 	"nexus",
     /* Prepare list to return */
     Rcpp::List res = Rcpp::List::create(Rcpp::Named("taxaNames") = taxaNames,
 					Rcpp::Named("treeNames") = treeNames,
-#               if defined (NEW_TREE_RETURN_TYPE)
-                    Rcpp::Named("parentVector") = parentVector,
-                    Rcpp::Named("branchLengthVector") = branchLengthVector,
-#               else
-					Rcpp::Named("trees") = trees,
-#               endif
-                    Rcpp::Named("dataTypes") = dataTypes,
+					Rcpp::Named("taxonLabelVector") = lTaxaLabelVector,
+					Rcpp::Named("parentVector") = lParentVector,
+					Rcpp::Named("branchLengthVector") = lBranchLengthVector,
+					Rcpp::Named("trees") = trees,					
+					Rcpp::Named("dataTypes") = dataTypes,
 					Rcpp::Named("nbCharacters") = nbCharacters,
 					Rcpp::Named("charLabels") = charLabels,
 					Rcpp::Named("nbStates") = nbStates,

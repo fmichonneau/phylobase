@@ -19,7 +19,7 @@
 readNexus(file, simplify=FALSE, type=c("all", "tree", "data"),
           char.all=FALSE, polymorphic.convert=TRUE, levels.uniform=FALSE,
           quiet=TRUE, check.node.labels=c("keep", "drop", "asdata"),
-          return.labels=TRUE, ...)
+          return.labels=TRUE, check.names=TRUE, ...)
 
 readNewick(file, simplify=FALSE, quiet=TRUE,
            check.node.labels=c("keep", "drop", "asdata"), ...)
@@ -57,6 +57,12 @@ readNewick(file, simplify=FALSE, quiet=TRUE,
   
   \item{return.labels}{Determines whether state names (if TRUE) or state
     codes should be returned.}
+
+  \item{check.names}{logical. If \sQuote{TRUE} then the names of the
+          characters from the NEXUS file are checked to ensure that they
+          are syntactically valid variable names and are not duplicated.
+          If necessary they are adjusted (by \sQuote{make.names}) so
+          that they are.}
   
   \item{\dots}{Additional arguments to be passed to phylo4 or phylo4d
     constructor (see Details)}
@@ -110,7 +116,8 @@ readNewick(file, simplify=FALSE, quiet=TRUE,
  
 }
 \note{Underscores in state labels (i.e. trait or taxon names)
-  will be translated to spaces when read by NCL; trait names will
+  will be translated to spaces when read by NCL. Unless
+  \code{check.names=FALSE}, trait names will
   be converted to valid R names (see \code{\link{make.names}}) on
   input to R, so spaces will be translated to periods.}
 \value{
