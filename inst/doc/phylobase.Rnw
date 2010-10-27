@@ -57,7 +57,7 @@ The phylobase package currently implements the following functions and data stru
   \item A data structure for storing a tree with associated tip and node data: \code{phylo4d}
   \item A data structure for storing multiple trees with one set of tip data: \code{multiPhylo4d}
   \item Functions for reading nexus files into the above data structures
-  \item Functions for converting between the above data structures and \code{ape phylo} objects as well as \code{ade4 phylog} objects
+  \item Functions for converting between the above data structures and \code{ape phylo} objects as well as \code{adephylo} \code{phylog} objects
   \item Functions for editing trees and data (i.e., subsetting and replacing)
   \item Functions for plotting trees and trees with data
 \end{itemize}
@@ -233,7 +233,7 @@ summary(g2)
 
 Or use \code{tdata()} to extract the data (i.e., \code{tdata(g2)}). By default, \code{tdata()} will retrieve tip data, but you can also get internal node data only (\code{tdata(tree, "internal")}) or --- if the tip and node data have the same format --- all the data combined (\code{tdata(tree, "allnode")}).
 
-%Plotting calls \code{plot.phylog} from the \code{ade4} package.
+%Plotting calls \code{plot.phylog} from the \code{adephylo} package.
 
 If you want to plot the data (e.g. for checking the input), \code{plot(tdata(g2))} will create the default plot for the data --- in this case, since it is a data frame [\textbf{this may change in future versions but should remain transparent}] this will be a \code{pairs} plot of the data.
 

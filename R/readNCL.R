@@ -166,7 +166,7 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
      edgeMat <- cbind(ncl$parentVector, c(1:length(ncl$parentVector)))
      edgeLgth <- ncl$branchLengthVector
      edgeLgth[edgeLgth == -1] <- NA
-     if (length(ncl$taxaNames) != min(ncll$parentVector)-1) {
+     if (length(ncl$taxaNames) != min(ncl$parentVector)-1) {
        stop("phylobase doesn't deal with multiple taxa block at this time.")
      }
      ## TODO: code node labels in GetNCL

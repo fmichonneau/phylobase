@@ -65,6 +65,8 @@ NxsString stdData(NxsCharactersBlock& charBlock, NxsString& charString, const in
 
 extern "C" SEXP GetNCL(SEXP params, SEXP paramsVecR) {
 
+    BEGIN_RCPP
+
     Rcpp::List list(params);
     Rcpp::LogicalVector paramsVec(paramsVecR);
 
@@ -367,4 +369,7 @@ fileFormatString should be one of these: 	"nexus",
 					Rcpp::Named("dataChr") = dataChr,
 					Rcpp::Named("Test") = test);
     return res;				
+
+  END_RCPP
+
 }

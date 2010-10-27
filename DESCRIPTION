@@ -4,7 +4,7 @@ Title: Base package for phylogenetic structures and comparative data
 Version: 0.6.1
 Date: 2010-08-06
 Depends: methods, grid, ape(>= 2.1), Rcpp (>= 0.8.3)
-Suggests: ade4, MASS
+Suggests: adephylo, MASS
 Author: R Hackathon et al. (alphabetically: Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vienne, Dirk Eddelbuettel, Mark Holder, Thibaut Jombart, Steve Kembel, Francois Michonneau, David Orme, Brian O'Meara, Emmanuel Paradis, Jim Regetz, Derrick Zwickl)
 Maintainer:  Ben Bolker <bolker@mcmaster.ca>
 Description: Provides a base S4 class for comparative methods, incorporating one or more trees and trait data

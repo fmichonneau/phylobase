@@ -44,7 +44,7 @@
   Translation functions to convert between phylobase objects
   (\code{phylo4} or \code{phylo4d}), and objects used by other
   comparative methods packages in R:  \code{ape} objects (\code{phylo},
-  \code{multiPhylo}), \code{ade4} objects (\code{phylog}), and to
+  \code{multiPhylo}), \code{adephylo} objects (\code{phylog}), and to
   \code{data.frame} representation.
 }
 
@@ -85,11 +85,11 @@
       \item{\code{as(object, "multiPhylo4")}}{~~Not implemented yet. where object is of class \code{multiPhylo} and returns an object of class \code{multiPhylo4}. }
     }} % end ape to phylobase
     
-    \item{}{\code{phylobase} to \code{ade4} formats:
+    \item{}{\code{phylobase} to \code{adephylo} formats:
     \describe{
       
       \item{\code{as(object, "phylog")}}{where object is of class \code{phylo4} and returns an object of class \linkS4class{phylog}.}
-    }} % end phylobase to ade4
+    }} % end phylobase to adephylo
     
     \item{}{\code{phylobase} format to \code{data.frame}:
     \describe{
@@ -102,7 +102,7 @@
 \author{Ben Bolker, Thibaut Jombart, Marguerite Butler, Steve Kembel}
 \seealso{ generic \code{\link[methods]{as}}, \code{\link{phylo4}},
   \code{\link{phylo4d}}, \code{\link{extractTree}}, the original
-  \code{\link[ade4]{phylog}} from the \code{ade4} package and
+  \code{\link[adephylo]{phylog}} from the \code{adephylo} package and
   \code{\link[ape]{as.phylo}} from the \code{ape} package. 
 }
 
@@ -116,7 +116,7 @@ identical(tree_in_phylo,as(tree_in_phylo4,"phylo"))
 ## test if phylo, and phylo4 converted to phylo are identical
 ## (no, because of dimnames)
 
-## Conversion to phylog (ade4)
+## Conversion to phylog (adephylo)
 as(tree_in_phylo4, "phylog")
 
 ## Conversion to data.frame

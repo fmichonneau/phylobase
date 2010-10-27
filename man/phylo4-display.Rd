@@ -1,5 +1,5 @@
 \name{phylo4-display}
-\docType{method}
+\docType{methods}
 \alias{print,phylo4-method}
 \alias{show,phylo4-method}
 \alias{head,phylo4-method}

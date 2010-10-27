@@ -13,7 +13,7 @@
         \item{Type:}{Package}
         \item{Date:}{2009}
 	\item{Depends:}{methods, grid, ape(>= 2.1)}
-	\item{Suggests:}{ade4, MASS}
+	\item{Suggests:}{adephylo, MASS}
 	\item{License:}{GPL Version 2 or later}
         \item{Authors:}{R Hackathon et al. (alphabetically: Ben Bolker,
 	  Marguerite Butler, Peter Cowan,  Damien de Vienne, Thibaut Jombart,

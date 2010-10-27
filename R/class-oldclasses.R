@@ -9,5 +9,5 @@ setOldClass("multiPhylo")
 
 ## setOldClass("multi.tree") ## obsolete
 
-## ade4 classes
+## adephylo classes
 setOldClass("phylog")
