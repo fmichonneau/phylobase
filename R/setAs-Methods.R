@@ -170,12 +170,13 @@ setAs("multiPhylo4", "multiPhylo", function(from, to) {
 })
 
 #######################################################
-## Exporting to adephylo
+## Exporting to ade4
 setAs("phylo4", "phylog", function(from, to) {
-    if (!require(adephylo))
-        stop("the adephylo package is required")
+    if (!require(ade4))
+        stop("the ade4 package is required")
     x <- as(from, "phylo")
     xstring <- write.tree(x, file = "")
+    warning("ade4::phylog objects are deprecated, please use the adephylo package instead")
     newick2phylog(xstring)
 })
 
