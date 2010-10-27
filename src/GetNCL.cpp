@@ -164,6 +164,11 @@ fileFormatString should be one of these: 	"nexus",
 	Rcpp::List res = Rcpp::List::create(Rcpp::Named("ErrorMsg") = errorMsg);
 	return res;
     }
+    catch (...) {
+	errorMsg = "Unknown error, check the formatting of your file first.";
+	Rcpp::List res = Rcpp::List::create(Rcpp::Named("ErrorMsg") = errorMsg);
+	return res;
+    }
 
     const unsigned nTaxaBlocks = nexusReader.GetNumTaxaBlocks();
     for (unsigned t = 0; t < nTaxaBlocks; ++t) {
@@ -178,8 +183,6 @@ fileFormatString should be one of these: 	"nexus",
 	for (int j=0; j < nTax; ++j) {	
 	    taxaNames.push_back (taxaBlock->GetTaxonLabel(j));
 	}
-
-      
 
 	/* Get trees */
 	if (returnTrees) {
