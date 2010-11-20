@@ -1,4 +1,7 @@
-PKG_LIBS = -s $(shell Rscript -e 'Rcpp:::LdFlags()') -L"$(RHOME)/bin" -lR --no-export-all-symbols --add-stdcall-alias
+## PKG_LIBS = -s $(shell Rscript -e 'Rcpp:::LdFlags()') -L"$(RHOME)/bin" -lR --no-export-all-symbols --add-stdcall-alias
 PKG_CXXFLAGS = $(shell Rscript -e 'Rcpp:::CxxFlags()') -I. -DHAVE_INTTYPES_H
+PKG_LIBS = $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e 
+"Rcpp:::LdFlags()")
+
 
 
