@@ -1,5 +1,2 @@
-RCPP_FLAGS=`${R_HOME}/bin/Rscript -e "Rcpp:::CxxFlags()"`
-RCPP_LIBS=`${R_HOME}/bin/Rscript -e "Rcpp:::LdFlags()"`
-
-PKG_CPPFLAGS=-I. ${RCPP_FLAGS} -DHAVE_INTTYPES_H
+PKG_CPPFLAGS=-I. -DHAVE_INTTYPES_H
 PKG_LIBS = `$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"`
