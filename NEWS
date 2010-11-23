@@ -7,6 +7,12 @@
         *                                               *
         *************************************************
 
+                CHANGES IN phylobase VERSION 0.6.2
+
+   *   Improve handling of errors returned by NCL (NxsException)
+
+   *   Fix bug in case state labels are missing from the NEXUS file
+
                 CHANGES IN phylobase VERSION 0.6.1
 
    *   Fix bugs that prevented building on Windows 64-bit systems
