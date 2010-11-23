@@ -360,6 +360,8 @@ class NxsToken
 		static unsigned 	DemandPositiveInt(NxsToken &token, NxsString & errormsg, const char *contextString);
 		static std::map<std::string, std::string> ParseAsSimpleKeyValuePairs(const ProcessedNxsCommand & tv, const char *cmdName);
 
+		static std::vector<ProcessedNxsToken> Tokenize(const std::string & );
+
 		enum NxsTokenFlags	/* For use with the variable labileFlags */
 			{
 			saveCommandComments		= 0x0001,	/* if set, command comments of the form [&X] are not ignored but are instead saved as regular tokens (without the square brackets, however) */

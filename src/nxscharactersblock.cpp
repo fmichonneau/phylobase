@@ -2739,7 +2739,12 @@ void NxsDiscreteDatatypeMapper::ValidateStateCode(NxsDiscreteStateCell c) const
 		throw NxsNCLAPIException("Illegal usage of unknown negative state index");
 		}
 	else if (c >= (((NxsDiscreteStateCell) stateSetsVec.size()) + sclOffset))
-		throw NxsNCLAPIException("Illegal usage of state code > the highest state code");
+	    {
+	    NxsString err = "Illegal usage of state code > the highest state code. c = ";
+	    err << int(c) << " (NxsDiscreteStateCell) stateSetsVec.size() = " << (NxsDiscreteStateCell) stateSetsVec.size();
+	    err << " sclOffset = " << sclOffset;
+	    throw NxsNCLAPIException(err);
+	    }
 	}
 
 
@@ -2806,6 +2811,7 @@ NxsDiscreteStateCell NxsDiscreteDatatypeMapper::PositionInSymbols(char c) const
 */
 void NxsDiscreteDatatypeMapper::WriteStateCodeAsNexusString(std::ostream & out, NxsDiscreteStateCell scode, bool demandSymbols) const
 	{
+	//out << "WriteStateCodeAsNexusString-debug scode=" << scode<< '\n';
 	ValidateStateCode(scode);
 	const NxsDiscreteStateSetInfo & stateSetInfo =  stateCodeLookupPtr[scode];
 	NCL_ASSERT (&(stateSetsVec.at(scode-sclOffset)) == &stateSetInfo);

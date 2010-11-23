@@ -32,6 +32,11 @@ unsigned NxsTaxaBlock::GetMaxIndex() const
 		return UINT_MAX;
 	return nct - 1;
 	}
+unsigned NxsTaxaBlock::GetNumLabelsCurrentlyStored() const
+	{
+	return taxLabels.size();
+	}
+
 
 std::vector<std::string> NxsTaxaBlockAPI::GetAllLabels() const
 	{

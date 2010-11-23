@@ -32,6 +32,7 @@ class BogusToIndMapper: public NxsLabelToIndicesMapper
 			:queried(false)
 			{}
 		virtual ~BogusToIndMapper(){}
+
 		virtual unsigned GetMaxIndex() const
 			{
 			return UINT_MAX;
@@ -276,7 +277,7 @@ int NxsTransformationManager::GetWeightForIndex(const ListOfIntWeights & wtset, 
 		if (wIt->second.count(index) > 0)
 			return wIt->first;
 		}
-	return 1;
+	return -1;
 	}
 
 /*!

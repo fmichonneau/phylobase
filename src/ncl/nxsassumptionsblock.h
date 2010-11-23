@@ -69,8 +69,21 @@ class NxsAssumptionsBlockAPI
 		virtual void ReadTreesetDef(NxsString set_name, NxsToken &token, bool asterisked) = 0;
 
 		virtual NxsTransformationManager & GetNxsTransformationManagerRef() = 0;
+		virtual const NxsTransformationManager & GetNxsTransformationManagerConstRef() const = 0;
 		virtual NxsGeneticCodesManager & GetNxsGeneticCodesManagerRef() = 0;
 		virtual void SetGapsAsNewstate(bool v) = 0;
+
+		/*!  delegates call to the NxsTransformationManager */
+		virtual std::vector<double> GetDefaultDoubleWeights() const
+			{
+		    return GetNxsTransformationManagerConstRef().GetDefaultDoubleWeights();
+			}
+
+		/*!  delegates call to the NxsTransformationManager */
+		virtual std::vector<int> GetDefaultIntWeights() const {
+		    return GetNxsTransformationManagerConstRef().GetDefaultIntWeights();
+		}
+
  	};
 
 /*!
@@ -158,6 +171,10 @@ class NxsAssumptionsBlock
 		NxsTaxaBlockAPI *	GetTaxaBlockPtr(int *status=NULL); /*v2.1to2.2 13 */
 		NxsTreesBlockAPI *	GetTreesBlockPtr(int *status=NULL); /*v2.1to2.2 13 */
 
+		const NxsTransformationManager & GetNxsTransformationManagerConstRef() const
+			{
+			return transfMgr;
+			}
 		NxsTransformationManager & GetNxsTransformationManagerRef()
 			{
 			return transfMgr;

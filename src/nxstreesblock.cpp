@@ -52,7 +52,8 @@ NxsSimpleNode * NxsSimpleNode::FindTaxonIndex(unsigned leafIndex)
 }
 
 //Makes the leaf with taxIndex == leafIndex a child of the root of the tree
-void NxsSimpleTree::RerootAt(unsigned leafIndex)
+// \returns the node that is the new child of the root.
+NxsSimpleNode * NxsSimpleTree::RerootAt(unsigned leafIndex)
 {
 	NxsSimpleNode * newRoot = NULL;
 	if (root)
@@ -70,7 +71,7 @@ void NxsSimpleTree::RerootAt(unsigned leafIndex)
 		}
 	NxsSimpleNode * p = newRoot->edgeToPar.parent;
 	if (!p || p == root)
-		return;
+		return newRoot;
 	std::stack<NxsSimpleNode *> toFlip;
 	while (p != root)
 		{
@@ -83,6 +84,7 @@ void NxsSimpleTree::RerootAt(unsigned leafIndex)
 		toFlip.pop();
 		FlipRootsChildToRoot(subRoot);
 		}
+	return newRoot;
 }
 void NxsSimpleTree::FlipRootsChildToRoot(NxsSimpleNode *subRoot)
 {
@@ -768,9 +770,11 @@ NxsTreesBlock::NxsTreesBlock(
 	defaultTreeInd = UINT_MAX;
 	writeTranslateTable = true;
 	allowImplicitNames = false;
+	treatIntegerLabelsAsNumbers = false;
 	processAllTreesDuringParse = true;
 	writeFromNodeEdgeDataStructure = false;
 	validateInternalNodeLabels = true;
+	treatAsRootedByDefault = true;
 	}
 /*!
 	Clears `translateList', `rooted', `treeName' and `treeDescription'.
@@ -1177,7 +1181,8 @@ void NxsTreesBlock::ProcessTokenVecIntoTree(
   bool allowNewTaxa,
   NxsReader * nexusReader,
   const bool respectCase,
-  const bool validateInternalNodeLabels)
+  const bool validateInternalNodeLabels,
+  const bool treatIntegerLabelsAsNumbers)
 	{
 	ProcessedNxsCommand::const_iterator tvIt = tokenVec.begin();
 	ostringstream tokenStream;
@@ -1198,7 +1203,7 @@ void NxsTreesBlock::ProcessTokenVecIntoTree(
 	NxsToken token(newickstream);
 	try
 		{
-		ProcessTokenStreamIntoTree(token, td, taxa, capNameToInd, allowNewTaxa, nexusReader, respectCase, validateInternalNodeLabels);
+		ProcessTokenStreamIntoTree(token, td, taxa, capNameToInd, allowNewTaxa, nexusReader, respectCase, validateInternalNodeLabels,  treatIntegerLabelsAsNumbers);
 		}
 	catch (NxsException & x)
 		{
@@ -1242,8 +1247,10 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
   bool allowNewTaxa,
   NxsReader * nexusReader,
   const bool respectCase,
-  const bool validateInternalNodeLabels)
+  const bool validateInternalNodeLabels,
+  const bool treatIntegerLabelsAsNumbers)
 	{
+	bool previousNonIntegerLabels=false, previousAllIntegerLabels = false;
 	NxsString errormsg;
 	int & flags = td.flags;
 	bool NHXComments = false;
@@ -1315,14 +1322,15 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 					*/
 					if (!someMissingEdgeLens && (prevToken == NXS_TREE_CLOSE_PARENS_TOKEN || prevToken == NXS_TREE_CLADE_NAME_TOKEN))
 						someMissingEdgeLens = true;
-					nchildren.top() += 1;
 					newickStream << ',';
 					prevToken = NXS_TREE_COMMA_TOKEN;
 					}
 				else if (prevToken == NXS_TREE_COLON_TOKEN)
 					throw NxsException("Expecting a branch length after a : but found (", token);
 				nchildren.top() += 1;
+				//std::cerr << "Open Parens nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 				nchildren.push(0);
+				//std::cerr << "Open Parens after push nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 				newickStream << '(';
 				prevToken = NXS_TREE_OPEN_PARENS_TOKEN;
 				handled = true;
@@ -1339,17 +1347,17 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 					someMissingEdgeLens = true;
 				if (nchildren.top() == 1)
 					hasDegTwoNodes = true;
-				else if ((!hasPolytomies) && (nchildren.top() > 2))
+				else if (nchildren.top() > 2)
 					{
 					if (rooted)
-						{
-						if (nchildren.top() > 2)
-							hasPolytomies = true;
-						}
+						hasPolytomies = true;
 					else if (nchildren.top() > 3 || nchildren.size() > 1) /* three children are allowed not considered a polytomy */
 						hasPolytomies = true;
 					}
+				//std::cerr << "close parens nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 				nchildren.pop();
+				//if (!nchildren.empty())
+					//std::cerr << "close parens post-pop nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 				newickStream << ')';
 				prevToken = NXS_TREE_CLOSE_PARENS_TOKEN;
 				handled = true;
@@ -1375,7 +1383,6 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 					throw NxsException("Found a , when a branch length was expected found. The combination \":,\" is prohibited.", token);
 				if (!someMissingEdgeLens && (prevToken == NXS_TREE_CLOSE_PARENS_TOKEN || prevToken == NXS_TREE_CLADE_NAME_TOKEN))
 					someMissingEdgeLens = true;
-				nchildren.top() += 1;
 				newickStream << ',';
 				prevToken = NXS_TREE_COMMA_TOKEN;
 				handled = true;
@@ -1474,16 +1481,69 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 								errormsg << "Expecting a Taxon label after a \"" << (prevToken == NXS_TREE_OPEN_PARENS_TOKEN ? '(' : ',') << "\" character. Found \"" << tstr << "\" but this is not a recognized taxon label.";
 								throw NxsException(errormsg, token);
 								}
-							std::string tasstring(tstr.c_str());
-							unsigned valueInd = taxa->AppendNewLabel(tasstring);
-							NxsString numV;
-							numV += (valueInd+1);
-							if (capNameToInd.find(numV) == capNameToInd.end())
-								capNameToInd[numV] = valueInd;
-							if (!respectCase)
-								NxsString::to_upper(tasstring);
-							capNameToInd[tasstring] = valueInd;
-							toAppend += (1 + valueInd);
+							long dummy;
+							if (treatIntegerLabelsAsNumbers && NxsString::to_long(ucl.c_str(), &dummy))
+								{
+								if (previousNonIntegerLabels)
+									{
+									errormsg << "Trees are being read in a mode that treats integer taxon labels as the number of the taxon. The mixing of integer and non-integer labels is not supported";
+									throw NxsException(errormsg, token);
+									}
+								previousAllIntegerLabels = true;
+								if (dummy < 1)
+									{
+									errormsg << "Trees are being read in a mode that treats integer taxon labels as the number of the taxon. All numbers are expected to be > 0";
+									throw NxsException(errormsg, token);
+									}
+								unsigned currNT = taxa->GetNumLabelsCurrentlyStored();
+								unsigned tn = (unsigned) dummy;
+								errormsg << "numeric taxon handling -- currNT =  " << currNT << ". dummy= " << dummy << ".\n" ;
+								while (currNT < tn)
+									{
+									NxsString tasstring;
+									tasstring << ++currNT;
+									unsigned valueInd = taxa->AppendNewLabel(tasstring);
+									capNameToInd[tasstring] = valueInd;
+									errormsg << "numeric taxon handling -- registering " << tasstring << " to " << valueInd << " mapping.\n";
+									}
+								std::map<std::string, unsigned>::const_iterator ttWithAdditions = capNameToInd.find(ucl);
+								unsigned indWithAdditions = (ttWithAdditions == capNameToInd.end() ? UINT_MAX : ttWithAdditions->second);
+								if (indWithAdditions == UINT_MAX)
+									{
+									errormsg << "Trees are being read in a mode that treats integer taxon labels as the number of the taxon - only numeric taxon labels were expected (the lookup table for "<< ucl << " failed to yield a hit, indicating that some non-numeric labels have been registered at some point)";
+									throw NxsException(errormsg, token);
+									}
+								taxaEncountered.insert(indWithAdditions);
+								nchildren.top() += 1;
+								//std::cerr << "treating as number " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
+
+								toAppend += (1 + indWithAdditions);
+								}
+							else
+								{
+								if (treatIntegerLabelsAsNumbers)
+									{
+									if (previousAllIntegerLabels)
+										{
+										errormsg << "Trees are being read in a mode that treats integer taxon labels as the number of the taxon. The mixing of integer and non-integer labels (such as \"" << t << "\") is not supported";
+										throw NxsException(errormsg, token);
+										}
+									previousNonIntegerLabels = true;
+									}
+								std::string tasstring(tstr.c_str());
+								unsigned valueInd = taxa->AppendNewLabel(tasstring);
+								NxsString numV;
+								numV += (valueInd+1);
+								if (capNameToInd.find(numV) == capNameToInd.end())
+									capNameToInd[numV] = valueInd;
+								if (!respectCase)
+									NxsString::to_upper(tasstring);
+								capNameToInd[tasstring] = valueInd;
+								taxaEncountered.insert(valueInd);
+								nchildren.top() += 1;
+								//std::cerr << "nonnumeric newtaxon " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
+								toAppend += (1 + valueInd);
+								}
 							}
 						else
 							{
@@ -1496,6 +1556,8 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 									throw NxsException(errormsg, token);
 									}
 								taxaEncountered.insert(*cit);
+								nchildren.top() += 1;
+								//std::cerr << "taxon set " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 								if (!firstTaxonAdded)
 									toAppend.append(1, ',');
 								toAppend += (1 + *cit);
@@ -1511,6 +1573,8 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 					else
 						{
 						taxaEncountered.insert(ind);
+						nchildren.top() += 1;
+						//std::cerr << "taxon label " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 						toAppend += (1 + ind);
 						}
 					}
@@ -1565,7 +1629,7 @@ void NxsTreesBlock::ProcessTree(NxsFullTreeDescription & ftd) const
 	ftd.newick.clear();
 	istringstream newickstream(incomingNewick);
 	NxsToken token(newickstream);
-	ProcessTokenStreamIntoTree(token, ftd, taxa, capNameToInd, constructingTaxaBlock, nexusReader, false, validateInternalNodeLabels);
+	ProcessTokenStreamIntoTree(token, ftd, taxa, capNameToInd, constructingTaxaBlock, nexusReader, false, validateInternalNodeLabels, treatIntegerLabelsAsNumbers);
 	}
 
 void NxsTreesBlock::HandleTreeCommand(NxsToken &token, bool rooted)
@@ -1726,12 +1790,13 @@ void NxsTreesBlock::Read(
 				{
 				bool utreeCmd = token.Equals("UTREE");
 				bool treeCmd = token.Equals("TREE");
+				bool readAsRooted = (treeCmd && this->treatAsRootedByDefault);
 				if (utreeCmd || treeCmd)
 					{
 					if (!readTranslate && ! readTree)
 						ConstructDefaultTranslateTable(token, token.GetTokenReference().c_str());
 					readTree = true;
-					HandleTreeCommand(token, treeCmd);
+					HandleTreeCommand(token, readAsRooted);
 					}
 				else
 					SkipCommand(token);

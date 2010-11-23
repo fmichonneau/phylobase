@@ -185,6 +185,7 @@ class NxsTaxaBlock
 		void 				WriteTaxLabelsCommand(std::ostream &out) const;
 
 		unsigned GetMaxIndex() const;
+		unsigned GetNumLabelsCurrentlyStored() const;
 		unsigned GetIndicesForLabel(const std::string &label, NxsUnsignedSet *inds) const;
 		bool AddNewIndexSet(const std::string &label, const NxsUnsignedSet & inds);
 		bool AddNewPartition(const std::string &label, const NxsPartition & inds);

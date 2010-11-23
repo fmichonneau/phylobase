@@ -20,20 +20,6 @@
 #ifndef NCL_NCL_H
 #define NCL_NCL_H
 
-#if defined(_MSC_VER)
-#	pragma warning(disable:4786)
-#	pragma warning(disable:4291)
-#	if _MSC_VER >= 1500
-#		include <cstdio>
-#		if !defined(vsnprintf)
-#			define vsnprintf _vsnprintf_s
-#		endif
-#		define sprintf sprintf_s
-#   else
-#       define vsnprintf _vsnprintf
-#   endif
-#endif
-
 #if !defined(__DECCXX)
 #	include <cctype>
 #	include <cmath>

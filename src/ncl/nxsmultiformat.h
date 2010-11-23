@@ -77,6 +77,17 @@ class MultiFormatReader: public PublicNexusReader
 				UNSUPPORTED_FORMAT // keep this last
 			};
 
+
+        void SetCoerceUnderscoresToSpaces(bool v) 
+            {
+            this->coerceUnderscoresToSpaces = v;
+            }
+
+        bool GetCoerceUnderscoresToSpaces() const
+            {
+            return this->coerceUnderscoresToSpaces;
+            }
+		
 		/*! \returns a vector with the "official" format names that can be used with formatNameToCode
 
 		Currently this list is:  {"nexus", "dnafasta", "aafasta", "rnafasta", "dnaphylip", "rnaphylip", "aaphylip", "discretephylip", "dnaphylipinterleaved", "rnaphylipinterleaved", "aaphylipinterleaved", "discretephylipinterleaved", "dnarelaxedphylip", "rnarelaxedphylip", "aarelaxedphylip", "discreterelaxedphylip", "dnarelaxedphylipinterleaved", "rnarelaxedphylipinterleaved", "aarelaxedphylipinterleaved", "discreterelaxedphylipinterleaved", "dnaaln", "rnaaln", "aaaln", "phyliptree", "relaxedphyliptree", "nexml"}
@@ -98,7 +109,8 @@ class MultiFormatReader: public PublicNexusReader
 				that indicates where warning messages should be directed.
 		*/
 		MultiFormatReader(const int blocksToRead = -1, NxsReader::WarningHandlingMode mode=NxsReader::WARNINGS_TO_STDERR)
-			:PublicNexusReader(blocksToRead, mode)
+			:PublicNexusReader(blocksToRead, mode),
+			coerceUnderscoresToSpaces(false)
 			{}
 		virtual ~MultiFormatReader(){}
 		/*! Read the specified format
@@ -151,6 +163,8 @@ class MultiFormatReader: public PublicNexusReader
 			\arg dt a facet of  NxsCharactersBlock::DataTypesEnum that indicates the expected datatype
 		*/
 		void readFinFile(std::istream & inf, NxsCharactersBlock::DataTypesEnum dt);
+		
+		bool coerceUnderscoresToSpaces;
 
 };
 

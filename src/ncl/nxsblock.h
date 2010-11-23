@@ -46,6 +46,7 @@ class NxsLabelToIndicesMapper
 	public:
 		virtual ~NxsLabelToIndicesMapper(){}
 		virtual unsigned GetMaxIndex() const = 0;
+		virtual unsigned GetNumLabelsCurrentlyStored() const {return GetMaxIndex();}
 		/* Adds the 0-based indices corresponding to a label to the set.
 
 		 \returns the number of indices that correspond to the label (and the number

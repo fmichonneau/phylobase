@@ -25,13 +25,259 @@ using std::vector;
 using std::cout;
 using std::endl;
 
+/**===========================================================================
+| fills compressedTransposedMatrix and empties patternSet
+|
+| If `originalIndexToCompressed` or `compressedIndexToOriginal` are requested
+|   then the `compressedIndexPattern` mapping must be supplied. `compressedIndexPattern`
+|   must contain pointers to the keys in `patternSet.` Note that these will 
+|   be invalid after the call because patternSet will be emptied).
+*/
+void NxsConsumePatternSetToPatternVector(
+  std::set<NxsCharacterPattern> & patternSet, /* INPUT matrix that will hold the compressed columns */
+  std::vector<NxsCharacterPattern> & compressedTransposedMatrix, /* OUTPUT matrix that will hold the compressed columns */
+  const std::vector<const NxsCharacterPattern *> * compressedIndexPattern, /** INPUT This mapping must be provided if either  `originalIndexToCompressed` or `compressedIndexToOriginal` is requested */
+  std::vector<int> * originalIndexToCompressed, /** OUTPUT if not 0L, this will be filled to provide map an index in `mat` to the corresponding index in `compressedTransposedMatrix` (-1 in the vector indicates that the character was not included) */
+  std::vector<std::set<unsigned> > * compressedIndexToOriginal) /** OUTPUT  if not 0L, this will be filled to provide a map from an index in `compressedTransposedMatrix` to the original character count */
+{
+    const unsigned patternIndexOffset = compressedTransposedMatrix.size();
+    const unsigned numCompressedPatterns = patternSet.size();
+    if (originalIndexToCompressed != 0L || compressedIndexToOriginal != 0L)
+        {
+        if (compressedIndexPattern == 0L)
+            throw NxsException("compressedIndexPattern must be provided in ConsumePatternSetToPatternVector if mappings are requested");
+        unsigned patternIndex = 0;
+        for (std::set<NxsCharacterPattern>::iterator pIt = patternSet.begin(); pIt != patternSet.end(); ++pIt, ++patternIndex)
+            {
+            pIt->patternIndex = patternIndex + patternIndexOffset;
+            }
+        if (originalIndexToCompressed)
+            originalIndexToCompressed->resize(compressedIndexPattern->size());
+        if (compressedIndexToOriginal)
+            {
+            compressedIndexToOriginal->clear();
+            compressedIndexToOriginal->resize(numCompressedPatterns);
+            }
+        for (unsigned i = 0; i < compressedIndexPattern->size(); ++ i)
+            {
+            const NxsCharacterPattern * pat = (*compressedIndexPattern)[i];
+            if (pat)
+                {
+                if (originalIndexToCompressed)
+                    (*originalIndexToCompressed)[i] = pat->patternIndex;
+                if (compressedIndexToOriginal)
+                    {
+                    NCL_ASSERT(pat->patternIndex < numCompressedPatterns);
+                    compressedIndexToOriginal->at(pat->patternIndex).insert(i);
+                    }
+                }
+            else
+                {
+                if (originalIndexToCompressed)
+                    (*originalIndexToCompressed)[i] = -1;
+                }
+            }
+        }
+    compressedTransposedMatrix.reserve(numCompressedPatterns);
+    for (std::set<NxsCharacterPattern>::iterator pIt = patternSet.begin(); pIt != patternSet.end();)
+        {
+        compressedTransposedMatrix.push_back(*pIt);
+        std::set<NxsCharacterPattern>::iterator prevIt = pIt++;
+        patternSet.erase(prevIt);
+        }
+    patternSet.clear();
+}
 
-NxsCXXDiscreteMatrix::NxsCXXDiscreteMatrix(const NxsCharactersBlock & cb, bool gapsToMissing, const NxsUnsignedSet * toInclude)
+
+unsigned NxsCompressDiscreteMatrix(
+  const NxsCXXDiscreteMatrix & mat,			/**< is the data source */
+  std::set<NxsCharacterPattern> & patternSet, /* matrix that will hold the compressed columns */
+  std::vector<const NxsCharacterPattern *> * compressedIndexPattern, /** if not 0L, this will be filled to provide a map from an index in `compressedTransposedMatrix` to the original character count */
+  const NxsUnsignedSet * taxaToInclude,	/**< if not 0L, this should be  the indices of the taxa in `mat` to include (if 0L all characters will be included). Excluding taxa will result in shorter patterns (the skipped taxa will not be filled with empty codes, instead the taxon indexing will be frameshifted -- the client code must keep track of these frameshifts). */
+  const NxsUnsignedSet * charactersToInclude)
+    {
+    const unsigned origNumPatterns = (unsigned) patternSet.size();
+	unsigned ntax = mat.getNTax();
+	unsigned patternLength = ntax;
+	unsigned nchar = mat.getNChar();
+	if (compressedIndexPattern)
+	    {
+	    compressedIndexPattern->resize(nchar);
+	    }
+	NxsUnsignedSet allTaxaInds;
+	if (taxaToInclude)
+	    {
+	    if (taxaToInclude->empty())
+	        return 0; // might want to warn about this!
+	    const unsigned lastTaxonIndex = *(taxaToInclude->rbegin());
+	    if (lastTaxonIndex >= ntax)
+	        throw NxsException("Taxon index in taxaToInclude argument to NxsCompressDiscreteMatrix is out of range");
+        patternLength -= taxaToInclude->size();
+	    }
+    else
+        {
+        for (unsigned i = 0; i < ntax; ++i)
+            allTaxaInds.insert(i);
+        taxaToInclude = &allTaxaInds;
+        }
+	if (charactersToInclude)
+	    {
+	    if (charactersToInclude->empty())
+	        return 0; // might want to warn about this!
+	    const unsigned lastColumnIndex = *(charactersToInclude->rbegin());
+	    if (lastColumnIndex >= nchar)
+	        throw NxsException("Character index in charactersToInclude argument to NxsCompressDiscreteMatrix is out of range");
+	    }
+
+    // Create actingWeights vector and copy the integer weights from mat into it
+    // If there are no integer weights in mat, copy the floating point weights instead
+    // if floating point weights have been defined
+	const std::vector<int> & iwts = mat.getIntWeightsConst();
+	std::vector<double> actingWeights(nchar, 1.0);
+	bool weightsSpecified = false;
+	bool weightsAsInts = false;
+	if (!iwts.empty())
+		{
+		NCL_ASSERT(iwts.size() >= nchar);
+		weightsSpecified = true;
+		weightsAsInts = true;
+		for (unsigned j = 0; j < nchar; ++j)
+			actingWeights[j] = (double)iwts.at(j);
+		}
+	else
+		{
+		const std::vector<double> & dwts = mat.getDblWeightsConst();
+		if (!dwts.empty())
+			{
+    		weightsSpecified = true;
+			actingWeights = dwts;
+			NCL_ASSERT(actingWeights.size() == nchar);
+			}
+		}
+
+    // Set corresponding actingWeights elements to zero if any characters have been excluded in mat
+	const NxsUnsignedSet & excl = mat.getExcludedCharIndices();
+	for (NxsUnsignedSet::const_iterator eIt = excl.begin(); eIt != excl.end(); ++eIt)
+		{
+		NCL_ASSERT(*eIt < nchar);
+		actingWeights[*eIt] = 0.0;
+		}
+	const double * wts = &(actingWeights[0]);
+	
+	NxsCharacterPattern patternTemp;
+    patternTemp.count = 1;
+	for (unsigned j = 0; j < nchar; ++j)
+		{
+        double patternWeight = wts[j];
+        bool shouldInclude = (charactersToInclude == 0L || (charactersToInclude->find(j) != charactersToInclude->end()));
+        if (patternWeight > 0.0 &&  shouldInclude)
+            {
+            // Build up a vector representing the pattern of state codes at this site
+            patternTemp.stateCodes.clear();
+            patternTemp.stateCodes.reserve(patternLength);
+            patternTemp.sumOfPatternWeights = patternWeight;
+
+            unsigned indexInPattern = 0;
+            for (NxsUnsignedSet::const_iterator taxIndIt = taxaToInclude->begin(); taxIndIt != taxaToInclude->end(); ++taxIndIt, ++indexInPattern)
+                {
+                const unsigned taxonIndex = *taxIndIt;
+                const NxsCDiscreteStateSet * row	= mat.getRow(taxonIndex);
+                const NxsCDiscreteStateSet code = row[j];
+                patternTemp.stateCodes.push_back(code);
+                }
+            NCL_ASSERT(indexInPattern == patternLength);
+
+            std::set<NxsCharacterPattern>::iterator lowBoundLoc = patternSet.lower_bound(patternTemp);
+            if ((lowBoundLoc == patternSet.end()) || (patternTemp < *lowBoundLoc))
+                {
+                std::set<NxsCharacterPattern>::iterator insertedIt = patternSet.insert(lowBoundLoc, patternTemp);
+                if (compressedIndexPattern)
+                    {
+                    const NxsCharacterPattern & patInserted = *insertedIt;
+                    (*compressedIndexPattern)[j] = &patInserted;
+                    }
+                }
+            else
+                {
+                NCL_ASSERT(patternTemp == *lowBoundLoc);
+                lowBoundLoc->sumOfPatternWeights += patternWeight;
+                lowBoundLoc->count += 1;
+                if (compressedIndexPattern)
+                    {
+                    (*compressedIndexPattern)[j] = &(*lowBoundLoc);
+                    }
+                }
+            }
+		}
+	return patternSet.size() - origNumPatterns;	
+    }
+
+/*----------------------------------------------------------------------------------------------------------------------
+|	Copies data from `mat' to `pattern_vect' and `pattern_counts'. The `pattern_vect' vector holds the patterns while
+|	`pattern_counts' holds the count of the number of sites having each pattern. Additionally, the vectors 
+|	`pattern_to_sites' and `charIndexToPatternIndex' are built: `pattern_to_sites' allows you to get a list of sites
+|	given a specific pattern, and `charIndexToPatternIndex' lets you find the index of a pattern in `pattern_vect' and
+|	`pattern_counts' given an original site index.
+*/
+unsigned NxsCompressDiscreteMatrix(
+  const NxsCXXDiscreteMatrix & mat,
+  std::vector<NxsCharacterPattern> & compressedTransposedMatrix,
+  std::vector<int> * originalIndexToCompressed,
+  std::vector<std::set<unsigned> > * compressedIndexToOriginal,
+  const NxsUnsignedSet * taxaToInclude,
+  const NxsUnsignedSet * charactersToInclude)
 	{
-	Initialize(&cb, gapsToMissing, toInclude);
+	std::set<NxsCharacterPattern> patternSet;
+	std::vector<const NxsCharacterPattern *> toPatternMap;
+	std::vector<const NxsCharacterPattern *> *toPatternMapPtr = 0L;
+	if (originalIndexToCompressed != 0L || compressedIndexToOriginal != 0L)
+	    toPatternMapPtr = &toPatternMap;
+
+	NxsCompressDiscreteMatrix(mat, patternSet, toPatternMapPtr, taxaToInclude, charactersToInclude);
+    const unsigned numPatternsAdded = patternSet.size();
+	
+	NxsConsumePatternSetToPatternVector(patternSet, compressedTransposedMatrix, toPatternMapPtr, originalIndexToCompressed, compressedIndexToOriginal);
+	return numPatternsAdded;
 	}
 
-void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsToMissing, const NxsUnsignedSet * toInclude)
+void NxsTransposeCompressedMatrix(
+  const std::vector<NxsCharacterPattern> & compressedTransposedMatrix, 
+  ScopedTwoDMatrix<NxsCDiscreteStateSet> & destination,
+  std::vector<unsigned> * patternCounts,
+  std::vector<double> * patternWeights)
+{
+	const unsigned npatterns = compressedTransposedMatrix.size();
+	if (npatterns == 0)
+	    {
+	    destination.Initialize(0, 0);
+	    return;
+	    }
+	const unsigned ntaxa = compressedTransposedMatrix[0].stateCodes.size();
+	destination.Initialize(ntaxa, npatterns);
+    NxsCDiscreteStateSet ** matrix = destination.GetAlias();			/** taxa x characters matrix of indices of state sets */
+    if (patternCounts)
+        patternCounts->resize(npatterns);
+    if (patternWeights)
+        patternWeights->resize(npatterns);
+	for (unsigned p = 0; p < npatterns; ++p)
+		{
+		const NxsCharacterPattern & pattern = compressedTransposedMatrix[p];
+		const std::vector<NxsCDiscreteState_t> & states = pattern.stateCodes;
+		for (unsigned t = 0; t < ntaxa; ++t)
+		    matrix[t][p] = states[t];
+        if (patternCounts)
+            (*patternCounts)[p] = pattern.count;
+        if (patternWeights)
+            (*patternWeights)[p] = pattern.sumOfPatternWeights;
+		}
+}
+
+NxsCXXDiscreteMatrix::NxsCXXDiscreteMatrix(const NxsCharactersBlock & cb, bool gapsToMissing, const NxsUnsignedSet * toInclude, bool standardizeCoding)
+	{
+	Initialize(&cb, gapsToMissing, toInclude, standardizeCoding);
+	}
+
+void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsToMissing, const NxsUnsignedSet * toInclude, bool standardizeCoding)
 {
 	this->nativeCMatrix.stateList = 0L;
 	this->nativeCMatrix.stateListPos = 0L;
@@ -90,7 +336,7 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 
 	this->symbolsStringAlias = fundamentalSymbols;
 	char missingSym = cb->GetMissingSymbol();
-	NxsCDiscreteState_t newMissingStateCode = this->nativeCMatrix.nStates;
+	const NxsCDiscreteState_t newMissingStateCode = (standardizeCoding ? (NxsCDiscreteState_t) this->nativeCMatrix.nStates : (NxsCDiscreteState_t) NXS_MISSING_CODE);
 	NCL_ASSERT((int)NXS_MISSING_CODE < 0);
 	NCL_ASSERT((int)NXS_GAP_STATE_CODE < 0);
 	NxsDiscreteStateCell sclOffsetV;
@@ -130,7 +376,12 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 	//NXS_INVALID_STATE_CODE
 
 	if (hadGaps)
-		recodeArr[NXS_GAP_STATE_CODE] = ((hadGaps && gapsToMissing)? newMissingStateCode : -1);
+		{
+		if (standardizeCoding)
+		    recodeArr[NXS_GAP_STATE_CODE] = ((hadGaps && gapsToMissing)? newMissingStateCode : -1);
+        else
+		    recodeArr[NXS_GAP_STATE_CODE] = NXS_GAP_STATE_CODE;
+        }
 
 	if (missingSym == '\0')
 		missingSym = (hadGaps ? mapper.GetGapSymbol() : '?');
@@ -139,16 +390,19 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 		NCL_ASSERT(NXS_MISSING_CODE == mapper.GetStateCodeStored(missingSym));
 		}
 	recodeArr[NXS_MISSING_CODE] = newMissingStateCode;
-	this->symbolsStringAlias.append(1, missingSym);
 	const unsigned nCodesInMissing  = this->nativeCMatrix.nStates + (gapsToMissing ?  0 : 1);
-	stateListPosAlias.push_back(2*this->nativeCMatrix.nStates);
-	stateListAlias.push_back(nCodesInMissing);
-	if (!gapsToMissing)
-		stateListAlias.push_back(-1);
-	for (NxsCDiscreteState_t i = 0; i < (NxsCDiscreteState_t)this->nativeCMatrix.nStates; ++i)
-		stateListAlias.push_back(i);
+	if (standardizeCoding)
+	    {
+	    this->symbolsStringAlias.append(1, missingSym);
+        stateListPosAlias.push_back(2*this->nativeCMatrix.nStates);
+        stateListAlias.push_back(nCodesInMissing);
+        if (!gapsToMissing)
+            stateListAlias.push_back(-1);
+        for (NxsCDiscreteState_t i = 0; i < (NxsCDiscreteState_t)this->nativeCMatrix.nStates; ++i)
+            stateListAlias.push_back(i);
+        }
 
-	NxsCDiscreteState_t nextStateCode = newMissingStateCode + 1;
+	NxsCDiscreteState_t nextStateCode = (standardizeCoding ? (newMissingStateCode + 1) : this->nativeCMatrix.nStates);
 	for (NxsDiscreteStateCell i = (NxsDiscreteStateCell)this->nativeCMatrix.nStates; i < (NxsDiscreteStateCell) nMapperPosStateCodes; ++i)
 		{
 		const std::set<NxsDiscreteStateCell>	 &ss = mapper.GetStateSetForCode( i);
@@ -203,7 +457,7 @@ void NxsCXXDiscreteMatrix::Initialize(const NxsCharactersBlock * cb, bool gapsTo
 					}
 				NCL_ASSERT(rawC >= sclOffset);
 				const NxsCDiscreteState_t recodedC = recodeArr[rawC];
-				NCL_ASSERT(recodedC > -2);
+				NCL_ASSERT(recodedC > -2 || !standardizeCoding);
 				NCL_ASSERT(recodedC < nextStateCode);
 				*recodedRow++ = recodedC;
 				}

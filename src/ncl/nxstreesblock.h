@@ -128,6 +128,10 @@ class NxsSimpleEdge
 				lenAsString.assign(asString);
 			}
 		mutable void * scratch;
+		void SetParent(NxsSimpleNode *p) 
+		    {
+		    this->parent = p;
+		    }
 	private:
 		void WriteAsNewick(std::ostream &out, bool nhx) const;
 		void DealWithNexusComments(const std::vector<NxsComment> & ecs, bool NHXComments);
@@ -176,6 +180,16 @@ class NxsSimpleNode
 	{
 	public:
 		NxsSimpleEdge GetEdgeToParent() const
+			{
+			return edgeToPar;
+			}
+
+		const NxsSimpleEdge & GetEdgeToParentRef() const
+			{
+			return edgeToPar;
+			}
+
+		NxsSimpleEdge & GetMutableEdgeToParentRef()
 			{
 			return edgeToPar;
 			}
@@ -239,9 +253,6 @@ class NxsSimpleNode
 			name = n;
 			}
 		mutable void * scratch;
-	private:
-		void WriteAsNewick(std::ostream &out, bool nhx, bool useLeafNames, bool escapeNames, const NxsTaxaBlockAPI *taxa=0L) const;
-
 
 		NxsSimpleNode(NxsSimpleNode *par, double edgeLen)
 			:scratch(0L),
@@ -252,6 +263,11 @@ class NxsSimpleNode
 			{
 			edgeToPar.child = this;
 			}
+
+
+	public:
+		void WriteAsNewick(std::ostream &out, bool nhx, bool useLeafNames, bool escapeNames, const NxsTaxaBlockAPI *taxa=0L) const;
+
 
 		NxsSimpleNode(int edgeLen, NxsSimpleNode *par)
 			:scratch(0L),
@@ -282,8 +298,40 @@ class NxsSimpleNode
 			else
 				lChild = n;
 			}
+
+		bool RemoveChild(NxsSimpleNode *n)
+			{
+			if (n == 0L || lChild == 0L)
+			    return false;			
+			if (lChild == n)
+				lChild = lChild->rSib;
+			else 
+			    {
+			    NxsSimpleNode * c = lChild;
+				for (;;) 
+				    {
+				    if (c->rSib == n)
+				        {
+				        c->rSib = n->rSib;
+				        break;
+				        }
+				    if (c->rSib == 0L)
+				        return false;
+	    			}
+		    	}
+			n->edgeToPar.parent = 0L;
+			return true;
+			}
 		void AddSelfAndDesToPreorder(std::vector<const NxsSimpleNode *> &p) const;
 		NxsSimpleNode * FindTaxonIndex(unsigned leafIndex);
+
+        void LowLevelSetFirstChild(NxsSimpleNode *nd) {
+            lChild = nd;
+        }
+        void LowLevelSetNextSib(NxsSimpleNode *nd) {
+            rSib = nd;
+        }
+    private:
 		NxsSimpleNode * lChild;
 		NxsSimpleNode * rSib;
 		NxsSimpleEdge edgeToPar;
@@ -333,7 +381,7 @@ class NxsSimpleTree
 			if (root)
 				root->WriteAsNewick(out, nhx, useLeafNames, escapeNames, taxa);
 			}
-		void RerootAt(unsigned leafIndex);
+		NxsSimpleNode * RerootAt(unsigned leafIndex);
 
 		const NxsSimpleNode * GetRootConst() const
 			{
@@ -346,7 +394,7 @@ class NxsSimpleTree
 		int defIntEdgeLen;
 		double defDblEdgeLen;
 		bool realEdgeLens;
-	private:
+	public:
 		NxsSimpleNode * AllocNewNode(NxsSimpleNode *p)
 			{
 			NxsSimpleNode * nd;
@@ -674,6 +722,10 @@ class NxsTreesBlock
 			{
 			allowImplicitNames = s;
 			}
+		void SetTreatIntegerLabelsAsNumbers(bool s) 
+		    {
+		    treatIntegerLabelsAsNumbers = s;
+		    }
 		/*! If true then the block will use the v2.1 style of parsing in which the tree is interpretted and converted into
 				a newick string with standard taxon numbering
 			If false, then the NxsTreesBlock will use the v2.0 API in which the tree reader simply stores the tree string
@@ -736,6 +788,7 @@ class NxsTreesBlock
 		virtual void CopyTreesBlockContents(const NxsTreesBlock &other)
 			{
 			allowImplicitNames = other.allowImplicitNames;
+			treatIntegerLabelsAsNumbers = other.treatIntegerLabelsAsNumbers;
 			processAllTreesDuringParse = other.processAllTreesDuringParse;
 			writeFromNodeEdgeDataStructure = other.writeFromNodeEdgeDataStructure;
 			validateInternalNodeLabels = other.validateInternalNodeLabels;
@@ -749,16 +802,22 @@ class NxsTreesBlock
 			treePartitions = other.treePartitions;
 			processedTreeValidationFunction = other.processedTreeValidationFunction;
 			ptvArg = other.ptvArg;
+			treatAsRootedByDefault = other.treatAsRootedByDefault;
 			}
-
+        bool GetTreatAsRootedByDefault() const {
+            return treatAsRootedByDefault;
+        }
+        void SetTreatAsRootedByDefault(bool v) {
+            this->treatAsRootedByDefault = v;
+        }
 		virtual NxsTreesBlock * Clone() const
 			{
 			NxsTreesBlock * a = new NxsTreesBlock(taxa);
 			*a = *this;
 			return a;
 			}
-		static void ProcessTokenVecIntoTree(const ProcessedNxsCommand & token, NxsFullTreeDescription & ftd, NxsLabelToIndicesMapper *, std::map<std::string, unsigned> &capNameToInd, bool allowNewTaxa, NxsReader * nexusReader, const bool respectCase=false, const bool validateInternalNodeLabels=true);
-		static void ProcessTokenStreamIntoTree(NxsToken & token, NxsFullTreeDescription & ftd, NxsLabelToIndicesMapper *, std::map<std::string, unsigned> &capNameToInd, bool allowNewTaxa, NxsReader * nexusReader, const bool respectCase=false, const bool validateInternalNodeLabels=true);
+		static void ProcessTokenVecIntoTree(const ProcessedNxsCommand & token, NxsFullTreeDescription & ftd, NxsLabelToIndicesMapper *, std::map<std::string, unsigned> &capNameToInd, bool allowNewTaxa, NxsReader * nexusReader, const bool respectCase=false, const bool validateInternalNodeLabels=true, const bool treatIntegerLabelsAsNumbers=false);
+		static void ProcessTokenStreamIntoTree(NxsToken & token, NxsFullTreeDescription & ftd, NxsLabelToIndicesMapper *, std::map<std::string, unsigned> &capNameToInd, bool allowNewTaxa, NxsReader * nexusReader, const bool respectCase=false, const bool validateInternalNodeLabels=true,   const bool treatIntegerLabelsAsNumbers=false);
 
 		void SetWriteFromNodeEdgeDataStructure(bool v)
 			{
@@ -838,14 +897,15 @@ class NxsTreesBlock
 		bool getValidateInternalNodeLabels() const {
 			return this->validateInternalNodeLabels;
 		}
+		void WriteTranslateCommand(std::ostream & out) const;
 	protected :
 		void ReadTreeFromOpenParensToken(NxsFullTreeDescription &td, NxsToken & token);
 
-		void WriteTranslateCommand(std::ostream & out) const;
 		void WriteTreesCommand(std::ostream & out) const;
 		void ConstructDefaultTranslateTable(NxsToken &token, const char * cmd);
 
 		bool allowImplicitNames; /** false by default, true causes the trees block to create a taxa block from the labels found in the trees. */
+		bool treatIntegerLabelsAsNumbers; // if true and allowImplicitNames is true, then new taxon labels that are integers will be treated as the taxon number (rather than arbitrary labels)
 		bool processAllTreesDuringParse; /** true by default, false speeds processing but disables detection of errors*/
 		bool constructingTaxaBlock; /** true if new names are being tolerated */
 		bool writeFromNodeEdgeDataStructure; /**this will probably only ever be set to true in testing code. If true the WriteTrees function will convert each tree to NxsSimpleTree object to write the newick*/
@@ -861,7 +921,7 @@ class NxsTreesBlock
 
 		ProcessedTreeValidationFunction processedTreeValidationFunction;
 		void * ptvArg;
-
+        bool treatAsRootedByDefault; /* true by default */
 		virtual	void		Read(NxsToken &token);
 		void				HandleTranslateCommand(NxsToken &token);
 		void				HandleTreeCommand(NxsToken &token, bool rooted);

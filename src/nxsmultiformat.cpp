@@ -316,6 +316,12 @@ bool  MultiFormatReader::readFastaSequences(
 					break;
 				}
 			std::string nameStripped = NxsString::strip_surrounding_whitespace(n);
+			if (this->coerceUnderscoresToSpaces)
+			    {
+			    NxsString x(nameStripped.c_str());
+			    x.UnderscoresToBlanks();
+			    nameStripped = x;
+			    }
 			taxaNames.push_back(nameStripped);
 
 			matList.push_back(NxsDiscreteStateRow());
@@ -414,6 +420,13 @@ std::string  MultiFormatReader::readPhylipName(FileToCharBuffer & ftcb, unsigned
 				}
 			}
 		}
+    if (this->coerceUnderscoresToSpaces)
+        {
+        NxsString x(n.c_str());
+        x.UnderscoresToBlanks();
+        n = x;
+        }
+
 	return n;
 	}
 
@@ -440,7 +453,7 @@ void  MultiFormatReader::readPhylipData(
 	for (unsigned i = 0; i < n_taxa; ++i)
 		{
 		std::string n = readPhylipName(ftcb, i, relaxedNames);
-		taxaNames.push_back(n);
+        taxaNames.push_back(n);
 		NCL_ASSERT(mIt != matList.end());
 		NxsDiscreteStateRow & row = *mIt++;
 		for (unsigned j = 0; j < n_char; ++j)
@@ -746,6 +759,12 @@ bool  MultiFormatReader::readAlnData(
 				}
 			if (readingFirstBlock)
 				{
+                if (this->coerceUnderscoresToSpaces)
+                    {
+                    NxsString x(n.c_str());
+                    x.UnderscoresToBlanks();
+                    n = x;
+                    }
 				taxaNames.push_back(n);
 				matList.push_back(NxsDiscreteStateRow());
 				row = &(*(matList.rbegin()));
@@ -802,7 +821,7 @@ bool  MultiFormatReader::readAlnData(
 						NxsDiscreteStateCell stateCode = dm.GetStateCodeStored(c);
 						if (stateCode == NXS_INVALID_STATE_CODE)
 							{
-							err << "Illegal state code \"" << c << "\" found when reading character " << row->size() << " for taxon " << n;
+							err << "Illegal state code \"" << c << "\" found when reading character " << (unsigned long) row->size() << " for taxon " << n;
 							throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 							}
 						row->push_back(stateCode);
@@ -1124,6 +1143,12 @@ bool  MultiFormatReader::readFinSequences(
 					throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 					}
 				}
+			if (this->coerceUnderscoresToSpaces)
+			    {
+			    NxsString x(name.c_str());
+			    x.UnderscoresToBlanks();
+			    name = x;
+			    }
 			taxaNames.push_back(name);
 			matList.push_back(NxsDiscreteStateRow());
 			NxsDiscreteStateRow & row = *(matList.rbegin());

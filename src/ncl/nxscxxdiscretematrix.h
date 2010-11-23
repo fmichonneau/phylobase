@@ -28,6 +28,7 @@
 #include "ncl/nxscharactersblock.h"
 #include "ncl/nxscdiscretematrix.h"
 
+class NxsCharacterPattern;
 	/**
 	 * A C++ class that wraps a CDiscretMatrix in order to handle the memory
 	 management more cleanly. This is intended to be an alternate, low-level way
@@ -41,9 +42,9 @@ class NxsCXXDiscreteMatrix
 			Initialize(0L, false);
 			}
 		NxsCXXDiscreteMatrix(const NxsCDiscreteMatrix & );
-		NxsCXXDiscreteMatrix(const NxsCharactersBlock & cb, bool convertGapsToMissing, const NxsUnsignedSet * toInclude = 0L);
+		NxsCXXDiscreteMatrix(const NxsCharactersBlock & cb, bool convertGapsToMissing, const NxsUnsignedSet * toInclude = 0L, bool standardizeCoding = true);
 
-		void Initialize(const NxsCharactersBlock * cb, bool convertGapsToMissing, const NxsUnsignedSet * toInclude = 0L);
+		void Initialize(const NxsCharactersBlock * cb, bool convertGapsToMissing, const NxsUnsignedSet * toInclude = 0L, bool standardizeCoding = true);
 
 		const NxsCDiscreteMatrix & getConstNativeC() const
 			{
@@ -171,5 +172,80 @@ class NxsCXXDiscreteMatrix
 		NxsCXXDiscreteMatrix(const NxsCXXDiscreteMatrix &); /** don't define, not copyable*/
 		NxsCXXDiscreteMatrix & operator=(const NxsCXXDiscreteMatrix &); /** don't define, not copyable*/
 	};
+
+
+
+
+class NxsCharacterPattern
+    {
+    public: 
+        
+        bool operator < (const NxsCharacterPattern & other) const {
+            return this->stateCodes < other.stateCodes;
+        }
+        bool operator == (const NxsCharacterPattern & other) const {
+            return this->stateCodes == other.stateCodes;
+        }
+        std::vector<NxsCDiscreteState_t> stateCodes;
+        mutable unsigned count;
+        mutable unsigned patternIndex; // used as scratchspace not always valid!!!
+        mutable double sumOfPatternWeights; // stored as float.  Use NxsCXXDiscreteMatrix::hasIntWeights of the original matrix to see if these weights should be interpretted as ints
+    };
+    
+
+/*----------------------------------------------------------------------------------------------------------------------
+| Fills `compressedTransposedMatrix` with the compressed patterns found in `mat`
+|
+| Data structure for mapping between indices in these patterns can be obtained by the client providing
+|   `compressedIndexPattern` arguments.
+|
+| Characters or taxa can be omitted by providing `taxaToInclude` or `charactersToInclude` arguments.
+|   If these arguments are 0L (or not provided) then all data will be included. Note that skipping taxa
+|   will cause the taxon indexing within a pattern to disagree with the overall taxon numbering because there will
+|   be "frameshifts" for all of the skipped taxa.  The included taxa will be present in the expected order, but it is 
+|   the caller code's responsibility to keep track of which taxa are included in the pattern.
+*/
+unsigned NxsCompressDiscreteMatrix(
+  const NxsCXXDiscreteMatrix & mat,			/**< is the data source */
+  std::set<NxsCharacterPattern> & patternSet, /* matrix that will hold the compressed columns */
+  std::vector<const NxsCharacterPattern *> * compressedIndexPattern = 0L, /** if not 0L, this will be filled to provide a map from an index in `compressedTransposedMatrix` to the original character count */
+  const NxsUnsignedSet * taxaToInclude = 0L,	/**< if not 0L, this should be  the indices of the taxa in `mat` to include (if 0L all characters will be included). Excluding taxa will result in shorter patterns (the skipped taxa will not be filled with empty codes, instead the taxon indexing will be frameshifted -- the client code must keep track of these frameshifts). */
+  const NxsUnsignedSet * charactersToInclude = 0L);	/**< if not 0L, this should be  the indices of the characters in `mat` to include (if 0L all characters will be included) */
+    
+/*----------------------------------------------------------------------------------------------------------------------
+| Fills `compressedTransposedMatrix` with the compressed patterns found in `mat`
+|
+| Data structure for mapping between indices in these representations can be obtained by the client providing
+|   `originalIndexToCompressed` and/or compressedIndexToOriginal arguments.
+|
+| Characters or taxa can be omitted by providing `taxaToInclude` or `charactersToInclude` arguments.
+|   If these arguments are 0L (or not provided) then all data will be included. Note that skipping taxa
+|   will cause the taxon indexing within a pattern to disagree with the overall taxon numbering because there will
+|   be "frameshifts" for all of the skipped taxa.  The included taxa will be present in the expected order, but it is 
+|   the caller code's responsibility to keep track of which taxa are included in the pattern.
+*/
+unsigned NxsCompressDiscreteMatrix(
+  const NxsCXXDiscreteMatrix & mat,			/**< is the data source */
+  std::vector<NxsCharacterPattern> & compressedTransposedMatrix, /* matrix that will hold the compressed columns */
+  std::vector<int> * originalIndexToCompressed, /** if not 0L, this will be filled to provide map an index in `mat` to the corresponding index in `compressedTransposedMatrix` (-1 in the vector indicates that the character was not included) */
+  std::vector<std::set<unsigned> > * compressedIndexToOriginal, /** if not 0L, this will be filled to provide a map from an index in `compressedTransposedMatrix` to the original character count */
+  const NxsUnsignedSet * taxaToInclude = 0L,	/**< if not 0L, this should be  the indices of the taxa in `mat` to include (if 0L all characters will be included). Excluding taxa will result in shorter patterns (the skipped taxa will not be filled with empty codes, instead the taxon indexing will be frameshifted -- the client code must keep track of these frameshifts). */
+  const NxsUnsignedSet * charactersToInclude = 0L);	/**< if not 0L, this should be  the indices of the characters in `mat` to include (if 0L all characters will be included) */
+	
+
+void NxsConsumePatternSetToPatternVector(
+  std::set<NxsCharacterPattern> & patternSet, /* INPUT matrix that will hold the compressed columns */
+  std::vector<NxsCharacterPattern> & compressedTransposedMatrix, /* OUTPUT matrix that will hold the compressed columns */
+  const std::vector<const NxsCharacterPattern *> * compressedIndexPattern = 0L, /** INPUT This mapping must be provided if either  `originalIndexToCompressed` or `compressedIndexToOriginal` is requested */
+  std::vector<int> * originalIndexToCompressed = 0L, /** OUTPUT if not 0L, this will be filled to provide map an index in `mat` to the corresponding index in `compressedTransposedMatrix` (-1 in the vector indicates that the character was not included) */
+  std::vector<std::set<unsigned> > * compressedIndexToOriginal = 0L); /** OUTPUT  if not 0L, this will be filled to provide a map from an index in `compressedTransposedMatrix` to the original character count */
+
+void NxsTransposeCompressedMatrix(
+  const std::vector<NxsCharacterPattern> & compressedTransposedMatrix, 
+  ScopedTwoDMatrix<NxsCDiscreteStateSet> & destination,
+  std::vector<unsigned> * patternCounts = 0L,
+  std::vector<double> * patternWeights = 0L);
+  
+ 
 
 #endif  // NXS_CXX_DISCRETE_MATRIX_H

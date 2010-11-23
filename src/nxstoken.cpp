@@ -18,6 +18,7 @@
 //
 #include <cstdlib>
 #include <cassert>
+#include <sstream>
 #include "ncl/nxstoken.h"
 
 using namespace std;
@@ -372,6 +373,25 @@ std::map<std::string, std::string> NxsToken::ParseAsSimpleKeyValuePairs(const Pr
 		}
 	return kv;
 	}
+
+
+std::vector<ProcessedNxsToken> NxsToken::Tokenize(const std::string & toTokenize)
+    {
+	std::string bogusStr = toTokenize;
+	bogusStr.append(1, '\n');
+	std::istringstream bogusStream(bogusStr);
+	NxsToken bogusToken(bogusStream);
+	bogusToken.GetNextToken();
+	std::vector<ProcessedNxsToken>  tokenVec;
+	while (!bogusToken.AtEOF())
+		{
+		tokenVec.push_back(ProcessedNxsToken(bogusToken));
+		bogusToken.GetNextToken();
+		}
+    return tokenVec;
+    }
+
+
 /*!
 	Reads until ";" and fills the vector of ProcessedNxsToken objects.
 	Note the ";" is not included in the ProcessedNxsCommand, but it can be assumed that the semicolon followed.
