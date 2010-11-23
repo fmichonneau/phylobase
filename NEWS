@@ -12,6 +12,8 @@
    *   Improve handling of errors returned by NCL (NxsException)
 
    *   Fix bug in case state labels are missing from the NEXUS file
+   
+   *   Upgrade to NCL 2.1.14
 
                 CHANGES IN phylobase VERSION 0.6.1
 
