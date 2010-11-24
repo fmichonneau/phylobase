@@ -1,7 +1,8 @@
 
-R version 2.10.1 (2009-12-14)
-Copyright (C) 2009 The R Foundation for Statistical Computing
+R version 2.12.0 (2010-10-15)
+Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -28,4 +29,4 @@ Loading required package: RUnit
 > 
 > proc.time()
    user  system elapsed 
-  0.376   0.028   0.399 
+   0.34    0.02    0.36 

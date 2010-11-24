@@ -1,7 +1,8 @@
 
-R version 2.10.1 (2009-12-14)
-Copyright (C) 2009 The R Foundation for Statistical Computing
+R version 2.12.0 (2010-10-15)
+Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -85,7 +86,7 @@ $pkg
 [1] "phylobase"
 
 $getwd
-[1] "/home/francois/Work/R-dev/phylobase/pkg/tests"
+[1] "/home/francois/R-dev/phylobase/pkg/tests"
 
 $pathToUnitTests
 [1] "/home/francois/.R/library/phylobase/unitTests"
@@ -96,10 +97,17 @@ Loading required package: Rcpp
 
 Attaching package: 'phylobase'
 
+The following object(s) are masked from 'package:ape':
 
-	The following object(s) are masked from package:ape :
+    edges
 
-	 edges 
+
+
+Executing test function test.checkTree  ... storing read block: TAXA
+Error in readNCL(file = file, simplify = simplify, type = type, char.all = char.all,  : 
+  Unknown taxon D s strain  in TRANSLATE command.
+The translate key 2 has NOT been added to the translation table!
+ done successfully.
 
 
 
@@ -111,7 +119,7 @@ Executing test function test.phylo4d.phylo  ...  done successfully.
 
 
 
-Executing test function test.phylo4d.phylo4  ... Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Executing test function test.phylo4d.phylo4  ... Error in formatData(phy = x, dt = tip.data, type = "tip", ...) : 
   The following nodes are not found in the dataset:  t1, t2, t3, t4, t5
 In addition: Warning messages:
 1: In checkTree(object) : Labels are not unique
@@ -150,79 +158,55 @@ Executing test function test.formatData  ... Error in formatData(phy.alt, phy.al
   phy.alt must be a vector, factor, matrix, or data frame
 Error : label.column %in% 1:ncol(dt) is not TRUE
 Error : label.column %in% names(dt) is not TRUE
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.alt, data.frame(a = 1:5, row.names = c(rev(lab.tip)[1:3],  : 
   The following nodes are not found in the dataset:  t1, t2
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.alt, data.frame(a = 1:5, lab = c(rev(lab.tip)[1:3],  : 
   The following nodes are not found in the dataset:  t1, t2
 Error in formatData(phy.alt, data.frame(a = 1:5, row.names = 4:8), type = "tip") : 
   Your tip data are being matched to internal nodes. Make sure that your data identifiers are correct.
 Error in formatData(phy.alt, data.frame(a = 6:9, row.names = 1:4), type = "internal") : 
   Your node data are being matched to tip nodes. Make sure that your data identifiers are correct.
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.alt, data.frame(a = 1:3), type = "tip") : 
   The following nodes are not found in the dataset:  t4, t5
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.alt, data.frame(a = 1:3), type = "tip", missing.data = "fail") : 
   The following nodes are not found in the dataset:  t4, t5
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.alt, data.frame(a = 1:3), type = "tip", missing.data = "warn") : 
   (converted from warning) The following nodes are not found in the dataset:  t4, t5
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.alt, data.frame(a = 1:3), type = "tip", missing.data = "fail") : 
   The following nodes are not found in the dataset:  t4, t5
-Error in switch(extra.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.alt, data.frame(a = 0:5, row.names = 0:5), type = "tip",  : 
   (converted from warning) The following names are not found in the tree:  0
-Error in switch(extra.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.alt, data.frame(a = 0:5, row.names = 0:5), type = "tip") : 
   (converted from warning) The following names are not found in the tree:  0
  done successfully.
 
 
 
 Executing test function test.formatDataWithDup  ... [1] 10
-<environment: 0x935e7c4>
+<environment: 0x20e0660>
 Error in formatData(phy.dup, phy.dup) : 
   phy.dup must be a vector, factor, matrix, or data frame
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.dup, data.frame(a = 1:5, row.names = c(rev(lab.tip)[1:3],  : 
   The following nodes are not found in the dataset:  t1, t1
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.dup, data.frame(a = 1:5, lab = c(rev(lab.tip)[1:3],  : 
   The following nodes are not found in the dataset:  t1, t1
 Error in formatData(phy.dup, data.frame(a = 1:5, row.names = 4:8), type = "tip") : 
   Your tip data are being matched to internal nodes. Make sure that your data identifiers are correct.
 Error in formatData(phy.dup, data.frame(a = 6:9, row.names = 1:4), type = "internal") : 
   Your node data are being matched to tip nodes. Make sure that your data identifiers are correct.
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.dup, data.frame(a = 1:3), type = "tip") : 
   The following nodes are not found in the dataset:  t4, t5
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.dup, data.frame(a = 1:3), type = "tip", missing.data = "fail") : 
   The following nodes are not found in the dataset:  t4, t5
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.dup, data.frame(a = 1:3), type = "tip", missing.data = "warn") : 
   (converted from warning) The following nodes are not found in the dataset:  t4, t5
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.dup, data.frame(a = 1:3), type = "tip", missing.data = "fail") : 
   The following nodes are not found in the dataset:  t4, t5
-Error in switch(extra.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.dup, data.frame(a = 0:5, row.names = 0:5), type = "tip",  : 
   (converted from warning) The following names are not found in the tree:  0
-Error in switch(extra.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy.dup, data.frame(a = 0:5, row.names = 0:5), type = "tip") : 
   (converted from warning) The following names are not found in the tree:  0
  done successfully.
-
-
-
-Executing test function test.labelsAllPhylo4  ...  done successfully.
-
-
-
-Executing test function test.labelsAllPhylo4d  ...  done successfully.
-
-
-
-Executing test function test.labelsNodePhylo4  ...  done successfully.
-
-
-
-Executing test function test.labelsNodePhylo4d  ...  done successfully.
-
-
-
-Executing test function test.labelsTipsPhylo4  ...  done successfully.
-
-
-
-Executing test function test.labelsTipsPhylo4d  ...  done successfully.
 
 
 
@@ -457,8 +441,7 @@ Executing test function test..genlab  ...  done successfully.
 
 Executing test function test.phylobase.options  ... Error in match.arg(foo, c("warn", "fail", "ok")) : 
   'arg' should be one of “warn”, “fail”, “ok”
-Error in switch(mode(arg), list = temp <- arg, character = return(.phylobase.Options[arg]),  : 
-  invalid argument: ‘1’
+Error in phylobase.options(1) : invalid argument: ‘1’
 Error in phylobase.options(foobar = "foo") : 
   Option name invalid: ‘foobar’
  done successfully.
@@ -473,18 +456,510 @@ Executing test function test.prune.phylo4d  ...  done successfully.
 
 
 
-Executing test function test.readNexus  ... Error in .local(x, ...) : Labels are not unique
+Executing test function test.readNCL  ... 
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 8, column (approximately) 9 (file position 217)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 8, column (approximately) 9 (file position 217)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 8, column (approximately) 9 (file position 217)
+storing implied block: TAXA
+storing read block: TREES
+Error in .local(x, ...) : Labels are not unique
+In addition: Warning messages:
+1: In FUN(X[[2L]], ...) :
+  Could not use value "asdata" for check.node.labels because there are no labels associated with the tree
+2: In FUN(X[[2L]], ...) :
+  Could not use value "asdata" for check.node.labels because there are no labels associated with the tree
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 8, column (approximately) 9 (file position 217)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 8, column (approximately) 9 (file position 217)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 5, column (approximately) 1 (file position 37)
+storing implied block: TAXA
+storing read block: TREES
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+Error in `levels<-.factor`(`*tmp*`, value = c("test2A", "test2B")) : 
+  number of levels differs
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+Error in `levels<-.factor`(`*tmp*`, value = c("test2A", "test2B")) : 
+  number of levels differs
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+Error in `levels<-.factor`(`*tmp*`, value = c("test2A", "test2B")) : 
+  number of levels differs
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+Error in `levels<-.factor`(`*tmp*`, value = c("test2A", "test2B")) : 
+  number of levels differs
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITE
+storing read block: BROWNIE
+Error in readNCL(file = "foo.bar") : 
+  "foo.bar" does not refer to a valid file.
 In addition: Warning message:
-In readNexus(file = co1File, check.node.labels = "asdata") :
-  Could not use value "asdata" for check.node.labels because there are no labels associated with the tree 2
-Error in readNexus(file = treePolyDt, type = "all", levels.uniform = FALSE,  : 
-  At this stage, it's not possible to use the combination: return.labels=TRUE for datasets that contain polymorphic characters.
-Error in readNexus(file = treePolyDt, type = "all", char.all = TRUE, levels.uniform = TRUE,  : 
-  At this stage, it's not possible to use the combination: return.labels=TRUE for datasets that contain polymorphic characters.
-Error in readNexus(file = treePolyDt, type = "all", levels.uniform = FALSE,  : 
-  At this stage, it's not possible to use the combination: return.labels=TRUE for datasets that contain polymorphic characters.
-Error in readNexus(file = treePolyDt, type = "all", char.all = FALSE,  : 
-  At this stage, it's not possible to use the combination: return.labels=TRUE for datasets that contain polymorphic characters.
+In rm(ExContDataFile) : object 'ExContDataFile' not found
+storing read block: TAXA
+storing read block: TREES
+storing read block: CHARACTERS
+Error in readNCL(file = noStateLabels, return.labels = TRUE) : 
+  (converted from warning) state labels are missing for 'char1', the option return.labels is thus ignored.
+storing read block: TAXA
+storing read block: TREES
+storing read block: CHARACTERS
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 1, column (approximately) 20 (file position 19)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 1, column (approximately) 20 (file position 19)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 1, column (approximately) 20 (file position 19)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 1, column (approximately) 20 (file position 19)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 1, column (approximately) 20 (file position 19)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 1, column (approximately) 20 (file position 19)
+storing implied block: TAXA
+storing read block: TREES
+ done successfully.
+
+
+
+Executing test function test.readNexus  ... 
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 8, column (approximately) 9 (file position 217)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 8, column (approximately) 9 (file position 217)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 8, column (approximately) 9 (file position 217)
+storing implied block: TAXA
+storing read block: TREES
+Error in .local(x, ...) : Labels are not unique
+In addition: Warning messages:
+1: In readNCL(file = noStateLabels, type = "data", return.labels = TRUE) :
+  state labels are missing for 'char1', the option return.labels is thus ignored.
+2: In readNCL(file = noStateLabels, type = "data", return.labels = TRUE) :
+  state labels are missing for 'char2', the option return.labels is thus ignored.
+3: In readNCL(file = noStateLabels, type = "data", return.labels = TRUE) :
+  state labels are missing for 'char3', the option return.labels is thus ignored.
+4: In FUN(X[[2L]], ...) :
+  Could not use value "asdata" for check.node.labels because there are no labels associated with the tree
+5: In FUN(X[[2L]], ...) :
+  Could not use value "asdata" for check.node.labels because there are no labels associated with the tree
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 8, column (approximately) 9 (file position 217)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 8, column (approximately) 9 (file position 217)
+storing implied block: TAXA
+storing read block: TREES
+
+Warning:  
+ A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.
+at line 5, column (approximately) 1 (file position 37)
+storing implied block: TAXA
+storing read block: TREES
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+Error in `levels<-.factor`(`*tmp*`, value = c("test2A", "test2B")) : 
+  number of levels differs
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+Error in `levels<-.factor`(`*tmp*`, value = c("test2A", "test2B")) : 
+  number of levels differs
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+Error in `levels<-.factor`(`*tmp*`, value = c("test2A", "test2B")) : 
+  number of levels differs
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+Error in `levels<-.factor`(`*tmp*`, value = c("test2A", "test2B")) : 
+  number of levels differs
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITECHARMODELS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITE
+storing read block: BROWNIE
+storing read block: TAXA
+storing read block: CHARACTERS
+storing read block: CHARACTERS
+storing read block: TREES
+storing read block: ASSUMPTIONS
+storing read block: MESQUITE
+storing read block: BROWNIE
  done successfully.
 
 
@@ -555,7 +1030,6 @@ In .local(x, ...) : invalid nodes ignored: t999
 Error in .local(x, ...) : 0 or 1 tips would remain after subsetting
 In addition: Warning message:
 In .local(x, ...) : invalid nodes ignored: t999
-Error: no function to return from, jumping to top level
 Error in subset(phyd, tips.include = "t1", tips.exclude = "t3") : 
   error in evaluating the argument 'x' in selecting a method for function 'subset'
  done successfully.
@@ -677,16 +1151,16 @@ Executing test function test.siblings  ...  done successfully.
 
 ------------------- UNIT TEST SUMMARY ---------------------
 
-RUNIT TEST PROTOCOL -- Thu Apr  1 16:01:34 2010 
+RUNIT TEST PROTOCOL -- Tue Nov 23 20:27:56 2010 
 *********************************************** 
-Number of test functions: 101 
+Number of test functions: 97 
 Number of errors: 0 
 Number of failures: 0 
 
  
 1 Test Suite : 
-phylobase unit testing - 101 test functions, 0 errors, 0 failures
+phylobase unit testing - 97 test functions, 0 errors, 0 failures
 > 
 > proc.time()
    user  system elapsed 
- 11.060   0.216  11.483 
+  11.48    0.14   11.65 

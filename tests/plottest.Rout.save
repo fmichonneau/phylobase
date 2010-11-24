@@ -1,7 +1,8 @@
 
-R version 2.10.1 (2009-12-14)
-Copyright (C) 2009 The R Foundation for Statistical Computing
+R version 2.12.0 (2010-10-15)
+Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -24,10 +25,9 @@ Loading required package: Rcpp
 
 Attaching package: 'phylobase'
 
+The following object(s) are masked from 'package:ape':
 
-	The following object(s) are masked from package:ape :
-
-	 edges 
+    edges
 
 > ## library(ape)
 > 
@@ -50,13 +50,14 @@ Loading required package: ade4
 
 Attaching package: 'ade4'
 
+The following object(s) are masked from 'package:base':
 
-	The following object(s) are masked from package:base :
+    within
 
-	 within 
-
-Warning message:
-In asMethod(object) : trees with unknown order may be unsafe in ape
+Warning messages:
+1: In asMethod(object) : trees with unknown order may be unsafe in ape
+2: In asMethod(object) :
+  ade4::phylog objects are deprecated, please use the adephylo package instead
 > ##  Note the numbering differences!
 > 
 > ## round trip 
@@ -88,7 +89,16 @@ In asMethod(object) : trees with unknown order may be unsafe in ape
 + }
 Loading required package: MASS
 initial  value 12.762561 
-final  value 12.762561 
+iter   5 value 1.542275
+iter  10 value 0.973859
+iter  15 value 0.657199
+iter  20 value 0.567848
+iter  25 value 0.347518
+iter  30 value 0.132855
+iter  35 value 0.047279
+iter  40 value 0.033890
+iter  45 value 0.018117
+final  value 0.006328 
 converged
 Warning messages:
 1: In asMethod(object) : losing data while coercing phylo4d to phylo
@@ -103,4 +113,4 @@ Warning messages:
 > 
 > proc.time()
    user  system elapsed 
-  2.044   0.040   2.107 
+   1.72    0.03    1.75 

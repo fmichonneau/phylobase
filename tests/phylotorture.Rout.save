@@ -1,7 +1,8 @@
 
-R version 2.10.1 (2009-12-14)
-Copyright (C) 2009 The R Foundation for Statistical Computing
+R version 2.12.0 (2010-10-15)
+Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -26,10 +27,9 @@ Loading required package: Rcpp
 
 Attaching package: 'phylobase'
 
+The following object(s) are masked from 'package:ape':
 
-	The following object(s) are masked from package:ape :
-
-	 edges 
+    edges
 
 > set.seed(1001)
 > p1 <- list()
@@ -203,4 +203,4 @@ attr(,"class")
 > 
 > proc.time()
    user  system elapsed 
-  1.436   0.036   1.504 
+  1.130   0.010   1.148 

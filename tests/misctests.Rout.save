@@ -1,7 +1,8 @@
 
-R version 2.10.1 (2009-12-14)
-Copyright (C) 2009 The R Foundation for Statistical Computing
+R version 2.12.0 (2010-10-15)
+Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -24,10 +25,9 @@ Loading required package: Rcpp
 
 Attaching package: 'phylobase'
 
+The following object(s) are masked from 'package:ape':
 
-	The following object(s) are masked from package:ape :
-
-	 edges 
+    edges
 
 > library(ape)
 > 
@@ -121,7 +121,7 @@ Nodes: data.frame with 3 internal nodes and 1 variables
 > tipdat2 <- tipdat
 > row.names(tipdat2)[1] <- "s1"
 > t1 <- try(q1 <- phylo4d(r1,tip.data=tipdat2))
-Error in switch(missing.data, warn = warning(msg), fail = stop(msg)) : 
+Error in formatData(phy = x, dt = tip.data, type = "tip", ...) : 
   The following nodes are not found in the dataset:  t4
 > 
 > plot(q2)
@@ -463,7 +463,7 @@ phyl4d> nodeLabels(p4) <- as.character(nodeId(p4, "internal"))
 
 phyl4d> p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat, match.data=FALSE))
 Warning message:
-In switch(extra.data, warn = warning(msg), fail = stop(msg)) :
+In formatData(phy = x, dt = all.data, type = "all", ...) :
   The following names are not found in the tree:  match.data
 > obj1 <- obj2 <- obj3 <- phylo4d(z, data.frame(wing=1:4,color=factor(c("b","w","b","b")), tail=runif(4)*10), match.data=FALSE)
 > 
@@ -497,4 +497,4 @@ In switch(extra.data, warn = warning(msg), fail = stop(msg)) :
 > 
 > proc.time()
    user  system elapsed 
-  3.436   0.080   3.882 
+  2.980   0.020   2.999 
