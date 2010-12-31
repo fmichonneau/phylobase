@@ -18,9 +18,9 @@ getNode <- function(x, node, type=c("all", "tip", "internal"),
     }
 
     ## match node to tree
-    if (is.character(node)) {
-        ndTmp <- paste("^", node, "$", sep="")
-        irval <- lapply(ndTmp, function(ND) grep(ND, labels(x, type)))
+    if (is.character(node)) {       
+        ndTmp <- paste("^\\Q", node, "\\E$", sep="")
+        irval <- lapply(ndTmp, function(ND) grep(ND, labels(x, type), perl=TRUE))
         irval <- unlist(irval)
     } else if (is.numeric(node) && all(floor(node) == node, na.rm=TRUE)) {
         irval <- match(as.character(node), names(labels(x, type)))
