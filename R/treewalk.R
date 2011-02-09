@@ -229,14 +229,18 @@ MRCA <- function(phy, ...) {
 # shortestPath
 ###############
 shortestPath <- function(phy, node1, node2){
-    ## if(!require(phylobase)) stop("phylobase package is not installed")
+  ## if(!require(phylobase)) stop("phylobase package is not installed")
 
-    ## conversion from phylo, phylo4 and phylo4d
+  ## conversion from phylo, phylo4 and phylo4d
+  if (class(phy) == "phylo4d") {
+    x <- extractTree(phy)
+  }
+  else if (class(phy) != "phylo4"){
     x <- as(phy, "phylo4")
-    ## FIXME: use extractTree if coming from phylo4d
+  }
 
     ## some checks
-    if (is.character(checkval <- checkPhylo4(x))) stop(checkval)
+    ## if (is.character(checkval <- checkPhylo4(x))) stop(checkval) # no need
     t1 <- getNode(x, node1)
     t2 <- getNode(x, node2)
     if(any(is.na(c(t1,t2)))) stop("wrong node specified")
