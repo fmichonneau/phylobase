@@ -45,6 +45,14 @@ test.nTips.phylo4 <- function() {
   checkEquals(nTips(phy.alt), length(nid.tip))
 }
 
+test.depthTips.phylo4 <- function() {
+  edgeLengthVec <- c(1.2, 1.8, 1.8, 2.1, 2.3)
+  checkEquals(depthTips(phy.alt), edgeLengthVec)
+  tmpPhy <- phy.alt
+  edgeLength(tmpPhy) <- NA
+  checkTrue(is.null(depthTips(tmpPhy)))
+}
+
 test.nTips.ANY <- function() {
   # nTips phylo
   checkEquals(nTips(tr), 5)

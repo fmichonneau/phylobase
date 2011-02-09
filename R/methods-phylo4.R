@@ -3,6 +3,7 @@
 
 ### 1. Tip accessors
 ###  1.1. nTips()
+###  1.2. depthTips()
 
 ### 2. Node accessors
 ###  2.1. nNodes()
@@ -72,6 +73,16 @@ setMethod("nTips", signature(x="phylo4"), function(x) {
 setMethod("nTips", signature(x="phylo"),
  function(x) {
      Ntip(x)
+})
+
+setMethod("depthTips", signature(x="phylo4"), function(x) {
+  if (!hasEdgeLength(x)) {
+    return(NULL)
+  }
+  else {
+    sapply(1:nTips(x), function(i)
+           sumEdgeLength(x, ancestors(x, i, "ALL")))
+  }
 })
 
 #########################################################

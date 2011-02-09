@@ -7,6 +7,10 @@
 \alias{nTips-methods}
 \alias{nTips,phylo4-method}
 \alias{nTips,phylo-method}
+\alias{depthTips}
+\alias{depthTips-methods}
+\alias{depthTips,phylo4-method}
+\alias{depthTips,phylo4d-method}
 \alias{edges}
 \alias{edges-methods}
 \alias{edges,phylo4-method}
@@ -44,6 +48,9 @@
 \section{Methods}{
 \describe{
   \item{nTips}{\code{signature(object="phylo4")}: number of tips}
+
+  \item{depthTips}{\code{signature(object="phylo4")}: distance between
+  the tips and the root}
   
   \item{nNodes}{\code{signature(object="phylo4")}: number of internal nodes}
   
@@ -78,6 +85,7 @@
 % https://stat.ethz.ch/pipermail/r-devel/2008-May/049653.html
 \S4method{nNodes}{phylo4}(x)
 \S4method{nTips}{phylo4}(x)
+\S4method{depthTips}{phylo4}(x)
 \S4method{edges}{phylo4}(x, drop.root=FALSE, \dots)
 \S4method{nEdges}{phylo4}(x)
 \S4method{edgeOrder}{phylo4}(x, \dots)
@@ -93,7 +101,7 @@
 
 \arguments{
   \item{x}{a phylo4/phylo4d object}
-  \item{node}{which edge lengths to extract (indexed by descendant
+  \item{node}{which edge to extract (indexed by descendant
     node)} 
   \item{value}{a vector of edge lengths or a node number}
   \item{use.names}{Should the names of \code{value} be used to match
@@ -104,9 +112,9 @@
 
 \examples{
 data(geospiza)
-edgeLength(geospiza,5)
-edgeLength(geospiza,"olivacea")
-edgeLength(geospiza,5:7)
+edgeLength(geospiza, 5)
+edgeLength(geospiza, "olivacea")
+edgeLength(geospiza, 5:7)
 }
 
 \keyword{methods}

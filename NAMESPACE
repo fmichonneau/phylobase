@@ -22,7 +22,7 @@ exportMethods(print, head, tail, reorder, plot, summary)
 exportMethods(phylo4, phylo4d)
 
 # counting methods
-exportMethods(nTips, nNodes, nEdges)
+exportMethods(nTips, nNodes, nEdges, depthTips)
 
 # edge methods
 exportMethods(edges, edgeId, hasEdgeLength, edgeLength, "edgeLength<-",

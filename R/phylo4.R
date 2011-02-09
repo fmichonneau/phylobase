@@ -5,6 +5,11 @@ setGeneric("nTips", function(x) {
     standardGeneric("nTips")
 })
 
+## depthTips
+setGeneric("depthTips", function(x) {
+  standardGeneric("depthTips")
+})
+
 ## nNodes
 setGeneric("nNodes", function(x) {
     standardGeneric("nNodes")
