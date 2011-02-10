@@ -47,6 +47,7 @@ test.nTips.phylo4 <- function() {
 
 test.depthTips.phylo4 <- function() {
   edgeLengthVec <- c(1.2, 1.8, 1.8, 2.1, 2.3)
+  names(edgeLengthVec) <- tipLabels(phy.alt)
   checkEquals(depthTips(phy.alt), edgeLengthVec)
   tmpPhy <- phy.alt
   edgeLength(tmpPhy) <- NA
@@ -77,6 +78,17 @@ test.nodeId.phylo4 <- function() {
 
 test.nEdges.phylo4 <- function() {
   checkIdentical(nEdges(phy.alt), nrow(edge))
+}
+
+test.nodeDepth.phylo4 <- function() {
+  allDepths <- c(1.2, 1.8, 1.8, 2.1, 2.3, 0.9, 1.0, 1.2, 1.6)
+  names(allDepths) <- names(getNode(phy.alt))
+  checkIdentical(nodeDepth(phy.alt), allDepths)
+  checkIdentical(nodeDepth(phy.alt, 1), allDepths[1])
+  checkIdentical(nodeDepth(phy.alt, "t1"), allDepths[1])
+  tmpPhy <- phy.alt
+  edgeLength(tmpPhy) <- NA
+  checkTrue(is.null(nodeDepth(tmpPhy)))
 }
 
 test.edges.phylo4 <- function() {
@@ -453,6 +465,15 @@ test.summary.phylo4 <- function() {
 
 test.reorder.phylo4 <- function() {
   #TODO
+}
+
+test.isUltrametric <- function() {
+  checkTrue(!isUltrametric(phy.alt))
+  tmpPhy <- as(rcoal(10), "phylo4")
+  checkTrue(isUltrametric(tmpPhy))
+  tmpPhy <- phy.alt
+  edgeLength(tmpPhy) <- NA
+  checkException(isUltrametric(tmpPhy))
 }
 
 phylobase.options(op)

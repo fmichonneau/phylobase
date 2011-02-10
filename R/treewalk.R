@@ -148,6 +148,10 @@ ancestors <- function (phy, node, type=c("all","parent","ALL")) {
     isValid <- !is.na(node)
     node <- as.integer(node[isValid])
 
+    if (length(node) == 0) {
+      return(NA)
+    }
+    
     if (type == "parent") {
         res <- lapply(node, function(x) ancestor(phy, x))
     } else {

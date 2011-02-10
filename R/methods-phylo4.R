@@ -9,6 +9,7 @@
 ###  2.1. nNodes()
 ###  2.2. nodeType()
 ###  2.3. nodeId()
+###  2.4. nodeDepth()
 
 ### 3. Edge accessors
 ###  3.1. nEdges()
@@ -50,6 +51,8 @@
 ###  7.1. orderIndex()
 ###  7.2. reorder()
 
+### 8. Tree properties
+###  8.1. isUltrametric()
 
 #########################################################
 ### Tip accessors
@@ -76,13 +79,7 @@ setMethod("nTips", signature(x="phylo"),
 })
 
 setMethod("depthTips", signature(x="phylo4"), function(x) {
-  if (!hasEdgeLength(x)) {
-    return(NULL)
-  }
-  else {
-    sapply(1:nTips(x), function(i)
-           sumEdgeLength(x, ancestors(x, i, "ALL")))
-  }
+  nodeDepth(x, 1:nTips(x))
 })
 
 #########################################################
@@ -148,7 +145,22 @@ setMethod("nodeId", signature(x="phylo4"),
 
 })
 
-
+setMethod("nodeDepth", signature(x="phylo4"),
+  function(x, node) {
+    if (!hasEdgeLength(x))
+      return(NULL)
+    else {
+      node <- getNode(x, node, missing="warn")
+      node <- node[!is.na(node)]
+      res <- sapply(node, function(n)
+                    sumEdgeLength(x, ancestors(x, n, "ALL")))
+      if (length(res) == 1) {
+        res <- res[[1]]
+        names(res) <- names(node)
+      }      
+      res
+    }
+})
 
 #########################################################
 ### Edge accessors
@@ -629,3 +641,17 @@ setMethod("reorder", signature(x="phylo4"),
 })
 
 
+#########################################################
+### Tree properties
+#########################################################
+
+setMethod("isUltrametric", signature(x="phylo4"),
+  function(x, tol=.Machine$double.eps^.5) {
+    if (!hasEdgeLength(x)) {
+      stop("The tree has no edge lengths.")
+    }
+    if (identical(all.equal.numeric(var(depthTips(x)), 0, tolerance=tol), TRUE)) {
+      TRUE
+    }
+    else FALSE
+  })

@@ -33,7 +33,10 @@ exportMethods(isRooted, rootNode, "rootNode<-")
 #export(rootEdge)  # no methods defined yet?
 
 # node methods
-exportMethods(nodeId, nodeType)
+exportMethods(nodeId, nodeType, nodeDepth)
+
+# tree properties methods
+exportMethods(isUltrametric)
 
 # tree data methods
 exportMethods(tdata, "tdata<-", tipData, "tipData<-", nodeData,
