@@ -17,10 +17,20 @@ getNode <- function(x, node, type=c("all", "tip", "internal"),
         node <- nodeId(x, type)
     }
 
+    if (length(node) == 0) {
+      rval <- integer(0)
+      names(rval) <- character(0)
+      return(rval)
+    }
+
     ## match node to tree
-    if (is.character(node)) {       
+    if (is.character(node)) {
         ndTmp <- paste("^\\Q", node, "\\E$", sep="")
-        irval <- lapply(ndTmp, function(ND) grep(ND, labels(x, type), perl=TRUE))
+        irval <- lapply(ndTmp, function(ND) {
+          xx <- grep(ND, labels(x, type), perl=TRUE)
+          if (length(xx) == 0) 0
+          else xx
+        })                                
         irval <- unlist(irval)
     } else if (is.numeric(node) && all(floor(node) == node, na.rm=TRUE)) {
         irval <- match(as.character(node), names(labels(x, type)))
@@ -31,7 +41,11 @@ getNode <- function(x, node, type=c("all", "tip", "internal"),
     ## node numbers
     rval <- names(labels(x, type))[irval]
 
-    rval[node == 0]   <- NA # root ancestor gets special treatment
+    ## root ancestor gets special treatment
+    isRoot <- ifelse(length(node) > 0,
+                     sapply(node, function(nd) identical(nd, 0)),
+                     logical(0))
+    rval[isRoot] <- NA
     rval[is.na(node)] <- NA # return NA for any NA_character_ inputs
     rval <- as.integer(rval)
 

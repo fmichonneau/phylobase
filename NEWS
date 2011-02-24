@@ -7,6 +7,14 @@
         *                                               *
         *************************************************
 
+                CHANGES IN phylobase VERSION 0.6.3
+
+   *   Fixed bugs in getNode in cases where labels included regexpr
+       metacharacters and when a tip was labelled 0
+
+   *   New methods: depthTips, nodeDepth and isUltrametric
+
+
                 CHANGES IN phylobase VERSION 0.6.2
 
    *   Improve handling of errors returned by NCL (NxsException)
