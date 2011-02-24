@@ -81,6 +81,13 @@ test.getNode <- function() {
 
     # node is neither integer-like nor character
     checkException(getNode(phytr, 1.5))
+
+    # check that tip labeled as "0" works
+    phyTmp <- phytr
+    tipLabels(phyTmp)[1] <- "0"
+    ans <- 1
+    names(ans) <- "0"
+    checkEquals(getNode(phyTmp, "0"), ans)
 }
 
 test.ancestor <- function() {
