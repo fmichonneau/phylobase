@@ -513,7 +513,7 @@ tip.data.plot <- function(
     tip.order <- xxyy$torder
     pedges <- edges(phy)
     Ntips  <- nTips(phy)
-    datalayout <- grid.layout(ncol = 2, width = unit(c(1, 1/Ntips), c('null', 'null')))
+    datalayout <- grid.layout(ncol = 2, widths = unit(c(1, 1/Ntips), c('null', 'null')))
     # TODO this is done multiple times,
     pushViewport(viewport(layout = datalayout, angle = rot,
                         name = 'datalayout'))
