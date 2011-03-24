@@ -257,13 +257,11 @@ test.formatData <- function() {
 
 test.formatDataWithDup <- function() {
 
-    print(sys.parent())
-    print(parent.frame())
     ## Saving default options
     op <- phylobase.options()
 
     ## Changing default options
-    phylobase.options(allow.duplicated.labels="ok")
+    phylobase.options(allow.duplicated.labels="ok") 
 
     ## Creating phylo4 object with duplicated labels
     phy.dup <- phy.alt
