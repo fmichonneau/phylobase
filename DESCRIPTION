@@ -2,8 +2,8 @@ Package: phylobase
 Type: Package
 Title: Base package for phylogenetic structures and comparative data
 Version: 0.6.3
-Date: 2011-02-24
-Depends: methods, grid, ape(>= 2.1), Rcpp (>= 0.8.3)
+Date: 2011-03-24
+Depends: methods, grid, ape(>= 2.1), Rcpp (>= 0.9)
 LinkingTo: Rcpp
 Suggests: adephylo, MASS, RUnit
 Author: R Hackathon et al. (alphabetically: Ben Bolker, Marguerite Butler, Peter Cowan,  Damien de Vienne, Dirk Eddelbuettel, Mark Holder, Thibaut Jombart, Steve Kembel, Francois Michonneau, David Orme, Brian O'Meara, Emmanuel Paradis, Jim Regetz, Derrick Zwickl)
