@@ -130,10 +130,13 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
    if (!experimental) {
      for (i in 1:length(ncl$trees)) {
        if (length(grep(":", ncl$trees[i]))) {
-         listTrees[[i]] <- tree.build(ncl$trees[i])
+         ## remove comments from the string, they are not being removed if they are part of the node labels
+         tStr <- gsub("\\[.*?\\]", "", ncl$trees[i])
+         listTrees[[i]] <- tree.build(tStr)
        }
        else {
-         listTrees[[i]] <- clado.build(ncl$trees[i])
+         tStr <- gsub("\\[.*?\\]", "", ncl$trees[i])
+         listTrees[[i]] <- clado.build(tStr)
        }
      }
      listTrees <- lapply(listTrees, function(tr) {       
