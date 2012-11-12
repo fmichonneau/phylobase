@@ -1,4 +1,4 @@
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 useDynLib(phylobase)
 
@@ -88,6 +88,7 @@ export(phylo4_orderings)
 ## options
 export(phylobase.options)
 
+importFrom(ade4,newick2phylog)
 ## commented out in source code, probably should be omitted here
 #export(phyloStripchart)
 #export(internEdges, terminEdges, isPoly)

@@ -41,7 +41,7 @@ test.phylo4.matrix <- function() {
 # tested more thoroughly in runit.setAs-methods.R; focus here is on
 # annote and check.node.labels arguments
 test.phylo4.phylo <- function() {
-    tr <- read.tree(text="(((t1:0.2,(t2:0.1,t3:0.1):0.15):0.5,t4:0.7):0.2,t5:1):0.4;")
+  tr <- ape::read.tree(text="(((t1:0.2,(t2:0.1,t3:0.1):0.15):0.5,t4:0.7):0.2,t5:1):0.4;")
 
 
     ##

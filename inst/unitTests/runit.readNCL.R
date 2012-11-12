@@ -123,6 +123,14 @@ test.readNCL <- function() {
     ## match it
     load(mlFile)
     checkIdentical(multiLines[[1]], ml1)
+    ## FAILS: why?
+    ## BMB 9 Nov 2012
+    ## for (i in slotNames(ml1)) {
+    ##   cat(i,"\n")
+    ##   checkIdentical(slot(ml1,i),slot(multiLines[[1]],i))
+    ##   fails on 'order': "preorder" (ml1) vs "unknown" (multiLines[[1]])?
+    ##   "unknown" seems correct to me, so modifying original file
+    ## }
     checkIdentical(multiLines[[2]], ml1)
     rm(ml1)
 

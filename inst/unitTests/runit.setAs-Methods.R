@@ -4,7 +4,7 @@
 
 # create ape::phylo version of a simple tree for testing
 nwk <- "((t1:0.1,t2:0.2)n7:0.7,(t3:0.3,(t4:0.4,t5:0.5)n9:0.9)n8:0.8)n6:0.6;"
-tr <- read.tree(text=nwk)
+tr <- ape::read.tree(text=nwk)
 
 # create analogous phylo4 object with a full complement of valid slots
 ancestor <- as.integer(c(6,7,7,6,8,0,8,9,9))
@@ -38,7 +38,7 @@ test.phylo.As.phylo4 <- function() {
     checkIdentical(tr$node.label, unname(nodeLabels(as.phy)))
     # TODO: ape keeps the root edge length in $root.edge
     #checkIdentical(tr$edge.length, unname(edgeLength(as.phy)))
-    checkIdentical("unknown", edgeOrder(as.phy))
+    checkIdentical("preorder", edgeOrder(as.phy))
 
     # test preservation of order attribute
     as.phy <- as(reorder(tr, "cladewise"), "phylo4")
@@ -47,7 +47,7 @@ test.phylo.As.phylo4 <- function() {
     checkIdentical("pruningwise", edgeOrder(as.phy))
 
     # test phylo import when only 2 tips
-    tr2 <- ape::drop.tip(tr, 3:Ntip(tr))
+    tr2 <- ape::drop.tip(tr, 3:ape::Ntip(tr))
     checkEquals(nTips(as(tr2, "phylo4")), 2)
     checkEquals(nNodes(as(tr2, "phylo4")), 1)
 
@@ -153,7 +153,7 @@ test.phylo4.As.data.frame <- function() {
     checkTrue(is.data.frame(as(phy, "data.frame")))
 
     # unrooted tree
-    tru <- unroot(tr)
+    tru <- ape::unroot(tr)
     phyu <- as(tru, "phylo4")
     # should probably check that this coercion results in something
     # *correct*, not just that it produces a data.frame

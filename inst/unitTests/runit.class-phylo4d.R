@@ -3,8 +3,9 @@
 #
 
 # create ape::phylo version of a simple tree for testing
+## require(ape)  ## messes badly with edges()!
 nwk <- "((t1:0.1,t2:0.2)n7:0.7,(t3:0.3,(t4:0.4,t5:0.5)n9:0.9)n8:0.8)n6:0.6;"
-tr <- read.tree(text=nwk)
+tr <- ape::read.tree(text=nwk)
 
 # create analogous phylo4 object with a full complement of valid slots
 ancestor <- as.integer(c(6,7,7,6,8,0,8,9,9))

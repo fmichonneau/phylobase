@@ -4,6 +4,7 @@
  
 test.hasPoly <- function() {
     # construct simple polytomy
+    require(ape)
     owls <- read.tree(text =
         "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);")
     owls$edge <- matrix(c(4,4,4,1,2,3), ncol=2)

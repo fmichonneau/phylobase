@@ -1,9 +1,18 @@
 #######################################################
 ## Importing from ape
 setAs("phylo", "phylo4", function(from, to) {
-    ## fixme SWK kludgy fix may not work well with unrooted trees
-    ## TODO should we also attempt to get order information?
-    if (is.rooted(from)) {
+  ## fixme SWK kludgy fix may not work well with unrooted trees
+  ## TODO should we also attempt to get order information?
+  ## BMB horrible kludge to avoid requiring ape explicitly
+  ape_is.rooted <- function(phy) {
+     if (!is.null(phy$root.edge)) 
+        TRUE
+    else if (tabulate(phy$edge[, 1])[length(phy$tip.label) + 
+        1] > 2) 
+        FALSE
+    else TRUE
+   }
+    if (ape_is.rooted(from)) {
         tip.idx <- 1:nTips(from)
         if (nTips(from) < nrow(from$edge)) {
             int.idx <- (nTips(from)+1):dim(from$edge)[1]
@@ -172,12 +181,10 @@ setAs("multiPhylo4", "multiPhylo", function(from, to) {
 #######################################################
 ## Exporting to ade4
 setAs("phylo4", "phylog", function(from, to) {
-    if (!require(ade4))
-        stop("the ade4 package is required")
     x <- as(from, "phylo")
     xstring <- write.tree(x, file = "")
     warning("ade4::phylog objects are deprecated, please use the adephylo package instead")
-    newick2phylog(xstring)
+    ade4::newick2phylog(xstring)
 })
 
 #######################################################

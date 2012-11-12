@@ -12,10 +12,11 @@
          allow.duplicated.labels = "warn")
 
 # use this with a namespace
-.onLoad <- function(lib, pkg) {
-    require(ape)
-    require(methods)
-}
+## 12 Nov 2012 obsolete?
+## .onLoad <- function(lib, pkg) {
+##     ## require(ape)
+##     require(methods)
+## }
 
 .onAttach <- function(library, pkg)
 {

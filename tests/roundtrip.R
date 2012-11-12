@@ -24,7 +24,7 @@ stopifnot(identical(t4$edge,t0$edge) &&
           max(abs(t4$edge.length-t0$edge.length))<1e-10)
 
 ## UNROOTED
-t6 <- unroot(t0)
+t6 <- ape::unroot(t0)
 ## hack around ape conversion issues:
 ##  unroot() converts integer to double
 storage.mode(t6$edge) <- "integer"
