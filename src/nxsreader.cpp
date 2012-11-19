@@ -23,6 +23,9 @@
 #include <climits>
 #include <sstream>
 #include <iterator>
+
+#include <Rcpp.h>
+
 #include "ncl/nxsreader.h"
 #include "ncl/nxsdefs.h"
 
@@ -1305,19 +1308,19 @@ void ExceptionRaisingNxsReader::NexusWarn(const std::string &msg, NxsWarnLevel w
 		return;
 	if (warnMode == NxsReader::WARNINGS_TO_STDERR)
 		{
-		std::cerr << "\nWarning:  ";
-		std::cerr << "\n " << msg << std::endl;
+		Rcpp::Rcerr << "\nWarning:  ";
+		Rcpp::Rcerr << "\n " << msg << std::endl;
 		if (line > 0 || pos > 0)
-			std::cerr << "at line " << line << ", column (approximately) " << col << " (file position " << pos << ")\n";
+			Rcpp::Rcerr << "at line " << line << ", column (approximately) " << col << " (file position " << pos << ")\n";
 		}
 	else if (warnMode != NxsReader::WARNINGS_TO_STDOUT)
 		{
-		std::cout << "\nWarning:  ";
+		Rcpp::Rcout << "\nWarning:  ";
 		if (line > 0 || pos > 0)
-			std::cout << "at line " << line << ", column " << col << " (file position " << pos << "):\n";
-		std::cout << "\n " << msg << '\n';
+			Rcpp::Rcout << "at line " << line << ", column " << col << " (file position " << pos << "):\n";
+		Rcpp::Rcout << "\n " << msg << '\n';
 		if (line > 0 || pos > 0)
-			std::cout << "at line " << line << ", column (approximately) " << col << " (file position " << pos << ')' << std::endl;
+			Rcpp::Rcout << "at line " << line << ", column (approximately) " << col << " (file position " << pos << ')' << std::endl;
 		}
 	else
 		{
@@ -1332,9 +1335,9 @@ void ExceptionRaisingNxsReader::SkippingBlock(NxsString blockName)
 	if (warnMode == NxsReader::IGNORE_WARNINGS)
 		return;
 	if (warnMode == NxsReader::WARNINGS_TO_STDERR)
-		std::cerr << "[!Skipping unknown block (" << blockName << ")...]" << std::endl;
+		Rcpp::Rcerr << "[!Skipping unknown block (" << blockName << ")...]" << std::endl;
 	else if (warnMode != NxsReader::WARNINGS_TO_STDOUT)
-		std::cout << "[!Skipping unknown block (" << blockName << ")...]" << std::endl;
+		Rcpp::Rcout << "[!Skipping unknown block (" << blockName << ")...]" << std::endl;
 	}
 
 void ExceptionRaisingNxsReader::SkippingDisabledBlock(NxsString blockName)
@@ -1342,15 +1345,15 @@ void ExceptionRaisingNxsReader::SkippingDisabledBlock(NxsString blockName)
 	if (warnMode == NxsReader::IGNORE_WARNINGS)
 		return;
 	if (warnMode == NxsReader::WARNINGS_TO_STDERR)
-		std::cerr << "[!Skipping disabled block (" << blockName << ")...]" << std::endl;
+		Rcpp::Rcerr << "[!Skipping disabled block (" << blockName << ")...]" << std::endl;
 	else if (warnMode != NxsReader::WARNINGS_TO_STDOUT)
-		std::cout << "[!Skipping disabled block (" << blockName << ")...]" << std::endl;
+		Rcpp::Rcout << "[!Skipping disabled block (" << blockName << ")...]" << std::endl;
 	}
 
 void NxsReader::statusMessage(const std::string & m) const
 {
 	if (alwaysReportStatusMessages || currentWarningLevel == UNCOMMON_SYNTAX_WARNING) {
-		std::cerr << m << std::endl;
+		Rcpp::Rcerr << m << std::endl;
 	}
 }
 

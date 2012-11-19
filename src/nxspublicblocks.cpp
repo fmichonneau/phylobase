@@ -23,6 +23,9 @@
 #include <fstream>
 #include "ncl/nxspublicblocks.h"
 #include "ncl/nxsreader.h"
+
+#include <Rcpp.h>
+
 using namespace std;
 
 
@@ -680,7 +683,7 @@ void NxsConversionOutputRecord::writeTaxonNameTranslationFilepath(const char * f
 		throw NxsException(msg);
 		}
 	if (verbose)
-		std::cerr << "Writing \"" << fn << "\" to store the translation of names\n";
+	    Rcpp::Rcerr << "Writing \"" << fn << "\" to store the translation of names\n";
 	writeTaxonNameTranslationStream(tnf, nameTrans, tb);
 	tnf.close();
 }

@@ -20,6 +20,9 @@
 #include "ncl/nxsdefs.h"
 #include "ncl/nxsblock.h"
 #include "ncl/nxsreader.h"
+
+#include <Rcpp.h>
+
 #include <cstdlib>
 using namespace std;
 
@@ -31,7 +34,7 @@ using namespace std;
 #		if defined (ASSERTS_TO_EXCEPTIONS)
 			NxsString err;
 #		else
-			std::ostream & err(cerr);
+			std::ostream & err(Rcerr);
 #		endif
 			err << "\nNCL assertion failed:";
 			err << "\n  expr: " << expr;
@@ -41,7 +44,7 @@ using namespace std;
 #		if defined (ASSERTS_TO_EXCEPTIONS)
 			throw NxsNCLAPIException(err);
 #		else
-			std::cerr << std::endl;
+			Rcpp::Rcerr << std::endl;
 			std::exit(1);
 #		endif
 		}
