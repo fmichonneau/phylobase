@@ -1,12 +1,14 @@
 
-R version 2.12.2 (2011-02-25)
-Copyright (C) 2011 The R Foundation for Statistical Computing
+R Under development (unstable) (2012-11-19 r61131) -- "Unsuffered Consequences"
+Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: i686-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -84,18 +86,18 @@ $pkg
 [1] "phylobase"
 
 $getwd
-[1] "/home/francois/R-dev/phylobase/pkg.Rcheck/tests"
+[1] "/mnt/hgfs/bolker/Documents/R/pkgs/phylobase/pkg/tests"
 
 $pathToUnitTests
-[1] "/home/francois/R-dev/phylobase/pkg.Rcheck/phylobase/unitTests"
+[1] "/mnt/hgfs/bolker/Documents/LOCAL/lib/R/site-library/phylobase/unitTests"
 
 Loading required package: grid
 Loading required package: ape
 Loading required package: Rcpp
 
-Attaching package: 'phylobase'
+Attaching package: ‘phylobase’
 
-The following object(s) are masked from 'package:ape':
+The following object is masked from ‘package:ape’:
 
     edges
 
@@ -105,24 +107,6 @@ Executing test function test.checkTree  ... storing read block: TAXA
 Error in readNCL(file = file, simplify = simplify, type = type, char.all = char.all,  : 
   Unknown taxon D s strain  in TRANSLATE command.
 The translate key 2 has NOT been added to the translation table!
- done successfully.
-
-
-
-Executing test function test.phylo4.matrix  ... Error in .createLabels(value = tip.label, ntips = ntips, nnodes = nnodes,  : 
-  Number of labels does not match number of nodes.
-Error in .createLabels(node.label, ntips = ntips, nnodes = nnodes, type = "internal") : 
-  Number of labels does not match number of nodes.
-Error in .local(x, ...) : 
-  unknown order: allowed values are unknown,preorder,postorder,pruningwise,cladewise
-Error in checkSlotAssignment(object, name, value) : 
-  assignment of an object of class "character" is not valid for slot "annote" in an object of class "phylo4"; is(value, "list") is not TRUE
- done successfully.
-
-
-
-Executing test function test.phylo4.phylo  ... Error in .local(x, ...) : Labels are not unique
-Error in .local(x, ...) : Labels are not unique
  done successfully.
 
 
@@ -148,6 +132,24 @@ Error in formatData(phy = x, dt = node.data, type = "internal", ...) :
 
 Executing test function test.phylo4d.phylo4d  ... Error in phylo4d(phyd) : 
   Your object is already a phylo4d object. If you want to modify the data attached to it look at the help for tdata()<-
+ done successfully.
+
+
+
+Executing test function test.phylo4.matrix  ... Error in .createLabels(value = tip.label, ntips = ntips, nnodes = nnodes,  : 
+  Number of labels does not match number of nodes.
+Error in .createLabels(node.label, ntips = ntips, nnodes = nnodes, type = "internal") : 
+  Number of labels does not match number of nodes.
+Error in .local(x, ...) : 
+  unknown order: allowed values are unknown,preorder,postorder,pruningwise,cladewise
+Error in checkSlotAssignment(object, name, value) : 
+  assignment of an object of class “character” is not valid for slot ‘annote’ in an object of class “phylo4”; is(value, "list") is not TRUE
+ done successfully.
+
+
+
+Executing test function test.phylo4.phylo  ... Error in .local(x, ...) : Labels are not unique
+Error in .local(x, ...) : Labels are not unique
  done successfully.
 
 
@@ -210,56 +212,51 @@ Executing test function test.reorder.phylo  ...  done successfully.
 
 
 
-Executing test function test.Replace.edgeLabels.phylo4  ... Error in .createEdge(value, x@edge, type = "labels") : 
-  Names provided don't match internal edge labels names.
-Error in .createEdge(value, x@edge, type = "labels") : 
-  Names provided don't match internal edge labels names.
- done successfully.
+Executing test function test.addData.phylo4  ...  done successfully.
 
 
 
-Executing test function test.Replace.edgeLength.phylo4  ... Error in .createEdge(value, x@edge, type = "lengths", use.names) : 
-  Names provided don't match internal edge labels names.
-Error in .createEdge(value, x@edge, type = "lengths", use.names) : 
-  Names provided don't match internal edge labels names.
-Error in .local(x, ..., value = value) : NAs in edge lengths
- done successfully.
+Executing test function test.addData.phylo4d  ...  done successfully.
 
 
 
-Executing test function test.Replace.labels.phylo4  ... Error in `labels<-`(`*tmp*`, value = structure(c("t2", "t2", "t3", "t4",  : 
-  Labels are not unique
-Error in `labels<-`(`*tmp*`, value = structure(c("t1", "t2", "t3", "t4",  : 
-  Labels are not unique
-Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
-  Number of labels does not match number of nodes.
-Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
-  Number of labels does not match number of nodes.
- done successfully.
+Executing test function test.hasNodeData.phylo4d  ...  done successfully.
 
 
 
-Executing test function test.Replace.nodeLabels.phylo4  ... Error in `labels<-`(`*tmp*`, type = "internal", ..., value = structure(c("n7",  : 
-  Labels are not unique
-Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
-  Number of labels does not match number of nodes.
-Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
-  Number of labels does not match number of nodes.
- done successfully.
+Executing test function test.na.omit.phylo4d  ...  done successfully.
 
 
 
-Executing test function test.Replace.rootNode.phylo4  ...  done successfully.
+Executing test function test.nData  ...  done successfully.
 
 
 
-Executing test function test.Replace.tipLabels.phylo4  ... Error in `labels<-`(`*tmp*`, type = "tip", ..., value = structure(c("t2",  : 
-  Labels are not unique
-Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
-  Number of labels does not match number of nodes.
-Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
-  Number of labels does not match number of nodes.
- done successfully.
+Executing test function test.nodeData.phylo4d  ...  done successfully.
+
+
+
+Executing test function test.Replace.nodeData.phylo4d  ...  done successfully.
+
+
+
+Executing test function test.Replace.tdata.phylo4d  ...  done successfully.
+
+
+
+Executing test function test.Replace.tipData.phylo4d  ...  done successfully.
+
+
+
+Executing test function test.summary.phylo4d  ...  done successfully.
+
+
+
+Executing test function test.tdata.phylo4d  ...  done successfully.
+
+
+
+Executing test function test.tipData.phylo4d  ...  done successfully.
 
 
 
@@ -316,23 +313,15 @@ Executing test function test.labels.phylo4  ...  done successfully.
 
 
 
+Executing test function test.names.phylo4  ...  done successfully.
+
+
+
 Executing test function test.nEdges.phylo4  ...  done successfully.
 
 
 
 Executing test function test.nNodes.phylo4  ...  done successfully.
-
-
-
-Executing test function test.nTips.ANY  ...  done successfully.
-
-
-
-Executing test function test.nTips.phylo4  ...  done successfully.
-
-
-
-Executing test function test.names.phylo4  ...  done successfully.
 
 
 
@@ -352,7 +341,68 @@ Executing test function test.nodeType.phylo4  ...  done successfully.
 
 
 
+Executing test function test.nTips.ANY  ...  done successfully.
+
+
+
+Executing test function test.nTips.phylo4  ...  done successfully.
+
+
+
 Executing test function test.reorder.phylo4  ...  done successfully.
+
+
+
+Executing test function test.Replace.edgeLabels.phylo4  ... Error in .createEdge(value, x@edge, type = "labels") : 
+  Names provided don't match internal edge labels names.
+Error in .createEdge(value, x@edge, type = "labels") : 
+  Names provided don't match internal edge labels names.
+ done successfully.
+
+
+
+Executing test function test.Replace.edgeLength.phylo4  ... Error in .createEdge(value, x@edge, type = "lengths", use.names) : 
+  Names provided don't match internal edge labels names.
+Error in .createEdge(value, x@edge, type = "lengths", use.names) : 
+  Names provided don't match internal edge labels names.
+Error in .local(x, ..., value = value) : NAs in edge lengths
+ done successfully.
+
+
+
+Executing test function test.Replace.labels.phylo4  ... Error in `labels<-`(`*tmp*`, value = structure(c("t2", "t2", "t3", "t4",  : 
+  Labels are not unique
+Error in `labels<-`(`*tmp*`, value = structure(c("t1", "t2", "t3", "t4",  : 
+  Labels are not unique
+Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
+  Number of labels does not match number of nodes.
+Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
+  Number of labels does not match number of nodes.
+ done successfully.
+
+
+
+Executing test function test.Replace.nodeLabels.phylo4  ... Error in `labels<-`(`*tmp*`, type = "internal", ..., value = structure(c("n7",  : 
+  Labels are not unique
+Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
+  Number of labels does not match number of nodes.
+Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
+  Number of labels does not match number of nodes.
+ done successfully.
+
+
+
+Executing test function test.Replace.rootNode.phylo4  ...  done successfully.
+
+
+
+Executing test function test.Replace.tipLabels.phylo4  ... Error in `labels<-`(`*tmp*`, type = "tip", ..., value = structure(c("t2",  : 
+  Labels are not unique
+Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
+  Number of labels does not match number of nodes.
+Error in .createLabels(value, nTips(x), nNodes(x), use.names, type = type) : 
+  Number of labels does not match number of nodes.
+ done successfully.
 
 
 
@@ -373,54 +423,6 @@ Executing test function test.tail.phylo4  ...  done successfully.
 
 
 Executing test function test.tipLabels.phylo4  ...  done successfully.
-
-
-
-Executing test function test.Replace.nodeData.phylo4d  ...  done successfully.
-
-
-
-Executing test function test.Replace.tdata.phylo4d  ...  done successfully.
-
-
-
-Executing test function test.Replace.tipData.phylo4d  ...  done successfully.
-
-
-
-Executing test function test.addData.phylo4  ...  done successfully.
-
-
-
-Executing test function test.addData.phylo4d  ...  done successfully.
-
-
-
-Executing test function test.hasNodeData.phylo4d  ...  done successfully.
-
-
-
-Executing test function test.nData  ...  done successfully.
-
-
-
-Executing test function test.na.omit.phylo4d  ...  done successfully.
-
-
-
-Executing test function test.nodeData.phylo4d  ...  done successfully.
-
-
-
-Executing test function test.summary.phylo4d  ...  done successfully.
-
-
-
-Executing test function test.tdata.phylo4d  ...  done successfully.
-
-
-
-Executing test function test.tipData.phylo4d  ...  done successfully.
 
 
 
@@ -449,10 +451,10 @@ Executing test function test..genlab  ...  done successfully.
 
 
 Executing test function test.phylobase.options  ... Error in match.arg(foo, c("warn", "fail", "ok")) : 
-  'arg' should be one of "warn", "fail", "ok"
-Error in phylobase.options(1) : invalid argument: '1'
+  'arg' should be one of “warn”, “fail”, “ok”
+Error in phylobase.options(1) : invalid argument: ‘1’
 Error in phylobase.options(foobar = "foo") : 
-  Option name invalid: 'foobar'
+  Option name invalid: ‘foobar’
  done successfully.
 
 
@@ -973,11 +975,44 @@ storing read block: BROWNIE
 
 
 
+Executing test function test.multiPhylo4.As.multiPhylo  ...  done successfully.
+
+
+
 Executing test function test.multiPhylo.As.multiPhylo4  ...  done successfully.
 
 
 
-Executing test function test.multiPhylo4.As.multiPhylo  ...  done successfully.
+Executing test function test.phylo4.As.data.frame  ...  done successfully.
+
+
+
+Executing test function test.phylo4.As.phylo  ... Error in asMethod(object) : 
+  (converted from warning) trees with unknown order may be unsafe in ape
+In addition: Warning message:
+In rm(ExContDataFile) : object 'ExContDataFile' not found
+ done successfully.
+
+
+
+Executing test function test.phylo4.As.phylog  ...  done successfully.
+
+
+
+Executing test function test.phylo4d.As.phylo  ... Error in asMethod(object) : 
+  (converted from warning) losing data while coercing phylo4d to phylo
+In addition: Warning messages:
+1: In asMethod(object) : trees with unknown order may be unsafe in ape
+2: In asMethod(object) : losing data while coercing phylo4d to phylo
+Error in asMethod(object) : 
+  (converted from warning) losing data while coercing phylo4d to phylo
+In addition: Warning message:
+In asMethod(object) : losing data while coercing phylo4d to phylo
+ done successfully.
+
+
+
+Executing test function test.phylo4ToDataFrame  ...  done successfully.
 
 
 
@@ -989,50 +1024,14 @@ Executing test function test.phylo.As.phylo4d  ...  done successfully.
 
 
 
-Executing test function test.phylo4.As.data.frame  ...  done successfully.
-
-
-
-Executing test function test.phylo4.As.phylo  ... Error in asMethod(object) : 
-  (converted from warning) trees with unknown order may be unsafe in ape
-In addition: Warning messages:
-1: In rm(ExContDataFile) : object 'ExContDataFile' not found
-2: In asMethod(object) : trees with unknown order may be unsafe in ape
-3: In asMethod(object) : losing data while coercing phylo4d to phylo
-4: In asMethod(object) : trees with unknown order may be unsafe in ape
- done successfully.
-
-
-
-Executing test function test.phylo4.As.phylog  ...  done successfully.
-
-
-
-Executing test function test.phylo4ToDataFrame  ...  done successfully.
-
-
-
-Executing test function test.phylo4d.As.phylo  ... Error in asMethod(object) : 
-  (converted from warning) losing data while coercing phylo4d to phylo
-In addition: Warning messages:
-1: In asMethod(object) : trees with unknown order may be unsafe in ape
-2: In asMethod(object) : losing data while coercing phylo4d to phylo
-3: In asMethod(object) : trees with unknown order may be unsafe in ape
-Error in asMethod(object) : 
-  (converted from warning) losing data while coercing phylo4d to phylo
-In addition: Warning message:
-In asMethod(object) : losing data while coercing phylo4d to phylo
- done successfully.
-
-
-
 Executing test function test.extractTree  ...  done successfully.
 
 
 
 Executing test function test.subset.phylo4  ... Error in .local(x, ...) : 0 or 1 tips would remain after subsetting
-In addition: Warning message:
-In asMethod(object) : losing data while coercing phylo4d to phylo
+In addition: Warning messages:
+1: In asMethod(object) : losing data while coercing phylo4d to phylo
+2: In asMethod(object) : losing data while coercing phylo4d to phylo
 Error in .local(x, ...) : 0 or 1 tips would remain after subsetting
 In addition: Warning message:
 In .local(x, ...) : invalid nodes ignored: t999
@@ -1040,7 +1039,8 @@ Error in .local(x, ...) : 0 or 1 tips would remain after subsetting
 In addition: Warning message:
 In .local(x, ...) : invalid nodes ignored: t999
 Error in subset(phyd, tips.include = "t1", tips.exclude = "t3") : 
-  error in evaluating the argument 'x' in selecting a method for function 'subset'
+  error in evaluating the argument 'x' in selecting a method for function 'subset': Error: object 'phyd' not found
+
  done successfully.
 
 
@@ -1068,19 +1068,19 @@ Executing test function test.drawDetails.bubLegend  ...  done successfully.
 
 
 
-Executing test function test.phyloXXYY  ...  done successfully.
-
-
-
 Executing test function test.phylobubbles  ...  done successfully.
 
 
 
-Executing test function test.plot.phylo4  ...  done successfully.
+Executing test function test.phyloXXYY  ...  done successfully.
 
 
 
 Executing test function test.plotOneTree  ...  done successfully.
+
+
+
+Executing test function test.plot.phylo4  ...  done successfully.
 
 
 
@@ -1101,10 +1101,6 @@ Executing test function test.hasRetic  ...  done successfully.
 
 
 Executing test function test.hasSingle  ...  done successfully.
-
-
-
-Executing test function test.MRCA  ...  done successfully.
 
 
 
@@ -1152,6 +1148,10 @@ Error in getNode(phytr, 1.5) :
 
 
 
+Executing test function test.MRCA  ...  done successfully.
+
+
+
 Executing test function test.shortestPath  ...  done successfully.
 
 
@@ -1160,7 +1160,7 @@ Executing test function test.siblings  ...  done successfully.
 
 ------------------- UNIT TEST SUMMARY ---------------------
 
-RUNIT TEST PROTOCOL -- Thu Mar 24 15:56:02 2011 
+RUNIT TEST PROTOCOL -- Wed Nov 21 17:43:24 2012 
 *********************************************** 
 Number of test functions: 100 
 Number of errors: 0 
@@ -1170,3 +1170,6 @@ Number of failures: 0
 1 Test Suite : 
 phylobase unit testing - 100 test functions, 0 errors, 0 failures
 > 
+> proc.time()
+   user  system elapsed 
+  8.500   3.376  11.868 

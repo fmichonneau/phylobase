@@ -1330,9 +1330,9 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 				else if (prevToken == NXS_TREE_COLON_TOKEN)
 					throw NxsException("Expecting a branch length after a : but found (", token);
 				nchildren.top() += 1;
-				Rcpp::Rcerr << "Open Parens nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
+				// Rcpp::Rcerr << "Open Parens nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 				nchildren.push(0);
-				Rcpp::Rcerr << "Open Parens after push nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
+				// Rcpp::Rcerr << "Open Parens after push nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 				newickStream << '(';
 				prevToken = NXS_TREE_OPEN_PARENS_TOKEN;
 				handled = true;
@@ -1356,10 +1356,10 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 					else if (nchildren.top() > 3 || nchildren.size() > 1) /* three children are allowed not considered a polytomy */
 						hasPolytomies = true;
 					}
-				Rcpp::Rcerr << "close parens nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
+				// Rcpp::Rcerr << "close parens nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 				nchildren.pop();
-				if (!nchildren.empty())
-					Rcpp::Rcerr << "close parens post-pop nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
+				// if (!nchildren.empty())
+				    // Rcpp::Rcerr << "close parens post-pop nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 				newickStream << ')';
 				prevToken = NXS_TREE_CLOSE_PARENS_TOKEN;
 				handled = true;
@@ -1433,7 +1433,7 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 				NxsString toAppend;
 				if (prevToken == NXS_TREE_CLOSE_PARENS_TOKEN)
 					{
-					Rcpp::Rcerr << "validateInternalNodeLabels = " << validateInternalNodeLabels << '\n';
+					    // Rcpp::Rcerr << "validateInternalNodeLabels = " << validateInternalNodeLabels << '\n';
 					if (validateInternalNodeLabels)
 						{
 						std::map<std::string, unsigned>::const_iterator tt = capNameToInd.find(ucl);
@@ -1517,7 +1517,7 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 									}
 								taxaEncountered.insert(indWithAdditions);
 								nchildren.top() += 1;
-								Rcpp::Rcerr << "treating as number " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
+								// Rcpp::Rcerr << "treating as number " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 
 								toAppend += (1 + indWithAdditions);
 								}
@@ -1543,7 +1543,7 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 								capNameToInd[tasstring] = valueInd;
 								taxaEncountered.insert(valueInd);
 								nchildren.top() += 1;
-								Rcpp::Rcerr << "nonnumeric newtaxon " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
+								// Rcpp::Rcerr << "nonnumeric newtaxon " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 								toAppend += (1 + valueInd);
 								}
 							}
@@ -1559,7 +1559,7 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 									}
 								taxaEncountered.insert(*cit);
 								nchildren.top() += 1;
-								Rcpp::Rcerr << "taxon set " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
+								// Rcpp::Rcerr << "taxon set " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 								if (!firstTaxonAdded)
 									toAppend.append(1, ',');
 								toAppend += (1 + *cit);
@@ -1576,7 +1576,7 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 						{
 						taxaEncountered.insert(ind);
 						nchildren.top() += 1;
-						Rcpp::Rcerr << "taxon label " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
+						// Rcpp::Rcerr << "taxon label " << ucl << " nchildren.top = " << nchildren.top() << " nchildren.size() = " << nchildren.size() << " rooted = " << rooted << " hasPolytomies = " << hasPolytomies << std::endl;
 						toAppend += (1 + ind);
 						}
 					}
