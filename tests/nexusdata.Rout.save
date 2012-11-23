@@ -1,8 +1,8 @@
 
-R version 2.12.0 (2010-10-15)
-Copyright (C) 2010 The R Foundation for Statistical Computing
+R Under development (unstable) (2012-11-20 r61133) -- "Unsuffered Consequences"
+Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: i686-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -38,4 +38,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-   0.28    0.03    0.30 
+  0.304   0.372   0.519 

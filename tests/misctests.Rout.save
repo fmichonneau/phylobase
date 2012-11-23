@@ -1,8 +1,8 @@
 
-R version 2.12.0 (2010-10-15)
-Copyright (C) 2010 The R Foundation for Statistical Computing
+R Under development (unstable) (2012-11-20 r61133) -- "Unsuffered Consequences"
+Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: i686-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -23,9 +23,9 @@ Loading required package: grid
 Loading required package: ape
 Loading required package: Rcpp
 
-Attaching package: 'phylobase'
+Attaching package: ‘phylobase’
 
-The following object(s) are masked from 'package:ape':
+The following object is masked from ‘package:ape’:
 
     edges
 
@@ -155,7 +155,7 @@ Tips: data.frame with 5 taxa and 2 variable(s)
  Mean   :3   Mean   :NaN  
  3rd Qu.:4   3rd Qu.: NA  
  Max.   :5   Max.   : NA  
-             NA's   :  5  
+             NA's   :5    
 
 Nodes: data.frame with 4 internal nodes and 2 variables 
 
@@ -166,7 +166,7 @@ Nodes: data.frame with 4 internal nodes and 2 variables
  Mean   :NaN   Mean   :7.50  
  3rd Qu.: NA   3rd Qu.:8.25  
  Max.   : NA   Max.   :9.00  
- NA's   :  4                 
+ NA's   :4                   
 > 
 > plot(p1)
 > 
@@ -497,4 +497,4 @@ In formatData(phy = x, dt = all.data, type = "all", ...) :
 > 
 > proc.time()
    user  system elapsed 
-  2.980   0.020   2.999 
+  3.260   2.556   5.671 

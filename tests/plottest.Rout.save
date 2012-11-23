@@ -1,8 +1,8 @@
 
-R version 2.12.0 (2010-10-15)
-Copyright (C) 2010 The R Foundation for Statistical Computing
+R Under development (unstable) (2012-11-20 r61133) -- "Unsuffered Consequences"
+Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: i686-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -23,9 +23,9 @@ Loading required package: grid
 Loading required package: ape
 Loading required package: Rcpp
 
-Attaching package: 'phylobase'
+Attaching package: ‘phylobase’
 
-The following object(s) are masked from 'package:ape':
+The following object is masked from ‘package:ape’:
 
     edges
 
@@ -46,14 +46,6 @@ The following object(s) are masked from 'package:ape':
 > 
 > 
 > g2B <- as(extractTree(g2), "phylog")
-Loading required package: ade4
-
-Attaching package: 'ade4'
-
-The following object(s) are masked from 'package:base':
-
-    within
-
 Warning messages:
 1: In asMethod(object) : trees with unknown order may be unsafe in ape
 2: In asMethod(object) :
@@ -88,18 +80,19 @@ In asMethod(object) : trees with unknown order may be unsafe in ape
 +     ## text(cmdpos[,1],cmdpos[,2],abbreviate(rownames(mdspos)))
 + }
 Loading required package: MASS
-initial  value 12.762561 
-iter   5 value 1.542275
-iter  10 value 0.973859
-iter  15 value 0.657199
-iter  20 value 0.567848
-iter  25 value 0.347518
-iter  30 value 0.132855
-iter  35 value 0.047279
-iter  40 value 0.033890
-iter  45 value 0.018117
-final  value 0.006328 
-converged
+initial  value 12.162947 
+iter   5 value 3.201793
+iter  10 value 1.433796
+iter  15 value 1.147120
+iter  20 value 0.914894
+iter  25 value 0.705057
+iter  30 value 0.376895
+iter  35 value 0.256479
+iter  40 value 0.091883
+iter  45 value 0.024262
+iter  50 value 0.010918
+final  value 0.010918 
+stopped after 50 iterations
 Warning messages:
 1: In asMethod(object) : losing data while coercing phylo4d to phylo
 2: In asMethod(object) : trees with unknown order may be unsafe in ape
@@ -113,4 +106,4 @@ Warning messages:
 > 
 > proc.time()
    user  system elapsed 
-   1.72    0.03    1.75 
+  2.352   2.468   4.674 

@@ -1,8 +1,8 @@
 
-R version 2.12.0 (2010-10-15)
-Copyright (C) 2010 The R Foundation for Statistical Computing
+R Under development (unstable) (2012-11-20 r61133) -- "Unsuffered Consequences"
+Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: i686-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -25,9 +25,9 @@ Loading required package: grid
 Loading required package: ape
 Loading required package: Rcpp
 
-Attaching package: 'phylobase'
+Attaching package: ‘phylobase’
 
-The following object(s) are masked from 'package:ape':
+The following object is masked from ‘package:ape’:
 
     edges
 
@@ -130,11 +130,15 @@ Warning messages:
 [1] "Error in .createLabels(value = tip.label, ntips = ntips, nnodes = nnodes,  : \n  Number of labels does not match number of nodes.\n"
 attr(,"class")
 [1] "try-error"
+attr(,"condition")
+<simpleError in .createLabels(value = tip.label, ntips = ntips, nnodes = nnodes,     type = "tip"): Number of labels does not match number of nodes.>
 > ## error regarding number of tip labels vs edges and nodes
 > print(try(phylo4(broke2$edge), silent=TRUE))
 [1] "Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.\n"
 attr(,"class")
 [1] "try-error"
+attr(,"condition")
+<simpleError in .local(x, ...): tips and nodes incorrectly numbered, One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.>
 Warning message:
 In tips == 1:ntips :
   longer object length is not a multiple of shorter object length
@@ -175,10 +179,14 @@ In tips == 1:ntips :
 [1] "Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, All tips must have associated tip labels. Use tipLabels<- (and nodeLabels<- if needed) to update them., One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.\n"
 attr(,"class")
 [1] "try-error"
+attr(,"condition")
+<simpleError in .local(x, ...): tips and nodes incorrectly numbered, All tips must have associated tip labels. Use tipLabels<- (and nodeLabels<- if needed) to update them., One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.>
 > print(try(phylo4(broke4$edge),silent=TRUE))     # error message saying tree has more than one root
 [1] "Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, All tips must have associated tip labels. Use tipLabels<- (and nodeLabels<- if needed) to update them., One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.\n"
 attr(,"class")
 [1] "try-error"
+attr(,"condition")
+<simpleError in .local(x, ...): tips and nodes incorrectly numbered, All tips must have associated tip labels. Use tipLabels<- (and nodeLabels<- if needed) to update them., One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.>
 > # print(try(plot(broke4), TRUE))   ## CAUSES R TO HANG!
 > 
 > ###
@@ -190,6 +198,8 @@ Error in treePlot(x, ...) : treePlot function requires a rooted tree.
 [1] "Error in treePlot(x, ...) : treePlot function requires a rooted tree.\n"
 attr(,"class")
 [1] "try-error"
+attr(,"condition")
+<simpleError in treePlot(x, ...): treePlot function requires a rooted tree.>
 > 
 > foo@label <- c(rep('blah',10), rep("",9))
 > 
@@ -203,4 +213,4 @@ attr(,"class")
 > 
 > proc.time()
    user  system elapsed 
-  1.130   0.010   1.148 
+  1.876   2.224   3.954 
