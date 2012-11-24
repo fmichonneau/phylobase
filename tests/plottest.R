@@ -15,7 +15,8 @@ plot(g1, show.node.label=TRUE)
 plot(g2, show.node.label=TRUE)
 
 
-g2B <- as(extractTree(g2), "phylog")
+## commented out since phylog objects are deprecated anyway
+## g2B <- as(extractTree(g2), "phylog")
 ##  Note the numbering differences!
 
 ## round trip 
@@ -32,6 +33,7 @@ plot(g3)
 
 ## Playing with new ways of plotting
 
+if (FALSE) {
 if(require(MASS)){
     dist1 <- cophenetic.phylo(as(g2, "phylo"))
     mdspos <- isoMDS(dist1)$points
@@ -45,7 +47,7 @@ if(require(MASS)){
 }
 ## never mind, I don't know how to construct a useful
 ##  2D color space anyway ...
-
+}
 
 treePlot(g2,plot.at.tip=TRUE,tip.plot.fun=
          function(x,...) {
