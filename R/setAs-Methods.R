@@ -5,56 +5,66 @@ setAs("phylo", "phylo4", function(from, to) {
   ## TODO should we also attempt to get order information?
   ## BMB horrible kludge to avoid requiring ape explicitly
   ape_is.rooted <- function(phy) {
-     if (!is.null(phy$root.edge)) 
-        TRUE
-    else if (tabulate(phy$edge[, 1])[length(phy$tip.label) + 
-        1] > 2) 
-        FALSE
+    if (!is.null(phy$root.edge)) 
+      TRUE
+    else if (tabulate(phy$edge[, 1])[length(phy$tip.label) + 1] > 2)
+      FALSE
     else TRUE
-   }
-    if (ape_is.rooted(from)) {
-        tip.idx <- 1:nTips(from)
-        if (nTips(from) < nrow(from$edge)) {
-            int.idx <- (nTips(from)+1):dim(from$edge)[1]
-        } else {
-            int.idx <- NULL
-        }
-        root.node <- as.numeric(setdiff(unique(from$edge[,1]), unique(from$edge[,2])))
-
-        from$edge <- rbind(from$edge[tip.idx,],c(0,root.node),from$edge[int.idx,])
-        if (!is.null(from$edge.length)) {
-            if (is.null(from$root.edge)) {
-                from$edge.length <- c(from$edge.length[tip.idx],as.numeric(NA),from$edge.length[int.idx])
-            }
-            else {
-                from$edge.length <- c(from$edge.length[tip.idx],from$root.edge,from$edge.length[int.idx])
-            }
-        }
-        if (!is.null(from$edge.label)) {
-            from$edge.label <- c(from$edge.label[tip.idx],NA,from$edge.label[int.idx])
-        }
+  }
+  if (ape_is.rooted(from)) {
+    tip.idx <- 1:nTips(from)
+    if (nTips(from) < nrow(from$edge)) {
+      int.idx <- (nTips(from)+1):dim(from$edge)[1]
+    } else {
+      int.idx <- NULL
     }
-    oldorder <- attr(from,"order")
-    neworder <- if (is.null(oldorder)) { "unknown" } else
+    root.node <- as.numeric(setdiff(unique(from$edge[,1]), unique(from$edge[,2])))
+    
+    from$edge <- rbind(from$edge[tip.idx,],c(0,root.node),from$edge[int.idx,])
+    if (!is.null(from$edge.length)) {
+      if (is.null(from$root.edge)) {
+        from$edge.length <- c(from$edge.length[tip.idx],as.numeric(NA),from$edge.length[int.idx])
+      }
+      else {
+        from$edge.length <- c(from$edge.length[tip.idx],from$root.edge,from$edge.length[int.idx])
+      }
+    }
+    if (!is.null(from$edge.label)) {
+      from$edge.label <- c(from$edge.label[tip.idx],NA,from$edge.label[int.idx])
+    }
+  }
+  newobj <- phylo4(from$edge, from$edge.length, unname(from$tip.label),
+                   node.label = from$node.label,
+                   edge.label = from$edge.label,
+                   order = "unknown")
+  oldorder <- attr(from,"order")
+  neworder <- if (is.null(oldorder)) { "unknown" } else
     if (!oldorder %in% phylo4_orderings) {
       stop("unknown ordering '",oldorder,"' in ape object")
-    } else if (oldorder=="cladewise") "preorder"
-    else oldorder
-    attr(from,"order") <- NULL
-    newobj <- phylo4(from$edge, from$edge.length, unname(from$tip.label),
-                     node.label = from$node.label,
-                     edge.label = from$edge.label,
-                     order = neworder)
-    attribs <- attributes(from)
-    attribs$names <- NULL
-    knownattr <- c("logLik", "origin", "para", "xi")
-    known <- names(attribs)[names(attribs) %in% knownattr]
-    unknown <- names(attribs)[!names(attribs) %in% c(knownattr, "class", "names")]
-    if (length(unknown) > 0) {
-      warning(paste("unknown attributes ignored: ", unknown, collapse = " "))
+    } else if (oldorder == "cladewise" || oldorder == "preorder") "preorder"
+    else if (oldorder == "pruningwise" || oldorder == "postorder") "postorder"
+  if (isRooted(newobj)) {
+    if (neworder == "preorder") {
+      newobj <- reorder(newobj, order="preorder")
     }
-    for (i in known) attr(newobj, i) <- attr(from, i)
-    newobj
+    if (neworder == "postorder") {
+      newobj <- reorder(newobj, order="postorder")
+    }
+  }
+  newobj@order <- neworder
+   
+  attr(from,"order") <- NULL
+  
+  attribs <- attributes(from)
+  attribs$names <- NULL
+  knownattr <- c("logLik", "origin", "para", "xi")
+  known <- names(attribs)[names(attribs) %in% knownattr]
+  unknown <- names(attribs)[!names(attribs) %in% c(knownattr, "class", "names")]
+  if (length(unknown) > 0) {
+    warning(paste("unknown attributes ignored: ", unknown, collapse = " "))
+  }
+  for (i in known) attr(newobj, i) <- attr(from, i)
+  newobj
 })
 
 setAs("phylo", "phylo4d", function(from, to) {

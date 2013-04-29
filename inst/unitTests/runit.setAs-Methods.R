@@ -44,7 +44,7 @@ test.phylo.As.phylo4 <- function() {
     as.phy <- as(reorder(tr, "cladewise"), "phylo4")
     checkIdentical("preorder", edgeOrder(as.phy))
     as.phy <- as(reorder(tr, "pruningwise"), "phylo4")
-    checkIdentical("pruningwise", edgeOrder(as.phy))
+    checkIdentical("postorder", edgeOrder(as.phy))
 
     # test phylo import when only 2 tips
     tr2 <- ape::drop.tip(tr, 3:ape::Ntip(tr))

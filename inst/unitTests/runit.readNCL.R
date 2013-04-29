@@ -123,16 +123,8 @@ test.readNCL <- function() {
     ## match it
     load(mlFile)
     checkIdentical(multiLines[[1]], ml1)
-    ## FAILS: why?
-    ## BMB 9 Nov 2012
-    ## for (i in slotNames(ml1)) {
-    ##   cat(i,"\n")
-    ##   checkIdentical(slot(ml1,i),slot(multiLines[[1]],i))
-    ##   fails on 'order': "preorder" (ml1) vs "unknown" (multiLines[[1]])?
-    ##   "unknown" seems correct to me, so modifying original file
-    ## }
-    checkIdentical(multiLines[[2]], ml1)
-    rm(ml1)
+    checkIdentical(multiLines[[2]], ml2)
+    rm(ml1, ml2)
 
     ## ########### Tree + data -- file from Mesquite
     ## tree properties
@@ -147,16 +139,15 @@ test.readNCL <- function() {
                 "Myrmecocystuscfnavajo", "Myrmecocystusnavajo",
                 NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
     names(labTr) <- 1:35
-    eTr <- c(1.699299, 0.894820, 0.836689, 4.524387, 0.506099, 0.198842, 0.689044,
-             2.926053, 1.724765, 1.724765, 4.650818, 4.255993, 1.083870, 1.083870,
-             0.802512, 2.027251, 2.708942, 2.708942, NA, 0.284767, 2.257581,
-             2.193845, 2.193845, 4.451425, 6.044804, 10.569191, 8.635503, 2.770378,
-             2.770378, 12.300701, 8.275077, 5.724923, 2.855375, 2.869547, 2.869547)
-    names(eTr) <- c("19-20","20-21","21-22","22-23","23-24","24-25","25-26","26-27",
-                    "27-1", "27-2","26-3","25-28","28-4","28-5","24-29","29-30",
-                    "30-6","30-7","0-19","29-31","31-32","32-8","32-9","31-10",
-                    "23-11","22-12","21-33","33-13","33-14","20-15","19-34","34-16",
-                    "34-35","35-17","35-18")
+    eTr <- c(NA, 1.699299, 12.300701, 0.894820, 0.836689, 10.569191, 4.524387, 6.044804,
+             0.506099, 0.198842, 0.689044, 4.650818, 2.926053, 1.724765, 1.724765, 4.255993,
+             1.083870, 1.083870, 0.802512, 2.027251, 2.708942, 2.708942, 0.284767, 4.451425,
+             2.257581, 2.193845, 2.193845, 8.635503, 2.770378, 2.770378, 8.275077, 5.724923,
+             2.855375, 2.869547, 2.869547)                                       
+    names(eTr) <- c("0-19", "19-20", "20-15", "20-21", "21-22", "22-12", "22-23", "23-11", "23-24",
+                    "24-25", "25-26", "26-3", "26-27", "27-1", "27-2", "25-28", "28-4", "28-5", 
+                    "24-29", "29-30", "30-6", "30-7", "29-31", "31-10", "31-32", "32-8", "32-9", 
+                    "21-33", "33-13", "33-14", "19-34", "34-16", "34-35", "35-17", "35-18")
     nTtr <- c("tip", "tip", "tip", "tip", "tip", "tip", "tip", "tip", "tip",
               "tip", "tip", "tip", "tip", "tip", "tip", "tip", "tip", "tip",
               "root", "internal", "internal", "internal", "internal", "internal",
@@ -443,8 +434,8 @@ test.readNCL <- function() {
     ## Tree representation
     labNew <- c("a", "b", "c", NA, NA)
     names(labNew) <- 1:5
-    eLnew <- c(1, 4, 2, NA, 3)
-    names(eLnew) <- c("4-1", "4-5", "5-2", "0-4", "5-3")
+    eLnew <- c(NA, 1, 4, 2, 3)
+    names(eLnew) <- c("0-4", "4-1", "4-5", "5-2", "5-3")
     nTnew <- c("tip", "tip", "tip", "root", "internal")
     names(nTnew) <- 1:5
     ## check.node.labels="drop" with readNCL

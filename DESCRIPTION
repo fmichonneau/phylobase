@@ -1,8 +1,8 @@
 Package: phylobase
 Type: Package
 Title: Base package for phylogenetic structures and comparative data
-Version: 0.6.5
-Date: 2012-11-21
+Version: 0.6.5.2
+Date: 2013-04-29
 Depends:
     methods,
     grid,
