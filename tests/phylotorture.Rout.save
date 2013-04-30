@@ -1,7 +1,6 @@
 
-R Under development (unstable) (2012-11-20 r61133) -- "Unsuffered Consequences"
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
+R Under development (unstable) (2013-04-25 r62670) -- "Unsuffered Consequences"
+Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: i686-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -98,8 +97,10 @@ Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, nodes 1 to nT
 > broke1$edge[broke1$edge[,2] ==9, 1] <- 9  # disconnect the node, two subtrees, ((a, b), c)  and (d,e)
 > 
 > try(as(broke1, "phylo4") -> tree, silent=TRUE)   # makes a phylo4  object with no warning
-Warning message:
-In checkTree(object) : tree contains singleton nodes
+Warning messages:
+1: In checkTree(object) : tree contains singleton nodes
+2: In checkTree(object) : tree contains singleton nodes
+3: In checkTree(object) : tree contains singleton nodes
 > try(phylo4(broke1$edge), silent=TRUE)    # constructor makes a phylo4 object with no warning
   label node ancestor edge.length node.type
 1    T1    1        7          NA       tip
@@ -213,4 +214,4 @@ attr(,"condition")
 > 
 > proc.time()
    user  system elapsed 
-  1.876   2.224   3.954 
+  1.996   2.228   4.109 
