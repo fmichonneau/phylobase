@@ -10,6 +10,68 @@ checkPhylo4 <- function(object) {
 }
 
 checkTree <- function(object) {
+    
+    ## case of empty phylo4 object
+    if(nrow(object@edge) == 0 && length(object@edge.length) == 0 &&
+       length(object@label) == 0 && length(object@edge.label) == 0)
+        return(TRUE)
+
+    ## get options
+    opt <- phylobase.options()
+
+    ## Storage of error/warning messages
+    err <- wrn <- character(0)
+
+    ## Matrix is integer
+    if (!is.integer(object@edge)) {
+        err <- c(err, "Edge matrix needs to be integer.")
+    }
+
+    ## Matrix doesn't have NAs
+    if (any(is.na(object@edge))) {
+        err <- c(err, "Edge matrix cannot have NAs at this time.",
+                 "This could only happen if singletons were allowed",
+                 "but this is not supported by phylobase yet.")
+    }
+
+    ## Having non-integer or NAs cause cryptic messages, so stop here
+    ##  if it's the case
+    if (length(err)) return(err)
+
+    ## Named slots
+    if (is.null(attributes(object@label)$names)) {
+        err <- c(err, "The label slot needs to be a named vector.")
+        attributes(object@label) <- list(names=character(0))
+    }
+    if (is.null(attributes(object@edge.length)$names)) {
+        err <- c(err, "The edge.length slot needs to be a named vector.")
+        attributes(object@edge.length) <- list(names=character(0))
+    }
+    if (is.null(attributes(object@edge.label)$names)) {
+        err <- c(err, "The edge.label slot needs to be a named vector.")
+        attributes(object@edge.label) <- list(names=character(0))
+    }
+
+    res <- checkTreeCpp(object, opts=opt)
+
+    err <- ifelse(nzchar(res[[1]]), c(err, res[[1]]), err)
+    wrn <- ifelse(nzchar(res[[2]]), c(wrn, res[[2]]), wrn)
+
+    if (!is.na(wrn)) {
+        wrn <- paste(wrn, collapse=", ")
+        warning(wrn)
+    }
+    if (!is.na(err)) {
+        err <- paste(err, collapse=", ")
+        return(err) #failures are returned as text
+    }
+    else {
+        return(TRUE)
+    }
+    
+}
+
+checkTreeOld <- function(object) {
 
     ## case of empty phylo4 object
     if(nrow(object@edge) == 0 && length(object@edge.length) == 0 &&
@@ -29,18 +91,17 @@ checkTree <- function(object) {
     tips <- unique(sort(E[,2][!E[,2] %in% E[,1]]))
     nodes <- unique(sort(c(E)))
     intnodes <- nodes[!nodes %in% tips]
-    roots <- E[which(is.na(E[,1])),2]
-    nRoots <- length(roots)
+    nRoots <- length(which(E[,1] == 0))
 
     ## Check edge lengths
     if (hasEdgeLength(object)) {
         if (length(object@edge.length) != nedges)
             err <- c(err, "edge lengths do not match number of edges")
-        if(!is.numeric(object@edge.length))
-            err <- c(err, "edge lengths are not numeric")
+        ##if(!is.numeric(object@edge.length)) # not needed
+        ##  err <- c(err, "edge lengths are not numeric")
         ## presumably we shouldn't allow NAs mixed
         ## with numeric branch lengths except at the root
-        if (sum(is.na(object@edge.length)) > 1)
+        if (sum(is.na(object@edge.length)) > (nRoots + 1))
             err <- c(err, "NAs in edge lengths")
         ## Strip root edge branch length (if set to NA)
         if (any(object@edge.length[!is.na(object@edge.length)] < 0))

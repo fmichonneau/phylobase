@@ -63,13 +63,10 @@ setMethod("nTips", signature(x="phylo4"), function(x) {
     if(nrow(E) == 0)
         return(0)
     else {
-        ## doesn't handle reticulated networks
-        ##    res <- sum(!E[, 2] %in% E[, 1])
-        res <- sum(tabulate(na.omit(E[,1])) == 0) ## twice as fast as ...
-        ## change suggested by Aaron Mackey, handles reticulated networks better
-        ## res <- sum(!(unique(E[,2]) %in% E[,1]))
-        return(res)
-    }
+        ## at this time NAs are not allowed in edge matrix
+        ## sum(tabulate(E[, 1]) == 0)
+        nTipsFastCpp(E[, 1])
+    }        
 })
 
 ## hack to ensure ape compatibility
@@ -388,7 +385,7 @@ setMethod("edgeLabels", signature(x="phylo4"),
 
 setReplaceMethod("edgeLabels", signature(x="phylo4", value="character"),
   function(x, ..., value) {
-    lbl <- .createEdge(value, x@edge, type="labels")
+    lbl <- .createEdge(value, x@edge, type="labels")    
     x@edge.label <- lbl[!is.na(lbl)]
     if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
     x
