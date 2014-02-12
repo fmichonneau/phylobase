@@ -1,0 +1,367 @@
+\documentclass{article}
+%\VignettePackage{phylobase}
+%\VignetteIndexEntry{A developers guide for contributing to phylobase}
+
+\usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
+\usepackage{graphicx}       % for jpeg and pdf figure support
+\usepackage[usenames,dvipsnames]{color} % loads colors w/ easy names for coloring our links
+\definecolor{DarkBlue}{rgb}{0,0,0.56}
+\usepackage[colorlinks=true,urlcolor=DarkBlue,linkcolor=BrickRed,bookmarks=true]{hyperref}
+\usepackage{url}
+\usepackage[noae]{Sweave}
+
+\newcommand{\code}[1]{{{\tt #1}}}
+\newcommand{\pb}{\texttt{phylobase }}
+
+%% Use a little bit more of the page
+%% borrowed from Rd.sty, of r-project.org
+\addtolength{\textheight}{12mm}
+\addtolength{\topmargin}{-9mm}   % still fits on US paper
+\addtolength{\textwidth}{24mm}   % still fits on US paper
+\setlength{\oddsidemargin}{10mm}
+\setlength{\evensidemargin}{\oddsidemargin}
+
+\title{Developers guide to \pb}
+\author{Peter Cowan, Ben Bolker \& other developers of \pb}
+\date{\today}
+
+\begin{document}
+%% inspired by the adephylo vignette
+\DefineVerbatimEnvironment{Sinput}{Verbatim}
+{formatcom={\color{BrickRed}},fontsize=\footnotesize, baselinestretch=0.75}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}
+{formatcom={\color{DarkBlue}},fontsize=\footnotesize, baselinestretch=0.75}
+
+\SweaveOpts{fig=FALSE, eps=FALSE, pdf=TRUE, width=6, height=6}
+
+\maketitle
+
+\tableofcontents
+
+<<setOptions, echo=false>>=
+options(width=40)
+@
+
+\section{Introduction}
+
+This vignette is intended as a guide for the development of \pb and a repository of technical notes of primary interest to it's developers and others interested in gory details --- by contrast the other \pb vignette is more of an introduction \& user's manual.
+
+\section{R-Forge}
+
+Our development infrastructure hosted by R-Forge,\footnote{\url{http://phylobase.r-forge.r-project.org}} and includes a Subversion repository (see \autoref{subversion}~[\nameref{subversion}]) for source code management, trackers for bug reports and feature requests,\footnote{\url{http://r-forge.r-project.org/tracker/?group_id=111}} and mailing lists for development discussion and tracking changes in the source code.\footnote{\url{http://r-forge.r-project.org/mail/?group_id=111}}
+
+The R-Forge manual\footnote{\url{http://r-forge.r-project.org/R-Forge_Manual.pdf}} describes how to develop a package using their infrastructure Of particular importance is the section on getting ssh keys to work so that you can commit changes to the \code{phylobase} code using Subversion (\code{svn}).
+
+On feature of R-Forge is a package repository that allows prerelease versions of \pb to be install directly from \code{R}.
+
+<<RforgeInstall, eval=false>>=
+install.packages("phylobase", repos = "http://r-forge.r-project.org")
+@
+
+\section{Building \code{phylobase}}
+
+If you are interested in building \pb from source, you will need the same tools required to build \code{R} itself.  These are documented in the R Installation and Administration manual.\footnote{\url{http://cran.r-project.org/doc/manuals/R-admin.html}} If you are running Mac OS X you’ll need to have the developer tools.\footnote{\url{http://developer.apple.com/technology/xcode.html}}  On Windows you'll need to install the ``Windows toolset''\footnote{\url{http://www.murdoch-sutherland.com/Rtools/}} as described in the above manual.  If you are running Linux, you probably already know what you need.  To build the vignettes and \LaTeX~documentation you will need to install a \TeX~distribution like MacTex\footnote{\url{http://www.tug.org/mactex/}} for Mac OS X, Tex-Live for Linux, or MiKTeX\footnote{\url{http://www.miktex.org/}} for Windows.  Once you have the proper tools installed follow the instruction in the Writing \code{R} Extensions manual.\footnote{\url{http://cran.r-project.org/doc/manuals/R-exts.html}}
+
+\section{Coding standards}
+
+We try to follow the coding standards of Bioconductor.\footnote{\url{http://wiki.fhcrc.org/bioc/Coding_Standards}}  Namely, variables and particularily function exposed to users should be in \code{camelCase}.  As of this writing many non-exported functions are prefixed with `.' however, future private functions should be named without this convention.  Indentation should be 4 spaces and tabs should be avoided.  We also use \code{<-} for assignment, and place spaces after commas, in indexes and function calls (e.g. \code{df[2, 2]} and \code{seq(1, 2, 0.1)}, not \code{df[2,2]} or \code{seq(1,2,0.1}.)
+
+\section{Release procedure}
+
+When the package code has stabilized or significant bugs have been fixed we want to push those changes out to CRAN.  This section documents the release sequence used for when submitting the package to CRAN.
+
+\begin{enumerate}
+    \item Update the NEWS file which resides in the pkg/ directory and describes  changes in the package since its last release.  New changes should be appended above the earlier entries and formatted so that it can be read by \code{news(package="phylobase")}, (format documented in \code{?news}).  Briefly, the version header should look like a previous entry and changes should be grouped in categories which start at the beginning of a line.  Within each category individual changes should be marked with an indented (4 spaces) asterisk, with the change text indented and wrapped a further four space, eight total.  The most comprehensive way to find the changes since the last version is to look at the SVN log.  This procedure was followed for the the 0.5 release and assumes that you have the entire project checked out, including the www and tags directories.
+
+Navigate to the tag for the previous release and get the revision it was created:
+\begin{verbatim}
+~$ cd phylobase/tags/phylobase-0.4
+~$ svn log --stop-on-copy
+------------------------------------------------------------------------
+r309 | skembel | 2008-12-18 12:55:14 -0800 (Thu, 18 Dec 2008) | 1 line
+
+Tagging current version as 0.4 prior to hackathon changes
+------------------------------------------------------------------------
+\end{verbatim}
+
+In this case we can see that the tag was created in revision 309 and as this was the current release, we want all the changes that have been made since.  To do that we navigate to the top level to get the change log from any branches that have been made and save the log.  If there are unmerged branches, care should be taken to exclude those changes from the NEWS file.  Because this file may be rather large we'll output it to a file.
+
+\begin{verbatim}
+~$ cd ../..
+~$ svn log -r309:HEAD > RecentChanges.txt
+\end{verbatim}
+
+The NEWS file can then be updated by going through the RecentChanges.txt file and picking out significant changes.
+
+    \item The DESCRIPTION file should be updated to reflect the new version number and current date. Version numbers should follow the 0.5.0 format (no dashes), and the date should be formatted as 2009-01-30.
+    \item Rebuild the vignettes to incorporate the latest changes.  CRAN may not have all the package we use to build our vignettes or able to run latex the multiple time necessary to generate the PDFs with the proper cross references and table of contents.
+
+\begin{verbatim}
+~$ cd phylobase/pkg/inst/doc
+~$ R CMD Sweave phylobase.Rnw
+~$ pdflatex phylobase.tex
+~$ pdflatex phylobase.tex
+~$ pdflatex phylobase.tex
+
+~$ R CMD Sweave developer.Rnw
+~$ pdflatex developer.tex
+~$ pdflatex developer.tex
+~$ pdflatex developer.tex
+
+~$ rm *.toc *.out *.log *.aux *.tex
+\end{verbatim}
+
+    \item Code freeze.  Before the package can be submitted to CRAN it must pass the R-Forge build and check process which happens every night.  The easiest way to handle this is to freeze the the code for a day or two after the NEWS, DESCRIPTION and PDF files have been updated.
+    \item Tag the release in SVN.  Each release is tagged so that a copy of it is easily available if needed at a later date.  This is done using the SVN copy as follows for a hypothetical 0.5.1 release:
+
+\begin{verbatim}
+~$ cd phylobase/
+~$ svn copy pkg/ tags/phylobase-0.5.1
+~$ svn commit -m "tagging version 0.5.1"
+\end{verbatim}
+
+    \item Uploading to CRAN is done by clicking the Upload to CRAN link on the R-Forge package page.  Ensure that the revision number corresponds to the revision with the updated NEWS etc. files.
+    \item Update the R-Forge website with the correct version number and PDFs of the vignettes.
+\end{enumerate}
+
+\section{Unit testing with RUnit}
+
+We are in the process of moving our testing infrastructure to the \code{RUnit}\footnote{\url{http://cran.r-project.org/web/packages/RUnit/index.html}} framework.  New contributions and bug fixes should be accompanied by unit tests which test the basic functionality of the code as well as edge cases (e.g what happens when the function is passed an empty string or negative number -- even when those inputs don't make sense.)  Unit tests are stored in the \code{inst/unitTests/} directory and are named according to the source file they correspond to.  See the included tests and the \code{RUnit} documentation for further details. \code{RUnit} has a few advantages over the other testing frameworks in \code{R}, namely the examples in documentation, vignettes,
+
+\section{Non-exported functions}
+
+These functions are for internal use in \code{phylobase} not exported.  Since most are not documented elsewhere, they are documented here.
+
+\begin{description}
+
+    \addcontentsline{toc}{subsection}{.chnumsort}
+    \item[\code{.chnumsort}] A convenience function that coerces vector of strings to numbers for sorting, then coerces the vector back to stings.  Currently only used inside the \code{prune} method.
+
+    \addcontentsline{toc}{subsection}{.createEdge}
+    \item[\code{.createEdge}]
+
+    \addcontentsline{toc}{subsection}{.createLabels}
+    \item[\code{.createLabels}] Used any time labels are needed, including when updating the labels via \code{labels()<-} or constructing a \code{phylo4} object.  It takes a vector of names to use or \code{NULL} if new labels should be generated, integers indicating the number of tips and internal nodes, as well as a string to indicated the type of labels to generate ``tip'' and ``internal'', for either tip or internal labels along or ``allnode'' or all nodes.
+
+    \addcontentsline{toc}{subsection}{.genlab}
+    \item[\code{.genlab}] A handy function that can generate labels for applying to nodes and tips.  The function takes to arguments, a `base' string, and an integer indicating the number of labels desired.  The result is a vector of string with a number (padded with `0') suffix e.g. \code{foo01...foo12}.  This function is used to generate names in the \code{.createLabels} function as well as for for making temporary names during the \code{prune} method.
+
+    \addcontentsline{toc}{subsection}{.phylo4Data}
+    \item[\code{.phylo4Data}]
+
+    \addcontentsline{toc}{subsection}{.phylo4ToDataFrame}
+    \item[\code{.phylo4ToDataFrame}]
+
+    \addcontentsline{toc}{subsection}{.bubLegendGrob}
+    \item[\code{.bubLegendGrob}] This function generates a \code{Grid} graphics object (a grob) for  drawing the \code{phylobubbles()} legend.  For reason I have not been able to understand, it must be defined outside of the \code{phylobubbles} function.  It takes the raw tip data values for a \code{phylo4d} object as well as the scaled values used for making the bubble plot, both of these vectors are passed directly to the \code{drawDetails.bubLegend} function.
+
+    \addcontentsline{toc}{subsection}{drawDetails.bubLegend}
+    \item[\code{drawDetails.bubLegend}] This function is the \code{drawDetails} method for the \code{bubLegend} grob described above.  The \code{drawDetails} method is called every time a plot is generated or resized.  In this case it calculates labels and sizes for drawing the example bubbles in the phylobubbles legend.  This is necessary because the because the main bubble plot bubble can change in size as the plot is resized.  Because the legend and the bubble plot occur in different viewports the legend cannot know the size of the main plot circles (they are plotted relative to the space available in their viewport.)
+
+    \addcontentsline{toc}{subsection}{orderIndex}
+    \item[\code{orderIndex}] This function is called from the \code{reorder} method.  It takes a \code{phylo4} or \code{phylo4d} object and a string indicating the desired tree ordering, currently one of ``preorder'' or ``postorder''.  It's value is a vector indicating the respective ordering of the edge matrix from top to bottom (i.e. in postorder the first edge in the edge matrix would terminate in a tip, while in preorder the first edge would be the root edge.
+
+\end{description}
+
+\section{The Nexus Class Library and Rcpp}
+
+\subsection{Organization of the repository}
+We manage NCL source code as a ``Vendor branch'' as described in the ``SVN
+book''. You should refer to this section of the SVN book before upgrading to a
+newer version of NCL.
+
+The original copies of NCL are stored at the root of the repository in the
+folder \code{libncl/}.
+
+When a new version of NCL is released:
+\begin{enumerate}
+  \item the newest tarball should be unpacked in the folder with the appropriate version number;
+  \item this new directory should then be copied over the \code{current/} folder
+    (using \code{svn copy});
+  \item the potential new files should be added with \code{svn add}, and the
+    missing files removed with \code{svn delete}. At this stage, the changes can
+    be commited.
+  \item The new version of NCL can then be tagged.
+  \item The new version of NCL can finally be merged in the \code{pkg/src} directory.
+\end{enumerate}
+
+For more information look at the section ``General Vendor Branch Management'' in
+the SVN book\footnote{\url{http://svnbook.red-bean.com/en/1.5/svn.advanced.vendorbr.html}}.
+
+\section{S4 classes and methods}
+
+\section{Grid graphics}
+
+\section{Converting between tree formats and ``round-trip'' issues}
+
+We should in principle be able to convert from other formats to \code{phylo4}(\code{d}) and (\code{ape::phylo}, \code{ouch::ouch} etc.) and back without losing any information. The two classes of exceptions would be (1) where \code{phylo4} stores \emph{less} information than the other formats (we would try to avoid this), and (2) where there are ambiguities etc. in the other formats (we would try to avoid this, too, but it may be difficult; ideally we would consult the package maintainers and try to get them to eliminate the ambiguities in their formats).
+
+Ideally we would be able to use \code{identical()} to test equality --- this tests ``bit-by-bit'' equality, and is intolerant of \emph{any} differences in format. More loosely, \code{all.equal()} allows for numeric variation below a certain tolerance, etc. (these correspond to \code{RUnit::checkEquals()} and \code{RUnit::checkIdentical()}).
+
+Case in point: \code{ape} is not entirely consistent in its internal representations, which causes some difficulty in creating perfect round trips (see \code{tests/roundtrip.R} for workarounds). In particular,
+
+\begin{itemize}
+
+  \item \code{unroot()} contains several statements that subtract 1 from
+  components of the data structure that were previously stored
+  as \code{integer}.  Because 1 is subtracted an not \code{1L}
+  (an explicitly integer constant), this coerces those elements
+  to be \code{numeric} instead.
+
+  \item different ways of creating trees in \code{ape}
+    (\code{read.tree()}, \code{rcoal()})
+    generate structures with the internal elements in different orders.
+    When \code{phylobase} re-exports them, it always uses the order
+    \{\code{edge}, \code{edge.length}, \code{tip.label},
+    \code{Nnode}, [\code{node.label}], [\code{root.edge}]\},
+    which matches the trees produced by \code{rcoal} but not
+    those produced by \code{read.tree}
+
+  \item because of differences in ordering standards, it's not
+    clear that we can always preserve ordering information through
+    non-trivial manipulations in phylobase
+\end{itemize}
+
+
+\appendix
+\section{Subversion}\label{subversion}
+
+\subsection{Organization of the \code{phylobase} repository}
+The \code{phylobase} subversion repository is organized with four top level directories
+\begin{itemize}
+    \item \code{branches/} where changes that will result in large disruption of the package take place
+    \item \code{libncl/} where we keep unaltered source of NCL.
+    \item \code{pkg/} where the main trunk of the project exists.  This directory is built and available through the R-Forge install mechanism so it is important that it passes \code{R CMD check}
+    \item \code{tags/} where copies of previous \code{phylobase} releases are kept
+    \item \code{www/} where the R-Forge webpage for phylobase is maintained.  This must be kept and the top level for R-Forge to find it
+\end{itemize}
+
+\subsection{Using subversion for the first time}
+The general a subversion work flow goes as follows. I’ve written this with macs linux in mind, however windows users will follow the same work flow but probably use a graphical front end for subversion, like TortoiseSVN.\footnote{\url{http://tortoisesvn.tigris.org/}}
+
+R-Forge allows code to be checked out in two different ways.  First, you can get the code anonymously using this terminal command:
+
+\begin{verbatim}
+svn checkout \
+svn://svn.r-forge.r-project.org/svnroot/phylobase
+\end{verbatim}
+
+If you would like to make commits directly to the source repository you need to register with R-Forge and be added to the \code{phylobase} project as a developer.  Once you've done this, you’ll need to have the ssh key set up in your R-Forge account.  These terminal commands will make a copy of the folder ``phylobase'', and all the source files for the package, in whatever directory you are in (in this case ``\code{~/Code}''), change ``\code{[name]}'' to your R-Forge username.
+
+\begin{verbatim}
+cd ~/Code/
+svn checkout \
+svn+ssh://[name]@svn.r-forge.r-project.org/svnroot/phylobase
+\end{verbatim}
+
+Once you have a copy of the package, hack away at it and adding functions and documentation. Save changes. Then check to make sure you have the latest version of the package, it is often the case that another developer has committed a change while you were working.
+
+\begin{verbatim}
+svn update
+\end{verbatim}
+
+R provides some tools for checking packages. They help ensure that the package can be installed and that all the proper documentation has been added. To keep the repository clean of files that are created during the build process copy the package folder to a tmp folder before running the check.
+
+\begin{verbatim}
+cp -R ~/Code/phylobase/pkg/ ~/Code/phylobase-tmp/
+R CMD check ~/Code/phylobase-tmp
+\end{verbatim}
+
+Fix any errors or warnings that come up, and repeat \code{R CMD check} as necessary.  The R core developers provide a manual \footnote{\url{http://cran.r-project.org/doc/manuals/R-exts.pdf}} for writing R Extensions (packages) which describes the package and documentation formats.  Main gotchas are being sure that you’ve properly updated the \code{DESCRIPTION} and \code{NAMESPACE} files and ensuring that the documentation is in the proper format.  \code{R CMD check} warnings/errors are very useful for helping figure out what the issue is. And, the command \code{prompt()} will provide ``fill-in-the-blank'' documentation if you’re documenting a function for the first time.
+
+The next step is to take a look at what we’ve actually changed. The \code{status} command will show any file that’s been added (\code{A}), modified (\code{M}), or is unknown (and may need to be added) to subversion (\code{?}).
+
+\begin{verbatim}
+svn status
+\end{verbatim}
+
+For instance if I’ve added a new file called foo.R subversion doesn’t
+follow it until I tell it to. So I might see something like:
+
+\begin{verbatim}
+? fooBar.R
+\end{verbatim}
+
+Which we can remedy with
+
+\begin{verbatim}
+svn add fooBar.R
+\end{verbatim}
+
+svn status will then show:
+
+\begin{verbatim}
+A fooBar.R
+\end{verbatim}
+
+Update again for good measure (you can’t overdo it on this).
+
+\begin{verbatim}
+svn up
+\end{verbatim}
+
+And, finally commit the changes with a helpful message (the -m portion) about what they change does:
+
+\begin{verbatim}
+svn commit fooBar.R -m "Function fooBar for calculating foo on the class bar"
+\end{verbatim}
+
+Subversion, has a whole bag of tricks, full documentation of which can be found in the subversion book.\footnote{\url{http://svnbook.red-bean.com/}} There are also a number of graphical interface programs that you can use with Subversion as well.
+
+\subsection{Subversion patches}
+
+If you don't have developer access to the project but you'd like to fix a bug or add a feature you can provide the change as a patch.  To make a patch with subversion first get a copy of the most recent code.
+
+\begin{verbatim}
+svn checkout svn://svn.r-forge.r-project.org/svnroot/phylobase/pkg
+\end{verbatim}
+
+Make whatever changes in the code or documentation are necessary.  For instance if there is a simple function \code{helloWorld}, in a file called fooBar.R
+
+\begin{verbatim}
+helloWorld <- function(){
+    # This is a comment
+    print('Hello World!')
+}
+\end{verbatim}
+
+And, I want to update it, would find the file fooBar.R in my svn checkout and change it to:
+
+\begin{verbatim}
+helloWorld <- function(x){
+    # This is a comment
+    # This is a new comment
+    print(paste('Hello', x, '!')
+}
+\end{verbatim}
+
+To supply that change to a developer with subversion access I would make a diff file of the change.  The way to make a diff is to run the \code{svn diff} command on the file in question.
+
+\begin{verbatim}
+svn diff fooBar.R > helloWorld.diff
+\end{verbatim}
+
+This however just spits the output of \code{svn diff} to the terminal.  To save the output to a file use ``\code{>}'' which tells the terminal to save the output to a file, this file should end in ``.diff'' and will have pluses and minuses to indicate which lines have been added and removed.
+
+\begin{verbatim}
+svn diff fooBar.R > fooBar.diff
+\end{verbatim}
+
+\begin{verbatim}
+--- /Users/birch/fooBar.R
++++ /Users/birch/fooBar.R
+@@ -1,4 +1,5 @@
+-helloWorld <- function(){
++helloWorld <- function(x){
+     # This is a comment
+-    print('Hello World!')
++    # This is a new comment
++    print(paste('Hello', x, '!')
+ }
+\end{verbatim}
+
+The fooBar.diff file can then be sent to the developers mailing list or the R-Forge Patches issue tracker.\footnote{\url{https://r-forge.r-project.org/tracker/?atid=490&group_id=111&func=browse}} Where another developer can easily review and apply the patch.
+
+\subsection{Branching and merging with svn}
+
+\end{document}
