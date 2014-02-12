@@ -19,10 +19,12 @@
 readNexus(file, simplify=FALSE, type=c("all", "tree", "data"),
           char.all=FALSE, polymorphic.convert=TRUE, levels.uniform=FALSE,
           quiet=TRUE, check.node.labels=c("keep", "drop", "asdata"),
-          return.labels=TRUE, check.names=TRUE, ...)
+          return.labels=TRUE, check.names=TRUE, convert.edge.length=FALSE,
+          ...)
 
 readNewick(file, simplify=FALSE, quiet=TRUE,
-           check.node.labels=c("keep", "drop", "asdata"), ...)
+           check.node.labels=c("keep", "drop", "asdata"),
+           convert.edge.length=FALSE, ...)
 
 }
 
@@ -63,6 +65,12 @@ readNewick(file, simplify=FALSE, quiet=TRUE,
           are syntactically valid variable names and are not duplicated.
           If necessary they are adjusted (by \sQuote{make.names}) so
           that they are.}
+
+  \item{convert.edge.length}{logical. If \sQuote{TRUE} negative edge
+    lengths are replaced with 0. At this time \code{phylobase} does not
+    accept objects with negative branch lengths, this workaround allows
+    to still use trees with negative branch lengths are an artifact of
+    the method used to build the tree.}
   
   \item{\dots}{Additional arguments to be passed to phylo4 or phylo4d
     constructor (see Details)}

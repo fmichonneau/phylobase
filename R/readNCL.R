@@ -8,11 +8,12 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
                     levels.uniform=FALSE, quiet=TRUE,
                     check.node.labels=c("keep", "drop", "asdata"),
                     return.labels=TRUE, file.format=c("nexus", "newick"),
-                    check.names=TRUE, ...) {
+                    check.names=TRUE, convert.edge.length=FALSE, ...) {
 
   ## turn on to TRUE to test new way of building trees in NCL
  experimental <- FALSE
 
+ file <- path.expand(file)
  type <- match.arg(type)
  check.node.labels <- match.arg(check.node.labels)
  file.format <- match.arg(file.format)
@@ -144,6 +145,9 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
          tr$tip.label <- ncl$taxaNames[as.numeric(tr$tip.label)]     
        }
        else stop("phylobase doesn't deal with multiple taxa block at this time.")
+       if (convert.edge.length) {
+         tr$edge.length[tr$edge.length < 0] <- 0
+       }
        if (is.null(tr$node.label)) {
          if (check.node.labels == "asdata") {
            warning("Could not use value \"asdata\" for ",
@@ -169,6 +173,9 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
      edgeMat <- cbind(ncl$parentVector, c(1:length(ncl$parentVector)))
      edgeLgth <- ncl$branchLengthVector
      edgeLgth[edgeLgth == -1] <- NA
+     if (convert.edge.length) {
+       edgeLgth[edgeLgth < 0] <- 0
+     }
      if (length(ncl$taxaNames) != min(ncl$parentVector)-1) {
        stop("phylobase doesn't deal with multiple taxa block at this time.")
      }
@@ -224,18 +231,21 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
                        char.all=FALSE, polymorphic.convert=TRUE,
                        levels.uniform=FALSE, quiet=TRUE,
                        check.node.labels=c("keep", "drop", "asdata"),
-                       return.labels=TRUE, check.names=TRUE, ...) {
+                       return.labels=TRUE, check.names=TRUE, convert.edge.length=FALSE,
+                       ...) {
 
   return(readNCL(file=file, simplify=simplify, type=type, char.all=char.all,
           polymorphic.convert=polymorphic.convert, levels.uniform=levels.uniform,
           quiet=quiet, check.node.labels=check.node.labels,
           return.labels=return.labels, file.format="nexus",
-          check.names=check.names, ...))
+          check.names=check.names, convert.edge.length=convert.edge.length, ...))
 }
 
 readNewick <- function(file, simplify=FALSE, quiet=TRUE,
-                       check.node.labels=c("keep", "drop", "asdata"), ...) {
+                       check.node.labels=c("keep", "drop", "asdata"),
+                       convert.edge.length=FALSE, ...) {
 
   return(readNCL(file=file, simplify=simplify, quiet=quiet,
-                 check.node.labels=check.node.labels, file.format="newick", ...))
+                 check.node.labels=check.node.labels, file.format="newick",
+                 convert.edge.length=convert.edge.length, ...))
 }
