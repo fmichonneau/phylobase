@@ -8,6 +8,7 @@ import(methods)
 importFrom(graphics, plot)
 importFrom(stats, reorder)
 importFrom(utils, head, tail)
+importFrom(Rcpp, evalCpp)
 
 #----------------------------------------------------------------------
 
