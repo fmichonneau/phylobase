@@ -158,29 +158,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // getAllNodesFast
-Rcpp::IntegerVector getAllNodesFast(Rcpp::IntegerMatrix edge);
-RcppExport SEXP phylobase_getAllNodesFast(SEXP edgeSEXP) {
+Rcpp::IntegerVector getAllNodesFast(Rcpp::IntegerMatrix edge, bool rooted);
+RcppExport SEXP phylobase_getAllNodesFast(SEXP edgeSEXP, SEXP rootedSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type edge(edgeSEXP );
-        Rcpp::IntegerVector __result = getAllNodesFast(edge);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// testNodes
-Rcpp::List testNodes(Rcpp::IntegerMatrix edge);
-RcppExport SEXP phylobase_testNodes(SEXP edgeSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type edge(edgeSEXP );
-        Rcpp::List __result = testNodes(edge);
+        Rcpp::traits::input_parameter< bool >::type rooted(rootedSEXP );
+        Rcpp::IntegerVector __result = getAllNodesFast(edge, rooted);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -197,21 +183,6 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type x(xSEXP );
         Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type y(ySEXP );
         Rcpp::List __result = testEqInt(x, y);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// getInternalNodes
-Rcpp::IntegerVector getInternalNodes(Rcpp::IntegerMatrix edge);
-RcppExport SEXP phylobase_getInternalNodes(SEXP edgeSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type edge(edgeSEXP );
-        Rcpp::IntegerVector __result = getInternalNodes(edge);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

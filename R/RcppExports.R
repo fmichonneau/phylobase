@@ -41,20 +41,12 @@ getAllNodesSafe <- function(edge) {
     .Call('phylobase_getAllNodesSafe', PACKAGE = 'phylobase', edge)
 }
 
-getAllNodesFast <- function(edge) {
-    .Call('phylobase_getAllNodesFast', PACKAGE = 'phylobase', edge)
-}
-
-testNodes <- function(edge) {
-    .Call('phylobase_testNodes', PACKAGE = 'phylobase', edge)
+getAllNodesFast <- function(edge, rooted) {
+    .Call('phylobase_getAllNodesFast', PACKAGE = 'phylobase', edge, rooted)
 }
 
 testEqInt <- function(x, y) {
     .Call('phylobase_testEqInt', PACKAGE = 'phylobase', x, y)
-}
-
-getInternalNodes <- function(edge) {
-    .Call('phylobase_getInternalNodes', PACKAGE = 'phylobase', edge)
 }
 
 all_naC <- function(x) {

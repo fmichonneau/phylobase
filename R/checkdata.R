@@ -51,9 +51,20 @@ checkTree <- function(object) {
         err <- c(err, "The edge.label slot needs to be a named vector.")
         attributes(object@edge.label) <- list(names=character(0))
     }
-
+    
     res <- checkTreeCpp(object, opts=opt)
 
+    if (hasEdgeLength(object) && any(is.na(edgeLength(object)))) {
+        naElen <- names(which(is.na(object@edge.length)))
+        if (! identical(naElen, edgeId(object, "root")))
+            err <- c(err, "Only the root can have NA as edge length. ")
+    }
+
+    if (!object@order %in% phylo4_orderings) {
+      err <- c(err, paste("unknown order: allowed values are",
+               paste(phylo4_orderings,collapse=",")))
+    }
+    
     err <- ifelse(nzchar(res[[1]]), c(err, res[[1]]), err)
     wrn <- ifelse(nzchar(res[[2]]), c(wrn, res[[2]]), wrn)
 

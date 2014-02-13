@@ -128,23 +128,29 @@ Rcpp::IntegerVector getAllNodesSafe (Rcpp::IntegerMatrix edge) {
 }
 
 //[[Rcpp::export]]
-Rcpp::IntegerVector getAllNodesFast (Rcpp::IntegerMatrix edge) {
+Rcpp::IntegerVector getAllNodesFast (Rcpp::IntegerMatrix edge, bool rooted) {
     Rcpp::IntegerVector tmp = Rcpp::as_vector(edge);
     Rcpp::IntegerVector maxN = Rcpp::range(tmp);
     Rcpp::IntegerVector ans = Rcpp::seq_len(maxN[1] + 1);
-    return ans - 1;
+    if (rooted) {
+	return ans - 1;
+    }
+    else {
+	ans.erase(0);
+	return ans - 1;
+    }
 }
 
-//[[Rcpp::export]]
-Rcpp::List testNodes (Rcpp::IntegerMatrix edge) {
-    Rcpp::IntegerVector allNodes = Rcpp::as_vector(edge);
-    allNodes = Rcpp::unique(allNodes);
-    std::sort (allNodes.begin(), allNodes.end());
-    Rcpp::IntegerVector supposedNodes = getAllNodesFast(edge);
-    Rcpp::IntegerVector test = Rcpp::setdiff(supposedNodes, allNodes);
-    Rcpp::LogicalVector res = supposedNodes == allNodes;
-    return Rcpp::List::create(supposedNodes, allNodes, test, res);
-}
+
+// Rcpp::List testNodes (Rcpp::IntegerMatrix edge, bool rooted) {
+//     Rcpp::IntegerVector allNodes = Rcpp::as_vector(edge);
+//     allNodes = Rcpp::unique(allNodes);
+//     std::sort (allNodes.begin(), allNodes.end());
+//     Rcpp::IntegerVector supposedNodes = getAllNodesFast(edge, rooted);
+//     Rcpp::IntegerVector test = Rcpp::setdiff(supposedNodes, allNodes);
+//     Rcpp::LogicalVector res = supposedNodes == allNodes;
+//     return Rcpp::List::create(supposedNodes, allNodes, test, res);
+// }
 
 //[[Rcpp::export]]
 Rcpp::List testEqInt (Rcpp::IntegerVector x, Rcpp::IntegerVector y) {
@@ -153,16 +159,14 @@ Rcpp::List testEqInt (Rcpp::IntegerVector x, Rcpp::IntegerVector y) {
     return Rcpp::List::create(xy, yx);
 }
 
-
-//[[Rcpp::export]]
-Rcpp::IntegerVector getInternalNodes (Rcpp::IntegerMatrix edge) {
-    Rcpp::IntegerVector ances = getAnces(edge);
-    Rcpp::IntegerVector allNodes = getAllNodesFast(edge);
-    Rcpp::IntegerVector tips = tipsFast(ances);
-    Rcpp::IntegerVector intNodes = Rcpp::setdiff(allNodes, tips);
-    intNodes.erase(intNodes.begin());
-    return intNodes;
-}
+// Rcpp::IntegerVector getInternalNodes (Rcpp::IntegerMatrix edge, bool rooted) {
+//     Rcpp::IntegerVector ances = getAnces(edge);
+//     Rcpp::IntegerVector allNodes = getAllNodesFast(edge, rooted);
+//     Rcpp::IntegerVector tips = tipsFast(ances);
+//     Rcpp::IntegerVector intNodes = Rcpp::setdiff(allNodes, tips);
+//     intNodes.erase(intNodes.begin());
+//     return intNodes;
+// }
 
 //[[Rcpp::export]]
 bool all_naC (Rcpp::NumericVector x) {
@@ -266,6 +270,8 @@ Rcpp::List checkTreeCpp(Rcpp::S4 obj, Rcpp::List opts) {
     int nrow = ed.nrow();
     Rcpp::IntegerVector ances = getAnces(ed);
     //Rcpp::IntegerVector desc = getDesc(ed);
+    int nroots = nRoots(ances);
+    bool rooted = nroots > 0;
     Rcpp::NumericVector edLength = obj.slot("edge.length");
     Rcpp::CharacterVector edLengthNm = edLength.names();
     Rcpp::CharacterVector label = obj.slot("label");
@@ -273,13 +279,12 @@ Rcpp::List checkTreeCpp(Rcpp::S4 obj, Rcpp::List opts) {
     Rcpp::CharacterVector edLabel = obj.slot("edge.label");
     Rcpp::CharacterVector edLabelNm = edLabel.names();
     Rcpp::IntegerVector allnodesSafe = getAllNodesSafe(ed);
-    Rcpp::IntegerVector allnodesFast = getAllNodesFast(ed);
+    Rcpp::IntegerVector allnodesFast = getAllNodesFast(ed, rooted);
     int nEdLength = edLength.size();
     int nLabel = label.size();
     int nEdLabel = edLabel.size();
     int nEdges = nrow;
     bool hasEdgeLength = !all_naC(edLength);
-    int nroots = nRoots(ances);    
 
     // check tips
     int ntipsSafe = nTipsSafe(ances);
@@ -297,13 +302,13 @@ Rcpp::List checkTreeCpp(Rcpp::S4 obj, Rcpp::List opts) {
     }
 
     // check edge lengths
-    if (hasEdgeLength) {
+    if (hasEdgeLength) {	
     	if (nEdLength != nEdges) {
     	    err.append("Number of edge lengths do not match number of edges. ");
     	}
-    	if (nb_naC(edLength) > (nroots + 1)) {
-    	    err.append("Only the root should have NA as an edge length. ");
-    	}
+    	// if (nb_naC(edLength) > nroots) { // not enough!  -- best done in R
+    	//     err.append("Only the root should have NA as an edge length. ");
+    	// }
     	if (getRange(edLength, TRUE)[0] < 0) {
     	    err.append("Edge lengths must be non-negative. ");
     	}

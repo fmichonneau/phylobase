@@ -226,7 +226,9 @@ setReplaceMethod("edgeLength", signature(x="phylo4"),
     len <- .createEdge(value, x@edge, type="lengths", use.names)
     ## return empty vector if all values are NA
     if (all(is.na(len))) {
-        x@edge.length <- numeric()
+        emptyVec <- numeric()
+        attributes(emptyVec) <- list(names=character(0))
+        x@edge.length <- emptyVec
     } else {
         x@edge.length <- len
     }
