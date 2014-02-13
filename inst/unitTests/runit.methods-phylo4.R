@@ -1,4 +1,4 @@
-#
+                                        #
 # --- Test methods-phylo4.R ---
 #
 
@@ -117,70 +117,92 @@ test.hasEdgeLength.phylo4 <- function() {
 }
 
 test.edgeLength.phylo4 <- function() {
-  # all edge lengths
-  checkIdentical(edgeLength(phy.alt), setNames(elen, eid))
-  # one edge length, by label
-  checkEquals(edgeLength(phy.alt, "t1"), c(`7-1`=0.1))
-  # one edge length, by node ID
-  checkEquals(edgeLength(phy.alt, 1), c(`7-1`=0.1))
-  # non-existent edge, by label
-  ans <- structure(NA_real_, .Names = NA_character_)
-  checkEquals(suppressWarnings(edgeLength(phy.alt, "xxx")), ans)
-  # non-existent edge, by number
-  checkEquals(suppressWarnings(edgeLength(phy.alt, 999)), ans)
+    ## all edge lengths
+    checkIdentical(edgeLength(phy.alt), setNames(elen, eid))
+    ## one edge length, by label
+    checkEquals(edgeLength(phy.alt, "t1"), c(`7-1`=0.1))
+    ## one edge length, by node ID
+    checkEquals(edgeLength(phy.alt, 1), c(`7-1`=0.1))
+    ## non-existent edge, by label
+    ans <- structure(NA_real_, .Names = NA_character_)
+    checkEquals(suppressWarnings(edgeLength(phy.alt, "xxx")), ans)
+    ## non-existent edge, by number
+    checkEquals(suppressWarnings(edgeLength(phy.alt, 999)), ans)
+    ## wrong number of edge lengths
+    phy.tmp1 <- phy.alt
+    phy.tmp1@edge.length <- phy.alt@edge.length[-1]
+    checkTrue(nzchar(checkPhylo4(phy.tmp1)))
+    phy.tmp1 <- phy.alt
+    phy.tmp1@edge.length <- c(phy.alt@edge.length, 1)
+    checkTrue(nzchar(checkPhylo4(phy.tmp1)))
+    ## negative edge lengths
+    phy.tmp1 <- phy.alt
+    phy.tmp1@edge.length[3] <- -1
+    checkTrue(nzchar(checkPhylo4(phy.tmp1)))
+    ## edge incorrectly labeled
+    phy.tmp1 <- phy.alt
+    names(phy.tmp1@edge.length)[1] <- "9-10"
+    checkTrue(nzchar(checkPhylo4(phy.tmp1)))
 }
 
 test.Replace.edgeLength.phylo4 <- function() {
 
-  #TODO function(x, use.names=TRUE, ..., value)
-  ## dropping all should produce empty slot
-  edgeLength(phy.alt) <- numeric()
-  checkIdentical(edgeLength(phy.alt), setNames(rep(NA_real_, 9), eid))
-  checkIdentical(phy.alt@edge.length, numeric())
-  edgeLength(phy.alt) <- NA_real_
-  checkIdentical(edgeLength(phy.alt), setNames(rep(NA_real_, 9), eid))
-  checkIdentical(phy.alt@edge.length, numeric())
+    emptyVec <- numeric()
+    attributes(emptyVec) <- list(names=character(0))
+    
+    ## dropping all should produce empty slot
+    edgeLength(phy.alt) <- numeric()
+    checkIdentical(edgeLength(phy.alt), setNames(rep(NA_real_, 9), edgeId(phy.alt, "all")))
+    checkIdentical(phy.alt@edge.length, emptyVec)
+    edgeLength(phy.alt) <- NA_real_
+    checkIdentical(edgeLength(phy.alt), setNames(rep(NA_real_, 9), edgeId(phy.alt, "all")))
+    checkIdentical(phy.alt@edge.length, emptyVec)
 
-  #
-  # complete replacement
-  #
+    ##
+    ## complete replacement
+    ##
 
-  # vector with reversed names, which get matched by default
-  edgeLength(phy.alt) <- numeric()
-  edgeLength(phy.alt) <- setNames(elen, rev(eid))
-  checkIdentical(edgeLength(phy.alt), setNames(rev(elen), eid))
-  # vector with reversed names, but specify no matching
-  edgeLength(phy.alt) <- numeric()
-  edgeLength(phy.alt, use.names=FALSE) <- setNames(elen, rev(eid))
-  checkIdentical(edgeLength(phy.alt), setNames(elen, eid))
-  # vector with no names, should match to edgeId order
-  edgeLength(phy.alt) <- numeric()
-  edgeLength(phy.alt) <- elen
-  checkIdentical(edgeLength(phy.alt), setNames(elen, eid))
+    ## vector with reversed names, which get matched by default
+    edgeLength(phy.alt) <- numeric()
+    revElen <- setNames(elen, rev(eid))
+    edgeLength(phy.alt) <- revElen
+    checkIdentical(edgeLength(phy.alt), revElen[edgeId(phy.alt, "all")])
+    ## vector with reversed names, but specify no matching
+    edgeLength(phy.alt) <- numeric()
+    edgeLength(phy.alt, use.names=FALSE) <- revElen
+    elen1 <- elen
+    checkIdentical(edgeLength(phy.alt), setNames(elen1, edgeId(phy.alt, "all")))
+    ## vector with no names, should match to edgeId order
+    edgeLength(phy.alt) <- numeric()
+    edgeLength(phy.alt) <- elen
+    elen2 <- elen
+    checkIdentical(edgeLength(phy.alt), setNames(elen2, edgeId(phy.alt, "all")))
 
-  # recycling applies if fewer the nEdges elements are supplied
-  # (duplicate edge length are okay)
-  edgeLength(phy.alt) <- 1
-  checkIdentical(edgeLength(phy.alt), setNames(rep(1, 9), eid))
+    ## recycling applies if fewer the nEdges elements are supplied
+    ## (duplicate edge length are okay)
+    edgeLength(phy.alt) <- 1
+    checkIdentical(edgeLength(phy.alt), setNames(rep(1, 9), edgeId(phy.alt, "all")))
 
-  #
-  # partial replacement
-  #
+    ##
+    ## partial replacement
+    ##
 
-  edgeLength(phy.alt) <- elen
-  # replace an edge length using numeric index
-  edgeLength(phy.alt)[9] <- 83
-  checkIdentical(edgeLength(phy.alt), setNames(c(elen[1:8], 83), eid))
-  # and back again, now using character index
-  edgeLength(phy.alt)["8-3"] <- 0.3
-  checkIdentical(edgeLength(phy.alt), setNames(elen, eid))
-  # error to add length for edges that don't exist
-  checkException(edgeLength(phy.alt)["fake"] <- 999)
-  checkException(edgeLength(phy.alt)[999] <- 999)
-  # NAs permitted only for root edge (or for *all* edges)
-  edgeLength(phy.alt)[edgeId(phy.alt, "root")] <- NA
-  checkIdentical(edgeLength(phy.alt), setNames(c(NA, elen[2:9]), eid))
-  checkException(edgeLength(phy.alt)["8-3"] <- NA)
+    edgeLength(phy.alt) <- elen
+    ## replace an edge length using numeric index
+    edgeLength(phy.alt)[9] <- 83
+    checkIdentical(edgeLength(phy.alt), setNames(c(elen[1:8], 83), edgeId(phy.alt, "all")))
+    ## and back again, now using character index
+    edgeLength(phy.alt)["8-3"] <- 0.3
+    elen3 <- elen
+    checkIdentical(edgeLength(phy.alt), setNames(elen3, edgeId(phy.alt, "all")))
+    ## error to add length for edges that don't exist
+    checkException(edgeLength(phy.alt)["fake"] <- 999)
+    checkException(edgeLength(phy.alt)[999] <- 999)
+    ## NAs permitted only for root edge (or for *all* edges)
+    edgeLength(phy.alt)[edgeId(phy.alt, "root")] <- NA
+    checkIdentical(edgeLength(phy.alt), setNames(c(NA, elen[2:9]), edgeId(phy.alt, "all")))
+    edgeLength(phy.alt) <- elen
+    checkException(edgeLength(phy.alt)["8-3"] <- NA)
 }
 
 test.sumEdgeLength.phylo4 <- function() {
