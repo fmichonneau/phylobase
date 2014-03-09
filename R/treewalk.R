@@ -22,39 +22,33 @@ getNode <- function(x, node, type=c("all", "tip", "internal"),
       names(rval) <- character(0)
       return(rval)
     }
-
+    
+    lblTmp <- labels(x, type)
+    
     ## match node to tree
     if (is.character(node)) {
-        ndTmp <- paste("^\\Q", node, "\\E$", sep="")
+        ndTmp <- paste("^\\Q", node, "\\E$", sep="")        
         irval <- lapply(ndTmp, function(ND) {
-          xx <- grep(ND, labels(x, type), perl=TRUE)
-          if (length(xx) == 0) 0
-          else xx
-        })                                
+            grep(ND, lblTmp, perl=TRUE)
+        })
+        irvalL <- sapply(irval, length)
+        irval[irvalL == 0] <- 0
         irval <- unlist(irval)
     } else if (is.numeric(node) && all(floor(node) == node, na.rm=TRUE)) {
-        irval <- match(as.character(node), names(labels(x, type)))
+        irval <- match(as.character(node), names(lblTmp))
     } else {
         stop("Node must be a vector of class \'integer\' or \'character\'.")
     }
 
     ## node numbers
-    rval <- names(labels(x, type))[irval]
-
-    ## root ancestor gets special treatment
-    isRoot <- ifelse(length(node) > 0,
-                     sapply(node, function(nd) identical(nd, 0)),
-                     logical(0))
-    rval[isRoot] <- NA
-    rval[is.na(node)] <- NA # return NA for any NA_character_ inputs
+    rval <- names(lblTmp)[irval]
+    rval[is.na(node)] <- NA # return NA for any NA_character_ inputs, not needed but ensure rval has correct length
     rval <- as.integer(rval)
 
     ## node labels
-    nmNd <- labels(x, type)[irval]
-
+    nmNd <- lblTmp[irval]
     names(rval) <- nmNd
-    names(rval)[rval == 0] <- "0" # root ancestor gets special treatment
-
+    
     ## deal with nodes that don't match
     if (any(is.na(rval))) {
         missnodes <- node[is.na(rval)]
@@ -81,7 +75,7 @@ ancestor <- function(phy,node) {
 children <- function(phy,node) {
     node2 <- getNode(phy,node)
     r <- which(edges(phy)[,1]==node2)
-    return(getNode(phy,edges(phy)[r,2]))
+    getNode(phy,edges(phy)[r,2])
 }
 
 ## get descendants [recursively]
@@ -96,6 +90,8 @@ descendants <- function (phy, node, type=c("tips","children","all")) {
 
     if (type == "children") {
         res <- lapply(node, function(x) children(phy, x))
+        ## if just a single node, return as a single vector
+        if (length(res)==1) res <- res[[1]]
     } else {
         ## edge matrix must be in preorder for the C function!
         if (phy@order=="preorder") {
@@ -119,13 +115,12 @@ descendants <- function (phy, node, type=c("tips","children","all")) {
         if (type=="tips") {
             isDes[descendant %in% nodeId(phy, "internal"),] <- FALSE
         }
-        res <- lapply(seq_along(node), function(n) getNode(phy,
-            descendant[isDes[,n]]))
+        ## res <- lapply(seq_along(node), function(n) getNode(phy,
+        ##     descendant[isDes[,n]]))
+        res <- getNode(phy, descendant[isDes[, seq_along(node)]])
     }
-    names(res) <- as.character(oNode[isValid])
+    ## names(res) <- as.character(oNode[isValid])
 
-    ## if just a single node, return as a single vector
-    if (length(res)==1) res <- res[[1]]
     res
 
     ## Original pure R implementation of the above
