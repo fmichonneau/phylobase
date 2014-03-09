@@ -1,3 +1,4 @@
+// -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 
 #include <Rcpp.h>
 #include <iostream>     // std::cout
@@ -47,10 +48,12 @@ int nRoots (Rcpp::IntegerVector ances) {
 //[[Rcpp::export]]
 std::vector<int> tabulateTips (Rcpp::IntegerVector ances) {
 // tabulates ancestor nodes that are not the root.
-    int n = ances.size();
+    int n = Rcpp::max(ances);
     std::vector<int> ans(n);
-    for (Rcpp::IntegerVector::iterator it = ances.begin(); it != ances.end(); ++it) {
-     	if (*it > 0) ans[*it - 1]++;
+    for (int i=0; i < n; i++) {
+        if (i > 0) {
+            ans[i - 1]++;
+        }
     }
     return ans;
 }
