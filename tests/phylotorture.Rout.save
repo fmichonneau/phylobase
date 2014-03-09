@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2013-04-25 r62670) -- "Unsuffered Consequences"
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
 Copyright (C) 2013 The R Foundation for Statistical Computing
-Platform: i686-pc-linux-gnu (32-bit)
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -41,18 +41,24 @@ The following object is masked from ‘package:ape’:
 +     e <- matrix(sample(1:10,replace=TRUE,size=10),ncol=2)
 +     p1[[i]] <- try(phylo4(e),silent=TRUE)
 + }
-There were 13 warnings (use warnings() to see them)
-> OKvals <- sapply(p1,class)!="try-error"
-> table(sapply(p1[!OKvals],as.character))
+Warning messages:
+1: In checkTree(object) : Tree contains singleton nodes. 
+2: In checkTree(object) : Tree contains singleton nodes. 
+3: In checkTree(object) : Tree contains singleton nodes. 
+4: In checkTree(object) : Tree contains singleton nodes. 
+5: In checkTree(object) : Tree contains singleton nodes. 
+6: In checkTree(object) : Tree contains singleton nodes. 
+7: In checkTree(object) : Tree contains singleton nodes. 
+8: In checkTree(object) : Tree contains singleton nodes. 
+> OKvals <- sapply(p1, class) != "try-error"
+> table(sapply(p1[!OKvals], as.character))
 
-                                                                                                 Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, All tips must have associated tip labels. Use tipLabels<- (and nodeLabels<- if needed) to update them., One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.\n 
-                                                                                                                                                                                                                                                                                                                                                                                             1 
-                                                                                                                  Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, nodes 1 to nTips must all be tips, nodes (nTips+1) to (nTips+nNodes) must all be internal nodes, All tips must have associated tip labels. Use tipLabels<- (and nodeLabels<- if needed) to update them.\n 
-                                                                                                                                                                                                                                                                                                                                                                                             1 
-Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, nodes 1 to nTips must all be tips, nodes (nTips+1) to (nTips+nNodes) must all be internal nodes, All tips must have associated tip labels. Use tipLabels<- (and nodeLabels<- if needed) to update them., One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.\n 
-                                                                                                                                                                                                                                                                                                                                                                                             7 
-                                                                                                        Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, nodes 1 to nTips must all be tips, nodes (nTips+1) to (nTips+nNodes) must all be internal nodes, One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.\n 
-                                                                                                                                                                                                                                                                                                                                                                                             1 
+                                                                                                  Error in .local(x, ...) : Nodes incorrectly labeled. \n 
+                                                                                                                                                        1 
+                                                                    Error in .local(x, ...) : \n  Tips incorrectly labeled. Nodes incorrectly labeled. \n 
+                                                                                                                                                        7 
+Error in names(res) <- switch(type, tip = 1:ntips, internal = seq(from = ntips +  : \n  'names' attribute [2] must be the same length as the vector [1]\n 
+                                                                                                                                                        2 
 > 
 > if (any(OKvals)) {
 +     p2 <- p1[OKvals]
@@ -98,9 +104,9 @@ Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, nodes 1 to nT
 > 
 > try(as(broke1, "phylo4") -> tree, silent=TRUE)   # makes a phylo4  object with no warning
 Warning messages:
-1: In checkTree(object) : tree contains singleton nodes
-2: In checkTree(object) : tree contains singleton nodes
-3: In checkTree(object) : tree contains singleton nodes
+1: In checkTree(object) : Tree contains singleton nodes. 
+2: In checkTree(object) : Tree contains singleton nodes. 
+3: In checkTree(object) : Tree contains singleton nodes. 
 > try(phylo4(broke1$edge), silent=TRUE)    # constructor makes a phylo4 object with no warning
   label node ancestor edge.length node.type
 1    T1    1        7          NA       tip
@@ -113,8 +119,8 @@ Warning messages:
 8  <NA>    8        6          NA  internal
 9  <NA>    9        9          NA  internal
 Warning messages:
-1: In checkTree(object) : tree contains singleton nodes
-2: In checkTree(object) : tree contains singleton nodes
+1: In checkTree(object) : Tree contains singleton nodes. 
+2: In checkTree(object) : Tree contains singleton nodes. 
 > ## error message comes from ape, not phylo? -- AND
 > ##   error is about singles, not disconnected nodes
 > ## print(try(plot(tree), silent=TRUE ))  ## pdc couldn't get this to work, so temporarily commenting
@@ -135,14 +141,11 @@ attr(,"condition")
 <simpleError in .createLabels(value = tip.label, ntips = ntips, nnodes = nnodes,     type = "tip"): Number of labels does not match number of nodes.>
 > ## error regarding number of tip labels vs edges and nodes
 > print(try(phylo4(broke2$edge), silent=TRUE))
-[1] "Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.\n"
+[1] "Error in .local(x, ...) : Nodes incorrectly labeled. \n"
 attr(,"class")
 [1] "try-error"
 attr(,"condition")
-<simpleError in .local(x, ...): tips and nodes incorrectly numbered, One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.>
-Warning message:
-In tips == 1:ntips :
-  longer object length is not a multiple of shorter object length
+<simpleError in .local(x, ...): Nodes incorrectly labeled. >
 > 
 > # switch root node value (6) with next internal node (7):
 > 
@@ -177,17 +180,17 @@ In tips == 1:ntips :
 > broke4$edge[broke4$edge==5] <- 15
 > 
 > print(try(as(broke4, "phylo4"), silent=TRUE) )  # error message saying tree has more than one root
-[1] "Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, All tips must have associated tip labels. Use tipLabels<- (and nodeLabels<- if needed) to update them., One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.\n"
+[1] "Error in .local(x, ...) : Nodes incorrectly labeled. \n"
 attr(,"class")
 [1] "try-error"
 attr(,"condition")
-<simpleError in .local(x, ...): tips and nodes incorrectly numbered, All tips must have associated tip labels. Use tipLabels<- (and nodeLabels<- if needed) to update them., One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.>
+<simpleError in .local(x, ...): Nodes incorrectly labeled. >
 > print(try(phylo4(broke4$edge),silent=TRUE))     # error message saying tree has more than one root
-[1] "Error in .local(x, ...) : \n  tips and nodes incorrectly numbered, All tips must have associated tip labels. Use tipLabels<- (and nodeLabels<- if needed) to update them., One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.\n"
+[1] "Error in .local(x, ...) : Nodes incorrectly labeled. \n"
 attr(,"class")
 [1] "try-error"
 attr(,"condition")
-<simpleError in .local(x, ...): tips and nodes incorrectly numbered, All tips must have associated tip labels. Use tipLabels<- (and nodeLabels<- if needed) to update them., One or more tip/node label has an unmatched ID name Use tipLabels<- (and nodeLabels<- if needed) to update them.>
+<simpleError in .local(x, ...): Nodes incorrectly labeled. >
 > # print(try(plot(broke4), TRUE))   ## CAUSES R TO HANG!
 > 
 > ###
@@ -214,4 +217,4 @@ attr(,"condition")
 > 
 > proc.time()
    user  system elapsed 
-  1.996   2.228   4.109 
+  5.551   0.181   5.773 

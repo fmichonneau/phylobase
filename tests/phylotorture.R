@@ -11,8 +11,8 @@ for (i in 1:n) {
     e <- matrix(sample(1:10,replace=TRUE,size=10),ncol=2)
     p1[[i]] <- try(phylo4(e),silent=TRUE)
 }
-OKvals <- sapply(p1,class)!="try-error"
-table(sapply(p1[!OKvals],as.character))
+OKvals <- sapply(p1, class) != "try-error"
+table(sapply(p1[!OKvals], as.character))
 
 if (any(OKvals)) {
     p2 <- p1[OKvals]
