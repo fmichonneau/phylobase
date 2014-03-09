@@ -50,9 +50,10 @@ std::vector<int> tabulateTips (Rcpp::IntegerVector ances) {
 // tabulates ancestor nodes that are not the root.
     int n = Rcpp::max(ances);
     std::vector<int> ans(n);
-    for (int i=0; i < n; i++) {
-        if (i > 0) {
-            ans[i - 1]++;
+    for (int i=0; i < ances.size(); i++) {
+        int j = ances[i];
+        if (j > 0) {
+            ans[j - 1]++;
         }
     }
     return ans;
