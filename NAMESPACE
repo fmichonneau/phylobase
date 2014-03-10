@@ -5,6 +5,7 @@ useDynLib(phylobase)
 #----------------------------------------------------------------------
 
 import(methods)
+import(ape)
 importFrom(graphics, plot)
 importFrom(stats, reorder)
 importFrom(utils, head, tail)
