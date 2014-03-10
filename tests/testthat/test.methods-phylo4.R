@@ -94,15 +94,15 @@ context("nodeDepth")
 allDepths <- c(1.2, 1.8, 1.8, 2.1, 2.3, 0.9, 1.0, 1.2, 1.6)
 names(allDepths) <- names(getNode(phy.alt))
 test_that("nodeDepth works without arguments", {
-    expect_identical(nodeDepth(phy.alt), allDepths)
+    expect_equal(nodeDepth(phy.alt), allDepths)
 })
 
 test_that("nodeDepth works with numeric argument", {
-    expect_identical(nodeDepth(phy.alt, 1), allDepths[1])
+    expect_equal(nodeDepth(phy.alt, 1), allDepths[1])
 })
 
 test_that("nodeDepth works with character argument", {          
-    expect_identical(nodeDepth(phy.alt, "t1"), allDepths[1])
+    expect_equal(nodeDepth(phy.alt, "t1"), allDepths[1])
 })
 
 test_that("nodeDepth works with no branch length", {
