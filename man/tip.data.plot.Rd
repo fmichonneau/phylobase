@@ -3,9 +3,13 @@
 \alias{tip.data.plot}
 \title{Plotting trees and associated data}
 \description{Plotting phylogenetic trees and associated data}
-\usage{
-tip.data.plot(xxyy, type = c("phylogram", "cladogram", "fan"), show.tip.label = TRUE, show.node.label = FALSE, rot = 0, tip.plot.fun = grid.points, edge.color = "black", node.color = "black", tip.color = "black", edge.width = 1, ...)
-}
+
+\usage{ tip.data.plot(xxyy, type = c("phylogram", "cladogram", "fan"),
+show.tip.label = TRUE, show.node.label = FALSE, rot = 0, tip.plot.fun =
+grid.points, edge.color = "black", node.color = "black", tip.color =
+"black", edge.width = 1, ...)  }
+
+
 \arguments{
   \item{xxyy}{A list created by the  \code{\link{phyloXXYY}} function}
   \item{type}{ A character string indicating the shape of plotted tree }

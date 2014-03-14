@@ -30,7 +30,8 @@ as_phylo4vcov(from, \dots)
 }
 \author{Ben Bolker}
 \examples{
-   tree.owls <- read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
+   trString <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
+   tree.owls <- read.tree(text=trString)
   o2 <- as(tree.owls,"phylo4")
   ov <- as(o2,"phylo4vcov")
   o3 <- as(ov,"phylo4")

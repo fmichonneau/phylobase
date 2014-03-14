@@ -4,9 +4,10 @@
 \title{Bubble plots for phylo4d objects }
 \description{
 Plots either circles or squares corresponding to the magnitude of each cell of a \code{phylo4d} object.}
-\usage{
-phylobubbles(type, place.tip.label, show.node.label, rot, edge.color, node.color, tip.color, edge.width, newpage, ..., XXYY, square = FALSE, grid = TRUE)
-}
+
+\usage{ phylobubbles(type, place.tip.label, show.node.label, rot,
+edge.color, node.color, tip.color, edge.width, newpage, ..., XXYY,
+square = FALSE, grid = TRUE) }
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{

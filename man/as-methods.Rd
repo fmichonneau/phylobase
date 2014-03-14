@@ -111,7 +111,8 @@
 
 
 \examples{
-tree.owls <- read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
+trString <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
+tree.owls <- read.tree(text=trString)
 ## round trip conversion
 tree_in_phylo <- tree.owls                  # tree is a phylo object
 (tree_in_phylo4 <- as(tree.owls,"phylo4"))  # phylo converted to phylo4
