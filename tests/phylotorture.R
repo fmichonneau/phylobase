@@ -1,5 +1,6 @@
 ## torture-testing phylo4 objects.
 require(phylobase)
+require(ape)
 set.seed(1001)
 p1 <- list()
 n <- 10

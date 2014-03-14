@@ -1,6 +1,6 @@
 
-R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -17,16 +17,19 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+[Previously saved workspace restored]
+
 > ## torture-testing phylo4 objects.
 > require(phylobase)
 Loading required package: phylobase
 Loading required package: grid
-Loading required package: ape
 Loading required package: Rcpp
+> require(ape)
+Loading required package: ape
 
-Attaching package: ‘phylobase’
+Attaching package: ‘ape’
 
-The following object is masked from ‘package:ape’:
+The following object is masked from ‘package:phylobase’:
 
     edges
 
@@ -217,4 +220,4 @@ attr(,"condition")
 > 
 > proc.time()
    user  system elapsed 
-  5.551   0.181   5.773 
+  5.799   0.194   5.971 
