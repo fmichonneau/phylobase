@@ -54,14 +54,15 @@ Warning messages:
 7: In checkTree(object) : Tree contains singleton nodes. 
 8: In checkTree(object) : Tree contains singleton nodes. 
 > OKvals <- sapply(p1, class) != "try-error"
-> table(sapply(p1[!OKvals], as.character))
+> ## table(sapply(p1[!OKvals], as.character)) # I think this is causing issues with
+> ##  R check because of different width of terminal/output, trying something simpler:
+> message(unique(sapply(p1[!OKvals], as.character)))
+Error in .local(x, ...) : 
+  Tips incorrectly labeled. Nodes incorrectly labeled. 
+Error in names(res) <- switch(type, tip = 1:ntips, internal = seq(from = ntips +  : 
+  'names' attribute [2] must be the same length as the vector [1]
+Error in .local(x, ...) : Nodes incorrectly labeled. 
 
-                                                                                                  Error in .local(x, ...) : Nodes incorrectly labeled. \n 
-                                                                                                                                                        1 
-                                                                    Error in .local(x, ...) : \n  Tips incorrectly labeled. Nodes incorrectly labeled. \n 
-                                                                                                                                                        7 
-Error in names(res) <- switch(type, tip = 1:ntips, internal = seq(from = ntips +  : \n  'names' attribute [2] must be the same length as the vector [1]\n 
-                                                                                                                                                        2 
 > 
 > if (any(OKvals)) {
 +     p2 <- p1[OKvals]
@@ -220,4 +221,4 @@ attr(,"condition")
 > 
 > proc.time()
    user  system elapsed 
-  5.799   0.194   5.971 
+  5.708   0.195   5.887 

@@ -13,7 +13,9 @@ for (i in 1:n) {
     p1[[i]] <- try(phylo4(e),silent=TRUE)
 }
 OKvals <- sapply(p1, class) != "try-error"
-table(sapply(p1[!OKvals], as.character))
+## table(sapply(p1[!OKvals], as.character)) # I think this is causing issues with
+##  R check because of different width of terminal/output, trying something simpler:
+message(unique(sapply(p1[!OKvals], as.character)))
 
 if (any(OKvals)) {
     p2 <- p1[OKvals]
