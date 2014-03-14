@@ -20,14 +20,17 @@ Type 'q()' to quit R.
 > ## torture-testing phylo4 objects.
 > require(phylobase)
 Loading required package: phylobase
-Warning message:
-In library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE,  :
-  there is no package called ‘phylobase’
+Loading required package: grid
+Loading required package: Rcpp
 > require(ape)
 Loading required package: ape
-Warning message:
-In library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE,  :
-  there is no package called ‘ape’
+
+Attaching package: ‘ape’
+
+The following object is masked from ‘package:phylobase’:
+
+    edges
+
 > set.seed(1001)
 > p1 <- list()
 > n <- 10
@@ -39,11 +42,24 @@ In library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = T
 +     e <- matrix(sample(1:10,replace=TRUE,size=10),ncol=2)
 +     p1[[i]] <- try(phylo4(e),silent=TRUE)
 + }
+Warning messages:
+1: In checkTree(object) : Tree contains singleton nodes. 
+2: In checkTree(object) : Tree contains singleton nodes. 
+3: In checkTree(object) : Tree contains singleton nodes. 
+4: In checkTree(object) : Tree contains singleton nodes. 
+5: In checkTree(object) : Tree contains singleton nodes. 
+6: In checkTree(object) : Tree contains singleton nodes. 
+7: In checkTree(object) : Tree contains singleton nodes. 
+8: In checkTree(object) : Tree contains singleton nodes. 
 > OKvals <- sapply(p1, class) != "try-error"
 > ## table(sapply(p1[!OKvals], as.character)) # I think this is causing issues with
 > ##  R check because of different width of terminal/output, trying something simpler:
 > message(unique(sapply(p1[!OKvals], as.character)))
-Error in try(phylo4(e), silent = TRUE) : could not find function "phylo4"
+Error in .local(x, ...) : 
+  Tips incorrectly labeled. Nodes incorrectly labeled. 
+Error in names(res) <- switch(type, tip = 1:ntips, internal = seq(from = ntips +  : 
+  'names' attribute [2] must be the same length as the vector [1]
+Error in .local(x, ...) : Nodes incorrectly labeled. 
 
 > 
 > if (any(OKvals)) {
@@ -83,5 +99,124 @@ Error in try(phylo4(e), silent = TRUE) : could not find function "phylo4"
 > # a disconnected node:
 > 
 > t1 <- read.tree (text="((a,b), (c,(d, e)));")
-Error: could not find function "read.tree"
-Execution halted
+> plot(t1)
+> 
+> broke1 <- t1
+> broke1$edge[broke1$edge[,2] ==9, 1] <- 9  # disconnect the node, two subtrees, ((a, b), c)  and (d,e)
+> 
+> try(as(broke1, "phylo4") -> tree, silent=TRUE)   # makes a phylo4  object with no warning
+Warning messages:
+1: In checkTree(object) : Tree contains singleton nodes. 
+2: In checkTree(object) : Tree contains singleton nodes. 
+3: In checkTree(object) : Tree contains singleton nodes. 
+> try(phylo4(broke1$edge), silent=TRUE)    # constructor makes a phylo4 object with no warning
+  label node ancestor edge.length node.type
+1    T1    1        7          NA       tip
+2    T2    2        7          NA       tip
+3    T3    3        8          NA       tip
+4    T4    4        9          NA       tip
+5    T5    5        9          NA       tip
+6  <NA>    6        0          NA  internal
+7  <NA>    7        6          NA  internal
+8  <NA>    8        6          NA  internal
+9  <NA>    9        9          NA  internal
+Warning messages:
+1: In checkTree(object) : Tree contains singleton nodes. 
+2: In checkTree(object) : Tree contains singleton nodes. 
+> ## error message comes from ape, not phylo? -- AND
+> ##   error is about singles, not disconnected nodes
+> ## print(try(plot(tree), silent=TRUE ))  ## pdc couldn't get this to work, so temporarily commenting
+> 
+> # root node value != ntips + 1:
+> 
+> broke2 <- t1
+> broke2$edge[broke2$edge==6] <- 10
+> 
+> ## warning, but no error
+> ## plot(broke2)  ## seems to hang R CMD check??
+> ## generates error, but it's about wrong number of tips, not wrong value at root.
+> print(try(as(broke2, "phylo4"), silent=TRUE))
+[1] "Error in .createLabels(value = tip.label, ntips = ntips, nnodes = nnodes,  : \n  Number of labels does not match number of nodes.\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in .createLabels(value = tip.label, ntips = ntips, nnodes = nnodes,     type = "tip"): Number of labels does not match number of nodes.>
+> ## error regarding number of tip labels vs edges and nodes
+> print(try(phylo4(broke2$edge), silent=TRUE))
+[1] "Error in .local(x, ...) : Nodes incorrectly labeled. \n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in .local(x, ...): Nodes incorrectly labeled. >
+> 
+> # switch root node value (6) with next internal node (7):
+> 
+> broke3 <- broke2
+> broke3$edge[broke3$edge==7] <- 6
+> broke3$edge[broke3$edge==10] <- 7
+> 
+> ## both of the following now fail with
+> ## "root node is not at position (nTips+1)
+> try(as(broke3,"phylo4") -> tree3)  # works with no error message
+> try(phylo4(broke3$edge))    # works with no error message
+  label node ancestor edge.length node.type
+1    T1    1        6          NA       tip
+2    T2    2        6          NA       tip
+3    T3    3        8          NA       tip
+4    T4    4        9          NA       tip
+5    T5    5        9          NA       tip
+6  <NA>    6        7          NA  internal
+7  <NA>    7        0          NA  internal
+8  <NA>    8        7          NA  internal
+9  <NA>    9        8          NA  internal
+> ## plot(tree3)  # would work if we could create it?
+> 
+> 
+> # tips have larger numbers than root node:
+> 
+> broke4 <- t1
+> broke4$edge[broke4$edge==1] <- 11
+> broke4$edge[broke4$edge==2] <- 12
+> broke4$edge[broke4$edge==3] <- 13
+> broke4$edge[broke4$edge==4] <- 14
+> broke4$edge[broke4$edge==5] <- 15
+> 
+> print(try(as(broke4, "phylo4"), silent=TRUE) )  # error message saying tree has more than one root
+[1] "Error in .local(x, ...) : Nodes incorrectly labeled. \n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in .local(x, ...): Nodes incorrectly labeled. >
+> print(try(phylo4(broke4$edge),silent=TRUE))     # error message saying tree has more than one root
+[1] "Error in .local(x, ...) : Nodes incorrectly labeled. \n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in .local(x, ...): Nodes incorrectly labeled. >
+> # print(try(plot(broke4), TRUE))   ## CAUSES R TO HANG!
+> 
+> ###
+> foo <- new('phylo4')
+> set.seed(1001)
+> foo@edge <- rcoal(10)$edge
+> print(try(plot(foo)))
+Error in treePlot(x, ...) : treePlot function requires a rooted tree.
+[1] "Error in treePlot(x, ...) : treePlot function requires a rooted tree.\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in treePlot(x, ...): treePlot function requires a rooted tree.>
+> 
+> foo@label <- c(rep('blah',10), rep("",9))
+> 
+> #####
+> ## tree with only 2 tips: will fail under previous versions
+> ## with "Error in if (which(nAncest == 0) != nTips + 1) { : 
+> ##  argument is of length zero"
+> 
+> edge <- matrix(c(3,1,3,2),byrow=TRUE,ncol=2)
+> try(p2 <- phylo4(edge), silent=TRUE)
+> 
+> proc.time()
+   user  system elapsed 
+  5.557   0.099   5.638 
