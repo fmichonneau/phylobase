@@ -1,8 +1,8 @@
 Package: phylobase
 Type: Package
 Title: Base package for phylogenetic structures and comparative data
-Version: 0.6.7
-Date: 2014-03-10
+Version: 0.6.7-1
+Date: 2014-03-14
 Depends:
     methods,
     grid,
@@ -18,7 +18,7 @@ Author: R Hackathon et al. (alphabetically: Ben Bolker, Marguerite Butler,
     Peter Cowan, Damien de Vienne, Dirk Eddelbuettel, Mark Holder, Thibaut
     Jombart, Steve Kembel, Francois Michonneau, David Orme, Brian O'Meara,
     Emmanuel Paradis, Jim Regetz, Derrick Zwickl)
-Maintainer: Ben Bolker <bolker@mcmaster.ca>
+Maintainer: Francois Michonneau <francois.michonneau@gmail.com>
 Description: Provides a base S4 class for comparative methods, incorporating
     one or more trees and trait data
 License: GPL (>= 2)
