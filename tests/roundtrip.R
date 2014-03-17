@@ -1,4 +1,5 @@
 library(phylobase)
+library(ape)
 
 ## set.seed(1)
 ## t0A <- rcoal(5)

@@ -1,97 +1,112 @@
+library(phylobase)
+library(ape)
 
-R version 3.0.3 (2014-03-06) -- "Warm Puppy"
-Copyright (C) 2014 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+set.seed(1)
 
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under certain conditions.
-Type 'license()' or 'licence()' for distribution details.
+data(geospiza)
 
-  Natural language support but running in an English locale
+## make sure geospiza is properly formatted
+if(is.character(checkval <- checkPhylo4(geospiza)))
+  stop(checkval)
+  
 
-R is a collaborative project with many contributors.
-Type 'contributors()' for more information and
-'citation()' on how to cite R or R packages in publications.
+geospiza0 <-
+  list(geospiza.tree=as(geospiza,"phylo"),geospiza.data=tipData(geospiza))
+## push data back into list form as in geiger
 
-Type 'demo()' for some demos, 'help()' for on-line help, or
-'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
+t1 <-  try(p1 <- phylo4d(geospiza0$geospiza.tree,geospiza0$geospiza.data))
+## Error in checkData(res, ...) :
+##   Tip data names are a subset of tree tip labels.
 
-> ## RUnit script obtained from:
-> ##   http://wiki.r-project.org/rwiki/doku.php?id=developers:runit
-> 
-> ## unit tests will not be done if RUnit is not available
-> if(require("RUnit", quietly=TRUE)) {
-+  
-+   ## --- Setup ---
-+  
-+   pkg <- "phylobase"
-+   if(Sys.getenv("RCMDCHECK") == "FALSE") {
-+     ## Path to unit tests for standalone running under Makefile (not R CMD check)
-+     ## PKG/tests/../inst/unitTests
-+     path <- file.path(getwd(), "..", "inst", "unitTests")
-+   } else {
-+     ## Path to unit tests for R CMD check
-+     ## PKG.Rcheck/tests/../PKG/unitTests
-+     path <- system.file(package=pkg, "unitTests")
-+   }
-+   cat("\nRunning unit tests\n")
-+   print(list(pkg=pkg, getwd=getwd(), pathToUnitTests=path))
-+  
-+   library(package=pkg, character.only=TRUE)
-+  
-+   ## If desired, load the name space to allow testing of private functions
-+   ## if (is.element(pkg, loadedNamespaces()))
-+   ##     attach(loadNamespace(pkg), name=paste("namespace", pkg, sep=":"), pos=3)
-+   ##
-+   ## or simply call PKG:::myPrivateFunction() in tests
-+  
-+   ## --- Testing ---
-+  
-+   ## Define tests
-+   testSuite <- defineTestSuite(name=paste(pkg, "unit testing"),
-+                                           dirs=path)
-+   ## Run
-+   tests <- runTestSuite(testSuite)
-+  
-+   ## Default report name
-+   pathReport <- file.path(path, "report")
-+  
-+   ## Report to stdout and text files
-+   cat("------------------- UNIT TEST SUMMARY ---------------------\n\n")
-+   printTextProtocol(tests, showDetails=FALSE)
-+   printTextProtocol(tests, showDetails=FALSE,
-+                     fileName=paste(pathReport, "Summary.txt", sep=""))
-+   printTextProtocol(tests, showDetails=TRUE,
-+                     fileName=paste(pathReport, ".txt", sep=""))
-+  
-+   ## Report to HTML file
-+   printHTMLProtocol(tests, fileName=paste(pathReport, ".html", sep=""))
-+  
-+   ## Return stop() to cause R CMD check stop in case of
-+   ##  - failures i.e. FALSE to unit tests or
-+   ##  - errors i.e. R errors
-+   tmp <- getErrors(tests)
-+   if(tmp$nFail > 0 | tmp$nErr > 0) {
-+     stop(paste("\n\nunit testing failed (#test failures: ", tmp$nFail,
-+                ", #R errors: ",  tmp$nErr, ")\n\n", sep=""))
-+   }
-+ } else {
-+   warning("cannot run unit tests -- package RUnit is not available")
-+ }
+p2 <- as(geospiza0$geospiza.tree,"phylo4")
+plot(p2)
 
-Running unit tests
-$pkg
-[1] "phylobase"
+lab1 <- tipLabels(p2)
+lab2 <- rownames(geospiza0$geospiza.data)
 
-$getwd
-[1] "/home/francois/R-dev/phylobase/pkg/tests"
+lab1[!lab1 %in% lab2]  ## missing data
+lab2[!lab2 %in% lab1]  ## extra data (none)
+p1 <- phylo4d(p2,geospiza0$geospiza.data, missing.data="warn")
+p1 <- phylo4d(p2,geospiza0$geospiza.data, missing.data="OK")
 
-$pathToUnitTests
-[1] "/home/francois/.R/library/phylobase/unitTests"
+plot(p1)
+plot(p1,show.node.label=TRUE)
+## one way to deal with it:
 
+p1B <- prune(p1,tip="olivacea")
 
-Warning messages:
-1: replacing previous import by ‘Rcpp::evalCpp’ when loading ‘phylobase’ 
-2: replacing previous import by ‘ade4::newick2phylog’ when loading ‘phylobase’ 
-Execution halted
+## or ...
+p1C <- na.omit(p1)
+
+labels(p1C, "all") <- tolower(labels(p1C, "all"))
+
+## trace("prune",browser,signature="phylo4d")
+r1 <- read.tree(text="((t4:0.3210275554,(t2:0.2724586465,t3:0.2724586465):0.0485689089):0.1397952619,(t5:0.07551818331,t1:0.07551818331):0.385304634);")
+
+## trace("phylo4d", browser, signature = "phylo")
+## untrace("phylo4d", signature = "phylo")
+tipdat <- data.frame(a=1:5, row.names=r1$tip.label)
+q1 <- phylo4d(r1,tip.data=tipdat, node.data=data.frame(a=6:9), match.data=FALSE)
+q2 <- prune(q1,1)
+summary(q2)
+
+tipdat2 <- tipdat
+row.names(tipdat2)[1] <- "s1"
+t1 <- try(q1 <- phylo4d(r1,tip.data=tipdat2))
+
+plot(q2)
+plot(q2,type="cladogram")
+## plot(p2,type="dotchart",labels.nodes=nodeLabels(p2))
+## trace("plot", browser, signature = c("phylo4d","missing"))
+tipLabels(q1) <- paste("q",1:5,sep="")
+nodeLabels(q1) <- paste("n",1:4,sep="")
+p3 <- phylo4d(r1,tip.data=tipdat,node.data=data.frame(b=6:9), match.data=FALSE)
+summary(p3)
+
+plot(p1)
+
+plot(subset(p1,tips.include=c("fuliginosa","fortis","magnirostris",
+            "conirostris","scandens")))
+## better error?
+## Error in phy$edge[, 2] : incorrect number of dimensions
+
+if(dev.cur() == 1) get(getOption("device"))()
+plot(subset(p2,tips.include=c("fuliginosa","fortis","magnirostris",
+            "conirostris","scandens")))
+
+plot(p2,show.node.label=TRUE)
+
+tree.owls <- read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
+
+z <- as(tree.owls,"phylo4")
+
+example("phylo4d")
+obj1 <- obj2 <- obj3 <- phylo4d(z, data.frame(wing=1:4,color=factor(c("b","w","b","b")), tail=runif(4)*10), match.data=FALSE)
+
+obj2@data <- as.data.frame(obj2@data[,1])
+obj3@data <- cbind(obj1@data,obj2@data)
+obj4 <- obj1
+obj4@data[2,3] <- NA
+obj4@data[1,1] <- NA
+
+nodeLabels(obj4) <- character(0)
+
+obj5 <- obj1
+tipData(obj4) <- subset(tipData(obj4),select=sapply(tipData(obj4),class)=="numeric")
+
+treePlot(obj4)
+
+E <- matrix(c(
+    8,  9,
+    9, 10,
+   10,  1,
+   10,  2,
+    9,  3,
+    9,  4,
+    8, 11,
+   11,  5,
+   11,  6,
+   11,  7,
+    0,  8), ncol=2,byrow=TRUE)
+
+P2 <- phylo4(E)

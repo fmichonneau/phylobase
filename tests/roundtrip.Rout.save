@@ -1,8 +1,7 @@
 
-R Under development (unstable) (2012-11-19 r61131) -- "Unsuffered Consequences"
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -20,12 +19,11 @@ Type 'q()' to quit R.
 
 > library(phylobase)
 Loading required package: grid
-Loading required package: ape
-Loading required package: Rcpp
+> library(ape)
 
-Attaching package: ‘phylobase’
+Attaching package: ‘ape’
 
-The following object is masked from ‘package:ape’:
+The following object is masked from ‘package:phylobase’:
 
     edges
 
@@ -79,4 +77,4 @@ In asMethod(object) : trees with unknown order may be unsafe in ape
 > 
 > proc.time()
    user  system elapsed 
-  1.252   1.692   2.908 
+  5.491   0.205   5.671 

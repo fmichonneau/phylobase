@@ -1,8 +1,7 @@
 
-R Under development (unstable) (2012-11-20 r61133) -- "Unsuffered Consequences"
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -20,16 +19,14 @@ Type 'q()' to quit R.
 
 > library(phylobase)
 Loading required package: grid
-Loading required package: ape
-Loading required package: Rcpp
+> library(ape)
 
-Attaching package: ‘phylobase’
+Attaching package: ‘ape’
 
-The following object is masked from ‘package:ape’:
+The following object is masked from ‘package:phylobase’:
 
     edges
 
-> library(ape)
 > 
 > set.seed(1)
 > 
@@ -189,7 +186,7 @@ Nodes: data.frame with 4 internal nodes and 2 variables
 
 phyl4d> treeOwls <- "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);"
 
-phyl4d> tree.owls.bis <- read.tree(text=treeOwls)
+phyl4d> tree.owls.bis <- ape::read.tree(text=treeOwls)
 
 phyl4d> try(phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3)), silent=TRUE)
           label node ancestor edge.length node.type wing
@@ -414,12 +411,10 @@ phyl4d> (exGeo8 <- phylo4d(trGeo, tip.data=tDt, match.data=FALSE))
 26   N26   26       25     0.05167  internal <NA>
 27   N27   27       26     0.01500  internal <NA>
 
-phyl4d> require(ape) ## for rcoal
-
 phyl4d> ## generate a tree and some data
 phyl4d> set.seed(1)
 
-phyl4d> p3 <- rcoal(5)
+phyl4d> p3 <- ape::rcoal(5)
 
 phyl4d> dat <- data.frame(a = rnorm(5), b = rnorm(5), row.names = p3$tip.label)
 
@@ -497,4 +492,4 @@ In formatData(phy = x, dt = all.data, type = "all", ...) :
 > 
 > proc.time()
    user  system elapsed 
-  3.260   2.556   5.671 
+  8.550   0.204   8.738 

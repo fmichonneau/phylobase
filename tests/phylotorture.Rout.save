@@ -18,12 +18,9 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > ## torture-testing phylo4 objects.
-> require(phylobase)
-Loading required package: phylobase
+> library(phylobase)
 Loading required package: grid
-Loading required package: Rcpp
-> require(ape)
-Loading required package: ape
+> library(ape)
 
 Attaching package: ‘ape’
 
@@ -31,26 +28,23 @@ The following object is masked from ‘package:phylobase’:
 
     edges
 
-> set.seed(1001)
-> p1 <- list()
-> n <- 10
+> 
+> set.seed(10101)
+> n <- 200
+> p1 <- vector("list", n)
 > ## don't want to slow down R CMD check by doing this every time:
 > ## n <- 10000
 > for (i in 1:n) {
-+ ##    e2 <- c(sample(1:5,replace=FALSE,size=5),sample(6:10,replace=FALSE,size=5))
-+ ##    e1 <- sample(6:10,replace=TRUE
-+     e <- matrix(sample(1:10,replace=TRUE,size=10),ncol=2)
-+     p1[[i]] <- try(phylo4(e),silent=TRUE)
++     if (i <= n/2) {
++         e <- matrix(sample(1:10, replace=TRUE, size=10), ncol=2)
++     }
++     else {
++         e <- cbind(sample(rep(11:19, 2)), sample(1:19))
++         e <- rbind(c(0, sample(11:19, 1)), e)
++     }
++     p1[[i]] <- try(phylo4(e), silent=TRUE)
 + }
-Warning messages:
-1: In checkTree(object) : Tree contains singleton nodes. 
-2: In checkTree(object) : Tree contains singleton nodes. 
-3: In checkTree(object) : Tree contains singleton nodes. 
-4: In checkTree(object) : Tree contains singleton nodes. 
-5: In checkTree(object) : Tree contains singleton nodes. 
-6: In checkTree(object) : Tree contains singleton nodes. 
-7: In checkTree(object) : Tree contains singleton nodes. 
-8: In checkTree(object) : Tree contains singleton nodes. 
+There were 50 or more warnings (use warnings() to see the first 50)
 > OKvals <- sapply(p1, class) != "try-error"
 > ## table(sapply(p1[!OKvals], as.character)) # I think this is causing issues with
 > ##  R check because of different width of terminal/output, trying something simpler:
@@ -61,14 +55,20 @@ Error in names(res) <- switch(type, tip = 1:ntips, internal = seq(from = ntips +
   'names' attribute [2] must be the same length as the vector [1]
 Error in .local(x, ...) : Nodes incorrectly labeled. 
 
+> unname(table(sapply(p1[!OKvals], as.character)))
+[1]  3 53 44
+> if (sum(OKvals))     message("There are ", sum(OKvals), " valid trees...")
+There are 100 valid trees...
 > 
 > if (any(OKvals)) {
 +     p2 <- p1[OKvals]
 +     length(p2)
-+     has.poly <- sapply(p2,hasPoly)
-+     has.sing <- sapply(p2,hasSingle)
-+     has.retic <- sapply(p2,hasRetic)   
-+     ##
++     has.poly <- sapply(p2, hasPoly)
++     has.sing <- sapply(p2, hasSingle)
++     has.retic <- sapply(p2, hasRetic)   
++     message("number of trees with polytomies: ", sum(has.poly))
++     message("number of trees with singletons: ", sum(has.sing))
++     message("number of trees with reticulation: ", sum(has.retic))
 +     if (any(has.sing)) {
 +         p4 <- p2[has.sing]
 +         plot(p4[[1]])  ## gives descriptive error
@@ -82,6 +82,9 @@ Error in .local(x, ...) : Nodes incorrectly labeled.
 +         ## plot(p2[[13]])
 +     }
 + }
+number of trees with polytomies: 100
+number of trees with singletons: 0
+number of trees with reticulation: 100
 > 
 > ## elements 8 and 34 are 
 > ## what SHOULD the rules for trees be?
@@ -135,19 +138,14 @@ Warning messages:
 > ## warning, but no error
 > ## plot(broke2)  ## seems to hang R CMD check??
 > ## generates error, but it's about wrong number of tips, not wrong value at root.
-> print(try(as(broke2, "phylo4"), silent=TRUE))
-[1] "Error in .createLabels(value = tip.label, ntips = ntips, nnodes = nnodes,  : \n  Number of labels does not match number of nodes.\n"
-attr(,"class")
-[1] "try-error"
-attr(,"condition")
-<simpleError in .createLabels(value = tip.label, ntips = ntips, nnodes = nnodes,     type = "tip"): Number of labels does not match number of nodes.>
+> message(try(as(broke2, "phylo4"), silent=TRUE))
+Error in .createLabels(value = tip.label, ntips = ntips, nnodes = nnodes,  : 
+  Number of labels does not match number of nodes.
+
 > ## error regarding number of tip labels vs edges and nodes
-> print(try(phylo4(broke2$edge), silent=TRUE))
-[1] "Error in .local(x, ...) : Nodes incorrectly labeled. \n"
-attr(,"class")
-[1] "try-error"
-attr(,"condition")
-<simpleError in .local(x, ...): Nodes incorrectly labeled. >
+> message(try(phylo4(broke2$edge), silent=TRUE))
+Error in .local(x, ...) : Nodes incorrectly labeled. 
+
 > 
 > # switch root node value (6) with next internal node (7):
 > 
@@ -181,31 +179,22 @@ attr(,"condition")
 > broke4$edge[broke4$edge==4] <- 14
 > broke4$edge[broke4$edge==5] <- 15
 > 
-> print(try(as(broke4, "phylo4"), silent=TRUE) )  # error message saying tree has more than one root
-[1] "Error in .local(x, ...) : Nodes incorrectly labeled. \n"
-attr(,"class")
-[1] "try-error"
-attr(,"condition")
-<simpleError in .local(x, ...): Nodes incorrectly labeled. >
-> print(try(phylo4(broke4$edge),silent=TRUE))     # error message saying tree has more than one root
-[1] "Error in .local(x, ...) : Nodes incorrectly labeled. \n"
-attr(,"class")
-[1] "try-error"
-attr(,"condition")
-<simpleError in .local(x, ...): Nodes incorrectly labeled. >
+> message(try(as(broke4, "phylo4"), silent=TRUE))
+Error in .local(x, ...) : Nodes incorrectly labeled. 
+
+> message(try(phylo4(broke4$edge), silent=TRUE))
+Error in .local(x, ...) : Nodes incorrectly labeled. 
+
 > # print(try(plot(broke4), TRUE))   ## CAUSES R TO HANG!
 > 
 > ###
 > foo <- new('phylo4')
-> set.seed(1001)
+> 
 > foo@edge <- rcoal(10)$edge
-> print(try(plot(foo)))
+> message(try(plot(foo)))
 Error in treePlot(x, ...) : treePlot function requires a rooted tree.
-[1] "Error in treePlot(x, ...) : treePlot function requires a rooted tree.\n"
-attr(,"class")
-[1] "try-error"
-attr(,"condition")
-<simpleError in treePlot(x, ...): treePlot function requires a rooted tree.>
+Error in treePlot(x, ...) : treePlot function requires a rooted tree.
+
 > 
 > foo@label <- c(rep('blah',10), rep("",9))
 > 
@@ -214,9 +203,9 @@ attr(,"condition")
 > ## with "Error in if (which(nAncest == 0) != nTips + 1) { : 
 > ##  argument is of length zero"
 > 
-> edge <- matrix(c(3,1,3,2),byrow=TRUE,ncol=2)
+> edge <- matrix(c(3, 1, 3, 2), byrow=TRUE, ncol=2)
 > try(p2 <- phylo4(edge), silent=TRUE)
 > 
 > proc.time()
    user  system elapsed 
-  5.557   0.099   5.638 
+  6.842   0.111   6.930 
