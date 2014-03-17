@@ -1,29 +1,38 @@
 ## torture-testing phylo4 objects.
-require(phylobase)
-require(ape)
-set.seed(1001)
-p1 <- list()
-n <- 10
+library(phylobase)
+library(ape)
+
+set.seed(10101)
+n <- 200
+p1 <- vector("list", n)
 ## don't want to slow down R CMD check by doing this every time:
 ## n <- 10000
 for (i in 1:n) {
-##    e2 <- c(sample(1:5,replace=FALSE,size=5),sample(6:10,replace=FALSE,size=5))
-##    e1 <- sample(6:10,replace=TRUE
-    e <- matrix(sample(1:10,replace=TRUE,size=10),ncol=2)
-    p1[[i]] <- try(phylo4(e),silent=TRUE)
+    if (i <= n/2) {
+        e <- matrix(sample(1:10, replace=TRUE, size=10), ncol=2)
+    }
+    else {
+        e <- cbind(sample(rep(11:19, 2)), sample(1:19))
+        e <- rbind(c(0, sample(11:19, 1)), e)
+    }
+    p1[[i]] <- try(phylo4(e), silent=TRUE)
 }
 OKvals <- sapply(p1, class) != "try-error"
 ## table(sapply(p1[!OKvals], as.character)) # I think this is causing issues with
 ##  R check because of different width of terminal/output, trying something simpler:
 message(unique(sapply(p1[!OKvals], as.character)))
+unname(table(sapply(p1[!OKvals], as.character)))
+if (sum(OKvals))     message("There are ", sum(OKvals), " valid trees...")
 
 if (any(OKvals)) {
     p2 <- p1[OKvals]
     length(p2)
-    has.poly <- sapply(p2,hasPoly)
-    has.sing <- sapply(p2,hasSingle)
-    has.retic <- sapply(p2,hasRetic)   
-    ##
+    has.poly <- sapply(p2, hasPoly)
+    has.sing <- sapply(p2, hasSingle)
+    has.retic <- sapply(p2, hasRetic)   
+    message("number of trees with polytomies: ", sum(has.poly))
+    message("number of trees with singletons: ", sum(has.sing))
+    message("number of trees with reticulation: ", sum(has.retic))
     if (any(has.sing)) {
         p4 <- p2[has.sing]
         plot(p4[[1]])  ## gives descriptive error
@@ -73,9 +82,9 @@ broke2$edge[broke2$edge==6] <- 10
 ## warning, but no error
 ## plot(broke2)  ## seems to hang R CMD check??
 ## generates error, but it's about wrong number of tips, not wrong value at root.
-print(try(as(broke2, "phylo4"), silent=TRUE))
+message(try(as(broke2, "phylo4"), silent=TRUE))
 ## error regarding number of tip labels vs edges and nodes
-print(try(phylo4(broke2$edge), silent=TRUE))
+message(try(phylo4(broke2$edge), silent=TRUE))
 
 # switch root node value (6) with next internal node (7):
 
@@ -99,15 +108,15 @@ broke4$edge[broke4$edge==3] <- 13
 broke4$edge[broke4$edge==4] <- 14
 broke4$edge[broke4$edge==5] <- 15
 
-print(try(as(broke4, "phylo4"), silent=TRUE) )  # error message saying tree has more than one root
-print(try(phylo4(broke4$edge),silent=TRUE))     # error message saying tree has more than one root
+message(try(as(broke4, "phylo4"), silent=TRUE))
+message(try(phylo4(broke4$edge), silent=TRUE))
 # print(try(plot(broke4), TRUE))   ## CAUSES R TO HANG!
 
 ###
 foo <- new('phylo4')
-set.seed(1001)
+
 foo@edge <- rcoal(10)$edge
-print(try(plot(foo)))
+message(try(plot(foo)))
 
 foo@label <- c(rep('blah',10), rep("",9))
 
@@ -116,5 +125,5 @@ foo@label <- c(rep('blah',10), rep("",9))
 ## with "Error in if (which(nAncest == 0) != nTips + 1) { : 
 ##  argument is of length zero"
 
-edge <- matrix(c(3,1,3,2),byrow=TRUE,ncol=2)
+edge <- matrix(c(3, 1, 3, 2), byrow=TRUE, ncol=2)
 try(p2 <- phylo4(edge), silent=TRUE)

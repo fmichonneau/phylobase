@@ -1,5 +1,5 @@
 library(phylobase)
-## library(ape)
+library(ape)
 
 data(geospiza)
 g1 <- as(geospiza,"phylo4")

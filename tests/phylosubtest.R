@@ -1,4 +1,5 @@
-require(phylobase)
+library(phylobase)
+library(ape)
 data(geospiza)
 
 gtree <- extractTree(geospiza)
