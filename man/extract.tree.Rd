@@ -16,7 +16,7 @@ extractTree(from)
 \author{ Ben Bolker }
 \seealso{\code{\link{phylo4}}, \code{\link{phylo4d}}, \code{\link{coerce-methods}} for translation functions. }
 \examples{
-tree.phylo <- read.tree(text = "((a,b),c);")
+tree.phylo <- ape::read.tree(text = "((a,b),c);")
 tree <- as(tree.phylo, "phylo4")
 plot(tree)
 tip.data <- data.frame(size = c(1, 2, 3), row.names = c("a", "b", "c"))

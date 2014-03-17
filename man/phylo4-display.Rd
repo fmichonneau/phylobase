@@ -74,7 +74,7 @@
 \examples{
 
   tOwls <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
-  tree.owls <- read.tree(text=tOwls)
+  tree.owls <- ape::read.tree(text=tOwls)
   P1 <- as(tree.owls, "phylo4")
   P1
   summary(P1)

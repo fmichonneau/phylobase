@@ -61,7 +61,7 @@
  \code{\link{children}} \code{\link{descendants}}
 }
 \examples{
-phy <- phylo4(rtree(5))
+phy <- phylo4(ape::rtree(5))
 edges(reorder(phy, "preorder"))
 edges(reorder(phy, "postorder"))
 }

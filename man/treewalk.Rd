@@ -102,9 +102,6 @@ shortestPath(phy, node1, node2)
   shortestPath(geospiza, "fortis", "fuliginosa")
   shortestPath(geospiza, "F", "L")
 
-  ## FIXME
-  ## if(require(ape)){ edgelabels() }
-
   ## branch length from a tip to the root
   sumEdgeLength(geospiza, ancestors(geospiza, "fortis", type="ALL"))
 

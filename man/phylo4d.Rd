@@ -126,7 +126,7 @@
 }
 \examples{
 treeOwls <- "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);"
-tree.owls.bis <- read.tree(text=treeOwls)
+tree.owls.bis <- ape::read.tree(text=treeOwls)
 try(phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3)), silent=TRUE)
 obj <- phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3), match.data=FALSE)
 obj
@@ -178,10 +178,9 @@ tipLabels(trGeo) <- as.character(sample(1:nTips(trGeo)))
 (exGeo7 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE))
 (exGeo8 <- phylo4d(trGeo, tip.data=tDt, match.data=FALSE))
 
-require(ape) ## for rcoal
 ## generate a tree and some data
 set.seed(1)
-p3 <- rcoal(5)
+p3 <- ape::rcoal(5)
 dat <- data.frame(a = rnorm(5), b = rnorm(5), row.names = p3$tip.label)
 dat.defaultnames <- dat
 row.names(dat.defaultnames) <- NULL

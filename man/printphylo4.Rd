@@ -38,7 +38,7 @@ The topology is given by the pattern of links from each node to its ancestor. Al
 \note{This is the default show() method for phylo4, phylo4d. It prints the user-supplied information for building a phylo4 object. For a full description of the phylo4 S4 object and slots, see \code{\link{phylo4}}. }
 \examples{
 
-tree.phylo <- read.tree(text="((a,b),c);")
+tree.phylo <- ape::read.tree(text="((a,b),c);")
 tree <- as(tree.phylo, "phylo4")
 ##plot(tree,show.node=TRUE) ## plotting broken with empty node labels: FIXME
 tip.data <- data.frame(size=c(1,2,3), row.names=c("a", "b", "c"))

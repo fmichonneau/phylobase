@@ -34,8 +34,7 @@ hasRetic(object)
   other cases to represent events occurring along a branch.)
 }
 \examples{
-library(ape)
-tree.owls.bis <- read.tree(text = "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);")
+tree.owls.bis <- ape::read.tree(text = "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);")
 owls4 <- as(tree.owls.bis, "phylo4")
 hasPoly(owls4)
 hasSingle(owls4)
