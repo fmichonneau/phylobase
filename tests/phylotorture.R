@@ -21,7 +21,7 @@ OKvals <- sapply(p1, class) != "try-error"
 ## table(sapply(p1[!OKvals], as.character)) # I think this is causing issues with
 ##  R check because of different width of terminal/output, trying something simpler:
 message(unique(sapply(p1[!OKvals], as.character)))
-unname(table(sapply(p1[!OKvals], as.character)))
+sort(unname(table(sapply(p1[!OKvals], as.character))))
 if (sum(OKvals))     message("There are ", sum(OKvals), " valid trees...")
 
 if (any(OKvals)) {

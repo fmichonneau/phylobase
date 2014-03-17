@@ -55,8 +55,8 @@ Error in names(res) <- switch(type, tip = 1:ntips, internal = seq(from = ntips +
   'names' attribute [2] must be the same length as the vector [1]
 Error in .local(x, ...) : Nodes incorrectly labeled. 
 
-> unname(table(sapply(p1[!OKvals], as.character)))
-[1]  3 53 44
+> sort(unname(table(sapply(p1[!OKvals], as.character))))
+[1]  3 44 53
 > if (sum(OKvals))     message("There are ", sum(OKvals), " valid trees...")
 There are 100 valid trees...
 > 
