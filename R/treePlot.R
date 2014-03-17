@@ -1,3 +1,57 @@
+#' Phylogeny plotting
+#' 
+#' Plot \code{phylo4} or \code{phylo4d} objects, including associated data.
+#' 
+#' 
+#' @name treePlot-methods
+#' @aliases treePlot plot,ANY,ANY-method plot,pdata,missing-method
+#' plot,phylo4,missing-method treePlot-method treePlot,phylo4,phylo4d-method
+#' @docType methods
+#' @param phy A \code{phylo4} or \code{phylo4d} object
+#' @param type A character string indicating the shape of plotted tree
+#' @param show.tip.label Logical, indicating whether tip labels should be shown
+#' @param show.node.label Logical, indicating whether node labels should be
+#' shown
+#' @param tip.order If NULL the tree is plotted with tips in preorder, if "rev"
+#' this is reversed. Otherwise, it is a character vector of tip labels,
+#' indicating their order along the y axis (from top to bottom). Or, a numeric
+#' vector of tip node IDs indicating the order.
+#' @param plot.data Logical indicating whether \code{phylo4d} data should be
+#' plotted
+#' @param rot Numeric indicating the rotation of the plot in degrees
+#' @param tip.plot.fun A function used to generate plot at the each tip of the
+#' phylogenetic trees
+#' @param edge.color A vector of colors in the order of \code{edges(phy)}
+#' @param node.color A vector of colors indicating the colors of the node
+#' labels
+#' @param tip.color A vector of colors indicating the colors of the tip labels
+#' @param edge.width A vector in the order of \code{edges(phy)} indicating the
+#' widths of edge lines
+#' @param newpage Logical indicating whether the page should be cleared before
+#' plotting
+#' @param \dots Currently unused, parameters to be passed on to \code{gpar}
+#' @return No return value, function invoked for plotting side effect
+#' @section Methods: \describe{ \item{phy = "phylo4"}{plots a tree of class
+#' \linkS4class{phylo4}} \item{phy = "phylo4d"}{plots a tree with one or more
+#' quantitative traits contained in a \linkS4class{phylo4d} object.} }
+#' @author Peter Cowan \email{pdc@@berkeley.edu}
+#' @seealso \code{\link{phylobubbles}}
+#' @keywords methods
+#' @examples
+#' 
+#' 
+#' ## example of plotting two grid plots on the same page
+#' data(geospiza)
+#' geotree <- extractTree(geospiza)
+#' grid.newpage()
+#' pushViewport(viewport(layout=grid.layout(nrow=1, ncol=2), name="base"))
+#'   pushViewport(viewport(layout.pos.col=1, name="plot1"))
+#'     treePlot(geotree, newpage=FALSE)
+#'   popViewport()
+#'   
+#'   pushViewport(viewport(layout.pos.col=2, name="plot2"))
+#'     treePlot(geotree, newpage=FALSE, rot=180)
+#' popViewport(2)
 `treePlot` <- function(phy,
                      type = c('phylogram', 'cladogram', 'fan'),
                      show.tip.label = TRUE,
@@ -30,6 +84,8 @@
         warning("tree has no tip data to plot")
         plot.data <- FALSE
     }
+    if (hasRetic(phy))
+        stop("treePlot requires non-reticulated trees.")
 
     if(newpage) grid.newpage()
     type   <- match.arg(type)
@@ -103,6 +159,52 @@
     upViewport() # margins
 }
 
+
+
+#' Plot a phylo4 object
+#' 
+#' Plots the phylogenetic tree contained in a \code{phylo4} or \code{phylo4d}
+#' object.
+#' 
+#' 
+#' @param xxyy A list created by the \code{\link{phyloXXYY}} function
+#' @param type A character string indicating the shape of plotted tree
+#' @param show.tip.label Logical, indicating whether tip labels should be shown
+#' @param show.node.label Logical, indicating whether node labels should be
+#' shown
+#' @param edge.color A vector of colors in the order of \code{edges(phy)}
+#' @param node.color A vector of colors indicating the colors of the node
+#' labels
+#' @param tip.color A vector of colors indicating the colors of the tip labels
+#' @param edge.width A vector in the order of \code{edges(phy)} indicating the
+#' widths of edge lines
+#' @param rot Numeric indicating the rotation of the plot in degrees
+#' @return Returns no values, function invoked for the plotting side effect.
+#' @author Peter Cowan \email{pdc@@berkeley.edu}
+#' @seealso \code{treePlot}, \code{\link{phyloXXYY}}
+#' @keywords methods
+#' @examples
+#' 
+#' 
+#' data(geospiza)
+#' grid.newpage()
+#' xxyy <- phyloXXYY(geospiza)
+#' plotOneTree(xxyy, type = 'phylogram', 
+#'   show.tip.label = TRUE, show.node.label = TRUE,
+#'   edge.color = 'black', node.color = 'orange', tip.color = 'blue',
+#'   edge.width = 1, rot = 0
+#' )
+#' 
+#' grid.newpage()
+#' pushViewport(viewport(w = 0.8, h = 0.8))
+#' plotOneTree(xxyy, type = 'phylogram', 
+#'   show.tip.label = TRUE, show.node.label = TRUE,
+#'   edge.color = 'black', node.color = 'orange', tip.color = 'blue',
+#'   edge.width = 1, rot = 0
+#' )
+#' popViewport()
+#' 
+#' 
 plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
                         node.color, tip.color, edge.width, rot)
 {
@@ -209,6 +311,40 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
     # grobTree(vseg, hseg, labtext)
 }
 
+
+
+#' Calculate node x and y coordinates
+#' 
+#' Calculates the node x and y locations for plotting a phylogenetic tree.
+#' 
+#' The y coordinates of the tips are evenly spaced from 0 to 1 in pruningwise
+#' order.  Ancestor y nodes are given the mean value of immediate descendants.
+#' The root is given the x coordinate 0 and descendant nodes are placed
+#' according to the cumulative branch length from the root, with a maximum x
+#' value of 1.
+#' 
+#' @param phy A \code{phylo4} or \code{phylo4d} object.
+#' @param tip.order A character vector of tip labels, indicating their order
+#' along the y axis (from top to bottom). Or, a numeric vector of tip node IDs
+#' indicating the order.
+#' @return \item{yy}{Internal node and tip y coordinates} \item{xx}{Internal
+#' node and tip x coordinates} \item{phy}{A \code{phylo4} or \code{phylo4d}
+#' object} \item{segs}{A list of \code{h0x, h1x, v0x, v1x} and \code{h0y, h1y,
+#' v0y, v1y} describing the start and end points for the plot line segments}
+#' \item{torder}{The tip order provided as \code{tip.order} or if NULL the
+#' preoder tip order} \item{eorder}{The an index of the reordered edges
+#' compared to the result of \code{edges(phy)}}
+#' @author Peter Cowan \email{pdc@@berkeley.edu}
+#' @seealso \code{treePlot}, \code{\link{plotOneTree}}
+#' @keywords methods
+#' @examples
+#' 
+#' 
+#' data(geospiza)
+#' coor <- phyloXXYY(geospiza)
+#' plot(coor$xx, coor$yy, pch = 20)
+#' 
+#' 
 phyloXXYY <- function(phy, tip.order=NULL)
 {
     phy.orig <- phy
@@ -331,6 +467,41 @@ drawDetails.bubLegend <- function(x, ...) {
     )
 }
 
+
+
+#' Bubble plots for phylo4d objects
+#' 
+#' Plots either circles or squares corresponding to the magnitude of each cell
+#' of a \code{phylo4d} object.
+#' 
+#' 
+#' @param type the type of plot
+#' @param place.tip.label A string indicating whether labels should be plotted
+#' to the right or to the left of the bubble plot
+#' @param show.node.label A logical indicating whether internal node labels
+#' should be plotted
+#' @param rot The number of degrees that the plot should be rotated
+#' @param edge.color A vector of colors for the tree edge segments
+#' @param node.color A vector of colors for the coloring the nodes
+#' @param tip.color A vector of colors for the coloring the tip labels
+#' @param edge.width A vector of line widths for the tree edges
+#' @param newpage Logical to control whether the device is cleared before
+#' plotting, useful for adding plot inside other plots
+#' @param \dots Additional parameters passed to the bubble plotting functions
+#' @param XXYY The out put from the phyloXXYY function
+#' @param square Logical indicating whether the plot 'bubbles' should be
+#' squares
+#' @param grid A logical indicating whether a grey grid should be plotted
+#' behind the bubbles
+#' @author Peter Cowan \email{pdc@@berkeley.edu}
+#' @seealso \code{\link{phyloXXYY}}, \code{treePlot}
+#' @keywords methods
+#' @examples
+#' 
+#' ##---- Should be DIRECTLY executable !! ----
+#' ##-- ==>  Define data, use random,
+#' ##--	or do  help(data=index)  for the standard data sets.
+#' 
 phylobubbles <- function(type = type,
                         place.tip.label = "right",
                         show.node.label = show.node.label,
@@ -496,6 +667,31 @@ phylobubbles <- function(type = type,
     ##             bubscale = bubscale))
 }
 
+
+
+#' Plotting trees and associated data
+#' 
+#' Plotting phylogenetic trees and associated data
+#' 
+#' 
+#' @param xxyy A list created by the \code{\link{phyloXXYY}} function
+#' @param type A character string indicating the shape of plotted tree
+#' @param show.tip.label Logical, indicating whether tip labels should be shown
+#' @param show.node.label Logical, indicating whether node labels should be
+#' shown
+#' @param rot Numeric indicating the rotation of the plot in degrees
+#' @param tip.plot.fun A function used to plot the data elements of a
+#' \code{phylo4d} object
+#' @param edge.color A vector of colors in the order of \code{edges(phy)}
+#' @param node.color A vector of colors indicating the colors of the node
+#' labels
+#' @param tip.color A vector of colors indicating the colors of the tip labels
+#' @param edge.width A vector in the order of \code{edges(phy)} indicating the
+#' widths of edge lines
+#' @param \dots Additional parameters passed to \code{tip.plot.fun}
+#' @return creates a plot on the current graphics device.
+#' @author Peter Cowan
+#' @keywords methods
 tip.data.plot <- function(
                      xxyy,
                      type = c('phylogram', 'cladogram', 'fan'),

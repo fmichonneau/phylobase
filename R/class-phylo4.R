@@ -1,3 +1,20 @@
+#' The phylo4 class
+#' 
+#' Classes for phylogenetic trees
+#' 
+#' 
+#' @name phylo4-class
+#' @aliases phylo4_orderings phylo-class phylo4-class
+#' @docType class
+#' @section Objects from the Class: Phylogenetic tree objects can be created by
+#' calls to the \code{\link{phylo4}} constructor function.  Translation
+#' functions from other phylogenetic packages are also available. See
+#' \code{\link{coerce-methods}}.
+#' @author Ben Bolker, Thibaut Jombart
+#' @seealso The \code{\link{phylo4}} constructor, the \code{\link{checkPhylo4}}
+#' function to check the validity of \code{phylo4} objects. See also the
+#' \code{\link{phylo4d}} constructor and the \linkS4class{phylo4d} class.
+#' @keywords classes
 setClass("phylo4",
          representation(edge = "matrix",
                         edge.length = "numeric",
@@ -95,6 +112,84 @@ setClass("phylo4",
 ## phylo4 constructor
 #####################
 
+
+#' Create a phylogenetic tree
+#' 
+#' \code{phylo4} is a generic constructor that creates a phylogenetic tree
+#' object for use in phylobase methods. Phylobase contains functions for input
+#' of phylogenetic trees and data, manipulation of these objects including
+#' pruning and subsetting, and plotting. The phylobase package also contains
+#' translation functions to forms used in other comparative phylogenetic method
+#' packages.
+#' 
+#' The minimum information necessary to create a phylobase tree object is a
+#' valid edge matrix. The edge matrix describes the topology of the phylogeny.
+#' Each row describes a branch of the phylogeny, with the (descendant) node
+#' number in column 2 and its ancestor's node number in column 1. These numbers
+#' are used internally and must be unique for each node.
+#' 
+#' The labels designate either nodes or edges. The vector \code{node.label}
+#' names internal nodes, and together with \code{tip.label}, name all nodes in
+#' the tree. The vector \code{edge.label} names all branches in the tree. All
+#' label vectors are optional, and if they are not given, internally-generated
+#' labels will be assigned. The labels, whether user-specified or internally
+#' generated, must be unique as they are used to join species data with
+#' phylogenetic trees.
+#' 
+#' @name phylo4-methods
+#' @aliases phylo4 phylo4-methods phylo4,matrix-method phylo4,phylo-method
+#' @docType methods
+#' @param x a matrix of edges or an object of class \code{phylo} (see above)
+#' @param edge A numeric, two-column matrix with as many rows as branches in
+#' the phylogeny.
+#' @param edge.length Edge (branch) length. (Optional)
+#' @param tip.label A character vector of species names (names of "tip" nodes).
+#' (Optional)
+#' @param node.label A character vector of internal node names. (Optional)
+#' @param edge.label A character vector of edge (branch) names. (Optional)
+#' @param order character: tree ordering (allowable values are listed in
+#' \code{phylo4_orderings}, currently "unknown", "preorder" (="cladewise" in
+#' \code{ape}), and "postorder", with "cladewise" and "pruningwise" also
+#' allowed for compatibility with \code{ape})
+#' @param check.node.labels if \code{x} is of class \code{phylo}, either "keep"
+#' (the default) or "drop" node labels. This argument is useful if the
+#' \code{phylo} object has non-unique node labels.
+#' @param annote any additional annotation data to be passed to the new object
+#' @note Translation functions are available from many valid tree formats. See
+#' \link{coerce-methods}.
+#' @section Methods: \describe{ \item{x = "matrix"}{creates a phylobase tree
+#' from a matrix of edges}
+#' 
+#' \item{x = "phylo"}{creates a phylobase tree from an object of class
+#' \code{phylo}} }
+#' @author phylobase team
+#' @seealso \code{\link{coerce-methods}} for translation functions. The
+#' \linkS4class{phylo4} class, the \code{\link{formatData}} function to check
+#' the validity of \code{phylo4} objects. See also the \code{\link{phylo4d}}
+#' constructor, and \linkS4class{phylo4d} class.
+#' @keywords classes
+#' @examples
+#' 
+#' # a three species tree:
+#' mytree <- phylo4(x=matrix(data=c(4,1, 4,5, 5,2, 5,3, 0,4), ncol=2,
+#' byrow=TRUE), tip.label=c("speciesA", "speciesB", "speciesC")) 
+#' mytree
+#' plot(mytree)
+#' 
+#' # another way to specify the same tree:
+#' mytree <- phylo4(x=cbind(c(4, 4, 5, 5, 0), c(1, 5, 2, 3, 4)),
+#' tip.label=c("speciesA", "speciesB", "speciesC")) 
+#' 
+#' # another way:
+#' mytree <- phylo4(x=rbind(c(4, 1), c(4, 5), c(5, 2), c(5, 3), c(0, 4)),
+#' tip.label=c("speciesA", "speciesB", "speciesC")) 
+#' 
+#' # with branch lengths:
+#' mytree <- phylo4(x=rbind(c(4, 1), c(4, 5), c(5, 2), c(5, 3), c(0, 4)),
+#' tip.label=c("speciesA", "speciesB", "speciesC"), edge.length=c(1, .2,
+#' .8, .8, NA))
+#' plot(mytree)
+#' 
 ## generic
 setGeneric("phylo4", function(x, ...) { standardGeneric("phylo4")} )
 

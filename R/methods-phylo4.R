@@ -54,6 +54,75 @@
 ### 8. Tree properties
 ###  8.1. isUltrametric()
 
+#' 
+#' @name phylo4-accessors
+#' @aliases nNodes nNodes-methods nNodes,phylo4-method nTips nTips-methods
+#' nTips,phylo4-method nTips,phylo-method depthTips depthTips-methods
+#' depthTips,phylo4-method depthTips,phylo4d-method edges edges-methods
+#' edges,phylo4-method nEdges nEdges-methods nEdges,phylo4-method nodeDepth
+#' nodeDepth-methods nodeDepth,phylo4-method edgeOrder edgeOrder,phylo4-method
+#' hasEdgeLength hasEdgeLength-methods hasEdgeLength,phylo4-method edgeLength
+#' edgeLength-methods edgeLength,phylo4-method edgeLength<-
+#' edgeLength<-,phylo4-method edgeLength<-,phylo4,ANY-method nodeType
+#' nodeType,phylo4-method isRooted isRooted-methods isRooted,phylo4-method
+#' rootEdge rootEdge-methods rootEdge,phylo4-method rootNode rootNode-methods
+#' rootNode,phylo4-method rootNode<- rootNode<-,phylo4-method isUltrametric
+#' isUltrametric-methods isUltrametric,phylo4-method
+#' @docType methods
+#' @param x a phylo4/phylo4d object
+#' @param node which edge to extract (indexed by descendant node)
+#' @param value a vector of edge lengths or a node number
+#' @param use.names Should the names of \code{value} be used to match edge
+#' lengths provided?
+#' @param drop.root logical: drop root row from edge matrix?
+#' @param tol tolerance in rounding error to determine whether the tree is
+#' ultrametric
+#' @param \dots additional parameters passed (currently ignored)
+#' @section Methods: \describe{ \item{nTips}{\code{signature(object="phylo4")}:
+#' number of tips}
+#' 
+#' \item{depthTips}{\code{signature(object="phylo4")}: distance between the
+#' tips and the root}
+#' 
+#' \item{nNodes}{\code{signature(object="phylo4")}: number of internal nodes}
+#' 
+#' \item{nEdges}{\code{signature(object = "phylo4")}: number of edges}
+#' 
+#' \item{edges}{\code{signature(object = "phylo4")}: returns the edge matrix}
+#' 
+#' \item{edgeOrder}{\code{signature(object = "phylo4")}: returns the order in
+#' which the edges are stored}
+#' 
+#' \item{hasEdgeLength}{\code{signature(object = "phylo4")}: whether tree has
+#' edge (branch) lengths}
+#' 
+#' \item{edgeLength}{\code{signature(object = "phylo4")}: edge (branch) lengths
+#' (or NAs if missing) ordered according to the edge matrix}
+#' 
+#' \item{nodeType}{\code{signature(object = "phylo4")}: named vector which has
+#' the type of node (internal, tip, root) for value, and the node number for
+#' name}
+#' 
+#' \item{nodeDepth}{\code{signature(object = "phylo4")}: named vector which
+#' gives the distance between nodes and the root}
+#' 
+#' \item{isRooted}{\code{signature(object = "phylo4")}: whether tree is rooted
+#' (i.e. has explicit root edge defined \emph{or} root node has <= 2
+#' descendants)}
+#' 
+#' \item{rootEdge}{\code{signature(object = "phylo4")}: root edge}
+#' 
+#' \item{isUltrametric}{\code{signature(object = "phylo4")}: whether the tree
+#' is ultrametric} }
+#' @keywords methods
+#' @examples
+#' 
+#' data(geospiza)
+#' edgeLength(geospiza, 5)
+#' edgeLength(geospiza, "olivacea")
+#' edgeLength(geospiza, 5:7)
+#' 
+
 #########################################################
 ### Tip accessors
 #########################################################
@@ -141,6 +210,24 @@ setMethod("nodeId", signature(x="phylo4"),
      return(sort(nid))
 
 })
+
+## nodeId
+setGeneric("nodeIdCpp", function(x, type=c("all", "tip", "internal",
+    "root")) {
+    standardGeneric("nodeIdCpp")
+})
+
+setMethod("nodeIdCpp", signature(x="phylo4"),
+          function(x, type=c("all", "tip", "internal", "root")) {
+              type <- match.arg(type)
+              E <- edges(x)
+              nid <- switch(type,
+                            all = getAllNodesFast(x@edge, isRooted(x)),
+                            tip = tipsFast(x@edge[,1]),
+                            internal = setdiff(getAllNodesFast(x@edge, isRooted(x)), tipsFast(x@edge[,1])),
+                            root = if (!isRooted(x)) NA else unname(E[E[, 1] == 0, 2]))
+              nid
+          })
 
 setMethod("nodeDepth", signature(x="phylo4"),
   function(x, node) {
@@ -275,6 +362,92 @@ setReplaceMethod("rootNode", signature(x="phylo4"),
 ### Label accessors
 #########################################################
 
+#' Labels for phylo4/phylo4d objects
+#' 
+#' Methods for creating, accessing and updating labels in phylo4/phylo4d
+#' objects
+#' 
+#' 
+#' In phylo4/phylo4d objects, tips must have labels (that's why there is no
+#' method for hasTipLabels), internal nodes and edges can have labels.
+#' 
+#' Labels must be provided as a vector of class \code{character}. The length of
+#' the vector must match the number of elements they label.
+#' 
+#' The option \code{use.names} allows the user to match a label to a particular
+#' node. In this case, the vector must have names that match the node numbers.
+#' 
+#' The function \code{labels} is mostly intended to be used internally.
+#' 
+#' @name phylo4-labels
+#' @aliases labels<- labels,phylo4-method
+#' labels<-,phylo4,ANY,ANY,character-method
+#' labels<-,phylo4d,ANY,ANY,character-method hasDuplicatedLabels
+#' hasDuplicatedLabels-methods hasDuplicatedLabels,phylo4-method hasNodeLabels
+#' hasNodeLabels-methods hasNodeLabels,phylo4-method nodeLabels
+#' nodeLabels-methods nodeLabels,phylo4-method nodeLabels<-
+#' nodeLabels<-,phylo4,character-method nodeLabels<-,phylo4d,ANY-method
+#' tipLabels tipLabels-methods tipLabels,phylo4-method tipLabels<-
+#' tipLabels<-,phylo4,character-method tipLabels<-,phylo4d,character-method
+#' hasEdgeLabels hasEdgeLabels-methods hasEdgeLabels,phylo4-method edgeLabels
+#' edgeLabels<- edgeLabels-methods edgeLabels,phylo4-method
+#' edgeLabels<-,phylo4,character-method
+#' @docType methods
+#' @param x a phylo4 or phylo4d object.
+#' @param object a phylo4 or phylo4d object.
+#' @param type which type of labels: \code{all} (tips and internal nodes),
+#' \code{tip} (tips only), \code{internal} (internal nodes only).
+#' @param value a vector of class \code{character}, see Details for more
+#' information.
+#' @param use.names should the names of the vector used to create/update labels
+#' be used to match the labels? See Details for more information.
+#' @section Methods: \describe{ \item{labels}{\code{signature(object =
+#' "phylo4")}: tip and/or internal node labels, ordered by node ID}
+#' 
+#' \item{hasDuplicatedLabels}{\code{signature(object = "phylo4")}: are any
+#' labels duplicated?}
+#' 
+#' \item{tipLabels}{\code{signature(object = "phylo4")}: tip labels, ordered by
+#' node ID}
+#' 
+#' \item{hasNodeLabels}{\code{signature(object = "phylo4")}: whether tree has
+#' (internal) node labels} \item{nodeLabels}{\code{signature(object =
+#' "phylo4")}: internal node labels, ordered by node ID}
+#' 
+#' \item{hasEdgeLabels}{\code{signature(object = "phylo4")}: whether tree has
+#' (internal) edge labels} \item{edgeLabels}{\code{signature(object =
+#' "phylo4")}: internal edge labels, ordered according to the edge matrix} }
+#' @examples
+#' 
+#' 
+#' data(geospiza)
+#' 
+#' ## Return labels from geospiza
+#' tipLabels(geospiza)
+#' 
+#' ## Internal node labels in geospiza are empty
+#' nodeLabels(geospiza)
+#' 
+#' ## Creating internal node labels
+#' ndLbl <- paste("n", 1:nNodes(geospiza), sep="")
+#' nodeLabels(geospiza) <- ndLbl
+#' nodeLabels(geospiza)
+#' 
+#' ## naming the labels
+#' names(ndLbl) <- nodeId(geospiza, "internal")
+#' 
+#' ## shuffling the labels
+#' (ndLbl <- sample(ndLbl))
+#' 
+#' ## by default, the labels are attributed in the order
+#' ## they are given:
+#' nodeLabels(geospiza) <- ndLbl
+#' nodeLabels(geospiza)
+#' 
+#' ## but use.names puts them in the correct order
+#' labels(geospiza, "internal", use.names=TRUE) <- ndLbl
+#' nodeLabels(geospiza)
+#' 
 ## return labels in increasing node order
 setMethod("labels", signature(object="phylo4"),
   function(object, type = c("all", "tip", "internal")) {
@@ -399,6 +572,57 @@ setReplaceMethod("edgeLabels", signature(x="phylo4", value="character"),
 #########################################################
 
 ### print
+
+
+#' print a phylogeny
+#' 
+#' Prints a phylo4 or phylo4d object in data.frame format with user-friendly
+#' column names
+#' 
+#' This is a user-friendly version of the tree representation, useful for
+#' checking that objects were read in completely and translated correctly. The
+#' phylogenetic tree is represented as a list of numbered nodes, linked in a
+#' particular way through time (or rates of evolutionary change).  The topology
+#' is given by the pattern of links from each node to its ancestor. Also given
+#' are the taxon names, node type (root/internal/tip) and phenotypic data (if
+#' any) associated with the node, and the branch length from the node to its
+#' ancestor. A list of nodes (descendants) and ancestors is minimally required
+#' for a phylo4 object.
+#' 
+#' @param x a \code{phylo4} tree or \code{phylo4d} tree+data object
+#' @param edgeOrder in the data frame returned, the option 'pretty' returns the
+#' internal nodes followed by the tips, the option 'real' returns the nodes in
+#' the order they are stored in the edge matrix.
+#' @param printall default prints entire tree. printall=FALSE returns the first
+#' 6 rows
+#' @return A data.frame with a row for each node (descendant), sorted as
+#' follows: root first, then other internal nodes, and finally tips.\cr The
+#' returned data.frame has the following columns:\cr \item{label}{Label for the
+#' taxon at the node (usually species name).} \item{node}{Node number, i.e. the
+#' number identifying the node in \code{x@edge}.} \item{ancestor}{Node number
+#' of the node's ancestor.} \item{branch.length}{The branch length connecting
+#' the node to its ancestor (NAs if missing).} \item{node.type}{"root",
+#' "internal", or "tip". (internally generated)} \item{data}{phenotypic data
+#' associated with the nodes, with separate columns for each variable.}
+#' @note This is the default show() method for phylo4, phylo4d. It prints the
+#' user-supplied information for building a phylo4 object. For a full
+#' description of the phylo4 S4 object and slots, see \code{\link{phylo4}}.
+#' @author Marguerite Butler Thibaut Jombart
+#' \email{jombart@@biomserv.univ-lyon1.fr} Steve Kembel
+#' @keywords methods
+#' @examples
+#' 
+#' 
+#' tree.phylo <- ape::read.tree(text="((a,b),c);")
+#' tree <- as(tree.phylo, "phylo4")
+#' ##plot(tree,show.node=TRUE) ## plotting broken with empty node labels: FIXME
+#' tip.data <- data.frame(size=c(1,2,3), row.names=c("a", "b", "c"))
+#' treedata <- phylo4d(tree, tip.data)
+#' plot(treedata)
+#' print(treedata)
+#' 
+#' 
+#' @export printphylo4
 printphylo4 <- function(x, edgeOrder=c("pretty", "real"), printall=TRUE) {
     if(!nrow(edges(x))) {
         msg <- paste("Empty \'", class(x), "\' object\n", sep="")
@@ -440,6 +664,83 @@ setMethod("tail", signature(x="phylo4"),
   })
 
 ### summary
+#' Displaying phylo4 object
+#' 
+#' Display methods for phylo4 and phylo4d phylogenetic trees
+#' 
+#' 
+#' @name phylo4-display
+#' @aliases print,phylo4-method show,phylo4-method head,phylo4-method
+#' tail,phylo4-method summary,phylo4-method names,phylo4-method
+#' @docType methods
+#' @param x a phylo4 object
+#' @param object a phylo4 object
+#' @param edgeOrder Character string indicating whether the edges should be
+#' printed as ordered in the tree "real" (e.g. preorder or postorder), or
+#' "pretty" printed with tips collated together
+#' @param printall If TRUE all tip labels are printed
+#' @param quiet a logical stating whether the results of the summary should be
+#' printed to the screen (FALSE, default) or not (TRUE)
+#' @return
+#' 
+#' The \code{summary} method invisibly returns a list with the following
+#' components:
+#' 
+#' \item{list("name")}{the name of the object} \item{list("nb.tips")}{the
+#' number of tips} \item{list("nb.nodes")}{the number of nodes}
+#' \item{list("mean.el")}{mean of edge lengths} \item{list("var.el")}{variance
+#' of edge lengths (estimate for population)} \item{list("sumry.el")}{summary
+#' (i.e. range and quartiles) of the edge lengths}
+#' \item{list("degree")}{(optional) degree (i.e. number of descendants) of each
+#' node; displayed only when there are polytomies}
+#' \item{list("polytomy")}{(optional) type of polytomy for each node:
+#' \sQuote{node}, \sQuote{terminal} (all descendants are tips) or
+#' \sQuote{internal} (at least one descendant is an internal node); displayed
+#' only when there are polytomies}
+#' 
+#' The \code{names} method returns a vector of characters corresponding to the
+#' names of the slots.
+#' @section Methods: \describe{ \item{print}{\code{signature(x = "phylo4")}:
+#' print method} \item{show}{\code{signature(object = "phylo4")}: show method }
+#' \item{summary}{\code{signature(object = "phylo4")}: summary method}
+#' \item{names}{\code{signature(x = "phylo4")}: gives the slot names}
+#' \item{head}{\code{signature(object = "phylo4")}: show first few nodes}
+#' \item{tail}{\code{signature(object = "phylo4")}: show last few nodes} }
+#' @author Ben Bolker, Thibaut Jombart
+#' @seealso The \code{\link{phylo4}} constructor, the \code{\link{checkPhylo4}}
+#' function to check the validity of \code{phylo4} objects. See also the
+#' \code{\link{phylo4d}} constructor and the \linkS4class{phylo4d} class.
+#' @keywords methods
+#' @examples
+#' 
+#' 
+#'   tOwls <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
+#'   tree.owls <- ape::read.tree(text=tOwls)
+#'   P1 <- as(tree.owls, "phylo4")
+#'   P1
+#'   summary(P1)
+#' 
+#' 
+#'   ## summary of a polytomous tree
+#'   E <- matrix(c(
+#'       8,  9,
+#'       9, 10,
+#'      10,  1,
+#'      10,  2,
+#'       9,  3,
+#'       9,  4,
+#'       8, 11,
+#'      11,  5,
+#'      11,  6,
+#'      11,  7,
+#'       0,  8), ncol=2, byrow=TRUE)
+#' 
+#'   P2 <- phylo4(E)
+#'   nodeLabels(P2) <- as.character(nodeId(P2, "internal"))
+#'   plot(P2, show.node.label=TRUE)
+#'   sumryP2 <- summary(P2)
+#'   sumryP2
+#' 
 setMethod("summary", signature(object="phylo4"),
   function(object, quiet=FALSE) {
 
@@ -538,6 +839,51 @@ setMethod("summary", signature(object="phylo4"),
 ### Ordering
 #########################################################
 
+#' reordering trees within phylobase objects
+#' 
+#' Methods for reordering trees into various traversal orders
+#' 
+#' The \code{reorder} method takes a \code{phylo4} or \code{phylo4d} tree and
+#' orders the edge matrix (i.e. \code{edges(x)}) in the requested traversal
+#' order. Currently only two orderings are permitted, and both require rooted
+#' trees. In "postorder", a node's descendants come before that node, thus the
+#' root, which is ancestral to all nodes, comes last.  In "preorder", a node is
+#' visited before its descendants, thus the root comes first.
+#' 
+#' A method is also defined that takes an \code{ape phylo} object.  This also
+#' takes an order argument, however, 'pruningwise' and 'cladewise' are the only
+#' acceptable parameters. This is because this method actually uses the
+#' \code{ape reorder()} command to complete the ordering.
+#' 
+#' @name reorder-methods
+#' @aliases reorder-methods reorder,phylo-method reorder,phylo4-method
+#' reorder,phylo4d-method
+#' @docType methods
+#' @param x a \code{phylo4} or \code{phylo4d} object
+#' @param order The desired traversal order; currently only 'preorder' and
+#' 'postorder' are allowed for \code{phylo4} and \code{phylo4d} objects,
+#' whereas only 'cladewise' and 'pruningwise' are allowed for \code{phylo}
+#' objects
+#' @return A \code{phylo4} or \code{phylo4d} object with the edge, label,
+#' length and data slots ordered as \code{order}, which is itself recorded in
+#' the order slot.
+#' @note The "preorder" parameter corresponds to "cladewise" in the \code{ape}
+#' package, and "postorder" corresponds (almost but close enough?) to
+#' "pruningwise".
+#' 
+#' See \url{http://ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf}
+#' @section Methods: \describe{ \item{x = "phylo"}{reorders a \code{phylo}
+#' object} \item{x = "phylo4"}{reorders a \linkS4class{phylo4} object} \item{x
+#' = "phylo4d"}{reorders a \linkS4class{phylo4d} object} }
+#' @author Peter Cowan, Jim Regetz
+#' @seealso \code{\link[ape]{reorder.phylo}} in the \code{ape} package.
+#' \code{\link{ancestors}} \code{\link{ancestor}} \code{\link{siblings}}
+#' \code{\link{children}} \code{\link{descendants}}
+#' @keywords methods
+#' @examples
+#' phy <- phylo4(ape::rtree(5))
+#' edges(reorder(phy, "preorder"))
+#' edges(reorder(phy, "postorder"))
 orderIndex <- function(x, order=c("preorder", "postorder")) {
 
     order <- match.arg(order)

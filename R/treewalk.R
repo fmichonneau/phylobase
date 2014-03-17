@@ -6,6 +6,82 @@
 ## x = n-nTips(phy)
 ## so:     n = x+nTips(phy)
 
+
+
+#' node and edge look-up functions
+#' 
+#' Functions for retrieving node and edge IDs (possibly with corresponding
+#' labels) from a phylogenetic tree.
+#' 
+#' \code{getNode} and \code{getEdge} are primarily intended for looking up the
+#' IDs either of nodes themselves or of edges associated with those nodes. Note
+#' that they behave quite differently. With \code{getNode}, any input nodes are
+#' looked up against tree nodes of the specified type, and those that match are
+#' returned as numeric node IDs with node labels (if they exist) as element
+#' names. With \code{getEdge}, any input nodes are looked up against edge ends
+#' of the specified type, and those that match are returned as character edge
+#' IDs with the corresponding node ID as element names.
+#' 
+#' If \code{missing} is \dQuote{warn} or \dQuote{OK}, \code{NA} is returned for
+#' any nodes that are unmatched for the specified type. This can provide a
+#' mechanism for filtering a set of nodes or edges.
+#' 
+#' \code{nodeId} provides similar output to \code{getNode} in the case when no
+#' node is supplied, but it is faster and returns an unnamed vector of the
+#' numeric IDs of all nodes of the specified node type.  Similarly,
+#' \code{edgeId} simply returns an unnamed vector of the character IDs of all
+#' edges for which the descendant node is of the specified node type.
+#' 
+#' @aliases getNode getEdge nodeId nodeId,phylo4-method edgeId
+#' edgeId,phylo4-method
+#' @param x a \linkS4class{phylo4} object (or one inheriting from
+#' \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
+#' @param node either an integer vector corresponding to node ID numbers, or a
+#' character vector corresponding to node labels; if missing, all nodes
+#' appropriate to the specified type will be returned by \code{getNode}, and
+#' all edges appropriate to the specified type will be returned by
+#' \code{getEdge}.
+#' @param type (\code{getNode}) specify whether to return nodes matching "all"
+#' tree nodes (default), only "tip" nodes, or only "internal" nodes;
+#' (\code{nodeId, edgeId}) specify whether to return "all" tree nodes, or only
+#' those corresponding to "tip", "internal", or "root" nodes; (\code{getEdge})
+#' specify whether to look up edges based on their descendant node
+#' ("descendant") or ancestral node ("ancestor")
+#' @param missing what to do if some requested node IDs or names are not in the
+#' tree: warn, do nothing, or stop with an error
+#' @return \item{list("getNode")}{returns a named integer vector of node IDs,
+#' in the order of input nodes if provided, otherwise in nodeId order}
+#' \item{list("getEdge")}{returns a named character vector of edge IDs, in the
+#' order of input nodes if provide, otherwise in nodeId order}
+#' \item{list("nodeId")}{returns an unnamed integer vector of node IDs, in
+#' ascending order} \item{list("getEdge")}{returns an unnamed character vector
+#' of edge IDs, in edge matrix order}
+#' @keywords misc
+#' @examples
+#' 
+#'   data(geospiza)
+#'   nodeLabels(geospiza) <- LETTERS[1:nNodes(geospiza)]
+#'   plot(as(geospiza, "phylo4"), show.node.label=TRUE)
+#'   getNode(geospiza, 18)
+#'   getNode(geospiza, "D")
+#'   getEdge(geospiza, "D")
+#'   getEdge(geospiza, "D", type="ancestor")
+#' 
+#'   ## match nodes only to tip nodes, flagging invalid cases as NA
+#'   getNode(geospiza, c(1, 18, 999), type="tip", missing="OK")
+#' 
+#'   ## get all edges that descend from internal nodes
+#'   getEdge(geospiza, type="ancestor")
+#' 
+#'   ## identify an edge from its terminal node
+#'   getEdge(geospiza, c("olivacea", "B", "fortis"))
+#'   getNode(geospiza, c("olivacea", "B", "fortis"))
+#'   geospiza@edge[c(26, 1, 11),]
+#' 
+#'   ## quickly get all tip node IDs and tip edge IDs
+#'   nodeId(geospiza, "tip")
+#'   edgeId(geospiza, "tip")
+#' 
 getNode <- function(x, node, type=c("all", "tip", "internal"),
     missing=c("warn","OK","fail")) {
 
@@ -64,6 +140,94 @@ getNode <- function(x, node, type=c("all", "tip", "internal"),
 }
 
 
+#' tree traversal and utility functions
+#' 
+#' Functions for describing relationships among phylogenetic nodes (i.e.
+#' internal nodes or tips).
+#' 
+#' \code{ancestors} and \code{descendants} can take \code{node} vectors of
+#' arbitrary length, returning a list of output vectors if the number of valid
+#' input nodes is greater than one. List element names are taken directly from
+#' the input node vector.
+#' 
+#' If any supplied nodes are not found in the tree, the behavior currently
+#' varies across functions. Invalid nodes are automatically omitted by
+#' \code{ancestors} and \code{descendants}, with a warning.  \code{ancestor}
+#' will return \code{NA} for any invalid nodes, with a warning. Both
+#' \code{children} and \code{siblings} will return an empty vector, again with
+#' a warning. In contrast, \code{MRCA} and \code{shortestPath} will throw an
+#' immediate error if any input nodes are invalid.
+#' 
+#' @aliases children descendants ancestor ancestors siblings MRCA shortestPath
+#' sumEdgeLength sumEdgeLength,phylo4-method
+#' @param phy a \linkS4class{phylo4} object (or one inheriting from
+#' \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
+#' @param x a \linkS4class{phylo4} object (or one inheriting from
+#' \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
+#' @param node either an integer corresponding to a node ID number, or a
+#' character corresponding to a node label; for \code{ancestors} and
+#' \code{descendants}, this may be a vector of multiple node numbers or names
+#' @param type (\code{ancestors}) specify whether to return just direct
+#' ancestor ("parent"), all ancestor nodes ("all"), or all ancestor nodes
+#' including self ("ALL"); (\code{descendants}) specify whether to return just
+#' direct descendants ("children"), all extant descendants ("tips"), or all
+#' descendant nodes ("all")
+#' @param include.self whether to include self in list of siblings
+#' @param \dots a list of node numbers or names, or a vector of node numbers or
+#' names
+#' @param node1 a node number (or name)
+#' @param node2 a node number (or name)
+#' @return \item{list("ancestors")}{ return a named vector (or a list of such
+#' vectors in the case of multiple input nodes) of the ancestors and
+#' descendants of a node}\item{ and }{ return a named vector (or a list of such
+#' vectors in the case of multiple input nodes) of the ancestors and
+#' descendants of a node}\item{list("descendants")}{ return a named vector (or
+#' a list of such vectors in the case of multiple input nodes) of the ancestors
+#' and descendants of a node} \item{list("ancestor")}{ \code{ancestor} is
+#' analogous to \code{ancestors(\dots{}, type="parent")} (i.e. direct ancestor
+#' only), but returns a single concatenated vector in the case of multiple
+#' input nodes; \code{children} is analogous to \code{descendants(\dots{},
+#' type="children")} (i.e. direct descendants only), but is not currently
+#' intended to be used with multiple input nodes }\item{ and }{ \code{ancestor}
+#' is analogous to \code{ancestors(\dots{}, type="parent")} (i.e. direct
+#' ancestor only), but returns a single concatenated vector in the case of
+#' multiple input nodes; \code{children} is analogous to
+#' \code{descendants(\dots{}, type="children")} (i.e. direct descendants only),
+#' but is not currently intended to be used with multiple input nodes
+#' }\item{list("children")}{ \code{ancestor} is analogous to
+#' \code{ancestors(\dots{}, type="parent")} (i.e. direct ancestor only), but
+#' returns a single concatenated vector in the case of multiple input nodes;
+#' \code{children} is analogous to \code{descendants(\dots{}, type="children")}
+#' (i.e. direct descendants only), but is not currently intended to be used
+#' with multiple input nodes } \item{list("siblings")}{ returns sibling nodes
+#' (children of the same parent)} \item{list("MRCA")}{ returns the most recent
+#' common ancestor of two or more nodes} \item{list("shortestPath")}{ returns
+#' the nodes of the shortest path from one node to another (excluding
+#' \code{node1} and \code{node2})} \item{list("sumEdgeLength")}{ returns the
+#' sum of branch length for branches starting at nodes provided}
+#' @note \code{MRCA} is uppercase to avoid conflict with \code{mrca} in ape
+#' @seealso \code{\link[ape]{mrca}}, in the ape package, gives a list of all
+#' subtrees
+#' @keywords misc
+#' @examples
+#' 
+#'   data(geospiza)
+#'   nodeLabels(geospiza) <- LETTERS[1:nNodes(geospiza)]
+#'   plot(as(geospiza, "phylo4"), show.node.label=TRUE)
+#'   ancestor(geospiza, "E")
+#'   children(geospiza, "C")
+#'   descendants(geospiza, "D", type="tips")
+#'   descendants(geospiza, "D", type="all")
+#'   ancestors(geospiza, "D")
+#'   MRCA(geospiza, "conirostris", "difficilis", "fuliginosa")
+#'   MRCA(geospiza, "olivacea", "conirostris")
+#' 
+#'   ## shortest path between 2 nodes
+#'   shortestPath(geospiza, "fortis", "fuliginosa")
+#'   shortestPath(geospiza, "F", "L")
+#' 
+#'   ## branch length from a tip to the root
+#'   sumEdgeLength(geospiza, ancestors(geospiza, "fortis", type="ALL"))
 ancestor <- function(phy,node) {
     node2 <- getNode(phy,node)
     ## r <- which(edges(phy)[,2]==node)
@@ -242,7 +406,6 @@ MRCA <- function(phy, ...) {
 # shortestPath
 ###############
 shortestPath <- function(phy, node1, node2){
-  ## if(!require(phylobase)) stop("phylobase package is not installed")
 
   ## conversion from phylo, phylo4 and phylo4d
   if (class(phy) == "phylo4d") {

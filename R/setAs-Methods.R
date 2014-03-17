@@ -1,5 +1,55 @@
 #######################################################
 ## Importing from ape
+#' Converting between phylo4/phylo4d and other phylogenetic tree formats
+#' 
+#' Translation functions to convert between phylobase objects (\code{phylo4} or
+#' \code{phylo4d}), and objects used by other comparative methods packages in
+#' R: \code{ape} objects (\code{phylo}, \code{multiPhylo}), \code{ade4} objects
+#' (\code{phylog}, \emph{now deprecated}), and to \code{data.frame}
+#' representation.
+#' 
+#' 
+#' @name as
+#' @aliases as as-method as,phylo,phylo4-method as,phylo,phylo4d-method
+#' as,multiPhylo4,multiPhylo-method as,multiPhylo,multiPhylo4-method
+#' as,multiPhylo4d,multiPhylo-method as,phylo4,phylo-method
+#' as,phylo4d,phylo-method as,phylo4,data.frame-method
+#' as,phylo4d,data.frame-method as,phylo4vcov,phylo4-method
+#' as,phylo4,phylo4vcov-method coerce-methods coerce,phylo,phylo4-method
+#' coerce,phylo,phylo4d-method coerce,multiPhylo4,multiPhylo-method
+#' coerce,multiPhylo,multiPhylo4-method coerce,multiPhylo4d,multiPhylo-method
+#' coerce,phylo4,phylo-method coerce,phylo4d,phylo-method
+#' coerce,phylo4,data.frame-method coerce,phylo4d,data.frame-method
+#' coerce,phylo4vcov,phylo4-method coerce,phylo4,phylo4vcov-method
+#' @docType methods
+#' @section Usage: \code{as(object, class)}
+#' @author Ben Bolker, Thibaut Jombart, Marguerite Butler, Steve Kembel
+#' @seealso generic \code{\link[methods]{as}}, \code{\link{phylo4}},
+#' \code{\link{phylo4d}}, \code{\link{extractTree}}, the original
+#' \code{\link[ade4]{phylog}} from the \code{ade4} package and
+#' \code{\link[ape]{as.phylo}} from the \code{ape} package.
+#' @keywords methods
+#' @examples
+#' 
+#' tree.owls <- ape::read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
+#' ## round trip conversion
+#' tree_in_phylo <- tree.owls                  # tree is a phylo object
+#' (tree_in_phylo4 <- as(tree.owls,"phylo4"))  # phylo converted to phylo4
+#' identical(tree_in_phylo,as(tree_in_phylo4,"phylo"))
+#' ## test if phylo, and phylo4 converted to phylo are identical
+#' ## (no, because of dimnames)
+#' 
+#' ## Conversion to phylog (ade4)
+#' as(tree_in_phylo4, "phylog")
+#' 
+#' ## Conversion to data.frame
+#' as(tree_in_phylo4, "data.frame")
+#' 
+#' ## Conversion to phylo (ape) 
+#' as(tree_in_phylo4, "phylo")
+#' 
+#' ## Conversion to phylo4d, (data slots empty)    
+#' as(tree_in_phylo4, "phylo4d")
 setAs("phylo", "phylo4", function(from, to) {
   ## fixme SWK kludgy fix may not work well with unrooted trees
   ## TODO should we also attempt to get order information?
@@ -71,7 +121,16 @@ setAs("phylo", "phylo4d", function(from, to) {
     phylo4d(as(from, "phylo4"), tip.data = data.frame())
 })
 
-
+#' multiPhylo4 and extended classes
+#' 
+#' Classes for lists of phylogenetic trees.  These classes and methods are
+#' planned for a future version of \code{phylobase}.
+#' 
+#' 
+#' @name multiPhylo-class
+#' @aliases multiPhylo-class multiPhylo4-class multiPhylo4d-class tbind
+#' @docType class
+#' @keywords classes
 setAs("multiPhylo", "multiPhylo4", function(from, to) {
     trNm <- names(from)
     if(is.null(trNm)) trNm <- character(0)
@@ -178,7 +237,21 @@ setAs("phylo4", "phylo", function(from, to) {
 ##    warning("losing data while coercing phylo4d to phylo")
 ##    y
 ##})
-
+#' Class "phylog"
+#' 
+#' S4 version of the class \code{phylog} from the \code{ade4} package.
+#' 
+#' 
+#' @name phylog-class
+#' @aliases phylog-class coerce,phylo4,phylog-method
+#' @docType class
+#' @section Objects from the Class: A virtual Class: No objects may be created
+#' from it.
+#' @author Thibaut Jombart \email{jombart@@biomserv.univ-lyon1.fr}
+#' @seealso The original \code{\link[ade4]{phylog}} from the \code{ade4}
+#' package.
+#' @keywords classes
+NULL
 setAs("multiPhylo4", "multiPhylo", function(from, to) {
     y <- lapply(from@phylolist, function(x) as(x, "phylo"))
     names(y) <- from@tree.names

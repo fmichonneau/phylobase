@@ -1,4 +1,45 @@
 
+#' matrix classes for phylobase
+#' 
+#' Classes representing phylogenies as matrices
+#' 
+#' 
+#' @name phylomat-class
+#' @aliases phylo4vcov-class as_phylo4vcov
+#' @docType class
+#' @param from a \code{phylo4} object
+#' @param \dots optional arguments, to be passed to \code{vcov.phylo} in
+#' \code{ape} (the main useful option is \code{cor}, which can be set to
+#' \code{TRUE} to compute a correlation rather than a variance-covariance
+#' matrix)
+#' @section Objects from the Class: These are square matrices (with rows and
+#' columns corresponding to tips, and internal nodes implicit) with different
+#' meanings depending on the type (variance-covariance matrix, distance matrix,
+#' etc.).
+#' @author Ben Bolker
+#' @keywords classes
+#' @examples
+#' 
+#'   tree.owls <- ape::read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
+#'   o2 <- as(tree.owls,"phylo4")
+#'   ov <- as(o2,"phylo4vcov")
+#'   o3 <- as(ov,"phylo4")
+#'   ## these are not completely identical, but are
+#'   ## topologically identical ...
+#' 
+#'   ## edge matrices are in a different order:
+#'   ## cf. o2@edge and o3@edge
+#'   ## BUT the edge matrices are otherwise identical
+#'   identical(o2@edge[order(o2@edge[,2]),],
+#'             o3@edge[order(o3@edge[,2]),])
+#' 
+#'   ## There is left/right ambiguity here in the tree orders:
+#'   ## in o2 the 5->6->7->1 lineage
+#'   ## (terminating in Strix aluco)
+#'   ## is first, in o3 the 5->6->3 lineage
+#'   ## (terminating in Athene noctua) is first.
+#' 
+#' 
 ## define class for phylogenetic var-cov matrices
 setClass("phylo4vcov",
          representation("matrix",
