@@ -6,10 +6,12 @@ useDynLib(phylobase)
 
 import(methods)
 import(ape)
+import(Rcpp)
+
 importFrom(graphics, plot)
 importFrom(stats, reorder)
 importFrom(utils, head, tail)
-importFrom(Rcpp, evalCpp)
+importFrom(ade4, newick2phylog)
 
 #----------------------------------------------------------------------
 
@@ -90,7 +92,8 @@ export(phylo4_orderings)
 ## options
 export(phylobase.options)
 
-importFrom(ade4,newick2phylog)
+
+
 ## commented out in source code, probably should be omitted here
 #export(phyloStripchart)
 #export(internEdges, terminEdges, isPoly)

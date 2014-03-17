@@ -61,4 +61,4 @@ rm -f src/ncl/example/translate/Makefile
 rm -f src/ncl/ncl/.deps
 rm -f src/ncl/ncl/Makefile
 rm -f tests/.RData
-rm -r tests/Rplots.pdf
+rm -f tests/Rplots.pdf
