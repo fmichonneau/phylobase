@@ -1,3 +1,5 @@
+// -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+
 #include <Rcpp.h>
 #include "ncl/nxsmultiformat.h"
 
@@ -63,9 +65,8 @@ NxsString stdData(NxsCharactersBlock& charBlock, NxsString& charString, const in
 }
 
 
-extern "C" SEXP GetNCL(SEXP params, SEXP paramsVecR) {
-
-    BEGIN_RCPP
+//[[Rcpp::export]]
+Rcpp::List GetNCL (SEXP params, SEXP paramsVecR) {
 
     Rcpp::List list(params);
     Rcpp::LogicalVector paramsVec(paramsVecR);
@@ -115,6 +116,7 @@ extern "C" SEXP GetNCL(SEXP params, SEXP paramsVecR) {
     std::string fileFormatString = list["fileFormat"];
     if (!fileFormatString.empty())
         {
+
         fileFormat = MultiFormatReader::formatNameToCode(fileFormatString);
         if (fileFormat == MultiFormatReader::UNSUPPORTED_FORMAT)
             {
@@ -125,39 +127,38 @@ extern "C" SEXP GetNCL(SEXP params, SEXP paramsVecR) {
 	        return res;
             }
         }
-/* 
 
-fileFormatString should be one of these: 	"nexus",
-								"dnafasta",
-								"aafasta",
-								"rnafasta",
-								"dnaphylip",
-								"rnaphylip",
-								"aaphylip",
-								"discretephylip",
-								"dnaphylipinterleaved",
-								"rnaphylipinterleaved",
-								"aaphylipinterleaved",
-								"discretephylipinterleaved",
-								"dnarelaxedphylip",
-								"rnarelaxedphylip",
-								"aarelaxedphylip",
-								"discreterelaxedphylip",
-								"dnarelaxedphylipinterleaved",
-								"rnarelaxedphylipinterleaved",
-								"aarelaxedphylipinterleaved",
-								"discreterelaxedphylipinterleaved",
-								"dnaaln",
-								"rnaaln",
-								"aaaln",
-								"phyliptree",
-								"relaxedphyliptree",
-								"nexml",
-								"dnafin",
-								"aafin",
-								"rnafin"
-							};
-							*/
+/*  fileFormatString should be one of these:
+    "nexus",
+    "dnafasta",
+    "aafasta",
+    "rnafasta",
+    "dnaphylip",
+    "rnaphylip",
+    "aaphylip",
+    "discretephylip",
+    "dnaphylipinterleaved",
+    "rnaphylipinterleaved",
+    "aaphylipinterleaved",
+    "discretephylipinterleaved",
+    "dnarelaxedphylip",
+    "rnarelaxedphylip",
+    "aarelaxedphylip",
+    "discreterelaxedphylip",
+    "dnarelaxedphylipinterleaved",
+    "rnarelaxedphylipinterleaved",
+    "aarelaxedphylipinterleaved",
+    "discreterelaxedphylipinterleaved",
+    "dnaaln",
+    "rnaaln",
+    "aaaln",
+    "phyliptree",
+    "relaxedphyliptree",
+    "nexml",
+    "dnafin",
+    "aafin",
+    "rnafin"
+    }; */
     try {
 	nexusReader.ReadFilepath(const_cast < char* > (filename.c_str()), fileFormat);  
     }
@@ -218,7 +219,8 @@ fileFormatString should be one of these: 	"nexus",
 			NxsSimpleTree simpleTree(ftd, -1, -1.0);
 			std::vector<const NxsSimpleNode *> ndVector =  simpleTree.GetPreorderTraversal();
 			unsigned internalNdIndex = nTax;
-			for (std::vector<const NxsSimpleNode *>::const_iterator ndIt = ndVector.begin(); ndIt != ndVector.end(); ++ndIt)
+			for (std::vector<const NxsSimpleNode *>::const_iterator ndIt = ndVector.begin();
+			     ndIt != ndVector.end(); ++ndIt) 
 			{
 			    NxsSimpleNode * nd = (NxsSimpleNode *) *ndIt;
 			    unsigned nodeIndex;
@@ -330,6 +332,7 @@ fileFormatString should be one of these: 	"nexus",
 						else {
 						    if (nCharStates == 1) {
 							tmpCharString += charBlock->GetState(taxon, eachChar, 0);
+			
 						    }
 						    else {
 							tmpCharString += "?"; //FIXME
@@ -348,8 +351,8 @@ fileFormatString should be one of these: 	"nexus",
 			}
 			std::string charString = "c(" + tmpCharString + ");";
 			dataChr.push_back (charString);
-		    }				
-		}  
+		    }
+		}
 	    }
 	}
     }
@@ -368,8 +371,5 @@ fileFormatString should be one of these: 	"nexus",
 					Rcpp::Named("stateLabels") = stateLabels,
 					Rcpp::Named("dataChr") = dataChr,
 					Rcpp::Named("Test") = test);
-    return res;				
-
-  END_RCPP
-
+    return res;
 }
