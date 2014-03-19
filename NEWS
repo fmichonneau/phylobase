@@ -7,6 +7,25 @@
         *                                               *
         *************************************************
 
+                CHANGES IN phylobase VERSION 0.6.8
+
+   *   Not many user-visible changes, most are related to improving speeds
+       during test of object validation (most tests done in C++) and to getNode
+       that is used by many functions.
+
+   *  Changes to package structure to make it compatible with devtools
+      (switching testing to testthat -- partial at this stage) and docs to
+      roxygen format (partial at this stage).
+
+   *  Changes to package structure to comply with new Rcpp standards
+
+                CHANGES IN phylobase VERSION 0.6.5
+
+   *  Updates from cout/cerr to Rcpp::Rcout/Rcerr
+
+   *  Comments in Nexus tree strings are being removed before being processed by
+      readNCL
+
                 CHANGES IN phylobase VERSION 0.6.3
 
    *   Fixed bugs in getNode in cases where labels included regexpr
