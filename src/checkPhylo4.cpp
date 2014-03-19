@@ -264,6 +264,7 @@ Rcpp::CharacterVector edgeIdCpp (Rcpp::IntegerMatrix edge, std::string type) {
        }         
        return c1;
     }
+    return "";
 }
 
 //[[Rcpp::export]]
