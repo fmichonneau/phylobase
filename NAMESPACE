@@ -6,8 +6,8 @@ useDynLib(phylobase)
 
 import(methods)
 import(ape)
-import(Rcpp)
 
+importFrom(Rcpp, evalCpp)
 importFrom(graphics, plot)
 importFrom(stats, reorder)
 importFrom(utils, head, tail)
