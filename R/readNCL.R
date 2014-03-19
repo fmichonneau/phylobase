@@ -138,7 +138,7 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
  ##    of characters)
  ##  $stateLabels: the labels for the states of the characters, i.e. the levels of the factors to be returned
  ##  $dataChr: string that contains the data to be returned
- ncl <- .Call("GetNCL", fileName, parameters, PACKAGE="phylobase")
+ ncl <- GetNCL(fileName, parameters)
 
  ## Return Error message
  if (length(ncl) == 1 && names(ncl) == "ErrorMsg") {
