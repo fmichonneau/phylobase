@@ -76,7 +76,7 @@
 #'   ## identify an edge from its terminal node
 #'   getEdge(geospiza, c("olivacea", "B", "fortis"))
 #'   getNode(geospiza, c("olivacea", "B", "fortis"))
-#'   geospiza@edge[c(26, 1, 11),]
+#'   edges(geospiza)[c(26, 1, 11),]
 #' 
 #'   ## quickly get all tip node IDs and tip edge IDs
 #'   nodeId(geospiza, "tip")
