@@ -1,11 +1,9 @@
 // -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 
 #include <Rcpp.h>
-#include <iostream>     // std::cout
 #include <algorithm>    // std::count_if
 #include <vector>       // std::vector
 #include <string>       // 
-#include <sstream>
 
 template <typename T>
 std::string NumberToString ( T Number ) {
@@ -214,55 +212,68 @@ bool hasDuplicatedLabelsCpp (Rcpp::CharacterVector label) {
     return is_true(any(Rcpp::duplicated(label)));
 }
 
-std::string edgeIdCppInternal (int tmp1, int tmp2) {
-    std::string tmp1S = static_cast<std::ostringstream*>( &(std::ostringstream() << tmp1) )->str();
-    std::string tmp2S = static_cast<std::ostringstream*>( &(std::ostringstream() << tmp2) )->str();
-    tmp1S.append("-");
-    tmp1S.append(tmp2S);
-    return tmp1S;
+Rcpp::CharacterVector edgeIdCppInternal (Rcpp::IntegerVector tmp1, Rcpp::IntegerVector tmp2) {
+    Rcpp::CharacterVector tmpV1 = Rcpp::as< Rcpp::CharacterVector >(tmp1);
+    Rcpp::CharacterVector tmpV2 = Rcpp::as< Rcpp::CharacterVector >(tmp2);
+    int Ne = tmp1.size();
+    Rcpp::CharacterVector res(Ne);
+    for (int i = 0; i < Ne; i++) {
+        std::string tmpS1;
+        tmpS1 = tmpV1[i];
+        std::string tmpS2;
+        tmpS2 = tmpV2[i];
+        std::string tmpS;
+        tmpS = tmpS1.append("-");
+        tmpS = tmpS.append(tmpS2);
+        res[i] = tmpS;
+    }
+    return res;
 }
 
 //[[Rcpp::export]]
 Rcpp::CharacterVector edgeIdCpp (Rcpp::IntegerMatrix edge, std::string type) {
     Rcpp::IntegerVector ances = getAnces(edge);
     Rcpp::IntegerVector desc = getDesc(edge);
-
+    int nedge;
+        
     if (type == "tip" || type == "internal") {
 	Rcpp::IntegerVector tips = tipsFast(ances);
-	int ntips = tips.size();
+	nedge = tips.size();
 	Rcpp::IntegerVector ans = match(tips, desc);
 	if (type == "tip") {
-	    Rcpp::CharacterVector c1(ntips);
-	    for (int j = 0; j < ntips; j++) {
-		int tmp1 = ances[ans[j]-1];
-		int tmp2 = desc[ans[j]-1];	   	   
-		c1[j] = edgeIdCppInternal(tmp1, tmp2);
+            Rcpp::IntegerVector tmpAnces(nedge);
+            Rcpp::IntegerVector tmpDesc(nedge);
+	    for (int j = 0; j < nedge; j++) {
+                tmpAnces[j] = ances[ans[j]-1];
+                tmpDesc[j] = desc[ans[j]-1];
 	    }
-	    return c1;
+            Rcpp::CharacterVector c1(nedge);
+            c1 = edgeIdCppInternal(tmpAnces, tmpDesc);
+            return c1;
 	}
 	else if (type == "internal") {
-	    int nedge = ances.size();
-	    Rcpp::IntegerVector idEdge = Rcpp::seq_len(nedge);
+	    int allEdges = ances.size();
+	    Rcpp::IntegerVector idEdge = Rcpp::seq_len(allEdges);
 	    Rcpp::IntegerVector intnd = Rcpp::setdiff(idEdge, ans);
-	    int nnd = intnd.size();
-	    Rcpp::CharacterVector c1(nnd);
-	    for (int j = 0; j < nnd; j++) {
-		int tmp1 = ances[intnd[j]-1];
-		int tmp2 = desc[intnd[j]-1];
-		c1[j] = edgeIdCppInternal(tmp1, tmp2);
-	    }   
-	    return c1;
+	    nedge = intnd.size();
+            Rcpp::IntegerVector tmpAnces(nedge);
+            Rcpp::IntegerVector tmpDesc(nedge);
+	    for (int j = 0; j < nedge; j++) {
+                tmpAnces[j] = ances[intnd[j]-1];
+                tmpDesc[j] = desc[intnd[j]-1];
+            }
+            Rcpp::CharacterVector c1(nedge);
+            c1 = edgeIdCppInternal(tmpAnces, tmpDesc);
+            return c1;
 	}
     }
     else {
-	int nedge = ances.size();
-	Rcpp::CharacterVector c1(nedge);
-	for (int j = 0; j < nedge; j++) {
-	    int tmp1 = ances[j];
-	    int tmp2 = desc[j];	            
-	    c1[j] = edgeIdCppInternal(tmp1, tmp2);
-       }         
-       return c1;
+        nedge = ances.size();
+        Rcpp::IntegerVector tmpAnces = ances;
+        Rcpp::IntegerVector tmpDesc = desc;
+        Rcpp::CharacterVector c1(nedge);
+        c1 = edgeIdCppInternal(tmpAnces, tmpDesc);
+        return c1;
     }
     return "";
 }
