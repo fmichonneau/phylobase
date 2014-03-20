@@ -28,10 +28,12 @@
 #'   ## topologically identical ...
 #' 
 #'   ## edge matrices are in a different order:
-#'   ## cf. o2@edge and o3@edge
+#'   ## cf. edges(o2) and edges(o3)
 #'   ## BUT the edge matrices are otherwise identical
-#'   identical(o2@edge[order(o2@edge[,2]),],
-#'             o3@edge[order(o3@edge[,2]),])
+#'   o2edges <- edges(o2)
+#'   o3edges <- edges(o3)
+#'   identical(o2edges[order(o2edges[,2]),],
+#'             o3edges[order(o3edges[,2]),])
 #' 
 #'   ## There is left/right ambiguity here in the tree orders:
 #'   ## in o2 the 5->6->7->1 lineage

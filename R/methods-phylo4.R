@@ -599,7 +599,7 @@ setReplaceMethod("edgeLabels", signature(x="phylo4", value="character"),
 #' follows: root first, then other internal nodes, and finally tips.\cr The
 #' returned data.frame has the following columns:\cr \item{label}{Label for the
 #' taxon at the node (usually species name).} \item{node}{Node number, i.e. the
-#' number identifying the node in \code{x@edge}.} \item{ancestor}{Node number
+#' number identifying the node in edge matrix.} \item{ancestor}{Node number
 #' of the node's ancestor.} \item{branch.length}{The branch length connecting
 #' the node to its ancestor (NAs if missing).} \item{node.type}{"root",
 #' "internal", or "tip". (internally generated)} \item{data}{phenotypic data
