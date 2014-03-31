@@ -145,7 +145,7 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
    stop(ncl$ErrorMsg)
  }
  
- if (!quiet) print(ncl)
+ if (!quiet) message(ncl)
 
  ## Disclaimer
  if (!length(grep("\\{", ncl$dataChr)) && return.labels && !polymorphic.convert) {
