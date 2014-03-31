@@ -43,6 +43,10 @@
 #' @author Ben Bolker, Thibaut Jombart, Francois Michonneau
 #' @seealso \code{\link{phylo4d}}
 #' @keywords methods
+#' @include RcppExports.R
+#' @include phylo4.R
+#' @include checkdata.R
+#' @include class-phylo4d.R
 #' @examples
 #' 
 #'    data(geospiza)

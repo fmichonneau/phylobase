@@ -42,6 +42,8 @@
 #' trees.  See \code{\link{coerce-methods}} for translation functions and
 #' \code{\link{phylobase.options} to change some of the default options of the
 #' validator.}
+#' @include RcppExports.R
+#' @include phylo4.R
 #' @keywords misc
 checkPhylo4 <- function(object) {
     ct <- checkTree(object)

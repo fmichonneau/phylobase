@@ -115,6 +115,10 @@
 #' \item{isUltrametric}{\code{signature(object = "phylo4")}: whether the tree
 #' is ultrametric} }
 #' @keywords methods
+#' @include RcppExports.R
+#' @include phylo4.R
+#' @include checkdata.R
+#' @include class-phylo4.R
 #' @examples
 #' 
 #' data(geospiza)

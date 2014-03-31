@@ -9,3 +9,5 @@
 #' @aliases multiPhylo-class multiPhylo4-class multiPhylo4d-class tbind
 #' @docType class
 #' @keywords classes
+#' @include class-multiphylo4.R
+NULL

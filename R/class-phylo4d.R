@@ -35,6 +35,7 @@ setClass("phylo4d",
 #' \code{\link{checkPhylo4}} function to check the validity of \code{phylo4}
 #' trees.
 #' @keywords classes
+#' @include formatData.R
 #' @examples
 #'   example(read.tree, "ape")
 #'   obj <- phylo4d(as(tree.owls.bis,"phylo4"), data.frame(wing=1:3))
