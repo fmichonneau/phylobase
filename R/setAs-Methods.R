@@ -29,6 +29,9 @@
 #' \code{\link[ade4]{phylog}} from the \code{ade4} package and
 #' \code{\link[ape]{as.phylo}} from the \code{ape} package.
 #' @keywords methods
+#' @export
+#' @include phylo4-methods.R
+#' @include phylo4d-methods.R
 #' @examples
 #' 
 #' tree.owls <- ape::read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")

@@ -3,22 +3,86 @@
 #' Utilities and Tools for Phylogenetics
 #' 
 #' Base package for phylogenetic structures and comparative data.
+#'
+#' \code{phylobase} provides a set of functions to associate and
+#' manipulate phylogenetic information and data about the
+#' species/individuals that are in the tree.
+#'
+#' \code{phylobase} intends to be robust, fast and efficient. We hope
+#' other people use the data structure it provides to develop new
+#' comparative methods in R.
 #' 
-#' \itemize{ \itemPackage:phylobase \itemType:Package \itemDate:2009
-#' \itemDepends:methods, grid, ape(>= 2.1) \itemSuggests:adephylo, MASS
-#' \itemLicense:GPL Version 2 or later \itemAuthors:R Hackathon et al.
-#' (alphabetically: Ben Bolker, Marguerite Butler, Peter Cowan, Damien de
-#' Vienne, Thibaut Jombart, Steve Kembel, Francois Michonneau, David Orme,
-#' Brian O'Meara, Emmanuel Paradis, Jim Regetz, Derrick Zwickl )
-#' \itemURL:\url{http://phylobase.r-forge.r-project.org/} }
+#' With \code{phylobase} it is easy to ensure that all your data are
+#' represented and associated with the tips or the internal nodes of
+#' your tree. \code{phylobase} provides functions to:
+#' \itemize{
 #' 
+#' \item prune (subset) your trees, find ancestor(s) a
+#' descendant(s)
+#'
+#' \item find the most common recent ancestor of 2 nodes (MRCA)
+#'
+#' \item calculate the distance of a given node from the tip or
+#' between two nodes in your tree
+#'
+#' \item robust functions to import data from NEXUS and Newick files
+#' using the NEXUS Class Library (\url{http://ncl.sourceforge.net/‎})
+#' }
+#'
+#' @section History: 
+#' \code{phylobase} was started during a Hackathlon at NEScent on December 10-14 2007.
+#'
+#' Peter Cowan was a Google Summer of Code fellow in 2008 and
+#' developed all the code for plotting.
+#'
+#' In December 2008, a mini-virtual Hackathlon was organized to clean
+#' up and make the code more robust.
+#'
+#' In the spring and summer of 2009, Jim Regetz made several
+#' contributions that made the code faster (in particular with the
+#' re-ordering parts), found many bugs, and wrote most of the testing
+#' code.
+#'
+#' \code{phylobase} was first released on CRAN on November 1st, 2009
+#' with version 0.5.
+#'
+#' Since then, several releases have followed adding new
+#' functionalities: better support of NEXUS files, creation of
+#' \code{phylobase.options()} function that controls the \code{phylo4}
+#' validator, rewrite of the validator in C++.
+#'
+#' Starting with 0.6.8, Francois Michonneau succeeds to Ben Bolker as
+#' the maintainer of the package.
+#'
 #' @name phylobase-package
 #' @aliases phylobase-package phylobase
 #' @docType package
-#' @section MoreInfo: See the help index \code{help(package="phylobase")} and
-#' run \code{vignette("phylobase", "phylobase")} for further details and
+#' @section More Info:
+#' See the help index \code{help(package="phylobase")} and run
+#' \code{vignette("phylobase", "phylobase")} for further details and
 #' examples about how to use \code{phylobase}.
 #' @keywords package
+#'
+#' @useDynLib phylobase
+#' @import methods
+#' @import ape
+#' @importFrom Rcpp evalCpp
+#' @importFrom graphics plot
+#' @importFrom stats reorder
+#' @importFrom utils head tail
+#' @importFrom ade4 newick2phylog
+#' 
+#' @exportMethod print head tail reorder plot summary
+#' @exportMethod phylo4 phylo4d
+#' @exportMethod edges edgeId hasEdgeLength edgeLength edgeLength<- sumEdgeLength edgeOrder
+#' @exportMethod isRooted rootNode rootNode<-
+#' @exportMethod nodeId nodeType nodeDepth
+#' @exportMethod isUltrametric
+#' @exportMethod subset prune [
+#' @exportMethod [<- [[ [[<-
+#' @exportMethod labels labels<- nodeLabels nodeLabels<- tipLabels tipLabels<- edgeLabels edgeLabels<-
+#' @exportMethod hasNodeLabels hasEdgeLabels hasDuplicatedLabels
+#' 
 NULL
 
 

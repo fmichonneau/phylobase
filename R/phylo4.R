@@ -1,9 +1,7 @@
 ## Same order as in methods-phylo4.R
 
 ## nTips
-setGeneric("nTips", function(x) {
-    standardGeneric("nTips")
-})
+
 
 ## depthTips
 setGeneric("depthTips", function(x) {
@@ -155,9 +153,6 @@ setGeneric("head")
 ## tail
 setGeneric("tail")
 
-## summary
-setGeneric("summary")
-
 ## isUltrametric
 setGeneric("isUltrametric", function(x, tol=.Machine$double.eps^.5) {
   standardGeneric("isUltrametric")
@@ -166,60 +161,9 @@ setGeneric("isUltrametric", function(x, tol=.Machine$double.eps^.5) {
 
 ### ----------- phylo4d methods -----------
 
-## tdata
-setGeneric("tdata", function(x, ...) {
-    standardGeneric("tdata")
-})
-
-## tdata<-
-setGeneric("tdata<-", function(x, ..., value) {
-    standardGeneric("tdata<-")
-})
-
-## tipData
-setGeneric("tipData", function(x, ...) {
-    standardGeneric("tipData")
-})
-
-## tipData<-
-setGeneric("tipData<-", function(x, ..., value) {
-    standardGeneric("tipData<-")
-})
-
-## nodeData
-setGeneric("nodeData", function(x, ...) {
-    standardGeneric("nodeData")
-})
-
-## nodeData<-
-setGeneric("nodeData<-", function(x, ..., value) {
-    standardGeneric("nodeData<-")
-})
-
-## addData
-setGeneric("addData", function(x, ...) {
-    standardGeneric("addData")
-})
-
-## nData
-setGeneric("nData", function(x, ...) {
-     standardGeneric("nData")
-})
-
-## hasTipData
-setGeneric("hasTipData", function(x) {
-    standardGeneric("hasTipData")
-})
-
-## hasNodeData
-setGeneric("hasNodeData", function(x) {
-    standardGeneric("hasNodeData")
-})
-
-##
 ##setGeneric("na.omit")
 
-setGeneric("reorder")
+
 
 ##setGeneric("rootEdge", function(x, order, ...) {
 ##    standardGeneric("rootEdge")
