@@ -74,12 +74,32 @@ setMethod("nEdges", signature(x="phylo4"),
 ##'
 ##' @param x A \code{phylo4} or \code{phylo4d} object.
 ##'
-##' @return \code{edges} returns the edge matrix that represent the
-##' ancestor-descendant relationships among the nodes of the tree.
+##' @return \describe{
+##' 
+##' \item{\code{edges}}{returns the edge matrix that represent the
+##' ancestor-descendant relationships among the nodes of the tree.}
 ##'
-##' \code{edgeOrder} returns the order in which the edge matrix is in.
+##' \item{\code{edgeOrder}}{returns the order in which the edge matrix
+##' is in.}
 ##'
-##' @seealso reorder
+##' \item{\code{internalEdges}}{returns a logical vector indicating
+##' internal edges (edges that connect an internal node to
+##' another). This vector is named with the \code{edgeId}}.
+##'
+##' \item{\code{terminalEdges}{returns a logical vector indicating
+##' terminal edges (edges that connect an internal node to a
+##' tip). This vector is named with the \code{edgeId}}
+##' }
+##' @author Ben Bolker, Francois Michonneau, Thibaut Jombart.
+##' @seealso reorder, edgeId
+##' @examples
+##'    data(geospiza)
+##'    edges(geospiza)
+##'    edgeOrder(geospîza)
+##'    geoPost <- reorder(geospiza, "postorder")
+##'    edgeOrder(geoPost)
+##'    ## with a binary tree this should always be true
+##'    identical(!terminalEdges(geospiza), internalEdges(geospiza))
 ##' @export
 ##' @docType methods
 ##' @rdname edges-accessors
@@ -97,6 +117,14 @@ setMethod("edges", signature(x="phylo4"),
      e
 })
 
+##### -------- edgeOrder
+
+##' @rdname edges-accessors
+##' @aliases edgeOrder
+setGeneric("edgeOrder", function(x, ...) {
+  standardGeneric("edgeOrder")
+})
+
 ##' @rdname edges-accessors
 ##' @aliases edgeOrder,phylo4-method
 setMethod("edgeOrder", signature(x="phylo4"),
@@ -104,3 +132,36 @@ setMethod("edgeOrder", signature(x="phylo4"),
     x@order
 })
 
+##### -------- internalEdges
+
+##' @rdname edges-accessors
+##' @aliases internalEdges
+setGeneric("internalEdges", function(x) {
+    standardGeneric("internalEdges")
+})
+
+##' @rdname edges-accessors
+##' @aliases internalEdges,phylo4-method
+setMethod("internalEdges", signature(x="phylo4"),
+  function(x) {
+      res <- edges(x)[, 2] %in% nodeId(x, "internal")
+      names(res) <- edgeId(x, "all")
+      res
+})
+
+##### -------- terminalEdges
+
+##' @rdname edges-accessors
+##' @aliases terminalEdges
+setGeneric("terminalEdges", function(x) {
+    standardGeneric("terminalEdges")
+})
+
+##' @rdname edges-accessors
+##' @aliases terminalEdges,phylo4-method
+setMethod("terminalEdges", signature(x="phylo4"),
+  function(x) {
+      res <- edges(x)[, 2] %in% nodeId(x, "tip")
+      names(res) <- edgeId(x, "all")
+      res
+})
