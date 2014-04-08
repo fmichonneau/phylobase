@@ -2,20 +2,20 @@
 ptypes <- c("multitype","binary","continuous","DNA","RNA","aacid",
             "other","unknown")
 
-#' Class "pdata"
-#' 
-#' Data class for phylo4d objects
-#' 
-#' 
-#' @name pdata-class
-#' @aliases ptypes pdata-class [<-,pdata-method [,pdata-method
-#' [,pdata,ANY,ANY,ANY-method [[,pdata-method [[<-,pdata-method
-#' [[,pdata,ANY,ANY-method [[,pdata,ANY,missing-method
-#' @docType class
-#' @section Objects from the Class: Objects can be created by calls of the form
-#' \code{new("pdata", ...)}.
-#' @author Ben Bolker
-#' @keywords classes
+##' Class "pdata"
+##' 
+##' Data class for phylo4d objects
+##' 
+##' 
+##' @name pdata-class
+##' @aliases ptypes pdata-class [<-,pdata-method [,pdata-method
+##' [,pdata,ANY,ANY,ANY-method [[,pdata-method [[<-,pdata-method
+##' [[,pdata,ANY,ANY-method [[,pdata,ANY,missing-method
+##' @docType class
+##' @section Objects from the Class: Objects can be created by calls of the form
+##' \code{new("pdata", ...)}.
+##' @author Ben Bolker
+##' @keywords classes
 setClass("pdata", representation(data="data.frame",
                                  type="factor",
                                  comment="character",
@@ -26,23 +26,23 @@ setClass("pdata", representation(data="data.frame",
 ## pdata constructor
 
 
-#' Constructor for pdata (phylogenetic data) class
-#' 
-#' Combine data, type, comments, and metadata information to create a new pdata
-#' object, or check such an object for consistency
-#' 
-#' 
-#' @aliases pdata check_pdata
-#' @param data a data frame
-#' @param type a factor with levels as specified by \linkS4class{pdata}, the
-#' same length as \code{ncol(data)}
-#' @param comment a character vector, the same length as \code{ncol(data)}
-#' @param metadata an arbitrary list
-#' @param object an object of class \code{pdata}
-#' @return An object of class \code{pdata}
-#' @author Ben Bolker
-#' @seealso \linkS4class{pdata}
-#' @keywords misc
+##' Constructor for pdata (phylogenetic data) class
+##' 
+##' Combine data, type, comments, and metadata information to create a new pdata
+##' object, or check such an object for consistency
+##' 
+##' 
+##' @aliases pdata check_pdata
+##' @param data a data frame
+##' @param type a factor with levels as specified by \linkS4class{pdata}, the
+##' same length as \code{ncol(data)}
+##' @param comment a character vector, the same length as \code{ncol(data)}
+##' @param metadata an arbitrary list
+##' @param object an object of class \code{pdata}
+##' @return An object of class \code{pdata}
+##' @author Ben Bolker
+##' @seealso \linkS4class{pdata}
+##' @keywords misc
 pdata <- function(data,type,comment,metadata) {
   nvar <- ncol(data)
   if (missing(type)) {
