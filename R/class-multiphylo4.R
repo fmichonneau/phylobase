@@ -1,17 +1,16 @@
 ## classes for holding multiple tree objects
 
-#' multiPhylo4 and extended classes
-#' 
-#' Classes for lists of phylogenetic trees.  These classes and methods are
-#' planned for a future version of \code{phylobase}.
-#' 
-#' 
-#' @name multiPhylo-class
-#' @aliases multiPhylo-class multiPhylo4-class multiPhylo4d-class tbind
-#' @docType class
-#' @keywords classes
-#' @export
-#' @include class-multiphylo4.R
+##' multiPhylo4 and extended classes
+##' 
+##' Classes for lists of phylogenetic trees.  These classes and methods are
+##' planned for a future version of \code{phylobase}.
+##' 
+##' 
+##' @name multiPhylo-class
+##' @aliases multiPhylo-class multiPhylo4-class multiPhylo4d-class tbind
+##' @docType class
+##' @keywords classes
+##' @export
 setClass("multiPhylo4", representation(phylolist = "list", 
     tree.names = "character"), prototype = list(phylolist = list(), 
     tree.names = character(0)))
