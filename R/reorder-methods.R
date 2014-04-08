@@ -37,7 +37,7 @@
 ##' \code{\link{children}} \code{\link{descendants}}
 ##' @keywords methods
 ##' @include phylo4-class.R
-##' @include phylo4-accessors.R
+##' @include phylo4-methods.R
 ##' @export
 ##' @examples
 ##' phy <- phylo4(ape::rtree(5))

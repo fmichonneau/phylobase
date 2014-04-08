@@ -49,7 +49,9 @@
 ##' @docType methods
 ##' @aliases hasEdgeLength
 ##' @rdname edgeLength-methods
-##' @include phylo4-class.R phylo4-methods.R phylo4-accessors.R nodeId-methods.R
+##' @include phylo4-class.R
+##' @include phylo4-methods.R
+##' @include nodeId-methods.R
 ##' @examples
 ##'   data(geospiza)
 ##'   hasEdgeLength(geospiza) # TRUE

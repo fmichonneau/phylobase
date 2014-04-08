@@ -71,6 +71,7 @@
 #' @importFrom stats reorder
 #' @importFrom utils head tail
 #' @importFrom ade4 newick2phylog
+#'
 #' 
 #' @exportMethod print head tail reorder plot summary
 #' @exportMethod phylo4 phylo4d
@@ -82,7 +83,6 @@
 #' @exportMethod [<- [[ [[<-
 #' @exportMethod labels labels<- nodeLabels nodeLabels<- tipLabels tipLabels<- edgeLabels edgeLabels<-
 #' @exportMethod hasNodeLabels hasEdgeLabels hasDuplicatedLabels
-#' 
 NULL
 
 

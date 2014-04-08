@@ -10,7 +10,7 @@
 ##' edge respectively.
 ##' @docType methods
 ##' @export
-##' @include phylo4-methods.R
+##' @include phylo4-class.R phylo4-methods.R
 ##' @rdname nTips-methods
 setGeneric("nTips", function(x) {
     standardGeneric("nTips")

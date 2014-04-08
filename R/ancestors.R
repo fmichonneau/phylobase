@@ -1,85 +1,86 @@
 
-#' Tree traversal and utility functions
-#' 
-#' Functions for describing relationships among phylogenetic nodes (i.e.
-#' internal nodes or tips).
-#' 
-#' \code{ancestors} and \code{descendants} can take \code{node} vectors of
-#' arbitrary length, returning a list of output vectors if the number of valid
-#' input nodes is greater than one. List element names are taken directly from
-#' the input node vector.
-#' 
-#' If any supplied nodes are not found in the tree, the behavior currently
-#' varies across functions.
-#'
-#' \item Invalid nodes are automatically omitted by \code{ancestors}
-#' and \code{descendants}, with a warning.
-#' 
-#' \item \code{ancestor}
-#' will return \code{NA} for any invalid nodes, with a warning.
-#'
-#' \item Both \code{children} and \code{siblings} will return an empty
-#' vector, again with a warning.
-#' 
-#' @param phy a \linkS4class{phylo4} object (or one inheriting from
-#' \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
-#' @param x a \linkS4class{phylo4} object (or one inheriting from
-#' \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
-#' @param node either an integer corresponding to a node ID number, or a
-#' character corresponding to a node label; for \code{ancestors} and
-#' \code{descendants}, this may be a vector of multiple node numbers or names
-#' @param type (\code{ancestors}) specify whether to return just direct
-#' ancestor ("parent"), all ancestor nodes ("all"), or all ancestor nodes
-#' including self ("ALL"); (\code{descendants}) specify whether to return just
-#' direct descendants ("children"), all extant descendants ("tips"), or all
-#' descendant nodes ("all")
-#' @param include.self whether to include self in list of siblings
-#' @param \dots a list of node numbers or names, or a vector of node numbers or
-#' names
-#' @return \item{\code{ancestors}}{ return a named vector (or a list
-#' of such vectors in the case of multiple input nodes) of the
-#' ancestors and descendants of a node}
-#'
-#' \item{\code{descendants}}{ return a named vector (or a list of
-#' such vectors in the case of multiple input nodes) of the ancestors
-#' and descendants of a node}
-#'
-#' \item{\code{ancestor}}{ \code{ancestor} is analogous to
-#' \code{ancestors(\dots{}, type="parent")} (i.e. direct ancestor
-#' only), but returns a single concatenated vector in the case of
-#' multiple input nodes}
-#'
-#' \item{\code{children}}{is analogous to \code{descendants(\dots{},
-#' type="children")} (i.e. direct descendants only), but is not
-#' currently intended to be used with multiple input nodes }
-#'
-#' \item{\code{siblings}}{ returns sibling nodes (children of the same
-#' parent)}
-#' 
-#' @seealso \code{\link[ape]{mrca}}, in the ape package, gives a list of all
-#' subtrees
-#' @export
-#' @include getNode-methods.R
-#' @include phylo4-accessors.R
-#' @examples
-#' 
-#'   data(geospiza)
-#'   nodeLabels(geospiza) <- LETTERS[1:nNodes(geospiza)]
-#'   plot(as(geospiza, "phylo4"), show.node.label=TRUE)
-#'   ancestor(geospiza, "E")
-#'   children(geospiza, "C")
-#'   descendants(geospiza, "D", type="tips")
-#'   descendants(geospiza, "D", type="all")
-#'   ancestors(geospiza, "D")
-#'   MRCA(geospiza, "conirostris", "difficilis", "fuliginosa")
-#'   MRCA(geospiza, "olivacea", "conirostris")
-#' 
-#'   ## shortest path between 2 nodes
-#'   shortestPath(geospiza, "fortis", "fuliginosa")
-#'   shortestPath(geospiza, "F", "L")
-#' 
-#'   ## branch length from a tip to the root
-#'   sumEdgeLength(geospiza, ancestors(geospiza, "fortis", type="ALL"))
+##' Tree traversal and utility functions
+##' 
+##' Functions for describing relationships among phylogenetic nodes (i.e.
+##' internal nodes or tips).
+##' 
+##' \code{ancestors} and \code{descendants} can take \code{node} vectors of
+##' arbitrary length, returning a list of output vectors if the number of valid
+##' input nodes is greater than one. List element names are taken directly from
+##' the input node vector.
+##' 
+##' If any supplied nodes are not found in the tree, the behavior currently
+##' varies across functions.
+##'
+##' \item Invalid nodes are automatically omitted by \code{ancestors}
+##' and \code{descendants}, with a warning.
+##' 
+##' \item \code{ancestor}
+##' will return \code{NA} for any invalid nodes, with a warning.
+##'
+##' \item Both \code{children} and \code{siblings} will return an empty
+##' vector, again with a warning.
+##' 
+##' @param phy a \linkS4class{phylo4} object (or one inheriting from
+##' \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
+##' @param x a \linkS4class{phylo4} object (or one inheriting from
+##' \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
+##' @param node either an integer corresponding to a node ID number, or a
+##' character corresponding to a node label; for \code{ancestors} and
+##' \code{descendants}, this may be a vector of multiple node numbers or names
+##' @param type (\code{ancestors}) specify whether to return just direct
+##' ancestor ("parent"), all ancestor nodes ("all"), or all ancestor nodes
+##' including self ("ALL"); (\code{descendants}) specify whether to return just
+##' direct descendants ("children"), all extant descendants ("tips"), or all
+##' descendant nodes ("all")
+##' @param include.self whether to include self in list of siblings
+##' @param \dots a list of node numbers or names, or a vector of node numbers or
+##' names
+##' @return \item{\code{ancestors}}{ return a named vector (or a list
+##' of such vectors in the case of multiple input nodes) of the
+##' ancestors and descendants of a node}
+##'
+##' \item{\code{descendants}}{ return a named vector (or a list of
+##' such vectors in the case of multiple input nodes) of the ancestors
+##' and descendants of a node}
+##'
+##' \item{\code{ancestor}}{ \code{ancestor} is analogous to
+##' \code{ancestors(\dots{}, type="parent")} (i.e. direct ancestor
+##' only), but returns a single concatenated vector in the case of
+##' multiple input nodes}
+##'
+##' \item{\code{children}}{is analogous to \code{descendants(\dots{},
+##' type="children")} (i.e. direct descendants only), but is not
+##' currently intended to be used with multiple input nodes }
+##'
+##' \item{\code{siblings}}{ returns sibling nodes (children of the same
+##' parent)}
+##' 
+##' @seealso \code{\link[ape]{mrca}}, in the ape package, gives a list of all
+##' subtrees
+##' @export
+##' @include phylo4-class.R
+##' @include phylo4-methods.R
+##' @include getNode-methods.R
+##' @examples
+##' 
+##'   data(geospiza)
+##'   nodeLabels(geospiza) <- LETTERS[1:nNodes(geospiza)]
+##'   plot(as(geospiza, "phylo4"), show.node.label=TRUE)
+##'   ancestor(geospiza, "E")
+##'   children(geospiza, "C")
+##'   descendants(geospiza, "D", type="tips")
+##'   descendants(geospiza, "D", type="all")
+##'   ancestors(geospiza, "D")
+##'   MRCA(geospiza, "conirostris", "difficilis", "fuliginosa")
+##'   MRCA(geospiza, "olivacea", "conirostris")
+##' 
+##'   ## shortest path between 2 nodes
+##'   shortestPath(geospiza, "fortis", "fuliginosa")
+##'   shortestPath(geospiza, "F", "L")
+##' 
+##'   ## branch length from a tip to the root
+##'   sumEdgeLength(geospiza, ancestors(geospiza, "fortis", type="ALL"))
 ancestor <- function(phy,node) {
     node2 <- getNode(phy,node)
     ## r <- which(edges(phy)[,2]==node)

@@ -20,6 +20,7 @@
 ##' \code{\link{coerce-methods}} for translation functions.
 ##' @keywords methods
 ##' @export
+##' @include setAs-methods.R
 ##' @examples
 ##' tree.phylo <- ape::read.tree(text = "((a,b),c);")
 ##' tree <- as(tree.phylo, "phylo4")

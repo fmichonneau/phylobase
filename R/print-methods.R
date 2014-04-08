@@ -32,8 +32,8 @@
 ##' @note This is the default show() method for phylo4, phylo4d. It prints the
 ##' user-supplied information for building a phylo4 object. For a full
 ##' description of the phylo4 S4 object and slots, see \code{\link{phylo4}}.
-##' @author Marguerite Butler Thibaut Jombart
-##' \email{jombart@@biomserv.univ-lyon1.fr} Steve Kembel
+##' @author Marguerite Butler, Thibaut Jombart \email{jombart@@biomserv.univ-lyon1.fr}, Steve Kembel
+##' @include setAs-methods.R
 ##' @keywords methods
 ##' @examples
 ##' 
@@ -71,7 +71,6 @@ setMethod("print", signature(x="phylo4"),
            }
        }
 })
-
 
 ##' @rdname print-methods
 ##' @aliases show
