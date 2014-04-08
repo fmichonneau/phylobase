@@ -59,7 +59,6 @@
 ##' \linkS4class{phylo4d} class. See \code{\link{coerce-methods}} for
 ##' translation functions.
 ##' @keywords misc
-##' @include 
 formatData <- function(phy, dt, type=c("tip", "internal", "all"),
                        match.data=TRUE, rownamesAsLabels=FALSE,
                        label.type=c("rownames", "column"),

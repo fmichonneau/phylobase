@@ -121,6 +121,7 @@ setGeneric("labels<-",
                standardGeneric("labels<-")
            })
 
+##' @name labels<-
 ##' @rdname labels-methods
 ##' @aliases labels<-,phylo4,ANY,ANY,character-method
 setReplaceMethod("labels",
@@ -215,6 +216,7 @@ setGeneric("nodeLabels<-",
                standardGeneric("nodeLabels<-")
            })
 
+##' @name nodeLabels<-
 ##' @rdname labels-methods
 ##' @aliases nodeLabels<-,phylo4,character-method
 setReplaceMethod("nodeLabels", signature(x="phylo4", value="character"),
@@ -246,6 +248,7 @@ setGeneric("tipLabels<-",
        standardGeneric("tipLabels<-")
 })
 
+##' @name tipLabels<-
 ##' @rdname labels-methods
 ##' @aliases tipLabels<-,phylo4,character-method
 setReplaceMethod("tipLabels", signature(x="phylo4", value="character"),
@@ -298,6 +301,7 @@ setGeneric("edgeLabels<-",
                standardGeneric("edgeLabels<-")
            })
 
+##' @name edgeLabels<-
 ##' @rdname labels-methods
 ##' @aliases edgeLabels<-,phylo4,character-method
 setReplaceMethod("edgeLabels", signature(x="phylo4", value="character"),

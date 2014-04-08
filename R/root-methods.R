@@ -52,6 +52,7 @@ setGeneric("rootNode<-", function(x, value) {
     standardGeneric("rootNode<-")
 })
 
+##' @name rootNode<-
 ##' @rdname root-methods
 ##' @aliases rootNode<-,phylo4-method
 setReplaceMethod("rootNode", signature(x="phylo4"),

@@ -4,6 +4,7 @@
 ##' Function to return the number of tips, nodes and edges found in a
 ##' tree in the \code{phylo4} or \code{phylo4d} format.
 ##' @title nTips, nNodes, nEdges
+##' @aliases nTips
 ##' @param x a \code{phylo4} or \code{phylo4d} object
 ##' @return a numeric vector indicating the number of tips, nodes or
 ##' edge respectively.

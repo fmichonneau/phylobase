@@ -47,6 +47,7 @@
 ##' more information about tolerance.
 ##' @export
 ##' @docType methods
+##' @aliases hasEdgeLength
 ##' @rdname edgeLength-methods
 ##' @include phylo4-class.R phylo4-methods.R phylo4-accessors.R nodeId-methods.R
 ##' @examples
@@ -105,6 +106,7 @@ setMethod("edgeLength", signature(x="phylo4"),
     return(elen)
 })
 
+##' @name edgeLength<-
 ##' @rdname edgeLength-methods
 ##' @aliases edgeLength<-,phylo4-method
 setReplaceMethod("edgeLength", signature(x="phylo4"),
