@@ -7,6 +7,14 @@
         *                                               *
         *************************************************
 
+                CHANGES IN phylobase VERSION 0.6.10
+
+   *  All documentation is now in Roxygen format
+
+   *  New methods: internalEdges(), terminalEdges()
+
+   *  hasPoly, hasRetic, hasSingle are now methods instead of functions.
+
                 CHANGES IN phylobase VERSION 0.6.8
 
    *   Not many user-visible changes, most are related to improving speeds

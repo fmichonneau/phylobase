@@ -158,15 +158,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // getAllNodesFast
-Rcpp::IntegerVector getAllNodesFast(Rcpp::IntegerMatrix edge, bool rooted);
-RcppExport SEXP phylobase_getAllNodesFast(SEXP edgeSEXP, SEXP rootedSEXP) {
+Rcpp::IntegerVector getAllNodesFast(Rcpp::IntegerMatrix edge);
+RcppExport SEXP phylobase_getAllNodesFast(SEXP edgeSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type edge(edgeSEXP );
-        Rcpp::traits::input_parameter< bool >::type rooted(rootedSEXP );
-        Rcpp::IntegerVector __result = getAllNodesFast(edge, rooted);
+        Rcpp::IntegerVector __result = getAllNodesFast(edge);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

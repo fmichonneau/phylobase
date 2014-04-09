@@ -1,119 +1,87 @@
-# ----------------------------------------------------------------------
-
-useDynLib(phylobase)
-
-#----------------------------------------------------------------------
-
-import(methods)
-import(ape)
-
-importFrom(Rcpp, evalCpp)
-importFrom(graphics, plot)
-importFrom(stats, reorder)
-importFrom(utils, head, tail)
-importFrom(ade4, newick2phylog)
-
-#----------------------------------------------------------------------
-
-exportClasses(phylo4, phylo4d, multiPhylo4, multiPhylo4d)
-
-#----------------------------------------------------------------------
-
-# utility methods
-exportMethods(print, head, tail, reorder, plot, summary)
-
-# tree constructor methods
-exportMethods(phylo4, phylo4d)
-
-# counting methods
-exportMethods(nTips, nNodes, nEdges, depthTips)
-
-# edge methods
-exportMethods(edges, edgeId, hasEdgeLength, edgeLength, "edgeLength<-",
-    sumEdgeLength, edgeOrder)
-
-# root methods
-exportMethods(isRooted, rootNode, "rootNode<-")
-#export(rootEdge)  # no methods defined yet?
-
-# node methods
-exportMethods(nodeId, nodeType, nodeDepth)
-
-# tree properties methods
-exportMethods(isUltrametric)
-
-# tree data methods
-exportMethods(tdata, "tdata<-", tipData, "tipData<-", nodeData,
-    "nodeData<-", hasTipData, hasNodeData, addData, nData)
-
-# subset methods
-exportMethods(subset, prune, "[")
-
-# pdata methods
-exportMethods("[<-", "[[", "[[<-")
-
-# label methods
-exportMethods(labels, "labels<-", nodeLabels, "nodeLabels<-",
-    tipLabels, "tipLabels<-", edgeLabels, "edgeLabels<-",
-    hasNodeLabels, hasEdgeLabels, hasDuplicatedLabels)
-
-#----------------------------------------------------------------------
-
-# tree structure functions
-export(hasPoly, hasSingle, hasRetic)
-
-# treewalk functions
-export(getNode, ancestor, children, descendants, siblings, ancestors,
-    MRCA, shortestPath, getEdge)
-
-# Import functions
-export(readNexus)
-export(readNewick)
-export(readNCL)
-
-# pdata functions
-export(pdata, check_pdata)
-
-# plotting functions
-export(treePlot, plotOneTree, tip.data.plot)
-export(phyloXXYY, phylobubbles)
-
-# misc functions
-export(extractTree, tbind)
-export(checkPhylo4, checkTree, checkPhylo4Data, formatData)
-export(as_phylo4vcov)
-export(printphylo4)
-
-#----------------------------------------------------------------------
-
-# misc objects
-export(phylo4_orderings)
-
-## options
+export("edgeLabels<-")
+export("edgeLength<-")
+export("labels<-")
+export("nodeData<-")
+export("nodeLabels<-")
+export("rootNode<-")
+export("tdata<-")
+export("tipData<-")
+export("tipLabels<-")
+export(MRCA)
+export(addData)
+export(ancestor)
+export(ancestors)
+export(checkPhylo4)
+export(children)
+export(depthTips)
+export(descendants)
+export(edgeId)
+export(edgeLabels)
+export(edgeLength)
+export(edgeOrder)
+export(edges)
+export(extractTree)
+export(getEdge)
+export(getNode)
+export(hasDuplicatedLabels)
+export(hasEdgeLabels)
+export(hasEdgeLength)
+export(hasNodeData)
+export(hasNodeLabels)
+export(hasPoly)
+export(hasRetic)
+export(hasSingle)
+export(hasTipData)
+export(internalEdges)
+export(isRooted)
+export(isUltrametric)
+export(nData)
+export(nEdges)
+export(nNodes)
+export(nTips)
+export(nodeData)
+export(nodeDepth)
+export(nodeId)
+export(nodeLabels)
+export(nodeType)
+export(phylo4)
+export(phylo4d)
+export(phyloXXYY)
 export(phylobase.options)
-
-
-
-## commented out in source code, probably should be omitted here
-#export(phyloStripchart)
-#export(internEdges, terminEdges, isPoly)
-
-## presumably these should remain hidden
-##export(.createLabels, .createEdge, .phylo4Data, orderIndex, .genlab,
-##    .chnumsort, .phylo4ToDataFrame, .bubLegendGrob)
-## hidden: drawDetails.bubLegend)
-
-## recently removed:
-##  tree.plot
-##  segs
-##  checkData
-##  attachData
-##  orderIndex
-
-#----------------------------------------------------------------------
-## For reference, quick & dirty UNIX-y commandline statements to pull
-## out methods and functions from package code; use in pkg/R/ dir:
-# grep "^ *setMethod" *.R | sed 's/setMethod(//' | sed 's/.*:["]\([^,]*\)["].*/\1/' | sort | uniq
-# grep "^ *setReplaceMethod" *.R | sed 's/setReplaceMethod(//' | sed 's/.*:["]\([^,]*\)["].*/\1/' | sort | uniq
-# grep "^[^ ].*<- *function *(" *.R | sed 's/.*R://'
-
+export(phylobubbles)
+export(plotOneTree)
+export(prune)
+export(readNCL)
+export(rootNode)
+export(shortestPath)
+export(siblings)
+export(sumEdgeLength)
+export(tdata)
+export(terminalEdges)
+export(tip.data.plot)
+export(tipData)
+export(tipLabels)
+export(treePlot)
+exportClasses(phylo4)
+exportClasses(phylo4d)
+exportClasses(phylo4vcov)
+exportMethods("[")
+exportMethods(head)
+exportMethods(labels)
+exportMethods(names)
+exportMethods(plot)
+exportMethods(print)
+exportMethods(reorder)
+exportMethods(show)
+exportMethods(subset)
+exportMethods(summary)
+exportMethods(tail)
+import(ape)
+import(methods)
+importFrom(Rcpp,evalCpp)
+importFrom(ade4,newick2phylog)
+importFrom(graphics,plot)
+importFrom(stats,reorder)
+importFrom(utils,head)
+importFrom(utils,tail)
+useDynLib(phylobase)

@@ -244,7 +244,7 @@ test_that("isRooted works as expected",
 
 context("rootNode")
 test_that("rootNode works as expected",
-          expect_identical(rootNode(phy.alt), nid.int[1]))
+          expect_identical(rootNode(phy.alt), getNode(phy, nid.int[1])))
 
 context("rootNode <-")
 test_that("rootNode <- is not yet implemented",

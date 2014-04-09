@@ -1,15 +1,15 @@
 Package: phylobase
 Type: Package
 Title: Base package for phylogenetic structures and comparative data
-Version: 0.6.8
-Date: 2014-03-20
-Imports: 
+Version: 0.6.9-1
+Date: 2014-04-08
+Imports:
     ade4,
     ape (>= 3.0),
-    Rcpp (>= 0.11.0),
-    methods
+    Rcpp (>= 0.11.0)
 Depends:
-    grid
+    grid,
+    methods
 LinkingTo: Rcpp
 Suggests:
     MASS,
@@ -23,30 +23,42 @@ Maintainer: Francois Michonneau <francois.michonneau@gmail.com>
 Description: Provides a base S4 class for comparative methods, incorporating
     one or more trees and trait data
 License: GPL (>= 2)
+URL: http://phylobase.R-forge.R-project.org
 Collate:
     'RcppExports.R'
-    'phylo4.R'
     'checkdata.R'
+    'phylo4-class.R'
+    'oldclasses-class.R'
+    'internal-constructors.R'
+    'phylo4-methods.R'
     'formatData.R'
-    'class-multiphylo4.R'
-    'class-oldclasses.R'
-    'class-phylo4.R'
-    'class-phylo4d.R'
-    'class-phylomats.R'
-    'methods-multiphylo4.R'
-    'methods-oldclasses.R'
-    'methods-phylo4.R'
-    'methods-phylo4d.R'
-    'setAs-Methods.R'
+    'phylo4d-class.R'
+    'phylo4d-methods.R'
+    'getNode-methods.R'
+    'MRCA-methods.R'
+    'addData-methods.R'
+    'ancestors.R'
+    'phylo4-accessors.R'
+    'root-methods.R'
+    'nodeId-methods.R'
+    'edgeLength-methods.R'
+    'setAs-methods.R'
+    'extractTree.R'
+    'labels-methods.R'
+    'multiphylo4-class.R'
     'pdata.R'
-    'subset.R'
+    'phylo4d-accessors.R'
     'phylobase-package.R'
     'phylobase.options.R'
-    'prune.R'
+    'phylomats-class.R'
+    'print-methods.R'
+    'readNCL.R'
+    'reorder-methods.R'
+    'shortestPath-methods.R'
+    'subset-methods.R'
+    'summary-methods.R'
+    'tbind.R'
+    'tdata-methods.R'
     'treePlot.R'
     'treestruc.R'
-    'treewalk.R'
-    'readNCL.R'
-    'tbind.R'
     'zzz.R'
-URL: http://phylobase.R-forge.R-project.org
