@@ -130,17 +130,18 @@ Rcpp::IntegerVector getAllNodesSafe (Rcpp::IntegerMatrix edge) {
 }
 
 //[[Rcpp::export]]
-Rcpp::IntegerVector getAllNodesFast (Rcpp::IntegerMatrix edge, bool rooted) {
+Rcpp::IntegerVector getAllNodesFast (Rcpp::IntegerMatrix edge) {
     Rcpp::IntegerVector tmp = Rcpp::as_vector(edge);
     Rcpp::IntegerVector maxN = Rcpp::range(tmp);
-    Rcpp::IntegerVector ans = Rcpp::seq_len(maxN[1] + 1);
-    if (rooted) {
-	return ans - 1;
+    Rcpp::IntegerVector ans;
+    if (maxN[0] == 0) {
+        ans = Rcpp::seq_len(maxN[1] + 1);
+        ans = ans - 1;
     }
     else {
-	ans.erase(0);
-	return ans - 1;
+        ans = Rcpp::seq_len(maxN[1]);
     }
+    return ans;
 }
 
 
@@ -287,7 +288,7 @@ Rcpp::List checkTreeCpp(Rcpp::S4 obj, Rcpp::List opts) {
     Rcpp::IntegerVector ances = getAnces(ed);
     //Rcpp::IntegerVector desc = getDesc(ed);
     int nroots = nRoots(ances);
-    bool rooted = nroots > 0;
+    //bool rooted = nroots > 0;
     Rcpp::NumericVector edLength = obj.slot("edge.length");
     Rcpp::CharacterVector edLengthNm = edLength.names();
     Rcpp::CharacterVector label = obj.slot("label");
@@ -295,10 +296,10 @@ Rcpp::List checkTreeCpp(Rcpp::S4 obj, Rcpp::List opts) {
     Rcpp::CharacterVector edLabel = obj.slot("edge.label");
     Rcpp::CharacterVector edLabelNm = edLabel.names();
     Rcpp::IntegerVector allnodesSafe = getAllNodesSafe(ed);
-    Rcpp::IntegerVector allnodesFast = getAllNodesFast(ed, rooted);
+    Rcpp::IntegerVector allnodesFast = getAllNodesFast(ed);
     int nEdLength = edLength.size();
-    int nLabel = label.size();
-    int nEdLabel = edLabel.size();
+    //int nLabel = label.size();
+    //int nEdLabel = edLabel.size();
     int nEdges = nrow;
     bool hasEdgeLength = !all_naC(edLength);
 
