@@ -15,6 +15,8 @@
 
    *  hasPoly, hasRetic, hasSingle are now methods instead of functions.
 
+   *  rootNode returns the rootNode using the same format as getNode().
+
                 CHANGES IN phylobase VERSION 0.6.8
 
    *   Not many user-visible changes, most are related to improving speeds
