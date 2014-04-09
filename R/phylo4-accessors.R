@@ -11,6 +11,7 @@
 ##' @docType methods
 ##' @export
 ##' @include phylo4-class.R phylo4-methods.R
+##' @include oldclasses-class.R
 ##' @rdname nTips-methods
 setGeneric("nTips", function(x) {
     standardGeneric("nTips")
@@ -38,6 +39,7 @@ setMethod("nTips", signature(x="phylo"),
 
 ##' @rdname nTips-methods
 ##' @aliases nNodes
+##' @export
 setGeneric("nNodes", function(x) {
     standardGeneric("nNodes")
 })
@@ -55,6 +57,7 @@ setMethod("nNodes", signature(x="phylo4"), function(x) {
 
 ##' @rdname nTips-methods
 ##' @aliases nEdges
+##' @export
 setGeneric("nEdges", function(x) {
     standardGeneric("nEdges")
 })
@@ -71,12 +74,16 @@ setMethod("nEdges", signature(x="phylo4"),
 ### Edge accessors
 #########################################################
 
-##' edges accessors
+##' Edges accessors
 ##'
-##' @param x A \code{phylo4} or \code{phylo4d} object.
+##' Access or modify information about the edges.
 ##'
+##' @param x a \code{phylo4} or \code{phylo4d} object.
+##' @param drop.root logical (default FALSE), should the edge
+##' connecting the root be included in the edge matrix?
+##' @param \dots Optional arguments used by specific methods. (None
+##' used at present).
 ##' @return \describe{
-##' 
 ##' \item{\code{edges}}{returns the edge matrix that represent the
 ##' ancestor-descendant relationships among the nodes of the tree.}
 ##'
@@ -87,16 +94,15 @@ setMethod("nEdges", signature(x="phylo4"),
 ##' internal edges (edges that connect an internal node to
 ##' another). This vector is named with the \code{edgeId}}.
 ##'
-##' \item{\code{terminalEdges}{returns a logical vector indicating
+##' \item{\code{terminalEdges}}{returns a logical vector indicating
 ##' terminal edges (edges that connect an internal node to a
-##' tip). This vector is named with the \code{edgeId}}
-##' }
-##' @author Ben Bolker, Francois Michonneau, Thibaut Jombart.
+##' tip). This vector is named with the \code{edgeId} }}
+##' @author Ben Bolker, Francois Michonneau, Thibaut Jombart
 ##' @seealso reorder, edgeId
 ##' @examples
 ##'    data(geospiza)
 ##'    edges(geospiza)
-##'    edgeOrder(geospîza)
+##'    edgeOrder(geospiza)
 ##'    geoPost <- reorder(geospiza, "postorder")
 ##'    edgeOrder(geoPost)
 ##'    ## with a binary tree this should always be true
@@ -112,7 +118,7 @@ setGeneric("edges", function(x, ...) {
 ##' @rdname edges-accessors
 ##' @aliases edges,phylo4-method
 setMethod("edges", signature(x="phylo4"),
- function(x, drop.root=FALSE, ...) {
+ function(x, drop.root=FALSE) {
      e <- x@edge
      if (drop.root) e <- e[e[, 1] != 0, ]
      e
@@ -122,6 +128,7 @@ setMethod("edges", signature(x="phylo4"),
 
 ##' @rdname edges-accessors
 ##' @aliases edgeOrder
+##' @export
 setGeneric("edgeOrder", function(x, ...) {
   standardGeneric("edgeOrder")
 })
@@ -129,7 +136,7 @@ setGeneric("edgeOrder", function(x, ...) {
 ##' @rdname edges-accessors
 ##' @aliases edgeOrder,phylo4-method
 setMethod("edgeOrder", signature(x="phylo4"),
- function(x, ...) {
+ function(x) {
     x@order
 })
 
@@ -137,6 +144,7 @@ setMethod("edgeOrder", signature(x="phylo4"),
 
 ##' @rdname edges-accessors
 ##' @aliases internalEdges
+##' @export
 setGeneric("internalEdges", function(x) {
     standardGeneric("internalEdges")
 })
@@ -154,6 +162,7 @@ setMethod("internalEdges", signature(x="phylo4"),
 
 ##' @rdname edges-accessors
 ##' @aliases terminalEdges
+##' @export
 setGeneric("terminalEdges", function(x) {
     standardGeneric("terminalEdges")
 })

@@ -29,7 +29,8 @@
 ##' widths of edge lines
 ##' @param newpage Logical indicating whether the page should be cleared before
 ##' plotting
-##' @param \dots Currently unused, parameters to be passed on to \code{gpar}
+##' @param plot.at.tip should the data plots be at the tip? (logical)
+##' @param margins number of lines around the plot (similar to \code{par(mar)}).
 ##' @return No return value, function invoked for plotting side effect
 ##' @section Methods: \describe{ \item{phy = "phylo4"}{plots a tree of class
 ##' \linkS4class{phylo4}} \item{phy = "phylo4d"}{plots a tree with one or more
@@ -749,7 +750,13 @@ tip.data.plot <- function(
 
 # phyloStripchart <- function()
 
+##' @rdname treePlot-methods
+##' @aliases plot
+##' @exportMethod plot
 setGeneric('plot')
+
+##' @rdname treePlot-methods
+##' @aliases plot,phylo4-method
 setMethod('plot', signature(x='phylo4', y='missing'), function(x, y, ...) {
     treePlot(x, ...)
 })

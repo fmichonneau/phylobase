@@ -19,6 +19,7 @@
 ##' @author Ben Bolker
 ##' @rdname phylomat-class
 ##' @keywords classes
+##' @export
 ##' @examples
 ##' 
 ##'   tree.owls <- ape::read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
@@ -58,12 +59,14 @@ as_phylo4vcov <- function(from,...) {
       edge.label=from@edge.label,
       order=from@order)
 }
+##' @name phylomat-setAs
 ##' @rdname phylomat-class
 ##' @aliases setAs,phylo,phylo4vcov-method
 setAs("phylo4","phylo4vcov",
       function(from,to) {
         as_phylo4vcov(from)})
 
+##' @name phylomat-setAs
 ##' @rdname phylomat-class
 ##' @aliases setAs,phylo4vcov,phylo4-method
 setAs("phylo4vcov","phylo4",

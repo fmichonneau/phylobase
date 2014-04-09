@@ -21,7 +21,6 @@
 ##' @keywords methods
 ##' @rdname setAs-methods
 ##' @aliases as as-method as,phylo,phylo4-method
-##' @export
 ##' @include phylo4-methods.R
 ##' @include phylo4d-methods.R
 ##' @include oldclasses-class.R

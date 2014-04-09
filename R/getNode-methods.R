@@ -31,8 +31,6 @@
 ##' \code{edgeId} simply returns an unnamed vector of the character IDs of all
 ##' edges for which the descendant node is of the specified node type.
 ##' 
-##' @aliases getNode getEdge nodeId nodeId,phylo4-method edgeId
-##' edgeId,phylo4-method
 ##' @param x a \linkS4class{phylo4} object (or one inheriting from
 ##' \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
 ##' @param node either an integer vector corresponding to node ID numbers, or a
@@ -57,6 +55,7 @@
 ##' of edge IDs, in edge matrix order}
 ##' @keywords misc
 ##' @export
+##' @rdname getNode-methods
 ##' @include phylo4-class.R
 ##' @examples
 ##' 
@@ -150,6 +149,7 @@ setMethod("getNode", signature(x="phylo4", node="ANY"),
 
 ##' @rdname getNode-methods
 ##' @aliases getEdge-methods
+##' @export
 setGeneric("getEdge", function(x, node, type=c("descendant", "ancestor"),
                                missing=c("warn", "OK", "fail")) {
     standardGeneric("getEdge")

@@ -45,6 +45,7 @@
 ##' @include RcppExports.R
 ##' @include phylo4-class.R
 ##' @include phylo4-methods.R
+##' @export
 ##' @keywords misc
 checkPhylo4 <- function(object) {
     ct <- checkTree(object)

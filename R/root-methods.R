@@ -32,6 +32,7 @@ setMethod("isRooted", signature(x="phylo4"),
 
 ##' @rdname root-methods
 ##' @aliases rootNode
+##' @export
 setGeneric("rootNode", function(x) {
     standardGeneric("rootNode")
 })
@@ -48,6 +49,7 @@ setMethod("rootNode", signature(x="phylo4"),
 
 ##' @rdname root-methods
 ##' @aliases rootNode<-
+##' @export
 setGeneric("rootNode<-", function(x, value) {
     standardGeneric("rootNode<-")
 })

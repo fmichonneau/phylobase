@@ -62,7 +62,7 @@
 ##' \item{hasEdgeLabels}{\code{signature(object = "phylo4")}: whether tree has
 ##' (internal) edge labels} \item{edgeLabels}{\code{signature(object =
 ##' "phylo4")}: internal edge labels, ordered according to the edge matrix} }
-##' @export
+##' @exportMethod labels
 ##' @rdname labels-methods
 ##' @include phylo4-class.R phylo4-methods.R phylo4-accessors.R nodeId-methods.R
 ##' @author Ben Bolker, Peter Cowan, Steve Kembel, Francois Michonneau
@@ -116,6 +116,7 @@ setMethod("labels", signature(object="phylo4"),
 
 ##' @rdname labels-methods
 ##' @aliases labels<-
+##' @export
 setGeneric("labels<-",
            function(x, type, use.names, ..., value) {
                standardGeneric("labels<-")
@@ -162,6 +163,7 @@ setReplaceMethod("labels",
 
 ##' @rdname labels-methods
 ##' @aliases hasDuplicatedLabels
+##' @export
 setGeneric("hasDuplicatedLabels",
            function(x, type) {
                standardGeneric("hasDuplicatedLabels")
@@ -183,6 +185,7 @@ setMethod("hasDuplicatedLabels", signature(x="phylo4", type="ANY"),
 
 ##' @rdname labels-methods
 ##' @aliases hasNodeLabels
+##' @export
 setGeneric("hasNodeLabels", function(x) {
     standardGeneric("hasNodeLabels")
 })
@@ -198,6 +201,7 @@ setMethod("hasNodeLabels", signature(x="phylo4"),
 
 ##' @rdname labels-methods
 ##' @aliases nodeLabels
+##' @export
 setGeneric("nodeLabels", function(x) {
     standardGeneric("nodeLabels")
 })
@@ -211,6 +215,7 @@ setMethod("nodeLabels", signature(x="phylo4"),
 
 ##' @rdname labels-methods
 ##' @aliases nodeLabels<-
+##' @export
 setGeneric("nodeLabels<-",
            function(x, ..., value) {
                standardGeneric("nodeLabels<-")
@@ -230,6 +235,7 @@ setReplaceMethod("nodeLabels", signature(x="phylo4", value="character"),
 
 ##' @rdname labels-methods
 ##' @aliases tipLabels
+##' @export
 setGeneric("tipLabels", function(x) {
     standardGeneric("tipLabels")
 })
@@ -243,6 +249,7 @@ setMethod("tipLabels", signature(x="phylo4"),
 
 ##' @rdname labels-methods
 ##' @aliases tipLabels<-
+##' @export
 setGeneric("tipLabels<-",
    function(x, ..., value) {
        standardGeneric("tipLabels<-")
@@ -263,6 +270,7 @@ setReplaceMethod("tipLabels", signature(x="phylo4", value="character"),
 
 ##' @rdname labels-methods
 ##' @aliases hasEdgeLabels
+##' @export
 setGeneric("hasEdgeLabels", function(x) {
     standardGeneric("hasEdgeLabels")
 })
@@ -278,6 +286,7 @@ setMethod("hasEdgeLabels", signature(x="phylo4"),
 
 ##' @rdname labels-methods
 ##' @aliases edgeLabels
+##' @export
 setGeneric("edgeLabels", function(x) {
     standardGeneric("edgeLabels")
 })
@@ -296,6 +305,7 @@ setMethod("edgeLabels", signature(x="phylo4"),
 
 ##' @rdname labels-methods
 ##' @aliases edgeLabels<-
+##' @export
 setGeneric("edgeLabels<-",
            function(x, ..., value) {
                standardGeneric("edgeLabels<-")

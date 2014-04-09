@@ -35,6 +35,7 @@
 ##' @seealso \code{\link{tdata}} for extracting or updating data and
 ##' \code{\link{phylo4d}} constructor.
 ##' @keywords methods
+##' @rdname addData-methods
 ##' @include phylo4d-class.R
 ##' @export
 ##' @examples

@@ -77,7 +77,6 @@
 ##' include
 ##' @param j (\code{[} method, phylo4d only) An index vector
 ##' indicating columns of node/tip data to include
-##' @param \dots additional arguments to be passed to other methods
 ##' @return an object of class \code{"phylo4"} or \code{"phylo4d"}
 ##' @section Methods: \describe{ \item{x = "phylo4"}{subset tree}
 ##' \item{x = "phylo4d"}{subset tree and corresponding node and tip
@@ -87,8 +86,9 @@
 ##' \email{damien.de-vienne@@u-psud.fr}\cr Thibaut Jombart
 ##' \email{jombart@@biomserv.univ-lyon1.fr}
 ##' @keywords methods
-##' @export
+##' @exportMethod subset
 ##' @rdname subset-methods
+##' @aliases subset
 ##' @examples
 ##' data(geospiza)
 ##' nodeLabels(geospiza) <- paste("N", nodeId(geospiza, "internal"), sep="")
@@ -192,6 +192,11 @@ setMethod("subset", "phylo4", function(x, tips.include=NULL,
 ## * in "[" methods for both phylo4 and phylo4d:
 ##    if (!missing(...)) stop("unused argument(s)")
 
+##' @rdname subset-methods
+##' @aliases [
+##' @exportMethod [
+setGeneric("[")
+
 ##### --------  phylo4 '[' methods
 
 ##' @rdname subset-methods
@@ -263,6 +268,7 @@ setMethod("[", signature(x="phylo4", i="ANY", j="ANY", drop="ANY"),
 
 ##' @rdname subset-methods
 ##' @aliases prune
+##' @export
 setGeneric("prune", function(x, ...) {
     standardGeneric("prune")
 })

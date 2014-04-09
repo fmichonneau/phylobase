@@ -47,13 +47,13 @@
 ##' print(treedata)
 ##' 
 ##' 
-##' @export
 ##' @aliases print
 ##' @rdname print-methods
 setGeneric("print")
 
 ##' @rdname print-methods
 ##' @aliases print,phylo4-method
+##' @exportMethod print
 setMethod("print", signature(x="phylo4"),
    function(x, edgeOrder=c("pretty", "real"),
             printall=TRUE) {
@@ -74,6 +74,7 @@ setMethod("print", signature(x="phylo4"),
 
 ##' @rdname print-methods
 ##' @aliases show
+##' @exportMethod show
 setGeneric("show")
 
 ##' @rdname print-methods
@@ -83,6 +84,7 @@ setMethod("show", signature(object="phylo4"),
 
 ##' @rdname print-methods
 ##' @aliases names
+##' @exportMethod names
 setGeneric("names")
 
 ##' @rdname print-methods
@@ -95,6 +97,7 @@ setMethod("names", signature(x="phylo4"),
 
 ##' @rdname print-methods
 ##' @aliases head
+##' @exportMethod head
 setGeneric("head")
 
 ##' @rdname print-methods
@@ -105,8 +108,12 @@ setMethod("head", signature(x="phylo4"),
   })
 
 ##' @rdname print-methods
-##' @aliases tail,phylo4-method
+##' @aliases tail
+##' @exportMethod tail
 setGeneric("tail")
+
+##' @rdname print-methods
+##' @aliases tail,phylo4-method
 setMethod("tail", signature(x="phylo4"),
   function(x, n=20) {
       tail(as(x, "data.frame"), n=n)

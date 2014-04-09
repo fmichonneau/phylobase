@@ -10,11 +10,10 @@
 ##' The \code{reorder} method takes a \code{phylo4} or \code{phylo4d}
 ##' tree and orders the edge matrix (i.e. \code{edges(x)}) in the
 ##' requested traversal order. Currently only two orderings are
-##' permitted, and both require rooted trees. In
-##' \code{\dQuote{postorder}}, a node's descendants come before that
-##' node, thus the root, which is ancestral to all nodes, comes last.
-##' In \code{\dQuote{preorder}}, a node is visited before its
-##' descendants, thus the root comes first.
+##' permitted, and both require rooted trees. In \code{postorder}, a
+##' node's descendants come before that node, thus the root, which is
+##' ancestral to all nodes, comes last.  In \code{preorder}, a node is
+##' visited before its descendants, thus the root comes first.
 ##' 
 ##' @name reorder-methods
 ##' @docType methods
@@ -25,10 +24,9 @@
 ##' @return A \code{phylo4} or \code{phylo4d} object with the edge,
 ##' label, length and data slots ordered as \code{order}, which is
 ##' itself recorded in the order slot.
-##' @note The \code{\dQuote{preorder}} parameter corresponds to
-##' \code{\dQuote{cladewise}} in the \code{ape} package, and
-##' \code{\dQuote{postorder}} corresponds (almost) to
-##' \code{\dQuote{pruningwise}}.
+##' @note The \code{preorder} parameter corresponds to
+##' \code{cladewise} in the \code{ape} package, and \code{postorder}
+##' corresponds (almost) to \code{pruningwise}.
 ##' 
 ##' See \url{http://ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf}
 ##' @author Peter Cowan, Jim Regetz
@@ -38,7 +36,8 @@
 ##' @keywords methods
 ##' @include phylo4-class.R
 ##' @include phylo4-methods.R
-##' @export
+##' @exportMethod reorder
+##' @aliases reorder
 ##' @examples
 ##' phy <- phylo4(ape::rtree(5))
 ##' edges(reorder(phy, "preorder"))

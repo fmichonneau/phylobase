@@ -20,6 +20,7 @@
 ##' cases to represent events occurring along a branch.)
 ##' @author Ben Bolker
 ##' @rdname treeStructure-methods
+##' @export
 ##' @keywords misc
 ##' @examples
 ##' 
@@ -48,6 +49,7 @@ setMethod("hasSingle", signature(object="phylo4"),
 
 ##' @rdname treeStructure-methods
 ##' @aliases hasRetic
+##' @export
 setGeneric("hasRetic", function(object) {
     standardGeneric("hasRetic")
 })
@@ -66,6 +68,7 @@ setMethod("hasRetic", signature(object="phylo4"), function(object) {
 
 ##' @rdname treeStructure-methods
 ##' @aliases hasPoly
+##' @export
 setGeneric("hasPoly", function(object) {
     standardGeneric("hasPoly")
 })

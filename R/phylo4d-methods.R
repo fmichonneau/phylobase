@@ -95,6 +95,7 @@
 ##' @docType methods
 ##' @rdname phylo4d-methods
 ##' @include phylo4d-class.R
+##' @include oldclasses-class.R
 ##' @examples
 ##' 
 ##' treeOwls <- "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);"

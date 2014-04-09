@@ -40,6 +40,7 @@
 ##' (the default) or "drop" node labels. This argument is useful if the
 ##' \code{phylo} object has non-unique node labels.
 ##' @param annote any additional annotation data to be passed to the new object
+##' @param \dots optional arguments (none used at present).
 ##' @note Translation functions are available from many valid tree formats. See
 ##' \link{coerce-methods}.
 ##' @author phylobase team
@@ -48,7 +49,9 @@
 ##' the validity of \code{phylo4} objects. See also the \code{\link{phylo4d}}
 ##' constructor, and \linkS4class{phylo4d} class.
 ##' @export
-##' @include internal-constructors.R phylo4-class.R
+##' @aliases phylo4
+##' @rdname phylo4-methods
+##' @include internal-constructors.R phylo4-class.R oldclasses-class.R
 ##' @examples
 ##' 
 ##' # a three species tree:
@@ -73,8 +76,12 @@
 ##'
 setGeneric("phylo4", function(x, ...) { standardGeneric("phylo4")} )
 
-# ape orderings should be allowed for so we can import trees from ape e.g. during subsetting
-phylo4_orderings <- c("unknown", "preorder", "postorder", "pruningwise", "cladewise")
+## ape orderings should be allowed for so we can import trees from ape
+## e.g. during subsetting
+##' @rdname phylo4-methods
+##' @aliases phylo4_orderings
+phylo4_orderings <- c("unknown", "preorder", "postorder",
+                      "pruningwise", "cladewise")
 
 ##' @rdname phylo4-methods
 ##' @aliases phylo4,matrix-method
@@ -85,7 +92,7 @@ setMethod("phylo4", "matrix",
     ## edge
     edge <- x
     mode(edge) <- "integer"
-    #if(any(is.na(edge))) stop("NA are not allowed in edge matrix") ## taken care by checkTree
+
     if(ncol(edge) > 2)
         warning("The edge matrix has more than two columns, ",
                 "only the first two columns are considered.")
@@ -102,14 +109,16 @@ setMethod("phylo4", "matrix",
     nnodes <- nNodes(res)
 
     ## edge.length (drop elements if all are NA but keep the vector named)
-    edge.length <- .createEdge(value=edge.length, edgeMat=edge, type="lengths", use.names=FALSE)
+    edge.length <- .createEdge(value=edge.length, edgeMat=edge, type="lengths",
+                               use.names=FALSE)
     if (all(is.na(edge.length))) {
         edge.length <- numeric()
         attributes(edge.length) <- list(names=character(0))
     }
 
     ## edge.label (drop NA elements)
-    edge.label <- .createEdge(value=edge.label, edgeMat=edge, type="labels", use.names=FALSE)
+    edge.label <- .createEdge(value=edge.label, edgeMat=edge, type="labels",
+                              use.names=FALSE)
     edge.label <- edge.label[!is.na(edge.label)]
 
     ## tip.label (leave NA elements; let checkTree complain about it)

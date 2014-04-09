@@ -21,7 +21,7 @@
 ##' # subsequent trees with polytomies will fail the validity check
 ##' }
 ##' 
-##' @export phylobase.options
+##' @export
 phylobase.options <- function (...) {
     if (nargs() == 0) return(.phylobase.Options)
     current <- .phylobase.Options

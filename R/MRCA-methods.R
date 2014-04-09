@@ -19,6 +19,7 @@
 ##' @return the node corresponding to the most recent common ancestor
 ##' @export
 ##' @include phylo4d-methods.R getNode-methods.R
+##' @include oldclasses-class.R
 ##' @rdname MRCA
 ##' @examples
 ##'   data(geospiza)

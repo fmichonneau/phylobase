@@ -14,14 +14,14 @@
 ##' This options is useful in the case of missing (\code{NA}) or non-unique
 ##' labels.
 ##' @param empty.columns Should columns filled with \code{NA} be returned?
-##' @param merge.data if tip or internal node data are provided and data already
-##' exists for the other type, this determines whether columns with common names
-##' will be merged together (default TRUE). If FALSE, columns with common names
-##' will be preserved separately, with \dQuote{.tip} and \dQuote{.node} appended
-##' to the names. This argument has no effect if tip and node data have no
-##' column names in common, or if type=\dQuote{all}.
-##' @param clear.all If only tip or internal node data are to be replaced,
-##' should data of the other type be dropped?
+# ## @param merge.data if tip or internal node data are provided and data already
+# ## exists for the other type, this determines whether columns with common names
+# ## will be merged together (default TRUE). If FALSE, columns with common names
+# ## will be preserved separately, with \dQuote{.tip} and \dQuote{.node} appended
+# ## to the names. This argument has no effect if tip and node data have no
+# ## column names in common, or if type=\dQuote{all}.
+# ## @param clear.all If only tip or internal node data are to be replaced,
+# ## should data of the other type be dropped?
 ##' @param \dots For the tipData and nodeData accessors, further
 ##' arguments to be used by \code{tdata}. For the replacement forms,
 ##' further arguments to be used by \code{formatData} (e.g.
@@ -47,8 +47,8 @@ setGeneric("tdata", function(x, ...) {
     standardGeneric("tdata")
 })
 
-## @rdname tdata-methods
-## @aliases tdata,phylo4d-method
+##' @rdname tdata-methods
+##' @aliases tdata,phylo4d-method
 setMethod("tdata", signature(x="phylo4d"),
   function(x, type=c("all", "tip", "internal"),
            label.type=c("row.names","column"),
@@ -95,13 +95,16 @@ setMethod("tdata", signature(x="phylo4d"),
       tdata
   })
 
+##' @rdname tdata-methods
+##' @aliases tdata<-
+##' @export
 setGeneric("tdata<-", function(x, ..., value) {
     standardGeneric("tdata<-")
 })
 
 ##' @name tdata<-
 ##' @rdname tdata-methods
-##' @aliases tdata<-,phylo4d-method,tdata<-,phylo4d,ANY-method
+##' @aliases tdata<-,phylo4d-method tdata<-,phylo4d,ANY-method
 setReplaceMethod("tdata", signature(x="phylo4d", value="ANY"),
     function(x, type = c("all", "tip", "internal"), merge.data = TRUE,
         clear.all = FALSE, ..., value) {
@@ -145,6 +148,7 @@ setReplaceMethod("tdata", signature(x="phylo4d", value="ANY"),
 ### Tip data wrappers
 ##' @rdname tdata-methods
 ##' @aliases tipData tipData-method
+##' @export
 setGeneric("tipData", function(x, ...) {
     standardGeneric("tipData")
 })
@@ -159,6 +163,7 @@ setMethod("tipData", signature(x="phylo4d"), function(x, ...) {
 ## tipData<-
 ##' @rdname tdata-methods
 ##' @aliases tipData<- 
+##' @export
 setGeneric("tipData<-", function(x, ..., value) {
     standardGeneric("tipData<-")
 })
@@ -176,6 +181,7 @@ setReplaceMethod("tipData", signature(x="phylo4d", value="ANY"),
 ### Node data wrappers
 ##' @rdname tdata-methods
 ##' @aliases  nodeData nodeData-method
+##' @export
 setGeneric("nodeData", function(x, ...) {
     standardGeneric("nodeData")
 })
@@ -190,6 +196,7 @@ setMethod("nodeData", signature(x="phylo4d"), function(x, ...) {
 ## nodeData<-
 ##' @rdname tdata-methods
 ##' @aliases nodeData<-
+##' @export
 setGeneric("nodeData<-", function(x, ..., value) {
     standardGeneric("nodeData<-")
 })

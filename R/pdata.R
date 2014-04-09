@@ -16,6 +16,7 @@ ptypes <- c("multitype","binary","continuous","DNA","RNA","aacid",
 ##' \code{new("pdata", ...)}.
 ##' @author Ben Bolker
 ##' @keywords classes
+####  @export
 setClass("pdata", representation(data="data.frame",
                                  type="factor",
                                  comment="character",
@@ -38,7 +39,7 @@ setClass("pdata", representation(data="data.frame",
 ##' same length as \code{ncol(data)}
 ##' @param comment a character vector, the same length as \code{ncol(data)}
 ##' @param metadata an arbitrary list
-##' @param object an object of class \code{pdata}
+## @param object an object of class \code{pdata}
 ##' @return An object of class \code{pdata}
 ##' @author Ben Bolker
 ##' @seealso \linkS4class{pdata}
@@ -55,6 +56,7 @@ pdata <- function(data,type,comment,metadata) {
   check_pdata(obj)
   obj
 }
+
 
 check_pdata <- function(object) {
     nvar <- ncol(object@data)
@@ -75,16 +77,21 @@ setMethod("[","pdata",function(x,i, j,...,drop=FALSE) {
   xd2
 })
 
+#### @exportMethod [<-
+setGeneric("[<-")
+
 setMethod("[<-","pdata",function(x,i, j,...,drop=FALSE,value) {
   "[<-"(x@data,i,j,...,drop=drop,value)
 })
 
+### @exportMethod [[
 setGeneric("[[")
 setMethod("[[","pdata",
           function(x,i,j,...,exact=NA) {
             x@data[[i,j,...,exact=exact]]
           })
 
+#### @exportMethod [[<-
 setGeneric("[[<-")
 setMethod("[[<-","pdata",
           function(x,i,j,...,exact=NA,value) {

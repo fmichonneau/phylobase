@@ -41,8 +41,8 @@ getAllNodesSafe <- function(edge) {
     .Call('phylobase_getAllNodesSafe', PACKAGE = 'phylobase', edge)
 }
 
-getAllNodesFast <- function(edge, rooted) {
-    .Call('phylobase_getAllNodesFast', PACKAGE = 'phylobase', edge, rooted)
+getAllNodesFast <- function(edge) {
+    .Call('phylobase_getAllNodesFast', PACKAGE = 'phylobase', edge)
 }
 
 testEqInt <- function(x, y) {

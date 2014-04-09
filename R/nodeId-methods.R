@@ -21,7 +21,7 @@
 ##' @include phylo4-class.R phylo4-methods.R phylo4-accessors.R root-methods.R
 ##' @examples
 ##'   data(geospiza)
-##'   identical(nodeId(geopsiza, "tip"), 1:nTips(geospiza))
+##'   identical(nodeId(geospiza, "tip"), 1:nTips(geospiza))
 ##'   nodeId(geospiza, "internal")
 ##'   edgeId(geospiza, "internal")
 ##'   nodeId(geospiza, "root")
@@ -45,7 +45,15 @@ setMethod("nodeId", signature(x="phylo4"),
          ## all nodes appear at least once in the edge matrix
          ## twice slower: all = unique(as.vector(E)[as.vector(E) != 0]),
          ## but maybe should be used if tree is not "normal"
-         all = getAllNodesFast(x@edge, isRooted(x)), 
+         all = {
+             if (isRooted(x)) {
+                 res <- getAllNodesFast(x@edge)[-1]
+             }
+             else {
+                 res <- getAllNodesFast(x@edge)
+             }
+             res
+         },
          ## tips are nodes that do not appear in the ancestor column
          ## three times slower: setdiff(E[, 2], E[, 1]),
          tip = tipsFast(x@edge[,1]),
@@ -53,7 +61,7 @@ setMethod("nodeId", signature(x="phylo4"),
          ## about 0.5 faster than: setdiff(getAllNodesFast(x@edge, isRooted(x)), tipsFast(x@edge[,1])),
          internal = unique(E[E[, 1] != 0, 1]), 
          ## roots are nodes that have NA as ancestor
-         root = if (!isRooted(x)) NA else unname(E[E[, 1] == 0, 2]))
+         root = if (!isRooted(x)) return(NA) else unname(E[E[, 1] == 0, 2]))
 
      return(sort(nid))
 
@@ -63,6 +71,7 @@ setMethod("nodeId", signature(x="phylo4"),
 
 ##' @rdname nodeId-methods
 ##' @aliases edgeId
+##' @export
 setGeneric("edgeId", function(x, type=c("all", "tip", "internal",
     "root")) {
     standardGeneric("edgeId")

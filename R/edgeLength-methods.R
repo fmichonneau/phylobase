@@ -21,11 +21,12 @@
 ##' @param value a numeric vector indicating the new values for the edge lengths
 ##' @param node optional numeric or character vector indicating the
 ##' nodes for which edge
-##' @param use.name should the the name attributes of \code{value} be
+##' @param use.names should the the name attributes of \code{value} be
 ##' used to match the length to a given edge.
 ##' @param tol the tolerance to decide whether all the tips have the
 ##' same depth to test if the tree is ultrametric. Default is
 ##' \code{.Machine$double.eps^0.5}.
+##' @param \dots optional arguments (none used at present).
 ##' @return \describe{
 ##' 
 ##' \item{hasEdgeLength}{whether or not the object has edge lengths
@@ -82,14 +83,9 @@ setMethod("hasEdgeLength", signature(x="phylo4"),
 
 ##' @rdname edgeLength-methods
 ##' @aliases edgeLength
+##' @export
 setGeneric("edgeLength", function(x, ...) {
     standardGeneric("edgeLength")
-})
-
-##' @rdname edgeLength-methods
-##' @aliases edgeLength<-
-setGeneric("edgeLength<-", function(x, ..., value) {
-    standardGeneric("edgeLength<-")
 })
 
 ##' @rdname edgeLength-methods
@@ -108,10 +104,17 @@ setMethod("edgeLength", signature(x="phylo4"),
     return(elen)
 })
 
+##' @rdname edgeLength-methods
+##' @aliases edgeLength<-
+##' @export
+setGeneric("edgeLength<-", function(x, use.names=TRUE, ..., value) {
+    standardGeneric("edgeLength<-")
+})
+
 ##' @name edgeLength<-
 ##' @rdname edgeLength-methods
-##' @aliases edgeLength<-,phylo4-method
-setReplaceMethod("edgeLength", signature(x="phylo4"),
+##' @aliases edgeLength<-,phylo4-method edgeLength<-,phylo4,ANY-method
+setReplaceMethod("edgeLength", signature(x="phylo4", value="ANY"),
  function(x, use.names=TRUE, ..., value) {
     len <- .createEdge(value, x@edge, type="lengths", use.names)
     ## return empty vector if all values are NA
@@ -130,6 +133,7 @@ setReplaceMethod("edgeLength", signature(x="phylo4"),
 
 ##' @rdname edgeLength-methods
 ##' @aliases depthTips
+##' @export
 setGeneric("depthTips", function(x) {
   standardGeneric("depthTips")
 })
@@ -144,6 +148,7 @@ setMethod("depthTips", signature(x="phylo4"), function(x) {
 
 ##' @rdname edgeLength-methods
 ##' @aliases nodeDepth
+##' @export
 setGeneric("nodeDepth", function(x, node) {
   standardGeneric("nodeDepth")
 })
@@ -171,6 +176,7 @@ setMethod("nodeDepth", signature(x="phylo4"),
 
 ##' @rdname edgeLength-methods
 ##' @aliases sumEdgeLength
+##' @export
 setGeneric("sumEdgeLength", function(x, node) {
     standardGeneric("sumEdgeLength")
 })
@@ -193,6 +199,7 @@ setMethod("sumEdgeLength", signature(x="phylo4"),
 
 ##' @rdname edgeLength-methods
 ##' @aliases isUltrametric
+##' @export
 setGeneric("isUltrametric", function(x, tol=.Machine$double.eps^.5) {
   standardGeneric("isUltrametric")
 })

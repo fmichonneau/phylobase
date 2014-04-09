@@ -10,7 +10,7 @@
 ##' @aliases multiPhylo-class multiPhylo4-class multiPhylo4d-class tbind
 ##' @docType class
 ##' @keywords classes
-##' @export
+## @export
 setClass("multiPhylo4", representation(phylolist = "list", 
     tree.names = "character"), prototype = list(phylolist = list(), 
     tree.names = character(0)))

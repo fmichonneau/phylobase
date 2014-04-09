@@ -3,6 +3,17 @@
 ## Labels constructor
 #####################
 
+## (formerly) recursive function to have labels of constant length
+## base = a character string
+## n = number of labels
+.genlab <- function(base, n) {
+    if(n <= 0) return("")
+    s <- seq(length.out=n)
+    fw <- max(nchar(as.character(s)))
+    numstr <- formatC(s, flag="0", width=fw)
+    paste(base, numstr, sep="")
+}
+
 .createLabels <- function(value, ntips, nnodes, use.names = TRUE,
                           type = c("all", "tip", "internal")) {
 
@@ -53,7 +64,8 @@
 }
 
 
-.createEdge <- function(value, edgeMat, type=c("lengths", "labels"), use.names=TRUE) {
+.createEdge <- function(value, edgeMat, type=c("lengths", "labels"),
+                        use.names=TRUE) {
     type <- match.arg(type)
 
     lgthRes <- nrow(edgeMat)

@@ -42,9 +42,10 @@
 ##' @seealso \code{\link{phylo4d}} constructor and
 ##' \code{\linkS4class{phylo4d}} class.
 ##' @keywords methods
+##' @aliases summary
 ##' @include phylo4-methods.R
 ##' @include phylo4d-methods.R
-##' @export
+##' @exportMethod summary
 ##' @examples
 ##'   tOwls <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
 ##'   tree.owls <- ape::read.tree(text=tOwls)
@@ -215,6 +216,7 @@ setMethod("summary", signature(object="phylo4d"),
 
 ##' @rdname summary-methods
 ##' @aliases nodeType
+##' @export
 setGeneric("nodeType", function(object) {
     standardGeneric("nodeType")
 })

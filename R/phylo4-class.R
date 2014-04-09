@@ -2,9 +2,7 @@
 ##' 
 ##' Classes for phylogenetic trees
 ##' 
-##' 
 ##' @name phylo4-class
-##' @aliases phylo4_orderings phylo-class phylo4-class
 ##' @docType class
 ##' @section Objects from the Class: Phylogenetic tree objects can be created by
 ##' calls to the \code{\link{phylo4}} constructor function.  Translation

@@ -26,7 +26,7 @@
 ##' between two nodes in your tree
 ##'
 ##' \item robust functions to import data from NEXUS and Newick files
-##' using the NEXUS Class Library (\url{http://ncl.sourceforge.net/‎})
+##' using the NEXUS Class Library (\url{http://ncl.sourceforge.net/})
 ##' }
 ##'
 ##' @section History: 
@@ -72,17 +72,17 @@
 ##' @importFrom utils head tail
 ##' @importFrom ade4 newick2phylog
 ##'
-##' 
-##' @exportMethod print head tail reorder plot summary
-##' @exportMethod phylo4 phylo4d
-##' @exportMethod edges edgeId hasEdgeLength edgeLength edgeLength<- sumEdgeLength edgeOrder
-##' @exportMethod isRooted rootNode rootNode<-
-##' @exportMethod nodeId nodeType nodeDepth
-##' @exportMethod isUltrametric
-##' @exportMethod subset prune [
-##' @exportMethod [<- [[ [[<-
-##' @exportMethod labels labels<- nodeLabels nodeLabels<- tipLabels tipLabels<- edgeLabels edgeLabels<-
-##' @exportMethod hasNodeLabels hasEdgeLabels hasDuplicatedLabels
+##'
+## exportMethod should only be used for generics defined outside the package!
+## @exportMethod print head tail reorder plot summary
+## @exportMethod phylo4 phylo4d
+## @exportMethod edges edgeId hasEdgeLength edgeLength edgeLength<- sumEdgeLength edgeOrder
+## @exportMethod isRooted rootNode rootNode<-
+## @exportMethod isUltrametric
+## @exportMethod subset prune [
+## @exportMethod [<- [[ [[<-
+## @exportMethod labels labels<- nodeLabels nodeLabels<- tipLabels tipLabels<- edgeLabels edgeLabels<-
+## @exportMethod hasNodeLabels hasEdgeLabels hasDuplicatedLabels
 NULL
 
 

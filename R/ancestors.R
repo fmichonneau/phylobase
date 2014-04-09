@@ -11,7 +11,7 @@
 ##' 
 ##' If any supplied nodes are not found in the tree, the behavior currently
 ##' varies across functions.
-##'
+##' \itemize{
 ##' \item Invalid nodes are automatically omitted by \code{ancestors}
 ##' and \code{descendants}, with a warning.
 ##' 
@@ -20,10 +20,8 @@
 ##'
 ##' \item Both \code{children} and \code{siblings} will return an empty
 ##' vector, again with a warning.
-##' 
+##' }
 ##' @param phy a \linkS4class{phylo4} object (or one inheriting from
-##' \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
-##' @param x a \linkS4class{phylo4} object (or one inheriting from
 ##' \linkS4class{phylo4}, e.g. a \linkS4class{phylo4d} object)
 ##' @param node either an integer corresponding to a node ID number, or a
 ##' character corresponding to a node label; for \code{ancestors} and
@@ -36,7 +34,8 @@
 ##' @param include.self whether to include self in list of siblings
 ##' @param \dots a list of node numbers or names, or a vector of node numbers or
 ##' names
-##' @return \item{\code{ancestors}}{ return a named vector (or a list
+##' @return \describe{
+##' \item{\code{ancestors}}{ return a named vector (or a list
 ##' of such vectors in the case of multiple input nodes) of the
 ##' ancestors and descendants of a node}
 ##'
@@ -55,10 +54,11 @@
 ##'
 ##' \item{\code{siblings}}{ returns sibling nodes (children of the same
 ##' parent)}
-##' 
+##' }
 ##' @seealso \code{\link[ape]{mrca}}, in the ape package, gives a list of all
 ##' subtrees
 ##' @export
+##' @rdname ancestors
 ##' @include phylo4-class.R
 ##' @include phylo4-methods.R
 ##' @include getNode-methods.R
@@ -91,6 +91,7 @@ ancestor <- function(phy,node) {
 
 ##' @rdname ancestors
 ##' @aliases children
+##' @export
 children <- function(phy,node) {
     node2 <- getNode(phy,node)
     r <- which(edges(phy)[,1]==node2)
@@ -99,6 +100,7 @@ children <- function(phy,node) {
 
 ##' @rdname ancestors
 ##' @aliases descendants
+##' @export
 descendants <- function (phy, node, type=c("tips","children","all")) {
     type <- match.arg(type)
 
@@ -162,6 +164,7 @@ descendants <- function (phy, node, type=c("tips","children","all")) {
 
 ##' @rdname ancestors
 ##' @aliases siblings
+##' @export
 siblings <- function(phy, node, include.self=FALSE) {
     v <- children(phy,ancestor(phy,node))
     if (!include.self) v <- v[v!=getNode(phy,node)]
@@ -170,6 +173,7 @@ siblings <- function(phy, node, include.self=FALSE) {
 
 ##' @rdname ancestors
 ##' @aliases siblings
+##' @export
 ancestors <- function (phy, node, type=c("all","parent","ALL")) {
 
     type <- match.arg(type)
