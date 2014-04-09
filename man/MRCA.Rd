@@ -1,0 +1,48 @@
+\docType{methods}
+\name{MRCA}
+\alias{MRCA}
+\alias{MRCA,phylo-method}
+\alias{MRCA,phylo4-method}
+\title{MRCA}
+\usage{
+MRCA(phy, ...)
+
+\S4method{MRCA}{phylo4}(phy, ...)
+
+\S4method{MRCA}{phylo}(phy, ...)
+}
+\arguments{
+  \item{phy}{a phylogenetic tree in phylo4, phylo4d or
+  phylo format.}
+
+  \item{...}{a vector of nodes}
+}
+\value{
+the node corresponding to the most recent common ancestor
+}
+\description{
+Most Recent Common Ancestor (MRCA) of 2 or more nodes.
+}
+\details{
+Given some nodes (i.e., tips and/or internal), this
+function returns the node corresponding to the most recent
+common ancestor.
+
+If \code{phy} is a \code{phylo4} or \code{phylo4d} object,
+the nodes can contain both numeric or character values that
+will be used by \code{getNode} to retrieve the correct
+node. However, if \code{phy} is a \code{phylo} object, the
+nodes must be a numeric vector.
+
+With \code{phylo4} and \code{phylo4d} objects, if a single
+node is provided, it will be returned.
+}
+\examples{
+data(geospiza)
+  MRCA(geospiza, 1, 5)
+  MRCA(geospiza, "fortis", 11)
+  MRCA(geospiza, 2, 4, "fusca", 3)
+  geo <- as(geospiza, "phylo")
+  MRCA(geo, c(1,5))
+}
+

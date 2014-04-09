@@ -1,0 +1,41 @@
+\docType{methods}
+\name{nTips}
+\alias{nEdges}
+\alias{nEdges,phylo4-method}
+\alias{nNodes}
+\alias{nNodes,phylo4-method}
+\alias{nTips}
+\alias{nTips,phylo-method}
+\alias{nTips,phylo4-method}
+\title{nTips, nNodes, nEdges}
+\usage{
+nTips(x)
+
+\S4method{nTips}{phylo4}(x)
+
+\S4method{nTips}{phylo}(x)
+
+nNodes(x)
+
+\S4method{nNodes}{phylo4}(x)
+
+nEdges(x)
+
+\S4method{nEdges}{phylo4}(x)
+}
+\arguments{
+  \item{x}{a \code{phylo4} or \code{phylo4d} object}
+}
+\value{
+a numeric vector indicating the number of tips, nodes or
+edge respectively.
+}
+\description{
+Number of tips, nodes and edges found in a tree.
+}
+\details{
+Function to return the number of tips, nodes and edges
+found in a tree in the \code{phylo4} or \code{phylo4d}
+format.
+}
+

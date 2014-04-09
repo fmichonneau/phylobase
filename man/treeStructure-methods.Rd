@@ -1,0 +1,59 @@
+\docType{methods}
+\name{hasSingle}
+\alias{hasPoly}
+\alias{hasPoly,phylo4-method}
+\alias{hasRetic}
+\alias{hasRetic,phylo4-method}
+\alias{hasSingle}
+\alias{hasSingle,phylo4-method}
+\title{Test trees for polytomies, inline nodes (singletons), or reticulation}
+\usage{
+hasSingle(object)
+
+\S4method{hasSingle}{phylo4}(object)
+
+hasRetic(object)
+
+\S4method{hasRetic}{phylo4}(object)
+
+hasPoly(object)
+
+\S4method{hasPoly}{phylo4}(object)
+}
+\arguments{
+  \item{object}{an object inheriting from class
+  \code{phylo4}}
+}
+\value{
+Logical value
+}
+\description{
+Methods to test whether trees have (structural) polytomies,
+inline nodes (i.e., nodes with a single descendant), or
+reticulation (i.e., nodes with more than one ancestor).
+\code{hasPoly} only check for structural polytomies (1 node
+has more than 2 descendants) and not polytomies that result
+from having edges with a length of 0.
+}
+\note{
+Some algorithms are unhappy with structural polytomies
+(i.e., >2 descendants from a node), with single-descendant
+nodes, or with reticulation; these functions check those
+properties.  We haven't bothered to check for zero branch
+lengths: the consensus is that it doesn't come up much, and
+that it's simple enough to test \code{any(edgeLength(x) ==
+0)} in these cases.  (Single-descendant nodes are used e.g.
+in OUCH, or in other cases to represent events occurring
+along a branch.)
+}
+\examples{
+tree.owls.bis <- ape::read.tree(text="((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);")
+owls4 <- as(tree.owls.bis, "phylo4")
+hasPoly(owls4)
+hasSingle(owls4)
+}
+\author{
+Ben Bolker
+}
+\keyword{misc}
+

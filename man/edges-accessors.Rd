@@ -1,0 +1,74 @@
+\docType{methods}
+\name{edges}
+\alias{edgeOrder}
+\alias{edgeOrder,phylo4-method}
+\alias{edges}
+\alias{edges,phylo4-method}
+\alias{internalEdges}
+\alias{internalEdges,phylo4-method}
+\alias{terminalEdges}
+\alias{terminalEdges,phylo4-method}
+\title{Edges accessors}
+\usage{
+edges(x, ...)
+
+\S4method{edges}{phylo4}(x, drop.root = FALSE)
+
+edgeOrder(x, ...)
+
+\S4method{edgeOrder}{phylo4}(x)
+
+internalEdges(x)
+
+\S4method{internalEdges}{phylo4}(x)
+
+terminalEdges(x)
+
+\S4method{terminalEdges}{phylo4}(x)
+}
+\arguments{
+  \item{x}{a \code{phylo4} or \code{phylo4d} object.}
+
+  \item{drop.root}{logical (default FALSE), should the edge
+  connecting the root be included in the edge matrix?}
+
+  \item{\dots}{Optional arguments used by specific methods.
+  (None used at present).}
+}
+\value{
+\describe{ \item{\code{edges}}{returns the edge matrix that
+represent the ancestor-descendant relationships among the
+nodes of the tree.}
+
+\item{\code{edgeOrder}}{returns the order in which the edge
+matrix is in.}
+
+\item{\code{internalEdges}}{returns a logical vector
+indicating internal edges (edges that connect an internal
+node to another). This vector is named with the
+\code{edgeId}}.
+
+\item{\code{terminalEdges}}{returns a logical vector
+indicating terminal edges (edges that connect an internal
+node to a tip). This vector is named with the \code{edgeId}
+}}
+}
+\description{
+Access or modify information about the edges.
+}
+\examples{
+data(geospiza)
+   edges(geospiza)
+   edgeOrder(geospiza)
+   geoPost <- reorder(geospiza, "postorder")
+   edgeOrder(geoPost)
+   ## with a binary tree this should always be true
+   identical(!terminalEdges(geospiza), internalEdges(geospiza))
+}
+\author{
+Ben Bolker, Francois Michonneau, Thibaut Jombart
+}
+\seealso{
+reorder, edgeId
+}
+

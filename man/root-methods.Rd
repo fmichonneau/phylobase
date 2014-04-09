@@ -1,0 +1,44 @@
+\docType{methods}
+\name{isRooted}
+\alias{isRooted}
+\alias{isRooted,phylo4-method}
+\alias{rootNode}
+\alias{rootNode,phylo4-method}
+\alias{rootNode<-}
+\alias{rootNode<-,phylo4-method}
+\title{Methods to test, access (and modify) the root of a phylo4 object.}
+\usage{
+isRooted(x)
+
+\S4method{isRooted}{phylo4}(x)
+
+rootNode(x)
+
+\S4method{rootNode}{phylo4}(x)
+
+rootNode(x) <- value
+}
+\arguments{
+  \item{x}{a \code{phylo4} or \code{phylo4d} object.}
+
+  \item{value}{a character string or a numeric giving the
+  new root.}
+}
+\value{
+\describe{ \item{isRooted}{logical whether the tree is
+rooted} \item{rootNode}{the node corresponding to the root}
+}
+}
+\description{
+Methods to test, access (and modify) the root of a phylo4
+object.
+}
+\examples{
+data(geospiza)
+isRooted(geospiza)
+rootNode(geospiza)
+}
+\author{
+Ben Bolker, Francois Michonneau
+}
+

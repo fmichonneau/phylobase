@@ -1,0 +1,41 @@
+\docType{methods}
+\name{shortestPath}
+\alias{shortestPath}
+\alias{shortestPath,phylo-method}
+\alias{shortestPath,phylo4-method}
+\alias{shortestPath-phylo}
+\alias{shortestPath-phylo4}
+\title{shortestPath-methods}
+\usage{
+shortestPath(x, node1, node2)
+
+\S4method{shortestPath}{phylo4}(x, node1, node2)
+
+\S4method{shortestPath}{phylo}(x, node1, node2)
+}
+\arguments{
+  \item{x}{a tree in the phylo4, phylo4d or phylo format}
+
+  \item{node1}{a numeric or character (passed to
+  \code{getNode}) indicating the beginning from which the
+  path should be calculated.}
+
+  \item{node2}{a numeric or character (passed to
+  \code{getNode}) indicating the end of the path.}
+}
+\value{
+a vector of nodes indcating the shortest path between 2
+nodes
+}
+\description{
+Finds the shortest path between two nodes in a tree
+}
+\details{
+Given two nodes (i.e, tips or internal nodes), this
+function returns the shortest path between them (excluding
+\code{node1} and \code{node2} as a vector of nodes.
+}
+\seealso{
+getNode
+}
+

@@ -1,0 +1,101 @@
+\docType{methods}
+\name{summary-methods}
+\alias{nodeType}
+\alias{nodeType,phylo4-method}
+\alias{summary}
+\alias{summary,phylo4-method}
+\alias{summary,phylo4d-method}
+\alias{summary-methods}
+\title{Summary for phylo4/phylo4d objects}
+\usage{
+summary(object, ...)
+
+\S4method{summary}{phylo4}(object, quiet = FALSE)
+
+\S4method{summary}{phylo4d}(object, quiet = FALSE)
+
+nodeType(object)
+
+\S4method{nodeType}{phylo4}(object)
+}
+\arguments{
+  \item{object}{a phylo4d object}
+
+  \item{quiet}{Should the summary be displayed on screen?}
+
+  \item{...}{additional arguments affecting the summary
+  produced.}
+}
+\value{
+The \code{nodeType} method returns named vector which has
+the type of node (internal, tip, root) for value, and the
+node number for name
+
+The \code{summary} method invisibly returns a list with the
+following components: \item{list("name")}{the name of the
+object}
+
+\item{list("nb.tips")}{the number of tips}
+
+\item{list("nb.nodes")}{the number of nodes}
+
+\item{list("mean.el")}{mean of edge lengths}
+
+\item{list("var.el")}{variance of edge lengths (estimate
+for population) }
+
+\item{list("sumry.el")}{summary (i.e. range and quartiles)
+of the edge lengths}
+
+\item{list("degree")}{(optional) type of polytomy for each
+node: \sQuote{node}, \sQuote{terminal} (all descendants are
+tips) or \sQuote{internal} (at least one descendant is an
+internal node); displayed only when there are polytomies}
+
+\item{list("sumry.tips")}{(optional) summary for the data
+associated with the tips}
+
+\item{list("sumry.nodes")}{(optional) summary for the data
+associated with the internal nodes}
+}
+\description{
+Summary of information for the tree (\code{phylo4} only)
+and/or the associated data (\code{phylo4d}).
+}
+\examples{
+tOwls <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
+  tree.owls <- ape::read.tree(text=tOwls)
+  P1 <- as(tree.owls, "phylo4")
+  P1
+  summary(P1)
+  nodeType(P1)
+
+  ## summary of a polytomous tree
+  E <- matrix(c(
+      8,  9,
+      9, 10,
+     10,  1,
+     10,  2,
+      9,  3,
+      9,  4,
+      8, 11,
+     11,  5,
+     11,  6,
+     11,  7,
+      0,  8), ncol=2, byrow=TRUE)
+
+  P2 <- phylo4(E)
+  nodeLabels(P2) <- as.character(nodeId(P2, "internal"))
+  plot(P2, show.node.label=TRUE)
+  sumryP2 <- summary(P2)
+  sumryP2
+}
+\author{
+Ben Bolker, Thibaut Jombart, Francois Michonneau
+}
+\seealso{
+\code{\link{phylo4d}} constructor and
+\code{\linkS4class{phylo4d}} class.
+}
+\keyword{methods}
+

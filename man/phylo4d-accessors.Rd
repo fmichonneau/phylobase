@@ -1,0 +1,76 @@
+\docType{methods}
+\name{hasTipData}
+\alias{hasNodeData}
+\alias{hasNodeData,phylo4d-method}
+\alias{hasNodeData-methods}
+\alias{hasTipData}
+\alias{hasTipData,phylo4d-method}
+\alias{hasTipData-method,phylo4d-method}
+\alias{nData}
+\alias{nData,phylo4d-method}
+\title{Tests for presence of data associated with trees stored as phylo4d objects}
+\usage{
+hasTipData(x)
+
+\S4method{hasTipData}{phylo4d}(x)
+
+hasNodeData(x)
+
+\S4method{hasNodeData}{phylo4d}(x)
+
+nData(x)
+
+\S4method{nData}{phylo4d}(x)
+}
+\arguments{
+  \item{x}{a \code{phylo4d} object}
+}
+\value{
+\describe{
+
+\item{\code{nData}}{returns the number of datasets (i.e.,
+columns) associated with the object.}
+
+\item{\code{hasTipData}, \code{hasNodeData}}{return
+\code{TRUE} or \code{FALSE} depending whether data
+associated with the tree are associated with either tips or
+internal nodes respectively.}}
+}
+\description{
+Methods that test for the presence of data associated with
+trees stored as \code{phylo4d} objects.
+}
+\details{
+\code{nData} tests for the presence of data associated with
+the object.
+
+\code{hasTipData} and \code{hasNodeData} tests for the
+presence of data associated with the tips and the internal
+nodes respectively. The outcome of the test is based on row
+names of the data frame stored in the \code{data} slot. If
+no rows have names from the set \code{nodeId(x, "tip")},
+then \code{hasTipData} returns FALSE.  Likewise, if no rows
+have names from the set \code{nodeId(x, "internal")}, then
+\code{hasNodeData} returns FALSE.
+}
+\section{Methods}{
+  \describe{ \item{hasNodeData}{\code{signature(object =
+  "phylo4d")}: whether tree has internal node data}
+  \item{hasTipData}{\code{signature(object = "phylo4d")}:
+  whether tree has data associated with its tips} }
+}
+\examples{
+data(geospiza)
+  nData(geospiza)       ## 5
+  hasTipData(geospiza)  ## TRUE
+  hasNodeData(geospiza) ## FALSE
+}
+\author{
+Ben Bolker, Thibault Jombart, Francois Michonneau
+}
+\seealso{
+\code{\link{phylo4d}} constructor and
+\code{\linkS4class{phylo4d}} class.
+}
+\keyword{methods}
+

@@ -1,0 +1,97 @@
+\docType{methods}
+\name{tdata}
+\alias{nodeData}
+\alias{nodeData,phylo4d-method}
+\alias{nodeData-method}
+\alias{nodeData<-}
+\alias{nodeData<-,phylo4d,ANY-method}
+\alias{nodeData<-,phylo4d-method}
+\alias{tdata}
+\alias{tdata,phylo4d-method}
+\alias{tdata<-}
+\alias{tdata<-,phylo4d,ANY-method}
+\alias{tdata<-,phylo4d-method}
+\alias{tipData}
+\alias{tipData,phylo4d-method}
+\alias{tipData-method}
+\alias{tipData<-}
+\alias{tipData<-,phylo4d,ANY-method}
+\alias{tipData<-,phylo4d-method}
+\title{Retrieving or updating tip and node data in phylo4d objects}
+\usage{
+tdata(x, ...)
+
+\S4method{tdata}{phylo4d}(x, type = c("all", "tip", "internal"),
+  label.type = c("row.names", "column"), empty.columns = TRUE)
+
+tdata(x, ...) <- value
+
+tipData(x, ...)
+
+\S4method{tipData}{phylo4d}(x, ...)
+
+tipData(x, ...) <- value
+
+nodeData(x, ...)
+
+\S4method{nodeData}{phylo4d}(x, ...)
+
+nodeData(x, ...) <- value
+}
+\arguments{
+  \item{x}{A \code{phylo4d} object}
+
+  \item{type}{The type of data to retrieve or update:
+  \dQuote{\code{all}} (default) for data associated with
+  both tip and internal nodes, \dQuote{\code{tip}} for data
+  associated with tips only, \dQuote{\code{internal}} for
+  data associated with internal nodes only.}
+
+  \item{label.type}{How should the tip/node labels from the
+  tree be returned? \dQuote{\code{row.names}} returns them
+  as row names of the data frame, \dQuote{\code{column}}
+  returns them in the first column of the data frame. This
+  options is useful in the case of missing (\code{NA}) or
+  non-unique labels.}
+
+  \item{empty.columns}{Should columns filled with \code{NA}
+  be returned?}
+
+  \item{\dots}{For the tipData and nodeData accessors,
+  further arguments to be used by \code{tdata}. For the
+  replacement forms, further arguments to be used by
+  \code{formatData} (e.g. \code{match.data}), see
+  \link{formatData} for more details.}
+
+  \item{value}{a data frame (or object to be coerced to
+  one) to replace the values associated with the nodes
+  specified by the argument \code{type}}
+}
+\value{
+\code{tdata} returns a data frame
+}
+\description{
+Methods to retrieve or update tip, node or all data
+associated with a phylogenetic tree stored as a phylo4d
+object
+}
+\section{Methods}{
+  \describe{
+  \item{tdata}{\code{signature(object="phylo4d")}: retrieve
+  or update data associated with a tree in a \code{phylo4d}
+  object} }
+}
+\examples{
+data(geospiza)
+   tdata(geospiza)
+   tipData(geospiza) <- 1:nTips(geospiza)
+   tdata(geospiza)
+}
+\author{
+Ben Bolker, Thibaut Jombart, Francois Michonneau
+}
+\seealso{
+\code{\link{phylo4d}}
+}
+\keyword{methods}
+

@@ -1,0 +1,115 @@
+\docType{methods}
+\name{hasEdgeLength}
+\alias{depthTips}
+\alias{depthTips,phylo4-method}
+\alias{depthTips,phylo4-methods}
+\alias{edgeLength}
+\alias{edgeLength,phylo4-method}
+\alias{edgeLength<-}
+\alias{edgeLength<-,phylo4,ANY-method}
+\alias{edgeLength<-,phylo4-method}
+\alias{hasEdgeLength}
+\alias{hasEdgeLength,phylo4-method}
+\alias{isUltrametric}
+\alias{isUltrametric,phylo4-method}
+\alias{nodeDepth}
+\alias{nodeDepth,phylo4-method}
+\alias{sumEdgeLength}
+\alias{sumEdgeLength,phylo4-method}
+\title{edgeLength methods}
+\usage{
+hasEdgeLength(x)
+
+\S4method{hasEdgeLength}{phylo4}(x)
+
+edgeLength(x, ...)
+
+\S4method{edgeLength}{phylo4}(x, node)
+
+edgeLength(x, use.names = TRUE, ...) <- value
+
+depthTips(x)
+
+\S4method{depthTips}{phylo4}(x)
+
+nodeDepth(x, node)
+
+\S4method{nodeDepth}{phylo4}(x, node)
+
+sumEdgeLength(x, node)
+
+\S4method{sumEdgeLength}{phylo4}(x, node)
+
+isUltrametric(x, tol = .Machine$double.eps^0.5)
+
+\S4method{isUltrametric}{phylo4}(x, tol = .Machine$double.eps^0.5)
+}
+\arguments{
+  \item{x}{a \code{phylo4} or \code{phylo4d} object.}
+
+  \item{value}{a numeric vector indicating the new values
+  for the edge lengths}
+
+  \item{node}{optional numeric or character vector
+  indicating the nodes for which edge}
+
+  \item{use.names}{should the the name attributes of
+  \code{value} be used to match the length to a given
+  edge.}
+
+  \item{tol}{the tolerance to decide whether all the tips
+  have the same depth to test if the tree is ultrametric.
+  Default is \code{.Machine$double.eps^0.5}.}
+
+  \item{\dots}{optional arguments (none used at present).}
+}
+\value{
+\describe{
+
+\item{hasEdgeLength}{whether or not the object has edge
+lengths (logical)}
+
+\item{edgeLength}{a named vector of the edge length for the
+object}
+
+\item{nodeDepth}{a named vector indicating the
+\dQuote{depth} (the distance between the root and the tip)
+of each tip.}
+
+\item{isUltrametric}{whether or not the tree is ultrametric
+(all the tips are have the same depth (distance from the
+root) (logical)}
+
+\item{sumEdgeLength}{the sum of the edge lengths for a set
+of nodes (intended to be used with \code{ancestors} or
+\code{descendants})} }
+}
+\description{
+These functions give information about and allow
+replacement of edge lengths.
+}
+\details{
+The \code{edgeLength} function returns the edge length in
+the same order as the edges in the matrix.
+}
+\examples{
+data(geospiza)
+  hasEdgeLength(geospiza) # TRUE
+  topoGeo <- geospiza
+  edgeLength(topoGeo) <- NULL
+  hasEdgeLength(topoGeo)  # FALSE
+
+  edgeLength(geospiza)[2]       # use the position in vector
+  edgeLength(geospiza)["16-17"] # or the name of the edge
+  edgeLength(geospiza, 17)      # or the descendant node of the edge
+
+  ## The same methods can be used to update an edge length
+  edgeLength(geospiza)[2] <- 0.33
+  edgeLength(geospiza)["16-17"] <- 0.34
+  edgeLength(geospiza, 17) <- 0.35
+}
+\seealso{
+\code{ancestors}, \code{descendants}, \code{.Machine} for
+more information about tolerance.
+}
+
