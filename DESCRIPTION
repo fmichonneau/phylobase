@@ -1,3 +1,4 @@
+Roxygen: list(wrap = FALSE)
 Package: phylobase
 Type: Package
 Title: Base package for phylogenetic structures and comparative data
