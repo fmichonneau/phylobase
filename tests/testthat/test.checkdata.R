@@ -28,42 +28,43 @@ phy <- phylo4(x=edge, tip.label=lab.tip, node.label=lab.int,
 
 op <- phylobase.options()
 
-checkPhylo4 <- function() {
-}
+context("test phylo4 validator/phylobase.options()")
 
-checkTree <- function() {
-    ## test polytomies
+test_that("test polytomies", {
     phylobase.options(poly="fail")
-    checkException(readNexus(file=co1File, check.node.labels="drop"))
+    expect_error(readNexus(file=co1File, check.node.labels="drop"))
     phylobase.options(op)
+})
 
-    ## test retic
+test_that("test retic", {
     phylobase.options(retic="fail")
     edgeRetic <- rbind(edge, c(6, 3))
-    checkException(phy <- phylo4(x=edgeRetic))
+    expect_error(phy <- phylo4(x=edgeRetic))
     phylobase.options(op)
+})
 
-    ## test multiroot
+test_that("test multiroot", {
     phylobase.options(multiroot="fail")
-    edgeMultiRoot <- rbind(edge, c(7, 0))
-    checkException(phy <- phylo4(x=edgeMultiRoot))
+    edgeMultiRoot <- rbind(edge, c(0, 7))
+    expect_error(phy <- phylo4(x=edgeMultiRoot))
     phylobase.options(op)
+})
 
-    ## test singleton
+test_that("test singleton", {
     phylobase.options(singleton="fail")
     edgeSingleton <- cbind(c(9,7,7,6,6,8,8,10,10,0), 1:10)
-    checkException(phylo4(x=edgeSingleton))
+    expect_error(phylo4(x=edgeSingleton))
     phylobase.options(op)
-}
+})
 
-checkPhylo4Data <- function() {
-}
+## checkPhylo4Data <- function() {
+## }
 
-formatData <- function() {
-    # function(phy, dt, type=c("tip", "internal", "all"),
-    #   match.data=TRUE, label.type=c("rownames", "column"),
-    #   label.column=1, missing.data=c("fail", "warn", "OK"),
-    #   extra.data=c("warn", "OK", "fail"), rownamesAsLabels=FALSE)
-}
+## formatData <- function() {
+##     # function(phy, dt, type=c("tip", "internal", "all"),
+##     #   match.data=TRUE, label.type=c("rownames", "column"),
+##     #   label.column=1, missing.data=c("fail", "warn", "OK"),
+##     #   extra.data=c("warn", "OK", "fail"), rownamesAsLabels=FALSE)
+## }
 
 
