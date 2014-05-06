@@ -29,8 +29,10 @@
 ##' using the NEXUS Class Library (\url{http://ncl.sourceforge.net/})
 ##' }
 ##'
-##' @section History: 
-##' \code{phylobase} was started during a Hackathlon at NEScent on December 10-14 2007.
+##' @section History:
+##' 
+##' \code{phylobase} was started during a Hackathlon at NESCent on
+##' December 10-14 2007.
 ##'
 ##' Peter Cowan was a Google Summer of Code fellow in 2008 and
 ##' developed all the code for plotting.
