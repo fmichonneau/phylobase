@@ -69,12 +69,12 @@ checkTree <- function(object) {
 
     ## Storage of error/warning messages
     err <- wrn <- character(0)
-
+    
     ## Matrix is integer
     if (!is.integer(object@edge)) {
         err <- c(err, "Edge matrix needs to be integer.")
     }
-
+    
     ## Matrix doesn't have NAs
     if (any(is.na(object@edge))) {
         err <- c(err, "Edge matrix cannot have NAs at this time.",
@@ -101,6 +101,16 @@ checkTree <- function(object) {
     }
     
     res <- checkTreeCpp(object, opts=opt)
+
+    if (hasRetic(object)) {
+        msg <- "Tree is reticulated."
+        if (identical(opt$retic, "fail")) {
+            err <- c(err, msg)
+        }
+        if (identical(opt$retic, "warn")) {
+            wrn <- c(wrn, msg)
+        }
+    }
 
     if (hasEdgeLength(object) && any(is.na(edgeLength(object)))) {
         naElen <- names(which(is.na(object@edge.length)))
