@@ -224,7 +224,7 @@ setMethod("[", signature(x="phylo4", i="logical", j="missing",
 ##' @aliases [,phylo4,missing,missing-method
 setMethod("[", signature(x="phylo4", i="missing", j="missing",
     drop="missing"), function(x, i, j, ..., drop) {
-    x
+    return(x)
 })
 
 ##### --------  phylo4d '[' methods
