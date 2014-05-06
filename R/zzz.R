@@ -1,6 +1,6 @@
 
 ".phylobase.Options" <-
-    list(retic = "warn",
+    list(retic = "fail",
          singleton = "warn",
          multiroot = "warn",
          poly = "ok",

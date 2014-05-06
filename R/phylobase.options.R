@@ -44,6 +44,9 @@ phylobase.options <- function (...) {
     current <- lapply(current, function(foo) {
         foo <- match.arg(foo, c("warn", "fail", "ok"))
     })
+    if (!identical(current$retic, "fail")) {
+        stop("Currently reticulated trees are not handled by phylobase.")
+    }
     ## options are always global
     env <- asNamespace("phylobase")
     assign(".phylobase.Options", current, envir = env)
