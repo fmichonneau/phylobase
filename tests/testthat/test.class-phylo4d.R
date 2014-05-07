@@ -2,8 +2,7 @@
 # --- Test class-phylo4d.R ---
 #
 
-# create ape::phylo version of a simple tree for testing
-## require(ape)  ## messes badly with edges()!
+## create ape::phylo version of a simple tree for testing
 nwk <- "((t1:0.1,t2:0.2)n7:0.7,(t3:0.3,(t4:0.4,t5:0.5)n9:0.9)n8:0.8)n6:0.6;"
 tr <- ape::read.tree(text=nwk)
 
@@ -46,7 +45,9 @@ row.names(nodDt) <- nid.int.r
 
 #-----------------------------------------------------------------------
 
-test.phylo4d.phylo4 <- function() {
+context("test phylo4d class")
+
+test_that("phylo4d can be built from phylo4", {
 
     ## case 1: add data matching only on row position
     row.names(allDt) <- NULL
@@ -54,51 +55,51 @@ test.phylo4d.phylo4 <- function() {
     row.names(nodDt) <- NULL
 
     ## these should fail because row.names don't match nodes
-    checkException(phylo4d(phy.alt, tip.data=tipDt, rownamesAsLabels=TRUE))
-    checkException(phylo4d(phy.alt, node.data=nodDt))
+    expect_error(phylo4d(phy.alt, tip.data=tipDt, rownamesAsLabels=TRUE))
+    expect_error(phylo4d(phy.alt, node.data=nodDt))
 
     ## brute force: no matching; with tip data
     phyd <- phylo4d(phy.alt, tip.data=tipDt, match.data=FALSE)
-    checkIdentical(phyd@data, data.frame(tipDt,
+    expect_equal(phyd@data, data.frame(tipDt,
         row.names=nid.tip))
-    checkIdentical(tdata(phyd, "tip"), data.frame(tipDt,
+    expect_equal(tdata(phyd, "tip"), data.frame(tipDt,
         row.names=lab.tip))
 
     ## brute force: no matching; with node data
     phyd <- phylo4d(phy.alt, node.data=nodDt, match.data=FALSE)
-    checkIdentical(phyd@data, data.frame(nodDt,
+    expect_equal(phyd@data, data.frame(nodDt,
         row.names=nid.int))
-    checkIdentical(tdata(phyd, "internal"), data.frame(nodDt,
+    expect_equal(tdata(phyd, "internal"), data.frame(nodDt,
         row.names=lab.int))
 
     ## brute force: no matching; with all.data
     phyd <- phylo4d(phy.alt, all.data=allDt, match.data=FALSE)
-    checkIdentical(phyd@data, data.frame(allDt,
+    expect_equal(phyd@data, data.frame(allDt,
         row.names=nid.all))
-    checkIdentical(tdata(phyd, "all"), data.frame(allDt,
+    expect_equal(tdata(phyd, "all"), data.frame(allDt,
         row.names=lab.all))
 
     ## brute force: no matching; with tip & node data
     ## no merging (data names don't match)
     phyd <- phylo4d(phy.alt, tip.data=tipDt["d"], node.data=nodDt["e"],
         match.data=FALSE)
-    checkIdentical(phyd@data, data.frame(rbind(data.frame(tipDt["d"],
+    expect_equal(phyd@data, data.frame(rbind(data.frame(tipDt["d"],
         e=NA_real_), data.frame(d=NA_real_, nodDt["e"])),
         row.names=nid.all))
-    checkIdentical(tdata(phyd, "tip"), data.frame(tipDt["d"], e=NA_real_,
+    expect_equal(tdata(phyd, "tip"), data.frame(tipDt["d"], e=NA_real_,
         row.names=lab.tip))
-    checkIdentical(tdata(phyd, "internal"), data.frame(d=NA_real_, nodDt["e"],
+    expect_equal(tdata(phyd, "internal"), data.frame(d=NA_real_, nodDt["e"],
         row.names=lab.int))
 
     ## brute force: no matching; with tip & node data
     ## merging (common data names)
     phyd <- phylo4d(phy.alt, tip.data=tipDt["c"], node.data=nodDt["c"],
         match.data=FALSE)
-    checkIdentical(phyd@data, data.frame(rbind(tipDt["c"], nodDt["c"]),
+    expect_equal(phyd@data, data.frame(rbind(tipDt["c"], nodDt["c"]),
         row.names=nid.all))
-    checkIdentical(tdata(phyd, "tip"), data.frame(c=factor(tipDt$c,
+    expect_equal(tdata(phyd, "tip"), data.frame(c=factor(tipDt$c,
         levels=letters[nid.all]), row.names=lab.tip))
-    checkIdentical(tdata(phyd, "internal"), data.frame(c=factor(nodDt$c,
+    expect_equal(tdata(phyd, "internal"), data.frame(c=factor(nodDt$c,
         levels=letters[nid.all]), row.names=lab.int))
 
     ## case 2: add data matching on numeric (node ID) row.names
@@ -108,42 +109,42 @@ test.phylo4d.phylo4 <- function() {
 
     ## match with node numbers, tip data
     phyd <- phylo4d(phy.alt, tip.data=tipDt)
-    checkIdentical(phyd@data, data.frame(tipDt[order(nid.tip.r),],
+    expect_equal(phyd@data, data.frame(tipDt[order(nid.tip.r),],
         row.names=nid.tip))
-    checkIdentical(tdata(phyd, "tip"), data.frame(tipDt[order(nid.tip.r),],
+    expect_equal(tdata(phyd, "tip"), data.frame(tipDt[order(nid.tip.r),],
         row.names=lab.tip))
 
     ## match with node numbers, node data
     phyd <- phylo4d(phy.alt, node.data=nodDt)
-    checkIdentical(phyd@data, data.frame(nodDt[order(nid.int.r),],
+    expect_equal(phyd@data, data.frame(nodDt[order(nid.int.r),],
         row.names=nid.int))
-    checkIdentical(tdata(phyd, "internal"), data.frame(nodDt[order(nid.int.r),],
+    expect_equal(tdata(phyd, "internal"), data.frame(nodDt[order(nid.int.r),],
         row.names=lab.int))
 
     ## match with node numbers, tip & node data, no merge
     phyd <- phylo4d(phy.alt, tip.data=tipDt["d"], node.data=nodDt["e"])
-    checkIdentical(phyd@data, data.frame(rbind(data.frame(
+    expect_equal(phyd@data, data.frame(rbind(data.frame(
         d=tipDt[order(nid.tip.r), "d"], e=NA_real_),
         data.frame(d=NA_real_, e=nodDt[order(nid.int.r), "e"])),
         row.names=nid.all))
-    checkIdentical(tdata(phyd, "tip"), data.frame(d=tipDt[order(nid.tip.r), "d"],
+    expect_equal(tdata(phyd, "tip"), data.frame(d=tipDt[order(nid.tip.r), "d"],
         e=NA_real_, row.names=lab.tip))
-    checkIdentical(tdata(phyd, "internal"), data.frame(d=NA_real_,
+    expect_equal(tdata(phyd, "internal"), data.frame(d=NA_real_,
         e=nodDt[order(nid.int.r), "e"], row.names=lab.int))
 
     ## match with node numbers, tip & all data
     phyd <- phylo4d(phy.alt, tip.data=tipDt, all.data=allDt)
     merged <- data.frame(merge(allDt[order(nid.all.r),],
         tipDt[order(nid.tip.r),], all=TRUE, by=0)[-1])
-    checkIdentical(phyd@data, data.frame(merged, row.names=nid.all))
-    checkIdentical(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
+    expect_equal(phyd@data, data.frame(merged, row.names=nid.all))
+    expect_equal(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
 
     ## match with node numbers, node & all data
     phyd <- phylo4d(phy.alt, node.data=nodDt, all.data=allDt)
     merged <- data.frame(merge(allDt[order(nid.all.r),],
         nodDt[order(nid.int.r),], all=TRUE, by=0)[-1])
-    checkIdentical(phyd@data, data.frame(merged, row.names=nid.all))
-    checkIdentical(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
+    expect_equal(phyd@data, data.frame(merged, row.names=nid.all))
+    expect_equal(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
 
     ## match with node numbers, tip, node & all data
     phyd <- phylo4d(phy.alt, tip.data=tipDt, node.data=nodDt, all.data=allDt)
@@ -154,13 +155,13 @@ test.phylo4d.phylo4 <- function() {
     m2 <- data.frame(merge(tipDt["d"], nodDt["e"], all=TRUE, by=0)[-1])
     # ...now merge these together
     merged <- data.frame(merge(m1, m2, by=0)[-1])
-    checkIdentical(phyd@data, data.frame(merged,
+    expect_equal(phyd@data, data.frame(merged,
         row.names=nid.all))
-    checkIdentical(tdata(phyd, "tip"), data.frame(merged[nid.tip,],
+    expect_equal(tdata(phyd, "tip"), data.frame(merged[nid.tip,],
         row.names=lab.tip, check.names=FALSE))
-    checkIdentical(tdata(phyd, "internal"), data.frame(merged[nid.int,],
+    expect_equal(tdata(phyd, "internal"), data.frame(merged[nid.int,],
         row.names=lab.int, check.names=FALSE))
-    checkIdentical(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
+    expect_equal(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
 
     ## as above, but without merging common tip and node column
     phyd <- phylo4d(phy.alt, tip.data=tipDt, node.data=nodDt,
@@ -168,13 +169,13 @@ test.phylo4d.phylo4 <- function() {
     m3 <- data.frame(merge(tipDt, nodDt, all=TRUE, by=0,
         suffix=c(".tip", ".node"))[-1])
     merged <- data.frame(merge(allDt, m3, by=0)[-1])
-    checkIdentical(phyd@data, data.frame(merged,
+    expect_equal(phyd@data, data.frame(merged,
         row.names=nid.all))
-    checkIdentical(tdata(phyd, "tip"), data.frame(merged[nid.tip,],
+    expect_equal(tdata(phyd, "tip"), data.frame(merged[nid.tip,],
         row.names=lab.tip, check.names=FALSE))
-    checkIdentical(tdata(phyd, "internal"), data.frame(merged[nid.int,],
+    expect_equal(tdata(phyd, "internal"), data.frame(merged[nid.int,],
         row.names=lab.int, check.names=FALSE))
-    checkIdentical(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
+    expect_equal(tdata(phyd, "all"), data.frame(merged, row.names=lab.all))
 
     ## case 3: add data matching on character (label) row.names for tips
     row.names(tipDt) <- c(lab.tip, lab.int)[nid.tip.r]
@@ -182,9 +183,9 @@ test.phylo4d.phylo4 <- function() {
 
     ## match with names, tip data
     phyd <- phylo4d(phy.alt, tip.data=tipDt)
-    checkIdentical(phyd@data, data.frame(tipDt[order(nid.tip.r),],
+    expect_equal(phyd@data, data.frame(tipDt[order(nid.tip.r),],
         row.names=nid.tip))
-    checkIdentical(tdata(phyd, "tip"), data.frame(tipDt[order(nid.tip.r),],
+    expect_equal(tdata(phyd, "tip"), data.frame(tipDt[order(nid.tip.r),],
         row.names=lab.tip))
 
     ## case 4: add data matching on mixed rowname types (for tips and
@@ -194,48 +195,49 @@ test.phylo4d.phylo4 <- function() {
 
     ## match with names for tips and numbers for nodes with all data
     phyd <- phylo4d(phy.alt, all.data=allDt)
-    checkIdentical(tdata(phyd, "all"), data.frame(allDt[match(nid.all,
+    expect_equal(tdata(phyd, "all"), data.frame(allDt[match(nid.all,
         nid.all.r),], row.names=lab.all))
-    checkIdentical(tdata(phyd, "tip"), data.frame(allDt[match(nid.tip,
+    expect_equal(tdata(phyd, "tip"), data.frame(allDt[match(nid.tip,
         nid.all.r),], row.names=lab.tip))
-    checkIdentical(tdata(phyd, "internal"), data.frame(allDt[match(nid.int,
+    expect_equal(tdata(phyd, "internal"), data.frame(allDt[match(nid.int,
         nid.all.r),], row.names=lab.int))
-    checkIdentical(phyd@data, data.frame(allDt[match(nid.all, nid.all.r),],
+    expect_equal(phyd@data, data.frame(allDt[match(nid.all, nid.all.r),],
         row.names=nid.all))
 
-}
+})
 
-test.phylo4d.matrix <- function() {
-}
+## test.phylo4d.matrix <- function() {
+## }
 
 # note: this method mostly does phylo4(phylo), then phylo4d(phylo4),
 # then addData methods, which are tested more thoroughly elsewhere;
 # focus here is on metadata and check.node.labels="asdata" arguments
-test.phylo4d.phylo <- function() {
+
+test_that("phylo4d can be built from phylo object", {
     # function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
     #   check.node.labels=c("keep", "drop", "asdata"), annote=list(),
     #   metadata=list(), ...)
 
-    # show that method basically just wraps phylo4d("phylo4")
+    ## show that method basically just wraps phylo4d("phylo4")
     phyd.tr <- phylo4d(tr, tip.data=tipDt, node.data=nodDt,
         all.data=allDt, match.data=TRUE, merge.data=TRUE)
-    checkTrue(class(phyd.tr)=="phylo4d")
+    expect_true(class(phyd.tr)=="phylo4d")
     phyd.phy <- phylo4d(phy.alt, tip.data=tipDt, node.data=nodDt,
         all.data=allDt, match.data=TRUE, merge.data=TRUE)
     # reorder for edge order consistency, then test each slot (except
     # edge labels, b/c phylo object has none)
     phyd.tr <- reorder(phyd.tr)
     phyd.phy <- reorder(phyd.phy)
-    checkIdentical(edges(phyd.tr), edges(phyd.phy))
-    checkIdentical(edgeLength(phyd.tr), edgeLength(phyd.phy))
-    checkIdentical(nNodes(phyd.tr), nNodes(phyd.phy))
-    checkIdentical(tipLabels(phyd.tr), tipLabels(phyd.phy))
-    checkIdentical(nodeLabels(phyd.tr), nodeLabels(phyd.phy))
-    checkIdentical(edgeOrder(phyd.tr), edgeOrder(phyd.phy))
-    checkIdentical(phyd.tr@annote, phyd.phy@annote)
+    expect_equal(edges(phyd.tr), edges(phyd.phy))
+    expect_equal(edgeLength(phyd.tr), edgeLength(phyd.phy))
+    expect_equal(nNodes(phyd.tr), nNodes(phyd.phy))
+    expect_equal(tipLabels(phyd.tr), tipLabels(phyd.phy))
+    expect_equal(nodeLabels(phyd.tr), nodeLabels(phyd.phy))
+    expect_equal(edgeOrder(phyd.tr), edgeOrder(phyd.phy))
+    expect_equal(phyd.tr@annote, phyd.phy@annote)
     # other misc checks
-    checkEquals(phylo4d(phylo4(tr)), phylo4d(tr))
-    checkEquals(phylo4d(phylo4(tr, check.node.labels="drop")),
+    expect_equal(phylo4d(phylo4(tr)), phylo4d(tr))
+    expect_equal(phylo4d(phylo4(tr, check.node.labels="drop")),
         phylo4d(tr, check.node.labels="drop"))
 
     ##
@@ -244,7 +246,7 @@ test.phylo4d.phylo <- function() {
 
     metadata <- list(x="metadata")
     phyd <- phylo4d(tr, metadata=metadata)
-    checkIdentical(metadata, phyd@metadata)
+    expect_equal(metadata, phyd@metadata)
 
     ##
     ## check.node.labels
@@ -253,39 +255,40 @@ test.phylo4d.phylo <- function() {
     # case 0: no node labels
     tr$node.label <- NULL
     phyd <- phylo4d(tr)
-    checkTrue(!hasNodeLabels(phyd))
+    expect_true(!hasNodeLabels(phyd))
 
     # case 1: convert character labels as data
     tr$node.label <- paste("n", 1:4, sep="")
     phyd <- phylo4d(tr, check.node.labels="asdata")
-    checkTrue(!hasNodeLabels(phyd))
-    checkEquals(tdata(phyd, "internal")$labelValues, as.factor(tr$node.label))
+    expect_true(!hasNodeLabels(phyd))
+    expect_equal(tdata(phyd, "internal")$labelValues, as.factor(tr$node.label))
 
     # case 2: convert number-like characters labels to numeric data
     tr$node.label <- as.character(1:4)
     phyd <- phylo4d(tr, check.node.labels="asdata")
-    checkTrue(!hasNodeLabels(phyd))
-    checkIdentical(tdata(phyd, "internal")$labelValues,
+    expect_true(!hasNodeLabels(phyd))
+    expect_equal(tdata(phyd, "internal")$labelValues,
         as.numeric(tr$node.label))
 
     # case 3: convert numeric labels to numeric data
     tr$node.label <- as.numeric(1:4)
     phyd <- phylo4d(tr, check.node.labels="asdata")
-    checkTrue(!hasNodeLabels(phyd))
-    checkIdentical(tdata(phyd, "internal")$labelValues, tr$node.label)
+    expect_true(!hasNodeLabels(phyd))
+    expect_equal(tdata(phyd, "internal")$labelValues, tr$node.label)
 
     # case 4: non-unique labels can be converted to data
     tr$node.label <- rep(99, 4)
     phyd <- phylo4d(tr)
-    checkIdentical(unname(nodeLabels(phyd)), as.character(tr$node.label))
+    expect_equal(unname(nodeLabels(phyd)), as.character(tr$node.label))
     phyd <- phylo4d(tr, check.node.labels="asdata")
-    checkTrue(!hasNodeLabels(phyd))
-    checkIdentical(tdata(phyd, "internal", label.type="column")$labelValues, tr$node.label)
-}
+    expect_true(!hasNodeLabels(phyd))
+    expect_equal(tdata(phyd, "internal", label.type="column")$labelValues, tr$node.label)
+})
 
 ## phylo4d->phylo4d is currently unallowed
-test.phylo4d.phylo4d <- function() {
+
+test_that("phylo4d to phylo4d throws error", {
     phyd <- phylo4d(phy)
-    checkException(phylo4d(phyd))
-}
+    expect_error(phylo4d(phyd))
+})
 
