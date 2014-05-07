@@ -41,222 +41,251 @@ row.names(nodDt) <- nid.int.r
 
 #-----------------------------------------------------------------------
 
-test.formatData <- function() {
-    # function(phy, dt, type=c("tip", "internal", "all"),
-    #   match.data=TRUE, rownamesAsLabels=FALSE,
-    #   label.type=c("rownames", "column"), label.column=1,
-    #   missing.data=c("fail", "warn", "OK"),
-    #   extra.data=c("warn", "OK", "fail"), keep.all=TRUE
+context("test formatData")
 
+## function(phy, dt, type=c("tip", "internal", "all"),
+##   match.data=TRUE, rownamesAsLabels=FALSE,
+##   label.type=c("rownames", "column"), label.column=1,
+##   missing.data=c("fail", "warn", "OK"),
+##   extra.data=c("warn", "OK", "fail"), keep.all=TRUE
+
+test_that("works with data.frame", {
     ## vector data coerced to data.frame (colname dt)
-    checkIdentical(phylobase:::formatData(phy.alt, 1:5),
-        phylobase:::formatData(phy.alt, data.frame(dt=1:5)))
+    expect_equal(phylobase:::formatData(phy.alt, 1:5),
+                 phylobase:::formatData(phy.alt, data.frame(dt=1:5)))
+})
+
+test_that("works with lists of vector", {
     ## list of vector data coerced to data.frame (colnames as given)
-    checkIdentical(phylobase:::formatData(phy.alt, list(a=1:5, b=6:10)),
-        phylobase:::formatData(phy.alt, data.frame(a=1:5, b=6:10)))
+    expect_equal(phylobase:::formatData(phy.alt, list(a=1:5, b=6:10)),
+                 phylobase:::formatData(phy.alt, data.frame(a=1:5, b=6:10)))
+})
+
+test_that("works factors", {
     ## factor data coerced to data.frame (colname dt)
-    checkIdentical(phylobase:::formatData(phy.alt, factor(letters[1:5])),
-        phylobase:::formatData(phy.alt, data.frame(dt=letters[1:5])))
+    expect_equal(phylobase:::formatData(phy.alt, factor(letters[1:5])),
+                 phylobase:::formatData(phy.alt, data.frame(dt=letters[1:5])))
+})
+
+test_that("works with data.frame and 2 columns", {
     ## matrix data coerced to data.frame (colnames V1, V2)
-    checkIdentical(phylobase:::formatData(phy.alt, matrix(1:10, ncol=2)),
-        phylobase:::formatData(phy.alt, data.frame(V1=1:5, V2=6:10)))
+    expect_equal(phylobase:::formatData(phy.alt, matrix(1:10, ncol=2)),
+                 phylobase:::formatData(phy.alt, data.frame(V1=1:5, V2=6:10)))
+})
+
+test_that("works with data.frame colname as given",  {
     ## matrix data coerced to data.frame (colname as given)
-    checkIdentical(phylobase:::formatData(phy.alt, matrix(1:10, ncol=2,
+    expect_equal(phylobase:::formatData(phy.alt, matrix(1:10, ncol=2,
         dimnames=list(NULL, c("a", "b")))),
-        phylobase:::formatData(phy.alt, data.frame(a=1:5, b=6:10)))
+                 phylobase:::formatData(phy.alt, data.frame(a=1:5, b=6:10)))
+})
+
+test_that("fails with non-supported objects (i.e. a phylo4)", {
     ## error if dt is, say, a phylo4 object
-    checkException(phylobase:::formatData(phy.alt, phy.alt))
+    expect_error(phylobase:::formatData(phy.alt, phy.alt))
+})
 
+test_that("fails with column number is out of range", {
     ## error if column number is out of range
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         lab=rev(nid.tip)), type="tip", match.data=FALSE,
-        label.type="column", label.column=3),
-        data.frame(a=c(1:5, rep(NA, 4)), lab=c(rev(nid.tip), rep(NA,
-        4)), row.names=nid.all))
+        label.type="column", label.column=3))
+})
+
+test_that("fails with column name is wrong", {
     ## error if column name is wrong
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         lab=rev(nid.tip)), type="tip", match.data=FALSE,
-        label.type="column", label.column="foo"),
-        data.frame(a=c(1:5, rep(NA, 4)), lab=c(rev(nid.tip), rep(NA,
-        4)), row.names=nid.all))
+        label.type="column", label.column="foo"))
+})
 
 
-    #
-    # matching options
-    #
+##
+## matching options
+##
 
+test_that("matching options work as expected", {
     ## don't match (purely positional)
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         row.names=rev(nid.tip)), type="tip", match.data=FALSE),
         data.frame(a=c(1:5, rep(NA, 4)), row.names=nid.all))
     ## match on rownames (node numbers)
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         row.names=rev(nid.tip)), type="tip", match.data=TRUE),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         row.names=rev(nid.tip)), type="tip"), data.frame(a=c(5:1,
         rep(NA, 4)), row.names=nid.all))
     ## match on rownames (labels)
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         row.names=rev(lab.tip)), type="tip", match.data=TRUE),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
     ## match on rownames (mixed node numbers and labels)
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         row.names=c(rev(lab.tip)[1:3], rev(nid.tip)[4:5])),
         type="tip", match.data=TRUE),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
     ## but fails if rownamesAsLabels is TRUE
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         row.names=c(rev(lab.tip)[1:3], rev(nid.tip)[4:5])),
         type="tip", match.data=TRUE, rownamesAsLabels=TRUE))
+})
 
-    #
-    #   label.type="column" and label.column=2
-    #
+##
+##   label.type="column" and label.column=2
+##
 
+test_that("label.type=column works", {
     ## should ignore label (purely positional) and retain a label col
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         lab=rev(nid.tip)), type="tip", match.data=FALSE,
         label.type="column", label.column=2),
         data.frame(a=c(1:5, rep(NA, 4)), lab=c(rev(nid.tip), rep(NA,
         4)), row.names=nid.all))
     ## match on label column (node numbers)
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         lab=rev(nid.tip)), type="tip", match.data=TRUE,
         label.type="column", label.column=2),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         lab=rev(nid.tip)), type="tip",
         label.type="column", label.column=2),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
     ## match on label column (labels)
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         lab=rev(lab.tip)), type="tip", match.data=TRUE,
         label.type="column", label.column=2),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         lab=rev(lab.tip)), type="tip", match.data=TRUE,
         label.type="column", label.column="lab"),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
     ## match on label column (mixed node numbers and labels)
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         lab=c(rev(lab.tip)[1:3], rev(nid.tip)[4:5])), type="tip",
         match.data=TRUE, label.type="column", label.column=2),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
     ## but fails if rownamesAsLabels is TRUE
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         lab=c(rev(lab.tip)[1:3], rev(nid.tip)[4:5])),
         type="tip", match.data=TRUE, rownamesAsLabels=TRUE,
         label.type="column", label.column=2))
-
     ## try to match internal nodes when type='tips'
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=1:5, row.names=4:8),
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:5, row.names=4:8),
         type="tip"))
     ## and vice versa
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=6:9, row.names=1:4),
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=6:9, row.names=1:4),
         type="internal"))
+})
 
-    #
-    # missing.data
-    #
+##
+## missing.data
+##
 
+test_that("behaves as expected with missing data", {
     ## force error conditions
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip"))
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip",
-        missing.data="fail"))
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip"))
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip",
+                                        missing.data="fail"))
     options(warn=3)
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip",
-        missing.data="warn"))
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip",
+                                        missing.data="warn"))
     options(warn=0)
     ## missing data with matching
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.tip)[-1],
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.tip)[-1],
         row.names=rev(nid.tip)[-1]), type="tip", missing.data="OK"),
         data.frame(a=c(nid.tip[-5], rep(NA, 5))))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.int)[-1],
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.int)[-1],
         row.names=rev(nid.int)[-1]), type="internal", missing.data="OK"),
         data.frame(a=c(rep(NA, 5), nid.int[-4], NA)))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.all)[-1],
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.all)[-1],
         row.names=rev(nid.all)[-1]), type="all", missing.data="OK"),
         data.frame(a=c(nid.all[-9], NA)))
     ## missing data without matching
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.tip)[-1]),
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.tip)[-1]),
         type="tip", match.data=FALSE, missing.data="OK"),
         data.frame(a=c(rev(nid.tip)[-1], rep(NA, 5))))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.int)[-1]),
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.int)[-1]),
         type="internal", match.data=FALSE, missing.data="OK"),
         data.frame(a=c(rep(NA, 5), rev(nid.int)[-1], NA)))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.all)[-1]),
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.all)[-1]),
         type="all", match.data=FALSE, missing.data="OK"),
         data.frame(a=c(rev(nid.all)[-1], NA)))
+})
 
-    #
-    # extra.data
-    #
+##
+## extra.data
+##
 
+test_that("works as expected with extra data", {
     ## force error conditions
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip",
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip",
         missing.data="fail"))
     options(warn=3)
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=0:5, row.names=0:5),
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=0:5, row.names=0:5),
         type="tip", missing="warn"))
-    checkException(phylobase:::formatData(phy.alt, data.frame(a=0:5, row.names=0:5),
+    expect_error(phylobase:::formatData(phy.alt, data.frame(a=0:5, row.names=0:5),
         type="tip"))
     options(warn=0)
     ## extra data with matching
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=c(0L, rev(nid.tip)),
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=c(0L, rev(nid.tip)),
         row.names=c(0, rev(nid.tip))), type="tip", extra.data="OK"),
         data.frame(a=c(nid.tip, rep(NA, 4))))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=c(0L, rev(nid.int)),
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=c(0L, rev(nid.int)),
         row.names=c(0, rev(nid.int))), type="internal", extra.data="OK"),
         data.frame(a=c(rep(NA, 5), nid.int)))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=c(0L, rev(nid.all)),
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=c(0L, rev(nid.all)),
         row.names=c(0, rev(nid.all))), type="all", extra.data="OK"),
         data.frame(a=nid.all))
     ## extra data without matching
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:15),
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:15),
         type="tip", match.data=FALSE, extra.data="OK"),
         data.frame(a=c(1:5, rep(NA, 4))))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:15),
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:15),
         type="internal", match.data=FALSE, extra.data="OK"),
         data.frame(a=c(rep(NA, 5), 1:4)))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:15),
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:15),
         type="all", match.data=FALSE, extra.data="OK"),
         data.frame(a=c(1:9)))
+})
 
+test_that("works as expected with both missing & extra data", {
     ## allow both extra.data and missing.data
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=0:3, row.names=0:3),
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=0:3, row.names=0:3),
         type="tip", extra.data="OK", missing.data="OK"),
         data.frame(a=c(1:3, rep(NA, 6))))
+})
 
-    #
-    # keep.all
-    #
+##
+## keep.all
+##
 
+test_that("keep.all works", {
     ## keep all rows
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         row.names=nid.tip), type="tip", keep.all=TRUE),
         data.frame(a=c(1:5, rep(NA, 4)), row.names=nid.all))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         row.names=nid.tip), type="tip"),
         data.frame(a=c(1:5, rep(NA, 4)), row.names=nid.all))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=6:9,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=6:9,
         row.names=nid.int), type="internal", keep.all=TRUE),
         data.frame(a=c(rep(NA, 5), 6:9), row.names=nid.all))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=6:9,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=6:9,
         row.names=nid.int), type="internal"),
         data.frame(a=c(rep(NA, 5), 6:9), row.names=nid.all))
     ## only keep 'type' rows
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=1:5,
         row.names=nid.tip), type="tip", keep.all=FALSE),
         data.frame(a=c(1:5), row.names=nid.tip))
-    checkIdentical(phylobase:::formatData(phy.alt, data.frame(a=6:9,
+    expect_equal(phylobase:::formatData(phy.alt, data.frame(a=6:9,
         row.names=nid.int), type="internal", keep.all=FALSE),
         data.frame(a=c(6:9), row.names=nid.int))
+})
 
-}
+context("formatData with duplicated labels in object")
 
-test.formatDataWithDup <- function() {
-
+test_that("it works", {
     ## Saving default options
     op <- phylobase.options()
 
@@ -268,192 +297,192 @@ test.formatDataWithDup <- function() {
     tipLabels(phy.dup)[2] <- tipLabels(phy.dup)[1]
 
     ## vector data coerced to data.frame (colname dt)
-    checkIdentical(phylobase:::formatData(phy.dup, 1:5),
+    expect_equal(phylobase:::formatData(phy.dup, 1:5),
         phylobase:::formatData(phy.dup, data.frame(dt=1:5)))
     ## list of vector data coerced to data.frame (colnames as given)
-    checkIdentical(phylobase:::formatData(phy.dup, list(a=1:5, b=6:10)),
+    expect_equal(phylobase:::formatData(phy.dup, list(a=1:5, b=6:10)),
         phylobase:::formatData(phy.dup, data.frame(a=1:5, b=6:10)))
     ## factor data coerced to data.frame (colname dt)
-    checkIdentical(phylobase:::formatData(phy.dup, factor(letters[1:5])),
+    expect_equal(phylobase:::formatData(phy.dup, factor(letters[1:5])),
         phylobase:::formatData(phy.dup, data.frame(dt=letters[1:5])))
     ## matrix data coerced to data.frame (colnames V1, V2)
-    checkIdentical(phylobase:::formatData(phy.dup, matrix(1:10, ncol=2)),
+    expect_equal(phylobase:::formatData(phy.dup, matrix(1:10, ncol=2)),
         phylobase:::formatData(phy.dup, data.frame(V1=1:5, V2=6:10)))
     ## matrix data coerced to data.frame (colname as given)
-    checkIdentical(phylobase:::formatData(phy.dup, matrix(1:10, ncol=2,
+    expect_equal(phylobase:::formatData(phy.dup, matrix(1:10, ncol=2,
         dimnames=list(NULL, c("a", "b")))),
         phylobase:::formatData(phy.dup, data.frame(a=1:5, b=6:10)))
     ## error if dt is, say, a phylo4 object
-    checkException(phylobase:::formatData(phy.dup, phy.dup))
+    expect_error(phylobase:::formatData(phy.dup, phy.dup))
 
     #
     # matching options
     #
 
     ## don't match (purely positional)
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         row.names=rev(nid.tip)), type="tip", match.data=FALSE),
         data.frame(a=c(1:5, rep(NA, 4)), row.names=nid.all))
     ## match on rownames (node numbers)
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         row.names=rev(nid.tip)), type="tip", match.data=TRUE),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         row.names=rev(nid.tip)), type="tip"), data.frame(a=c(5:1,
         rep(NA, 4)), row.names=nid.all))
     ## match on rownames (labels)
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=c(1,3,4,5),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=c(1,3,4,5),
         row.names=rev(lab.tip[-2])), type="tip", match.data=TRUE),
         data.frame(a=c(5,5,4,3,1, rep(NA, 4)), row.names=nid.all))
     ## match on rownames (mixed node numbers and labels)
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=c(1,2,3,4,5),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=c(1,2,3,4,5),
         row.names=c(rev(lab.tip)[1:3], rev(nid.tip)[4:5])),
         type="tip", match.data=TRUE),
         data.frame(a=c(5,4,3,2,1, rep(NA, 4)), row.names=nid.all))
     ## but fails if rownamesAsLabels is TRUE
-    checkException(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_error(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         row.names=c(rev(lab.tip)[1:3], rev(nid.tip)[4:5])),
         type="tip", match.data=TRUE, rownamesAsLabels=TRUE))
 
-    #
-    #   label.type="column" and label.column=2
-    #
+    ##
+    ##   label.type="column" and label.column=2
+    ##
 
     ## should ignore label (purely positional) and retain a label col
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         lab=rev(nid.tip)), type="tip", match.data=FALSE,
         label.type="column", label.column=2),
         data.frame(a=c(1:5, rep(NA, 4)), lab=c(rev(nid.tip), rep(NA,
         4)), row.names=nid.all))
     ## match on label column (node numbers)
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         lab=rev(nid.tip)), type="tip", match.data=TRUE,
         label.type="column", label.column=2),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         lab=rev(nid.tip)), type="tip",
         label.type="column", label.column=2),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
     ## match on label column (labels)
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:4,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:4,
         lab=rev(lab.tip[-2])), type="tip", match.data=TRUE,
         label.type="column", label.column=2),
         data.frame(a=as.integer(c(4, 4:1, rep(NA, 4))), row.names=nid.all))
     ## match on label column (mixed node numbers and labels)
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         lab=c(rev(lab.tip)[1:3], rev(nid.tip)[4:5])), type="tip",
         match.data=TRUE, label.type="column", label.column=2),
         data.frame(a=c(5:1, rep(NA, 4)), row.names=nid.all))
     ## but fails if rownamesAsLabels is TRUE
-    checkException(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_error(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         lab=c(rev(lab.tip)[1:3], rev(nid.tip)[4:5])),
         type="tip", match.data=TRUE, rownamesAsLabels=TRUE,
         label.type="column", label.column=2))
 
     ## try to match internal nodes when type='tips'
-    checkException(phylobase:::formatData(phy.dup, data.frame(a=1:5, row.names=4:8),
+    expect_error(phylobase:::formatData(phy.dup, data.frame(a=1:5, row.names=4:8),
         type="tip"))
     ## and vice versa
-    checkException(phylobase:::formatData(phy.dup, data.frame(a=6:9, row.names=1:4),
+    expect_error(phylobase:::formatData(phy.dup, data.frame(a=6:9, row.names=1:4),
         type="internal"))
 
-    #
-    # missing.data
-    #
+    ##
+    ## missing.data
+    ##
 
     ## force error conditions
-    checkException(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip"))
-    checkException(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip",
+    expect_error(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip"))
+    expect_error(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip",
         missing.data="fail"))
     options(warn=3)
-    checkException(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip",
+    expect_error(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip",
         missing.data="warn"))
     options(warn=0)
     ## missing data with matching
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.tip)[-1],
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.tip)[-1],
         row.names=rev(nid.tip)[-1]), type="tip", missing.data="OK"),
         data.frame(a=c(nid.tip[-5], rep(NA, 5))))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.int)[-1],
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.int)[-1],
         row.names=rev(nid.int)[-1]), type="internal", missing.data="OK"),
         data.frame(a=c(rep(NA, 5), nid.int[-4], NA)))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.all)[-1],
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.all)[-1],
         row.names=rev(nid.all)[-1]), type="all", missing.data="OK"),
         data.frame(a=c(nid.all[-9], NA)))
     ## missing data without matching
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.tip)[-1]),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.tip)[-1]),
         type="tip", match.data=FALSE, missing.data="OK"),
         data.frame(a=c(rev(nid.tip)[-1], rep(NA, 5))))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.int)[-1]),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.int)[-1]),
         type="internal", match.data=FALSE, missing.data="OK"),
         data.frame(a=c(rep(NA, 5), rev(nid.int)[-1], NA)))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.all)[-1]),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.all)[-1]),
         type="all", match.data=FALSE, missing.data="OK"),
         data.frame(a=c(rev(nid.all)[-1], NA)))
 
-    #
-    # extra.data
-    #
+    ##
+    ## extra.data
+    ##
 
-   ## force error conditions
-    checkException(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip",
+    ## force error conditions
+    expect_error(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip",
         missing.data="fail"))
     options(warn=3)
-    checkException(phylobase:::formatData(phy.dup, data.frame(a=0:5, row.names=0:5),
+    expect_error(phylobase:::formatData(phy.dup, data.frame(a=0:5, row.names=0:5),
         type="tip", missing="warn"))
-    checkException(phylobase:::formatData(phy.dup, data.frame(a=0:5, row.names=0:5),
+    expect_error(phylobase:::formatData(phy.dup, data.frame(a=0:5, row.names=0:5),
         type="tip"))
     options(warn=0)
     ## extra data with matching
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=c(0L, rev(nid.tip)),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=c(0L, rev(nid.tip)),
         row.names=c(0, rev(nid.tip))), type="tip", extra.data="OK"),
         data.frame(a=c(nid.tip, rep(NA, 4))))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=c(0L, rev(nid.int)),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=c(0L, rev(nid.int)),
         row.names=c(0, rev(nid.int))), type="internal", extra.data="OK"),
         data.frame(a=c(rep(NA, 5), nid.int)))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=c(0L, rev(nid.all)),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=c(0L, rev(nid.all)),
         row.names=c(0, rev(nid.all))), type="all", extra.data="OK"),
         data.frame(a=nid.all))
     ## extra data without matching
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:15),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:15),
         type="tip", match.data=FALSE, extra.data="OK"),
         data.frame(a=c(1:5, rep(NA, 4))))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:15),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:15),
         type="internal", match.data=FALSE, extra.data="OK"),
         data.frame(a=c(rep(NA, 5), 1:4)))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:15),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:15),
         type="all", match.data=FALSE, extra.data="OK"),
         data.frame(a=c(1:9)))
 
     ## allow both extra.data and missing.data
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=0:3, row.names=0:3),
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=0:3, row.names=0:3),
         type="tip", extra.data="OK", missing.data="OK"),
         data.frame(a=c(1:3, rep(NA, 6))))
 
-    #
-    # keep.all
-    #
+    ##
+    ## keep.all
+    ##
 
     ## keep all rows
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         row.names=nid.tip), type="tip", keep.all=TRUE),
         data.frame(a=c(1:5, rep(NA, 4)), row.names=nid.all))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         row.names=nid.tip), type="tip"),
         data.frame(a=c(1:5, rep(NA, 4)), row.names=nid.all))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=6:9,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=6:9,
         row.names=nid.int), type="internal", keep.all=TRUE),
         data.frame(a=c(rep(NA, 5), 6:9), row.names=nid.all))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=6:9,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=6:9,
         row.names=nid.int), type="internal"),
         data.frame(a=c(rep(NA, 5), 6:9), row.names=nid.all))
     ## only keep 'type' rows
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=1:5,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=1:5,
         row.names=nid.tip), type="tip", keep.all=FALSE),
         data.frame(a=c(1:5), row.names=nid.tip))
-    checkIdentical(phylobase:::formatData(phy.dup, data.frame(a=6:9,
+    expect_equal(phylobase:::formatData(phy.dup, data.frame(a=6:9,
         row.names=nid.int), type="internal", keep.all=FALSE),
         data.frame(a=c(6:9), row.names=nid.int))
 
     ## restoring default options
     phylobase.options(op)
-}
+})
