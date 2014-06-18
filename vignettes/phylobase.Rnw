@@ -88,13 +88,13 @@ plot(rand_p4_tree)
 All fine and good, but how to we find out about all the great features of the \code{phylobase} plotting function?  \code{R} has two nifty ways to find it, the first is to simply put a question mark in front of the whole call:
 
 <<doc0,eval=FALSE>>=
-?plot(rand_p4_tree)
+`?`(plot(rand_p4_tree))
 @
 
 \code{R} looks at the class of the \code{rand\_p4\_tree} object and takes us to the correct help file (note: this only works with \code{S4} objects).  The second ways is handy if you already know the class of your object, or want to compare to generics for different classes:
 
 <<doc1,eval=FALSE>>=
-method?plot("phylo4")
+`?`(method, plot("phylo4"))
 @
 
 More information about how \code{S4} documentation works can be found in the methods package, by running the following command.
