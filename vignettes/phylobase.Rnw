@@ -20,7 +20,7 @@
 \newcommand{\code}[1]{{{\tt #1}}}
 
 \title{The \code{phylo4} S4 classes and methods}
-\author{Ben Bolker \& Peter Cowan}
+\author{Ben Bolker, Peter Cowan \& Fran\c{c}ois Michonneau}
 \date{\today}
 
 \begin{document}
@@ -179,7 +179,11 @@ names(geospiza_raw)
 @
 
 Convert the \code{S3} tree to a \code{S4 phylo4} object using the \code{as()}
-function: <<convgeodata>>= (g1 <- as(geospiza_raw$tree, "phylo4")) @
+function:
+
+<<convgeodata>>=
+(g1 <- as(geospiza_raw$tree, "phylo4"))
+@
 
 The (internal) nodes appear with labels \verb+<NA>+ because
 they are not defined:
@@ -208,39 +212,8 @@ Print tip labels:
 <<tiplabelgeodata>>=
 tipLabels(g1)
 @
+
 (\code{labels(g1,"tip")} would also work.)
-
-
-Print node numbers (in edge matrix order):
-<<nodenumbergeodata>>=
-nodeId(g1, type='all')
-@
-
-Print edge labels (also empty in this case --- therefore
-all \code{NA}):
-<<edgelabelgeodata>>=
-edgeLabels(g1)
-@
-
-Is it rooted?
-<<rootedgeodata>>=
-isRooted(g1)
-@
-
-Which node is the root?
-<<rootnodegeodata>>=
-rootNode(g1)
-@
-
-Does it contain any polytomies?
-<<polygeodata>>=
-hasPoly(g1)
-@
-
-Does it have information on branch lengths?
-<<hasbrlengeodata>>=
-hasEdgeLength(g1)
-@
 
 You can modify labels and other aspects of the tree --- for example, to convert
 all the labels to lower case:
@@ -256,6 +229,85 @@ and 13 (which happen to be the only labels with uppercase letters):
 tipLabels(g1)[c(11, 13)] <- c("platyspiza", "pinaroloxias")
 @
 
+Note that for a given tree, \code{phylobase} always return the \code{tipLabels}
+in the same order.
+
+Print node numbers (in edge matrix order):
+<<nodenumbergeodata>>=
+nodeId(g1, type='all')
+@
+
+Does it have information on branch lengths?
+<<hasbrlengeodata>>=
+hasEdgeLength(g1)
+@
+
+It does! What do they look like?
+<<edgeLength-geodata>>=
+edgeLength(g1)
+@ 
+
+Note that the root has \verb+<NA>+ as its length.
+
+Print edge labels (also empty in this case --- therefore all \code{NA}): 
+
+<<edgelabelgeodata>>=
+edgeLabels(g1)
+@
+
+You can also use this function to label specific edges:
+<<edgelabel-assign-geodata>>=
+edgeLabels(g1)["23-24"] <- "an edge"
+edgeLabels(g1)
+@ 
+
+The edge labels are named according to the nodes they connect
+(ancestor-descendant). You can get the edge(s) associated with a particular
+node:
+
+<<getEdge-geodata>>=
+getEdge(g1, 24) # default uses descendant node
+getEdge(g1, 24, type="ancestor") # edges using ancestor node
+@
+
+These results can in turn be passed to the function \code{edgeLength} to
+retrieve the length of a given set of edges:
+
+<<getEdge-edgeLength>>=
+edgeLength(g1)[getEdge(g1, 24)]
+edgeLength(g1)[getEdge(g1, 24, "ancestor")]
+@ 
+
+Is it rooted?
+
+<<rootedgeodata>>=
+isRooted(g1)
+@
+
+Which node is the root?
+<<rootnodegeodata>>=
+rootNode(g1)
+@
+
+Does it contain any polytomies?
+<<polygeodata>>=
+hasPoly(g1)
+@
+
+Is the tree ultrametric?
+<<ultrametric-geodata>>=
+isUltrametric(g1)
+@ 
+
+You can also get the depth (distance from the root) of any given node or the
+tips:
+<<nodeDepth-geodata>>=
+nodeDepth(g1, 23)
+depthTips(g1)
+@ 
+
+
+
 \section{Trees with data}
 
 The \code{phylo4d} class matches trees with data, or combines them with a data
@@ -266,40 +318,41 @@ it with the tree. However, since \emph{G. olivacea} is included in the tree but
 not in the data set, we will initially run into some trouble:
 
 <<geomergedata,eval=FALSE>>=
-g2 <- phylo4d(g1, geospiza_raw$data)
+g1 <- as(geospiza_raw$tree, "phylo4")
+geodata <- geospiza_raw$data
+g2 <- phylo4d(g1, geodata)
 @
 
 <<geomergeerr1,echo=FALSE>>=
-g2 <- try(phylo4d(g1, geospiza_raw$data),silent=TRUE)
+g2 <- try(phylo4d(g1, geodata),silent=TRUE)
 cat(as.character(g2))
 @
 
-We have two problems --- the first is that we forgot to lowercase the labels on
-the data to match the tip labels:
-
-<<geomergenames>>=
-gdata <- geospiza_raw$data
-row.names(gdata) <- tolower(row.names(gdata))
-@
-
-To deal with the second problem (missing data for \emph{G. olivacea}), we have a
-few choices. The easiest is to use \code{missing.data="warn"} to allow R to
+To deal with \emph{G. olivacea} missing from the data, we have a few
+choices. The easiest is to use \code{missing.data="warn"} to allow \code{R} to
 create the new object with a warning (you can also use \code{missing.data="OK"}
 to proceed without warnings):
 
 <<geomerge2,tidy=FALSE>>=
-g2 <- phylo4d(g1, gdata, missing.data="warn")
+g2 <- phylo4d(g1, geodata, missing.data="warn")
 @
 
 Another way to deal with this would be to use \code{prune()} to drop the
 offending tip from the tree first:
 
 <<geomerge3,results='hide'>>=
-g1B <- prune(g1, "olivacea")
-phylo4d(g1B, gdata)
+g1sub <- prune(g1, "olivacea")
+g1B <- phylo4d(g1sub, geodata)
 @
 
-You can summarize the new object:
+The difference between the two objects is that the species \emph{G. olivacea} is
+still present in the tree but has no data (i.e., \verb+NA+) associated with
+it. In the other case, \textit{G. olivacea} is not included in the tree
+anymore. The approach you choose depends on the goal of your analysis.
+
+You can summarize the new object with the function \code{summary}. It breaks
+down the statistics about the traits based on whether it is associated with the
+tips for the internal nodes:
 <<geomergesum>>=
 summary(g2)
 @
