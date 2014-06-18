@@ -1,14 +1,13 @@
 \documentclass{article}
-%\VignettePackage{phylobase}
+%\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{A developers guide for contributing to phylobase}
 
 \usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
 \usepackage{graphicx}       % for jpeg and pdf figure support
-\usepackage[usenames,dvipsnames]{color} % loads colors w/ easy names for coloring our links
 \definecolor{DarkBlue}{rgb}{0,0,0.56}
-\usepackage[colorlinks=true,urlcolor=DarkBlue,linkcolor=BrickRed,bookmarks=true]{hyperref}
+\usepackage[colorlinks=true,bookmarks=true]{hyperref}
 \usepackage{url}
-\usepackage[noae]{Sweave}
+
 
 \newcommand{\code}[1]{{{\tt #1}}}
 \newcommand{\pb}{\texttt{phylobase }}
@@ -26,19 +25,22 @@
 \date{\today}
 
 \begin{document}
-%% inspired by the adephylo vignette
-\DefineVerbatimEnvironment{Sinput}{Verbatim}
-{formatcom={\color{BrickRed}},fontsize=\footnotesize, baselinestretch=0.75}
-\DefineVerbatimEnvironment{Soutput}{Verbatim}
-{formatcom={\color{DarkBlue}},fontsize=\footnotesize, baselinestretch=0.75}
 
-\SweaveOpts{fig=FALSE, eps=FALSE, pdf=TRUE, width=6, height=6}
+
+<<include=FALSE>>=
+library(knitr)
+opts_chunk$set(
+    fig.keep='none', dev='pdf', fig.width=6, fig.height=6,
+    latex.options.color="usenames,dvipsnames"
+)
+@
+
 
 \maketitle
 
 \tableofcontents
 
-<<setOptions, echo=false>>=
+<<setOptions, echo=FALSE>>=
 options(width=40)
 @
 
@@ -54,7 +56,7 @@ The R-Forge manual\footnote{\url{http://r-forge.r-project.org/R-Forge_Manual.pdf
 
 On feature of R-Forge is a package repository that allows prerelease versions of \pb to be install directly from \code{R}.
 
-<<RforgeInstall, eval=false>>=
+<<RforgeInstall, eval=FALSE>>=
 install.packages("phylobase", repos = "http://r-forge.r-project.org")
 @
 
