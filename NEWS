@@ -9,6 +9,9 @@
 
                 CHANGES IN phylobase VERSION 0.6.10
 
+   *  Initial basic support for converting RNeXML objects in phylo4 and phylo4d
+      format.
+
    *  All documentation is now in Roxygen format
 
    *  New methods: internalEdges(), terminalEdges()

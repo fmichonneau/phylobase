@@ -43,8 +43,8 @@
 ##' may lead to surprising results, so this practice should be avoided.
 ##' 
 ##' @name phylo4d
-##' @param x an object of class \code{phylo4}, \code{phylo} or a matrix of edges
-##' (see above)
+##' @param x an object of class \code{phylo4}, \code{phylo},
+##' \code{nexml} or a matrix of edges (see above)
 ##' @param tip.data a data frame (or object to be coerced to one) containing
 ##' only tip data (Optional)
 ##' @param node.data a data frame (or object to be coerced to one) containing
@@ -279,6 +279,21 @@ setMethod("phylo4d", c("phylo4d"), function(x, ...) {
                " the data attached to it look at the help for tdata()<-,")
       })
 
+### first arg is nexml
+##' @rdname phylo4d-methods
+##' @aliases nexml,phylo4d-method
+setMethod("phylo4d", c("nexml"), function(x) {
+    tr <- RNeXML::get_trees_list(x)
+    chr <- RNeXML::get_characters(x)
+    if (is.null(tr[[1]])) {
+        new("phylo4d")
+    } else {
+        if (length(tr) > 1) {
+            warning("Only the first tree has been imported.")
+        } 
+        phylo4d(x=tr[[1]][[1]], chr)
+    }
+})
 
 
 ### Core function that takes care of the data

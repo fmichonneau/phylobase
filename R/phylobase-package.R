@@ -68,12 +68,12 @@
 ##' @useDynLib phylobase
 ##' @import methods
 ##' @import ape
+##' @import RNeXML
 ##' @importFrom Rcpp evalCpp
 ##' @importFrom graphics plot
 ##' @importFrom stats reorder
 ##' @importFrom utils head tail
 ##' @importFrom ade4 newick2phylog
-##'
 ##'
 ## exportMethod should only be used for generics defined outside the package!
 ## @exportMethod print head tail reorder plot summary

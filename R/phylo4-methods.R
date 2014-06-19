@@ -21,6 +21,10 @@
 ##' labels will be assigned. The labels, whether user-specified or internally
 ##' generated, must be unique as they are used to join species data with
 ##' phylogenetic trees.
+##'
+##' \code{phylobase} also allows to create \code{phylo4} objects using
+##' the function \code{phylo4()} from objects of the classes:
+##' \code{phylo} (from \code{ape}), and \code{nexml} (from \code{RNeXML}).
 ##' 
 ##' @name phylo4-methods
 ##' @docType methods
@@ -156,4 +160,19 @@ setMethod("phylo4", c("phylo"), function(x, check.node.labels=c("keep",
   res@annote <- annote
 
   return(res)
+})
+
+##' @rdname phylo4-methods
+##' @aliases nexml,phylo4-method
+setMethod("phylo4", c("nexml"), function(x) {
+    tr <- RNeXML::get_trees_list(x)
+    if (is.null(tr)) {
+        new("phylo4")
+    }
+    else {
+        if (length(tr) > 1) {
+            warning("Only the first tree has been imported.")
+        }        
+        phylo4(x=tr[[1]][[1]])
+    }
 })

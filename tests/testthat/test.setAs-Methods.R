@@ -2,6 +2,13 @@
 # --- Test setAs-Methods.R ---
 #
 
+### Get all the test files
+if (Sys.getenv("RCMDCHECK") == FALSE) {
+    pth <- file.path(getwd(), "..", "inst", "nexmlfiles")
+} else {
+    pth <- system.file(package="phylobase", "nexmlfiles")
+}
+
 # create ape::phylo version of a simple tree for testing
 nwk <- "((t1:0.1,t2:0.2)n7:0.7,(t3:0.3,(t4:0.4,t5:0.5)n9:0.9)n8:0.8)n6:0.6;"
 tr <- ape::read.tree(text=nwk)
@@ -26,6 +33,10 @@ phy.alt@label <- rev(phy@label)
 phy.alt@edge <- phy@edge[c(6:9, 1:5), ]
 phy.alt@edge.length <- phy@edge.length[c(7:9, 1:6)]
 phy.alt@edge.label <- phy@edge.label[c(8:9, 1:7)]
+
+## NeXML files
+compFile <- file.path(pth, "comp_analysis.xml")
+stopifnot(file.exists(compFile))
 
 #-----------------------------------------------------------------------
 
@@ -75,6 +86,25 @@ test_that("phylo to phylo4d", {
 
 ## test.multiPhylo4.As.multiPhylo <- function() {
 ## }
+
+test_that("nexml to phylo4", {
+    nxml <- RNeXML::nexml_read(compFile)
+    phy4 <- as(nxml, "phylo4")
+    expect_true(all(tipLabels(phy4) %in% paste("taxon", 1:10, sep="_")))
+    expect_equal(nEdges(phy4), 19)
+})
+
+test_that("nexml to phylo4d", {
+    nxml <- RNeXML::nexml_read(compFile)
+    phy4d <- as(nxml, "phylo4d")
+    nxmldt <- RNeXML::get_characters(nxml)
+    phy4d2 <- phylo4d(get_trees(nxml), nxmldt[sample(1:nrow(nxmldt)), ])
+    expect_true(all(tipLabels(phy4d) %in% paste("taxon", 1:10, sep="_")))
+    expect_equal(nEdges(phy4d), 19)
+    expect_equal(phy4d, phy4d2)
+    expect_equal(ncol(tdata(phy4d, "tip")), 2)
+    expect_true(all(names(tdata(phy4d, "tip")) %in% c("log.snout.vent.length", "reef.dwelling")))
+})
 
 test_that("phylo4 to phylo", {
   ## phylo tree in unknown order

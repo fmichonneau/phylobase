@@ -5,17 +5,18 @@
 ##' Translation functions to convert between phylobase objects
 ##' (\code{phylo4} or \code{phylo4d}), and objects used by other
 ##' comparative methods packages in R: \code{ape} objects
-##' (\code{phylo}, \code{multiPhylo}), \code{ade4} objects
-##' (\code{phylog}, \emph{now deprecated}), and to \code{data.frame}
-##' representation.
+##' (\code{phylo}, \code{multiPhylo}), \code{RNeXML} object
+##' (\code{nexml}), \code{ade4} objects (\code{phylog}, \emph{now
+##' deprecated}), and to \code{data.frame} representation.
 ##'
 ##' @name setAs
 ##' @docType methods
 ##' @section Usage: \code{as(object, class)}
 ##' @author Ben Bolker, Thibaut Jombart, Marguerite Butler, Steve
-##' Kembel
+##' Kembel, Francois Michonneau
 ##' @seealso generic \code{\link[methods]{as}}, \code{\link{phylo4}},
-##' \code{\link{phylo4d}}, \code{\link{extractTree}}, the original
+##' \code{\link{phylo4d}}, \code{\link{extractTree}},
+##' \code{nexml} class from the \code{RNeXML} package,
 ##' \code{\link[ade4]{phylog}} from the \code{ade4} package and
 ##' \code{\link[ape]{as.phylo}} from the \code{ape} package.
 ##' @keywords methods
@@ -128,7 +129,20 @@ setAs("phylo", "phylo4d", function(from, to) {
     phylo4d(as(from, "phylo4"), tip.data = data.frame())
 })
 
+##' @name setAs
+##' @rdname setAs-methods
+##' @aliases as,nexml,phylo4-method
+setAs("nexml", "phylo4", function(from, to) {
+    phylo4(from)
+})
 
+##' @name setAs
+##' @rdname setAs-methods
+##' @aliases as,nexml,phylo4d-method
+setAs("nexml", "phylo4d", function(from, to) {
+    phylo4d(from)
+})
+    
 #######################################################
 ## Exporting to ape
 

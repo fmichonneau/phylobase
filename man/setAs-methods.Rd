@@ -17,7 +17,7 @@ formats}
 Translation functions to convert between phylobase objects
 (\code{phylo4} or \code{phylo4d}), and objects used by other
 comparative methods packages in R: \code{ape} objects
-(\code{phylo}, \code{multiPhylo}), \code{RNeXML} objects
+(\code{phylo}, \code{multiPhylo}), \code{RNeXML} object
 (\code{nexml}), \code{ade4} objects (\code{phylog}, \emph{now
 deprecated}), and to \code{data.frame} representation.
 }
@@ -51,8 +51,8 @@ Kembel, Francois Michonneau
 }
 \seealso{
 generic \code{\link[methods]{as}}, \code{\link{phylo4}},
-\code{\link{phylo4d}}, \code{\link{extractTree}}, the original
-\code{\link[RNeXML]{nexml}} from the \code{RNeXML} package,
+\code{\link{phylo4d}}, \code{\link{extractTree}},
+\code{nexml} class from the \code{RNeXML} package,
 \code{\link[ade4]{phylog}} from the \code{ade4} package and
 \code{\link[ape]{as.phylo}} from the \code{ape} package.
 }

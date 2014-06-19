@@ -2,6 +2,13 @@
 # --- Test class-phylo4d.R ---
 #
 
+### Get all the test files
+if (Sys.getenv("RCMDCHECK") == FALSE) {
+    pth <- file.path(getwd(), "..", "inst", "nexmlfiles")
+} else {
+    pth <- system.file(package="phylobase", "nexmlfiles")
+}
+
 ## create ape::phylo version of a simple tree for testing
 nwk <- "((t1:0.1,t2:0.2)n7:0.7,(t3:0.3,(t4:0.4,t5:0.5)n9:0.9)n8:0.8)n6:0.6;"
 tr <- ape::read.tree(text=nwk)
@@ -42,6 +49,11 @@ nodDt <- data.frame(c=letters[nid.int.r], e=10*nid.int.r)
 row.names(allDt) <- nid.all.r
 row.names(tipDt) <- nid.tip.r
 row.names(nodDt) <- nid.int.r
+
+## NeXML files
+compFile <- file.path(pth, "comp_analysis.xml")
+stopifnot(file.exists(compFile))
+
 
 #-----------------------------------------------------------------------
 
@@ -292,3 +304,14 @@ test_that("phylo4d to phylo4d throws error", {
     expect_error(phylo4d(phyd))
 })
 
+test_that("nexml to phylo4d", {
+    nxml <- RNeXML::nexml_read(compFile)
+    phy4d <- phylo4d(nxml)
+    nxmldt <- RNeXML::get_characters(nxml)
+    phy4d2 <- phylo4d(get_trees(nxml), nxmldt[sample(1:nrow(nxmldt)), ])
+    expect_true(all(tipLabels(phy4d) %in% paste("taxon", 1:10, sep="_")))
+    expect_equal(nEdges(phy4d), 19)
+    expect_equal(phy4d, phy4d2)
+    expect_equal(ncol(tdata(phy4d, "tip")), 2)
+    expect_true(all(names(tdata(phy4d, "tip")) %in% c("log.snout.vent.length", "reef.dwelling")))
+})

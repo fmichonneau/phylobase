@@ -2,6 +2,17 @@
 # --- Test class-phylo4.R ---
 #
 
+### Get all the test files
+if (Sys.getenv("RCMDCHECK") == FALSE) {
+    pth <- file.path(getwd(), "..", "inst", "nexmlfiles")
+} else {
+    pth <- system.file(package="phylobase", "nexmlfiles")
+}
+
+## NeXML files
+compFile <- file.path(pth, "comp_analysis.xml")
+stopifnot(file.exists(compFile))
+
 op <- phylobase.options()
 
 context("test phylo4 class")
@@ -98,4 +109,11 @@ test_that("phylo4 can be built from phylo (tests on what's not done in setAs tes
     phy <- phylo4(tr, check.node.labels="drop")
     expect_true(!hasNodeLabels(phy))
     phylobase.options(op)
+})
+
+test_that("nexml to phylo4", {
+    nxml <- RNeXML::nexml_read(compFile)
+    phy4 <- phylo4(nxml)
+    expect_true(all(tipLabels(phy4) %in% paste("taxon", 1:10, sep="_")))
+    expect_equal(nEdges(phy4), 19)
 })
