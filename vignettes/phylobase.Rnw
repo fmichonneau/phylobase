@@ -1,5 +1,4 @@
 \documentclass{article}
-%\VignettePackage{phylo4}
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{phylo4: classes and methods for phylogenetic trees and data}
 
@@ -306,8 +305,6 @@ nodeDepth(g1, 23)
 depthTips(g1)
 @ 
 
-
-
 \section{Trees with data}
 
 The \code{phylo4d} class matches trees with data, or combines them with a data
@@ -317,7 +314,7 @@ Now we'll take the \emph{Geospiza} data from \verb+geospiza_raw$data+ and merge
 it with the tree. However, since \emph{G. olivacea} is included in the tree but
 not in the data set, we will initially run into some trouble:
 
-<<geomergedata,eval=FALSE>>=
+<<geomergedata>>=
 g1 <- as(geospiza_raw$tree, "phylo4")
 geodata <- geospiza_raw$data
 g2 <- phylo4d(g1, geodata)
@@ -381,8 +378,8 @@ The \code{subset} command offers a variety of ways of extracting portions of a
     from this node}
 \end{description}
 
-Different ways to extract the \emph{fuliginosa}-\emph{scandens}
-clade:
+Different ways to extract the \emph{fuliginosa}-\emph{scandens} clade:
+
 <<geoextract,results='hide'>>=
 subset(g2, tips.include=c("fuliginosa", "fortis", "magnirostris",
             "conirostris", "scandens"))
@@ -390,15 +387,14 @@ subset(g2, node.subtree=21)
 subset(g2, mrca=c("scandens", "fortis"))
 @
 
-One could drop the clade by  doing
-<<geodrop,results='hide'>>=
-try(
+One could drop the clade by doing
+
+<<geodrop, results='hide'>>=
 subset(g2, tips.exclude=c("fuliginosa", "fortis", "magnirostris",
             "conirostris", "scandens"))
-    , silent=TRUE)
-try(
-subset(g2, tips.exclude=names(descendants(g2 ,MRCA(g2, c("difficilis", "fortis")))))
-    , silent=TRUE)
+subset(g2, tips.exclude=names(descendants(g2, MRCA(g2, c("difficilis",
+               "fortis")))))
+    
 @
 
 % This isn't implemented yet
@@ -415,27 +411,75 @@ subset(g2, tips.exclude=names(descendants(g2 ,MRCA(g2, c("difficilis", "fortis")
 
 \section{Tree-walking}
 
-\code{getnodes},
-\code{children}, \code{parent},
-\code{descendants}, \code{ancestors},
-\code{siblings},
-\code{MRCA} \ldots
+\code{phylobase} provides many functions that allows users to explore
+relationships between nodes on a tree (tree-walking and tree traversal). Most
+functions work by specifying the \code{phylo4} (or \code{phylo4d}) object as the
+first argument, the node numbers/labels as the second argument (followed by some
+additional arguments).
 
-generally take a \code{phylo4} object, a node (specified by number or name) and
-return a named vector of node numbers.
+\code{getNode} allows you to find a node based on its node number or its
+label. It returns a vector with node numbers as values and labels as names:
 
-\section{multiPhylo classes}
+<<getnode>>=
+data(geospiza)
+getNode(geospiza, 10)
+getNode(geospiza, "pauper")
+@ 
 
-Fix me!
+If no node is specified, they are all returned, and if a node can't be found
+it's returned as a \verb+NA+. It is possible to control what happens when a node
+can't be found:
+
+<<getnode2>>=
+getNode(geospiza)
+getNode(geospiza, 10:14)
+getNode(geospiza, "melanogaster", missing="OK") # no warning
+getNode(geospiza, "melanogaster", missing="warn") # warning!
+@ 
+
+\code{children} and \code{ancestor} give the immediate neighboring nodes:
+
+<<children>>=
+children(geospiza, 16)
+ancestor(geospiza, 16)
+@ 
+
+while \code{descendants} and \code{ancestors} can traverse the tree up to the
+tips or root respectively:
+
+<<descendants>>=
+descendants(geospiza, 16)    # by default returns only the tips
+descendants(geospiza, "all") # also include the internal nodes
+ancestors(geospiza, 20)
+ancestors(geospiza, 20, "ALL") # uppercase ALL includes self
+@ 
+
+\code{siblings} returns the other node(s) associated with the same ancestor:
+
+<<siblings>>=
+siblings(geospiza, 20)
+siblings(geospiza, 20, include.self=TRUE)
+@ 
+
+\code{MRCA} returns the most common recent ancestor for a set of tips, and
+shortest path returns the nodes connecting 2 nodes:
+
+<<mrca>>=
+MRCA(geospiza, 1:6)
+shortestPath(geospiza, 4, "pauper")
+@ 
+
+\section{multiPhylo4 classes}
+
+\code{multiPhylo4} classes are not yet implemented but will be coming soon.
+
 \section{Examples}
 
 \subsection{Constructing a Brownian motion trait simulator}
 
-This section will describe two (?) ways of constructing a simulator that
-generates trait values for extant species (tips) given a tree with branch
-lengths, assuming a model of Brownian motion.
-
-\subsubsection{the easy way}
+This section will describe a way of constructing a simulator that generates
+trait values for extant species (tips) given a tree with branch lengths,
+assuming a model of Brownian motion.
 
 We can use \code{as(tree,"phylo4vcov")} to coerce the tree into a
 variance-covariance matrix form, and then use \code{mvrnorm} from the
@@ -474,31 +518,31 @@ treed <- phylo4d(tree, tip.data=as.data.frame(trvec))
 plot(treed)
 @
 
-\subsubsection{The hard way}
+% \subsubsection{The hard way}
 
-<<tidy=FALSE>>=
-## add node labels so we can match to data
-nodeLabels(tree) <- as.character(nodeId(tree, "internal"))
-## ordering will make sure that we have ancestor value
-## defined before descendant
-tree <- reorder(tree, "preorder")
-edgemat <- edges(tree)
-## set aside space for values
-nodevals <- numeric(nrow(edgemat))
-## label data in edge matrix order
-names(nodevals) <- labels(tree, "all")[nodeId(tree, "all")]
-## variance is proportional to edge length; drop first
-## element of edge length, which is NA
-dvals <- rnorm(nrow(edgemat) - 1, sd=edgeLength(tree)[-1]^2)
-## indexing: ind[node number] gives position in edge matrix
-ind <- order(nodeId(tree, "all"))
-for (i in 2:nrow(edgemat)) {
-  ## value of ancestor node plus change
-  nodevals[i] <- nodevals[ind[edgemat[i, 1]]] + dvals[i - 1]
-  }
-nodevals <- data.frame(nodevals)
-treed2 <- phylo4d(tree, all.data=nodevals)
-@
+% <<tidy=FALSE>>=
+% ## add node labels so we can match to data
+% nodeLabels(tree) <- as.character(nodeId(tree, "internal"))
+% ## ordering will make sure that we have ancestor value
+% ## defined before descendant
+% tree <- reorder(tree, "preorder")
+% edgemat <- edges(tree)
+% ## set aside space for values
+% nodevals <- numeric(nrow(edgemat))
+% ## label data in edge matrix order
+% names(nodevals) <- labels(tree, "all")[nodeId(tree, "all")]
+% ## variance is proportional to edge length; drop first
+% ## element of edge length, which is NA
+% dvals <- rnorm(nrow(edgemat) - 1, sd=edgeLength(tree)[-1]^2)
+% ## indexing: ind[node number] gives position in edge matrix
+% ind <- order(nodeId(tree, "all"))
+% for (i in 2:nrow(edgemat)) {
+%   ## value of ancestor node plus change
+%   nodevals[i] <- nodevals[ind[edgemat[i, 1]]] + dvals[i - 1]
+%   }
+% nodevals <- data.frame(nodevals)
+% treed2 <- phylo4d(tree, all.data=nodevals)
+% @
 
 
 % ========================================
@@ -522,10 +566,11 @@ treed2 <- phylo4d(tree, all.data=nodevals)
 \section{Definitions/slots}
 
 This section details the internal structure of the \code{phylo4},
-\code{multiphylo4}, \code{phylo4d}, and \code{multiphylo4d} classes.  The basic
-building blocks of these classes are the \code{phylo4} object and a dataframe.
-The \code{phylo4} tree format is largely similar to the one used by \code{phylo}
-class in the package \code{ape} \footnote{\url{http://ape.mpl.ird.fr/}}.
+\code{multiphylo4} (coming soon!), \code{phylo4d}, and \code{multiphylo4d}
+(coming soon!) classes. The basic building blocks of these classes are the
+\code{phylo4} object and a dataframe.  The \code{phylo4} tree format is largely
+similar to the one used by \code{phylo} class in the package
+\code{ape}\footnote{\url{http://ape.mpl.ird.fr/}}.
 
 We use ``edge'' for ancestor-descendant relationships in the phylogeny
 (sometimes called ``branches'') and ``edge lengths'' for their lengths (``branch
@@ -615,25 +660,6 @@ separately with \code{tdata(x,"tip")}, \code{tdata(x,"internal")} or
 stored as node data associated with the descendant node.
 
 
-\subsection{multiphylo4}
-
-
-% % hack removed ...
-% %
-% % \section{Hacks/backward compatibility}
-% %
-% % There is a way to hack the \verb+$+ operator so that it would
-% % provide %backward compatibility with code that is extracting internal elements %of a \code{phylo4}. The basic recipe is:
-% 
-% <<echo=FALSE,eval=FALSE>>=
-% setMethod("$", "phylo4", function(x, name) { attr(x, name)})
-% @
-% 
-% % but this has to be hacked slightly to intercept calls to
-% % elements %that might be missing.  For example, \code{ape} detects whether %log-likelihood, root edges, node labels, etc. are missing by testing %whether they are \code{NULL}, whereas missing items are represented %in \code{phylo4} by zero-length vectors in the slots (or \code{NA} %for the root edge) --- so we need code like
-% <<echo=FALSE,eval=FALSE>>=
-% if(!hasNodeLabels(x)) NULL else x@node.label
-% @
-% %to handle these cases.
+% \subsection{multiphylo4}
 
 \end{document}
