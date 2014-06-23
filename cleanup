@@ -4,6 +4,7 @@ rm -f src/*.o src/*.so
 rm -f src/RcppSrc/*.o src/RcppSrc/*.a inst/Rcpp-version.txt
 rm -f inst/doc/*.cpp inst/doc/*.hpp inst/doc/*.R 
 rm -f inst/doc/*.Rd inst/doc/*.aux inst/doc/*.log inst/doc/*.tex
+rm -f vignettes/*.aux vignettes/*.log vignettes/*.tex vignettes/*.toc vignettes/*.out
 rm -f inst/Rcpp-license.txt
 rm -rf inst/doc/auto
 rm -rf autom4te.cache
