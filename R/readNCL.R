@@ -335,6 +335,7 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
 
 ##' @rdname readNexus
 ##' @aliases readNexus
+##' @export
 readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
                        char.all=FALSE, polymorphic.convert=TRUE,
                        levels.uniform=FALSE, quiet=TRUE,
@@ -351,6 +352,7 @@ readNexus <- function (file, simplify=FALSE, type=c("all", "tree", "data"),
 
 ##' @rdname readNexus
 ##' @aliases readNewick
+##' @export
 readNewick <- function(file, simplify=FALSE, quiet=TRUE,
                        check.node.labels=c("keep", "drop", "asdata"),
                        convert.edge.length=FALSE, ...) {
