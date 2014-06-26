@@ -68,8 +68,8 @@ data(geospiza)
 Ben Bolker, Thibault Jombart, Francois Michonneau
 }
 \seealso{
-\code{\link{phylo4d}} constructor and \code{\linkS4class{phylo4d}}
-class.
+\code{\link{phylo4d-methods}} constructor and
+\code{\linkS4class{phylo4d}} class.
 }
 \keyword{methods}
 

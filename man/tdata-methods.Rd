@@ -55,10 +55,10 @@ labels.}
 
 \item{empty.columns}{Should columns filled with \code{NA} be returned?}
 
-\item{\dots}{For the tipData and nodeData accessors, further
-arguments to be used by \code{tdata}. For the replacement forms,
-further arguments to be used by \code{formatData} (e.g.
-\code{match.data}), see \link{formatData} for more details.}
+\item{\dots}{For the \code{tipData} and \code{nodeData} accessors,
+further arguments to be used by \code{tdata}. For the replacement
+forms, further arguments to be used to control matching between
+tree and data (see Details section of \code{\link{phylo4d-methods}}).}
 
 \item{value}{a data frame (or object to be coerced to one) to replace the
 values associated with the nodes specified by the argument \code{type}}
@@ -85,7 +85,7 @@ data(geospiza)
 Ben Bolker, Thibaut Jombart, Francois Michonneau
 }
 \seealso{
-\code{\link{phylo4d}}
+\code{\link{phylo4d-methods}}, \code{\linkS4class{phylo4d}}
 }
 \keyword{methods}
 

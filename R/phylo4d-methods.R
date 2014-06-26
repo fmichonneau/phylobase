@@ -9,87 +9,142 @@
 
 ##' Combine a phylogenetic tree with data
 ##' 
-##' \code{phylo4d} is a generic constructor which merges a phylogenetic tree
-##' with data frames to create a combined object of class \code{phylo4d}
+##' \code{phylo4d} is a generic constructor which merges a
+##' phylogenetic tree with data frames to create a combined object of
+##' class \code{phylo4d}
 ##' 
-##' You can provide several data frames to define traits associated with tip
-##' and/or internal nodes. By default, data row names are used to link data to
-##' nodes in the tree, with any number-like names (e.g., \dQuote{10}) matched
-##' against node ID numbers, and any non-number-like names (e.g., \dQuote{n10})
-##' matched against node labels. Alternative matching rules can be specified by
-##' passing additional arguments to \code{formatData}; these include positional
-##' matching, matching exclusively on node labels, and matching based on a
-##' column of data rather than on row names. See \code{\link{formatData}} for
-##' more information.
+##' You can provide several data frames to define traits associated
+##' with tip and/or internal nodes. By default, data row names are
+##' used to link data to nodes in the tree, with any number-like names
+##' (e.g., \dQuote{10}) matched against node ID numbers, and any
+##' non-number-like names (e.g., \dQuote{n10}) matched against node
+##' labels. Alternative matching rules can be specified by passing
+##' additional arguments (listed in the Details section); these
+##' include positional matching, matching exclusively on node labels,
+##' and matching based on a column of data rather than on row
+##' names.
 ##' 
-##' Matching rules will apply the same way to all supplied data frames.  This
-##' means that you need to be consistent with the row names of your data frames.
-##' It is good practice to use tip and node labels (or node numbers) when you
-##' combine data with a tree.
+##' Matching rules will apply the same way to all supplied data
+##' frames.  This means that you need to be consistent with the row
+##' names of your data frames.  It is good practice to use tip and
+##' node labels (or node numbers if you use duplicated labels) when
+##' you combine data with a tree.
 ##' 
-##' If you provide both \code{tip.data} and \code{node.data}, the treatment of
-##' columns with common names will depend on the \code{merge.data} argument. If
-##' TRUE, columns with the same name in both data frames will be merged; when
-##' merging columns of different data types, coercion to a common type will
-##' follow standard R rules. If \code{merge.data} is FALSE, columns with common
-##' names will be preserved independently, with \dQuote{.tip} and \dQuote{.node}
-##' appended to the names. This argument has no effect if \code{tip.data} and
-##' \code{node.data} have no column names in common.
+##' If you provide both \code{tip.data} and \code{node.data}, the
+##' treatment of columns with common names will depend on the
+##' \code{merge.data} argument. If TRUE, columns with the same name in
+##' both data frames will be merged; when merging columns of different
+##' data types, coercion to a common type will follow standard R
+##' rules. If \code{merge.data} is FALSE, columns with common names
+##' will be preserved independently, with \dQuote{.tip} and
+##' \dQuote{.node} appended to the names. This argument has no effect
+##' if \code{tip.data} and \code{node.data} have no column names in
+##' common.
 ##' 
-##' If you provide \code{all.data} along with either of \code{tip.data} and
-##' \code{node.data}, it must have distinct column names, otherwise an error
-##' will result. Additionally, although supplying columns with the same names
-##' \emph{within} data frames is not illegal, automatic renaming for uniqeness
-##' may lead to surprising results, so this practice should be avoided.
+##' If you provide \code{all.data} along with either of
+##' \code{tip.data} and \code{node.data}, it must have distinct column
+##' names, otherwise an error will result. Additionally, although
+##' supplying columns with the same names \emph{within} data frames is
+##' not illegal, automatic renaming for uniqeness may lead to
+##' surprising results, so this practice should be avoided.
 ##' 
-##' @name phylo4d
+##' @name phylo4d-methods
+##' @aliases phylo4d
 ##' @param x an object of class \code{phylo4}, \code{phylo},
 ##' \code{nexml} or a matrix of edges (see above)
-##' @param tip.data a data frame (or object to be coerced to one) containing
-##' only tip data (Optional)
-##' @param node.data a data frame (or object to be coerced to one) containing
-##' only node data (Optional)
-##' @param all.data a data frame (or object to be coerced to one) containing
-##' both tip and node data (Optional)
-##' @param merge.data if both \code{tip.data} and \code{node.data} are provided,
-##' should columns with common names will be merged together (default TRUE) or
-##' not (FALSE)? See details.
+##' @param tip.data a data frame (or object to be coerced to one)
+##' containing only tip data (Optional)
+##' @param node.data a data frame (or object to be coerced to one)
+##' containing only node data (Optional)
+##' @param all.data a data frame (or object to be coerced to one)
+##' containing both tip and node data (Optional)
+##' @param merge.data if both \code{tip.data} and \code{node.data} are
+##' provided, should columns with common names will be merged together
+##' (default TRUE) or not (FALSE)? See details.
 ##' @param metadata any additional metadata to be passed to the new object
 ##' @param edge.length Edge (branch) length. (Optional)
-##' @param tip.label A character vector of species names (names of "tip" nodes).
-##' (Optional)
-##' @param node.label A character vector of internal node names. (Optional)
-##' @param edge.label A character vector of edge (branch) names. (Optional)
-##' @param order character: tree ordering (allowable values are listed in
-##' \code{phylo4_orderings}, currently "unknown", "preorder" (="cladewise" in
-##' \code{ape}), and "postorder", with "cladewise" and "pruningwise" also
-##' allowed for compatibility with \code{ape})
-##' @param annote any additional annotation data to be passed to the new object
-##' @param check.node.labels if \code{x} is of class \code{phylo}, use either
-##' \dQuote{keep} (the default) to retain internal node labels, \dQuote{drop} to
-##' drop them, or \dQuote{asdata} to convert them to numeric tree data. This
-##' argument is useful if the \code{phylo} object has non-unique node labels or
-##' node labels with informative data (e.g., posterior probabilities).
-##' @param \dots further arguments to be passed to \code{\link{formatData}}.
-##' Notably, these additional arguments control the behavior of the constructor
-##' in the case of missing/extra data and where to look for labels in the case
-##' of non-unique labels that cannot be stored as row names in a data frame.
+##' @param tip.label A character vector of species names (names of
+##' "tip" nodes).  (Optional)
+##' @param node.label A character vector of internal node
+##' names. (Optional)
+##' @param edge.label A character vector of edge (branch)
+##' names. (Optional)
+##' @param order character: tree ordering (allowable values are listed
+##' in \code{phylo4_orderings}, currently "unknown", "preorder"
+##' (="cladewise" in \code{ape}), and "postorder", with "cladewise"
+##' and "pruningwise" also allowed for compatibility with \code{ape})
+##' @param annote any additional annotation data to be passed to the
+##' new object
+##' @param check.node.labels if \code{x} is of class \code{phylo}, use
+##' either \dQuote{keep} (the default) to retain internal node labels,
+##' \dQuote{drop} to drop them, or \dQuote{asdata} to convert them to
+##' numeric tree data. This argument is useful if the \code{phylo}
+##' object has non-unique node labels or node labels with informative
+##' data (e.g., posterior probabilities).
+##' @param \dots further arguments to control the behavior of the
+##' constructor in the case of missing/extra data and where to look
+##' for labels in the case of non-unique labels that cannot be stored
+##' as row names in a data frame (see Details).
+##' @details This is the list of additional arguments that can be used
+##' to control matching between the tree and the data:
+##'
+##' \itemize{
+##'
+##' \item{match.data}{(logical) should the rownames of the data frame
+##' be used to be matched against tip and internal node identifiers?}
+##'
+##' \item{rownamesAsLabels}{(logical), should the row names of the
+##' data provided be matched only to labels (TRUE), or should any
+##' number-like row names be matched to node numbers (FALSE and
+##' default)}
+##'
+##' \item{label.type}{character, \code{rownames} or \code{column}:
+##' should the labels be taken from the row names of \code{dt} or from
+##' the \code{label.column} column of \code{dt}?}
+##'
+##' \item{label.column}{iff \code{label.type=="column"}, column
+##' specifier (number or name) of the column containing tip labels}
+##'
+##' \item{missing.data}{action to take if there are missing data or if
+##' there are data labels that don't match}
+##'
+##' \item{extra.data}{action to take if there are extra data or if
+##' there are labels that don't match}
+##'
+##' \item{keep.all}{(logical), should the returned data have rows for
+##' all nodes (with NA values for internal rows when type='tip', and
+##' vice versa) (TRUE and default) or only rows corresponding to the
+##' type argument}
+##' 
+##' }
+##'
+##' Rules for matching rows of data to tree nodes are determined
+##' jointly by the \code{match.data} and \code{rownamesAsLabels}
+##' arguments. If \code{match.data} is TRUE, data frame rows will be
+##' matched exclusively against tip and node labels if
+##' \code{rownamesAsLabels} is also TRUE, whereas any all-digit row
+##' names will be matched against tip and node numbers if
+##' \code{rownamesAsLabels} is FALSE (the default). If
+##' \code{match.data} is FALSE, \code{rownamesAsLabels} has no effect,
+##' and row matching is purely positional with respect to the order
+##' returned by \code{nodeId(phy, type)}. 
+##'
 ##' @return An object of class \linkS4class{phylo4d}.
-##' @note Checking on matches between the tree and the data will be done by the
-##' validity checker (label matches between data and tree tips, number of rows
-##' of data vs. number of nodes/tips/etc.)
-##' @section Methods: \describe{ \item{x = "phylo4"}{merges a tree of class
-##' \code{phylo4} with a data.frame into a \code{phylo4d} object} \item{x =
-##' "matrix"}{merges a matrix of tree edges similar to the edge slot of a
-##' \code{phylo4} object (or to \$edge of a \code{phylo} object) with a
-##' data.frame into a \code{phylo4d} object} \item{x = "phylo"}{merges a tree of
-##' class \code{phylo} with a data.frame into a \code{phylo4d} object } }
-##' @author Ben Bolker, Thibaut Jombart, Steve Kembel, Francois Michonneau, Jim
-##' Regetz
-##' @seealso \code{\link{coerce-methods}} for translation functions. The
-##' \linkS4class{phylo4d} class, the \code{\link{formatData}} function to check
-##' the validity of \code{phylo4d} objects; \linkS4class{phylo4} class and
-##' \link{phylo4} constructor.
+##' @note Checking on matches between the tree and the data will be
+##' done by the validity checker (label matches between data and tree
+##' tips, number of rows of data vs. number of nodes/tips/etc.)
+##' @section Methods: \describe{ \item{x = "phylo4"}{merges a tree of
+##' class \code{phylo4} with a data.frame into a \code{phylo4d}
+##' object} \item{x = "matrix"}{merges a matrix of tree edges similar
+##' to the edge slot of a \code{phylo4} object (or to \$edge of a
+##' \code{phylo} object) with a data.frame into a \code{phylo4d}
+##' object} \item{x = "phylo"}{merges a tree of class \code{phylo}
+##' with a data.frame into a \code{phylo4d} object } }
+##' @author Ben Bolker, Thibaut Jombart, Steve Kembel, Francois
+##' Michonneau, Jim Regetz
+##' @seealso \code{\link{coerce-methods}} for translation
+##' functions. The \linkS4class{phylo4d} class; \linkS4class{phylo4}
+##' class and \link{phylo4} constructor.
 ##' @keywords misc
 ##' @export
 ##' @docType methods

@@ -22,10 +22,10 @@
 # ## column names in common, or if type=\dQuote{all}.
 # ## @param clear.all If only tip or internal node data are to be replaced,
 # ## should data of the other type be dropped?
-##' @param \dots For the tipData and nodeData accessors, further
-##' arguments to be used by \code{tdata}. For the replacement forms,
-##' further arguments to be used by \code{formatData} (e.g.
-##' \code{match.data}), see \link{formatData} for more details.
+##' @param \dots For the \code{tipData} and \code{nodeData} accessors,
+##' further arguments to be used by \code{tdata}. For the replacement
+##' forms, further arguments to be used to control matching between
+##' tree and data (see Details section of \code{\link{phylo4d-methods}}).
 ##' @param value a data frame (or object to be coerced to one) to replace the
 ##' values associated with the nodes specified by the argument \code{type}
 ##' @return \code{tdata} returns a data frame
@@ -33,7 +33,7 @@
 ##' \item{tdata}{\code{signature(object="phylo4d")}: retrieve or update data
 ##' associated with a tree in a \code{phylo4d} object} }
 ##' @author Ben Bolker, Thibaut Jombart, Francois Michonneau
-##' @seealso \code{\link{phylo4d}}
+##' @seealso \code{\link{phylo4d-methods}}, \code{\linkS4class{phylo4d}}
 ##' @export
 ##' @keywords methods
 ##' @include phylo4d-methods.R

@@ -14,11 +14,12 @@
 ##' @section Usage: \code{as(object, class)}
 ##' @author Ben Bolker, Thibaut Jombart, Marguerite Butler, Steve
 ##' Kembel, Francois Michonneau
-##' @seealso generic \code{\link[methods]{as}}, \code{\link{phylo4}},
-##' \code{\link{phylo4d}}, \code{\link{extractTree}},
-##' \code{nexml} class from the \code{RNeXML} package,
-##' \code{\link[ade4]{phylog}} from the \code{ade4} package and
-##' \code{\link[ape]{as.phylo}} from the \code{ape} package.
+##' @seealso generic \code{\link[methods]{as}},
+##' \code{\link{phylo4-methods}}, \code{\link{phylo4d-methods}},
+##' \code{\link{extractTree}}, \code{nexml} class from the
+##' \code{RNeXML} package, \code{\link[ade4]{phylog}} from the
+##' \code{ade4} package and \code{\link[ape]{as.phylo}} from the
+##' \code{ape} package.
 ##' @keywords methods
 ##' @rdname setAs-methods
 ##' @aliases as as-method as,phylo,phylo4-method

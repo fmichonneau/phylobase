@@ -128,9 +128,8 @@ issued, and thus \code{check.node.labels} takes the value
 
 For both \code{readNexus} and \code{readNewick}, additional
 arguments can be passed to the constructors such as \code{annote},
-\code{missing.data} or \code{extra.data}. See the documentation of
-\link{phylo4-methods}, \link{phylo4d} and \link{formatData} for
-the complete list of options.
+\code{missing.data} or \code{extra.data}. See the Details section
+of \code{\link{phylo4d-methods}} for the complete list of options.
 }
 \note{
 Underscores in state labels (i.e. trait or taxon names) will

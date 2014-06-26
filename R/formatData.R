@@ -55,7 +55,7 @@
 ##' as row names. The data frame is also formatted to have the correct
 ##' dimension given the \code{phylo4} object provided.
 ##' @author Francois Michonneau
-##' @seealso the \code{\link{phylo4d}} constructor, the
+##' @seealso the \code{\link{phylo4d-methods}} constructor, the
 ##' \linkS4class{phylo4d} class. See \code{\link{coerce-methods}} for
 ##' translation functions.
 ##' @keywords misc

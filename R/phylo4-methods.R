@@ -48,10 +48,10 @@
 ##' @note Translation functions are available from many valid tree formats. See
 ##' \link{coerce-methods}.
 ##' @author phylobase team
-##' @seealso \code{\link{coerce-methods}} for translation functions. The
-##' \linkS4class{phylo4} class, the \code{\link{formatData}} function to check
-##' the validity of \code{phylo4} objects. See also the \code{\link{phylo4d}}
-##' constructor, and \linkS4class{phylo4d} class.
+##' @seealso \code{\link{coerce-methods}} for translation
+##' functions. The \linkS4class{phylo4} class. See also the
+##' \code{\link{phylo4d-methods}} constructor, and
+##' \linkS4class{phylo4d} class.
 ##' @export
 ##' @aliases phylo4
 ##' @rdname phylo4-methods

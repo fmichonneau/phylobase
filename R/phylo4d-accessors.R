@@ -29,8 +29,8 @@
 ##' \item{hasTipData}{\code{signature(object = "phylo4d")}: whether tree has
 ##' data associated with its tips} }
 ##' @author Ben Bolker, Thibault Jombart, Francois Michonneau
-##' @seealso \code{\link{phylo4d}} constructor and \code{\linkS4class{phylo4d}}
-##' class.
+##' @seealso \code{\link{phylo4d-methods}} constructor and
+##' \code{\linkS4class{phylo4d}} class.
 ##' @rdname phylo4d-accessors
 ##' @aliases hasTipData
 ##' @keywords methods

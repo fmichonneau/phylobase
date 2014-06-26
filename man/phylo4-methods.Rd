@@ -109,10 +109,10 @@ plot(mytree)
 phylobase team
 }
 \seealso{
-\code{\link{coerce-methods}} for translation functions. The
-\linkS4class{phylo4} class, the \code{\link{formatData}} function to check
-the validity of \code{phylo4} objects. See also the \code{\link{phylo4d}}
-constructor, and \linkS4class{phylo4d} class.
+\code{\link{coerce-methods}} for translation
+functions. The \linkS4class{phylo4} class. See also the
+\code{\link{phylo4d-methods}} constructor, and
+\linkS4class{phylo4d} class.
 }
 \keyword{datasets}
 

@@ -92,7 +92,7 @@ tOwls <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba
 Ben Bolker, Thibaut Jombart, Francois Michonneau
 }
 \seealso{
-\code{\link{phylo4d}} constructor and
+\code{\link{phylo4d-methods}} constructor and
 \code{\linkS4class{phylo4d}} class.
 }
 \keyword{methods}

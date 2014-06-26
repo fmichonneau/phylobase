@@ -36,8 +36,9 @@ plot(tree1)
 Ben Bolker
 }
 \seealso{
-\code{\link{phylo4}}, \code{\link{phylo4d}},
-\code{\link{coerce-methods}} for translation functions.
+\code{\link{phylo4-methods}},
+\code{\link{phylo4d-methods}}, \code{\link{coerce-methods}} for
+translation functions.
 }
 \keyword{methods}
 

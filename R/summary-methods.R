@@ -39,7 +39,7 @@
 ##' associated with the internal nodes}
 ##' 
 ##' @author Ben Bolker, Thibaut Jombart, Francois Michonneau
-##' @seealso \code{\link{phylo4d}} constructor and
+##' @seealso \code{\link{phylo4d-methods}} constructor and
 ##' \code{\linkS4class{phylo4d}} class.
 ##' @keywords methods
 ##' @aliases summary

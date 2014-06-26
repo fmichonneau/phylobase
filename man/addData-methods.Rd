@@ -18,26 +18,29 @@ addData(x, ...)
 \arguments{
 \item{x}{a phylo4 or a phylo4d object}
 
-\item{tip.data}{a data frame (or object to be coerced to one) containing
-only tip data}
+\item{tip.data}{a data frame (or object to be coerced to one)
+containing only tip data}
 
-\item{node.data}{a data frame (or object to be coerced to one) containing
-only node data}
+\item{node.data}{a data frame (or object to be coerced to one)
+containing only node data}
 
-\item{all.data}{a data frame (or object to be coerced to one) containing
-both tip and node data}
+\item{all.data}{a data frame (or object to be coerced to one)
+containing both tip and node data}
 
-\item{merge.data}{if both \code{tip.data} and \code{node.data} are provided,
-it determines whether columns with common names will be merged together
-(default TRUE). If FALSE, columns with common names will be preserved
-separately, with ".tip" and ".node" appended to the names. This argument has
-no effect if \code{tip.data} and \code{node.data} have no column names in
+\item{merge.data}{if both \code{tip.data} and \code{node.data} are
+provided, it determines whether columns with common names will be
+merged together (default TRUE). If FALSE, columns with common
+names will be preserved separately, with ".tip" and ".node"
+appended to the names. This argument has no effect if
+\code{tip.data} and \code{node.data} have no column names in
 common.}
 
 \item{pos}{should the new data provided be bound \code{before} or
 \code{after} the pre-existing data?}
 
-\item{\dots}{additional arguments to be passed to \link{formatData}}
+\item{\dots}{additional arguments to control how matching between
+data and tree (see Details section of
+\code{\link{phylo4d-methods}} for more details).}
 }
 \value{
 \code{addData} returns a \code{phylo4d} object.
@@ -47,15 +50,15 @@ common.}
 \code{phylo4d} object) or to a \code{phylo4d} object
 }
 \details{
-Rules for matching data to tree nodes are identical to those used by the
-\code{\link{phylo4d}} constructor.
+Rules for matching data to tree nodes are identical to those used
+by the \code{\link{phylo4d-methods}} constructor.
 
-If any column names in the original data are the same as columns in the new
-data, ".old" is appended to the former column names and ".new" is appended
-to the new column names.
+If any column names in the original data are the same as columns
+in the new data, ".old" is appended to the former column names and
+".new" is appended to the new column names.
 
-The option \code{pos} is ignored (silently) if \code{x} is a \code{phylo4}
-object. It is provided for compatibility reasons.
+The option \code{pos} is ignored (silently) if \code{x} is a
+\code{phylo4} object. It is provided for compatibility reasons.
 }
 \examples{
 data(geospiza)
@@ -68,7 +71,7 @@ Francois Michonneau
 }
 \seealso{
 \code{\link{tdata}} for extracting or updating data and
-\code{\link{phylo4d}} constructor.
+\code{\link{phylo4d-methods}} constructor.
 }
 \keyword{methods}
 

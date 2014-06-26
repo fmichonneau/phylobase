@@ -22,12 +22,11 @@ example(read.tree, "ape")
 Ben Bolker, Thibaut Jombart
 }
 \seealso{
-\code{\link{coerce-methods}} for translation functions. The
-\code{\link{phylo4d}} constructor and the \code{\link{formatData}} function
-to check the validity of trees and data. See also the \code{\link{phylo4}}
-constructor, the \linkS4class{phylo4} class, and the
-\code{\link{checkPhylo4}} function to check the validity of \code{phylo4}
-trees.
+\code{\link{coerce-methods}} for translation
+functions. The \code{\link{phylo4d-methods}} constructor. See also
+the \code{\link{phylo4-methods}} constructor, the
+\linkS4class{phylo4} class, and the \code{\link{checkPhylo4}}
+function to check the validity of \code{phylo4} trees.
 }
 \keyword{classes}
 
