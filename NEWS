@@ -9,6 +9,8 @@
 
                 CHANGES IN phylobase VERSION 0.6.10
 
+   *  Fix bug #605 (R-forge) -- treePlot subsets numeric data for plotting.
+
    *  Initial basic support for converting RNeXML objects in phylo4 and phylo4d
       format.
 

@@ -75,8 +75,9 @@
 ##' @importFrom utils head tail
 ##' @importFrom ade4 newick2phylog
 ##'
+##' @exportMethod print head tail reorder plot summary
+##' 
 ## exportMethod should only be used for generics defined outside the package!
-## @exportMethod print head tail reorder plot summary
 ## @exportMethod phylo4 phylo4d
 ## @exportMethod edges edgeId hasEdgeLength edgeLength edgeLength<- sumEdgeLength edgeOrder
 ## @exportMethod isRooted rootNode rootNode<-

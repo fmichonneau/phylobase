@@ -107,6 +107,15 @@ No return value, function invoked for plotting side effect
 \description{
 Plot \code{phylo4} or \code{phylo4d} objects, including associated data.
 }
+\details{
+Currently, \code{treePlot} can only plot numeric values
+for tree-associated data. The dataset will be subset to only
+include columns of class \code{numeric}, \code{integer} or
+\code{double}. If a \code{phylo4d} object is passed to the
+function and it contains no data, or if the data is in a format
+that cannot be plotted, the function will produce a warning. You
+can avoid this by using the argument \code{plot.data=FALSE}.
+}
 \section{Methods}{
  \describe{ \item{phy = "phylo4"}{plots a tree of class
 \linkS4class{phylo4}} \item{phy = "phylo4d"}{plots a tree with one or more
@@ -127,7 +136,7 @@ pushViewport(viewport(layout=grid.layout(nrow=1, ncol=2), name="base"))
 popViewport(2)
 }
 \author{
-Peter Cowan \email{pdc@berkeley.edu}
+Peter Cowan \email{pdc@berkeley.edu}, Francois Michonneau
 }
 \seealso{
 \code{\link{phylobubbles}}

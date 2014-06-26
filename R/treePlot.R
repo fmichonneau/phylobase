@@ -7,6 +7,13 @@
 ##' @aliases treePlot plot,ANY,ANY-method plot,pdata,missing-method
 ##' plot,phylo4,missing-method treePlot-method treePlot,phylo4,phylo4d-method
 ##' @docType methods
+##' @details Currently, \code{treePlot} can only plot numeric values
+##' for tree-associated data. The dataset will be subset to only
+##' include columns of class \code{numeric}, \code{integer} or
+##' \code{double}. If a \code{phylo4d} object is passed to the
+##' function and it contains no data, or if the data is in a format
+##' that cannot be plotted, the function will produce a warning. You
+##' can avoid this by using the argument \code{plot.data=FALSE}.
 ##' @param phy A \code{phylo4} or \code{phylo4d} object
 ##' @param type A character string indicating the shape of plotted tree
 ##' @param show.tip.label Logical, indicating whether tip labels should be shown
@@ -35,7 +42,7 @@
 ##' @section Methods: \describe{ \item{phy = "phylo4"}{plots a tree of class
 ##' \linkS4class{phylo4}} \item{phy = "phylo4d"}{plots a tree with one or more
 ##' quantitative traits contained in a \linkS4class{phylo4d} object.} }
-##' @author Peter Cowan \email{pdc@@berkeley.edu}
+##' @author Peter Cowan \email{pdc@@berkeley.edu}, Francois Michonneau
 ##' @seealso \code{\link{phylobubbles}}
 ##' @keywords methods
 ##' @export
@@ -82,9 +89,20 @@
 
     if (!inherits(phy, 'phylo4')) stop('treePlot requires a phylo4 or phylo4d object')
     if (!isRooted(phy)) stop("treePlot function requires a rooted tree.")
-    if (plot.data && !hasTipData(phy)) {
-        warning("tree has no tip data to plot")
-        plot.data <- FALSE
+    if (plot.data) {
+        if (!hasTipData(phy)) {
+            warning("tree has no tip data to plot")
+            plot.data <- FALSE
+        }
+        else {
+            ## if new plotting functions are developped that allow users to plot other type of data
+            ## this needs to be removed/adjusted
+            ##  other checks are being made in phylobubbles()
+            if (!any(sapply(tdata(phy, "tip"), function(x) class(x) %in% c("numeric", "double", "integer")))) {
+                warning("only numeric data can be plotted at this time")
+                plot.data <- FALSE
+            }
+        }
     }
     if (hasRetic(phy))
         stop("treePlot requires non-reticulated trees.")
@@ -529,11 +547,14 @@ phylobubbles <- function(type = type,
     lab.left  <- ifelse(place.tip.label %in% c("left", "both"), TRUE, FALSE)
 
     phy       <- XXYY$phy
-    tmin      <- min(tdata(phy, type = 'tip'), na.rm = TRUE)
-    tmax      <- max(tdata(phy, type = 'tip'), na.rm = TRUE)
-    pedges    <- edges(phy)
     tip.order <- XXYY$torder
-    tipdata   <- tdata(phy, type = "tip")[tip.order,,drop=FALSE]
+    tipdata   <- tdata(phy, type = "tip")[tip.order,, drop=FALSE]
+    tipClass <- sapply(tipdata, function(x) class(x) %in% c("double", "integer", "numeric"))
+    tipdata <- tipdata[, tipClass, drop=FALSE]
+    tmin      <- min(tipdata, na.rm = TRUE)
+    tmax      <- max(tipdata, na.rm = TRUE)
+    pedges    <- edges(phy)
+
     nVars     <- ncol(tipdata) # number of bubble columns
 
     dlabwdth <- max(stringWidth(colnames(tipdata))) * 1.2
