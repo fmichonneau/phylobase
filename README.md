@@ -71,27 +71,14 @@ not in the data set, we will initially run into some trouble:
 
 
 ```r
+data(geospiza_raw)
 g1 <- as(geospiza_raw$tree, "phylo4")
-```
-
-```
-## Error: object 'geospiza_raw' not found
-```
-
-```r
 geodata <- geospiza_raw$data
-```
-
-```
-## Error: object 'geospiza_raw' not found
-```
-
-```r
 g2 <- phylo4d(g1, geodata)
 ```
 
 ```
-## Error: error in evaluating the argument 'x' in selecting a method for function 'phylo4d': Error: object 'g1' not found
+## Error: The following nodes are not found in the dataset: olivacea
 ```
 
 To deal with _G. olivacea_ missing from the data, we have a few choices. The
@@ -105,7 +92,7 @@ g2 <- phylo4d(g1, geodata, missing.data="warn")
 ```
 
 ```
-## Error: error in evaluating the argument 'x' in selecting a method for function 'phylo4d': Error: object 'g1' not found
+## Warning: The following nodes are not found in the dataset: olivacea
 ```
 
 ### Importing data
