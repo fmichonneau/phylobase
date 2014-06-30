@@ -95,6 +95,55 @@ g2 <- phylo4d(g1, geodata, missing.data="warn")
 ## Warning: The following nodes are not found in the dataset: olivacea
 ```
 
+```r
+head(g2)
+```
+
+```
+##           label node ancestor edge.length node.type wingL tarsusL culmenL
+## 1    fuliginosa    1       24     0.05500       tip 4.133   2.807   2.095
+## 2        fortis    2       24     0.05500       tip 4.244   2.895   2.407
+## 3  magnirostris    3       23     0.11000       tip 4.404   3.039   2.725
+## 4   conirostris    4       22     0.18333       tip 4.350   2.984   2.654
+## 5      scandens    5       21     0.19250       tip 4.261   2.929   2.622
+## 6    difficilis    6       20     0.22800       tip 4.224   2.899   2.277
+## 7       pallida    7       25     0.08667       tip 4.265   3.089   2.430
+## 8      parvulus    8       27     0.02000       tip 4.132   2.973   1.974
+## 9    psittacula    9       27     0.02000       tip 4.235   3.049   2.260
+## 10       pauper   10       26     0.03500       tip 4.232   3.036   2.187
+## 11   Platyspiza   11       18     0.46550       tip 4.420   3.271   2.331
+## 12        fusca   12       17     0.53409       tip 3.975   2.937   2.052
+## 13 Pinaroloxias   13       16     0.58333       tip 4.189   2.980   2.311
+## 14     olivacea   14       15     0.88077       tip    NA      NA      NA
+## 15         <NA>   15        0          NA      root    NA      NA      NA
+## 16         <NA>   16       15     0.29744  internal    NA      NA      NA
+## 17         <NA>   17       16     0.04924  internal    NA      NA      NA
+## 18         <NA>   18       17     0.06859  internal    NA      NA      NA
+## 19         <NA>   19       18     0.13404  internal    NA      NA      NA
+## 20         <NA>   20       19     0.10346  internal    NA      NA      NA
+##    beakD gonysW
+## 1  1.941  1.845
+## 2  2.363  2.222
+## 3  2.824  2.676
+## 4  2.514  2.360
+## 5  2.145  2.037
+## 6  2.011  1.930
+## 7  2.016  1.949
+## 8  1.874  1.813
+## 9  2.230  2.074
+## 10 2.073  1.962
+## 11 2.347  2.282
+## 12 1.191  1.401
+## 13 1.548  1.630
+## 14    NA     NA
+## 15    NA     NA
+## 16    NA     NA
+## 17    NA     NA
+## 18    NA     NA
+## 19    NA     NA
+## 20    NA     NA
+```
+
 ### Importing data
 
 #### From NEXUS files
