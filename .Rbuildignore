@@ -5,3 +5,4 @@ cleanup
 .?svn.?
 ~$
 vignettes/developer.*
+travis-tool.sh
