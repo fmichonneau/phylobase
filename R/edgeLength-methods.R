@@ -36,7 +36,7 @@
 ##' object}
 ##'
 ##' \item{nodeDepth}{a named vector indicating the \dQuote{depth} (the
-##' distance between the root and the tip) of each tip.}
+##' distance between the root and a given node).}
 ##'
 ##' \item{isUltrametric}{whether or not the tree is ultrametric (all
 ##' the tips are have the same depth (distance from the root) (logical)}
