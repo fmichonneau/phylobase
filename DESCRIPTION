@@ -2,8 +2,8 @@ Roxygen: list(wrap = FALSE)
 Package: phylobase
 Type: Package
 Title: Base package for phylogenetic structures and comparative data
-Version: 0.6.9-4
-Date: 2014-06-26
+Version: 0.6.9-5
+Date: 2014-09-06
 Imports:
     ade4,
     ape (>= 3.0),

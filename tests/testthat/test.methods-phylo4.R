@@ -59,7 +59,7 @@ test_that("depthTips works when there are no edge lengths", {
     expect_true(is.null(depthTips(tmpPhy)))
 })
 
-test_that("nTips works on ape objects",          
+test_that("nTips works on ape objects",
           ## nTips phylo
           expect_equal(nTips(tr), 5))
 
@@ -84,7 +84,7 @@ test_that("nodeId works with argument all",
           expect_identical(nodeId(phy.alt, "all"), c(nid.tip, nid.int)))
 test_that("nodeId works with argument tip",
           expect_identical(nodeId(phy.alt, "tip"), nid.tip))
-test_that("nodeId works with argument internal", 
+test_that("nodeId works with argument internal",
           expect_identical(nodeId(phy.alt, "internal"), nid.int))
 test_that("nodeId works woth argument root",
           expect_identical(nodeId(phy.alt, "root"), nid.int[1]))
@@ -101,7 +101,7 @@ test_that("nodeDepth works with numeric argument", {
     expect_equal(nodeDepth(phy.alt, 1), allDepths[1])
 })
 
-test_that("nodeDepth works with character argument", {          
+test_that("nodeDepth works with character argument", {
     expect_equal(nodeDepth(phy.alt, "t1"), allDepths[1])
 })
 
@@ -148,9 +148,9 @@ test_that("hasEdgeLength works when no edge lengths are present", {
 context("edgeLength")
 test_that("default works (all edge lengths)",
           expect_identical(edgeLength(phy.alt), setNames(elen, eid)))
-test_that("one edge length, by label", 
+test_that("one edge length, by label",
     expect_equal(edgeLength(phy.alt, "t1"), c(`7-1`=0.1)))
-test_that("one edge length, by node ID", 
+test_that("one edge length, by node ID",
           expect_equal(edgeLength(phy.alt, 1), c(`7-1`=0.1)))
 test_that("non-existent edge, by label", {
     ans <- structure(NA_real_, .Names = NA_character_)
@@ -251,7 +251,7 @@ test_that("rootNode <- is not yet implemented",
           expect_error(rootNode(phy.alt) <- 7))
 
 context("labels")
-test_that("labels works as expected with no argument", 
+test_that("labels works as expected with no argument",
   expect_identical(labels(phy.alt),
                    setNames(c(lab.tip, lab.int), c(nid.tip, nid.int))))
 test_that("labels works as expected with argument all",
@@ -360,7 +360,7 @@ test_that("error to add labels for nodes that don't exist", {
 })
 
 context("nodeLabels")
-test_that("nodeLabels works as expected", 
+test_that("nodeLabels works as expected",
           expect_identical(nodeLabels(phy.alt), setNames(lab.int, nid.int)))
 
 context("hasNodeLabels")
@@ -394,6 +394,10 @@ test_that("duplicated labels work as expected", {
     phylobase.options(allow.duplicated.labels="ok")
     nodeLabels(phy.alt)["6"] <- "n7"
     expect_identical(nodeLabels(phy.alt), setNames(c("n7", "n7", "n8", "n9"), nid.int))
+    expect_true(hasDuplicatedLabels(phy.alt))
+    ## NAs are not considered duplicated
+    nodeLabels(phy.alt)[1:2] <- NA
+    expect_true(!hasDuplicatedLabels(phy.alt))
     phylobase.options(op)
     ## error to add labels for nodes that don't exist
     expect_error(nodeLabels(phy.alt)["fake"] <- "xxx")
@@ -401,7 +405,7 @@ test_that("duplicated labels work as expected", {
 })
 
 context("tipLabels")
-test_that("tipLabels works as expected", 
+test_that("tipLabels works as expected",
           expect_identical(tipLabels(phy.alt), setNames(lab.tip, nid.tip)))
 
 context("tipLabels <-")
@@ -427,6 +431,9 @@ test_that("duplicated labels works as expected on tips", {
     phylobase.options(allow.duplicated.labels="ok")
     tipLabels(phy.alt)[1] <- "t2"
     expect_identical(tipLabels(phy.alt), setNames(c("t2", "t2", "t3", "t4", "t5"), nid.tip))
+    expect_true(hasDuplicatedLabels(phy.alt))
+    tipLabels(phy.alt)[1:2] <- NA
+    expect_true(!hasDuplicatedLabels(phy.alt))
     phylobase.options(op)
 })
 test_that("error to add labels for nodes that don't exist", {
@@ -534,7 +541,7 @@ test_that("now remove edge lengths altogether", {
 ## }
 
 ## test.reorder.phylo4 <- function() {
-##   ## TODO 
+##   ## TODO
 ## }
 
 context("isUltrametric")

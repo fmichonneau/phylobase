@@ -3,7 +3,7 @@
 #include <Rcpp.h>
 #include <algorithm>    // std::count_if
 #include <vector>       // std::vector
-#include <string>       // 
+#include <string>       //
 
 template <typename T>
 std::string NumberToString ( T Number ) {
@@ -102,7 +102,7 @@ Rcpp::IntegerVector tipsSafe (Rcpp::IntegerVector ances, Rcpp::IntegerVector des
     std::vector<int> y(nedge);
     int j = 0;
     for(int i = 0; i < nedge; i++) {
-	if (istip[i]) {	    
+	if (istip[i]) {
 	    y[j] = desc[i];
 	    j++;
 	}
@@ -200,17 +200,17 @@ Rcpp::NumericVector getRange(Rcpp::NumericVector x, const bool na_rm) {
 	    out[1] = NA_REAL;
 	    return(out);
 	}
-	
+
 	if (x[i] < out[0]) out[0] = x[i];
 	if (x[i] > out[1]) out[1] = x[i];
     }
-    
+
     return(out);
 }
 
 //[[Rcpp::export]]
 bool hasDuplicatedLabelsCpp (Rcpp::CharacterVector label) {
-    return is_true(any(Rcpp::duplicated(label)));
+    return is_true(any(Rcpp::duplicated(na_omit(label))));
 }
 
 Rcpp::CharacterVector edgeIdCppInternal (Rcpp::IntegerVector tmp1, Rcpp::IntegerVector tmp2) {
@@ -236,7 +236,7 @@ Rcpp::CharacterVector edgeIdCpp (Rcpp::IntegerMatrix edge, std::string type) {
     Rcpp::IntegerVector ances = getAnces(edge);
     Rcpp::IntegerVector desc = getDesc(edge);
     int nedge;
-        
+
     if (type == "tip" || type == "internal") {
 	Rcpp::IntegerVector tips = tipsFast(ances);
 	nedge = tips.size();
@@ -281,7 +281,7 @@ Rcpp::CharacterVector edgeIdCpp (Rcpp::IntegerMatrix edge, std::string type) {
 
 //[[Rcpp::export]]
 Rcpp::List checkTreeCpp(Rcpp::S4 obj, Rcpp::List opts) {
-  
+
     std::string err, wrn;
     Rcpp::IntegerMatrix ed = obj.slot("edge");
     int nrow = ed.nrow();
@@ -319,7 +319,7 @@ Rcpp::List checkTreeCpp(Rcpp::S4 obj, Rcpp::List opts) {
     }
 
     // check edge lengths
-    if (hasEdgeLength) {	
+    if (hasEdgeLength) {
     	if (nEdLength != nEdges) {
     	    err.append("Number of edge lengths do not match number of edges. ");
     	}
@@ -333,14 +333,14 @@ Rcpp::List checkTreeCpp(Rcpp::S4 obj, Rcpp::List opts) {
 	Rcpp::CharacterVector edgeLblDiff = Rcpp::setdiff(edLengthNm, edgeLblSupp);
     	if ( edgeLblDiff.size() != 0 ) {
     	    err.append("Edge lengths incorrectly labeled. ");
-    	}	    
+    	}
     }
-    
+
     // check label names
     Rcpp::CharacterVector chrLabelNm = Rcpp::as<Rcpp::CharacterVector>(allnodesFast);
     int j = 0;
     while (j < nroots) { //remove root(s)
-    	chrLabelNm.erase(0); 
+    	chrLabelNm.erase(0);
     	j++;
     }
     bool testLabelNm = isLabelName(labelNm, chrLabelNm);
@@ -348,7 +348,7 @@ Rcpp::List checkTreeCpp(Rcpp::S4 obj, Rcpp::List opts) {
     	err.append("Tip and node labels must be a named vector, the names must match the node IDs. ");
     	err.append("Use tipLabels<- and/or nodeLabels<- to update them. ");
     }
-    
+
     // check that tips have labels
     Rcpp::CharacterVector tiplabel(ntipsFast);
     std::copy (label.begin(), label.begin()+ntipsFast, tiplabel.begin());

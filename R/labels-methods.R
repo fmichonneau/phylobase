@@ -17,24 +17,24 @@
 # edgeLabels<-,phylo4,character-method
 
 ##' Labels for phylo4/phylo4d objects
-##' 
+##'
 ##' Methods for creating, accessing and updating labels in
 ##' phylo4/phylo4d objects
-##' 
+##'
 ##' In phylo4/phylo4d objects, tips must have labels (that's why there
 ##' is no method for hasTipLabels), internal nodes and edges can have
 ##' labels.
-##' 
+##'
 ##' Labels must be provided as a vector of class \code{character}. The
 ##' length of the vector must match the number of elements they label.
-##' 
+##'
 ##' The option \code{use.names} allows the user to match a label to a
 ##' particular node. In this case, the vector must have names that
 ##' match the node numbers.
-##' 
+##'
 ##' The function \code{labels} is mostly intended to be used
 ##' internally.
-##' 
+##'
 ##' @name phylo4-labels
 ##' @aliases labels
 ##' @docType methods
@@ -48,17 +48,17 @@
 ##' be used to match the labels? See Details for more information.
 ##' @section Methods: \describe{ \item{labels}{\code{signature(object =
 ##' "phylo4")}: tip and/or internal node labels, ordered by node ID}
-##' 
+##'
 ##' \item{hasDuplicatedLabels}{\code{signature(object = "phylo4")}: are any
 ##' labels duplicated?}
-##' 
+##'
 ##' \item{tipLabels}{\code{signature(object = "phylo4")}: tip labels, ordered by
 ##' node ID}
-##' 
+##'
 ##' \item{hasNodeLabels}{\code{signature(object = "phylo4")}: whether tree has
 ##' (internal) node labels} \item{nodeLabels}{\code{signature(object =
 ##' "phylo4")}: internal node labels, ordered by node ID}
-##' 
+##'
 ##' \item{hasEdgeLabels}{\code{signature(object = "phylo4")}: whether tree has
 ##' (internal) edge labels} \item{edgeLabels}{\code{signature(object =
 ##' "phylo4")}: internal edge labels, ordered according to the edge matrix} }
@@ -68,31 +68,31 @@
 ##' @author Ben Bolker, Peter Cowan, Steve Kembel, Francois Michonneau
 ##' @return labels in ascending order.
 ##' @examples
-##' 
+##'
 ##' data(geospiza)
-##' 
+##'
 ##' ## Return labels from geospiza
 ##' tipLabels(geospiza)
-##' 
+##'
 ##' ## Internal node labels in geospiza are empty
 ##' nodeLabels(geospiza)
-##' 
+##'
 ##' ## Creating internal node labels
 ##' ndLbl <- paste("n", 1:nNodes(geospiza), sep="")
 ##' nodeLabels(geospiza) <- ndLbl
 ##' nodeLabels(geospiza)
-##' 
+##'
 ##' ## naming the labels
 ##' names(ndLbl) <- nodeId(geospiza, "internal")
-##' 
+##'
 ##' ## shuffling the labels
 ##' (ndLbl <- sample(ndLbl))
-##' 
+##'
 ##' ## by default, the labels are attributed in the order
 ##' ## they are given:
 ##' nodeLabels(geospiza) <- ndLbl
 ##' nodeLabels(geospiza)
-##' 
+##'
 ##' ## but use.names puts them in the correct order
 ##' labels(geospiza, "internal", use.names=TRUE) <- ndLbl
 ##' nodeLabels(geospiza)
@@ -178,7 +178,8 @@ setMethod("hasDuplicatedLabels", signature(x="phylo4", type="ANY"),
           type <- "all"
       }
       type <- match.arg(type)
-      any(duplicated(na.omit(labels(x, type))))
+      ## any(duplicated(na.omit(labels(x, type))))
+      hasDuplicatedLabelsCpp(labels(x, type))
 })
 
 ##### --------- hasNodeLabels
@@ -316,9 +317,8 @@ setGeneric("edgeLabels<-",
 ##' @aliases edgeLabels<-,phylo4,character-method
 setReplaceMethod("edgeLabels", signature(x="phylo4", value="character"),
   function(x, ..., value) {
-    lbl <- .createEdge(value, x@edge, type="labels")    
+    lbl <- .createEdge(value, x@edge, type="labels")
     x@edge.label <- lbl[!is.na(lbl)]
     if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
     x
   })
-
