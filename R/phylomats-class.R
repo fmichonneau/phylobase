@@ -1,9 +1,9 @@
 
 ##' matrix classes for phylobase
-##' 
+##'
 ##' Classes representing phylogenies as matrices
-##' 
-##' 
+##'
+##'
 ##' @name phylomat-class
 ##' @aliases phylo4vcov-class as_phylo4vcov
 ##' @docType class
@@ -21,14 +21,14 @@
 ##' @keywords classes
 ##' @export
 ##' @examples
-##' 
-##'   tree.owls <- ape::read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
+##'   tree_string <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
+##'   tree.owls <- ape::read.tree(text=tree_string)
 ##'   o2 <- as(tree.owls,"phylo4")
 ##'   ov <- as(o2,"phylo4vcov")
 ##'   o3 <- as(ov,"phylo4")
 ##'   ## these are not completely identical, but are
 ##'   ## topologically identical ...
-##' 
+##'
 ##'   ## edge matrices are in a different order:
 ##'   ## cf. edges(o2) and edges(o3)
 ##'   ## BUT the edge matrices are otherwise identical
@@ -36,14 +36,14 @@
 ##'   o3edges <- edges(o3)
 ##'   identical(o2edges[order(o2edges[,2]),],
 ##'             o3edges[order(o3edges[,2]),])
-##' 
+##'
 ##'   ## There is left/right ambiguity here in the tree orders:
 ##'   ## in o2 the 5->6->7->1 lineage
 ##'   ## (terminating in Strix aluco)
 ##'   ## is first, in o3 the 5->6->3 lineage
 ##'   ## (terminating in Athene noctua) is first.
-##' 
-##' 
+##'
+##'
 ## define class for phylogenetic var-cov matrices
 setClass("phylo4vcov",
          representation("matrix",
@@ -134,5 +134,3 @@ setAs("phylo4vcov","phylo4",
                edge.label=from@edge.label,order="unknown"),
                 "preorder")
       })
-
-
