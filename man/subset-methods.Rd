@@ -71,9 +71,13 @@ include}
 \item{j}{(\code{[} method, phylo4d only) An index vector
 indicating columns of node/tip data to include}
 
+\item{drop}{(not in use: for compatibility with the generic method)}
+
 \item{trim.internal}{A logical specifying whether to remove
 internal nodes that no longer have tip descendants in the subset
 tree}
+
+\item{\dots}{optional additional parameters (not in use)}
 }
 \value{
 an object of class \code{"phylo4"} or \code{"phylo4d"}

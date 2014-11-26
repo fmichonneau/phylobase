@@ -16,6 +16,8 @@ reorder(x, ...)
 \item{order}{The desired traversal order; currently only
 \dQuote{preorder} and \dQuote{postorder} are allowed for
 \code{phylo4} and \code{phylo4d} objects.}
+
+\item{\dots}{additional optional elements (not in use)}
 }
 \value{
 A \code{phylo4} or \code{phylo4d} object with the edge,

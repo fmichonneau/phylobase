@@ -65,6 +65,16 @@ labels.}
 \item{value}{a data frame (or object to be coerced to one) to replace the
 values associated with the nodes specified by the argument \code{type}}
 
+\item{merge.data}{if tip or internal node data are provided and data already
+exists for the other type, this determines whether columns with common names
+will be merged together (default TRUE). If FALSE, columns with common names
+will be preserved separately, with \dQuote{.tip} and \dQuote{.node} appended
+to the names. This argument has no effect if tip and node data have no
+column names in common, or if type=\dQuote{all}.}
+
+\item{clear.all}{If only tip or internal node data are to be replaced,
+should data of the other type be dropped?}
+
 \item{\dots}{For the \code{tipData} and \code{nodeData} accessors,
 further arguments to be used by \code{tdata}. For the replacement
 forms, further arguments to be used to control matching between

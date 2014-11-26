@@ -43,6 +43,12 @@ the order they are stored in the edge matrix.}
 
 \item{printall}{default prints entire tree. printall=FALSE returns the first
 6 rows}
+
+\item{object}{a \code{phylo4} or \code{phylo4d} object}
+
+\item{n}{for head() and tail(), the number of lines to print}
+
+\item{\dots}{optional additional arguments (not in use)}
 }
 \value{
 A data.frame with a row for each node (descendant), sorted as

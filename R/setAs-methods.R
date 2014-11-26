@@ -1,7 +1,7 @@
 
 ##' Converting between phylo4/phylo4d and other phylogenetic tree
 ##' formats
-##' 
+##'
 ##' Translation functions to convert between phylobase objects
 ##' (\code{phylo4} or \code{phylo4d}), and objects used by other
 ##' comparative methods packages in R: \code{ape} objects
@@ -27,32 +27,32 @@
 ##' @include phylo4d-methods.R
 ##' @include oldclasses-class.R
 ##' @examples
-##' 
-##' tree.owls <- ape::read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
+##' tree_string <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
+##' tree.owls <- ape::read.tree(text=tree_string)
 ##' ## round trip conversion
 ##' tree_in_phylo <- tree.owls                  # tree is a phylo object
 ##' (tree_in_phylo4 <- as(tree.owls,"phylo4"))  # phylo converted to phylo4
 ##' identical(tree_in_phylo,as(tree_in_phylo4,"phylo"))
 ##' ## test if phylo, and phylo4 converted to phylo are identical
 ##' ## (no, because of dimnames)
-##' 
+##'
 ##' ## Conversion to phylog (ade4)
 ##' as(tree_in_phylo4, "phylog")
-##' 
+##'
 ##' ## Conversion to data.frame
 ##' as(tree_in_phylo4, "data.frame")
-##' 
-##' ## Conversion to phylo (ape) 
+##'
+##' ## Conversion to phylo (ape)
 ##' as(tree_in_phylo4, "phylo")
-##' 
-##' ## Conversion to phylo4d, (data slots empty)    
+##'
+##' ## Conversion to phylo4d, (data slots empty)
 ##' as(tree_in_phylo4, "phylo4d")
 setAs("phylo", "phylo4", function(from, to) {
   ## fixme SWK kludgy fix may not work well with unrooted trees
   ## TODO should we also attempt to get order information?
   ## BMB horrible kludge to avoid requiring ape explicitly
     ape_is.rooted <- function(phy) {
-        if (!is.null(phy$root.edge)) 
+        if (!is.null(phy$root.edge))
             TRUE
         else if (tabulate(phy$edge[, 1])[length(phy$tip.label) + 1] > 2)
             FALSE
@@ -67,7 +67,7 @@ setAs("phylo", "phylo4", function(from, to) {
         }
         root.node <- as.numeric(setdiff(unique(from$edge[,1]),
                                         unique(from$edge[,2])))
-        
+
         from$edge <- rbind(from$edge[tip.idx,],c(0,root.node),
                            from$edge[int.idx,])
         if (!is.null(from$edge.length)) {
@@ -108,9 +108,9 @@ setAs("phylo", "phylo4", function(from, to) {
         }
     }
     newobj@order <- neworder
-    
+
     attr(from,"order") <- NULL
-    
+
     attribs <- attributes(from)
     attribs$names <- NULL
     knownattr <- c("logLik", "origin", "para", "xi")
@@ -143,7 +143,7 @@ setAs("nexml", "phylo4", function(from, to) {
 setAs("nexml", "phylo4d", function(from, to) {
     phylo4d(from)
 })
-    
+
 #######################################################
 ## Exporting to ape
 

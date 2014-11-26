@@ -4,9 +4,9 @@
 #########################################################
 
 ##' reordering trees within phylobase objects
-##' 
+##'
 ##' Methods for reordering trees into various traversal orders
-##' 
+##'
 ##' The \code{reorder} method takes a \code{phylo4} or \code{phylo4d}
 ##' tree and orders the edge matrix (i.e. \code{edges(x)}) in the
 ##' requested traversal order. Currently only two orderings are
@@ -14,20 +14,21 @@
 ##' node's descendants come before that node, thus the root, which is
 ##' ancestral to all nodes, comes last.  In \code{preorder}, a node is
 ##' visited before its descendants, thus the root comes first.
-##' 
+##'
 ##' @name reorder-methods
 ##' @docType methods
 ##' @param x a \code{phylo4} or \code{phylo4d} object
 ##' @param order The desired traversal order; currently only
 ##' \dQuote{preorder} and \dQuote{postorder} are allowed for
 ##' \code{phylo4} and \code{phylo4d} objects.
+##' @param \dots additional optional elements (not in use)
 ##' @return A \code{phylo4} or \code{phylo4d} object with the edge,
 ##' label, length and data slots ordered as \code{order}, which is
 ##' itself recorded in the order slot.
 ##' @note The \code{preorder} parameter corresponds to
 ##' \code{cladewise} in the \code{ape} package, and \code{postorder}
 ##' corresponds (almost) to \code{pruningwise}.
-##' 
+##'
 ##' See \url{http://ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf}
 ##' @author Peter Cowan, Jim Regetz
 ##' @seealso \code{\link[ape]{reorder.phylo}} in the \code{ape} package.

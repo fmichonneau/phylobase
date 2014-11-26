@@ -1,14 +1,15 @@
 
 ##' Summary for phylo4/phylo4d objects
-##' 
+##'
 ##' Summary of information for the tree (\code{phylo4} only) and/or the
 ##' associated data (\code{phylo4d}).
-##' 
+##'
 ##' @name summary-methods
 ##' @docType methods
 ##' @param object a phylo4d object
 ##' @param quiet Should the summary be displayed on screen?
-##' 
+##' @param \dots optional additional elements (not in use)
+##'
 ##' @return The \code{nodeType} method returns named vector which has
 ##' the type of node (internal, tip, root) for value, and the node number
 ##' for name
@@ -21,9 +22,9 @@
 ##' \item{list("nb.nodes")}{the number of nodes}
 ##'
 ##' \item{list("mean.el")}{mean of edge lengths}
-##' 
+##'
 ##' \item{list("var.el")}{variance of edge lengths (estimate for population) }
-##' 
+##'
 ##' \item{list("sumry.el")}{summary (i.e. range and quartiles) of the
 ##' edge lengths}
 ##'
@@ -37,7 +38,7 @@
 ##'
 ##' \item{list("sumry.nodes")}{(optional) summary for the data
 ##' associated with the internal nodes}
-##' 
+##'
 ##' @author Ben Bolker, Thibaut Jombart, Francois Michonneau
 ##' @seealso \code{\link{phylo4d-methods}} constructor and
 ##' \code{\linkS4class{phylo4d}} class.
@@ -53,7 +54,7 @@
 ##'   P1
 ##'   summary(P1)
 ##'   nodeType(P1)
-##' 
+##'
 ##'   ## summary of a polytomous tree
 ##'   E <- matrix(c(
 ##'       8,  9,
@@ -67,13 +68,13 @@
 ##'      11,  6,
 ##'      11,  7,
 ##'       0,  8), ncol=2, byrow=TRUE)
-##' 
+##'
 ##'   P2 <- phylo4(E)
 ##'   nodeLabels(P2) <- as.character(nodeId(P2, "internal"))
 ##'   plot(P2, show.node.label=TRUE)
 ##'   sumryP2 <- summary(P2)
 ##'   sumryP2
-##' 
+##'
 setGeneric("summary")
 
 ##' @rdname summary-methods
@@ -171,7 +172,7 @@ setMethod("summary", signature(object="phylo4"),
 
 
 ##' @rdname summary-methods
-##' @aliases summary,phylo4d-method 
+##' @aliases summary,phylo4d-method
 setMethod("summary", signature(object="phylo4d"),
  function(object, quiet=FALSE) {
     x <- object

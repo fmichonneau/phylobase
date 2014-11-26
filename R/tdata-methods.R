@@ -1,8 +1,8 @@
 ##' Retrieving or updating tip and node data in phylo4d objects
-##' 
+##'
 ##' Methods to retrieve or update tip, node or all data associated with a
 ##' phylogenetic tree stored as a phylo4d object
-##' 
+##'
 ##' @param x A \code{phylo4d} object
 ##' @param type The type of data to retrieve or update: \dQuote{\code{all}}
 ##' (default) for data associated with both tip and internal nodes,
@@ -14,14 +14,14 @@
 ##' This options is useful in the case of missing (\code{NA}) or non-unique
 ##' labels.
 ##' @param empty.columns Should columns filled with \code{NA} be returned?
-# ## @param merge.data if tip or internal node data are provided and data already
-# ## exists for the other type, this determines whether columns with common names
-# ## will be merged together (default TRUE). If FALSE, columns with common names
-# ## will be preserved separately, with \dQuote{.tip} and \dQuote{.node} appended
-# ## to the names. This argument has no effect if tip and node data have no
-# ## column names in common, or if type=\dQuote{all}.
-# ## @param clear.all If only tip or internal node data are to be replaced,
-# ## should data of the other type be dropped?
+##' @param merge.data if tip or internal node data are provided and data already
+##' exists for the other type, this determines whether columns with common names
+##' will be merged together (default TRUE). If FALSE, columns with common names
+##' will be preserved separately, with \dQuote{.tip} and \dQuote{.node} appended
+##' to the names. This argument has no effect if tip and node data have no
+##' column names in common, or if type=\dQuote{all}.
+##' @param clear.all If only tip or internal node data are to be replaced,
+##' should data of the other type be dropped?
 ##' @param \dots For the \code{tipData} and \code{nodeData} accessors,
 ##' further arguments to be used by \code{tdata}. For the replacement
 ##' forms, further arguments to be used to control matching between
@@ -155,14 +155,14 @@ setGeneric("tipData", function(x, ...) {
 
 ##' @name tipData
 ##' @rdname tdata-methods
-##' @aliases tipData,phylo4d-method 
+##' @aliases tipData,phylo4d-method
 setMethod("tipData", signature(x="phylo4d"), function(x, ...) {
     tdata(x, type="tip", ...)
 })
 
 ## tipData<-
 ##' @rdname tdata-methods
-##' @aliases tipData<- 
+##' @aliases tipData<-
 ##' @export
 setGeneric("tipData<-", function(x, ..., value) {
     standardGeneric("tipData<-")

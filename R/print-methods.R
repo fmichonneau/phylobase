@@ -1,9 +1,9 @@
 
 ##' print a phylogeny
-##' 
+##'
 ##' Prints a phylo4 or phylo4d object in data.frame format with user-friendly
 ##' column names
-##' 
+##'
 ##' This is a user-friendly version of the tree representation, useful for
 ##' checking that objects were read in completely and translated correctly. The
 ##' phylogenetic tree is represented as a list of numbered nodes, linked in a
@@ -13,13 +13,16 @@
 ##' any) associated with the node, and the branch length from the node to its
 ##' ancestor. A list of nodes (descendants) and ancestors is minimally required
 ##' for a phylo4 object.
-##' 
+##'
 ##' @param x a \code{phylo4} tree or \code{phylo4d} tree+data object
+##' @param object a \code{phylo4} or \code{phylo4d} object
 ##' @param edgeOrder in the data frame returned, the option 'pretty' returns the
 ##' internal nodes followed by the tips, the option 'real' returns the nodes in
 ##' the order they are stored in the edge matrix.
 ##' @param printall default prints entire tree. printall=FALSE returns the first
 ##' 6 rows
+##' @param n for head() and tail(), the number of lines to print
+##' @param \dots optional additional arguments (not in use)
 ##' @return A data.frame with a row for each node (descendant), sorted as
 ##' follows: root first, then other internal nodes, and finally tips.\cr The
 ##' returned data.frame has the following columns:\cr \item{label}{Label for the
@@ -36,8 +39,8 @@
 ##' @include setAs-methods.R
 ##' @keywords methods
 ##' @examples
-##' 
-##' 
+##'
+##'
 ##' tree.phylo <- ape::read.tree(text="((a,b),c);")
 ##' tree <- as(tree.phylo, "phylo4")
 ##' ##plot(tree,show.node=TRUE) ## plotting broken with empty node labels: FIXME
@@ -45,8 +48,8 @@
 ##' treedata <- phylo4d(tree, tip.data)
 ##' plot(treedata)
 ##' print(treedata)
-##' 
-##' 
+##'
+##'
 ##' @aliases print
 ##' @rdname print-methods
 setGeneric("print")
@@ -118,4 +121,3 @@ setMethod("tail", signature(x="phylo4"),
   function(x, n=20) {
       tail(as(x, "data.frame"), n=n)
   })
-

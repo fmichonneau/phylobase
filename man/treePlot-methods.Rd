@@ -62,6 +62,12 @@ widths of edge lines}
 plotting}
 
 \item{margins}{number of lines around the plot (similar to \code{par(mar)}).}
+
+\item{x}{A \code{phylo4} or \code{phylo4d} object}
+
+\item{y}{(only here for compatibility)}
+
+\item{\dots}{additional arguments}
 }
 \value{
 No return value, function invoked for plotting side effect

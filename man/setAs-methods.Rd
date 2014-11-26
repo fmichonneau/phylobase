@@ -25,7 +25,8 @@ deprecated}), and to \code{data.frame} representation.
  \code{as(object, class)}
 }
 \examples{
-tree.owls <- ape::read.tree(text="(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);")
+tree_string <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
+tree.owls <- ape::read.tree(text=tree_string)
 ## round trip conversion
 tree_in_phylo <- tree.owls                  # tree is a phylo object
 (tree_in_phylo4 <- as(tree.owls,"phylo4"))  # phylo converted to phylo4

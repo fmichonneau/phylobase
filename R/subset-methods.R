@@ -3,12 +3,12 @@
 ################
 
 ##' Methods for creating subsets of phylogenies
-##' 
+##'
 ##' Methods for creating subsets of phylogenies, based on pruning a
 ##' tree to include or exclude a set of terminal taxa, to include all
 ##' descendants of the MRCA of multiple taxa, or to return a subtree
 ##' rooted at a given node.
-##' 
+##'
 ##' The \code{subset} methods must be called using no more than one of
 ##' the four main subsetting criteria arguments (\code{tips.include},
 ##' \code{tips.exclude}, \code{mrca}, or \code{node.subtree}).  Each
@@ -21,13 +21,13 @@
 ##' tree will be ignored, with a warning.  For the \code{node.subtree}
 ##' argument, failure to provide a single, valid internal node will
 ##' result in an error.
-##' 
+##'
 ##' Although \code{prune} is mainly intended as the workhorse function
 ##' called by \code{subset}, it may also be called directly.  In
 ##' general it should be equivalent to the \code{tips.exclude} form of
 ##' \code{subset} (although perhaps with less up-front error
 ##' checking).
-##' 
+##'
 ##' The "[" operator, when used as \code{x[i]}, is similar to the
 ##' \code{tips.include} form of \code{subset}.  However, the indices
 ##' used with this operator can also be logical, in which case the
@@ -39,10 +39,10 @@
 ##' \code{tdata(geospiza, "all")}.  Note that the second index is
 ##' optional: \code{x[i, TRUE]}, \code{x[i,]}, and \code{x[i]} are all
 ##' equivalent.
-##' 
+##'
 ##' Regardless of which approach to subsetting is used, the argument
 ##' values must be such that at least two tips are retained.
-##' 
+##'
 ##' If the most recent common ancestor of the retained tips is not the
 ##' original root node, then the root node of the subset tree will be
 ##' a descendant of the original root.  For rooted trees with non-NA
@@ -52,14 +52,14 @@
 ##' the original root edge).  As an alternative, see the examples for
 ##' a way to determine the length of the edge that was immediately
 ##' ancestral to the new root node in the original tree.
-##' 
+##'
 ##' Note that the correspondance between nodes and labels (and data in
 ##' the case of \linkS4class{phylo4d}) will be retained after all
 ##' forms of subsetting.  Beware, however, that the node numbers (IDs)
 ##' will likely be altered to reflect the new tree topology, and
 ##' therefore cannot be compared directly between the original tree
 ##' and the subset tree.
-##' 
+##'
 ##' @name subset-methods
 ##' @docType methods
 ##' @param x an object of class \code{"phylo4"} or \code{"phylo4d"}
@@ -77,6 +77,8 @@
 ##' include
 ##' @param j (\code{[} method, phylo4d only) An index vector
 ##' indicating columns of node/tip data to include
+##' @param drop (not in use: for compatibility with the generic method)
+##' @param \dots optional additional parameters (not in use)
 ##' @return an object of class \code{"phylo4"} or \code{"phylo4d"}
 ##' @section Methods: \describe{ \item{x = "phylo4"}{subset tree}
 ##' \item{x = "phylo4d"}{subset tree and corresponding node and tip
@@ -93,7 +95,7 @@
 ##' data(geospiza)
 ##' nodeLabels(geospiza) <- paste("N", nodeId(geospiza, "internal"), sep="")
 ##' geotree <- extractTree(geospiza)
-##' 
+##'
 ##' ## "subset" examples
 ##' tips <- c("difficilis", "fortis", "fuliginosa", "fusca", "olivacea",
 ##'     "pallida", "parvulus", "scandens")
@@ -102,17 +104,17 @@
 ##' plot(subset(geotree, tips.exclude="scandens"))
 ##' plot(subset(geotree, mrca=c("scandens","fortis","pauper")))
 ##' plot(subset(geotree, node.subtree=18))
-##' 
+##'
 ##' ## "prune" examples (equivalent to subset using tips.exclude)
 ##' plot(prune(geotree, tips))
-##' 
+##'
 ##' ## "[" examples (equivalent to subset using tips.include)
 ##' plot(geotree[c(1:6,14)])
 ##' plot(geospiza[c(1:6,14)])
-##' 
+##'
 ##' ## for phylo4d, subset both tips and data columns
 ##' geospiza[c(1:6,14), c("wingL", "beakD")]
-##' 
+##'
 ##' ## note handling of root edge length:
 ##' edgeLength(geotree)['0-15'] <- 0.1
 ##' geotree2 <- geotree[1:2]
@@ -170,7 +172,7 @@ setMethod("subset", "phylo4", function(x, tips.include=NULL,
         unknown <- numeric(0)
     }
     if (length(unknown)>0) {
-        warning("invalid nodes ignored: ", paste(unknown, 
+        warning("invalid nodes ignored: ", paste(unknown,
             collapse=", "))
     }
     if (length(kept)<2) {
@@ -285,7 +287,7 @@ setMethod("prune", "phylo4",
 
     makeEdgeNames <- function(edge) {
         paste(edge[,1], edge[,2], sep="-")
-    } 
+    }
 
     ## drop tips and obsolete internal nodes from edge matrix
     tip.drop <- getNode(x, tips.exclude, missing="fail")
@@ -308,7 +310,7 @@ setMethod("prune", "phylo4",
         node.keep[nodeId(x, "internal")] <- TRUE
     }
     edge.new <- edges(x)[edges(x)[,2] %in% nodes[node.keep], ]
-  
+
     ## remove singletons
     edge.length.new <- edgeLength(x)
     edge.label.new <- edgeLabels(x)
@@ -375,7 +377,7 @@ setMethod("prune", "phylo4",
 
     ## update, check, then return the pruned phylo4 object
     x@edge <- edge.new
-    ##TODO would prefer to leave out NA from edge.length slot, but can't 
+    ##TODO would prefer to leave out NA from edge.length slot, but can't
     x@edge.length <- edge.length.new
     x@edge.label <- edge.label.new[!is.na(edge.label.new)]
     x@label <- label.new[!is.na(label.new)]
@@ -425,4 +427,3 @@ setMethod("prune", "phylo4d",
 ##                     deparse(substitute(phy)),
 ##                     "(class",class(phy),")")
 ##           })
-

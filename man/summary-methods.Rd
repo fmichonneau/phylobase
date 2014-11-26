@@ -23,6 +23,8 @@ nodeType(object)
 \item{object}{a phylo4d object}
 
 \item{quiet}{Should the summary be displayed on screen?}
+
+\item{\dots}{optional additional elements (not in use)}
 }
 \value{
 The \code{nodeType} method returns named vector which has

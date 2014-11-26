@@ -1,8 +1,8 @@
 ##' Phylogeny plotting
-##' 
+##'
 ##' Plot \code{phylo4} or \code{phylo4d} objects, including associated data.
-##' 
-##' 
+##'
+##'
 ##' @name treePlot-methods
 ##' @aliases treePlot plot,ANY,ANY-method plot,pdata,missing-method
 ##' plot,phylo4,missing-method treePlot-method treePlot,phylo4,phylo4d-method
@@ -15,6 +15,8 @@
 ##' that cannot be plotted, the function will produce a warning. You
 ##' can avoid this by using the argument \code{plot.data=FALSE}.
 ##' @param phy A \code{phylo4} or \code{phylo4d} object
+##' @param x A \code{phylo4} or \code{phylo4d} object
+##' @param y (only here for compatibility)
 ##' @param type A character string indicating the shape of plotted tree
 ##' @param show.tip.label Logical, indicating whether tip labels should be shown
 ##' @param show.node.label Logical, indicating whether node labels should be
@@ -38,6 +40,7 @@
 ##' plotting
 ##' @param plot.at.tip should the data plots be at the tip? (logical)
 ##' @param margins number of lines around the plot (similar to \code{par(mar)}).
+##' @param \dots additional arguments
 ##' @return No return value, function invoked for plotting side effect
 ##' @section Methods: \describe{ \item{phy = "phylo4"}{plots a tree of class
 ##' \linkS4class{phylo4}} \item{phy = "phylo4d"}{plots a tree with one or more
@@ -47,8 +50,8 @@
 ##' @keywords methods
 ##' @export
 ##' @examples
-##' 
-##' 
+##'
+##'
 ##' ## example of plotting two grid plots on the same page
 ##' data(geospiza)
 ##' geotree <- extractTree(geospiza)
@@ -57,7 +60,7 @@
 ##'   pushViewport(viewport(layout.pos.col=1, name="plot1"))
 ##'     treePlot(geotree, newpage=FALSE)
 ##'   popViewport()
-##'   
+##'
 ##'   pushViewport(viewport(layout.pos.col=2, name="plot2"))
 ##'     treePlot(geotree, newpage=FALSE, rot=180)
 ##' popViewport(2)
@@ -182,11 +185,11 @@
 
 
 ##' Plot a phylo4 object
-##' 
+##'
 ##' Plots the phylogenetic tree contained in a \code{phylo4} or \code{phylo4d}
 ##' object.
-##' 
-##' 
+##'
+##'
 ##' @param xxyy A list created by the \code{\link{phyloXXYY}} function
 ##' @param type A character string indicating the shape of plotted tree
 ##' @param show.tip.label Logical, indicating whether tip labels should be shown
@@ -205,27 +208,27 @@
 ##' @export
 ##' @keywords methods
 ##' @examples
-##' 
-##' 
+##'
+##'
 ##' data(geospiza)
 ##' grid.newpage()
 ##' xxyy <- phyloXXYY(geospiza)
-##' plotOneTree(xxyy, type = 'phylogram', 
+##' plotOneTree(xxyy, type = 'phylogram',
 ##'   show.tip.label = TRUE, show.node.label = TRUE,
 ##'   edge.color = 'black', node.color = 'orange', tip.color = 'blue',
 ##'   edge.width = 1, rot = 0
 ##' )
-##' 
+##'
 ##' grid.newpage()
 ##' pushViewport(viewport(w = 0.8, h = 0.8))
-##' plotOneTree(xxyy, type = 'phylogram', 
+##' plotOneTree(xxyy, type = 'phylogram',
 ##'   show.tip.label = TRUE, show.node.label = TRUE,
 ##'   edge.color = 'black', node.color = 'orange', tip.color = 'blue',
 ##'   edge.width = 1, rot = 0
 ##' )
 ##' popViewport()
-##' 
-##' 
+##'
+##'
 plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
                         node.color, tip.color, edge.width, rot)
 {
@@ -335,15 +338,15 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
 
 
 ##' Calculate node x and y coordinates
-##' 
+##'
 ##' Calculates the node x and y locations for plotting a phylogenetic tree.
-##' 
+##'
 ##' The y coordinates of the tips are evenly spaced from 0 to 1 in pruningwise
 ##' order.  Ancestor y nodes are given the mean value of immediate descendants.
 ##' The root is given the x coordinate 0 and descendant nodes are placed
 ##' according to the cumulative branch length from the root, with a maximum x
 ##' value of 1.
-##' 
+##'
 ##' @param phy A \code{phylo4} or \code{phylo4d} object.
 ##' @param tip.order A character vector of tip labels, indicating their order
 ##' along the y axis (from top to bottom). Or, a numeric vector of tip node IDs
@@ -360,13 +363,13 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
 ##' @export
 ##' @keywords methods
 ##' @examples
-##' 
-##' 
+##'
+##'
 ##' data(geospiza)
 ##' coor <- phyloXXYY(geospiza)
 ##' plot(coor$xx, coor$yy, pch = 20)
-##' 
-##' 
+##'
+##'
 phyloXXYY <- function(phy, tip.order=NULL)
 {
     phy.orig <- phy
@@ -492,11 +495,11 @@ drawDetails.bubLegend <- function(x, ...) {
 
 
 ##' Bubble plots for phylo4d objects
-##' 
+##'
 ##' Plots either circles or squares corresponding to the magnitude of each cell
 ##' of a \code{phylo4d} object.
-##' 
-##' 
+##'
+##'
 ##' @param type the type of plot
 ##' @param place.tip.label A string indicating whether labels should be plotted
 ##' to the right or to the left of the bubble plot
@@ -516,15 +519,15 @@ drawDetails.bubLegend <- function(x, ...) {
 ##' @param grid A logical indicating whether a grey grid should be plotted
 ##' behind the bubbles
 ##' @author Peter Cowan \email{pdc@@berkeley.edu}
-##' @export 
+##' @export
 ##' @seealso \code{\link{phyloXXYY}}, \code{treePlot}
 ##' @keywords methods
 ##' @examples
-##' 
+##'
 ##' ##---- Should be DIRECTLY executable !! ----
 ##' ##-- ==>  Define data, use random,
 ##' ##--	or do  help(data=index)  for the standard data sets.
-##' 
+##'
 phylobubbles <- function(type = type,
                         place.tip.label = "right",
                         show.node.label = show.node.label,
@@ -696,10 +699,10 @@ phylobubbles <- function(type = type,
 
 
 ##' Plotting trees and associated data
-##' 
+##'
 ##' Plotting phylogenetic trees and associated data
-##' 
-##' 
+##'
+##'
 ##' @param xxyy A list created by the \code{\link{phyloXXYY}} function
 ##' @param type A character string indicating the shape of plotted tree
 ##' @param show.tip.label Logical, indicating whether tip labels should be shown
@@ -781,4 +784,3 @@ setGeneric('plot')
 setMethod('plot', signature(x='phylo4', y='missing'), function(x, y, ...) {
     treePlot(x, ...)
 })
-

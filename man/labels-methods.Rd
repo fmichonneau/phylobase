@@ -85,6 +85,8 @@ be used to match the labels? See Details for more information.}
 
 \item{value}{a vector of class \code{character}, see Details for more
 information.}
+
+\item{\dots}{additional optional arguments (not in use)}
 }
 \value{
 labels in ascending order.

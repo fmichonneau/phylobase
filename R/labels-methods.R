@@ -42,6 +42,7 @@
 ##' @param object a phylo4 or phylo4d object.
 ##' @param type which type of labels: \code{all} (tips and internal nodes),
 ##' \code{tip} (tips only), \code{internal} (internal nodes only).
+##' @param \dots additional optional arguments (not in use)
 ##' @param value a vector of class \code{character}, see Details for more
 ##' information.
 ##' @param use.names should the names of the vector used to create/update labels
