@@ -1,7 +1,7 @@
 
 
 ##' Utilities and Tools for Phylogenetics
-##' 
+##'
 ##' Base package for phylogenetic structures and comparative data.
 ##'
 ##' \code{phylobase} provides a set of functions to associate and
@@ -11,12 +11,12 @@
 ##' \code{phylobase} intends to be robust, fast and efficient. We hope
 ##' other people use the data structure it provides to develop new
 ##' comparative methods in R.
-##' 
+##'
 ##' With \code{phylobase} it is easy to ensure that all your data are
 ##' represented and associated with the tips or the internal nodes of
 ##' your tree. \code{phylobase} provides functions to:
 ##' \itemize{
-##' 
+##'
 ##' \item prune (subset) your trees, find ancestor(s) a
 ##' descendant(s)
 ##'
@@ -30,7 +30,7 @@
 ##' }
 ##'
 ##' @section History:
-##' 
+##'
 ##' \code{phylobase} was started during a Hackathlon at NESCent on
 ##' December 10-14 2007.
 ##'
@@ -67,6 +67,7 @@
 ##'
 ##' @useDynLib phylobase
 ##' @import methods
+##' @import grid
 ##' @import ape
 ##' @import RNeXML
 ##' @importFrom Rcpp evalCpp
@@ -76,7 +77,7 @@
 ##' @importFrom ade4 newick2phylog
 ##'
 ##' @exportMethod print head tail reorder plot summary
-##' 
+##'
 ## exportMethod should only be used for generics defined outside the package!
 ## @exportMethod phylo4 phylo4d
 ## @exportMethod edges edgeId hasEdgeLength edgeLength edgeLength<- sumEdgeLength edgeOrder
@@ -90,11 +91,11 @@ NULL
 
 
 ##' Data from Darwin's finches
-##' 
+##'
 ##' Phylogenetic tree and morphological data for Darwin's finches, in different
 ##' formats
-##' 
-##' 
+##'
+##'
 ##' @name geospiza
 ##' @aliases geospiza geospiza_raw
 ##' @docType data
@@ -107,20 +108,20 @@ NULL
 ##' @source Dolph Schluter via Luke Harmon
 ##' @keywords datasets
 ##' @examples
-##' 
+##'
 ##' data(geospiza)
 ##' plot(geospiza)
-##' 
+##'
 NULL
 
 
 
 ##' 'Owls' data from ape
-##' 
+##'
 ##' A tiny tree, for testing/example purposes, using one of the examples from
 ##' the \code{ape} package
-##' 
-##' 
+##'
+##'
 ##' @name owls4
 ##' @docType data
 ##' @format This is the standard 'owls' tree from the \code{ape} package, in
@@ -128,8 +129,8 @@ NULL
 ##' @source From various examples in the \code{ape} package
 ##' @keywords datasets
 ##' @examples
-##' 
+##'
 ##' data(owls4)
 ##' plot(owls4)
-##' 
+##'
 NULL
