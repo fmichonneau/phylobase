@@ -3,10 +3,10 @@ ptypes <- c("multitype","binary","continuous","DNA","RNA","aacid",
             "other","unknown")
 
 ##' Class "pdata"
-##' 
+##'
 ##' Data class for phylo4d objects
-##' 
-##' 
+##'
+##'
 ##' @name pdata-class
 ##' @aliases ptypes pdata-class [<-,pdata-method [,pdata-method
 ##' [,pdata,ANY,ANY,ANY-method [[,pdata-method [[<-,pdata-method
@@ -28,11 +28,11 @@ setClass("pdata", representation(data="data.frame",
 
 
 ##' Constructor for pdata (phylogenetic data) class
-##' 
+##'
 ##' Combine data, type, comments, and metadata information to create a new pdata
 ##' object, or check such an object for consistency
-##' 
-##' 
+##'
+##'
 ##' @aliases pdata check_pdata
 ##' @param data a data frame
 ##' @param type a factor with levels as specified by \linkS4class{pdata}, the
@@ -71,36 +71,36 @@ check_pdata <- function(object) {
     }
 }
 
-setMethod("[","pdata",function(x,i, j,...,drop=FALSE) {
-  xd <- x@data[i,j,...,drop=drop]
-  xd2 <- as.data.frame(xd)
-  xd2
-})
+## setMethod("[","pdata",function(x,i, j,...,drop=FALSE) {
+##   xd <- x@data[i,j,...,drop=drop]
+##   xd2 <- as.data.frame(xd)
+##   xd2
+## })
 
-#### @exportMethod [<-
-setGeneric("[<-")
+## #### @exportMethod [<-
+## setGeneric("[<-")
 
-setMethod("[<-","pdata",function(x,i, j,...,drop=FALSE,value) {
-  "[<-"(x@data,i,j,...,drop=drop,value)
-})
+## setMethod("[<-","pdata",function(x,i, j,...,drop=FALSE,value) {
+##   "[<-"(x@data,i,j,...,drop=drop,value)
+## })
 
-### @exportMethod [[
-setGeneric("[[")
-setMethod("[[","pdata",
-          function(x,i,j,...,exact=NA) {
-            x@data[[i,j,...,exact=exact]]
-          })
+## ### @exportMethod [[
+## setGeneric("[[")
+## setMethod("[[","pdata",
+##           function(x,i,j,...,exact=NA) {
+##             x@data[[i,j,...,exact=exact]]
+##           })
 
-#### @exportMethod [[<-
-setGeneric("[[<-")
-setMethod("[[<-","pdata",
-          function(x,i,j,...,exact=NA,value) {
-            "[[<-"(x@data,i,j,...,exact=exact,value)
-          })
+## #### @exportMethod [[<-
+## setGeneric("[[<-")
+## setMethod("[[<-","pdata",
+##           function(x,i,j,...,exact=NA,value) {
+##             "[[<-"(x@data,i,j,...,exact=exact,value)
+##           })
 
-setMethod("plot",signature(x="pdata",y="missing"), function(x,...){
-    return(plot(x@data, ...))
-}) # end plot phylo4
+## setMethod("plot",signature(x="pdata",y="missing"), function(x,...){
+##     return(plot(x@data, ...))
+## }) # end plot phylo4
 
 
 ## od = data.frame(a=1:3,b=4:6)
@@ -145,6 +145,5 @@ setMethod("plot",signature(x="pdata",y="missing"), function(x,...){
 
 # this works, but list structure is destroyed
 #> mapply(function(x, i, j, ..., drop=TRUE) x@.Data[i], x, 2)
-#  x   y 
-#"b" "2" 
-
+#  x   y
+#"b" "2"
