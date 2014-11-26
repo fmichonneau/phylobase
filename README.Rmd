@@ -41,7 +41,7 @@ library(phylobase)
 
 The development version (the patch version number is odd, e.g., 0.6.9) is
 available on GitHub (https://github.com/fmichonneau/phylobase), and can be
-installed using the `[devtools](http://cran.r-project.org/package=devtools)`
+installed using the [`devtools`](http://cran.r-project.org/package=devtools)
 package.
 
 ```{r, eval=FALSE}
