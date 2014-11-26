@@ -1,0 +1,6 @@
+inst/doc
+*.o
+*.so
+.Rhistory
+*/auto/*
+src/symbols.rds
