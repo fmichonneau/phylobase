@@ -244,11 +244,11 @@ hasEdgeLength(g1)
 It does! What do they look like?
 <<edgeLength-geodata>>=
 edgeLength(g1)
-@ 
+@
 
 Note that the root has \verb+<NA>+ as its length.
 
-Print edge labels (also empty in this case --- therefore all \code{NA}): 
+Print edge labels (also empty in this case --- therefore all \code{NA}):
 
 <<edgelabelgeodata>>=
 edgeLabels(g1)
@@ -258,7 +258,7 @@ You can also use this function to label specific edges:
 <<edgelabel-assign-geodata>>=
 edgeLabels(g1)["23-24"] <- "an edge"
 edgeLabels(g1)
-@ 
+@
 
 The edge labels are named according to the nodes they connect
 (ancestor-descendant). You can get the edge(s) associated with a particular
@@ -275,7 +275,7 @@ retrieve the length of a given set of edges:
 <<getEdge-edgeLength>>=
 edgeLength(g1)[getEdge(g1, 24)]
 edgeLength(g1)[getEdge(g1, 24, "ancestor")]
-@ 
+@
 
 Is it rooted?
 
@@ -296,14 +296,14 @@ hasPoly(g1)
 Is the tree ultrametric?
 <<ultrametric-geodata>>=
 isUltrametric(g1)
-@ 
+@
 
 You can also get the depth (distance from the root) of any given node or the
-tips:
+tips:q
 <<nodeDepth-geodata>>=
 nodeDepth(g1, 23)
 depthTips(g1)
-@ 
+@
 
 \section{Trees with data}
 
@@ -314,15 +314,10 @@ Now we'll take the \emph{Geospiza} data from \verb+geospiza_raw$data+ and merge
 it with the tree. However, since \emph{G. olivacea} is included in the tree but
 not in the data set, we will initially run into some trouble:
 
-<<geomergedata>>=
+<<geomergedata, error=TRUE>>=
 g1 <- as(geospiza_raw$tree, "phylo4")
 geodata <- geospiza_raw$data
 g2 <- phylo4d(g1, geodata)
-@
-
-<<geomergeerr1,echo=FALSE>>=
-g2 <- try(phylo4d(g1, geodata),silent=TRUE)
-cat(as.character(g2))
 @
 
 To deal with \emph{G. olivacea} missing from the data, we have a few
@@ -394,7 +389,7 @@ subset(g2, tips.exclude=c("fuliginosa", "fortis", "magnirostris",
             "conirostris", "scandens"))
 subset(g2, tips.exclude=names(descendants(g2, MRCA(g2, c("difficilis",
                "fortis")))))
-    
+
 @
 
 % This isn't implemented yet
@@ -424,7 +419,7 @@ label. It returns a vector with node numbers as values and labels as names:
 data(geospiza)
 getNode(geospiza, 10)
 getNode(geospiza, "pauper")
-@ 
+@
 
 If no node is specified, they are all returned, and if a node can't be found
 it's returned as a \verb+NA+. It is possible to control what happens when a node
@@ -435,14 +430,14 @@ getNode(geospiza)
 getNode(geospiza, 10:14)
 getNode(geospiza, "melanogaster", missing="OK") # no warning
 getNode(geospiza, "melanogaster", missing="warn") # warning!
-@ 
+@
 
 \code{children} and \code{ancestor} give the immediate neighboring nodes:
 
 <<children>>=
 children(geospiza, 16)
 ancestor(geospiza, 16)
-@ 
+@
 
 while \code{descendants} and \code{ancestors} can traverse the tree up to the
 tips or root respectively:
@@ -452,14 +447,14 @@ descendants(geospiza, 16)    # by default returns only the tips
 descendants(geospiza, "all") # also include the internal nodes
 ancestors(geospiza, 20)
 ancestors(geospiza, 20, "ALL") # uppercase ALL includes self
-@ 
+@
 
 \code{siblings} returns the other node(s) associated with the same ancestor:
 
 <<siblings>>=
 siblings(geospiza, 20)
 siblings(geospiza, 20, include.self=TRUE)
-@ 
+@
 
 \code{MRCA} returns the most common recent ancestor for a set of tips, and
 shortest path returns the nodes connecting 2 nodes:
@@ -467,7 +462,7 @@ shortest path returns the nodes connecting 2 nodes:
 <<mrca>>=
 MRCA(geospiza, 1:6)
 shortestPath(geospiza, 4, "pauper")
-@ 
+@
 
 \section{multiPhylo4 classes}
 
