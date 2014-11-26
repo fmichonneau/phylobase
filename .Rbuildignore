@@ -6,3 +6,4 @@ cleanup
 ~$
 vignettes/developer.*
 travis-tool.sh
+README.*
