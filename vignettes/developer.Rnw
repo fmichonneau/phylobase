@@ -1,6 +1,7 @@
 \documentclass{article}
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{A developers guide for contributing to phylobase}
+%% VignetteIndexEntry{A developers guide for contributing to phylobase}  % add
+%% backslash when reusing
 
 \usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
 \usepackage{graphicx}       % for jpeg and pdf figure support
