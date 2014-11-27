@@ -325,7 +325,8 @@ choices. The easiest is to use \code{missing.data="warn"} to allow \code{R} to
 create the new object with a warning (you can also use \code{missing.data="OK"}
 to proceed without warnings):
 
-<<geomerge2,tidy=FALSE>>=
+<<geomerge2, tidy=FALSE>>=
+geodata <- geospiza_raw$data
 g2 <- phylo4d(g1, geodata, missing.data="warn")
 @
 
