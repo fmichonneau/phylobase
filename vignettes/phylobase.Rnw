@@ -314,7 +314,7 @@ Now we'll take the \emph{Geospiza} data from \verb+geospiza_raw$data+ and merge
 it with the tree. However, since \emph{G. olivacea} is included in the tree but
 not in the data set, we will initially run into some trouble:
 
-<<geomergedata, error=TRUE>>=
+<<geomergedata, error=TRUE, purl=FALSE>>=
 g1 <- as(geospiza_raw$tree, "phylo4")
 geodata <- geospiza_raw$data
 g2 <- phylo4d(g1, geodata)
