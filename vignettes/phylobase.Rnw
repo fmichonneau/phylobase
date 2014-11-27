@@ -299,7 +299,7 @@ isUltrametric(g1)
 @
 
 You can also get the depth (distance from the root) of any given node or the
-tips:q
+tips:
 <<nodeDepth-geodata>>=
 nodeDepth(g1, 23)
 depthTips(g1)
