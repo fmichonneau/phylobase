@@ -143,7 +143,7 @@ All fine and good, but how to we find out about all the great features of the
 \code{phylobase} plotting function?  \code{R} has two nifty ways to find it, the
 first is to simply put a question mark in front of the whole call:
 
-<<doc0,eval=FALSE>>=
+<<doc0, eval=FALSE, purl=FALSE>>=
 `?`(plot(rand_p4_tree))
 @
 
@@ -152,14 +152,14 @@ the correct help file (note: this only works with \code{S4} objects).  The
 second ways is handy if you already know the class of your object, or want to
 compare to generics for different classes:
 
-<<doc1,eval=FALSE>>=
+<<doc1, eval=FALSE, purl=FALSE>>=
 `?`(method, plot("phylo4"))
 @
 
 More information about how \code{S4} documentation works can be found in the
 methods package, by running the following command.
 
-<<doc2,eval=FALSE>>=
+<<doc2,eval=FALSE, purl=FALSE>>=
 help('Documentation', package="methods")
 @
 
@@ -224,7 +224,7 @@ tipLabels(g1) <- tolower(tipLabels(g1))
 You could also modify selected labels, e.g. to modify the labels in positions 11
 and 13 (which happen to be the only labels with uppercase letters):
 
-<<eval=FALSE>>=
+<<eval=FALSE, purl=FALSE>>=
 tipLabels(g1)[c(11, 13)] <- c("platyspiza", "pinaroloxias")
 @
 
@@ -311,12 +311,18 @@ The \code{phylo4d} class matches trees with data, or combines them with a data
 frame to make a \code{phylo4d} (tree-with-data) object.
 
 Now we'll take the \emph{Geospiza} data from \verb+geospiza_raw$data+ and merge
-it with the tree. However, since \emph{G. olivacea} is included in the tree but
+it with the tree. First, let's prepare the data:
+
+<<dataprep>>=
+g1 <- as(geospiza_raw$tree, "phylo4")
+geodata <- geospiza_raw$data
+@
+
+
+However, since \emph{G. olivacea} is included in the tree but
 not in the data set, we will initially run into some trouble:
 
 <<geomergedata, error=TRUE, purl=FALSE>>=
-g1 <- as(geospiza_raw$tree, "phylo4")
-geodata <- geospiza_raw$data
 g2 <- phylo4d(g1, geodata)
 @
 
@@ -334,7 +340,7 @@ g2 <- phylo4d(g1, geodata, missing.data="warn")
 @
 
 <<echo=FALSE, results='hide'>>=
-g2 <- phylo4d(g1, geodata, missing.data="OK")
+g2 <- phylo4d(g1, geodata, missing.data="OK", extra.data="OK")
 @
 
 Another way to deal with this would be to use \code{prune()} to drop the
