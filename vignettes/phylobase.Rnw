@@ -29,7 +29,7 @@
 library(knitr)
 opts_chunk$set(
     fig.keep='none', dev='pdf', fig.width=6, fig.height=6,
-    purl=FALSE, latex.options.color="usenames,dvipsnames"
+    latex.options.color="usenames,dvipsnames"
 )
 @
 
@@ -325,9 +325,13 @@ choices. The easiest is to use \code{missing.data="warn"} to allow \code{R} to
 create the new object with a warning (you can also use \code{missing.data="OK"}
 to proceed without warnings):
 
-<<geomerge2, tidy=FALSE>>=
+<<geomerge2, tidy=FALSE, warning=TRUE, purl=FALSE>>=
 geodata <- geospiza_raw$data
 g2 <- phylo4d(g1, geodata, missing.data="warn")
+@
+
+<<echo=FALSE, results='hide'>>=
+g2 <- phylo4d(g1, geodata, missing.data="OK")
 @
 
 Another way to deal with this would be to use \code{prune()} to drop the
