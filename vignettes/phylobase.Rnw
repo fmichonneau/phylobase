@@ -29,7 +29,7 @@
 library(knitr)
 opts_chunk$set(
     fig.keep='none', dev='pdf', fig.width=6, fig.height=6,
-    latex.options.color="usenames,dvipsnames"
+    purl=FALSE, latex.options.color="usenames,dvipsnames"
 )
 @
 
