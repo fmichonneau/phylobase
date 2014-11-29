@@ -20,6 +20,6 @@ notifications:
     on_failure: change
 env:
   global:
-    - WARNINGS_ARE_ERRORS=0
+    ## - WARNINGS_ARE_ERRORS=1
     - _R_CHECK_FORCE_SUGGESTS_=0
     - BOOTSTRAP_LATEX=1
