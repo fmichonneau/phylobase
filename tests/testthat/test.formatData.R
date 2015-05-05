@@ -187,10 +187,8 @@ test_that("behaves as expected with missing data", {
     expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip"))
     expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip",
                                         missing.data="fail"))
-    options(warn=3)
-    expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip",
+    expect_warning(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip",
                                         missing.data="warn"))
-    options(warn=0)
     ## missing data with matching
     expect_equal(phylobase:::formatData(phy.alt, data.frame(a=rev(nid.tip)[-1],
         row.names=rev(nid.tip)[-1]), type="tip", missing.data="OK"),
@@ -221,12 +219,10 @@ test_that("works as expected with extra data", {
     ## force error conditions
     expect_error(phylobase:::formatData(phy.alt, data.frame(a=1:3), type="tip",
         missing.data="fail"))
-    options(warn=3)
-    expect_error(phylobase:::formatData(phy.alt, data.frame(a=0:5, row.names=0:5),
-        type="tip", missing="warn"))
-    expect_error(phylobase:::formatData(phy.alt, data.frame(a=0:5, row.names=0:5),
-        type="tip"))
-    options(warn=0)
+    expect_warning(phylobase:::formatData(phy.alt, data.frame(a=0:5, row.names=0:5),
+        type="tip", missing="warn"), "not found in the tree")
+    expect_warning(phylobase:::formatData(phy.alt, data.frame(a=0:5, row.names=0:5),
+        type="tip"), "not found in the tree")
     ## extra data with matching
     expect_equal(phylobase:::formatData(phy.alt, data.frame(a=c(0L, rev(nid.tip)),
         row.names=c(0, rev(nid.tip))), type="tip", extra.data="OK"),
@@ -285,12 +281,12 @@ test_that("keep.all works", {
 
 context("formatData with duplicated labels in object")
 
-test_that("it works", {
+test_that("formatData works with duplicated labels", {
     ## Saving default options
     op <- phylobase.options()
 
     ## Changing default options
-    phylobase.options(allow.duplicated.labels="ok") 
+    phylobase.options(allow.duplicated.labels="ok")
 
     ## Creating phylo4 object with duplicated labels
     phy.dup <- phy.alt
@@ -394,10 +390,8 @@ test_that("it works", {
     expect_error(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip"))
     expect_error(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip",
         missing.data="fail"))
-    options(warn=3)
-    expect_error(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip",
+    expect_warning(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip",
         missing.data="warn"))
-    options(warn=0)
     ## missing data with matching
     expect_equal(phylobase:::formatData(phy.dup, data.frame(a=rev(nid.tip)[-1],
         row.names=rev(nid.tip)[-1]), type="tip", missing.data="OK"),
@@ -426,12 +420,10 @@ test_that("it works", {
     ## force error conditions
     expect_error(phylobase:::formatData(phy.dup, data.frame(a=1:3), type="tip",
         missing.data="fail"))
-    options(warn=3)
-    expect_error(phylobase:::formatData(phy.dup, data.frame(a=0:5, row.names=0:5),
+    expect_warning(phylobase:::formatData(phy.dup, data.frame(a=0:5, row.names=0:5),
         type="tip", missing="warn"))
-    expect_error(phylobase:::formatData(phy.dup, data.frame(a=0:5, row.names=0:5),
+    expect_warning(phylobase:::formatData(phy.dup, data.frame(a=0:5, row.names=0:5),
         type="tip"))
-    options(warn=0)
     ## extra data with matching
     expect_equal(phylobase:::formatData(phy.dup, data.frame(a=c(0L, rev(nid.tip)),
         row.names=c(0, rev(nid.tip))), type="tip", extra.data="OK"),
