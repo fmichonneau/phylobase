@@ -77,7 +77,3 @@ checkTreeCpp <- function(obj, opts) {
     .Call('phylobase_checkTreeCpp', PACKAGE = 'phylobase', obj, opts)
 }
 
-GetNCL <- function(params, paramsVecR) {
-    .Call('phylobase_GetNCL', PACKAGE = 'phylobase', params, paramsVecR)
-}
-
