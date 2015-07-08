@@ -8,3 +8,4 @@ vignettes/developer.*
 inst/doc/developer.*
 travis-tool.sh
 README.*
+tmp/

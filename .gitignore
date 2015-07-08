@@ -3,3 +3,6 @@
 .Rhistory
 */auto/*
 src/symbols.rds
+tmp/
+*.gcda
+*.gcno
