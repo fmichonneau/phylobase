@@ -220,15 +220,3 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// GetNCL
-Rcpp::List GetNCL(SEXP params, SEXP paramsVecR);
-RcppExport SEXP phylobase_GetNCL(SEXP paramsSEXP, SEXP paramsVecRSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< SEXP >::type params(paramsSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type paramsVecR(paramsVecRSEXP);
-    __result = Rcpp::wrap(GetNCL(params, paramsVecR));
-    return __result;
-END_RCPP
-}

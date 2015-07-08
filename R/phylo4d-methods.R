@@ -8,11 +8,11 @@
 
 
 ##' Combine a phylogenetic tree with data
-##' 
+##'
 ##' \code{phylo4d} is a generic constructor which merges a
 ##' phylogenetic tree with data frames to create a combined object of
 ##' class \code{phylo4d}
-##' 
+##'
 ##' You can provide several data frames to define traits associated
 ##' with tip and/or internal nodes. By default, data row names are
 ##' used to link data to nodes in the tree, with any number-like names
@@ -23,13 +23,13 @@
 ##' include positional matching, matching exclusively on node labels,
 ##' and matching based on a column of data rather than on row
 ##' names.
-##' 
+##'
 ##' Matching rules will apply the same way to all supplied data
 ##' frames.  This means that you need to be consistent with the row
 ##' names of your data frames.  It is good practice to use tip and
 ##' node labels (or node numbers if you use duplicated labels) when
 ##' you combine data with a tree.
-##' 
+##'
 ##' If you provide both \code{tip.data} and \code{node.data}, the
 ##' treatment of columns with common names will depend on the
 ##' \code{merge.data} argument. If TRUE, columns with the same name in
@@ -40,14 +40,14 @@
 ##' \dQuote{.node} appended to the names. This argument has no effect
 ##' if \code{tip.data} and \code{node.data} have no column names in
 ##' common.
-##' 
+##'
 ##' If you provide \code{all.data} along with either of
 ##' \code{tip.data} and \code{node.data}, it must have distinct column
 ##' names, otherwise an error will result. Additionally, although
 ##' supplying columns with the same names \emph{within} data frames is
 ##' not illegal, automatic renaming for uniqeness may lead to
 ##' surprising results, so this practice should be avoided.
-##' 
+##'
 ##' @name phylo4d-methods
 ##' @aliases phylo4d
 ##' @param x an object of class \code{phylo4}, \code{phylo},
@@ -115,7 +115,7 @@
 ##' all nodes (with NA values for internal rows when type='tip', and
 ##' vice versa) (TRUE and default) or only rows corresponding to the
 ##' type argument}
-##' 
+##'
 ##' }
 ##'
 ##' Rules for matching rows of data to tree nodes are determined
@@ -127,7 +127,7 @@
 ##' \code{rownamesAsLabels} is FALSE (the default). If
 ##' \code{match.data} is FALSE, \code{rownamesAsLabels} has no effect,
 ##' and row matching is purely positional with respect to the order
-##' returned by \code{nodeId(phy, type)}. 
+##' returned by \code{nodeId(phy, type)}.
 ##'
 ##' @return An object of class \linkS4class{phylo4d}.
 ##' @note Checking on matches between the tree and the data will be
@@ -152,52 +152,52 @@
 ##' @include phylo4d-class.R
 ##' @include oldclasses-class.R
 ##' @examples
-##' 
+##'
 ##' treeOwls <- "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);"
 ##' tree.owls.bis <- ape::read.tree(text=treeOwls)
 ##' try(phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3)), silent=TRUE)
 ##' obj <- phylo4d(as(tree.owls.bis,"phylo4"),data.frame(wing=1:3), match.data=FALSE)
 ##' obj
 ##' print(obj)
-##' 
+##'
 ##' ####
-##' 
+##'
 ##' data(geospiza_raw)
 ##' geoTree <- geospiza_raw$tree
 ##' geoData <- geospiza_raw$data
-##' 
+##'
 ##' ## fix differences in tip names between the tree and the data
 ##' geoData <- rbind(geoData, array(, dim = c(1,ncol(geoData)),
 ##'                   dimnames = list("olivacea", colnames(geoData))))
-##' 
+##'
 ##' ### Example using a tree of class 'phylo'
 ##' exGeo1 <- phylo4d(geoTree, tip.data = geoData)
-##' 
+##'
 ##' ### Example using a tree of class 'phylo4'
 ##' geoTree <- as(geoTree, "phylo4")
-##' 
+##'
 ##' ## some random node data
 ##' rNodeData <- data.frame(randomTrait = rnorm(nNodes(geoTree)),
 ##'                         row.names = nodeId(geoTree, "internal"))
-##' 
+##'
 ##' exGeo2 <- phylo4d(geoTree, tip.data = geoData, node.data = rNodeData)
-##' 
+##'
 ##' ### Example using 'merge.data'
 ##' data(geospiza)
 ##' trGeo <- extractTree(geospiza)
 ##' tDt <- data.frame(a=rnorm(nTips(trGeo)), row.names=nodeId(trGeo, "tip"))
 ##' nDt <- data.frame(a=rnorm(nNodes(trGeo)), row.names=nodeId(trGeo, "internal"))
-##' 
+##'
 ##' (matchData1 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=FALSE))
 ##' (matchData2 <- phylo4d(trGeo, tip.data=tDt, node.data=nDt, merge.data=TRUE))
-##' 
+##'
 ##' ## Example with 'all.data'
 ##' nodeLabels(geoTree) <- as.character(nodeId(geoTree, "internal"))
 ##' rAllData <- data.frame(randomTrait = rnorm(nTips(geoTree) + nNodes(geoTree)),
 ##' row.names = labels(geoTree, 'all'))
-##' 
+##'
 ##' exGeo5 <- phylo4d(geoTree, all.data = rAllData)
-##' 
+##'
 ##' ## Examples using 'rownamesAsLabels' and comparing with match.data=FALSE
 ##' tDt <- data.frame(x=letters[1:nTips(trGeo)],
 ##'                   row.names=sample(nodeId(trGeo, "tip")))
@@ -205,7 +205,7 @@
 ##' (exGeo6 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=TRUE))
 ##' (exGeo7 <- phylo4d(trGeo, tip.data=tDt, rownamesAsLabels=FALSE))
 ##' (exGeo8 <- phylo4d(trGeo, tip.data=tDt, match.data=FALSE))
-##' 
+##'
 ##' ## generate a tree and some data
 ##' set.seed(1)
 ##' p3 <- ape::rcoal(5)
@@ -214,29 +214,29 @@
 ##' row.names(dat.defaultnames) <- NULL
 ##' dat.superset <- rbind(dat, rnorm(2))
 ##' dat.subset <- dat[-1, ]
-##' 
+##'
 ##' ## create a phylo4 object from a phylo object
 ##' p4 <- as(p3, "phylo4")
-##' 
+##'
 ##' ## create phylo4d objects with tip data
 ##' p4d <- phylo4d(p4, dat)
 ##' ###checkData(p4d)
 ##' p4d.sorted <- phylo4d(p4, dat[5:1, ])
 ##' try(p4d.nonames <- phylo4d(p4, dat.defaultnames))
 ##' p4d.nonames <- phylo4d(p4, dat.defaultnames, match.data=FALSE)
-##' 
+##'
 ##' \dontrun{
 ##' p4d.subset <- phylo4d(p4, dat.subset)
 ##' p4d.subset <- phylo4d(p4, dat.subset)
 ##' try(p4d.superset <- phylo4d(p4, dat.superset))
 ##' p4d.superset <- phylo4d(p4, dat.superset)
 ##' }
-##' 
+##'
 ##' ## create phylo4d objects with node data
 ##' nod.dat <- data.frame(a = rnorm(4), b = rnorm(4))
 ##' p4d.nod <- phylo4d(p4, node.data = nod.dat, match.data=FALSE)
-##' 
-##' 
+##'
+##'
 ##' ## create phylo4 objects with node and tip data
 ##' p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat, match.data=FALSE)
 ##' nodeLabels(p4) <- as.character(nodeId(p4, "internal"))
@@ -269,7 +269,7 @@ setMethod("phylo4d", "phylo4",
 
 ### first arg is a matrix of edges
 ##' @rdname phylo4d-methods
-##' @aliases phylo4d,matrix,matrix-method 
+##' @aliases phylo4d,matrix,matrix-method
 setMethod("phylo4d", "matrix",
           function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
                    merge.data=TRUE, metadata=list(), edge.length=NULL,
@@ -282,6 +282,19 @@ setMethod("phylo4d", "matrix",
         merge.data=merge.data, metadata=metadata, ...)
     return(res)
 })
+
+
+label_to_data <- function(nlab.data, ...) {
+    ## convert number-like labels to numeric, other keep as it is
+    nlab.data.test <- gsub("[0-9]|\\.", "", nlab.data[!is.na(nlab.data)])
+    if (all(nchar(nlab.data.test) == 0 )) {
+        nlab.data <- data.frame(labelValues=as.numeric(nlab.data), ...)
+    }
+    else {
+        nlab.data <- data.frame(labelValues=nlab.data, ...)
+    }
+    nlab.data
+}
 
 ### first arg is a phylo
 ##' @rdname phylo4d-methods
@@ -304,13 +317,7 @@ setMethod("phylo4d", "phylo",
         nlab.data[!nzchar(nlab.data)] <- NA
 
         ## convert number-like labels to numeric, other keep as it is
-        nlab.data.test <- gsub("[0-9]|\\.", "", nlab.data[!is.na(nlab.data)])
-        if (all(nchar(nlab.data.test) == 0 )) {
-            nlab.data <- data.frame(labelValues=as.numeric(nlab.data))
-        }
-        else {
-            nlab.data <- data.frame(labelValues=nlab.data)
-        }
+        nlab.data <- label_to_data(nlab.data)
 
         tree <- phylo4(x, check.node.labels="drop", annote=annote)
         res <- phylo4d(tree, tip.data=tip.data, node.data=node.data,
@@ -345,7 +352,7 @@ setMethod("phylo4d", c("nexml"), function(x) {
     } else {
         if (length(tr) > 1) {
             warning("Only the first tree has been imported.")
-        } 
+        }
         phylo4d(x=tr[[1]][[1]], chr)
     }
 })
