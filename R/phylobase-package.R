@@ -69,6 +69,7 @@
 ##' @import methods
 ##' @import grid
 ##' @import ape
+##' @importFrom rncl rncl
 ##' @import RNeXML
 ##' @importFrom Rcpp evalCpp
 ##' @importFrom graphics plot

@@ -9,306 +9,226 @@ using namespace Rcpp;
 bool isLabelName(Rcpp::CharacterVector lblToCheck, Rcpp::CharacterVector lbl);
 RcppExport SEXP phylobase_isLabelName(SEXP lblToCheckSEXP, SEXP lblSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type lblToCheck(lblToCheckSEXP );
-        Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type lbl(lblSEXP );
-        bool __result = isLabelName(lblToCheck, lbl);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type lblToCheck(lblToCheckSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type lbl(lblSEXP);
+    __result = Rcpp::wrap(isLabelName(lblToCheck, lbl));
+    return __result;
 END_RCPP
 }
 // nRoots
 int nRoots(Rcpp::IntegerVector ances);
 RcppExport SEXP phylobase_nRoots(SEXP ancesSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP );
-        int __result = nRoots(ances);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP);
+    __result = Rcpp::wrap(nRoots(ances));
+    return __result;
 END_RCPP
 }
 // tabulateTips
 std::vector<int> tabulateTips(Rcpp::IntegerVector ances);
 RcppExport SEXP phylobase_tabulateTips(SEXP ancesSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP );
-        std::vector<int> __result = tabulateTips(ances);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP);
+    __result = Rcpp::wrap(tabulateTips(ances));
+    return __result;
 END_RCPP
 }
 // nTipsSafe
 int nTipsSafe(Rcpp::IntegerVector ances);
 RcppExport SEXP phylobase_nTipsSafe(SEXP ancesSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP );
-        int __result = nTipsSafe(ances);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP);
+    __result = Rcpp::wrap(nTipsSafe(ances));
+    return __result;
 END_RCPP
 }
 // nTipsFastCpp
 int nTipsFastCpp(Rcpp::IntegerVector ances);
 RcppExport SEXP phylobase_nTipsFastCpp(SEXP ancesSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP );
-        int __result = nTipsFastCpp(ances);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP);
+    __result = Rcpp::wrap(nTipsFastCpp(ances));
+    return __result;
 END_RCPP
 }
 // hasSingleton
 bool hasSingleton(Rcpp::IntegerVector ances);
 RcppExport SEXP phylobase_hasSingleton(SEXP ancesSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP );
-        bool __result = hasSingleton(ances);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP);
+    __result = Rcpp::wrap(hasSingleton(ances));
+    return __result;
 END_RCPP
 }
 // hasPolytomy
 bool hasPolytomy(Rcpp::IntegerVector ances);
 RcppExport SEXP phylobase_hasPolytomy(SEXP ancesSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP );
-        bool __result = hasPolytomy(ances);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP);
+    __result = Rcpp::wrap(hasPolytomy(ances));
+    return __result;
 END_RCPP
 }
 // tipsSafe
 Rcpp::IntegerVector tipsSafe(Rcpp::IntegerVector ances, Rcpp::IntegerVector desc);
 RcppExport SEXP phylobase_tipsSafe(SEXP ancesSEXP, SEXP descSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP );
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type desc(descSEXP );
-        Rcpp::IntegerVector __result = tipsSafe(ances, desc);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type desc(descSEXP);
+    __result = Rcpp::wrap(tipsSafe(ances, desc));
+    return __result;
 END_RCPP
 }
 // tipsFast
 Rcpp::IntegerVector tipsFast(Rcpp::IntegerVector ances);
 RcppExport SEXP phylobase_tipsFast(SEXP ancesSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP );
-        Rcpp::IntegerVector __result = tipsFast(ances);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ances(ancesSEXP);
+    __result = Rcpp::wrap(tipsFast(ances));
+    return __result;
 END_RCPP
 }
 // getAllNodesSafe
 Rcpp::IntegerVector getAllNodesSafe(Rcpp::IntegerMatrix edge);
 RcppExport SEXP phylobase_getAllNodesSafe(SEXP edgeSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type edge(edgeSEXP );
-        Rcpp::IntegerVector __result = getAllNodesSafe(edge);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type edge(edgeSEXP);
+    __result = Rcpp::wrap(getAllNodesSafe(edge));
+    return __result;
 END_RCPP
 }
 // getAllNodesFast
 Rcpp::IntegerVector getAllNodesFast(Rcpp::IntegerMatrix edge);
 RcppExport SEXP phylobase_getAllNodesFast(SEXP edgeSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type edge(edgeSEXP );
-        Rcpp::IntegerVector __result = getAllNodesFast(edge);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type edge(edgeSEXP);
+    __result = Rcpp::wrap(getAllNodesFast(edge));
+    return __result;
 END_RCPP
 }
 // testEqInt
 Rcpp::List testEqInt(Rcpp::IntegerVector x, Rcpp::IntegerVector y);
 RcppExport SEXP phylobase_testEqInt(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type x(xSEXP );
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type y(ySEXP );
-        Rcpp::List __result = testEqInt(x, y);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type y(ySEXP);
+    __result = Rcpp::wrap(testEqInt(x, y));
+    return __result;
 END_RCPP
 }
 // all_naC
 bool all_naC(Rcpp::NumericVector x);
 RcppExport SEXP phylobase_all_naC(SEXP xSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP );
-        bool __result = all_naC(x);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    __result = Rcpp::wrap(all_naC(x));
+    return __result;
 END_RCPP
 }
 // any_naC
 bool any_naC(Rcpp::NumericVector x);
 RcppExport SEXP phylobase_any_naC(SEXP xSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP );
-        bool __result = any_naC(x);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    __result = Rcpp::wrap(any_naC(x));
+    return __result;
 END_RCPP
 }
 // nb_naC
 int nb_naC(Rcpp::NumericVector x);
 RcppExport SEXP phylobase_nb_naC(SEXP xSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP );
-        int __result = nb_naC(x);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    __result = Rcpp::wrap(nb_naC(x));
+    return __result;
 END_RCPP
 }
 // getRange
 Rcpp::NumericVector getRange(Rcpp::NumericVector x, const bool na_rm);
 RcppExport SEXP phylobase_getRange(SEXP xSEXP, SEXP na_rmSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP );
-        Rcpp::traits::input_parameter< const bool >::type na_rm(na_rmSEXP );
-        Rcpp::NumericVector __result = getRange(x, na_rm);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const bool >::type na_rm(na_rmSEXP);
+    __result = Rcpp::wrap(getRange(x, na_rm));
+    return __result;
 END_RCPP
 }
 // hasDuplicatedLabelsCpp
 bool hasDuplicatedLabelsCpp(Rcpp::CharacterVector label);
 RcppExport SEXP phylobase_hasDuplicatedLabelsCpp(SEXP labelSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type label(labelSEXP );
-        bool __result = hasDuplicatedLabelsCpp(label);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type label(labelSEXP);
+    __result = Rcpp::wrap(hasDuplicatedLabelsCpp(label));
+    return __result;
 END_RCPP
 }
 // edgeIdCpp
 Rcpp::CharacterVector edgeIdCpp(Rcpp::IntegerMatrix edge, std::string type);
 RcppExport SEXP phylobase_edgeIdCpp(SEXP edgeSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type edge(edgeSEXP );
-        Rcpp::traits::input_parameter< std::string >::type type(typeSEXP );
-        Rcpp::CharacterVector __result = edgeIdCpp(edge, type);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type edge(edgeSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    __result = Rcpp::wrap(edgeIdCpp(edge, type));
+    return __result;
 END_RCPP
 }
 // checkTreeCpp
 Rcpp::List checkTreeCpp(Rcpp::S4 obj, Rcpp::List opts);
 RcppExport SEXP phylobase_checkTreeCpp(SEXP objSEXP, SEXP optsSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::S4 >::type obj(objSEXP );
-        Rcpp::traits::input_parameter< Rcpp::List >::type opts(optsSEXP );
-        Rcpp::List __result = checkTreeCpp(obj, opts);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::S4 >::type obj(objSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type opts(optsSEXP);
+    __result = Rcpp::wrap(checkTreeCpp(obj, opts));
+    return __result;
 END_RCPP
 }
 // GetNCL
 Rcpp::List GetNCL(SEXP params, SEXP paramsVecR);
 RcppExport SEXP phylobase_GetNCL(SEXP paramsSEXP, SEXP paramsVecRSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< SEXP >::type params(paramsSEXP );
-        Rcpp::traits::input_parameter< SEXP >::type paramsVecR(paramsVecRSEXP );
-        Rcpp::List __result = GetNCL(params, paramsVecR);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type params(paramsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type paramsVecR(paramsVecRSEXP);
+    __result = Rcpp::wrap(GetNCL(params, paramsVecR));
+    return __result;
 END_RCPP
 }
