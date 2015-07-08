@@ -18,6 +18,7 @@ r_binary_install:
 
 r_github_packages:
   - ropensci/RNeXML
+  - fmichonneau/rncl
   - jimhester/covr
 
 after_success:
