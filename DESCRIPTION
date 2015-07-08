@@ -24,10 +24,11 @@ Author: R Hackathon et al. (alphabetically: Ben Bolker, Marguerite Butler,
     Emmanuel Paradis, Jim Regetz, Derrick Zwickl)
 Maintainer: Francois Michonneau <francois.michonneau@gmail.com>
 Description: Provides a base S4 class for comparative methods, incorporating
-    one or more trees and trait data
+    one or more trees and trait data.
 License: GPL (>= 2)
 URL: https://github.com/fmichonneau/phylobase
 BugReports: https://github.com/fmichonneau/phylobase/issues
+LazyData: true
 Collate:
     'RcppExports.R'
     'checkdata.R'
