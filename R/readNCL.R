@@ -5,13 +5,13 @@
 
 ##' Create a phylo4, phylo4d or data.frame object from a Nexus or a
 ##' Newick file
-##' 
+##'
 ##' \code{readNexus} reads a Nexus file and outputs a \code{phylo4} or
 ##' \code{phylo4d} or \code{data.frame} object.
-##' 
+##'
 ##' \code{readNewick} reads a Newick file and outputs a \code{phylo4}
 ##' or \code{phylo4d} object.
-##' 
+##'
 ##' \code{readNexus} extracts data held in a Nexus file, specifically
 ##' from DATA, CHARACTER or TREES blocks present in the file. The
 ##' \code{type} argument specifies which of these is returned:
@@ -25,16 +25,16 @@
 ##' both.} } The function returns \code{NULL} if the \code{type} of
 ##' data requested is not present in the file, or if neither data nor
 ##' tree blocks are present.
-##' 
+##'
 ##' Depending on the context \code{readNexus} will call either the
 ##' \code{phylo4} or \code{phylo4d} constructor. In addition with
 ##' \code{type="all"}, the \code{phylo4d} constructor will be used if
 ##' \code{check.node.labels="asdata"}.
-##' 
+##'
 ##' \code{readNewick} imports newick formatted tree files and will
 ##' return a \code{phylo4} or a \code{phylo4d} object if the option
 ##' \code{check.node.labels="asdata"} is invoked.
-##' 
+##'
 ##' For both \code{readNexus} and \code{readNewick}, the options for
 ##' \code{check.node.labels} can take the values: \describe{
 ##' \item{keep}{the node labels of the trees will be passed as node
@@ -45,85 +45,90 @@
 ##' \code{asdata} on a file with no node labels, a warning message is
 ##' issued, and thus \code{check.node.labels} takes the value
 ##' \code{drop}.
-##' 
+##'
 ##' For both \code{readNexus} and \code{readNewick}, additional
 ##' arguments can be passed to the constructors such as \code{annote},
 ##' \code{missing.data} or \code{extra.data}. See the Details section
 ##' of \code{\link{phylo4d-methods}} for the complete list of options.
-##' 
+##'
 ##' @name Import Nexus and Newick files
 ##' @docType methods
 ##' @param file a Nexus file for \code{readNexus} or a file that
-##' contains Newick formatted trees for \code{readNewick}
+##'     contains Newick formatted trees for \code{readNewick}
 ##' @param simplify If there are multiple trees in the file, only the
-##' first one is returned if TRUE and a list of phylo4/phylo4d objects
-##' is returned if the file contains multiple trees.
+##'     first one is returned if TRUE and a list of phylo4/phylo4d
+##'     objects is returned if the file contains multiple trees.
 ##' @param type Determines which type of objects to return, if present
-##' in the file (see Details).
+##'     in the file (see Details).
+##' @param spacesAsUnderscores In the NEXUS file format white spaces
+##'     are not allowed in taxa labels and are represented by
+##'     underscores. Therefore, NCL converts underscores found in taxa
+##'     labels in the NEXUS file into white spaces
+##'     (e.g. \code{species_1} will become \code{"species 1"}. If you
+##'     want to preserve the underscores, set as TRUE, the default).
 ##' @param char.all If TRUE, returns all characters, even those
-##' excluded in the NEXUS file
+##'     excluded in the NEXUS file
 ##' @param polymorphic.convert If TRUE, converts polymorphic
-##' characters to missing data
+##'     characters to missing data
 ##' @param levels.uniform If TRUE, uses the same levels for all
-##' characters
+##'     characters
 ##' @param quiet If FALSE the output of the NCL interface is
-##' printed. This is mainly for debugging purposes. This option can
-##' considerably slow down the process if the tree is big or there are
-##' many trees in the file.
+##'     printed. This is mainly for debugging purposes. This option
+##'     can considerably slow down the process if the tree is big or
+##'     there are many trees in the file.
 ##' @param check.node.labels Determines how the node labels in the
-##' Nexus or Newick files should be treated in the phylo4 object, see
-##' Details for more information.
+##'     Nexus or Newick files should be treated in the phylo4 object,
+##'     see Details for more information.
 ##' @param return.labels Determines whether state names (if TRUE) or
-##' state codes should be returned.
+##'     state codes should be returned.
 ##' @param file.format character indicating the format of the
-##' specified file (either \dQuote{\code{newick}} or
-##' \dQuote{\code{nexus}}). It's best to just use \code{readNexus} or
-##' \code{readNewick}.
+##'     specified file (either \dQuote{\code{newick}} or
+##'     \dQuote{\code{nexus}}). It's best to just use \code{readNexus}
+##'     or \code{readNewick}.
 ##' @param check.names logical. If \sQuote{TRUE} then the names of the
-##' characters from the NEXUS file are checked to ensure that they are
-##' syntactically valid variable names and are not duplicated.  If
-##' necessary they are adjusted (by \sQuote{make.names}) so that they
-##' are.
+##'     characters from the NEXUS file are checked to ensure that they
+##'     are syntactically valid variable names and are not duplicated.
+##'     If necessary they are adjusted (by \sQuote{make.names}) so
+##'     that they are.
 ##' @param convert.edge.length logical. If \sQuote{TRUE} negative edge
-##' lengths are replaced with 0. At this time \code{phylobase} does
-##' not accept objects with negative branch lengths, this workaround
-##' allows to still use trees with negative branch lengths are an
-##' artifact of the method used to build the tree.
+##'     lengths are replaced with 0. At this time \code{phylobase}
+##'     does not accept objects with negative branch lengths, this
+##'     workaround allows to still use trees with negative branch
+##'     lengths are an artifact of the method used to build the tree.
 ##' @param \dots Additional arguments to be passed to phylo4 or
-##' phylo4d constructor (see Details)
+##'     phylo4d constructor (see Details)
 ##' @return Depending on the value of \code{type} and the contents of
-##' the file, one of: a \code{data.frame}, a \linkS4class{phylo4}
-##' object, a \linkS4class{phylo4d} object or \code{NULL}.  If several
-##' trees are included in the Nexus file and the option
-##' \code{simplify=FALSE} a list of \linkS4class{phylo4} or
-##' \linkS4class{phylo4d} objects is returned.
+##'     the file, one of: a \code{data.frame}, a \linkS4class{phylo4}
+##'     object, a \linkS4class{phylo4d} object or \code{NULL}.  If
+##'     several trees are included in the Nexus file and the option
+##'     \code{simplify=FALSE} a list of \linkS4class{phylo4} or
+##'     \linkS4class{phylo4d} objects is returned.
 ##' @note Underscores in state labels (i.e. trait or taxon names) will
-##' be translated to spaces when read by NCL. Unless
-##' \code{check.names=FALSE}, trait names will be converted to valid R
-##' names (see \code{\link{make.names}}) on input to R, so spaces will
-##' be translated to periods.
+##'     be translated to spaces when read by NCL. Unless
+##'     \code{check.names=FALSE}, trait names will be converted to
+##'     valid R names (see \code{\link{make.names}}) on input to R, so
+##'     spaces will be translated to periods.
 ##' @author Brian O'Meara, Francois Michonneau, Derrick Zwickl
-##' @seealso the \linkS4class{phylo4d} class, the \linkS4class{phylo4} class
+##' @seealso the \linkS4class{phylo4d} class, the \linkS4class{phylo4}
+##'     class
 ##' @export
 ##' @rdname readNexus
 ##' @aliases readNCL
 ##' @keywords misc
-readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
-                    char.all=FALSE, polymorphic.convert=TRUE,
-                    levels.uniform=FALSE, quiet=TRUE,
-                    check.node.labels=c("keep", "drop", "asdata"),
-                    return.labels=TRUE, file.format=c("nexus", "newick"),
-                    check.names=TRUE, convert.edge.length=FALSE, ...) {
 
-    ## turn on to TRUE to test new way of building trees in NCL
-    experimental <- FALSE
+readNCL <- function(file, simplify=FALSE, type=c("all", "tree","data"),
+                    spacesAsUnderscores = TRUE, char.all=FALSE,
+                    polymorphic.convert=TRUE, levels.uniform=FALSE, quiet=TRUE,
+                    check.node.labels=c("keep", "drop", "asdata"), return.labels=TRUE,
+                    file.format=c("nexus", "newick"), check.names=TRUE,
+                    convert.edge.length=FALSE, ...) {
 
-    file <- path.expand(file)
+
     type <- match.arg(type)
-    check.node.labels <- match.arg(check.node.labels)
     file.format <- match.arg(file.format)
-    if (file.format == "newick") file.format <- "relaxedphyliptree" 
-    
+
+    check.node.labels <- match.arg(check.node.labels)
+
     if (type == "all" || type == "data") {
         returnData <- TRUE
     }
@@ -137,9 +142,6 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
         returnTrees <- FALSE
     }
 
-    fileName <- list(fileName=file, fileFormat=file.format)
-    parameters <- c(char.all, polymorphic.convert, levels.uniform, returnTrees, returnData)
-
     ## GetNCL returns a list containing:
     ##  $taxaNames: names of the taxa (from taxa block, implied or declared)
     ##  $treeNames: the names of the trees
@@ -152,13 +154,17 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
     ##    of characters)
     ##  $stateLabels: the labels for the states of the characters, i.e. the levels of the factors to be returned
     ##  $dataChr: string that contains the data to be returned
-    ncl <- GetNCL(fileName, parameters)
+
+    ncl <- rncl::rncl(file = file, file.format = file.format, spacesAsUnderscores = spacesAsUnderscores,
+                      char.all = char.all, polymorphic.convert = polymorphic.convert,
+                      levels.uniform = levels.uniform)
+
 
     ## Return Error message
     if (length(ncl) == 1 && names(ncl) == "ErrorMsg") {
         stop(ncl$ErrorMsg)
     }
-    
+
     if (!quiet) message(ncl)
 
     ## Disclaimer
@@ -167,12 +173,12 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
              "return.labels=TRUE and polymorphic.convert=FALSE for datasets ",
              "that contain polymorphic characters.")
     }
-    
+
     if (returnData && length(ncl$dataChr)) {
         tipData <- vector("list", length(ncl$dataChr))
         for (iBlock in 1:length(ncl$dataTypes)) {
             chrCounter <- ifelse(iBlock == 1, 0, sum(ncl$nbCharacters[1:(iBlock-1)]))
-            if (ncl$dataTypes[iBlock] == "Continuous") {       
+            if (ncl$dataTypes[iBlock] == "Continuous") {
                 for (iChar in 1:ncl$nbCharacters[iBlock]) {
                     i <- chrCounter + iChar
                     tipData[[i]] <- eval(parse(text=ncl$dataChr[i]))
@@ -180,10 +186,9 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
                 }
             }
             else {
-                
                 if (ncl$dataTypes[iBlock] == "Standard") {
                     iForBlock <- integer(0)
-                    for (iChar in 1:ncl$nbCharacters[iBlock]) {      
+                    for (iChar in 1:ncl$nbCharacters[iBlock]) {
                         i <- chrCounter + iChar
                         iForBlock <- c(iForBlock, i)
                         lblCounterMin <- ifelse(i == 1, 1, sum(ncl$nbStates[1:(i-1)]) + 1)
@@ -191,7 +196,7 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
                         tipData[[i]] <- eval(parse(text=ncl$dataChr[i]))
                         names(tipData)[i] <- ncl$charLabels[i]
                         tipData[[i]] <- as.factor(tipData[[i]])
-                        
+
                         lbl <- ncl$stateLabels[lblCounter]
                         if (return.labels) {
                             if (any(nchar(gsub(" ", "", lbl)) == 0)) {
@@ -201,7 +206,7 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
                             else {
                                 levels(tipData[[i]]) <- lbl
                             }
-                        }          
+                        }
                     }
                     if (levels.uniform) {
                         allLevels <- character(0)
@@ -231,68 +236,83 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
     }
 
     if (returnTrees && length(ncl$trees) > 0) {
+
         listTrees <- vector("list", length(ncl$trees))
-        
-        if (!experimental) {
-            for (i in 1:length(ncl$trees)) {
-                if (length(grep(":", ncl$trees[i]))) {
-                    ## remove comments from the string, they are not being removed if they are part of the node labels
-                    tStr <- gsub("\\[.*?\\]", "", ncl$trees[i])
-                    listTrees[[i]] <- tree.build(tStr)
-                }
-                else {
-                    tStr <- gsub("\\[.*?\\]", "", ncl$trees[i])
-                    listTrees[[i]] <- clado.build(tStr)
-                }
+
+        for (i in 1:length(ncl$trees)) {
+
+            is_rooted <- function(parentVector) {
+                tab_edg <- table(parentVector)
+                if (tabulate(parentVector)[which(parentVector == 0)] > 2)
+                    FALSE
+                else TRUE
             }
-            listTrees <- lapply(listTrees, function(tr) {       
-                if (length(ncl$taxaNames) == nTips(tr)) {
-                    tr$tip.label <- ncl$taxaNames[as.numeric(tr$tip.label)]     
-                }
-                else stop("phylobase doesn't deal with multiple taxa block at this time.")
-                if (convert.edge.length) {
-                    tr$edge.length[tr$edge.length < 0] <- 0
-                }
-                if (is.null(tr$node.label)) {
-                    if (check.node.labels == "asdata") {
-                        warning("Could not use value \"asdata\" for ",
-                                "check.node.labels because there are no ",
-                                "labels associated with the tree")
-                        check.node.labels <- "drop"
-                    }
-                    tr <- phylo4(tr, check.node.labels=check.node.labels, ...)       
-                }
-                else {
-                    if (check.node.labels == "asdata") {
-                        tr <- phylo4d(tr, check.node.labels=check.node.labels, ...)
-                    }
-                    else {
-                        tr <- phylo4(tr, check.node.labels=check.node.labels, ...)
-                    }
-                }
-            })
-            if (length(listTrees) == 1 || simplify)
-                listTrees <- listTrees[[1]]
-        }
-        else {
-            edgeMat <- cbind(ncl$parentVector, c(1:length(ncl$parentVector)))
-            edgeLgth <- ncl$branchLengthVector
-            edgeLgth[edgeLgth == -1] <- NA
+
+            isRooted <- is_rooted(ncl$parentVector[[i]])
+
+            edgeMat <- get_edge_matrix(ncl$parentVector[[i]], isRooted)
+
+            edgeLgth <- get_edge_length(ncl$branchLength[[i]], ncl$parentVector[[i]],
+                                        isRooted)
+            tipLbl <- ncl$taxonLabelVector[[i]]
+
             if (convert.edge.length) {
                 edgeLgth[edgeLgth < 0] <- 0
             }
-            if (length(ncl$taxaNames) != min(ncl$parentVector)-1) {
+
+            if (check.node.labels == "asdata" &&
+                !has_node_labels(ncl$nodeLabelsVector[[i]])) {
+                warning("Could not use value \"asdata\" for ",
+                            "check.node.labels because there are no ",
+                            "labels associated with the tree")
+                check.node.labels <- "drop"
+            }
+
+
+            if (has_node_labels(ncl$nodeLabelsVector[[i]]) &&
+                !identical(check.node.labels, "drop")) {
+                nodeLbl <- ncl$nodeLabelsVector[[i]]
+                rootNd <- attr(edgeMat, "root")
+                nodeLbl[rootNd] <- nodeLbl[1]
+                node_pos <- (length(tipLbl)+1):length(nodeLbl)
+                nodeLbl <- nodeLbl[node_pos]
+
+                if (identical(check.node.labels, "asdata")) {
+                    tr <- phylo4(x = edgeMat,
+                                 edge.length = edgeLgth,
+                                 tip.label = tipLbl)
+                    nodeDt <- label_to_data(nodeLbl, row.names = node_pos)
+                    tr <- phylo4d(tr, node.data = nodeDt)
+                } else {
+
+                    tr <- phylo4(x = edgeMat,
+                                 edge.length = edgeLgth,
+                                 tip.label = tipLbl,
+                                 node.label = nodeLbl)
+                }
+            } else {
+                tr <- phylo4(x = edgeMat,
+                             edge.length = edgeLgth,
+                             tip.label = tipLbl)
+
+
+            }
+
+            if (!identical(length(ncl$taxaNames), nTips(tr))) {
                 stop("phylobase doesn't deal with multiple taxa block at this time.")
             }
-            ## TODO: code node labels in GetNCL
-            tr <- phylo4(x=edgeMat, edge.length=edgeLgth, tip.label=ncl$taxaNames,
-                         ...)
+
+            listTrees[[i]] <- tr
+            if (simplify) break
         }
-    }
-    else {
+
+        if (length(listTrees) == 1 || simplify)
+            listTrees <- listTrees[[1]]
+
+    } else {
         listTrees <- NULL
     }
-    
+
 ###
     switch(type,
            "data" = {
@@ -307,22 +327,22 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
                if (is.null(listTrees)) {
                    toRet <- NULL
                }
-               else {           
-                   toRet <- listTrees                                          
+               else {
+                   toRet <- listTrees
                }
            },
            "all" = {
                if (is.null(tipData) && is.null(listTrees)) {
                    toRet <- NULL
                }
-               else if (is.null(tipData)) {              
+               else if (is.null(tipData)) {
                    toRet <- listTrees
                }
                else if (is.null(listTrees)) {
                    toRet <- tipData
                }
                else {
-                   if (length(listTrees) > 1) {              
+                   if (length(listTrees) > 1) {
                        toRet <- lapply(listTrees, function(tr)
                                        addData(tr, tip.data=tipData, ...))
                    }
@@ -330,6 +350,37 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree", "data"),
                }
            })
     toRet
+}
+
+
+## Returns the edge matrix from the parentVector (the i^th element is
+## the descendant element of node i)
+get_edge_matrix <- function(parentVector, isRooted) {
+    edgeMat <- cbind(ancestor = parentVector,
+                     descendant = 1:length(parentVector))
+    rootNd <- edgeMat[which(edgeMat[, 1] == 0), 2]
+    if (!isRooted) {
+        edgeMat <- edgeMat[-which(edgeMat[, 1] == 0), ]
+    }
+    attr(edgeMat, "root") <- rootNd
+    edgeMat
+}
+
+## Returns the edge lengths (missing are represented by -1)
+get_edge_length <- function(branchLengthVector, parentVector, isRooted) {
+    edgeLgth <- branchLengthVector
+    if (isRooted) {
+        edgeLgth[which(parentVector == 0)] <- NA
+    } else {
+        edgeLgth <- edgeLgth[which(parentVector != 0)]
+    }
+    edgeLgth[edgeLgth == -1] <- NA
+    edgeLgth
+}
+
+## Tests whether there are node labels
+has_node_labels <- function(nodeLabelsVector) {
+    any(nzchar(nodeLabelsVector))
 }
 
 ##' @rdname readNexus
