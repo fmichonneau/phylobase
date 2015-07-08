@@ -40,6 +40,9 @@ newick <- file.path(pth, "newick.tre")
 ## stored in the nexus file
 mlFile <- file.path(pth, "multiLines.Rdata")
 
+## Test with trees that don't include all the taxa listed in TAXA block
+treeSubset <- file.path(pth, "testSubsetTaxa.nex")
+
 ## Contains representation of data associated with continuous data
 ExContDataFile <- file.path(pth, "ExContData.Rdata")
 
@@ -53,6 +56,7 @@ stopifnot(file.exists(treeContDt))
 stopifnot(file.exists(treeDiscCont))
 stopifnot(file.exists(ExContDataFile))
 stopifnot(file.exists(noStateLabels))
+stopifnot(file.exists(treeSubset))
 
 op <- phylobase.options()
 
@@ -552,3 +556,12 @@ test_that("check.node.labels='keep' with readNewick", {
     newTr <- readNewick(file=newick, check.node.labels="keep")
     expect_equal(labels(newTr), labNew)
 })
+
+### Test with files where trees don't include all taxa -------------------------
+context("Trees that don't contain all the taxa listed in the TAXA block")
+
+test_that("first tree is correct", {
+              expect_error(tr <- readNexus(file = treeSubset),
+                           "All the taxa listed")
+          }
+)
