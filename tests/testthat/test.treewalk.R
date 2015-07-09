@@ -3,7 +3,7 @@
 #
 
 # Create sample phylo4 tree for testing
-tr <- read.tree(text="(((spA:0.2,(spB:0.1,spC:0.1):0.15):0.5,spD:0.7):0.2,spE:1):0.4;") 
+tr <- read.tree(text="(((spA:0.2,(spB:0.1,spC:0.1):0.15):0.5,spD:0.7):0.2,spE:1):0.4;")
 phytr <- as(tr, "phylo4")
 
 # create phylo4 object with a full complement of valid slots
@@ -78,19 +78,19 @@ test_that("getNode works wehn node includes only missing numbers (IDs), but miss
     expect_error(getNode(phytr, c(-9, 0, 50), missing="fail"))
 })
 
-test_that("getNode works when node includes NAs, but missing = \"OK\"", {    
+test_that("getNode works when node includes NAs, but missing = \"OK\"", {
     expect_true(is.na(getNode(phytr, NA_integer_, missing="OK")))
     expect_true(is.na(getNode(phytr, NA_character_, missing="OK")))
 })
 
 test_that("getNode works when node includes mixture of valid values and NAs", {
     ans <- c(2, NA)
-    names(ans) <- c("spB", NA) 
+    names(ans) <- c("spB", NA)
     expect_that(getNode(phytr, c("spB", NA), missing="OK"), equals(ans))
     expect_that(getNode(phytr, c(2, NA), missing="OK"), equals(ans))
 })
 
-test_that("getNode throws exception when node is neither integer-like nor character", 
+test_that("getNode throws exception when node is neither integer-like nor character",
     expect_error(getNode(phytr, 1.5)))
 
 test_that("getNode works even when a tip is labeled as \"0\"", {
@@ -115,7 +115,30 @@ test_that("descendants() works with tips", {
     expect_identical(descendants(phytr, 5, "children"),
                      setNames(integer(0), character(0)))
     expect_identical(descendants(phytr, 5, "all"), setNames(5L, "t5"))
+    expect_identical(descendants(phytr, 5, "ALL"), setNames(5L, "t5"))
 })
+
+test_that("descendants() works when provided with a vector of nodes", {
+              expect_identical(descendants(phytr, 5:7),
+                               list("5" = c(t5 = 5L),
+                                    "6" = c(t3 = 1L, t4 = 2L, t1 = 3L, t2 = 4L, t5 = 5L),
+                                    "7" = c(t3 = 1L, t4 = 2L)))
+              expect_identical(descendants(phytr, 5:7, "tips"),
+                               list("5" = c(t5 = 5L),
+                                    "6" = c(t3 = 1L, t4 = 2L, t1 = 3L, t2 = 4L, t5 = 5L),
+                                    "7" = c(t3 = 1L, t4 = 2L)))
+              expect_identical(descendants(phytr, 5:7, "children"),
+                               list("5" = setNames(integer(0), character(0)),
+                                    "6" = setNames(c(7L, 8L), c(NA, NA)),
+                                    "7" = c(t3 = 1L, t4 = 2L))
+                               )
+              expect_identical(descendants(phytr, 5:7, "ALL"),
+                               list("5" = c(t5 = 5L),
+                                    "6" = setNames(c(6L, 7L, 1L, 2L, 8L, 3L, 9L, 4L, 5L),
+                                        c(NA, NA, "t3", "t4", NA, "t1", NA, "t2", "t5")),
+                                    "7" = setNames(c(7L, 1L, 2L), c(NA, "t3", "t4")))
+                               )
+          })
 
 test_that("descendants() works with internal nodes", {
     expect_identical(descendants(phytr, 8),
@@ -125,7 +148,10 @@ test_that("descendants() works with internal nodes", {
     expect_identical(descendants(phytr, 8, "children"),
         setNames(c(3L, 9L), c("t1", NA)))
     expect_identical(descendants(phytr, 8, "all"),
-        setNames(c(3L, 9L, 4L, 5L), c("t1", NA, "t2", "t5")))
+                     setNames(c(3L, 9L, 4L, 5L), c("t1", NA, "t2", "t5")))
+    expect_identical(descendants(phytr, 8, "ALL"),
+                     setNames(c(8L, 3L, 9L, 4L, 5L),
+                              c(NA, "t1", NA, "t2", "t5")))
 })
 
 ## TODO siblings  # function(phy, node, include.self=FALSE)
@@ -169,7 +195,7 @@ test_that("node includes NAs, but missing = OK", {
     expect_true(is.na(getEdge(phy, NA_integer_, missing="OK")))
     expect_true(is.na(getEdge(phy, NA_character_, missing="OK")))
 })
-          
+
 test_that("node includes mixture of valid values and NAs", {
     expect_identical(getEdge(phy, c("t3", NA), missing="OK"),
                      setNames(c("8-3", NA), c(3, NA)))
@@ -242,10 +268,8 @@ test_that("node includes NAs, but missing = OK", {
 test_that("node includes mixture of valid values and NAs", {
     expect_identical(
         getEdge(phy.alt, c("t3", "n8", NA), type="ancestor", missing="OK"),
-        setNames(c(NA, "8-9", "8-3", NA), c(3, 8, 8, NA)))    
+        setNames(c(NA, "8-9", "8-3", NA), c(3, 8, 8, NA)))
     expect_identical(
         getEdge(phy.alt, c(3, 8, NA), type="ancestor", missing="OK"),
         setNames(c(NA, "8-9", "8-3", NA), c(3, 8, 8, NA)))
 })
-
-
