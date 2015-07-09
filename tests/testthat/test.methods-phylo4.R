@@ -111,6 +111,90 @@ test_that("nodeDepth works with no branch length", {
     expect_true(is.null(nodeDepth(tmpPhy)))
 })
 
+############################################################################
+## nodeHeight                                                             ##
+############################################################################
+
+context("nodeHeight")
+
+tmp_nd_hgt_tree <- tempfile()
+cat("(((A:1,B:1):2,(C:1,D:1):2):4,((E:10,F:1):2,(G:3,H:7):2):4);",
+    file = tmp_nd_hgt_tree)
+nd_hgt_tree <- readNewick(file = tmp_nd_hgt_tree)
+unlink(tmp_nd_hgt_tree)
+
+test_that("nodeHeight with 1 node", {
+              expect_equal(nodeHeight(nd_hgt_tree, MRCA(nd_hgt_tree, c("A", "D")), "all_tip"),
+                           setNames(c(3, 3, 3, 3), c("A", "B", "C", "D")))
+              expect_equal(nodeHeight(nd_hgt_tree, MRCA(nd_hgt_tree, c("E", "H")), "min_tip"),
+                           c("F" = 3))
+              expect_equal(nodeHeight(nd_hgt_tree, MRCA(nd_hgt_tree, c("E", "H")), "max_tip"),
+                           c("E" = 12))
+              expect_equal(nodeHeight(nd_hgt_tree, MRCA(nd_hgt_tree, c("A", "D")), "root"),
+                           4)
+          })
+
+test_that("nodeHeight with several nodes", {
+              expect_equal(nodeHeight(nd_hgt_tree, c(
+                  MRCA(nd_hgt_tree, c("A", "D")),
+                  MRCA(nd_hgt_tree, c("A", "B"))),
+                                      "all_tip"),
+                           list("10" = setNames(c(3, 3, 3, 3), c("A", "B", "C", "D")),
+                                "11" = c("A" = 1, "B" = 1)))
+
+              expect_equal(nodeHeight(nd_hgt_tree, c(
+                  MRCA(nd_hgt_tree, c("E", "H")),
+                  MRCA(nd_hgt_tree, c("E", "F"))),
+                                      "min_tip"),
+                           list("13" = c("F" = 3),
+                                "14" = c("F" = 1)))
+
+              expect_equal(nodeHeight(nd_hgt_tree, c(
+                  MRCA(nd_hgt_tree, c("E", "H")),
+                  MRCA(nd_hgt_tree, c("E", "F"))), "max_tip"),
+                           list("13" = c("E" = 12),
+                                "14" = c("E" = 10)))
+
+              expect_equal(nodeHeight(nd_hgt_tree, c(
+                  MRCA(nd_hgt_tree, c("A", "D")),
+                  MRCA(nd_hgt_tree, c("E", "F"))),
+                                      "root"),
+                           c("10" = 4, "14" = 6))
+          })
+
+
+test_that("nodeHeight for tips", {
+              res <- as.list(rep(0, nTips(nd_hgt_tree)))
+              for (i in seq_len(nTips(nd_hgt_tree))) names(res[[i]]) <- LETTERS[i]
+              names(res) <- seq_len(nTips(nd_hgt_tree))
+
+              expect_equal(nodeHeight(nd_hgt_tree, nodeId(nd_hgt_tree, "tip"), "all_tip"),
+                           res)
+              expect_equal(nodeHeight(nd_hgt_tree, nodeId(nd_hgt_tree, "tip"), "min_tip"),
+                           res)
+              expect_equal(nodeHeight(nd_hgt_tree, nodeId(nd_hgt_tree, "tip"), "max_tip"),
+                           res)
+          })
+
+test_that("nodeHeight for mix of tips and internal nodes", {
+              expect_equal(nodeHeight(nd_hgt_tree, c(1, 10), "all_tip"),
+                           list("1" = c("A" = 0),
+                                "10" = c("A" = 3, "B" = 3, "C" = 3, "D" = 3)))
+              expect_equal(nodeHeight(nd_hgt_tree, c(1, 14), "min_tip"),
+                           list("1" = c("A" = 0),
+                                "14" = c("F" = 1)))
+              expect_equal(nodeHeight(nd_hgt_tree, c(1, 14), "max_tip"),
+                           list("1" = c("A" = 0),
+                                "14" = c("E" = 10)))
+              expect_equal(nodeHeight(nd_hgt_tree, c(5, 14), "root"),
+                           c("5" = 16, "14" = 6))
+          })
+
+
+############################################################################
+## edges                                                                  ##
+############################################################################
+
 context("edges")
 test_that("edges works",  expect_identical(edges(phy.alt), edge))
 test_that("edges work with drop.root=TRUE option",
