@@ -12,7 +12,7 @@ ancestor(phy, node)
 
 children(phy, node)
 
-descendants(phy, node, type = c("tips", "children", "all"))
+descendants(phy, node, type = c("tips", "children", "all", "ALL"))
 
 siblings(phy, node, include.self = FALSE)
 
@@ -30,7 +30,7 @@ character corresponding to a node label; for \code{ancestors} and
 ancestor ("parent"), all ancestor nodes ("all"), or all ancestor nodes
 including self ("ALL"); (\code{descendants}) specify whether to return just
 direct descendants ("children"), all extant descendants ("tips"), or all
-descendant nodes ("all")}
+descendant nodes ("all") or all descendant nodes including self ("ALL").}
 
 \item{include.self}{whether to include self in list of siblings}
 

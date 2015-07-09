@@ -1,20 +1,20 @@
 
 ##' Tree traversal and utility functions
-##' 
+##'
 ##' Functions for describing relationships among phylogenetic nodes (i.e.
 ##' internal nodes or tips).
-##' 
+##'
 ##' \code{ancestors} and \code{descendants} can take \code{node} vectors of
 ##' arbitrary length, returning a list of output vectors if the number of valid
 ##' input nodes is greater than one. List element names are taken directly from
 ##' the input node vector.
-##' 
+##'
 ##' If any supplied nodes are not found in the tree, the behavior currently
 ##' varies across functions.
 ##' \itemize{
 ##' \item Invalid nodes are automatically omitted by \code{ancestors}
 ##' and \code{descendants}, with a warning.
-##' 
+##'
 ##' \item \code{ancestor}
 ##' will return \code{NA} for any invalid nodes, with a warning.
 ##'
@@ -30,7 +30,7 @@
 ##' ancestor ("parent"), all ancestor nodes ("all"), or all ancestor nodes
 ##' including self ("ALL"); (\code{descendants}) specify whether to return just
 ##' direct descendants ("children"), all extant descendants ("tips"), or all
-##' descendant nodes ("all")
+##' descendant nodes ("all") or all descendant nodes including self ("ALL").
 ##' @param include.self whether to include self in list of siblings
 ##' @param \dots a list of node numbers or names, or a vector of node numbers or
 ##' names
@@ -63,7 +63,7 @@
 ##' @include phylo4-methods.R
 ##' @include getNode-methods.R
 ##' @examples
-##' 
+##'
 ##'   data(geospiza)
 ##'   nodeLabels(geospiza) <- LETTERS[1:nNodes(geospiza)]
 ##'   plot(as(geospiza, "phylo4"), show.node.label=TRUE)
@@ -74,11 +74,11 @@
 ##'   ancestors(geospiza, "D")
 ##'   MRCA(geospiza, "conirostris", "difficilis", "fuliginosa")
 ##'   MRCA(geospiza, "olivacea", "conirostris")
-##' 
+##'
 ##'   ## shortest path between 2 nodes
 ##'   shortestPath(geospiza, "fortis", "fuliginosa")
 ##'   shortestPath(geospiza, "F", "L")
-##' 
+##'
 ##'   ## branch length from a tip to the root
 ##'   sumEdgeLength(geospiza, ancestors(geospiza, "fortis", type="ALL"))
 ancestor <- function(phy,node) {
@@ -101,7 +101,7 @@ children <- function(phy,node) {
 ##' @rdname ancestors
 ##' @aliases descendants
 ##' @export
-descendants <- function (phy, node, type=c("tips","children","all")) {
+descendants <- function (phy, node, type=c("tips","children","all", "ALL")) {
     type <- match.arg(type)
 
     ## look up nodes, warning about and excluding invalid nodes
@@ -128,10 +128,11 @@ descendants <- function (phy, node, type=c("tips","children","all")) {
         isDes <- .Call("descendants", node, ancestor, descendant)
         storage.mode(isDes) <- "logical"
 
-        ## for internal nodes only, drop self (not sure why this rule?)
-        int.node <- intersect(node, nodeId(phy, "internal"))
-        isDes[cbind(match(int.node, descendant),
-            match(int.node, node))] <- FALSE
+        if (type == "all") {
+            i <- match(intersect(node, nodeId(phy, "internal")), descendant)
+            isDes[i, seq_along(node)] <- FALSE
+        }
+
         ## if only tips desired, drop internal nodes
         if (type=="tips") {
             isDes[descendant %in% nodeId(phy, "internal"),] <- FALSE
@@ -188,7 +189,7 @@ ancestors <- function (phy, node, type=c("all","parent","ALL")) {
     if (length(node) == 0) {
       return(NA)
     }
-    
+
     if (type == "parent") {
         res <- lapply(node, function(x) ancestor(phy, x))
     } else {
