@@ -3,19 +3,6 @@
 ### Label accessors
 #########################################################
 
-# @aliases labels<- labels,phylo4-method
-# labels<-,phylo4,ANY,ANY,character-method
-# labels<-,phylo4d,ANY,ANY,character-method hasDuplicatedLabels
-# hasDuplicatedLabels-methods hasDuplicatedLabels,phylo4-method hasNodeLabels
-# hasNodeLabels-methods hasNodeLabels,phylo4-method nodeLabels
-# nodeLabels-methods nodeLabels,phylo4-method nodeLabels<-
-# nodeLabels<-,phylo4,character-method nodeLabels<-,phylo4d,ANY-method
-# tipLabels tipLabels-methods tipLabels,phylo4-method tipLabels<-
-# tipLabels<-,phylo4,character-method tipLabels<-,phylo4d,character-method
-# hasEdgeLabels hasEdgeLabels-methods hasEdgeLabels,phylo4-method edgeLabels
-# edgeLabels<- edgeLabels-methods edgeLabels,phylo4-method
-# edgeLabels<-,phylo4,character-method
-
 ##' Labels for phylo4/phylo4d objects
 ##'
 ##' Methods for creating, accessing and updating labels in
@@ -116,19 +103,16 @@ setMethod("labels", signature(object="phylo4"),
 })
 
 ##' @rdname labels-methods
-##' @aliases labels<-
 ##' @export
 setGeneric("labels<-",
            function(x, type, use.names, ..., value) {
                standardGeneric("labels<-")
            })
 
-##' @name labels<-
 ##' @rdname labels-methods
-##' @aliases labels<-,phylo4,ANY,ANY,character-method
 setReplaceMethod("labels",
                  signature(x="phylo4", type="ANY",
-                           use.names="ANY", value="character"),
+                           use.names="ANY", value="ANY"),
    function(x, type = c("all", "tip", "internal"),
             use.names, ..., value) {
 
@@ -216,17 +200,14 @@ setMethod("nodeLabels", signature(x="phylo4"),
 })
 
 ##' @rdname labels-methods
-##' @aliases nodeLabels<-
 ##' @export
 setGeneric("nodeLabels<-",
            function(x, ..., value) {
                standardGeneric("nodeLabels<-")
            })
 
-##' @name nodeLabels<-
 ##' @rdname labels-methods
-##' @aliases nodeLabels<-,phylo4,character-method
-setReplaceMethod("nodeLabels", signature(x="phylo4", value="character"),
+setReplaceMethod("nodeLabels", signature(x="phylo4", value="ANY"),
   function(x, ..., value) {
       labels(x, type="internal", ...) <- value
       if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
@@ -243,24 +224,20 @@ setGeneric("tipLabels", function(x) {
 })
 
 ##' @rdname labels-methods
-##' @aliases tipLabels,phylo4-method
 setMethod("tipLabels", signature(x="phylo4"),
  function(x) {
     labels(x, type="tip")
     })
 
 ##' @rdname labels-methods
-##' @aliases tipLabels<-
 ##' @export
 setGeneric("tipLabels<-",
    function(x, ..., value) {
        standardGeneric("tipLabels<-")
 })
 
-##' @name tipLabels<-
 ##' @rdname labels-methods
-##' @aliases tipLabels<-,phylo4,character-method
-setReplaceMethod("tipLabels", signature(x="phylo4", value="character"),
+setReplaceMethod("tipLabels", signature(x="phylo4", value="ANY"),
   function(x, ...,  value) {
       labels(x, type="tip", ...) <- value
       if(is.character(checkval <- checkPhylo4(x))) stop(checkval)
@@ -278,7 +255,6 @@ setGeneric("hasEdgeLabels", function(x) {
 })
 
 ##' @rdname labels-methods
-##' @aliases hasEdgeLabels,phylo4-method
 setMethod("hasEdgeLabels", signature(x="phylo4"),
  function(x) {
     !all(is.na(x@edge.label))
@@ -313,10 +289,8 @@ setGeneric("edgeLabels<-",
                standardGeneric("edgeLabels<-")
            })
 
-##' @name edgeLabels<-
 ##' @rdname labels-methods
-##' @aliases edgeLabels<-,phylo4,character-method
-setReplaceMethod("edgeLabels", signature(x="phylo4", value="character"),
+setReplaceMethod("edgeLabels", signature(x="phylo4", value="ANY"),
   function(x, ..., value) {
     lbl <- .createEdge(value, x@edge, type="labels")
     x@edge.label <- lbl[!is.na(lbl)]

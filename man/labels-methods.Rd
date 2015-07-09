@@ -5,7 +5,7 @@
 \alias{edgeLabels}
 \alias{edgeLabels,phylo4-method}
 \alias{edgeLabels<-}
-\alias{edgeLabels<-,phylo4,character-method}
+\alias{edgeLabels<-,phylo4-method}
 \alias{hasDuplicatedLabels}
 \alias{hasDuplicatedLabels,phylo4,ANY-method}
 \alias{hasDuplicatedLabels,phylo4-method}
@@ -16,16 +16,16 @@
 \alias{labels}
 \alias{labels,phylo4-method}
 \alias{labels<-}
-\alias{labels<-,phylo4,ANY,ANY,character-method}
+\alias{labels<-,phylo4-method}
 \alias{nodeLabels}
 \alias{nodeLabels,phylo4-method}
 \alias{nodeLabels<-}
-\alias{nodeLabels<-,phylo4,character-method}
+\alias{nodeLabels<-,phylo4-method}
 \alias{phylo4-labels}
 \alias{tipLabels}
 \alias{tipLabels,phylo4-method}
 \alias{tipLabels<-}
-\alias{tipLabels<-,phylo4,character-method}
+\alias{tipLabels<-,phylo4-method}
 \title{Labels for phylo4/phylo4d objects}
 \usage{
 labels(object, ...)
@@ -34,8 +34,8 @@ labels(object, ...)
 
 labels(x, type, use.names, ...) <- value
 
-\S4method{labels}{phylo4,ANY,ANY,character}(x, type = c("all", "tip",
-  "internal"), use.names, ...) <- value
+\S4method{labels}{phylo4}(x, type = c("all", "tip", "internal"), use.names,
+  ...) <- value
 
 hasDuplicatedLabels(x, type)
 
@@ -51,7 +51,7 @@ nodeLabels(x)
 
 nodeLabels(x, ...) <- value
 
-\S4method{nodeLabels}{phylo4,character}(x, ...) <- value
+\S4method{nodeLabels}{phylo4}(x, ...) <- value
 
 tipLabels(x)
 
@@ -59,7 +59,7 @@ tipLabels(x)
 
 tipLabels(x, ...) <- value
 
-\S4method{tipLabels}{phylo4,character}(x, ...) <- value
+\S4method{tipLabels}{phylo4}(x, ...) <- value
 
 hasEdgeLabels(x)
 
@@ -71,7 +71,7 @@ edgeLabels(x)
 
 edgeLabels(x, ...) <- value
 
-\S4method{edgeLabels}{phylo4,character}(x, ...) <- value
+\S4method{edgeLabels}{phylo4}(x, ...) <- value
 }
 \arguments{
 \item{object}{a phylo4 or phylo4d object.}
