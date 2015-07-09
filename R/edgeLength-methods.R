@@ -16,7 +16,7 @@
 ##'
 ##' The \code{edgeLength} function returns the edge length in the same
 ##' order as the edges in the matrix.
-##' 
+##'
 ##' @param x a \code{phylo4} or \code{phylo4d} object.
 ##' @param value a numeric vector indicating the new values for the edge lengths
 ##' @param node optional numeric or character vector indicating the
@@ -28,15 +28,12 @@
 ##' \code{.Machine$double.eps^0.5}.
 ##' @param \dots optional arguments (none used at present).
 ##' @return \describe{
-##' 
+##'
 ##' \item{hasEdgeLength}{whether or not the object has edge lengths
 ##' (logical)}
 ##'
 ##' \item{edgeLength}{a named vector of the edge length for the
 ##' object}
-##'
-##' \item{nodeDepth}{a named vector indicating the \dQuote{depth} (the
-##' distance between the root and a given node).}
 ##'
 ##' \item{isUltrametric}{whether or not the tree is ultrametric (all
 ##' the tips are have the same depth (distance from the root) (logical)}
@@ -47,6 +44,13 @@
 ##' \item{nodeHeight}{the distance between a node and the root or the
 ##' tips. The format of the result will depend on the options and the
 ##' number of nodes provided, either a vector or a list.}
+##'
+##'  \item{nodeDepth}{Deprecated, now replaced by \code{nodeHeight}. A
+##' named vector indicating the \dQuote{depth} (the distance between
+##' the root and a given node).}
+##'
+##' \item{depthTip}{Deprecated, now  replaced by \code{nodeHeight}.}
+##'
 ##' }
 ##' @seealso \code{ancestors}, \code{descendants}, \code{.Machine} for
 ##' more information about tolerance.
@@ -156,6 +160,7 @@ setGeneric("depthTips", function(x) {
 ##' @rdname edgeLength-methods
 ##' @aliases depthTips,phylo4-methods
 setMethod("depthTips", signature(x="phylo4"), function(x) {
+              .Deprecated("nodeHeight")
   nodeDepth(x, 1:nTips(x))
 })
 
@@ -171,7 +176,8 @@ setGeneric("nodeDepth", function(x, node) {
 ##' @rdname edgeLength-methods
 ##' @aliases nodeDepth,phylo4-method
 setMethod("nodeDepth", signature(x="phylo4"),
-  function(x, node) {
+          function(x, node) {
+              .Deprecated("nodeHeight")
     if (!hasEdgeLength(x))
       return(NULL)
     else {
@@ -182,7 +188,7 @@ setMethod("nodeDepth", signature(x="phylo4"),
       if (length(res) == 1) {
         res <- res[[1]]
         names(res) <- names(node)
-      }      
+      }
       res
     }
 })
@@ -256,6 +262,8 @@ setMethod("nodeHeight", signature(x = "phylo4"),
               }
               res
           })
+
+
 ###### ----- sumEdgeLength
 
 ##' @rdname edgeLength-methods
