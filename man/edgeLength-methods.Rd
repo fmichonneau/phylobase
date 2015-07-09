@@ -16,6 +16,8 @@
 \alias{isUltrametric,phylo4-method}
 \alias{nodeDepth}
 \alias{nodeDepth,phylo4-method}
+\alias{nodeHeight}
+\alias{nodeHeight,phylo4-method}
 \alias{sumEdgeLength}
 \alias{sumEdgeLength,phylo4-method}
 \title{edgeLength methods}
@@ -40,6 +42,11 @@ nodeDepth(x, node)
 
 \S4method{nodeDepth}{phylo4}(x, node)
 
+nodeHeight(x, node, from)
+
+\S4method{nodeHeight}{phylo4}(x, node, from = c("root", "all_tip", "min_tip",
+  "max_tip"))
+
 sumEdgeLength(x, node)
 
 \S4method{sumEdgeLength}{phylo4}(x, node)
@@ -59,6 +66,16 @@ used to match the length to a given edge.}
 
 \item{value}{a numeric vector indicating the new values for the edge lengths}
 
+\item{from}{The point of reference for calculating the height of
+the node. \code{root} calculates the distance between the root of
+the tree and the node. \code{all_tip} return the distance between
+the node and all the tips descending from it. \code{min_tip} the
+distance between the node and its closest tip. \code{max_tip} the
+distance between the node and its farther tip. \code{min_tip} and
+\code{max_tip} will be identical if the tree is ultrametric. If
+more than one tip is equidistant from the node, the tip with the
+lowest node id will be returned.}
+
 \item{tol}{the tolerance to decide whether all the tips have the
 same depth to test if the tree is ultrametric. Default is
 \code{.Machine$double.eps^0.5}.}
@@ -74,14 +91,22 @@ same depth to test if the tree is ultrametric. Default is
 \item{edgeLength}{a named vector of the edge length for the
 object}
 
-\item{nodeDepth}{a named vector indicating the \dQuote{depth} (the
-distance between the root and a given node).}
-
 \item{isUltrametric}{whether or not the tree is ultrametric (all
 the tips are have the same depth (distance from the root) (logical)}
 
 \item{sumEdgeLength}{the sum of the edge lengths for a set of
 nodes (intended to be used with \code{ancestors} or \code{descendants})}
+
+\item{nodeHeight}{the distance between a node and the root or the
+tips. The format of the result will depend on the options and the
+number of nodes provided, either a vector or a list.}
+
+ \item{nodeDepth}{Deprecated, now replaced by \code{nodeHeight}. A
+named vector indicating the \dQuote{depth} (the distance between
+the root and a given node).}
+
+\item{depthTip}{Deprecated, now  replaced by \code{nodeHeight}.}
+
 }
 }
 \description{
@@ -106,6 +131,17 @@ data(geospiza)
   edgeLength(geospiza)[2] <- 0.33
   edgeLength(geospiza)["16-17"] <- 0.34
   edgeLength(geospiza, 17) <- 0.35
+
+  ## Test if tree is ultrametric
+  isUltrametric(geospiza)   # TRUE
+  ## indeed all tips are at the same distance from the root
+  nodeHeight(geospiza, nodeId(geospiza, "tip"), from="root")
+  ## compare distances from tips of two MRCA
+  nodeHeight(geospiza, MRCA(geospiza, c("pallida", "psittacula")), from="min_tip")
+  nodeHeight(geospiza, MRCA(geospiza, c("fortis", "difficilis")), from="min_tip")
+  ## or the same but from the root
+  nodeHeight(geospiza, MRCA(geospiza, c("pallida", "psittacula")), from="root")
+  nodeHeight(geospiza, MRCA(geospiza, c("fortis", "difficilis")), from="root")
 }
 \seealso{
 \code{ancestors}, \code{descendants}, \code{.Machine} for
