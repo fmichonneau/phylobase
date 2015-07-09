@@ -236,11 +236,9 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree","data"),
     }
 
     if (returnTrees && length(ncl$trees) > 0) {
-
         listTrees <- vector("list", length(ncl$trees))
 
         for (i in 1:length(ncl$trees)) {
-
 
             isRooted <- is_rooted(ncl$parentVector[[i]])
 
@@ -248,7 +246,8 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree","data"),
 
             edgeLgth <- get_edge_length(ncl$branchLength[[i]], ncl$parentVector[[i]],
                                         isRooted)
-            tipLbl <- ncl$taxonLabelVector[[i]]
+
+            tipLbl <- ncl$taxaNames
 
             if (convert.edge.length) {
                 edgeLgth[edgeLgth < 0] <- 0
