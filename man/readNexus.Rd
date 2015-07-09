@@ -6,14 +6,15 @@
 \alias{readNCL}
 \alias{readNewick}
 \alias{readNexus}
-\title{Create a phylo4, phylo4d or data.frame object from a Nexus or a
-Newick file}
+\title{Create a \code{phylo4}, \code{phylo4d} or \code{data.frame} object
+from a NEXIS or a Newick file}
 \usage{
 readNCL(file, simplify = FALSE, type = c("all", "tree", "data"),
-  char.all = FALSE, polymorphic.convert = TRUE, levels.uniform = FALSE,
-  quiet = TRUE, check.node.labels = c("keep", "drop", "asdata"),
-  return.labels = TRUE, file.format = c("nexus", "newick"),
-  check.names = TRUE, convert.edge.length = FALSE, ...)
+  spacesAsUnderscores = TRUE, char.all = FALSE,
+  polymorphic.convert = TRUE, levels.uniform = FALSE, quiet = TRUE,
+  check.node.labels = c("keep", "drop", "asdata"), return.labels = TRUE,
+  file.format = c("nexus", "newick"), check.names = TRUE,
+  convert.edge.length = FALSE, ...)
 
 readNexus(file, simplify = FALSE, type = c("all", "tree", "data"),
   char.all = FALSE, polymorphic.convert = TRUE, levels.uniform = FALSE,
@@ -26,124 +27,155 @@ readNewick(file, simplify = FALSE, quiet = TRUE,
   convert.edge.length = FALSE, ...)
 }
 \arguments{
-\item{file}{a Nexus file for \code{readNexus} or a file that
-contains Newick formatted trees for \code{readNewick}}
+\item{file}{a NEXUS file for \code{readNexus} or a file that
+contains Newick formatted trees for \code{readNewick}.}
 
-\item{simplify}{If there are multiple trees in the file, only the
-first one is returned if TRUE and a list of phylo4/phylo4d objects
-is returned if the file contains multiple trees.}
+\item{simplify}{If TRUE, if there are multiple trees in the file,
+only the first one is returned; otherwise a list of
+\code{phylo4(d)} objects is returned if the file contains multiple
+trees.}
 
 \item{type}{Determines which type of objects to return, if present
 in the file (see Details).}
 
-\item{char.all}{If TRUE, returns all characters, even those
+\item{spacesAsUnderscores}{In the NEXUS file format white spaces
+are not allowed in taxa labels and are represented by
+underscores. Therefore, NCL converts underscores found in taxa
+labels in the NEXUS file into white spaces
+(e.g. \code{species_1} will become \code{"species 1"}. If you
+want to preserve the underscores, set as TRUE, the default).}
+
+\item{char.all}{If \code{TRUE}, returns all characters, even those
 excluded in the NEXUS file}
 
-\item{polymorphic.convert}{If TRUE, converts polymorphic
+\item{polymorphic.convert}{If \code{TRUE}, converts polymorphic
 characters to missing data}
 
-\item{levels.uniform}{If TRUE, uses the same levels for all
+\item{levels.uniform}{If \code{TRUE}, uses the same levels for all
 characters}
 
-\item{quiet}{If FALSE the output of the NCL interface is
-printed. This is mainly for debugging purposes. This option can
-considerably slow down the process if the tree is big or there are
-many trees in the file.}
+\item{quiet}{If \code{FALSE} the output of the NCL interface is
+printed. This is mainly for debugging purposes. This option
+can considerably slow down the process if the tree is big or
+there are many trees in the file.}
 
 \item{check.node.labels}{Determines how the node labels in the
-Nexus or Newick files should be treated in the phylo4 object, see
-Details for more information.}
+NEXUS or Newick files should be treated in the phylo4 object,
+see Details for more information.}
 
-\item{return.labels}{Determines whether state names (if TRUE) or
-state codes should be returned.}
+\item{return.labels}{Determines whether state names (if
+\code{TRUE}) or state codes should be returned.}
 
 \item{file.format}{character indicating the format of the
 specified file (either \dQuote{\code{newick}} or
-\dQuote{\code{nexus}}). It's best to just use \code{readNexus} or
-\code{readNewick}.}
+\dQuote{\code{nexus}}). It's more convenient to just use
+\code{readNexus}  or \code{readNewick}.}
 
 \item{check.names}{logical. If \sQuote{TRUE} then the names of the
-characters from the NEXUS file are checked to ensure that they are
-syntactically valid variable names and are not duplicated.  If
-necessary they are adjusted (by \sQuote{make.names}) so that they
-are.}
+characters from the NEXUS file are checked to ensure that they
+are syntactically valid variable names and are not duplicated.
+If necessary they are adjusted using \sQuote{make.names}.}
 
-\item{convert.edge.length}{logical. If \sQuote{TRUE} negative edge
-lengths are replaced with 0. At this time \code{phylobase} does
-not accept objects with negative branch lengths, this workaround
-allows to still use trees with negative branch lengths are an
-artifact of the method used to build the tree.}
+\item{convert.edge.length}{logical. If \code{TRUE} negative edge
+lengths are replaced with 0. At this time \code{phylobase}
+does not accept objects with negative branch lengths, this
+workaround allows to import trees with negative branch
+lengths.}
 
 \item{\dots}{Additional arguments to be passed to phylo4 or
 phylo4d constructor (see Details)}
 }
 \value{
 Depending on the value of \code{type} and the contents of
-the file, one of: a \code{data.frame}, a \linkS4class{phylo4}
-object, a \linkS4class{phylo4d} object or \code{NULL}.  If several
-trees are included in the Nexus file and the option
-\code{simplify=FALSE} a list of \linkS4class{phylo4} or
-\linkS4class{phylo4d} objects is returned.
+    the file, one of: a \code{data.frame}, a \linkS4class{phylo4}
+    object, a \linkS4class{phylo4d} object or \code{NULL}.  If
+    several trees are included in the NEXUS file and the option
+    \code{simplify=FALSE} a list of \linkS4class{phylo4} or
+    \linkS4class{phylo4d} objects is returned.
 }
 \description{
-\code{readNexus} reads a Nexus file and outputs a \code{phylo4} or
+\code{readNexus} reads a NEXUS file and outputs a \code{phylo4},
 \code{phylo4d} or \code{data.frame} object.
 }
 \details{
 \code{readNewick} reads a Newick file and outputs a \code{phylo4}
 or \code{phylo4d} object.
 
-\code{readNexus} extracts data held in a Nexus file, specifically
-from DATA, CHARACTER or TREES blocks present in the file. The
-\code{type} argument specifies which of these is returned:
-\describe{ \item{data}{will only return a \code{data.frame} of the
-contents of all DATA and CHARACTER blocks.} \item{tree}{will only
-return a \code{phylo4} object of the contents of the TREES block.}
+\code{readNexus} is used internally by both \code{readNexus} and
+\code{readNewick} to extract data held in a tree files,
+specifically in NEXUS files from DATA, CHARACTER or TREES
+blocks.
+
+The \code{type} argument specifies which of these is returned:
+
+\describe{
+
+\item{data}{will only return a \code{data.frame} of the contents
+of all DATA and CHARACTER blocks.}
+
+\item{tree}{will only return a \code{phylo4} object of the
+contents of the TREES block.}
+
 \item{all}{if only data or a tree are present in the file, this
 option will act as the options above, returning either a
 \code{data.frame} or a \code{phylo4} object respectively. If both
 are present then a \code{phylo4d} object is returned containing
-both.} } The function returns \code{NULL} if the \code{type} of
+both.}
+
+}
+
+The function returns \code{NULL} if the \code{type} of
 data requested is not present in the file, or if neither data nor
 tree blocks are present.
 
 Depending on the context \code{readNexus} will call either the
-\code{phylo4} or \code{phylo4d} constructor. In addition with
-\code{type="all"}, the \code{phylo4d} constructor will be used if
-\code{check.node.labels="asdata"}.
+\code{phylo4} or \code{phylo4d} constructor. The \code{phylo4d}
+constructor will be used with \code{type="all"}, or if the option
+\code{check.node.labels="asdata"} is invoked.
 
-\code{readNewick} imports newick formatted tree files and will
+\code{readNewick} imports Newick formatted tree files and will
 return a \code{phylo4} or a \code{phylo4d} object if the option
 \code{check.node.labels="asdata"} is invoked.
 
 For both \code{readNexus} and \code{readNewick}, the options for
-\code{check.node.labels} can take the values: \describe{
+\code{check.node.labels} can take the values:
+
+\describe{
+
 \item{keep}{the node labels of the trees will be passed as node
-labels in the \code{phylo4} object} \item{drop}{the node labels of
-the trees will be ignored in the \code{phylo4} object}
+labels in the \code{phylo4} object}
+
+\item{drop}{the node labels of the trees will be ignored in the
+\code{phylo4} object}
+
 \item{asdata}{the node labels will be passed as data and a
-\code{phylo4d} object will be returned.} } If you use the option
-\code{asdata} on a file with no node labels, a warning message is
-issued, and thus \code{check.node.labels} takes the value
+\code{phylo4d} object will be returned.}
+
+}
+
+If you use the option \code{asdata} on a file with no node labels,
+a warning message is issued, and is thus equivalent to the value
 \code{drop}.
 
 For both \code{readNexus} and \code{readNewick}, additional
 arguments can be passed to the constructors such as \code{annote},
-\code{missing.data} or \code{extra.data}. See the Details section
-of \code{\link{phylo4d-methods}} for the complete list of options.
+\code{missing.data} or \code{extra.data}. See the \sQuote{Details}
+section of \code{\link{phylo4d-methods}} for the complete list of
+options.
 }
 \note{
 Underscores in state labels (i.e. trait or taxon names) will
-be translated to spaces when read by NCL. Unless
-\code{check.names=FALSE}, trait names will be converted to valid R
-names (see \code{\link{make.names}}) on input to R, so spaces will
-be translated to periods.
+be translated to spaces. Unless \code{check.names=FALSE}, trait
+names will be converted to valid R names (see
+\code{\link{make.names}}) on input to R, so spaces will be
+translated to periods.
 }
 \author{
 Brian O'Meara, Francois Michonneau, Derrick Zwickl
 }
 \seealso{
-the \linkS4class{phylo4d} class, the \linkS4class{phylo4} class
+the \linkS4class{phylo4d} class, the \linkS4class{phylo4}
+    class
 }
 \keyword{misc}
 
