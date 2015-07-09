@@ -1,23 +1,43 @@
 
 
-##  CHANGES IN phylobase VERSION 0.6.10
+##  CHANGES IN phylobase VERSION 0.7.999
 
-*  Fix bug NA is labels were considered duplicated by checkPhylo4().
 
-*  Fix bug #605 (R-forge) -- treePlot subsets numeric data for plotting.
+### NEW FEATURES
 
 *  Initial basic support for converting RNeXML objects in phylo4 and phylo4d
 format.
 
-*  All documentation is now in Roxygen format
+*  New methods: `internalEdges()`, `terminalEdges()`
+
+
+### MAJOR CHANGES
+
+* `readNexus` and `readNewick` now internally uses the package `rncl` to parse
+  files. They also use a different approach to reconstruct the edge
+  matrix. These changes make file parsing faster. Objects created with this new
+  approach will not exactly be identical to those created before as node
+  numbering might differ, they are however fully compatible with each others.
+
+* Source code for the package is now hosted on GitHub
+
+### MINOR CHANGES
 
 *  All tests done with testthat
 
-*  New methods: internalEdges(), terminalEdges()
+*  `rootNode` returns the rootNode using the same format as `getNode()`.
 
-*  hasPoly, hasRetic, hasSingle are now methods instead of functions.
+*  All documentation is now in Roxygen format
 
-*  rootNode returns the rootNode using the same format as getNode().
+*  `hasPoly`, `hasRetic`, `hasSingle` are now methods instead of functions.
+
+### BUG FIXES
+
+*  Fix bug: `NA` in labels were considered duplicated by `checkPhylo4()`.
+
+*  Fix bug #605 (R-forge) -- treePlot subsets numeric data for plotting.
+
+
 
 ##  CHANGES IN phylobase VERSION 0.6.8
 
