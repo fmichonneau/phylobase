@@ -36,10 +36,6 @@ noStateLabels <- file.path(pth, "noStateLabels.nex")
 ## Newick trees
 newick <- file.path(pth, "newick.tre")
 
-## Contains correct (as of 2010-03-08) phylo4 representation of one of the tree
-## stored in the nexus file
-mlFile <- file.path(pth, "multiLines.Rdata")
-
 ## Test with trees that don't include all the taxa listed in TAXA block
 treeSubset <- file.path(pth, "testSubsetTaxa.nex")
 
@@ -50,7 +46,6 @@ ExContDataFile <- file.path(pth, "ExContData.Rdata")
 stopifnot(file.exists(co1File))
 stopifnot(file.exists(treeDiscDt))
 stopifnot(file.exists(multiLinesFile))
-stopifnot(file.exists(mlFile))
 stopifnot(file.exists(treePolyDt))
 stopifnot(file.exists(treeContDt))
 stopifnot(file.exists(treeDiscCont))
@@ -151,29 +146,31 @@ test_that("readNCL can handle multi line files", {
     multiLines <- readNCL(file=multiLinesFile)
     ## load correct representation and make sure that the trees read
     ## match it
-    load(mlFile)
+    ml <- ape::read.nexus(file = multiLinesFile)
+    ml1 <- as(ml[[1]], "phylo4")
+    ml2 <- as(ml[[2]], "phylo4")
     expect_equal(tipLabels(multiLines[[1]]), tipLabels(ml1))
     expect_equal(tipLabels(multiLines[[2]]), tipLabels(ml2))
     expect_equivalent(sort(edgeLength(multiLines[[1]])), sort(edgeLength(ml1)))
     expect_equivalent(sort(edgeLength(multiLines[[2]])), sort(edgeLength(ml2)))
     expect_equal(nodeType(multiLines[[1]]), nodeType(ml1))
     expect_equal(nodeType(multiLines[[2]]), nodeType(ml2))
-    rm(ml1, ml2)
 })
 
 ## ########### Tree + data -- file from Mesquite
 context("readNCL can handle files with tree & data")
 ## tree properties
-labTr <-  c("Myrmecocystussemirufus", "Myrmecocystusplacodops",
-            "Myrmecocystusmendax", "Myrmecocystuskathjuli",
-            "Myrmecocystuswheeleri", "Myrmecocystusmimicus",
-            "Myrmecocystusdepilis", "Myrmecocystusromainei",
-            "Myrmecocystusnequazcatl", "Myrmecocystusyuma",
-            "Myrmecocystuskennedyi", "Myrmecocystuscreightoni",
-            "Myrmecocystussnellingi", "Myrmecocystustenuinodis",
-            "Myrmecocystustestaceus", "Myrmecocystusmexicanus",
-            "Myrmecocystuscfnavajo", "Myrmecocystusnavajo",
-            NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
+
+labTr <- c("Myrmecocystuscfnavajo", "Myrmecocystuscreightoni",
+           "Myrmecocystusdepilis", "Myrmecocystuskathjuli",
+           "Myrmecocystuskennedyi", "Myrmecocystusmendax",
+           "Myrmecocystusmexicanus", "Myrmecocystusmimicus",
+           "Myrmecocystusnavajo", "Myrmecocystusnequazcatl",
+           "Myrmecocystusplacodops", "Myrmecocystusromainei",
+           "Myrmecocystussemirufus", "Myrmecocystussnellingi",
+           "Myrmecocystustenuinodis", "Myrmecocystustestaceus",
+           "Myrmecocystuswheeleri", "Myrmecocystusyuma", NA, NA, NA, NA, NA, NA,
+           NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
 names(labTr) <- 1:35
 eTr <- c(NA, 1.699299, 12.300701, 0.894820, 0.836689, 10.569191, 4.524387, 6.044804,
          0.506099, 0.198842, 0.689044, 4.650818, 2.926053, 1.724765, 1.724765, 4.255993,
@@ -213,10 +210,12 @@ attributes(p4) <- attributes(p4d) <- list(package="phylobase")
 test_that("readNCL can deal with the tree only", {
     ## Tree only
     tr <- readNCL(file=treeDiscDt, type="tree")
+    tr2 <- ape::read.nexus(file = treeDiscDt)
+    tr2 <- as(tr2, "phylo4")
     expect_equal(labels(tr), labTr)   # check labels
-    expect_equal(sort(unname(edgeLength(tr))), sort(unname(eTr))) # check edge lengths
     expect_equal(nodeType(tr), nTtr)  # check node types
     expect_equal(class(tr), p4)       # check class
+    expect_equal(edgeLength(tr), edgeLength(tr2)[names(edgeLength(tr))])
 })
 
 test_that("readNCL can deal with data only", {
@@ -313,7 +312,7 @@ test_that("char.all=TRUE, levels.uniform=FALSE, return.labels=FALSE, polymorphic
     expect_equivalent(sort(edgeLength(trChr1)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr1), nTtr)  # check node types
     expect_equal(class(trChr1), p4d)      # check class
-    expect_equal(tdata(trChr1, "tip"), dtPoly1)
+    expect_equal(tdata(trChr1, "tip"), dtPoly1[tipLabels(trChr1), ])
 })
 
 test_that("char.all=TRUE, levels.uniform=FALSE, return.labels=FALSE, polymorphic.convert=TRUE", {
@@ -323,7 +322,7 @@ test_that("char.all=TRUE, levels.uniform=FALSE, return.labels=FALSE, polymorphic
     expect_equivalent(sort(edgeLength(trChr2)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr2), nTtr)  # check node types
     expect_equal(class(trChr2), p4d)      # check class
-    expect_equal(tdata(trChr2, "tip"), dtPoly2)
+    expect_equal(tdata(trChr2, "tip"), dtPoly2[tipLabels(trChr2), ])
 })
 
 test_that("char.all=TRUE, levels.uniform=FALSE, return.labels=TRUE, polymorphic.convert=TRUE", {
@@ -333,7 +332,7 @@ test_that("char.all=TRUE, levels.uniform=FALSE, return.labels=TRUE, polymorphic.
     expect_equivalent(sort(edgeLength(trChr3)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr3), nTtr)  # check node types
     expect_equal(class(trChr3), p4d)      # check class
-    expect_equal(tdata(trChr3, "tip"), dtPoly3)
+    expect_equal(tdata(trChr3, "tip"), dtPoly3[tipLabels(trChr3), ])
 })
 
 test_that("char.all=TRUE, levels.uniform=FALSE, return.labels=TRUE, polymorphic.convert=FALSE is not yet implemented", {
@@ -351,7 +350,7 @@ test_that("char.all=TRUE, levels.uniform=TRUE, return.labels=FALSE, polymorphic.
     expect_equivalent(sort(edgeLength(trChr5)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr5), nTtr)  # check node types
     expect_equal(class(trChr5), p4d)      # check class
-    expect_equal(tdata(trChr5, "tip"), dtPoly5)
+    expect_equal(tdata(trChr5, "tip"), dtPoly5[tipLabels(trChr5), ])
 })
 
 test_that("char.all=TRUE, levels.uniform=TRUE, return.labels=FALSE, polymorphic.convert=TRUE", {
@@ -361,7 +360,7 @@ test_that("char.all=TRUE, levels.uniform=TRUE, return.labels=FALSE, polymorphic.
     expect_equivalent(sort(edgeLength(trChr6)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr6), nTtr)  # check node types
     expect_equal(class(trChr6), p4d)      # check class
-    expect_equal(tdata(trChr6, "tip"), dtPoly6)
+    expect_equal(tdata(trChr6, "tip"), dtPoly6[tipLabels(trChr6), ])
 })
 
 test_that("char.all=TRUE, levels.uniform=TRUE, return.labels=TRUE, polymorphic.convert=FALSE is not yet implemented", {
@@ -381,7 +380,7 @@ test_that("char.all=TRUE, levels.uniform=TRUE, return.labels=TRUE, polymorphic.c
     expect_equivalent(sort(edgeLength(trChr8)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr8), nTtr)  # check node types
     expect_equal(class(trChr8), p4d)      # check class
-    expect_equal(tdata(trChr8, "tip"), dtPoly8)
+    expect_equal(tdata(trChr8, "tip"), dtPoly8[tipLabels(trChr8), ])
 })
 
 ## -- with char.all=FALSE
@@ -392,7 +391,7 @@ test_that("char.all=FALSE, levels.uniform=FALSE, return.labels=FALSE, polymorphi
     expect_equivalent(sort(edgeLength(trChr1F)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr1F), nTtr)  # check node types
     expect_equal(class(trChr1F), p4d)      # check class
-    expect_equal(tdata(trChr1F, "tip"), dtPoly1[, 1:2])
+    expect_equal(tdata(trChr1F, "tip"), dtPoly1[tipLabels(trChr1F), 1:2])
 })
 
 test_that("char.all=FALSE, levels.uniform=FALSE, return.labels=FALSE, polymorphic.convert=TRUE", {
@@ -402,7 +401,7 @@ test_that("char.all=FALSE, levels.uniform=FALSE, return.labels=FALSE, polymorphi
     expect_equivalent(sort(edgeLength(trChr2F)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr2F), nTtr)  # check node types
     expect_equal(class(trChr2F), p4d)      # check class
-    expect_equal(tdata(trChr2F, "tip"), dtPoly2[, 1:2])
+    expect_equal(tdata(trChr2F, "tip"), dtPoly2[tipLabels(trChr2F), 1:2])
 })
 
 test_that("char.all=FALSE, levels.uniform=FALSE, return.labels=TRUE, polymorphic.convert=TRUE", {
@@ -412,7 +411,7 @@ test_that("char.all=FALSE, levels.uniform=FALSE, return.labels=TRUE, polymorphic
     expect_equivalent(sort(edgeLength(trChr3F)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr3F), nTtr)  # check node types
     expect_equal(class(trChr3F), p4d)      # check class
-    expect_equal(tdata(trChr3F, "tip"), dtPoly3[, 1:2])
+    expect_equal(tdata(trChr3F, "tip"), dtPoly3[tipLabels(trChr3F), 1:2])
 })
 
 test_that("char.all=FALSE, levels.uniform=FALSE, return.labels=TRUE, polymorphic.convert=FALSE is not yet implemented", {
@@ -430,7 +429,7 @@ test_that("char.all=FALSE, levels.uniform=TRUE, return.labels=FALSE, polymorphic
     expect_equivalent(sort(edgeLength(trChr5F)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr5F), nTtr)  # check node types
     expect_equal(class(trChr5F), p4d)      # check class
-    expect_equal(tdata(trChr5F, "tip"), dtPoly5F)
+    expect_equal(tdata(trChr5F, "tip"), dtPoly5F[tipLabels(trChr5F), ])
 })
 
 test_that("char.all=FALSE, levels.uniform=TRUE, return.labels=FALSE, polymorphic.convert=TRUE", {
@@ -440,7 +439,7 @@ test_that("char.all=FALSE, levels.uniform=TRUE, return.labels=FALSE, polymorphic
     expect_equivalent(sort(edgeLength(trChr6F)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr6F), nTtr)  # check node types
     expect_equal(class(trChr6F), p4d)      # check class
-    expect_equal(tdata(trChr6F, "tip"), dtPoly6F)
+    expect_equal(tdata(trChr6F, "tip"), dtPoly6F[tipLabels(trChr6F), ])
 })
 
 test_that("char.all=FALSE, levels.uniform=TRUE, return.labels=TRUE, polymorphic.convert=FALSE is not yet implemented", {
@@ -460,7 +459,7 @@ test_that("char.all=FALSE, levels.uniform=TRUE, return.labels=TRUE, polymorphic.
     expect_equivalent(sort(edgeLength(trChr8F)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trChr8F), nTtr)  # check node types
     expect_equal(class(trChr8F), p4d)      # check class
-    expect_equal(tdata(trChr8F, "tip"), dtPoly8F)
+    expect_equal(tdata(trChr8F, "tip"), dtPoly8F[tipLabels(trChr8F), ])
 })
 
 ## ########## Tree + Data -- test with continuous Characters
@@ -469,7 +468,7 @@ test_that("test of readNCL with tree data, with continuous characters", {
     trDtCont <- readNCL(file=treeContDt, type="all")
     load(ExContDataFile)
     expect_equal(DtCont, ExContData[rownames(DtCont), ])
-    expect_equal(tdata(trDtCont, "tip"), ExContData)
+    expect_equal(tdata(trDtCont, "tip"), ExContData[tipLabels(trDtCont), ])
     expect_equal(labels(trDtCont), labTr)   # check labels
     expect_equivalent(sort(edgeLength(trDtCont)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trDtCont), nTtr)  # check node types
@@ -484,7 +483,7 @@ test_that("tree + data for both types (discrete & continuous)", {
     load(ExContDataFile)
     dtDiscContTest <- cbind(ExContData, dtTest2[rownames(ExContData), ])
     expect_equal(dtDiscCont, dtDiscContTest[rownames(dtDiscCont), ])
-    expect_equal(tdata(trDtDiscCont, "tip"), dtDiscContTest)
+    expect_equal(tdata(trDtDiscCont, "tip"), dtDiscContTest[tipLabels(trDtDiscCont), ])
     expect_equal(labels(trDtDiscCont), labTr)   # check labels
     expect_equivalent(sort(edgeLength(trDtDiscCont)), sort(eTr)) # check edge lengths
     expect_equal(nodeType(trDtDiscCont), nTtr)  # check node types
@@ -565,3 +564,18 @@ test_that("first tree is correct", {
                            "All the taxa listed")
           }
 )
+
+### Test roundtrip with Myrmecus file ------------------------------------------
+
+context("Compare output from ape read file and phylobase")
+
+test_that("output from ape::read.nexus and readNexus match", {
+            tr_ape <- ape::read.nexus(file = treeDiscDt)
+            tr_ph4 <- readNexus(file = treeDiscDt, type = "tree")
+            tr_ape <- as(tr_ape, "phylo4")
+            expect_equal(edges(tr_ape)[order(edges(tr_ape)[, 1]), ],
+                         edges(tr_ph4)[order(edges(tr_ph4)[, 1]), ])
+            expect_equal(edgeLength(tr_ape),
+                         edgeLength(tr_ph4)[names(edgeLength(tr_ape))])
+            expect_equal(labels(tr_ape), labels(tr_ph4))
+})
