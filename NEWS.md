@@ -10,6 +10,7 @@ format.
 
 *  New methods: `internalEdges()`, `terminalEdges()`
 
+* `descendants()` has now a `"ALL"` argument to include self in results
 
 ### MAJOR CHANGES
 
@@ -37,6 +38,8 @@ format.
 
 *  Fix bug #605 (R-forge) -- treePlot subsets numeric data for plotting.
 
+*  Fix bug #4: `descendants()` behave like `ancestors()` when provided with a
+   list of nodes and is consistent across all arguments.
 
 
 ##  CHANGES IN phylobase VERSION 0.6.8
