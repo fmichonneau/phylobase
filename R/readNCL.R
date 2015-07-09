@@ -241,12 +241,6 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree","data"),
 
         for (i in 1:length(ncl$trees)) {
 
-            is_rooted <- function(parentVector) {
-                tab_edg <- table(parentVector)
-                if (tabulate(parentVector)[which(parentVector == 0)] > 2)
-                    FALSE
-                else TRUE
-            }
 
             isRooted <- is_rooted(ncl$parentVector[[i]])
 
@@ -350,6 +344,15 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree","data"),
                }
            })
     toRet
+}
+
+
+## check if the implicit root is dichotomous
+is_rooted <- function(parentVector) {
+    tab_edg <- table(parentVector)
+    if (tabulate(parentVector)[which(parentVector == 0)] > 2)
+        FALSE
+    else TRUE
 }
 
 
