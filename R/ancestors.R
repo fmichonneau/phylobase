@@ -112,8 +112,7 @@ descendants <- function (phy, node, type=c("tips","children","all")) {
 
     if (type == "children") {
         res <- lapply(node, function(x) children(phy, x))
-        ## if just a single node, return as a single vector
-        if (length(res)==1) res <- res[[1]]
+        names(res) <- node
     } else {
         ## edge matrix must be in preorder for the C function!
         if (phy@order=="preorder") {
@@ -137,12 +136,14 @@ descendants <- function (phy, node, type=c("tips","children","all")) {
         if (type=="tips") {
             isDes[descendant %in% nodeId(phy, "internal"),] <- FALSE
         }
-        ## res <- lapply(seq_along(node), function(n) getNode(phy,
-        ##     descendant[isDes[,n]]))
-        res <- getNode(phy, descendant[isDes[, seq_along(node)]])
+        res <- lapply(seq_along(node), function(n) {
+                          getNode(phy, descendant[isDes[,n]])
+                      })
+        names(res) <- node
     }
-    ## names(res) <- as.character(oNode[isValid])
 
+    ## if just a single node, return as a single vector
+    if (length(res)==1) res <- res[[1]]
     res
 
     ## Original pure R implementation of the above
