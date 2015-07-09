@@ -3,7 +3,7 @@
 ##  CHANGES IN phylobase VERSION 0.7.999
 
 
-### NEW FEATURES
+### New features
 
 *  Initial basic support for converting RNeXML objects in phylo4 and phylo4d
 format.
@@ -12,7 +12,11 @@ format.
 
 * `descendants()` has now a `"ALL"` argument to include self in results
 
-### MAJOR CHANGES
+* New method: `nodeHeight()` that provides a consistent and comprehensive way of
+  calculating the distance between a node and either the root or the
+  tips. (fix #3)
+
+### Major changes
 
 * `readNexus` and `readNewick` now internally uses the package `rncl` to parse
   files. They also use a different approach to reconstruct the edge
@@ -22,7 +26,7 @@ format.
 
 * Source code for the package is now hosted on GitHub
 
-### MINOR CHANGES
+### Minor changes
 
 *  All tests done with testthat
 
@@ -32,7 +36,11 @@ format.
 
 *  `hasPoly`, `hasRetic`, `hasSingle` are now methods instead of functions.
 
-### BUG FIXES
+### Deprecated functions
+
+* `nodeDepth` and `depthTips` are now deprecated and are replaced by `nodeHeight`
+
+### Bug fixes
 
 *  Fix bug: `NA` in labels were considered duplicated by `checkPhylo4()`.
 
