@@ -16,6 +16,9 @@ format.
   calculating the distance between a node and either the root or the
   tips. (fix #3)
 
+* The replacement methods for `labels`, `tipLabels`, `nodeLabels`, `edgeLabels`
+  now accept `NA` or `NULL` to remove labels (fix #2)
+
 ### Major changes
 
 * `readNexus` and `readNewick` now internally uses the package `rncl` to parse
