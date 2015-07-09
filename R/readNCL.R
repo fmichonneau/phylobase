@@ -199,7 +199,7 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree","data"),
 
                         lbl <- ncl$stateLabels[lblCounter]
                         if (return.labels) {
-                            if (any(nchar(gsub(" ", "", lbl)) == 0)) {
+                            if (any(nchar(gsub("\\s|_", "", lbl)) == 0)) {
                                 warning("state labels are missing for \'", ncl$charLabels[i],
                                         "\', the option return.labels is thus ignored.")
                             }
