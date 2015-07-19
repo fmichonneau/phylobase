@@ -270,7 +270,7 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree","data"),
             edgeLgth <- get_edge_length(ncl$branchLength[[i]], ncl$parentVector[[i]],
                                         isRooted)
 
-            tipLbl <- ncl$taxaNames
+            tipLbl <- ncl$taxonLabelVector[[i]]
 
             if (convert.edge.length) {
                 edgeLgth[edgeLgth < 0] <- 0
@@ -279,8 +279,8 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree","data"),
             if (check.node.labels == "asdata" &&
                 !has_node_labels(ncl$nodeLabelsVector[[i]])) {
                 warning("Could not use value \"asdata\" for ",
-                            "check.node.labels because there are no ",
-                            "labels associated with the tree")
+                        "check.node.labels because there are no ",
+                        "labels associated with the tree")
                 check.node.labels <- "drop"
             }
 
@@ -312,10 +312,6 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree","data"),
                              tip.label = tipLbl)
 
 
-            }
-
-            if (!identical(length(ncl$taxaNames), nTips(tr))) {
-                stop("phylobase doesn't deal with multiple taxa block at this time.")
             }
 
             listTrees[[i]] <- tr

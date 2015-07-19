@@ -146,7 +146,7 @@ test_that("readNCL can handle multi line files", {
     multiLines <- readNCL(file=multiLinesFile)
     ## load correct representation and make sure that the trees read
     ## match it
-    ml <- ape::read.nexus(file = multiLinesFile)
+    ml <- rncl::read_nexus_phylo(file = multiLinesFile)
     ml1 <- as(ml[[1]], "phylo4")
     ml2 <- as(ml[[2]], "phylo4")
     expect_equal(tipLabels(multiLines[[1]]), tipLabels(ml1))
@@ -160,17 +160,16 @@ test_that("readNCL can handle multi line files", {
 ## ########### Tree + data -- file from Mesquite
 context("readNCL can handle files with tree & data")
 ## tree properties
-
-labTr <- c("Myrmecocystuscfnavajo", "Myrmecocystuscreightoni",
-           "Myrmecocystusdepilis", "Myrmecocystuskathjuli",
-           "Myrmecocystuskennedyi", "Myrmecocystusmendax",
-           "Myrmecocystusmexicanus", "Myrmecocystusmimicus",
-           "Myrmecocystusnavajo", "Myrmecocystusnequazcatl",
-           "Myrmecocystusplacodops", "Myrmecocystusromainei",
-           "Myrmecocystussemirufus", "Myrmecocystussnellingi",
-           "Myrmecocystustenuinodis", "Myrmecocystustestaceus",
-           "Myrmecocystuswheeleri", "Myrmecocystusyuma", NA, NA, NA, NA, NA, NA,
-           NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
+labTr <-  c("Myrmecocystussemirufus", "Myrmecocystusplacodops",
+            "Myrmecocystusmendax", "Myrmecocystuskathjuli",
+            "Myrmecocystuswheeleri", "Myrmecocystusmimicus",
+            "Myrmecocystusdepilis", "Myrmecocystusromainei",
+            "Myrmecocystusnequazcatl", "Myrmecocystusyuma",
+            "Myrmecocystuskennedyi", "Myrmecocystuscreightoni",
+            "Myrmecocystussnellingi", "Myrmecocystustenuinodis",
+            "Myrmecocystustestaceus", "Myrmecocystusmexicanus",
+            "Myrmecocystuscfnavajo", "Myrmecocystusnavajo",
+            NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
 names(labTr) <- 1:35
 eTr <- c(NA, 1.699299, 12.300701, 0.894820, 0.836689, 10.569191, 4.524387, 6.044804,
          0.506099, 0.198842, 0.689044, 4.650818, 2.926053, 1.724765, 1.724765, 4.255993,
@@ -210,7 +209,7 @@ attributes(p4) <- attributes(p4d) <- list(package="phylobase")
 test_that("readNCL can deal with the tree only", {
     ## Tree only
     tr <- readNCL(file=treeDiscDt, type="tree")
-    tr2 <- ape::read.nexus(file = treeDiscDt)
+    tr2 <- rncl::read_nexus_phylo(file = treeDiscDt)
     tr2 <- as(tr2, "phylo4")
     expect_equal(labels(tr), labTr)   # check labels
     expect_equal(nodeType(tr), nTtr)  # check node types
@@ -560,17 +559,22 @@ test_that("check.node.labels='keep' with readNewick", {
 context("Trees that don't contain all the taxa listed in the TAXA block")
 
 test_that("first tree is correct", {
-              expect_error(tr <- readNexus(file = treeSubset),
-                           "All the taxa listed")
+              tr <- readNexus(file = treeSubset)
+              expect_equivalent(rootNode(tr[[1]]), 6)
+              expect_equivalent(rootNode(tr[[2]]), 6)
+              expect_equivalent(rootNode(tr[[3]]), 7)
+              expect_equivalent(tipLabels(tr[[1]]), c("porifera", "ctenophora", "cnidaria", "deuterostomia", "protostomia"))
+              expect_equivalent(tipLabels(tr[[2]]), c("porifera", "ctenophora", "xeno", "deuterostomia", "protostomia"))
+              expect_equivalent(tipLabels(tr[[3]]), c("deuterostomia", "protostomia", "porifera", "ctenophora", "cnidaria", "xeno"))
           }
 )
 
 ### Test roundtrip with Myrmecus file ------------------------------------------
 
-context("Compare output from ape read file and phylobase")
+context("Compare output from rncl read file and phylobase")
 
-test_that("output from ape::read.nexus and readNexus match", {
-            tr_ape <- ape::read.nexus(file = treeDiscDt)
+test_that("output from rncl::read_nexus_phylo and readNexus match", {
+            tr_ape <- rncl::read_nexus_phylo(file = treeDiscDt)
             tr_ph4 <- readNexus(file = treeDiscDt, type = "tree")
             tr_ape <- as(tr_ape, "phylo4")
             expect_equal(edges(tr_ape)[order(edges(tr_ape)[, 1]), ],
