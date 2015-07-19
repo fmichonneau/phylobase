@@ -9,3 +9,4 @@ inst/doc/developer.*
 travis-tool.sh
 README.*
 tmp/
+^revdep$
