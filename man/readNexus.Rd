@@ -7,7 +7,7 @@
 \alias{readNewick}
 \alias{readNexus}
 \title{Create a \code{phylo4}, \code{phylo4d} or \code{data.frame} object
-from a NEXIS or a Newick file}
+from a NEXUS or a Newick file}
 \usage{
 readNCL(file, simplify = FALSE, type = c("all", "tree", "data"),
   spacesAsUnderscores = TRUE, char.all = FALSE,

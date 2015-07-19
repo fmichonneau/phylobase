@@ -4,7 +4,7 @@
 ###  - readNewick (wrapper for readNCL importing Newick files)
 
 ##' Create a \code{phylo4}, \code{phylo4d} or \code{data.frame} object
-##' from a NEXIS or a Newick file
+##' from a NEXUS or a Newick file
 ##'
 ##' \code{readNexus} reads a NEXUS file and outputs a \code{phylo4},
 ##' \code{phylo4d} or \code{data.frame} object.
