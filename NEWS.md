@@ -24,10 +24,14 @@ format.
 * `readNexus` and `readNewick` now internally uses the package `rncl` to parse
   files. They also use a different approach to reconstruct the edge
   matrix. These changes make file parsing faster. Objects created with this new
-  approach will not exactly be identical to those created before as node
-  numbering might differ, they are however fully compatible with each others.
+  approach may not exactly be identical to those created in previous versions as
+  node numbering might differ, they are however fully compatible with each
+  others.
 
-* Source code for the package is now hosted on GitHub
+* `readNexus` and `readNewick` can now parse tree files with trees containing a
+  subset of the taxa listed in the TAXA Block.
+
+* Source code for the package is now hosted on GitHub at https://github.com/fmichonneau/phylobase
 
 ### Minor changes
 
