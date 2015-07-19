@@ -391,7 +391,7 @@ get_edge_matrix <- function(parentVector, isRooted) {
     edgeMat
 }
 
-## Returns the edge lengths (missing are represented by -1)
+## Returns the edge lengths (missing are represented by -999)
 get_edge_length <- function(branchLengthVector, parentVector, isRooted) {
     edgeLgth <- branchLengthVector
     if (isRooted) {
@@ -399,7 +399,7 @@ get_edge_length <- function(branchLengthVector, parentVector, isRooted) {
     } else {
         edgeLgth <- edgeLgth[which(parentVector != 0)]
     }
-    edgeLgth[edgeLgth == -1] <- NA
+    edgeLgth[edgeLgth == -999] <- NA
     edgeLgth
 }
 
