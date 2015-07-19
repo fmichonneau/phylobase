@@ -164,45 +164,45 @@ head(myrme)
 
 ```
 ##                      label node ancestor edge.length node.type        time
-## 1    Myrmecocystuscfnavajo    1       35    2.869547       tip   nocturnal
-## 2  Myrmecocystuscreightoni    2       22   10.569191       tip crepuscular
-## 3     Myrmecocystusdepilis    3       30    2.708942       tip     diurnal
+## 1   Myrmecocystussemirufus    1       27    1.724765       tip     diurnal
+## 2   Myrmecocystusplacodops    2       27    1.724765       tip     diurnal
+## 3      Myrmecocystusmendax    3       26    4.650818       tip     diurnal
 ## 4    Myrmecocystuskathjuli    4       28    1.083870       tip     diurnal
-## 5    Myrmecocystuskennedyi    5       23    6.044804       tip     diurnal
-## 6      Myrmecocystusmendax    6       26    4.650818       tip     diurnal
-## 7   Myrmecocystusmexicanus    7       34    5.724923       tip   nocturnal
-## 8     Myrmecocystusmimicus    8       30    2.708942       tip     diurnal
-## 9      Myrmecocystusnavajo    9       35    2.869547       tip   nocturnal
-## 10 Myrmecocystusnequazcatl   10       32    2.193845       tip     diurnal
-## 11  Myrmecocystusplacodops   11       27    1.724765       tip     diurnal
-## 12   Myrmecocystusromainei   12       32    2.193845       tip     diurnal
-## 13  Myrmecocystussemirufus   13       27    1.724765       tip     diurnal
-## 14  Myrmecocystussnellingi   14       33    2.770378       tip crepuscular
-## 15 Myrmecocystustenuinodis   15       33    2.770378       tip crepuscular
-## 16  Myrmecocystustestaceus   16       20   12.300701       tip crepuscular
-## 17   Myrmecocystuswheeleri   17       28    1.083870       tip     diurnal
-## 18       Myrmecocystusyuma   18       31    4.451425       tip crepuscular
+## 5    Myrmecocystuswheeleri    5       28    1.083870       tip     diurnal
+## 6     Myrmecocystusmimicus    6       30    2.708942       tip     diurnal
+## 7     Myrmecocystusdepilis    7       30    2.708942       tip     diurnal
+## 8    Myrmecocystusromainei    8       32    2.193845       tip     diurnal
+## 9  Myrmecocystusnequazcatl    9       32    2.193845       tip     diurnal
+## 10       Myrmecocystusyuma   10       31    4.451425       tip crepuscular
+## 11   Myrmecocystuskennedyi   11       23    6.044804       tip     diurnal
+## 12 Myrmecocystuscreightoni   12       22   10.569191       tip crepuscular
+## 13  Myrmecocystussnellingi   13       33    2.770378       tip crepuscular
+## 14 Myrmecocystustenuinodis   14       33    2.770378       tip crepuscular
+## 15  Myrmecocystustestaceus   15       20   12.300701       tip crepuscular
+## 16  Myrmecocystusmexicanus   16       34    5.724923       tip   nocturnal
+## 17   Myrmecocystuscfnavajo   17       35    2.869547       tip   nocturnal
+## 18     Myrmecocystusnavajo   18       35    2.869547       tip   nocturnal
 ## 19                    <NA>   19        0          NA      root        <NA>
 ## 20                    <NA>   20       19    1.699299  internal        <NA>
 ##         subgenus
-## 1  Myrmecocystus
-## 2   Eremnocystus
+## 1   Endiodioctes
+## 2   Endiodioctes
 ## 3   Endiodioctes
 ## 4   Endiodioctes
 ## 5   Endiodioctes
 ## 6   Endiodioctes
-## 7  Myrmecocystus
+## 7   Endiodioctes
 ## 8   Endiodioctes
-## 9  Myrmecocystus
-## 10  Endiodioctes
+## 9   Endiodioctes
+## 10  Eremnocystus
 ## 11  Endiodioctes
-## 12  Endiodioctes
-## 13  Endiodioctes
+## 12  Eremnocystus
+## 13  Eremnocystus
 ## 14  Eremnocystus
-## 15  Eremnocystus
+## 15 Myrmecocystus
 ## 16 Myrmecocystus
-## 17  Endiodioctes
-## 18  Eremnocystus
+## 17 Myrmecocystus
+## 18 Myrmecocystus
 ## 19          <NA>
 ## 20          <NA>
 ```
