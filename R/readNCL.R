@@ -267,7 +267,8 @@ readNCL <- function(file, simplify=FALSE, type=c("all", "tree","data"),
 
             edgeMat <- get_edge_matrix(ncl$parentVector[[i]], isRooted)
 
-            edgeLgth <- get_edge_length(ncl$branchLength[[i]], ncl$parentVector[[i]],
+            edgeLgth <- get_edge_length(ncl$branchLengthVector[[i]],
+                                        ncl$parentVector[[i]],
                                         isRooted)
 
             tipLbl <- ncl$taxonLabelVector[[i]]
