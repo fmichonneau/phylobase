@@ -122,7 +122,7 @@ check_pdata <- function(object) {
 
 # x <- new("pdata", x=c("a","b", "c", "d", "3"), y=c(1:5))
 #>x[c(2,4)]
-#An object of class “pdata”
+#An object of class pdata
 #Slot "x":
 #[1] "b" "d"
 #
