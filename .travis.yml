@@ -16,6 +16,8 @@ r_binary_install:
   - rgl
   - testthat
 
+r_check_args: --as-cran
+
 r_github_packages:
   - ropensci/RNeXML
   - fmichonneau/rncl
