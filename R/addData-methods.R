@@ -1,19 +1,19 @@
 
 ##' Adding data to a phylo4 or a phylo4d object
-##' 
+##'
 ##' \code{addData} adds data to a \code{phylo4} (converting it in a
 ##' \code{phylo4d} object) or to a \code{phylo4d} object
-##' 
+##'
 ##' Rules for matching data to tree nodes are identical to those used
 ##' by the \code{\link{phylo4d-methods}} constructor.
-##' 
+##'
 ##' If any column names in the original data are the same as columns
 ##' in the new data, ".old" is appended to the former column names and
 ##' ".new" is appended to the new column names.
-##' 
+##'
 ##' The option \code{pos} is ignored (silently) if \code{x} is a
 ##' \code{phylo4} object. It is provided for compatibility reasons.
-##' 
+##'
 ##' @param x a phylo4 or a phylo4d object
 ##' @param tip.data a data frame (or object to be coerced to one)
 ##' containing only tip data
@@ -83,7 +83,7 @@ setMethod("addData", signature(x="phylo4d"),
             sort=FALSE, suffixes=c(".new", ".old"))
     }
     row.names(new.data) <- new.data[["Row.names"]]
-    x@data <- subset(new.data, select=-Row.names)
+    x@data <- new.data[, -match("Row.names", names(new.data)), drop = FALSE]
 
     x
 })
