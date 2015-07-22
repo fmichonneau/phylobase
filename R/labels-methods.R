@@ -163,7 +163,6 @@ setMethod("hasDuplicatedLabels", signature(x="phylo4", type="ANY"),
           type <- "all"
       }
       type <- match.arg(type)
-      ## any(duplicated(na.omit(labels(x, type))))
       hasDuplicatedLabelsCpp(labels(x, type))
 })
 
