@@ -41,8 +41,6 @@ visited before its descendants, thus the root comes first.
 The \code{preorder} parameter corresponds to
 \code{cladewise} in the \code{ape} package, and \code{postorder}
 corresponds (almost) to \code{pruningwise}.
-
-See \url{http://ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf}
 }
 \examples{
 phy <- phylo4(ape::rtree(5))

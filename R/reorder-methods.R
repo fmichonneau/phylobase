@@ -29,7 +29,6 @@
 ##' \code{cladewise} in the \code{ape} package, and \code{postorder}
 ##' corresponds (almost) to \code{pruningwise}.
 ##'
-##' See \url{http://ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf}
 ##' @author Peter Cowan, Jim Regetz
 ##' @seealso \code{\link[ape]{reorder.phylo}} in the \code{ape} package.
 ##' \code{\link{ancestors}} \code{\link{ancestor}} \code{\link{siblings}}
