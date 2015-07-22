@@ -26,7 +26,7 @@
 ##' between two nodes in your tree
 ##'
 ##' \item robust functions to import data from NEXUS and Newick files
-##' using the NEXUS Class Library (\url{http://ncl.sourceforge.net/})
+##' using the NEXUS Class Library (\url{https://github.com/mtholder/ncl/})
 ##' }
 ##'
 ##' @section History:
