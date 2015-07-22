@@ -2,35 +2,37 @@
 
 
 ##' Validity checking for phylo4 objects
-##' 
+##'
 ##' Basic checks on the validity of S4 phylogenetic objects
-##' 
-##' 
+##'
+##'
 ##' @aliases checkPhylo4 checkTree checkPhylo4Data
 ##' @param object A prospective phylo4 or phylo4d object
 ##' @return As required by \code{\link[methods]{validObject}}, returns an error
 ##' string (describing problems) or TRUE if everything is OK.
 ##' @note
-##' 
+##'
 ##' These functions are only intended to be called by other phylobase functions.
-##' 
-##' \code{checkPhylo4} is an (inflexible) wrapper for \code{checkTree}.  The
-##' rules for \code{phylo4} objects essentially follow those for \code{phylo}
-##' objects from the \code{ape} package, which are in turn defined in
-##' \url{http://ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf}.  These are
-##' essentially that: \itemize{ \item if the tree has edge lengths defined, the
-##' number of edge lengths must match the number of edges; \item the number of
-##' tip labels must match the number of tips; \item in a tree with \code{ntips}
-##' tips and \code{nnodes} (total) nodes, nodes 1 to \code{ntips} must be tips
-##' \item if the tree is rooted, the root must be node number \code{ntips+1} and
-##' the root node must be the first row of the edge matrix \item tip labels,
-##' node labels, edge labels, edge lengths must have proper internal names (i.e.
-##' internal names that match the node numbers they document) \item tip and node
-##' labels must be unique }
-##' 
+##'
+##' \code{checkPhylo4} is an (inflexible) wrapper for
+##' \code{checkTree}.  The rules for \code{phylo4} objects essentially
+##' follow those for \code{phylo} objects from the \code{ape} package,
+##' which are in turn defined in
+##' \url{http://ape-package.ird.fr/misc/FormatTreeR_24Oct2012.pdf}.
+##' These are essentially that: \itemize{ \item if the tree has edge
+##' lengths defined, the number of edge lengths must match the number
+##' of edges; \item the number of tip labels must match the number of
+##' tips; \item in a tree with \code{ntips} tips and \code{nnodes}
+##' (total) nodes, nodes 1 to \code{ntips} must be tips \item if the
+##' tree is rooted, the root must be node number \code{ntips+1} and
+##' the root node must be the first row of the edge matrix \item tip
+##' labels, node labels, edge labels, edge lengths must have proper
+##' internal names (i.e.  internal names that match the node numbers
+##' they document) \item tip and node labels must be unique }
+##'
 ##' You can alter some of the default options by using the function
 ##' \code{phylobase.options}.
-##' 
+##'
 ##' For \code{phylo4d} objects, \code{checkTree} also calls
 ##' \code{checkPhylo4Data} to check the validity of the data associated with the
 ##' tree. It ensures that (1) the data associated with the tree have the correct
