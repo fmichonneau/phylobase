@@ -16,7 +16,6 @@ LinkingTo: Rcpp
 Suggests:
     MASS,
     testthat (>= 0.8.1),
-    RUnit,
     knitr
 Author: R Hackathon et al. (alphabetically: Ben Bolker, Marguerite Butler,
     Peter Cowan, Damien de Vienne, Dirk Eddelbuettel, Mark Holder, Thibaut
