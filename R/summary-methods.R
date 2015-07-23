@@ -104,8 +104,8 @@ setMethod("summary", signature(object="phylo4"),
       ## check for polytomies
       if (hasPoly(object)) {
           E <- edges(object)
-          temp <- tabulate(na.omit(E[,1]))
-          degree <- temp[na.omit(E[,1])] # contains the degree of the ancestor for all edges
+          temp <- tabulate(E[,1][!is.na(E[, 1])])
+          degree <- temp[E[,1][!is.na(E[, 1])]] # contains the degree of the ancestor for all edges
           endsAtATip <- !(E[,2] %in% E[,1])
           terminPoly <- (degree>2) & endsAtATip
           internPoly <- (degree>2) & !endsAtATip
