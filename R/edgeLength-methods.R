@@ -304,7 +304,7 @@ setMethod("isUltrametric", signature(x="phylo4"),
     if (!hasEdgeLength(x)) {
       stop("The tree has no edge lengths.")
     }
-    if (identical(all.equal.numeric(var(nodeHeight(x, nodeId(x, "tip"), "root")), 0, tolerance=tol), TRUE)) {
+    if (identical(all.equal.numeric(stats::var(nodeHeight(x, nodeId(x, "tip"), "root")), 0, tolerance=tol), TRUE)) {
       TRUE
     }
     else FALSE

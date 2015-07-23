@@ -71,6 +71,7 @@
 ##' @importFrom rncl rncl
 ##' @import RNeXML
 ##' @import grid
+##' @import stats
 ##' @importFrom Rcpp evalCpp
 ##' @importFrom graphics plot
 ##' @importFrom stats reorder

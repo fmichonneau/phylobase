@@ -92,7 +92,7 @@ setMethod("summary", signature(object="phylo4"),
       if(hasEdgeLength(object)) {
           edge.length <- edgeLength(object)
           res$mean.el <- mean(edge.length, na.rm=TRUE)
-          res$var.el <- var(edge.length, na.rm=TRUE)
+          res$var.el <- stats::var(edge.length, na.rm=TRUE)
           if (isRooted(object) && is.na(edgeLength(object, rootNode(object)))) {
               root.index <- match(edgeId(object, "root"), names(edge.length))
               res$sumry.el <- summary(edge.length[-root.index])
