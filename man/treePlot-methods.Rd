@@ -92,6 +92,7 @@ quantitative traits contained in a \linkS4class{phylo4d} object.} }
 }
 \examples{
 ## example of plotting two grid plots on the same page
+library(grid)
 data(geospiza)
 geotree <- extractTree(geospiza)
 grid.newpage()

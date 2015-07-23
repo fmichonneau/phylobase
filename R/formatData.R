@@ -1,16 +1,16 @@
 ##' Format data for use in phylo4d objects
-##' 
+##'
 ##' Associates data with tree nodes and applies consistent formatting
 ##' rules.
-##' 
-##' 
+##'
+##'
 ##' \code{formatData} is an internal function that should not be
 ##' called directly by the user. It is used to format data provided by
 ##' the user before associating it with a tree, and is called
 ##' internally by the \code{phylo4d}, \code{tdata}, and \code{addData}
 ##' methods. However, users may pass additional arguments to these
 ##' methods in order to control how the data are matched to nodes.
-##' 
+##'
 ##' Rules for matching rows of data to tree nodes are determined
 ##' jointly by the \code{match.data} and \code{rownamesAsLabels}
 ##' arguments. If \code{match.data} is TRUE, data frame rows will be
@@ -21,13 +21,13 @@
 ##' \code{match.data} is FALSE, \code{rownamesAsLabels} has no effect,
 ##' and row matching is purely positional with respect to the order
 ##' returned by \code{nodeId(phy, type)}.
-##' 
+##'
 ##' \code{formatData} (1) converts labels provided in the data into
 ##' node numbers, (2) makes sure that the data are appropriately
 ##' matched against tip and/or internal nodes, (3) checks for
 ##' differences between data and tree, (4) creates a data frame with
 ##' the correct dimensions given a tree.
-##' 
+##'
 ##' @param phy a valid \code{phylo4} object
 ##' @param dt a data frame, matrix, vector, or factor
 ##' @param type type of data to attach
@@ -59,6 +59,7 @@
 ##' \linkS4class{phylo4d} class. See \code{\link{coerce-methods}} for
 ##' translation functions.
 ##' @keywords misc
+##' @importFrom stats na.omit
 formatData <- function(phy, dt, type=c("tip", "internal", "all"),
                        match.data=TRUE, rownamesAsLabels=FALSE,
                        label.type=c("rownames", "column"),
@@ -129,13 +130,13 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
         ids.in <- unlist(ids.in)
 
         ## Make sure that data are matched to appropriate nodes
-        if (type=="tip" && any(na.omit(ids.in) %in% nodeId(phy,
+        if (type=="tip" && any(stats::na.omit(ids.in) %in% nodeId(phy,
             "internal"))) {
             stop("Your tip data are being matched to internal ",
                 "nodes. Make sure that your data identifiers ",
                 "are correct.")
         }
-        if (type=="internal" && any(na.omit(ids.in) %in% nodeId(phy,
+        if (type=="internal" && any(stats::na.omit(ids.in) %in% nodeId(phy,
             "tip"))) {
             stop("Your node data are being matched to tip ",
                 "nodes. Make sure that your data identifiers ",

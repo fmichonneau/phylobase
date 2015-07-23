@@ -213,6 +213,7 @@ setGeneric("nodeHeight", function(x, node, from) {
 
 ##' @rdname edgeLength-methods
 ##' @aliases nodeHeight,phylo4-method
+##' @importFrom stats setNames
 setMethod("nodeHeight", signature(x = "phylo4"),
           function(x, node, from = c("root", "all_tip", "min_tip", "max_tip")) {
               from <- match.arg(from)
@@ -227,7 +228,7 @@ setMethod("nodeHeight", signature(x = "phylo4"),
                       res <- lapply(node, function(n) {
                                         if (n %in% tip_id) {
                                             ## tips are always at 0
-                                            tmp_res <- setNames(0, tipLabels(x)[n])
+                                            tmp_res <- stats::setNames(0, tipLabels(x)[n])
                                         } else {
                                             desc_pths <- descendants(x, n, "all")
                                             ## Get the paths in the other direction

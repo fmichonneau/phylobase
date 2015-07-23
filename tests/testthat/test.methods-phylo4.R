@@ -610,7 +610,7 @@ test_that("summary works as expected when root edge as no length", {
     phy.sum2 <- summary(phy.alt, quiet=TRUE)
     expect_identical(phy.sum2$mean.el, mean(edgeLength(phy.alt), na.rm=TRUE))
     expect_identical(phy.sum2$var.el, var(edgeLength(phy.alt), na.rm=TRUE))
-    expect_identical(phy.sum2$sumry.el, summary(na.omit(edgeLength(phy.alt))))
+    expect_identical(phy.sum2$sumry.el, summary(stats::na.omit(edgeLength(phy.alt))))
 })
 test_that("now remove edge lengths altogether", {
     phy.alt@edge.length[] <- NA

@@ -8,7 +8,7 @@ data(geospiza)
 ## make sure geospiza is properly formatted
 if(is.character(checkval <- checkPhylo4(geospiza)))
   stop(checkval)
-  
+
 
 geospiza0 <-
   list(geospiza.tree=as(geospiza,"phylo"),geospiza.data=tipData(geospiza))
@@ -36,7 +36,7 @@ plot(p1,show.node.label=TRUE)
 p1B <- prune(p1,tip="olivacea")
 
 ## or ...
-p1C <- na.omit(p1)
+p1C <- stats::na.omit(p1)
 
 labels(p1C, "all") <- tolower(labels(p1C, "all"))
 

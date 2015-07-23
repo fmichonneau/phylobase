@@ -67,10 +67,10 @@
 ##'
 ##' @useDynLib phylobase
 ##' @import methods
-##' @import grid
 ##' @import ape
 ##' @importFrom rncl rncl
 ##' @import RNeXML
+##' @import grid
 ##' @importFrom Rcpp evalCpp
 ##' @importFrom graphics plot
 ##' @importFrom stats reorder

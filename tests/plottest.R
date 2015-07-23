@@ -19,13 +19,13 @@ plot(g2, show.node.label=TRUE)
 ## g2B <- as(extractTree(g2), "phylog")
 ##  Note the numbering differences!
 
-## round trip 
+## round trip
 g2C <- as(read.tree(text=write.tree(as(g1, "phylo"))), "phylo4")
 ## comes back in same order
 try(plot(g1, show.node.label=TRUE))
 try(plot(g2C, show.node.label=TRUE))
 
-g3 = subset(g2, tips.exclude=c("fuliginosa", "fortis", "magnirostris", 
+g3 = subset(g2, tips.exclude=c("fuliginosa", "fortis", "magnirostris",
                  "conirostris", "scandens"))
 plot(extractTree(g3))  ## phylo4
 plot(g3)
@@ -51,4 +51,4 @@ if(require(MASS)){
 
 treePlot(g2,plot.at.tip=TRUE,tip.plot.fun=
          function(x,...) {
-           grid.points(seq(along=x),x)})
+           grid::grid.points(seq(along=x),x)})

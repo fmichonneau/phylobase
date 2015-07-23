@@ -37,6 +37,7 @@ Plots the phylogenetic tree contained in a \code{phylo4} or \code{phylo4d}
 object.
 }
 \examples{
+library(grid)
 data(geospiza)
 grid.newpage()
 xxyy <- phyloXXYY(geospiza)
