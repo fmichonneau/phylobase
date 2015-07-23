@@ -10,3 +10,4 @@ travis-tool.sh
 README.*
 ^tmp/
 ^revdep$
+^cran-comments.md$
