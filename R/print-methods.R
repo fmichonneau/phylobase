@@ -83,7 +83,9 @@ setGeneric("show")
 ##' @rdname print-methods
 ##' @aliases show,phylo4-method
 setMethod("show", signature(object="phylo4"),
-   function(object) print(object))
+          function(object) {
+              print(object)
+          })
 
 ##' @rdname print-methods
 ##' @aliases names
