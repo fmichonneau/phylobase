@@ -1,7 +1,7 @@
 
 
 [![Build Status](https://travis-ci.org/fmichonneau/phylobase.png?branch=master)](https://travis-ci.org/fmichonneau/phylobase)
-[![Coverage Status](https://coveralls.io/repos/fmichonneau/phylobase/badge.svg?branch=master&service=github)](https://coveralls.io/github/fmichonneau/phylobase?branch=master)
+[![codecov.io](http://codecov.io/github/fmichonneau/phylobase/coverage.svg?branch=master)](http://codecov.io/github/fmichonneau/phylobase?branch=master)
 ![](http://cranlogs.r-pkg.org/badges/phylobase)
 [![CRAN version](http://www.r-pkg.org/badges/version/phylobase)](http://cran.r-project.org/package=phylobase)
 
@@ -212,19 +212,6 @@ head(myrme)
 
 ```r
 library(RNeXML)
-```
-
-```
-## Loading required package: ape
-## 
-## Attaching package: 'ape'
-## 
-## The following object is masked from 'package:phylobase':
-## 
-##     edges
-```
-
-```r
 nxmlFile <- system.file("nexmlfiles/comp_analysis.xml", package="phylobase")
 nxml <- nexml_read(nxmlFile)
 nxmlEx <- phylo4(nxml)
