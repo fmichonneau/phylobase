@@ -213,7 +213,6 @@ setGeneric("nodeHeight", function(x, node, from) {
 
 ##' @rdname edgeLength-methods
 ##' @aliases nodeHeight,phylo4-method
-##' @importFrom stats setNames
 setMethod("nodeHeight", signature(x = "phylo4"),
           function(x, node, from = c("root", "all_tip", "min_tip", "max_tip")) {
               from <- match.arg(from)

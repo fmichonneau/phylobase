@@ -68,15 +68,14 @@
 ##' @useDynLib phylobase
 ##' @import methods
 ##' @import ape
-##' @importFrom rncl rncl
 ##' @import RNeXML
 ##' @import grid
 ##' @import stats
 ##' @importFrom Rcpp evalCpp
 ##' @importFrom graphics plot
-##' @importFrom stats reorder
 ##' @importFrom utils head tail
 ##' @importFrom ade4 newick2phylog
+##' @importFrom rncl rncl
 ##'
 ##' @exportMethod print head tail reorder plot summary
 ##'
