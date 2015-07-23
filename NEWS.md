@@ -1,7 +1,6 @@
 
 
-##  CHANGES IN phylobase VERSION 0.7.999
-
+##  CHANGES IN phylobase VERSION 0.8.0
 
 ### New features
 
@@ -12,26 +11,26 @@ format.
 
 * `descendants()` has now a `"ALL"` argument to include self in results
 
-* New method: `nodeHeight()` that provides a consistent and comprehensive way of
-  calculating the distance between a node and either the root or the
-  tips. (fix #3)
+* New method: `nodeHeight()`  provides a consistent and comprehensive way of
+  calculating the distance between a node and either the root or the tips. (fix
+  #3)
 
 * The replacement methods for `labels`, `tipLabels`, `nodeLabels`, `edgeLabels`
   now accept `NA` or `NULL` to remove labels (fix #2)
 
 ### Major changes
 
-* `readNexus` and `readNewick` now internally uses the package `rncl` to parse
+* `readNexus` and `readNewick` now internally use the package `rncl` to parse
   files. They also use a different approach to reconstruct the edge
   matrix. These changes make file parsing faster. Objects created with this new
   approach may not exactly be identical to those created in previous versions as
-  node numbering might differ, they are however fully compatible with each
+  node numbering might differ, they should however be fully compatible with each
   others.
 
 * `readNexus` and `readNewick` can now parse tree files with trees containing a
   subset of the taxa listed in the TAXA Block.
 
-* Source code for the package is now hosted on GitHub at https://github.com/fmichonneau/phylobase
+* Source code for the package is hosted on GitHub at https://github.com/fmichonneau/phylobase
 
 ### Minor changes
 
@@ -39,7 +38,7 @@ format.
 
 *  `rootNode` returns the rootNode using the same format as `getNode()`.
 
-*  All documentation is now in Roxygen format
+*  All documentation is in Roxygen format
 
 *  `hasPoly`, `hasRetic`, `hasSingle` are now methods instead of functions.
 
@@ -54,7 +53,7 @@ format.
 *  Fix bug #605 (R-forge) -- treePlot subsets numeric data for plotting.
 
 *  Fix bug #4: `descendants()` behave like `ancestors()` when provided with a
-   list of nodes and is consistent across all arguments.
+   vector of nodes and is consistent across all arguments.
 
 
 ##  CHANGES IN phylobase VERSION 0.6.8
