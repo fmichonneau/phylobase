@@ -4,6 +4,7 @@
 [![codecov.io](http://codecov.io/github/fmichonneau/phylobase/coverage.svg?branch=master)](http://codecov.io/github/fmichonneau/phylobase?branch=master)
 ![](http://cranlogs.r-pkg.org/badges/phylobase)
 [![CRAN version](http://www.r-pkg.org/badges/version/phylobase)](http://cran.r-project.org/package=phylobase)
+[![Research software impact](http://depsy.org/api/package/cran/phylobase/badge.svg)](http://depsy.org/package/r/phylobase)
 
 # phylobase
 
