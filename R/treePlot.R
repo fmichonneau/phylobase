@@ -318,9 +318,9 @@ plotOneTree <- function(xxyy, type, show.tip.label, show.node.label, edge.color,
     # TODO probably want to be able to adjust the location of these guys
     if(show.node.label) {
         grid::pushViewport(grid::viewport(layout = treelayout, layout.pos.col = 1, name = 'nodelabelvp'))
-            theLabels <- nodeLabels(phy)
-            # don't plot NAs
-            theLabels[is.na(theLabels)] <- ""
+        theLabels <- nodeLabels(phy)[match(pedges[pedges[, 2] > Ntips, 2], names(nodeLabels(phy)))]
+        ## don't plot NAs
+        theLabels[is.na(theLabels)] <- ""
         labtext <- grid::grid.text(
             theLabels,
             x = c(xxyy$xx[pedges[, 2] > Ntips]),
