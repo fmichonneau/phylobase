@@ -29,16 +29,16 @@ URL: https://github.com/fmichonneau/phylobase
 BugReports: https://github.com/fmichonneau/phylobase/issues
 LazyData: true
 Collate:
-    'RcppExports.R'
-    'checkdata.R'
-    'phylo4-class.R'
     'oldclasses-class.R'
     'internal-constructors.R'
     'phylo4-methods.R'
+    'RcppExports.R'
+    'checkdata.R'
+    'phylo4-class.R'
+    'getNode-methods.R'
     'formatData.R'
     'phylo4d-class.R'
     'phylo4d-methods.R'
-    'getNode-methods.R'
     'MRCA-methods.R'
     'addData-methods.R'
     'ancestors.R'
@@ -67,3 +67,4 @@ Collate:
     'treestruc.R'
     'zzz.R'
 VignetteBuilder: knitr
+RoxygenNote: 5.0.1
