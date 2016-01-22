@@ -240,7 +240,7 @@
 ##' ## create phylo4 objects with node and tip data
 ##' p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat, match.data=FALSE)
 ##' nodeLabels(p4) <- as.character(nodeId(p4, "internal"))
-##' p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat, match.data=FALSE))
+##' p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat), match.data=FALSE)
 setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
 
 ## first arg is a phylo4
