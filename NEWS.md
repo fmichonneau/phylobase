@@ -1,4 +1,7 @@
 
+## CHANGES in phylobase VERSION 0.8.2
+
+*  Fix typo in examples of phylo4d methods.
 
 ##  CHANGES IN phylobase VERSION 0.8.0
 
