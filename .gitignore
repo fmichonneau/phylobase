@@ -7,3 +7,4 @@ tmp/
 *.gcda
 *.gcno
 revdep/
+/README.html

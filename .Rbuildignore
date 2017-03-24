@@ -11,3 +11,4 @@ README.*
 ^tmp/
 ^revdep$
 ^cran-comments.md$
+^appveyor\.yml$

@@ -1,6 +1,9 @@
-
+---
+output: github_document
+---
 
 [![Build Status](https://travis-ci.org/fmichonneau/phylobase.png?branch=master)](https://travis-ci.org/fmichonneau/phylobase)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/fmichonneau/phylobase?branch=master&svg=true)](https://ci.appveyor.com/project/fmichonneau/phylobase)
 [![codecov.io](http://codecov.io/github/fmichonneau/phylobase/coverage.svg?branch=master)](http://codecov.io/github/fmichonneau/phylobase?branch=master)
 ![](http://cranlogs.r-pkg.org/badges/phylobase)
 [![CRAN version](http://www.r-pkg.org/badges/version/phylobase)](http://cran.r-project.org/package=phylobase)
@@ -71,7 +74,7 @@ Now we'll take the \emph{Geospiza} data from \verb+geospiza_raw$data+ and merge
 it with the tree. However, since \emph{G. olivacea} is included in the tree but
 not in the data set, we will initially run into some trouble:
 
-```{r}
+```{r, error=TRUE}
 data(geospiza_raw)
 g1 <- as(geospiza_raw$tree, "phylo4")
 geodata <- geospiza_raw$data
@@ -83,7 +86,7 @@ easiest is to use `missing.data="warn"` to allow `R` to create the new object
 with a warning (you can also use `missing.data="OK"` to proceed without
 warnings):
 
-```{r}
+```{r, warn=TRUE}
 g2 <- phylo4d(g1, geodata, missing.data="warn")
 head(g2)
 ```
