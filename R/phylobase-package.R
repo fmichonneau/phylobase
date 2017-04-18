@@ -65,7 +65,7 @@
 ##' examples about how to use \code{phylobase}.
 ##' @keywords package
 ##'
-##' @useDynLib phylobase
+##' @useDynLib phylobase, .registration = TRUE
 ##' @import methods
 ##' @import ape
 ##' @import RNeXML
