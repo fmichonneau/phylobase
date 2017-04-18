@@ -90,6 +90,7 @@ setMethod("show", signature(object="phylo4"),
 ##' @rdname print-methods
 ##' @aliases names
 ##' @exportMethod names
+##' @export
 setGeneric("names")
 
 ##' @rdname print-methods

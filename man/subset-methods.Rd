@@ -7,13 +7,9 @@
 \alias{subset,phylo4-method}
 \alias{[}
 \alias{[,phylo4,character,missing,missing-method}
-\alias{[,phylo4,character,missing-method}
 \alias{[,phylo4,numeric,missing,missing-method}
-\alias{[,phylo4,numeric,missing-method}
 \alias{[,phylo4,logical,missing,missing-method}
-\alias{[,phylo4,logical,missing-method}
 \alias{[,phylo4,missing,missing,missing-method}
-\alias{[,phylo4,missing,missing-method}
 \alias{[,phylo4d,ANY,character,missing-method}
 \alias{[,phylo4d,ANY,numeric,missing-method}
 \alias{[,phylo4d,ANY,logical,missing-method}

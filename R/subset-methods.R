@@ -88,7 +88,6 @@
 ##' \email{damien.de-vienne@@u-psud.fr}\cr Thibaut Jombart
 ##' \email{jombart@@biomserv.univ-lyon1.fr}
 ##' @keywords methods
-##' @exportMethod subset
 ##' @rdname subset-methods
 ##' @aliases subset
 ##' @examples
@@ -122,10 +121,11 @@
 ##' edgeLength(geotree2)['0-3']
 ##' ## edge length immediately ancestral to this node in the original tree
 ##' edgeLength(geotree, MRCA(geotree, tipLabels(geotree2)))
+##' @exportMethod subset
 setGeneric("subset")
 
 ##' @rdname subset-methods
-##' @aliases subset,phylo4-method
+## @aliases subset,phylo4-method
 setMethod("subset", "phylo4", function(x, tips.include=NULL,
     tips.exclude=NULL, mrca=NULL, node.subtree=NULL, ...) {
     ##  FIXME: could eliminate NULL and make the test
@@ -195,35 +195,35 @@ setMethod("subset", "phylo4", function(x, tips.include=NULL,
 ##    if (!missing(...)) stop("unused argument(s)")
 
 ##' @rdname subset-methods
-##' @aliases [
-##' @exportMethod [
+##' @exportMethod "["
+##' @export
 setGeneric("[")
 
 ##### --------  phylo4 '[' methods
 
 ##' @rdname subset-methods
-##' @aliases [,phylo4,character,missing-method
+## @aliases [,phylo4,character,missing-method
 setMethod("[", signature(x="phylo4", i="character", j="missing",
     drop="missing"), function(x, i, j, ..., drop) {
     subset(x, tips.include=i)
 })
 
 ##' @rdname subset-methods
-##' @aliases [,phylo4,numeric,missing-method
+## @aliases [,phylo4,numeric,missing-method
 setMethod("[", signature(x="phylo4", i="numeric", j="missing",
     drop="missing"), function(x, i, j, ..., drop) {
     subset(x, tips.include=i)
 })
 
 ##' @rdname subset-methods
-##' @aliases [,phylo4,logical,missing-method
+## @aliases [,phylo4,logical,missing-method
 setMethod("[", signature(x="phylo4", i="logical", j="missing",
     drop="missing"), function(x, i, j, ..., drop) {
     subset(x, tips.include=nodeId(x, "tip")[i])
 })
 
 ##' @rdname subset-methods
-##' @aliases [,phylo4,missing,missing-method
+## @aliases [,phylo4,missing,missing-method
 setMethod("[", signature(x="phylo4", i="missing", j="missing",
     drop="missing"), function(x, i, j, ..., drop) {
     return(x)
@@ -232,7 +232,7 @@ setMethod("[", signature(x="phylo4", i="missing", j="missing",
 ##### --------  phylo4d '[' methods
 
 ##' @rdname subset-methods
-##' @aliases [,phylo4d,ANY,character,missing-method
+## @aliases [,phylo4d,ANY,character,missing-method
 setMethod("[", signature(x="phylo4d", i="ANY", j="character",
     drop="missing"), function(x, i, j, ..., drop) {
     if (!missing(i)) x <- x[i]
@@ -241,7 +241,7 @@ setMethod("[", signature(x="phylo4d", i="ANY", j="character",
 })
 
 ##' @rdname subset-methods
-##' @aliases [,phylo4d,ANY,numeric,missing-method
+## @aliases [,phylo4d,ANY,numeric,missing-method
 setMethod("[", signature(x="phylo4d", i="ANY", j="numeric",
     drop="missing"), function(x, i, j, ..., drop) {
     if (!missing(i)) x <- x[i]
@@ -250,7 +250,7 @@ setMethod("[", signature(x="phylo4d", i="ANY", j="numeric",
 })
 
 ##' @rdname subset-methods
-##' @aliases [,phylo4d,ANY,logical,missing-method
+## @aliases [,phylo4d,ANY,logical,missing-method
 setMethod("[", signature(x="phylo4d", i="ANY", j="logical",
     drop="missing"), function(x, i, j, ..., drop) {
     if (!missing(i)) x <- x[i]
@@ -260,7 +260,7 @@ setMethod("[", signature(x="phylo4d", i="ANY", j="logical",
 
 ## borrow from Matrix package approach of trapping invalid usage
 ##' @rdname subset-methods
-##' @aliases [,phylo4,ANY,ANY,ANY-method
+## @aliases [,phylo4,ANY,ANY,ANY-method
 setMethod("[", signature(x="phylo4", i="ANY", j="ANY", drop="ANY"),
     function(x, i, j, ..., drop) {
     stop("invalid argument(s)")
@@ -269,7 +269,7 @@ setMethod("[", signature(x="phylo4", i="ANY", j="ANY", drop="ANY"),
 ##### -------- prune
 
 ##' @rdname subset-methods
-##' @aliases prune
+## @aliases prune
 ##' @export
 setGeneric("prune", function(x, ...) {
     standardGeneric("prune")
@@ -281,7 +281,7 @@ setGeneric("prune", function(x, ...) {
 }
 
 ##' @rdname subset-methods
-##' @aliases prune,phylo4-method
+## @aliases prune,phylo4-method
 setMethod("prune", "phylo4",
     function(x, tips.exclude, trim.internal=TRUE) {
 
@@ -390,7 +390,7 @@ setMethod("prune", "phylo4",
 })
 
 ##' @rdname subset-methods
-##' @aliases prune,phylo4d-method
+## @aliases prune,phylo4d-method
 setMethod("prune", "phylo4d",
     function(x, tips.exclude, trim.internal=TRUE) {
 
