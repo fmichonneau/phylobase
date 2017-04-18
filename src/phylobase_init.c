@@ -13,8 +13,8 @@ extern void reorderBinary(void *, void *, void *, void *, void *, void *, void *
 extern void reorderRobust(void *, void *, void *, void *, void *, void *);
 
 /* .Call calls */
-extern SEXP ancestors(SEXP, SEXP, SEXP);
-extern SEXP descendants(SEXP, SEXP, SEXP);
+extern SEXP ancestors_c(SEXP, SEXP, SEXP);
+extern SEXP descendants_c(SEXP, SEXP, SEXP);
 extern SEXP phylobase_all_naC(SEXP);
 extern SEXP phylobase_any_naC(SEXP);
 extern SEXP phylobase_checkTreeCpp(SEXP, SEXP);
@@ -43,8 +43,8 @@ static const R_CMethodDef CEntries[] = {
 };
 
 static const R_CallMethodDef CallEntries[] = {
-    {"ancestors",                        (DL_FUNC) &ancestors,                        3},
-    {"descendants",                      (DL_FUNC) &descendants,                      3},
+    {"ancestors_c",                      (DL_FUNC) &ancestors_c,                      3},
+    {"descendants_c",                    (DL_FUNC) &descendants_c,                    3},
     {"phylobase_all_naC",                (DL_FUNC) &phylobase_all_naC,                1},
     {"phylobase_any_naC",                (DL_FUNC) &phylobase_any_naC,                1},
     {"phylobase_checkTreeCpp",           (DL_FUNC) &phylobase_checkTreeCpp,           2},

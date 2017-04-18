@@ -6,7 +6,7 @@
   which nodes (rows, corresponding to the decendant vector) are
   descendants of each input node (columns, corresponding to the nodes
   vector). It will contain 1 for each descendant of the node, *including
-  itself*, and 0 for all other nodes. 
+  itself*, and 0 for all other nodes.
 
   Jim Regetz (NCEAS)
 */
@@ -14,7 +14,7 @@
 #include <R.h>
 #include <Rinternals.h>
 
-SEXP descendants(SEXP nod, SEXP anc, SEXP des) {
+SEXP descendants_c(SEXP nod, SEXP anc, SEXP des) {
 
     int numEdges = length(anc);
     int numNodes = length(nod);
@@ -42,7 +42,7 @@ SEXP descendants(SEXP nod, SEXP anc, SEXP des) {
                 child = descendant[i];
                 for (int j=i+1; j<numEdges; j++) {
                     if (ancestor[j]==child) {
-                        INTEGER(isDescendant)[j + n*numEdges] = 1; 
+                        INTEGER(isDescendant)[j + n*numEdges] = 1;
                     }
                 }
             }

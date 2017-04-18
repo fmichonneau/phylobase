@@ -14,7 +14,7 @@
 #include <R.h>
 #include <Rinternals.h>
 
-SEXP ancestors(SEXP nod, SEXP anc, SEXP des) {
+SEXP ancestors_c(SEXP nod, SEXP anc, SEXP des) {
 
     int numEdges = length(anc);
     int numNodes = length(nod);
@@ -42,7 +42,7 @@ SEXP ancestors(SEXP nod, SEXP anc, SEXP des) {
                 parent = ancestor[i];
                 for (int j=i+1; j<numEdges; j++) {
                     if (descendant[j]==parent) {
-                        INTEGER(isAncestor)[j + n*numEdges]=1; 
+                        INTEGER(isAncestor)[j + n*numEdges]=1;
                     }
                 }
             }
