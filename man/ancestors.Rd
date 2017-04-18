@@ -2,9 +2,10 @@
 % Please edit documentation in R/ancestors.R
 \name{ancestor}
 \alias{ancestor}
-\alias{ancestors}
 \alias{children}
 \alias{descendants}
+\alias{siblings}
+\alias{ancestors}
 \alias{siblings}
 \title{Tree traversal and utility functions}
 \usage{
@@ -107,4 +108,3 @@ vector, again with a warning.
 \code{\link[ape]{mrca}}, in the ape package, gives a list of all
 subtrees
 }
-

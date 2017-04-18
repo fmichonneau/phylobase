@@ -2,16 +2,22 @@
 % Please edit documentation in R/setAs-methods.R
 \docType{methods}
 \name{setAs}
+\alias{setAs}
 \alias{as}
-\alias{as,nexml,phylo4-method}
-\alias{as,nexml,phylo4d-method}
-\alias{as,phylo,phylo4-method}
-\alias{as,phylo,phylo4d-method}
-\alias{as,phylo4,phylo-method}
 \alias{as-method}
+\alias{as,phylo,phylo4-method}
+\alias{setAs}
+\alias{as,phylo,phylo4d-method}
+\alias{setAs}
+\alias{as,nexml,phylo4-method}
+\alias{setAs}
+\alias{as,nexml,phylo4d-method}
+\alias{setAs}
+\alias{as,phylo4,phylo-method}
+\alias{setAs}
+\alias{setAs,phylo4,phylog-method}
 \alias{setAs}
 \alias{setAs,phylo4,data.frame-method}
-\alias{setAs,phylo4,phylog-method}
 \title{Converting between phylo4/phylo4d and other phylogenetic tree
 formats}
 \description{
@@ -25,6 +31,7 @@ deprecated}), and to \code{data.frame} representation.
 \section{Usage}{
  \code{as(object, class)}
 }
+
 \examples{
 tree_string <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
 tree.owls <- ape::read.tree(text=tree_string)
@@ -47,10 +54,6 @@ as(tree_in_phylo4, "phylo")
 ## Conversion to phylo4d, (data slots empty)
 as(tree_in_phylo4, "phylo4d")
 }
-\author{
-Ben Bolker, Thibaut Jombart, Marguerite Butler, Steve
-Kembel, Francois Michonneau
-}
 \seealso{
 generic \code{\link[methods]{as}},
 \code{\link{phylo4-methods}}, \code{\link{phylo4d-methods}},
@@ -59,5 +62,8 @@ generic \code{\link[methods]{as}},
 \code{ade4} package and \code{\link[ape]{as.phylo}} from the
 \code{ape} package.
 }
+\author{
+Ben Bolker, Thibaut Jombart, Marguerite Butler, Steve
+Kembel, Francois Michonneau
+}
 \keyword{methods}
-

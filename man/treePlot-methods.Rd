@@ -2,15 +2,16 @@
 % Please edit documentation in R/treePlot.R
 \docType{methods}
 \name{treePlot-methods}
-\alias{plot}
+\alias{treePlot-methods}
+\alias{treePlot}
 \alias{plot,ANY,ANY-method}
 \alias{plot,pdata,missing-method}
 \alias{plot,phylo4,missing-method}
-\alias{plot,phylo4-method}
-\alias{treePlot}
-\alias{treePlot,phylo4,phylo4d-method}
 \alias{treePlot-method}
-\alias{treePlot-methods}
+\alias{treePlot,phylo4,phylo4d-method}
+\alias{plot}
+\alias{plot,phylo4,missing-method}
+\alias{plot,phylo4-method}
 \title{Phylogeny plotting}
 \usage{
 treePlot(phy, type = c("phylogram", "cladogram", "fan"),
@@ -64,11 +65,11 @@ plotting}
 
 \item{margins}{number of lines around the plot (similar to \code{par(mar)}).}
 
+\item{\dots}{additional arguments}
+
 \item{x}{A \code{phylo4} or \code{phylo4d} object}
 
 \item{y}{(only here for compatibility)}
-
-\item{\dots}{additional arguments}
 }
 \value{
 No return value, function invoked for plotting side effect
@@ -90,6 +91,7 @@ can avoid this by using the argument \code{plot.data=FALSE}.
 \linkS4class{phylo4}} \item{phy = "phylo4d"}{plots a tree with one or more
 quantitative traits contained in a \linkS4class{phylo4d} object.} }
 }
+
 \examples{
 
 ## example of plotting two grid plots on the same page
@@ -106,11 +108,10 @@ pushViewport(viewport(layout=grid.layout(nrow=1, ncol=2), name="base"))
     treePlot(geotree, newpage=FALSE, rot=180)
 popViewport(2)
 }
-\author{
-Peter Cowan \email{pdc@berkeley.edu}, Francois Michonneau
-}
 \seealso{
 \code{\link{phylobubbles}}
 }
+\author{
+Peter Cowan \email{pdc@berkeley.edu}, Francois Michonneau
+}
 \keyword{methods}
-

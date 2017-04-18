@@ -2,11 +2,12 @@
 % Please edit documentation in R/phylomats-class.R
 \docType{class}
 \name{phylomat-class}
-\alias{as_phylo4vcov}
-\alias{phylo4vcov-class}
 \alias{phylomat-class}
+\alias{phylo4vcov-class}
+\alias{as_phylo4vcov}
 \alias{phylomat-setAs}
 \alias{setAs,phylo,phylo4vcov-method}
+\alias{phylomat-setAs}
 \alias{setAs,phylo4vcov,phylo4-method}
 \title{matrix classes for phylobase}
 \arguments{
@@ -26,6 +27,7 @@ columns corresponding to tips, and internal nodes implicit) with different
 meanings depending on the type (variance-covariance matrix, distance matrix,
 etc.).
 }
+
 \examples{
   tree_string <- "(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
   tree.owls <- ape::read.tree(text=tree_string)
@@ -55,4 +57,3 @@ etc.).
 Ben Bolker
 }
 \keyword{classes}
-

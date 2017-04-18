@@ -2,23 +2,28 @@
 % Please edit documentation in R/tdata-methods.R
 \docType{methods}
 \name{tdata}
-\alias{nodeData}
-\alias{nodeData,phylo4d-method}
-\alias{nodeData-method}
-\alias{nodeData<-}
-\alias{nodeData<-,phylo4d,ANY-method}
-\alias{nodeData<-,phylo4d-method}
 \alias{tdata}
 \alias{tdata,phylo4d-method}
 \alias{tdata<-}
-\alias{tdata<-,phylo4d,ANY-method}
+\alias{tdata<-}
 \alias{tdata<-,phylo4d-method}
+\alias{tdata<-,phylo4d,ANY-method}
+\alias{tipData}
+\alias{tipData-method}
 \alias{tipData}
 \alias{tipData,phylo4d-method}
-\alias{tipData-method}
 \alias{tipData<-}
-\alias{tipData<-,phylo4d,ANY-method}
+\alias{tipData<-}
 \alias{tipData<-,phylo4d-method}
+\alias{tipData<-,phylo4d,ANY-method}
+\alias{nodeData}
+\alias{nodeData-method}
+\alias{nodeData}
+\alias{nodeData,phylo4d-method}
+\alias{nodeData<-}
+\alias{nodeData<-}
+\alias{nodeData<-,phylo4d-method}
+\alias{nodeData<-,phylo4d,ANY-method}
 \title{Retrieving or updating tip and node data in phylo4d objects}
 \usage{
 tdata(x, ...)
@@ -50,6 +55,11 @@ nodeData(x, ...) <- value
 \arguments{
 \item{x}{A \code{phylo4d} object}
 
+\item{\dots}{For the \code{tipData} and \code{nodeData} accessors,
+further arguments to be used by \code{tdata}. For the replacement
+forms, further arguments to be used to control matching between
+tree and data (see Details section of \code{\link{phylo4d-methods}}).}
+
 \item{type}{The type of data to retrieve or update: \dQuote{\code{all}}
 (default) for data associated with both tip and internal nodes,
 \dQuote{\code{tip}} for data associated with tips only,
@@ -75,11 +85,6 @@ column names in common, or if type=\dQuote{all}.}
 
 \item{clear.all}{If only tip or internal node data are to be replaced,
 should data of the other type be dropped?}
-
-\item{\dots}{For the \code{tipData} and \code{nodeData} accessors,
-further arguments to be used by \code{tdata}. For the replacement
-forms, further arguments to be used to control matching between
-tree and data (see Details section of \code{\link{phylo4d-methods}}).}
 }
 \value{
 \code{tdata} returns a data frame
@@ -93,17 +98,17 @@ phylogenetic tree stored as a phylo4d object
 \item{tdata}{\code{signature(object="phylo4d")}: retrieve or update data
 associated with a tree in a \code{phylo4d} object} }
 }
+
 \examples{
    data(geospiza)
    tdata(geospiza)
    tipData(geospiza) <- 1:nTips(geospiza)
    tdata(geospiza)
 }
-\author{
-Ben Bolker, Thibaut Jombart, Francois Michonneau
-}
 \seealso{
 \code{\link{phylo4d-methods}}, \code{\linkS4class{phylo4d}}
 }
+\author{
+Ben Bolker, Thibaut Jombart, Francois Michonneau
+}
 \keyword{methods}
-

@@ -2,13 +2,13 @@
 % Please edit documentation in R/phylo4-accessors.R
 \docType{methods}
 \name{nTips}
-\alias{nEdges}
-\alias{nEdges,phylo4-method}
+\alias{nTips}
+\alias{nTips,phylo4-method}
+\alias{nTips,phylo-method}
 \alias{nNodes}
 \alias{nNodes,phylo4-method}
-\alias{nTips}
-\alias{nTips,phylo-method}
-\alias{nTips,phylo4-method}
+\alias{nEdges}
+\alias{nEdges,phylo4-method}
 \title{nTips, nNodes, nEdges}
 \usage{
 nTips(x)
@@ -39,4 +39,3 @@ Number of tips, nodes and edges found in a tree.
 Function to return the number of tips, nodes and edges found in a
 tree in the \code{phylo4} or \code{phylo4d} format.
 }
-

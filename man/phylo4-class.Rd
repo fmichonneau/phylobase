@@ -13,14 +13,14 @@ calls to the \code{\link{phylo4}} constructor function.  Translation
 functions from other phylogenetic packages are also available. See
 \code{\link{coerce-methods}}.
 }
-\author{
-Ben Bolker, Thibaut Jombart
-}
+
 \seealso{
 The \code{\link{phylo4-methods}} constructor, the
 \code{\link{checkPhylo4}} function to check the validity of
 \code{phylo4} objects. See also the \code{\link{phylo4d-methods}}
 constructor and the \linkS4class{phylo4d} class.
 }
+\author{
+Ben Bolker, Thibaut Jombart
+}
 \keyword{classes}
-

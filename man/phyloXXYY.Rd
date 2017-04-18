@@ -41,11 +41,10 @@ plot(coor$xx, coor$yy, pch = 20)
 
 
 }
-\author{
-Peter Cowan \email{pdc@berkeley.edu}
-}
 \seealso{
 \code{treePlot}, \code{\link{plotOneTree}}
 }
+\author{
+Peter Cowan \email{pdc@berkeley.edu}
+}
 \keyword{methods}
-

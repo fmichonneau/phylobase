@@ -2,8 +2,8 @@
 % Please edit documentation in R/checkdata.R
 \name{checkPhylo4}
 \alias{checkPhylo4}
-\alias{checkPhylo4Data}
 \alias{checkTree}
+\alias{checkPhylo4Data}
 \title{Validity checking for phylo4 objects}
 \usage{
 checkPhylo4(object)
@@ -45,9 +45,6 @@ For \code{phylo4d} objects, \code{checkTree} also calls
 tree. It ensures that (1) the data associated with the tree have the correct
 dimensions, (2) that the row names for the data are correct.
 }
-\author{
-Ben Bolker, Steven Kembel, Francois Michonneau
-}
 \seealso{
 the \code{\link{phylo4}} constructor and
 \linkS4class{phylo4} class; the \code{\link{phylo4d-methods}} constructor
@@ -56,5 +53,7 @@ associated with trees.  See \code{\link{coerce-methods}} for
 translation functions and \code{\link{phylobase.options} to change
 some of the default options of the validator.}
 }
+\author{
+Ben Bolker, Steven Kembel, Francois Michonneau
+}
 \keyword{misc}
-

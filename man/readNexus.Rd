@@ -4,8 +4,8 @@
 \name{Import Nexus and Newick files}
 \alias{Import Nexus and Newick files}
 \alias{readNCL}
-\alias{readNewick}
 \alias{readNexus}
+\alias{readNewick}
 \title{Create a \code{phylo4}, \code{phylo4d} or \code{data.frame} object
 from a NEXUS or a Newick file}
 \usage{
@@ -170,12 +170,11 @@ names will be converted to valid R names (see
 \code{\link{make.names}}) on input to R, so spaces will be
 translated to periods.
 }
-\author{
-Brian O'Meara, Francois Michonneau, Derrick Zwickl
-}
 \seealso{
 the \linkS4class{phylo4d} class, the \linkS4class{phylo4}
     class
 }
+\author{
+Brian O'Meara, Francois Michonneau, Derrick Zwickl
+}
 \keyword{misc}
-

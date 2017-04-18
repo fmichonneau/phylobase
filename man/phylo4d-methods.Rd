@@ -2,18 +2,18 @@
 % Please edit documentation in R/phylo4d-methods.R
 \docType{methods}
 \name{phylo4d-methods}
-\alias{nexml,phylo4d-method}
-\alias{phylo4d}
-\alias{phylo4d,matrix,matrix-method}
-\alias{phylo4d,matrix-method}
-\alias{phylo4d,nexml-method}
-\alias{phylo4d,phylo,phylo-method}
-\alias{phylo4d,phylo-method}
-\alias{phylo4d,phylo4,phylo4-method}
-\alias{phylo4d,phylo4-method}
-\alias{phylo4d,phylo4d,phylo4d-method}
-\alias{phylo4d,phylo4d-method}
 \alias{phylo4d-methods}
+\alias{phylo4d}
+\alias{phylo4d,phylo4-method}
+\alias{phylo4d,phylo4,phylo4-method}
+\alias{phylo4d,matrix-method}
+\alias{phylo4d,matrix,matrix-method}
+\alias{phylo4d,phylo-method}
+\alias{phylo4d,phylo,phylo-method}
+\alias{phylo4d,phylo4d-method}
+\alias{phylo4d,phylo4d,phylo4d-method}
+\alias{phylo4d,nexml-method}
+\alias{nexml,phylo4d-method}
 \title{Combine a phylogenetic tree with data}
 \usage{
 phylo4d(x, ...)
@@ -37,6 +37,11 @@ phylo4d(x, ...)
 \arguments{
 \item{x}{an object of class \code{phylo4}, \code{phylo},
 \code{nexml} or a matrix of edges (see above)}
+
+\item{\dots}{further arguments to control the behavior of the
+constructor in the case of missing/extra data and where to look
+for labels in the case of non-unique labels that cannot be stored
+as row names in a data frame (see Details).}
 
 \item{tip.data}{a data frame (or object to be coerced to one)
 containing only tip data (Optional)}
@@ -78,11 +83,6 @@ either \dQuote{keep} (the default) to retain internal node labels,
 numeric tree data. This argument is useful if the \code{phylo}
 object has non-unique node labels or node labels with informative
 data (e.g., posterior probabilities).}
-
-\item{\dots}{further arguments to control the behavior of the
-constructor in the case of missing/extra data and where to look
-for labels in the case of non-unique labels that cannot be stored
-as row names in a data frame (see Details).}
 }
 \value{
 An object of class \linkS4class{phylo4d}.
@@ -186,6 +186,7 @@ to the edge slot of a \code{phylo4} object (or to \$edge of a
 object} \item{x = "phylo"}{merges a tree of class \code{phylo}
 with a data.frame into a \code{phylo4d} object } }
 }
+
 \examples{
 
 treeOwls <- "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);"
@@ -277,14 +278,13 @@ p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat, match.data=FALSE)
 nodeLabels(p4) <- as.character(nodeId(p4, "internal"))
 p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat), match.data=FALSE)
 }
-\author{
-Ben Bolker, Thibaut Jombart, Steve Kembel, Francois
-Michonneau, Jim Regetz
-}
 \seealso{
 \code{\link{coerce-methods}} for translation
 functions. The \linkS4class{phylo4d} class; \linkS4class{phylo4}
 class and \link{phylo4} constructor.
 }
+\author{
+Ben Bolker, Thibaut Jombart, Steve Kembel, Francois
+Michonneau, Jim Regetz
+}
 \keyword{misc}
-

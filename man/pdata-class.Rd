@@ -2,15 +2,15 @@
 % Please edit documentation in R/pdata.R
 \docType{class}
 \name{pdata-class}
-\alias{[,pdata,ANY,ANY,ANY-method}
-\alias{[,pdata-method}
-\alias{[<-,pdata-method}
-\alias{[[,pdata,ANY,ANY-method}
-\alias{[[,pdata,ANY,missing-method}
-\alias{[[,pdata-method}
-\alias{[[<-,pdata-method}
 \alias{pdata-class}
 \alias{ptypes}
+\alias{[<-,pdata-method}
+\alias{[,pdata-method}
+\alias{[,pdata,ANY,ANY,ANY-method}
+\alias{[[,pdata-method}
+\alias{[[<-,pdata-method}
+\alias{[[,pdata,ANY,ANY-method}
+\alias{[[,pdata,ANY,missing-method}
 \title{Class "pdata"}
 \description{
 Data class for phylo4d objects
@@ -19,8 +19,8 @@ Data class for phylo4d objects
  Objects can be created by calls of the form
 \code{new("pdata", ...)}.
 }
+
 \author{
 Ben Bolker
 }
 \keyword{classes}
-

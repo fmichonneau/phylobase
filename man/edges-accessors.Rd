@@ -2,10 +2,10 @@
 % Please edit documentation in R/phylo4-accessors.R
 \docType{methods}
 \name{edges}
-\alias{edgeOrder}
-\alias{edgeOrder,phylo4-method}
 \alias{edges}
 \alias{edges,phylo4-method}
+\alias{edgeOrder}
+\alias{edgeOrder,phylo4-method}
 \alias{internalEdges}
 \alias{internalEdges,phylo4-method}
 \alias{terminalEdges}
@@ -31,11 +31,11 @@ terminalEdges(x)
 \arguments{
 \item{x}{a \code{phylo4} or \code{phylo4d} object.}
 
-\item{drop.root}{logical (default FALSE), should the edge
-connecting the root be included in the edge matrix?}
-
 \item{\dots}{Optional arguments used by specific methods. (None
 used at present).}
+
+\item{drop.root}{logical (default FALSE), should the edge
+connecting the root be included in the edge matrix?}
 }
 \value{
 \describe{
@@ -65,10 +65,9 @@ Access or modify information about the edges.
    ## with a binary tree this should always be true
    identical(!terminalEdges(geospiza), internalEdges(geospiza))
 }
-\author{
-Ben Bolker, Francois Michonneau, Thibaut Jombart
-}
 \seealso{
 reorder, edgeId
 }
-
+\author{
+Ben Bolker, Francois Michonneau, Thibaut Jombart
+}

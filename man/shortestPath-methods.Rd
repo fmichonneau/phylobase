@@ -3,10 +3,10 @@
 \docType{methods}
 \name{shortestPath}
 \alias{shortestPath}
-\alias{shortestPath,phylo-method}
+\alias{shortestPath-phylo4}
 \alias{shortestPath,phylo4-method}
 \alias{shortestPath-phylo}
-\alias{shortestPath-phylo4}
+\alias{shortestPath,phylo-method}
 \title{shortestPath-methods}
 \usage{
 shortestPath(x, node1, node2)
@@ -38,4 +38,3 @@ returns the shortest path between them (excluding \code{node1} and
 \seealso{
 getNode
 }
-

@@ -2,24 +2,25 @@
 % Please edit documentation in R/edgeLength-methods.R
 \docType{methods}
 \name{hasEdgeLength}
-\alias{depthTips}
-\alias{depthTips,phylo4-method}
-\alias{depthTips,phylo4-methods}
+\alias{hasEdgeLength}
+\alias{hasEdgeLength,phylo4-method}
 \alias{edgeLength}
 \alias{edgeLength,phylo4-method}
 \alias{edgeLength<-}
-\alias{edgeLength<-,phylo4,ANY-method}
+\alias{edgeLength<-}
 \alias{edgeLength<-,phylo4-method}
-\alias{hasEdgeLength}
-\alias{hasEdgeLength,phylo4-method}
-\alias{isUltrametric}
-\alias{isUltrametric,phylo4-method}
+\alias{edgeLength<-,phylo4,ANY-method}
+\alias{depthTips}
+\alias{depthTips,phylo4-method}
+\alias{depthTips,phylo4-methods}
 \alias{nodeDepth}
 \alias{nodeDepth,phylo4-method}
 \alias{nodeHeight}
 \alias{nodeHeight,phylo4-method}
 \alias{sumEdgeLength}
 \alias{sumEdgeLength,phylo4-method}
+\alias{isUltrametric}
+\alias{isUltrametric,phylo4-method}
 \title{edgeLength methods}
 \usage{
 hasEdgeLength(x)
@@ -58,6 +59,8 @@ isUltrametric(x, tol = .Machine$double.eps^0.5)
 \arguments{
 \item{x}{a \code{phylo4} or \code{phylo4d} object.}
 
+\item{\dots}{optional arguments (none used at present).}
+
 \item{node}{optional numeric or character vector indicating the
 nodes for which edge}
 
@@ -79,8 +82,6 @@ lowest node id will be returned.}
 \item{tol}{the tolerance to decide whether all the tips have the
 same depth to test if the tree is ultrametric. Default is
 \code{.Machine$double.eps^0.5}.}
-
-\item{\dots}{optional arguments (none used at present).}
 }
 \value{
 \describe{
@@ -147,4 +148,3 @@ order as the edges in the matrix.
 \code{ancestors}, \code{descendants}, \code{.Machine} for
 more information about tolerance.
 }
-

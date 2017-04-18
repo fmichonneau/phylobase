@@ -2,14 +2,14 @@
 % Please edit documentation in R/print-methods.R
 \docType{methods}
 \name{print}
-\alias{head}
-\alias{head,phylo4-method}
-\alias{names}
-\alias{names,phylo4-method}
 \alias{print}
 \alias{print,phylo4-method}
 \alias{show}
 \alias{show,phylo4-method}
+\alias{names}
+\alias{names,phylo4-method}
+\alias{head}
+\alias{head,phylo4-method}
 \alias{tail}
 \alias{tail,phylo4-method}
 \title{print a phylogeny}
@@ -38,6 +38,8 @@ tail(x, ...)
 \arguments{
 \item{x}{a \code{phylo4} tree or \code{phylo4d} tree+data object}
 
+\item{\dots}{optional additional arguments (not in use)}
+
 \item{edgeOrder}{in the data frame returned, the option 'pretty' returns the
 internal nodes followed by the tips, the option 'real' returns the nodes in
 the order they are stored in the edge matrix.}
@@ -48,8 +50,6 @@ the order they are stored in the edge matrix.}
 \item{object}{a \code{phylo4} or \code{phylo4d} object}
 
 \item{n}{for head() and tail(), the number of lines to print}
-
-\item{\dots}{optional additional arguments (not in use)}
 }
 \value{
 A data.frame with a row for each node (descendant), sorted as
@@ -99,4 +99,3 @@ print(treedata)
 Marguerite Butler, Thibaut Jombart \email{jombart@biomserv.univ-lyon1.fr}, Steve Kembel
 }
 \keyword{methods}
-

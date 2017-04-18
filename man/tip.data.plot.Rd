@@ -46,4 +46,3 @@ Plotting phylogenetic trees and associated data
 Peter Cowan
 }
 \keyword{methods}
-

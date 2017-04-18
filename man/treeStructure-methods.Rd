@@ -2,12 +2,12 @@
 % Please edit documentation in R/treestruc.R
 \docType{methods}
 \name{hasSingle}
-\alias{hasPoly}
-\alias{hasPoly,phylo4-method}
-\alias{hasRetic}
-\alias{hasRetic,phylo4-method}
 \alias{hasSingle}
 \alias{hasSingle,phylo4-method}
+\alias{hasRetic}
+\alias{hasRetic,phylo4-method}
+\alias{hasPoly}
+\alias{hasPoly,phylo4-method}
 \title{Test trees for polytomies, inline nodes (singletons), or reticulation}
 \usage{
 hasSingle(object)
@@ -57,4 +57,3 @@ hasSingle(owls4)
 Ben Bolker
 }
 \keyword{misc}
-

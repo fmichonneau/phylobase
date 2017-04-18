@@ -77,13 +77,12 @@ matched against tip and/or internal nodes, (3) checks for
 differences between data and tree, (4) creates a data frame with
 the correct dimensions given a tree.
 }
-\author{
-Francois Michonneau
-}
 \seealso{
 the \code{\link{phylo4d-methods}} constructor, the
 \linkS4class{phylo4d} class. See \code{\link{coerce-methods}} for
 translation functions.
 }
+\author{
+Francois Michonneau
+}
 \keyword{misc}
-

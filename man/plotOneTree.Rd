@@ -57,11 +57,10 @@ plotOneTree(xxyy, type = 'phylogram',
 popViewport()
 
 }
-\author{
-Peter Cowan \email{pdc@berkeley.edu}
-}
 \seealso{
 \code{treePlot}, \code{\link{phyloXXYY}}
 }
+\author{
+Peter Cowan \email{pdc@berkeley.edu}
+}
 \keyword{methods}
-

@@ -2,13 +2,13 @@
 % Please edit documentation in R/phylo4-methods.R
 \docType{methods}
 \name{phylo4-methods}
-\alias{nexml,phylo4-method}
-\alias{phylo4}
-\alias{phylo4,matrix-method}
-\alias{phylo4,nexml-method}
-\alias{phylo4,phylo-method}
 \alias{phylo4-methods}
+\alias{phylo4}
 \alias{phylo4_orderings}
+\alias{phylo4,matrix-method}
+\alias{phylo4,phylo-method}
+\alias{phylo4,nexml-method}
+\alias{nexml,phylo4-method}
 \title{Create a phylogenetic tree}
 \format{An object of class \code{character} of length 5.}
 \usage{
@@ -27,6 +27,8 @@ phylo4_orderings
 }
 \arguments{
 \item{x}{a matrix of edges or an object of class \code{phylo} (see above)}
+
+\item{\dots}{optional arguments (none used at present).}
 
 \item{edge.length}{Edge (branch) length. (Optional)}
 
@@ -50,8 +52,6 @@ allowed for compatibility with \code{ape})}
 
 \item{edge}{A numeric, two-column matrix with as many rows as branches in
 the phylogeny.}
-
-\item{\dots}{optional arguments (none used at present).}
 }
 \description{
 \code{phylo4} is a generic constructor that creates a phylogenetic tree
@@ -107,14 +107,13 @@ tip.label=c("speciesA", "speciesB", "speciesC"), edge.length=c(1, .2,
 plot(mytree)
 
 }
-\author{
-phylobase team
-}
 \seealso{
 \code{\link{coerce-methods}} for translation
 functions. The \linkS4class{phylo4} class. See also the
 \code{\link{phylo4d-methods}} constructor, and
 \linkS4class{phylo4d} class.
 }
+\author{
+phylobase team
+}
 \keyword{datasets}
-

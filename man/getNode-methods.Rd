@@ -2,11 +2,12 @@
 % Please edit documentation in R/getNode-methods.R
 \docType{methods}
 \name{getNode}
-\alias{getEdge}
-\alias{getEdge,phylo4-method}
-\alias{getEdge-methods}
 \alias{getNode}
 \alias{getNode,phylo4-method}
+\alias{getEdge}
+\alias{getEdge-methods}
+\alias{getEdge}
+\alias{getEdge,phylo4-method}
 \title{Node and Edge look-up functions}
 \usage{
 getNode(x, node, type = c("all", "tip", "internal"), missing = c("warn",
@@ -101,4 +102,3 @@ edges for which the descendant node is of the specified node type.
 
 }
 \keyword{misc}
-

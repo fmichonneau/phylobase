@@ -2,12 +2,12 @@
 % Please edit documentation in R/phylo4d-accessors.R
 \docType{methods}
 \name{hasTipData}
-\alias{hasNodeData}
-\alias{hasNodeData,phylo4d-method}
-\alias{hasNodeData-methods}
 \alias{hasTipData}
 \alias{hasTipData,phylo4d-method}
 \alias{hasTipData-method,phylo4d-method}
+\alias{hasNodeData}
+\alias{hasNodeData-methods}
+\alias{hasNodeData,phylo4d-method}
 \alias{nData}
 \alias{nData,phylo4d-method}
 \title{Tests for presence of data associated with trees stored as phylo4d objects}
@@ -59,6 +59,7 @@ FALSE.
 \item{hasTipData}{\code{signature(object = "phylo4d")}: whether tree has
 data associated with its tips} }
 }
+
 \examples{
   data(geospiza)
   nData(geospiza)       ## 5
@@ -66,12 +67,11 @@ data associated with its tips} }
   hasNodeData(geospiza) ## FALSE
 
 }
-\author{
-Ben Bolker, Thibault Jombart, Francois Michonneau
-}
 \seealso{
 \code{\link{phylo4d-methods}} constructor and
 \code{\linkS4class{phylo4d}} class.
 }
+\author{
+Ben Bolker, Thibault Jombart, Francois Michonneau
+}
 \keyword{methods}
-

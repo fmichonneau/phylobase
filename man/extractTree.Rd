@@ -34,13 +34,12 @@ plot(treedata)
 plot(tree1)
 
 }
-\author{
-Ben Bolker
-}
 \seealso{
 \code{\link{phylo4-methods}},
 \code{\link{phylo4d-methods}}, \code{\link{coerce-methods}} for
 translation functions.
 }
+\author{
+Ben Bolker
+}
 \keyword{methods}
-

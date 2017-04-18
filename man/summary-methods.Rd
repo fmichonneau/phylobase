@@ -2,12 +2,12 @@
 % Please edit documentation in R/summary-methods.R
 \docType{methods}
 \name{summary-methods}
-\alias{nodeType}
-\alias{nodeType,phylo4-method}
+\alias{summary-methods}
 \alias{summary}
 \alias{summary,phylo4-method}
 \alias{summary,phylo4d-method}
-\alias{summary-methods}
+\alias{nodeType}
+\alias{nodeType,phylo4-method}
 \title{Summary for phylo4/phylo4d objects}
 \usage{
 summary(object, ...)
@@ -23,9 +23,9 @@ nodeType(object)
 \arguments{
 \item{object}{a phylo4d object}
 
-\item{quiet}{Should the summary be displayed on screen?}
-
 \item{\dots}{optional additional elements (not in use)}
+
+\item{quiet}{Should the summary be displayed on screen?}
 }
 \value{
 The \code{nodeType} method returns named vector which has
@@ -90,12 +90,11 @@ associated data (\code{phylo4d}).
   sumryP2
 
 }
-\author{
-Ben Bolker, Thibaut Jombart, Francois Michonneau
-}
 \seealso{
 \code{\link{phylo4d-methods}} constructor and
 \code{\linkS4class{phylo4d}} class.
 }
+\author{
+Ben Bolker, Thibaut Jombart, Francois Michonneau
+}
 \keyword{methods}
-

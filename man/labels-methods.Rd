@@ -2,30 +2,30 @@
 % Please edit documentation in R/labels-methods.R
 \docType{methods}
 \name{phylo4-labels}
-\alias{edgeLabels}
-\alias{edgeLabels,phylo4-method}
-\alias{edgeLabels<-}
-\alias{edgeLabels<-,phylo4-method}
-\alias{hasDuplicatedLabels}
-\alias{hasDuplicatedLabels,phylo4,ANY-method}
-\alias{hasDuplicatedLabels,phylo4-method}
-\alias{hasEdgeLabels}
-\alias{hasEdgeLabels,phylo4-method}
-\alias{hasNodeLabels}
-\alias{hasNodeLabels,phylo4-method}
+\alias{phylo4-labels}
 \alias{labels}
 \alias{labels,phylo4-method}
 \alias{labels<-}
 \alias{labels<-,phylo4-method}
+\alias{hasDuplicatedLabels}
+\alias{hasDuplicatedLabels,phylo4-method}
+\alias{hasDuplicatedLabels,phylo4,ANY-method}
+\alias{hasNodeLabels}
+\alias{hasNodeLabels,phylo4-method}
 \alias{nodeLabels}
 \alias{nodeLabels,phylo4-method}
 \alias{nodeLabels<-}
 \alias{nodeLabels<-,phylo4-method}
-\alias{phylo4-labels}
 \alias{tipLabels}
 \alias{tipLabels,phylo4-method}
 \alias{tipLabels<-}
 \alias{tipLabels<-,phylo4-method}
+\alias{hasEdgeLabels}
+\alias{hasEdgeLabels,phylo4-method}
+\alias{edgeLabels}
+\alias{edgeLabels,phylo4-method}
+\alias{edgeLabels<-}
+\alias{edgeLabels<-,phylo4-method}
 \title{Labels for phylo4/phylo4d objects}
 \usage{
 labels(object, ...)
@@ -76,6 +76,8 @@ edgeLabels(x, ...) <- value
 \arguments{
 \item{object}{a phylo4 or phylo4d object.}
 
+\item{\dots}{additional optional arguments (not in use)}
+
 \item{type}{which type of labels: \code{all} (tips and internal nodes),
 \code{tip} (tips only), \code{internal} (internal nodes only).}
 
@@ -86,8 +88,6 @@ be used to match the labels? See Details for more information.}
 
 \item{value}{a vector of class \code{character}, see Details for more
 information.}
-
-\item{\dots}{additional optional arguments (not in use)}
 }
 \value{
 labels in ascending order.
@@ -129,6 +129,7 @@ node ID}
 (internal) edge labels} \item{edgeLabels}{\code{signature(object =
 "phylo4")}: internal edge labels, ordered according to the edge matrix} }
 }
+
 \examples{
 
 data(geospiza)
@@ -162,4 +163,3 @@ nodeLabels(geospiza)
 \author{
 Ben Bolker, Peter Cowan, Steve Kembel, Francois Michonneau
 }
-

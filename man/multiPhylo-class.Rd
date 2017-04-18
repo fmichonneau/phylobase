@@ -6,6 +6,10 @@
 \alias{multiPhylo4-class}
 \alias{multiPhylo4d-class}
 \alias{tbind}
+\alias{multiPhylo-class}
+\alias{multiPhylo4-class}
+\alias{multiPhylo4d-class}
+\alias{tbind}
 \title{multiPhylo4 and extended classes}
 \description{
 Classes for lists of phylogenetic trees.  These classes and methods are
@@ -15,4 +19,3 @@ Classes for lists of phylogenetic trees.  These classes and methods are
 planned for a future version of \code{phylobase}.
 }
 \keyword{classes}
-

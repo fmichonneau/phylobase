@@ -2,9 +2,9 @@
 % Please edit documentation in R/reorder-methods.R
 \docType{methods}
 \name{reorder-methods}
+\alias{reorder-methods}
 \alias{reorder}
 \alias{reorder,phylo4-method}
-\alias{reorder-methods}
 \title{reordering trees within phylobase objects}
 \usage{
 reorder(x, ...)
@@ -14,11 +14,11 @@ reorder(x, ...)
 \arguments{
 \item{x}{a \code{phylo4} or \code{phylo4d} object}
 
+\item{\dots}{additional optional elements (not in use)}
+
 \item{order}{The desired traversal order; currently only
 \dQuote{preorder} and \dQuote{postorder} are allowed for
 \code{phylo4} and \code{phylo4d} objects.}
-
-\item{\dots}{additional optional elements (not in use)}
 }
 \value{
 A \code{phylo4} or \code{phylo4d} object with the edge,
@@ -47,13 +47,12 @@ phy <- phylo4(ape::rtree(5))
 edges(reorder(phy, "preorder"))
 edges(reorder(phy, "postorder"))
 }
-\author{
-Peter Cowan, Jim Regetz
-}
 \seealso{
 \code{\link[ape]{reorder.phylo}} in the \code{ape} package.
 \code{\link{ancestors}} \code{\link{ancestor}} \code{\link{siblings}}
 \code{\link{children}} \code{\link{descendants}}
 }
+\author{
+Peter Cowan, Jim Regetz
+}
 \keyword{methods}
-

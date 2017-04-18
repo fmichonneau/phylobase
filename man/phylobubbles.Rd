@@ -31,6 +31,8 @@ should be plotted}
 \item{newpage}{Logical to control whether the device is cleared before
 plotting, useful for adding plot inside other plots}
 
+\item{\dots}{Additional parameters passed to the bubble plotting functions}
+
 \item{XXYY}{The out put from the phyloXXYY function}
 
 \item{square}{Logical indicating whether the plot 'bubbles' should be
@@ -38,8 +40,6 @@ squares}
 
 \item{grid}{A logical indicating whether a grey grid should be plotted
 behind the bubbles}
-
-\item{\dots}{Additional parameters passed to the bubble plotting functions}
 }
 \description{
 Plots either circles or squares corresponding to the magnitude of each cell
@@ -52,11 +52,10 @@ of a \code{phylo4d} object.
 ##--	or do  help(data=index)  for the standard data sets.
 
 }
-\author{
-Peter Cowan \email{pdc@berkeley.edu}
-}
 \seealso{
 \code{\link{phyloXXYY}}, \code{treePlot}
 }
+\author{
+Peter Cowan \email{pdc@berkeley.edu}
+}
 \keyword{methods}
-

@@ -3,8 +3,8 @@
 \docType{methods}
 \name{MRCA}
 \alias{MRCA}
-\alias{MRCA,phylo-method}
 \alias{MRCA,phylo4-method}
+\alias{MRCA,phylo-method}
 \title{MRCA}
 \usage{
 MRCA(phy, ...)
@@ -45,4 +45,3 @@ provided, it will be returned.
   geo <- as(geospiza, "phylo")
   MRCA(geo, c(1,5))
 }
-

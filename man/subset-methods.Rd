@@ -2,25 +2,25 @@
 % Please edit documentation in R/subset-methods.R
 \docType{methods}
 \name{subset-methods}
+\alias{subset-methods}
+\alias{subset}
+\alias{subset,phylo4-method}
 \alias{[}
-\alias{[,phylo4,ANY,ANY,ANY-method}
 \alias{[,phylo4,character,missing,missing-method}
 \alias{[,phylo4,character,missing-method}
+\alias{[,phylo4,numeric,missing,missing-method}
+\alias{[,phylo4,numeric,missing-method}
 \alias{[,phylo4,logical,missing,missing-method}
 \alias{[,phylo4,logical,missing-method}
 \alias{[,phylo4,missing,missing,missing-method}
 \alias{[,phylo4,missing,missing-method}
-\alias{[,phylo4,numeric,missing,missing-method}
-\alias{[,phylo4,numeric,missing-method}
 \alias{[,phylo4d,ANY,character,missing-method}
-\alias{[,phylo4d,ANY,logical,missing-method}
 \alias{[,phylo4d,ANY,numeric,missing-method}
+\alias{[,phylo4d,ANY,logical,missing-method}
+\alias{[,phylo4,ANY,ANY,ANY-method}
 \alias{prune}
 \alias{prune,phylo4-method}
 \alias{prune,phylo4d-method}
-\alias{subset}
-\alias{subset,phylo4-method}
-\alias{subset-methods}
 \title{Methods for creating subsets of phylogenies}
 \usage{
 subset(x, ...)
@@ -55,6 +55,8 @@ prune(x, ...)
 \arguments{
 \item{x}{an object of class \code{"phylo4"} or \code{"phylo4d"}}
 
+\item{\dots}{optional additional parameters (not in use)}
+
 \item{tips.include}{A vector of tips to include in the subset tree}
 
 \item{tips.exclude}{A vector of tips to exclude from the subset
@@ -77,8 +79,6 @@ indicating columns of node/tip data to include}
 \item{trim.internal}{A logical specifying whether to remove
 internal nodes that no longer have tip descendants in the subset
 tree}
-
-\item{\dots}{optional additional parameters (not in use)}
 }
 \value{
 an object of class \code{"phylo4"} or \code{"phylo4d"}
@@ -146,6 +146,7 @@ and the subset tree.
 \item{x = "phylo4d"}{subset tree and corresponding node and tip
 data} }
 }
+
 \examples{
 data(geospiza)
 nodeLabels(geospiza) <- paste("N", nodeId(geospiza, "internal"), sep="")
@@ -185,4 +186,3 @@ Jim Regetz \email{regetz@nceas.ucsb.edu}\cr Steven Kembel
 \email{jombart@biomserv.univ-lyon1.fr}
 }
 \keyword{methods}
-

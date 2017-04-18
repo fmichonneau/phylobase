@@ -20,4 +20,3 @@ plot(owls4)
 
 }
 \keyword{datasets}
-

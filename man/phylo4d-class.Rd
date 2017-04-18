@@ -12,15 +12,13 @@ S4 class for phylogenetic tree and data.
 and a data.frame using the constructor \code{phylo4d}, or using
 \code{new("phylo4d", \dots{})} for empty objects.
 }
+
 \examples{
   example(read.tree, "ape")
   obj <- phylo4d(as(tree.owls.bis,"phylo4"), data.frame(wing=1:3))
   obj
   names(obj)
   summary(obj)
-}
-\author{
-Ben Bolker, Thibaut Jombart
 }
 \seealso{
 \code{\link{coerce-methods}} for translation
@@ -29,5 +27,7 @@ the \code{\link{phylo4-methods}} constructor, the
 \linkS4class{phylo4} class, and the \code{\link{checkPhylo4}}
 function to check the validity of \code{phylo4} trees.
 }
+\author{
+Ben Bolker, Thibaut Jombart
+}
 \keyword{classes}
-

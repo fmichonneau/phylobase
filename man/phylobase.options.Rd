@@ -37,4 +37,3 @@ Francois Michonneau (adapted from the package \code{sm})
 }
 \keyword{phylobase}
 \keyword{validator}
-

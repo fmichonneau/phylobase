@@ -3,9 +3,11 @@
 \docType{methods}
 \name{addData}
 \alias{addData}
-\alias{addData,phylo4-method}
 \alias{addData,phylo4d-method}
 \alias{addData-methods}
+\alias{addData,phylo4-method}
+\alias{addData,phylo4-method}
+\alias{addData,phylo4d-method}
 \title{Adding data to a phylo4 or a phylo4d object}
 \usage{
 addData(x, ...)
@@ -18,6 +20,10 @@ addData(x, ...)
 }
 \arguments{
 \item{x}{a phylo4 or a phylo4d object}
+
+\item{\dots}{additional arguments to control how matching between
+data and tree (see Details section of
+\code{\link{phylo4d-methods}} for more details).}
 
 \item{tip.data}{a data frame (or object to be coerced to one)
 containing only tip data}
@@ -38,10 +44,6 @@ common.}
 
 \item{pos}{should the new data provided be bound \code{before} or
 \code{after} the pre-existing data?}
-
-\item{\dots}{additional arguments to control how matching between
-data and tree (see Details section of
-\code{\link{phylo4d-methods}} for more details).}
 }
 \value{
 \code{addData} returns a \code{phylo4d} object.
@@ -67,12 +69,11 @@ The option \code{pos} is ignored (silently) if \code{x} is a
                     row.names=nodeId(geospiza, "internal"))
   t1 <- addData(geospiza, node.data=nDt)
 }
-\author{
-Francois Michonneau
-}
 \seealso{
 \code{\link{tdata}} for extracting or updating data and
 \code{\link{phylo4d-methods}} constructor.
 }
+\author{
+Francois Michonneau
+}
 \keyword{methods}
-

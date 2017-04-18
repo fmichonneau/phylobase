@@ -2,8 +2,8 @@
 % Please edit documentation in R/phylobase-package.R
 \docType{package}
 \name{phylobase-package}
-\alias{phylobase}
 \alias{phylobase-package}
+\alias{phylobase}
 \title{Utilities and Tools for Phylogenetics}
 \description{
 Base package for phylogenetic structures and comparative data.
@@ -69,5 +69,5 @@ See the help index \code{help(package="phylobase")} and run
 \code{vignette("phylobase", "phylobase")} for further details and
 examples about how to use \code{phylobase}.
 }
-\keyword{package}
 
+\keyword{package}

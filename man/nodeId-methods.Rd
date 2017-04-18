@@ -2,10 +2,10 @@
 % Please edit documentation in R/nodeId-methods.R
 \docType{methods}
 \name{nodeId}
-\alias{edgeId}
-\alias{edgeId,phylo4-method}
 \alias{nodeId}
 \alias{nodeId,phylo4-method}
+\alias{edgeId}
+\alias{edgeId,phylo4-method}
 \title{nodeId methods}
 \usage{
 nodeId(x, type = c("all", "tip", "internal", "root"))
@@ -44,4 +44,3 @@ edge matrix.
   edgeId(geospiza, "internal")
   nodeId(geospiza, "root")
 }
-
