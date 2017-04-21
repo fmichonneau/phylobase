@@ -1,4 +1,4 @@
-## CHANGES in phylobase VERSION 0.8.3
+## CHANGES in phylobase VERSION 0.8.4
 
 *  CRAN maintenance release
 
