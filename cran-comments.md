@@ -1,12 +1,12 @@
-This submission follows an email sent to me by Prof. Brian Ripley and Martin
-Maelcher regarding a typo in the examples (detected by changes to R-devel).
+This submission follows an email sent to me by Kurt Hornik on April 7th, 2017.
 
 ## Test environments
 
-- local Ubuntu 15.04, R 3.2.3
-- Ubuntu 12.04 (travis-ci), R 3.2.3
-- Windows with win-builder (R 3.2.3 and R-devel r69971)
-- Debian Testing with R-devel compiled with gcc-5
+- local Ubuntu 16.10, R 3.3.3
+- Ubuntu 12.04 (travis-ci), R 3.3.3
+- Windows with win-builder (R 3.3.3 and R-devel r72555)
+- Debian Testing with R-devel (r72514)
+
 
 ## R CMD check results
 
@@ -21,5 +21,5 @@ Maelcher regarding a typo in the examples (detected by changes to R-devel).
 ## Downstream dependencies
 
 I have run R CMD check on all downstream dependencies listed on CRAN. None of
-the packages seem to have generated NOTEs or WARNINGs relevant to the
-changes in phylobase.
+the packages seem to have generated NOTEs or WARNINGs relevant to the changes in
+phylobase.
