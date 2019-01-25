@@ -66,7 +66,7 @@
 ##' @keywords package
 ##'
 ##' @useDynLib phylobase, .registration = TRUE
-##' @import methods
+##' @importFrom methods show as is new
 ##' @import ape
 ##' @import RNeXML
 ##' @import grid
