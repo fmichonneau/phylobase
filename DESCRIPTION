@@ -2,7 +2,7 @@ Roxygen: list(wrap = FALSE)
 Package: phylobase
 Type: Package
 Title: Base Package for Phylogenetic Structures and Comparative Data
-Version: 0.8.4
+Version: 0.8.6
 Imports:
     ade4,
     ape (>= 3.0),
@@ -67,4 +67,5 @@ Collate:
     'treestruc.R'
     'zzz.R'
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
+Encoding: UTF-8
