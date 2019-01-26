@@ -1,12 +1,12 @@
 #
 # --- Test checkdata.R ---
 #
-
-if (Sys.getenv("RCMDCHECK") == FALSE) {
+if (is.na(Sys.getenv("R_CMD_CHECK", unset = NA))) {
     pth <- file.path(getwd(), "..", "inst", "nexusfiles")
 } else {
-    pth <- system.file(package="phylobase", "nexusfiles")
+    pth <- system.file(package = "phylobase", "nexusfiles")
 }
+
 ## co1.nex -- typical output from MrBayes. Contains 2 identical trees, the first
 ## one having posterior probabilities as node labels
 co1File <- file.path(pth, "co1.nex")

@@ -3,13 +3,13 @@
 #
 
 ### Get all the test files
-if (Sys.getenv("RCMDCHECK") == FALSE) {
+if (is.na(Sys.getenv("R_CMD_CHECK", unset = NA))) {
     pth <- file.path(getwd(), "..", "inst", "nexmlfiles")
 } else {
-    pth <- system.file(package="phylobase", "nexmlfiles")
+    pth <- system.file(package = "phylobase", "nexmlfiles")
 }
 
-# create ape::phylo version of a simple tree for testing
+## create ape::phylo version of a simple tree for testing
 nwk <- "((t1:0.1,t2:0.2)n7:0.7,(t3:0.3,(t4:0.4,t5:0.5)n9:0.9)n8:0.8)n6:0.6;"
 tr <- ape::read.tree(text=nwk)
 
