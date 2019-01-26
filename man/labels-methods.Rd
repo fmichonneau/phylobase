@@ -34,12 +34,13 @@ labels(object, ...)
 
 labels(x, type, use.names, ...) <- value
 
-\S4method{labels}{phylo4}(x, type = c("all", "tip", "internal"), use.names,
-  ...) <- value
+\S4method{labels}{phylo4}(x, type = c("all", "tip", "internal"),
+  use.names, ...) <- value
 
 hasDuplicatedLabels(x, type)
 
-\S4method{hasDuplicatedLabels}{phylo4}(x, type = c("all", "tip", "internal"))
+\S4method{hasDuplicatedLabels}{phylo4}(x, type = c("all", "tip",
+  "internal"))
 
 hasNodeLabels(x)
 

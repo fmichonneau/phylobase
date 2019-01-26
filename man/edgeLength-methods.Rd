@@ -7,7 +7,6 @@
 \alias{edgeLength}
 \alias{edgeLength,phylo4-method}
 \alias{edgeLength<-}
-\alias{edgeLength<-}
 \alias{edgeLength<-,phylo4-method}
 \alias{edgeLength<-,phylo4,ANY-method}
 \alias{depthTips}
@@ -45,8 +44,8 @@ nodeDepth(x, node)
 
 nodeHeight(x, node, from)
 
-\S4method{nodeHeight}{phylo4}(x, node, from = c("root", "all_tip", "min_tip",
-  "max_tip"))
+\S4method{nodeHeight}{phylo4}(x, node, from = c("root", "all_tip",
+  "min_tip", "max_tip"))
 
 sumEdgeLength(x, node)
 

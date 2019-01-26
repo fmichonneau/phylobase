@@ -4,10 +4,11 @@
 \alias{formatData}
 \title{Format data for use in phylo4d objects}
 \usage{
-formatData(phy, dt, type = c("tip", "internal", "all"), match.data = TRUE,
-  rownamesAsLabels = FALSE, label.type = c("rownames", "column"),
-  label.column = 1, missing.data = c("fail", "warn", "OK"),
-  extra.data = c("warn", "OK", "fail"), keep.all = TRUE)
+formatData(phy, dt, type = c("tip", "internal", "all"),
+  match.data = TRUE, rownamesAsLabels = FALSE,
+  label.type = c("rownames", "column"), label.column = 1,
+  missing.data = c("fail", "warn", "OK"), extra.data = c("warn", "OK",
+  "fail"), keep.all = TRUE)
 }
 \arguments{
 \item{phy}{a valid \code{phylo4} object}

@@ -6,7 +6,6 @@
 \alias{descendants}
 \alias{siblings}
 \alias{ancestors}
-\alias{siblings}
 \title{Tree traversal and utility functions}
 \usage{
 ancestor(phy, node)

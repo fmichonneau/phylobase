@@ -7,7 +7,6 @@
 \alias{as_phylo4vcov}
 \alias{phylomat-setAs}
 \alias{setAs,phylo,phylo4vcov-method}
-\alias{phylomat-setAs}
 \alias{setAs,phylo4vcov,phylo4-method}
 \title{matrix classes for phylobase}
 \arguments{

@@ -6,17 +6,11 @@
 \alias{as}
 \alias{as-method}
 \alias{as,phylo,phylo4-method}
-\alias{setAs}
 \alias{as,phylo,phylo4d-method}
-\alias{setAs}
 \alias{as,nexml,phylo4-method}
-\alias{setAs}
 \alias{as,nexml,phylo4d-method}
-\alias{setAs}
 \alias{as,phylo4,phylo-method}
-\alias{setAs}
 \alias{setAs,phylo4,phylog-method}
-\alias{setAs}
 \alias{setAs,phylo4,data.frame-method}
 \title{Converting between phylo4/phylo4d and other phylogenetic tree
 formats}

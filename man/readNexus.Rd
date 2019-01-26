@@ -12,15 +12,15 @@ from a NEXUS or a Newick file}
 readNCL(file, simplify = FALSE, type = c("all", "tree", "data"),
   spacesAsUnderscores = TRUE, char.all = FALSE,
   polymorphic.convert = TRUE, levels.uniform = FALSE, quiet = TRUE,
-  check.node.labels = c("keep", "drop", "asdata"), return.labels = TRUE,
-  file.format = c("nexus", "newick"), check.names = TRUE,
-  convert.edge.length = FALSE, ...)
+  check.node.labels = c("keep", "drop", "asdata"),
+  return.labels = TRUE, file.format = c("nexus", "newick"),
+  check.names = TRUE, convert.edge.length = FALSE, ...)
 
 readNexus(file, simplify = FALSE, type = c("all", "tree", "data"),
-  char.all = FALSE, polymorphic.convert = TRUE, levels.uniform = FALSE,
-  quiet = TRUE, check.node.labels = c("keep", "drop", "asdata"),
-  return.labels = TRUE, check.names = TRUE, convert.edge.length = FALSE,
-  ...)
+  char.all = FALSE, polymorphic.convert = TRUE,
+  levels.uniform = FALSE, quiet = TRUE, check.node.labels = c("keep",
+  "drop", "asdata"), return.labels = TRUE, check.names = TRUE,
+  convert.edge.length = FALSE, ...)
 
 readNewick(file, simplify = FALSE, quiet = TRUE,
   check.node.labels = c("keep", "drop", "asdata"),

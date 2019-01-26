@@ -6,17 +6,17 @@
 \alias{addData,phylo4d-method}
 \alias{addData-methods}
 \alias{addData,phylo4-method}
-\alias{addData,phylo4-method}
-\alias{addData,phylo4d-method}
 \title{Adding data to a phylo4 or a phylo4d object}
 \usage{
 addData(x, ...)
 
 \S4method{addData}{phylo4d}(x, tip.data = NULL, node.data = NULL,
-  all.data = NULL, merge.data = TRUE, pos = c("after", "before"), ...)
+  all.data = NULL, merge.data = TRUE, pos = c("after", "before"),
+  ...)
 
 \S4method{addData}{phylo4}(x, tip.data = NULL, node.data = NULL,
-  all.data = NULL, merge.data = TRUE, pos = c("after", "before"), ...)
+  all.data = NULL, merge.data = TRUE, pos = c("after", "before"),
+  ...)
 }
 \arguments{
 \item{x}{a phylo4 or a phylo4d object}

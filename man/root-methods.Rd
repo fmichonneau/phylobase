@@ -7,7 +7,6 @@
 \alias{rootNode}
 \alias{rootNode,phylo4-method}
 \alias{rootNode<-}
-\alias{rootNode<-}
 \alias{rootNode<-,phylo4-method}
 \title{Methods to test, access (and modify) the root of a phylo4 object.}
 \usage{

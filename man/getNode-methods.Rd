@@ -6,18 +6,17 @@
 \alias{getNode,phylo4-method}
 \alias{getEdge}
 \alias{getEdge-methods}
-\alias{getEdge}
 \alias{getEdge,phylo4-method}
 \title{Node and Edge look-up functions}
 \usage{
-getNode(x, node, type = c("all", "tip", "internal"), missing = c("warn",
-  "OK", "fail"))
+getNode(x, node, type = c("all", "tip", "internal"),
+  missing = c("warn", "OK", "fail"))
 
 \S4method{getNode}{phylo4}(x, node, type = c("all", "tip", "internal"),
   missing = c("warn", "OK", "fail"))
 
-getEdge(x, node, type = c("descendant", "ancestor"), missing = c("warn",
-  "OK", "fail"))
+getEdge(x, node, type = c("descendant", "ancestor"),
+  missing = c("warn", "OK", "fail"))
 
 \S4method{getEdge}{phylo4}(x, node, type = c("descendant", "ancestor"),
   missing = c("warn", "OK", "fail"))

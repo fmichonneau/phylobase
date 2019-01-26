@@ -4,8 +4,8 @@
 \alias{plotOneTree}
 \title{Plot a phylo4 object}
 \usage{
-plotOneTree(xxyy, type, show.tip.label, show.node.label, edge.color, node.color,
-  tip.color, edge.width, rot)
+plotOneTree(xxyy, type, show.tip.label, show.node.label, edge.color,
+  node.color, tip.color, edge.width, rot)
 }
 \arguments{
 \item{xxyy}{A list created by the \code{\link{phyloXXYY}} function}
