@@ -397,7 +397,8 @@ phyloXXYY <- function(phy, tip.order=NULL)
     nedges  <- as.integer(nEdges(phy))
     segsv0x <- as.numeric(rep.int(0, Nedges))
     xPos <- .C("phyloxx", edge1, edge2,
-            edgeLen, nedges, xx, segsv0x)
+               edgeLen, nedges, xx, segsv0x,
+               PACKAGE = "phylobase")
     xx <- xPos[[5]]
     segs$v0x <- xPos[[6]]
 

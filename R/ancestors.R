@@ -125,7 +125,8 @@ descendants <- function (phy, node, type=c("tips","children","all", "ALL")) {
         descendant <- as.integer(edge[, 2])
 
         ## return indicator matrix of ALL descendants (including self)
-        isDes <- .Call("descendants_c", node, ancestor, descendant)
+        isDes <- .Call("descendants_c", node, ancestor, descendant,
+                       PACKAGE = "phylobase")
         storage.mode(isDes) <- "logical"
 
         if (type == "all") {
@@ -204,7 +205,8 @@ ancestors <- function (phy, node, type=c("all","parent","ALL")) {
         descendant <- as.integer(edge[, 2])
 
         ## return indicator matrix of ALL ancestors (including self)
-        isAnc <- .Call("ancestors_c", node, ancestor, descendant)
+        isAnc <- .Call("ancestors_c", node, ancestor, descendant,
+                       PACKAGE = "phylobase")
         storage.mode(isAnc) <- "logical"
 
         ## drop self if needed

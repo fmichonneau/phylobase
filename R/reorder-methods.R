@@ -98,12 +98,12 @@ orderIndex <- function(x, order=c("preorder", "postorder")) {
         nEdge <- as.integer(length(ancestor))
 
         descendantReord <- .C("reorderBinary", descendantNew, root,
-            ancestor, left, right, nEdge, iOrder)[[1]]
+                              ancestor, left, right, nEdge, iOrder,
+                              PACKAGE = "phylobase")[[1]]
 
     } else {
-        # method 2: not as fast, but robust to singletons and polytomies
-
-        # extract ancestors and descendants
+        ## method 2: not as fast, but robust to singletons and polytomies
+        ## extract ancestors and descendants
         ancestor <- as.integer(edge[,1])
         descendant <- as.integer(edge[,2])
         descendantNew <- rep(0L, nEdges(x))
@@ -111,7 +111,8 @@ orderIndex <- function(x, order=c("preorder", "postorder")) {
         nEdge <- as.integer(nrow(edge))
 
         descendantReord <- .C("reorderRobust", descendantNew, root,
-            ancestor, descendant, nEdge, iOrder)[[1]]
+                              ancestor, descendant, nEdge, iOrder,
+                              PACKAGE = "phylobase")[[1]]
 
     }
 
