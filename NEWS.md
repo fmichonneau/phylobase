@@ -1,3 +1,7 @@
+## CHANGES in phylobase VERSION 0.8.6
+
+* CRAN maintenance release following updates to RNeXML.
+
 ## CHANGES in phylobase VERSION 0.8.4
 
 *  CRAN maintenance release

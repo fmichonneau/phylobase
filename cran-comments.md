@@ -1,22 +1,16 @@
-This submission follows an email sent to me by Kurt Hornik on April 7th, 2017.
+This submission follows an email sent to me by Kurt Hornik on January 25th, 2019.
 
 ## Test environments
 
-- local Ubuntu 16.10, R 3.3.3
-- Ubuntu 12.04 (travis-ci), R 3.3.3
-- Windows with win-builder (R 3.3.3 and R-devel r72555)
-- Debian Testing with R-devel (r72514)
+- local Ubuntu 18.10, R 3.5.2
+- Ubuntu 14.04 (travis-ci), R 3.5.2 and R-devel
+- Windows with win-builder (R 3.5.2 and R-devel 2019-01-27 r76018)
 
 
 ## R CMD check results
 
 - There were no ERRORs or WARNINGs
 
-- There was 1 NOTE:
-  * checking CRAN incoming feasibility ... NOTE
-    Maintainer: 'Francois Michonneau <francois.michonneau@gmail.com>'
-    Possibly mis-spelled words in DESCRIPTION:
-    Phylogenetic (4:25)
 
 ## Downstream dependencies
 
