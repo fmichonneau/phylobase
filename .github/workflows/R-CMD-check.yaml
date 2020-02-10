@@ -12,6 +12,9 @@ jobs:
       - name: Install dependencies
         run: Rscript -e "install.packages(c('remotes', 'rcmdcheck'))" -e "remotes::install_deps(dependencies = TRUE)"
       - name: Install tinytex packages
-        run: Rscript -e "tinytex::tlmgr_install(epstopdf)"
+        run: |
+          Rscript \
+          -e "install.packages('tinytex')"
+          -e "tinytex::tlmgr_install('epstopdf')"
       - name: Check
         run: Rscript -e "rcmdcheck::rcmdcheck(args = '--no-manual', error_on = 'error')"
