@@ -11,5 +11,7 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v1
       - name: Install dependencies
         run: Rscript -e "install.packages(c('remotes', 'rcmdcheck'))" -e "remotes::install_deps(dependencies = TRUE)"
+      - name: Install tinytex packages
+        run: Rscript -e "tinytex::tlmgr_install(c('epstopdf')"
       - name: Check
         run: Rscript -e "rcmdcheck::rcmdcheck(args = '--no-manual', error_on = 'error')"
