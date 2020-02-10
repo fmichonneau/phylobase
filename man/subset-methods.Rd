@@ -21,10 +21,16 @@
 \usage{
 subset(x, ...)
 
-\S4method{subset}{phylo4}(x, tips.include = NULL, tips.exclude = NULL,
-  mrca = NULL, node.subtree = NULL, ...)
+\S4method{subset}{phylo4}(
+  x,
+  tips.include = NULL,
+  tips.exclude = NULL,
+  mrca = NULL,
+  node.subtree = NULL,
+  ...
+)
 
-"["(x, i, j, ..., drop = TRUE)
+`[`(x, i, j, ..., drop = TRUE)
 
 \S4method{[}{phylo4,character,missing,missing}(x, i, j, ..., drop = TRUE)
 

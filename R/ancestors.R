@@ -32,8 +32,6 @@
 ##' direct descendants ("children"), all extant descendants ("tips"), or all
 ##' descendant nodes ("all") or all descendant nodes including self ("ALL").
 ##' @param include.self whether to include self in list of siblings
-##' @param \dots a list of node numbers or names, or a vector of node numbers or
-##' names
 ##' @return \describe{
 ##' \item{\code{ancestors}}{ return a named vector (or a list
 ##' of such vectors in the case of multiple input nodes) of the

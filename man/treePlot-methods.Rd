@@ -13,12 +13,24 @@
 \alias{plot,phylo4-method}
 \title{Phylogeny plotting}
 \usage{
-treePlot(phy, type = c("phylogram", "cladogram", "fan"),
-  show.tip.label = TRUE, show.node.label = FALSE, tip.order = NULL,
-  plot.data = is(phy, "phylo4d"), rot = 0, tip.plot.fun = "bubbles",
-  plot.at.tip = TRUE, edge.color = "black", node.color = "black",
-  tip.color = "black", edge.width = 1, newpage = TRUE,
-  margins = c(1.1, 1.1, 1.1, 1.1), ...)
+treePlot(
+  phy,
+  type = c("phylogram", "cladogram", "fan"),
+  show.tip.label = TRUE,
+  show.node.label = FALSE,
+  tip.order = NULL,
+  plot.data = is(phy, "phylo4d"),
+  rot = 0,
+  tip.plot.fun = "bubbles",
+  plot.at.tip = TRUE,
+  edge.color = "black",
+  node.color = "black",
+  tip.color = "black",
+  edge.width = 1,
+  newpage = TRUE,
+  margins = c(1.1, 1.1, 1.1, 1.1),
+  ...
+)
 
 plot(x, y, ...)
 

@@ -16,12 +16,17 @@ phylo4(x, ...)
 
 phylo4_orderings
 
-\S4method{phylo4}{matrix}(x, edge.length = NULL, tip.label = NULL,
-  node.label = NULL, edge.label = NULL, order = "unknown",
-  annote = list())
+\S4method{phylo4}{matrix}(
+  x,
+  edge.length = NULL,
+  tip.label = NULL,
+  node.label = NULL,
+  edge.label = NULL,
+  order = "unknown",
+  annote = list()
+)
 
-\S4method{phylo4}{phylo}(x, check.node.labels = c("keep", "drop"),
-  annote = list())
+\S4method{phylo4}{phylo}(x, check.node.labels = c("keep", "drop"), annote = list())
 
 \S4method{phylo4}{nexml}(x)
 }

@@ -33,9 +33,6 @@ direct descendants ("children"), all extant descendants ("tips"), or all
 descendant nodes ("all") or all descendant nodes including self ("ALL").}
 
 \item{include.self}{whether to include self in list of siblings}
-
-\item{\dots}{a list of node numbers or names, or a vector of node numbers or
-names}
 }
 \value{
 \describe{

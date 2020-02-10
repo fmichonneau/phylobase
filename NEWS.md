@@ -1,3 +1,8 @@
+## CHANGES in phylobase VERSION 0.8.8
+
+* CRAN maintenance release. Updated documentation of the `ancestors()` function
+  to remove unused `...`.
+
 ## CHANGES in phylobase VERSION 0.8.6
 
 * CRAN maintenance release following updates to RNeXML.

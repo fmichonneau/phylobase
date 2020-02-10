@@ -9,22 +9,46 @@
 \title{Create a \code{phylo4}, \code{phylo4d} or \code{data.frame} object
 from a NEXUS or a Newick file}
 \usage{
-readNCL(file, simplify = FALSE, type = c("all", "tree", "data"),
-  spacesAsUnderscores = TRUE, char.all = FALSE,
-  polymorphic.convert = TRUE, levels.uniform = FALSE, quiet = TRUE,
+readNCL(
+  file,
+  simplify = FALSE,
+  type = c("all", "tree", "data"),
+  spacesAsUnderscores = TRUE,
+  char.all = FALSE,
+  polymorphic.convert = TRUE,
+  levels.uniform = FALSE,
+  quiet = TRUE,
   check.node.labels = c("keep", "drop", "asdata"),
-  return.labels = TRUE, file.format = c("nexus", "newick"),
-  check.names = TRUE, convert.edge.length = FALSE, ...)
+  return.labels = TRUE,
+  file.format = c("nexus", "newick"),
+  check.names = TRUE,
+  convert.edge.length = FALSE,
+  ...
+)
 
-readNexus(file, simplify = FALSE, type = c("all", "tree", "data"),
-  char.all = FALSE, polymorphic.convert = TRUE,
-  levels.uniform = FALSE, quiet = TRUE, check.node.labels = c("keep",
-  "drop", "asdata"), return.labels = TRUE, check.names = TRUE,
-  convert.edge.length = FALSE, ...)
-
-readNewick(file, simplify = FALSE, quiet = TRUE,
+readNexus(
+  file,
+  simplify = FALSE,
+  type = c("all", "tree", "data"),
+  char.all = FALSE,
+  polymorphic.convert = TRUE,
+  levels.uniform = FALSE,
+  quiet = TRUE,
   check.node.labels = c("keep", "drop", "asdata"),
-  convert.edge.length = FALSE, ...)
+  return.labels = TRUE,
+  check.names = TRUE,
+  convert.edge.length = FALSE,
+  ...
+)
+
+readNewick(
+  file,
+  simplify = FALSE,
+  quiet = TRUE,
+  check.node.labels = c("keep", "drop", "asdata"),
+  convert.edge.length = FALSE,
+  ...
+)
 }
 \arguments{
 \item{file}{a NEXUS file for \code{readNexus} or a file that
@@ -110,13 +134,13 @@ The \code{type} argument specifies which of these is returned:
 
 \describe{
 
-\item{data}{will only return a \code{data.frame} of the contents
+  \item{data}{will only return a \code{data.frame} of the contents
 of all DATA and CHARACTER blocks.}
 
-\item{tree}{will only return a \code{phylo4} object of the
+  \item{tree}{will only return a \code{phylo4} object of the
 contents of the TREES block.}
 
-\item{all}{if only data or a tree are present in the file, this
+  \item{all}{if only data or a tree are present in the file, this
 option will act as the options above, returning either a
 \code{data.frame} or a \code{phylo4} object respectively. If both
 are present then a \code{phylo4d} object is returned containing

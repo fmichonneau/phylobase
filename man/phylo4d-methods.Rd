@@ -18,17 +18,42 @@
 \usage{
 phylo4d(x, ...)
 
-\S4method{phylo4d}{phylo4}(x, tip.data = NULL, node.data = NULL,
-  all.data = NULL, merge.data = TRUE, metadata = list(), ...)
+\S4method{phylo4d}{phylo4}(
+  x,
+  tip.data = NULL,
+  node.data = NULL,
+  all.data = NULL,
+  merge.data = TRUE,
+  metadata = list(),
+  ...
+)
 
-\S4method{phylo4d}{matrix}(x, tip.data = NULL, node.data = NULL,
-  all.data = NULL, merge.data = TRUE, metadata = list(),
-  edge.length = NULL, tip.label = NULL, node.label = NULL,
-  edge.label = NULL, order = "unknown", annote = list(), ...)
+\S4method{phylo4d}{matrix}(
+  x,
+  tip.data = NULL,
+  node.data = NULL,
+  all.data = NULL,
+  merge.data = TRUE,
+  metadata = list(),
+  edge.length = NULL,
+  tip.label = NULL,
+  node.label = NULL,
+  edge.label = NULL,
+  order = "unknown",
+  annote = list(),
+  ...
+)
 
-\S4method{phylo4d}{phylo}(x, tip.data = NULL, node.data = NULL,
-  all.data = NULL, check.node.labels = c("keep", "drop", "asdata"),
-  annote = list(), metadata = list(), ...)
+\S4method{phylo4d}{phylo}(
+  x,
+  tip.data = NULL,
+  node.data = NULL,
+  all.data = NULL,
+  check.node.labels = c("keep", "drop", "asdata"),
+  annote = list(),
+  metadata = list(),
+  ...
+)
 
 \S4method{phylo4d}{phylo4d}(x, ...)
 

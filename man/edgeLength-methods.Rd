@@ -44,8 +44,7 @@ nodeDepth(x, node)
 
 nodeHeight(x, node, from)
 
-\S4method{nodeHeight}{phylo4}(x, node, from = c("root", "all_tip",
-  "min_tip", "max_tip"))
+\S4method{nodeHeight}{phylo4}(x, node, from = c("root", "all_tip", "min_tip", "max_tip"))
 
 sumEdgeLength(x, node)
 

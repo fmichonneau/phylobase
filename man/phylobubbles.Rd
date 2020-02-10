@@ -4,11 +4,21 @@
 \alias{phylobubbles}
 \title{Bubble plots for phylo4d objects}
 \usage{
-phylobubbles(type = type, place.tip.label = "right",
-  show.node.label = show.node.label, rot = 0,
-  edge.color = edge.color, node.color = node.color,
-  tip.color = tip.color, edge.width = edge.width, newpage = TRUE,
-  ..., XXYY, square = FALSE, grid = TRUE)
+phylobubbles(
+  type = type,
+  place.tip.label = "right",
+  show.node.label = show.node.label,
+  rot = 0,
+  edge.color = edge.color,
+  node.color = node.color,
+  tip.color = tip.color,
+  edge.width = edge.width,
+  newpage = TRUE,
+  ...,
+  XXYY,
+  square = FALSE,
+  grid = TRUE
+)
 }
 \arguments{
 \item{type}{the type of plot}
