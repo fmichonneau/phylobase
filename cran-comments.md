@@ -1,10 +1,8 @@
-This submission follows an email sent to me by Kurt Hornik on January 25th, 2019.
-
 ## Test environments
 
-- local Ubuntu 18.10, R 3.5.2
-- Ubuntu 14.04 (travis-ci), R 3.5.2 and R-devel
-- Windows with win-builder (R 3.5.2 and R-devel 2019-01-27 r76018)
+- local Ubuntu 19.10, R 3.6.2
+- Ubuntu 16.04 (travis-ci), R 3.6.2 and R-devel
+- Windows with win-builder (R 3.6.2 and R-devel (2020-01-28 r77738)
 
 
 ## R CMD check results
