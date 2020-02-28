@@ -31,9 +31,12 @@ set.seed(1)
 nid.tip.r <- sample(nid.tip)
 nid.int.r <- sample(nid.int)
 nid.all.r <- sample(c(nid.tip, nid.int))
-allDt <- data.frame(a=letters[nid.all.r], b=10*nid.all.r)
-tipDt <- data.frame(c=letters[nid.tip.r], d=10*nid.tip.r)
-nodDt <- data.frame(c=letters[nid.int.r], e=10*nid.int.r)
+allDt <- data.frame(a = letters[nid.all.r], b = 10 * nid.all.r,
+  stringsAsFators = TRUE)
+tipDt <- data.frame(c=letters[nid.tip.r], d=10*nid.tip.r,
+  stringsAsFators = TRUE)
+nodDt <- data.frame(c=letters[nid.int.r], e=10*nid.int.r,
+  stringsAsFators = TRUE)
 ## set row.names as numeric node IDs (may be changed in tests below)
 row.names(allDt) <- nid.all.r
 row.names(tipDt) <- nid.tip.r
@@ -64,7 +67,8 @@ test_that("works with lists of vector", {
 test_that("works factors", {
     ## factor data coerced to data.frame (colname dt)
     expect_equal(phylobase:::formatData(phy.alt, factor(letters[1:5])),
-                 phylobase:::formatData(phy.alt, data.frame(dt=letters[1:5])))
+      phylobase:::formatData(phy.alt, data.frame(dt=letters[1:5],
+        stringsAsFactors = TRUE)))
 })
 
 test_that("works with data.frame and 2 columns", {
@@ -300,7 +304,8 @@ test_that("formatData works with duplicated labels", {
         phylobase:::formatData(phy.dup, data.frame(a=1:5, b=6:10)))
     ## factor data coerced to data.frame (colname dt)
     expect_equal(phylobase:::formatData(phy.dup, factor(letters[1:5])),
-        phylobase:::formatData(phy.dup, data.frame(dt=letters[1:5])))
+      phylobase:::formatData(phy.dup, data.frame(dt=letters[1:5],
+        stringsAsFators = TRUE)))
     ## matrix data coerced to data.frame (colnames V1, V2)
     expect_equal(phylobase:::formatData(phy.dup, matrix(1:10, ncol=2)),
         phylobase:::formatData(phy.dup, data.frame(V1=1:5, V2=6:10)))

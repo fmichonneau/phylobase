@@ -42,9 +42,12 @@ set.seed(1)
 nid.tip.r <- sample(nid.tip)
 nid.int.r <- sample(nid.int)
 nid.all.r <- sample(c(nid.tip, nid.int))
-allDt <- data.frame(a=letters[nid.all.r], b=10*nid.all.r)
-tipDt <- data.frame(c=letters[nid.tip.r], d=10*nid.tip.r)
-nodDt <- data.frame(c=letters[nid.int.r], e=10*nid.int.r)
+allDt <- data.frame(a = letters[nid.all.r], b = 10 * nid.all.r,
+  stringsAsFactors = TRUE)
+tipDt <- data.frame(c = letters[nid.tip.r], d = 10 * nid.tip.r,
+  stringsAsFactors = TRUE)
+nodDt <- data.frame(c=letters[nid.int.r], e=10*nid.int.r,
+  stringsAsFactors = TRUE)
 ## set row.names as numeric node IDs (may be changed in tests below)
 row.names(allDt) <- nid.all.r
 row.names(tipDt) <- nid.tip.r

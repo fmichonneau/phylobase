@@ -50,13 +50,15 @@ test_that("nTips works correctly",
 test_that("depthTips works when there are edge lengths", {
     edgeLengthVec <- c(1.2, 1.8, 1.8, 2.1, 2.3)
     names(edgeLengthVec) <- tipLabels(phy.alt)
-    expect_that(depthTips(phy.alt), equals(edgeLengthVec))
+    expect_warning(depth_tips <- depthTips(phy.alt))
+    expect_that(depth_tips, equals(edgeLengthVec))
 })
 
 test_that("depthTips works when there are no edge lengths", {
     tmpPhy <- phy.alt
     edgeLength(tmpPhy) <- NA
-    expect_true(is.null(depthTips(tmpPhy)))
+    expect_warning(depth_tips <- depthTips(tmpPhy))
+    expect_true(is.null(depth_tips))
 })
 
 test_that("nTips works on ape objects",
@@ -94,21 +96,25 @@ context("nodeDepth")
 allDepths <- c(1.2, 1.8, 1.8, 2.1, 2.3, 0.9, 1.0, 1.2, 1.6)
 names(allDepths) <- names(getNode(phy.alt))
 test_that("nodeDepth works without arguments", {
-    expect_equal(nodeDepth(phy.alt), allDepths)
+  expect_warning(node_depth <- nodeDepth(phy.alt))
+  expect_equal(node_depth, allDepths)
 })
 
 test_that("nodeDepth works with numeric argument", {
-    expect_equal(nodeDepth(phy.alt, 1), allDepths[1])
+  expect_warning(node_depth <- nodeDepth(phy.alt, 1))
+  expect_equal(node_depth, allDepths[1])
 })
 
 test_that("nodeDepth works with character argument", {
-    expect_equal(nodeDepth(phy.alt, "t1"), allDepths[1])
+  expect_warning(node_depth <- nodeDepth(phy.alt, "t1"))
+  expect_equal(node_depth, allDepths[1])
 })
 
 test_that("nodeDepth works with no branch length", {
     tmpPhy <- phy.alt
     edgeLength(tmpPhy) <- NA
-    expect_true(is.null(nodeDepth(tmpPhy)))
+    expect_warning(node_depth <- nodeDepth(tmpPhy))
+    expect_true(is.null(node_depth))
 })
 
 ############################################################################
