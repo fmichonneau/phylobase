@@ -41,6 +41,7 @@ jobs:
           deps[["installed"]] <- vapply(deps[["package"]], remotes:::local_sha, character(1))
           update(deps)
           remotes::install_cran("rcmdcheck")
+          remotes::install_cran("sessioninfo")
         shell: Rscript {0}
       - name: Install tinytex packages
         run: |
@@ -48,4 +49,4 @@ jobs:
           -e "install.packages('tinytex')" \
           -e "tinytex::tlmgr_install('epstopdf-pkg')"
       - name: Check
-        run: Rscript -e "rcmdcheck::rcmdcheck(args = '--no-manual', error_on = 'error')"
+        run: Rscript -e "sessioninfo::session_info(); rcmdcheck::rcmdcheck(args = c('--as-cran', '--no-manual'), error_on = 'warning')"
