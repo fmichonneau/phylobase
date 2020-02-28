@@ -1,7 +1,7 @@
 Package: phylobase
 Type: Package
 Title: Base Package for Phylogenetic Structures and Comparative Data
-Version: 0.8.8
+Version: 0.8.10
 Imports:
     ade4,
     ape (>= 3.0),
@@ -66,5 +66,5 @@ Collate:
     'treestruc.R'
     'zzz.R'
 VignetteBuilder: knitr
-RoxygenNote: 7.0.2
+RoxygenNote: 7.0.2.9000
 Encoding: UTF-8
