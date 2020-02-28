@@ -305,7 +305,7 @@ test_that("formatData works with duplicated labels", {
     ## factor data coerced to data.frame (colname dt)
     expect_equal(phylobase:::formatData(phy.dup, factor(letters[1:5])),
       phylobase:::formatData(phy.dup, data.frame(dt=letters[1:5],
-        stringsAsFators = TRUE)))
+        stringsAsFactors = TRUE)))
     ## matrix data coerced to data.frame (colnames V1, V2)
     expect_equal(phylobase:::formatData(phy.dup, matrix(1:10, ncol=2)),
         phylobase:::formatData(phy.dup, data.frame(V1=1:5, V2=6:10)))
