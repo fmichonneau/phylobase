@@ -405,13 +405,13 @@ phyloXXYY <- function(phy, tip.order=NULL)
     ## Set y positions for terminal nodes and calculate remaining y positions
     if(!is.null(tip.order)) {
         if(length(tip.order) == 1 &&  tip.order == "rev") {
-            yy[tips] <- seq(1, 0, length = Ntips)
+            yy[tips] <- seq(1, 0, length.out = Ntips)
             tip.order <- rev(edge2[edge2 <= Ntips])
         } else {
-            yy[tips][match(tip.order, edge2[tips])] <- seq(0, 1, length = Ntips)
+            yy[tips][match(tip.order, edge2[tips])] <- seq(0, 1, length.out = Ntips)
         }
     } else {
-        yy[tips] <- seq(0, 1, length = Ntips)
+        yy[tips] <- seq(0, 1, length.out = Ntips)
         tip.order <- edge2[edge2 <= Ntips]
     }
     segs$h0y[tips] <- segs$h1y[tips] <- yy[tips]

@@ -29,7 +29,7 @@
     ## create internal names
     names(res) <- switch(type,
                          tip = 1:ntips,
-                         internal = seq(from=ntips+1, length=lgthRes),
+                         internal = seq(from=ntips+1, length.out=lgthRes),
                          all = 1:(ntips+nnodes))
 
     ## Convert empty labels to NA
