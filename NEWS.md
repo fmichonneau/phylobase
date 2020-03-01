@@ -1,7 +1,10 @@
 ## CHANGES IN phylobase VERSION 0.8.10
 
 * CRAN maintenance release in prepartion for R 4.0.0 with
-  `stringsAsFactors=FALSE` as default
+  `stringsAsFactors=FALSE` as default. For backwards compatibility,
+  `stringsAsFactors` is set to `TRUE` internally to mimic the previous default
+  behavior. For the time being, conversion to non-factors data types will need
+  to be handled manually.
 
 ## CHANGES in phylobase VERSION 0.8.8
 
