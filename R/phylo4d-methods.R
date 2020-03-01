@@ -241,7 +241,9 @@
 ##' p4d.all1 <- phylo4d(p4, node.data = nod.dat, tip.data = dat, match.data=FALSE)
 ##' nodeLabels(p4) <- as.character(nodeId(p4, "internal"))
 ##' p4d.all2 <- phylo4d(p4, all.data = rbind(dat, nod.dat), match.data=FALSE)
-setGeneric("phylo4d", function(x, ...) { standardGeneric("phylo4d")} )
+setGeneric("phylo4d", function(x, ...) {
+  standardGeneric("phylo4d")
+})
 
 ## first arg is a phylo4
 ##' @rdname phylo4d-methods
@@ -288,12 +290,14 @@ label_to_data <- function(nlab.data, ...) {
     ## convert number-like labels to numeric, other keep as it is
     nlab.data.test <- gsub("[0-9]|\\.", "", nlab.data[!is.na(nlab.data)])
     if (all(nchar(nlab.data.test) == 0 )) {
-        nlab.data <- data.frame(labelValues=as.numeric(nlab.data), ...)
+      nlab.data <- data.frame(labelValues = as.numeric(nlab.data), ...,
+        stringsAsFactors = TRUE)
     }
     else {
-        nlab.data <- data.frame(labelValues=nlab.data, ...)
+      nlab.data <- data.frame(labelValues = nlab.data, ...,
+        stringsAsFactors =TRUE)
     }
-    nlab.data
+  nlab.data
 }
 
 ### first arg is a phylo
@@ -362,11 +366,11 @@ setMethod("phylo4d", c("nexml"), function(x) {
 .phylo4Data <- function(x, tip.data=NULL, node.data=NULL, all.data=NULL,
                         merge.data=TRUE) {
 
-    ## Check validity of phylo4 object
-    if (is.character(checkval <- checkPhylo4(x))) stop(checkval)
+  ## Check validity of phylo4 object
+  if (is.character(checkval <- checkPhylo4(x))) stop(checkval)
 
-    ## Create placeholder data frames for any null data arguments
-    if (is.null(tip.data)) tip.data <- formatData(x, NULL, "tip")
+  ## Create placeholder data frames for any null data arguments
+  if (is.null(tip.data)) tip.data <- formatData(x, NULL, "tip")
     if (is.null(node.data)) node.data <- formatData(x, NULL, "internal")
     if (is.null(all.data)) all.data <- formatData(x, NULL, "all")
 
@@ -389,11 +393,11 @@ setMethod("phylo4d", c("nexml"), function(x) {
         node.rows <- node.data[match(nodeId(x, "internal"),
             row.names(tip.data)), colsToMerge, drop=FALSE]
         merge.data <- rbind(tip.rows, node.rows)
-        all.data <- data.frame(all.data, merge.data)
+        all.data <- data.frame(all.data, merge.data, stringsAsFactors = TRUE)
     } else {
-        names(tip.data)[names(tip.data) %in% colsToMerge] <-
-            paste(colsToMerge, "tip", sep=".")
-        names(node.data)[names(node.data) %in% colsToMerge] <-
+      names(tip.data)[names(tip.data) %in% colsToMerge] <-
+              paste(colsToMerge, "tip", sep = ".")
+      names(node.data)[names(node.data) %in% colsToMerge] <-
             paste(colsToMerge, "node", sep=".")
     }
     ## now separate tips-only and nodes-only data
@@ -401,9 +405,9 @@ setMethod("phylo4d", c("nexml"), function(x) {
     node.only.data <- node.data[setdiff(names(node.data), names(tip.data))]
 
     ## combine all data
-    complete.data <- data.frame(all.data, tip.only.data, node.only.data)
+    complete.data <- data.frame(all.data, tip.only.data, node.only.data, stringsAsFactors = TRUE)
 
-    ## drop any rows that only contain NAs
+  ## drop any rows that only contain NAs
     if (ncol(complete.data)==0) {
         return(data.frame())
     } else {

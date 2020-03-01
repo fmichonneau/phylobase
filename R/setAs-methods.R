@@ -294,8 +294,8 @@ setAs("phylo4", "phylog", function(from, to) {
     label <- label[match(node, names(label))]
 
     tDf <- data.frame(label, node, ancestor=ancestr, edge.length,
-                    node.type=ndType, row.names=node)
-    tDf$label <- as.character(tDf$label)
+                    node.type=ndType, row.names=node, stringsAsFactors = TRUE)
+  tDf$label <- as.character(tDf$label)
 
     if (class(from) == "phylo4d") {
         dat <- tdata(from, "all", label.type="column") # get data

@@ -80,7 +80,7 @@ formatData <- function(phy, dt, type=c("tip", "internal", "all"),
     }
     ## if vector, coerce to data.frame
     if (is.vector(dt) || is.factor(dt) || is.matrix(dt)) {
-        dt <- as.data.frame(dt)
+        dt <- as.data.frame(dt, stringsAsFactors = TRUE)
     }
     ## before proceeding, make sure that data provided are a data frame
     if (!is.data.frame(dt)) {
