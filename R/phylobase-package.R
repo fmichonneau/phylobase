@@ -76,7 +76,7 @@
 ##' @importFrom ade4 newick2phylog
 ##' @importFrom rncl rncl
 ##'
-##' @exportMethod print head tail reorder plot summary `[`
+##' @exportMethod print head tail reorder plot summary
 ##'
 ## exportMethod should only be used for generics defined outside the package!
 ## @exportMethod phylo4 phylo4d
