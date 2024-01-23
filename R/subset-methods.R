@@ -196,7 +196,6 @@ setMethod("subset", "phylo4", function(x, tips.include=NULL,
 
 ##' @rdname subset-methods
 ##' @exportMethod "["
-##' @export
 setGeneric("[")
 
 ##### --------  phylo4 '[' methods

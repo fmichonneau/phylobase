@@ -456,6 +456,7 @@ phyloXXYY <- function(phy, tip.order=NULL)
     grid::grob(tipdata=tipdata, tipdataS=tipdataS, cl='bubLegend')
 }
 
+##' @export
 drawDetails.bubLegend <- function(x, ...) {
     ## number of bubbles in legend
     leglen  <- 4
