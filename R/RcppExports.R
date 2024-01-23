@@ -2,78 +2,78 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 isLabelName <- function(lblToCheck, lbl) {
-    .Call('phylobase_isLabelName', PACKAGE = 'phylobase', lblToCheck, lbl)
+    .Call(`_phylobase_isLabelName`, lblToCheck, lbl)
 }
 
 nRoots <- function(ances) {
-    .Call('phylobase_nRoots', PACKAGE = 'phylobase', ances)
+    .Call(`_phylobase_nRoots`, ances)
 }
 
 tabulateTips <- function(ances) {
-    .Call('phylobase_tabulateTips', PACKAGE = 'phylobase', ances)
+    .Call(`_phylobase_tabulateTips`, ances)
 }
 
 nTipsSafe <- function(ances) {
-    .Call('phylobase_nTipsSafe', PACKAGE = 'phylobase', ances)
+    .Call(`_phylobase_nTipsSafe`, ances)
 }
 
 nTipsFastCpp <- function(ances) {
-    .Call('phylobase_nTipsFastCpp', PACKAGE = 'phylobase', ances)
+    .Call(`_phylobase_nTipsFastCpp`, ances)
 }
 
 hasSingleton <- function(ances) {
-    .Call('phylobase_hasSingleton', PACKAGE = 'phylobase', ances)
+    .Call(`_phylobase_hasSingleton`, ances)
 }
 
 hasPolytomy <- function(ances) {
-    .Call('phylobase_hasPolytomy', PACKAGE = 'phylobase', ances)
+    .Call(`_phylobase_hasPolytomy`, ances)
 }
 
 tipsSafe <- function(ances, desc) {
-    .Call('phylobase_tipsSafe', PACKAGE = 'phylobase', ances, desc)
+    .Call(`_phylobase_tipsSafe`, ances, desc)
 }
 
 tipsFast <- function(ances) {
-    .Call('phylobase_tipsFast', PACKAGE = 'phylobase', ances)
+    .Call(`_phylobase_tipsFast`, ances)
 }
 
 getAllNodesSafe <- function(edge) {
-    .Call('phylobase_getAllNodesSafe', PACKAGE = 'phylobase', edge)
+    .Call(`_phylobase_getAllNodesSafe`, edge)
 }
 
 getAllNodesFast <- function(edge) {
-    .Call('phylobase_getAllNodesFast', PACKAGE = 'phylobase', edge)
+    .Call(`_phylobase_getAllNodesFast`, edge)
 }
 
 testEqInt <- function(x, y) {
-    .Call('phylobase_testEqInt', PACKAGE = 'phylobase', x, y)
+    .Call(`_phylobase_testEqInt`, x, y)
 }
 
 all_naC <- function(x) {
-    .Call('phylobase_all_naC', PACKAGE = 'phylobase', x)
+    .Call(`_phylobase_all_naC`, x)
 }
 
 any_naC <- function(x) {
-    .Call('phylobase_any_naC', PACKAGE = 'phylobase', x)
+    .Call(`_phylobase_any_naC`, x)
 }
 
 nb_naC <- function(x) {
-    .Call('phylobase_nb_naC', PACKAGE = 'phylobase', x)
+    .Call(`_phylobase_nb_naC`, x)
 }
 
 getRange <- function(x, na_rm) {
-    .Call('phylobase_getRange', PACKAGE = 'phylobase', x, na_rm)
+    .Call(`_phylobase_getRange`, x, na_rm)
 }
 
 hasDuplicatedLabelsCpp <- function(label) {
-    .Call('phylobase_hasDuplicatedLabelsCpp', PACKAGE = 'phylobase', label)
+    .Call(`_phylobase_hasDuplicatedLabelsCpp`, label)
 }
 
 edgeIdCpp <- function(edge, type) {
-    .Call('phylobase_edgeIdCpp', PACKAGE = 'phylobase', edge, type)
+    .Call(`_phylobase_edgeIdCpp`, edge, type)
 }
 
 checkTreeCpp <- function(obj, opts) {
-    .Call('phylobase_checkTreeCpp', PACKAGE = 'phylobase', obj, opts)
+    .Call(`_phylobase_checkTreeCpp`, obj, opts)
 }
 
