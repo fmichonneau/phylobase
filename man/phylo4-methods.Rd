@@ -10,7 +10,9 @@
 \alias{phylo4,nexml-method}
 \alias{nexml,phylo4-method}
 \title{Create a phylogenetic tree}
-\format{An object of class \code{character} of length 5.}
+\format{
+An object of class \code{character} of length 5.
+}
 \usage{
 phylo4(x, ...)
 

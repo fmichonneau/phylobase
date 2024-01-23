@@ -70,4 +70,12 @@ See the help index \code{help(package="phylobase")} and run
 examples about how to use \code{phylobase}.
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/fmichonneau/phylobase}
+  \item Report bugs at \url{https://github.com/fmichonneau/phylobase/issues}
+}
+
+}
 \keyword{package}

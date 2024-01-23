@@ -4,8 +4,10 @@
 \name{owls4}
 \alias{owls4}
 \title{'Owls' data from ape}
-\format{This is the standard 'owls' tree from the \code{ape} package, in
-\code{phylo4} format.}
+\format{
+This is the standard 'owls' tree from the \code{ape} package, in
+\code{phylo4} format.
+}
 \source{
 From various examples in the \code{ape} package
 }

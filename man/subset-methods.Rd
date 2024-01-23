@@ -30,7 +30,7 @@ subset(x, ...)
   ...
 )
 
-`[`(x, i, j, ..., drop = TRUE)
+x[i
 
 \S4method{[}{phylo4,character,missing,missing}(x, i, j, ..., drop = TRUE)
 

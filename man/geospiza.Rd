@@ -5,10 +5,12 @@
 \alias{geospiza}
 \alias{geospiza_raw}
 \title{Data from Darwin's finches}
-\format{\code{geospiza} is a \code{phylo4d} object; \code{geospiza_raw} is a
+\format{
+\code{geospiza} is a \code{phylo4d} object; \code{geospiza_raw} is a
 list containing \code{tree}, a \code{phylo} object (the tree), \code{data},
 and a data frame with the data (for showing examples of how to merge tree
-and data)}
+and data)
+}
 \source{
 Dolph Schluter via Luke Harmon
 }
