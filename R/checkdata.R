@@ -52,9 +52,10 @@
 checkPhylo4 <- function(object) {
     ct <- checkTree(object)
 
-    if (class(object) == "phylo4d")
-        ## checkPhyo4Data returns TRUE or fail
-        cd <- checkPhylo4Data(object)
+    if (inherits(object,  "phylo4d")) {
+      ## checkPhyo4Data returns TRUE or fail
+      cd <- checkPhylo4Data(object)
+    }
 
     return(ct)
 }

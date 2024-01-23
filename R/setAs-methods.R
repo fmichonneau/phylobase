@@ -297,17 +297,17 @@ setAs("phylo4", "phylog", function(from, to) {
                     node.type=ndType, row.names=node, stringsAsFactors = TRUE)
   tDf$label <- as.character(tDf$label)
 
-    if (class(from) == "phylo4d") {
-        dat <- tdata(from, "all", label.type="column") # get data
+  if (inherits(from, "phylo4d")) {
+    dat <- tdata(from, "all", label.type="column") # get data
 
-        ## reorder data to edge matrix order, drop labels (first column)
-        if(nrow(dat) > 0 && ncol(dat) > 1) {
-            dat <- dat[match(rownames(tDf), rownames(dat)), ]
-            tDf <- cbind(tDf, dat[ ,-1 , drop=FALSE])
-        }
-        else {
-            cat("No data associated with the tree\n")
-       }
+    ## reorder data to edge matrix order, drop labels (first column)
+    if(nrow(dat) > 0 && ncol(dat) > 1) {
+      dat <- dat[match(rownames(tDf), rownames(dat)), ]
+      tDf <- cbind(tDf, dat[ ,-1 , drop=FALSE])
+    }
+    else {
+      cat("No data associated with the tree\n")
+    }
     }
     tDf
 }
