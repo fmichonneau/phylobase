@@ -156,7 +156,7 @@ surprising results, so this practice should be avoided.
 This is the list of additional arguments that can be used
 to control matching between the tree and the data:
 
-\itemize{
+\describe{
 
 \item{match.data}{(logical) should the rownames of the data frame
 be used to be matched against tip and internal node identifiers?}
