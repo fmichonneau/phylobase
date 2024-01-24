@@ -1,7 +1,7 @@
 Package: phylobase
 Type: Package
 Title: Base Package for Phylogenetic Structures and Comparative Data
-Version: 0.8.11
+Version: 0.8.12
 Imports:
     ade4,
     ape (>= 3.0),

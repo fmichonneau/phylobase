@@ -8,10 +8,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "fig-vignettes-"
+)
+```
 
-
-
-```r
+```{r setup}
 library(phylobase)
 ```
 
@@ -103,8 +108,7 @@ dispatch the right type of plotting function. In the case of an object
 correct functions, so the following works correctly.
 
 
-
-```r
+```{r randtree, fig.keep="none"}
 library(ape)
 set.seed(1)  ## set random-number seed
 rand_tree <- rcoal(10) ## Make a random tree with 10 tips
@@ -119,8 +123,7 @@ The generic system is too complicated to describe here, but doesn't
 include the same dot notation. As a result doesn't work, `R` still finds
 the right plotting function.
 
-
-```r
+```{r convtree, fig.keep="none"}
 library(phylobase)
 # convert rand_tree to a phylo4 object
 rand_p4_tree <- as(rand_tree, "phylo4")
@@ -131,8 +134,7 @@ All fine and good, but how to we find out about all the great features
 of the `phylobase` plotting function? `R` has two nifty ways to find it,
 the first is to simply put a question mark in front of the whole call:
 
-
-```r
+```{r doc0, eval=FALSE}
 `?`(plot(rand_p4_tree))
 ```
 
@@ -141,16 +143,14 @@ file (note: this only works with objects). The second ways is handy if
 you already know the class of your object, or want to compare to
 generics for different classes:
 
-
-```r
+```{r doc1, eval=FALSE}
 `?`(method, plot("phylo4"))
 ```
 
 More information about how documentation works can be found in the
 methods package, by running the following command.
 
-
-```r
+```{r doc2, eval=FALSE}
 help('Documentation', package="methods")
 ```
 
@@ -162,99 +162,45 @@ functions), and convert it to a `phylo4` object.
 
 For example, load the raw *Geospiza* data:
 
-
-```r
+```{r <geodata,tidy=FALSE}
 library(phylobase)
 data(geospiza_raw) # what does it contain?
 names(geospiza_raw)
-#> [1] "tree" "data"
 ```
 
 Convert the `S3` tree to a `S4 phylo4` object using the `as()` function:
 
-
-```r
+```{r convgeodata}
 (g1 <- as(geospiza_raw$tree, "phylo4"))
-#>           label node ancestor edge.length node.type
-#> 1    fuliginosa    1       24     0.05500       tip
-#> 2        fortis    2       24     0.05500       tip
-#> 3  magnirostris    3       23     0.11000       tip
-#> 4   conirostris    4       22     0.18333       tip
-#> 5      scandens    5       21     0.19250       tip
-#> 6    difficilis    6       20     0.22800       tip
-#> 7       pallida    7       25     0.08667       tip
-#> 8      parvulus    8       27     0.02000       tip
-#> 9    psittacula    9       27     0.02000       tip
-#> 10       pauper   10       26     0.03500       tip
-#> 11   Platyspiza   11       18     0.46550       tip
-#> 12        fusca   12       17     0.53409       tip
-#> 13 Pinaroloxias   13       16     0.58333       tip
-#> 14     olivacea   14       15     0.88077       tip
-#> 15         <NA>   15        0          NA      root
-#> 16         <NA>   16       15     0.29744  internal
-#> 17         <NA>   17       16     0.04924  internal
-#> 18         <NA>   18       17     0.06859  internal
-#> 19         <NA>   19       18     0.13404  internal
-#> 20         <NA>   20       19     0.10346  internal
-#>  [ reached 'max' / getOption("max.print") -- omitted 7 rows ]
 ```
 
 The (internal) nodes appear with labels \verb+<NA>+ because
 they are not defined:
 
-
-```r
+```{r nodelabelgeodata}
 nodeLabels(g1)
-#> 15 16 17 18 19 20 21 22 23 24 25 26 27 
-#> NA NA NA NA NA NA NA NA NA NA NA NA NA
 ```
 
 You can also retrieve the node labels with \texttt{labels(g1,"internal")}.
 
 A simple way to assign the node numbers as labels (useful for various checks) is
 
-
-```r
+```{r assignnode_name}
 nodeLabels(g1) <- paste("N", nodeId(g1, "internal"), sep="")
 head(g1, 5)
-#>          label node ancestor edge.length node.type
-#> 1   fuliginosa    1       24     0.05500       tip
-#> 2       fortis    2       24     0.05500       tip
-#> 3 magnirostris    3       23     0.11000       tip
-#> 4  conirostris    4       22     0.18333       tip
-#> 5     scandens    5       21     0.19250       tip
 ```
 
 The \texttt{summary} method gives a little extra information, including
 information on the distribution of branch lengths:
 
-
-```r
+```{r sumgeodata}
 summary(g1)
-#> 
-#>  Phylogenetic tree : g1 
-#> 
-#>  Number of tips    : 14 
-#>  Number of nodes   : 13 
-#>  Branch lengths:
-#>         mean         : 0.1764008 
-#>         variance     : 0.04624379 
-#>         distribution :
-#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#> 0.00917 0.04985 0.08000 0.17640 0.21912 0.88077
 ```
 
 Print tip labels:
 
-
-```r
+```{r tiplabelgeodata}
 tipLabels(g1)
-#>              1              2              3              4              5              6 
-#>   "fuliginosa"       "fortis" "magnirostris"  "conirostris"     "scandens"   "difficilis" 
-#>              7              8              9             10             11             12 
-#>      "pallida"     "parvulus"   "psittacula"       "pauper"   "Platyspiza"        "fusca" 
-#>             13             14 
-#> "Pinaroloxias"     "olivacea"
 ```
 
 (`labels(g1,"tip")` would also work.)
@@ -262,16 +208,14 @@ tipLabels(g1)
 You can modify labels and other aspects of the tree --- for example, to convert
 all the labels to lower case:
 
-
-```r
+```{r modlabelsgeodata}
 tipLabels(g1) <- tolower(tipLabels(g1))
 ```
 
 You could also modify selected labels, e.g. to modify the labels in positions 11
 and 13 (which happen to be the only labels with uppercase letters):
 
-
-```r
+```{r modifylabels, eval=FALSE}
 tipLabels(g1)[c(11, 13)] <- c("platyspiza", "pinaroloxias")
 ```
 
@@ -280,145 +224,84 @@ in the same order.
 
 Print node numbers (in edge matrix order):
 
-
-```r
+```{r nodenumbergeodata}
 nodeId(g1, type='all')
-#>  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
 ```
 
 Does it have information on branch lengths?
 
-
-```r
+```{r hasbrlengeodata}
 hasEdgeLength(g1)
-#> [1] TRUE
 ```
 
 It does! What do they look like?
 
-
-```r
+```{r edgeLength-geodata}
 edgeLength(g1)
-#>   15-16   16-17   17-18   18-19   19-20   20-21   21-22   22-23   23-24    24-1    24-2 
-#> 0.29744 0.04924 0.06859 0.13404 0.10346 0.03550 0.00917 0.07333 0.05500 0.05500 0.05500 
-#>    23-3    22-4    21-5    0-15    20-6   19-25    25-7   25-26   26-27    27-8    27-9 
-#> 0.11000 0.18333 0.19250      NA 0.22800 0.24479 0.08667 0.05167 0.01500 0.02000 0.02000 
-#>   26-10   18-11   17-12   16-13   15-14 
-#> 0.03500 0.46550 0.53409 0.58333 0.88077
 ```
 
 Note that the root has `<NA>` as its length.
 
 Print edge labels (also empty in this case --- therefore all `NA`):
 
-
-```r
+```{r edgelabelgeodata}
 edgeLabels(g1)
-#> 15-16 16-17 17-18 18-19 19-20 20-21 21-22 22-23 23-24  24-1  24-2  23-3  22-4  21-5  0-15 
-#>    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA 
-#>  20-6 19-25  25-7 25-26 26-27  27-8  27-9 26-10 18-11 17-12 16-13 15-14 
-#>    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
 ```
 
 You can also use this function to label specific edges:
 
-
-```r
+```{r edgelabel-assign-geodata}
 edgeLabels(g1)["23-24"] <- "an edge"
 edgeLabels(g1)
-#>     15-16     16-17     17-18     18-19     19-20     20-21     21-22     22-23     23-24 
-#>        NA        NA        NA        NA        NA        NA        NA        NA "an edge" 
-#>      24-1      24-2      23-3      22-4      21-5      0-15      20-6     19-25      25-7 
-#>        NA        NA        NA        NA        NA        NA        NA        NA        NA 
-#>     25-26     26-27      27-8      27-9     26-10     18-11     17-12     16-13     15-14 
-#>        NA        NA        NA        NA        NA        NA        NA        NA        NA
 ```
 
 The edge labels are named according to the nodes they connect
 (ancestor-descendant). You can get the edge(s) associated with a particular
 node:
 
-
-```r
+```{r getEdge-geodata}
 getEdge(g1, 24) # default uses descendant node
-#>      24 
-#> "23-24"
 getEdge(g1, 24, type="ancestor") # edges using ancestor node
-#>     24     24 
-#> "24-1" "24-2"
 ```
 
 These results can in turn be passed to the function \texttt{edgeLength} to
 retrieve the length of a given set of edges:
 
-
-```r
+```{r getEdge-edgeLength}
 edgeLength(g1)[getEdge(g1, 24)]
-#> 23-24 
-#> 0.055
 edgeLength(g1)[getEdge(g1, 24, "ancestor")]
-#>  24-1  24-2 
-#> 0.055 0.055
 ```
 
 Is it rooted?
 
-
-```r
+```{r rootedgeodata}
 isRooted(g1)
-#> [1] TRUE
 ```
 
 Which node is the root?
 
-
-```r
+```{r rootnodegeodata}
 rootNode(g1)
-#> N15 
-#>  15
 ```
 
 Does it contain any polytomies?
 
-
-```r
+```{r polygeodata}
 hasPoly(g1)
-#> [1] FALSE
 ```
 
 Is the tree ultrametric?
 
-
-```r
+```{r ultrametric-geodata}
 isUltrametric(g1)
-#> [1] TRUE
 ```
 
 You can also get the depth (distance from the root) of any given node or the
 tips:
 
-
-```r
+```{r nodeDepth-geodata}
 nodeDepth(g1, 23)
-#> Warning: 'nodeDepth' is deprecated.
-#> Use 'nodeHeight' instead.
-#> See help("Deprecated")
-#>     N23 
-#> 0.77077
 depthTips(g1)
-#> Warning: 'depthTips' is deprecated.
-#> Use 'nodeHeight' instead.
-#> See help("Deprecated")
-
-#> Warning: 'nodeDepth' is deprecated.
-#> Use 'nodeHeight' instead.
-#> See help("Deprecated")
-#>   fuliginosa       fortis magnirostris  conirostris     scandens   difficilis 
-#>      0.88077      0.88077      0.88077      0.88077      0.88077      0.88077 
-#>      pallida     parvulus   psittacula       pauper   platyspiza        fusca 
-#>      0.88077      0.88077      0.88077      0.88077      0.88077      0.88077 
-#> pinaroloxias     olivacea 
-#>      0.88077      0.88077
 ```
 
 ## Trees with data
@@ -429,8 +312,7 @@ frame to make a `phylo4d` (tree-with-data) object.
 Now we'll take the _Geospiza_ data from `geospiza_raw$data`
 and merge it with the tree. First, let's prepare the data:
 
-
-```r
+```{r}
 g1 <- as(geospiza_raw$tree, "phylo4")
 geodata <- geospiza_raw$data
 ```
@@ -439,32 +321,30 @@ However, since *G. olivacea* is included in the tree but not in the data
 set, we will initially run into some trouble:
 
 
-
-```r
+```{r geomergedata, error=TRUE}
 g2 <- phylo4d(g1, geodata)
-#> Error in formatData(phy = x, dt = tip.data, type = "tip", ...): The following nodes are not found in the dataset:  olivacea
 ```
 
-
+```{r echo=FALSE, results='hide'}
+geodata <- geospiza_raw$data
+```
 
 To deal with *G. olivacea* missing from the data, we have a few choices.
 The easiest is to use to allow to create the new object with a warning
 (you can also use to proceed without warnings):
 
-
-```r
+```{r geomerge2, tidy=FALSE, warning=TRUE}
 g2 <- phylo4d(g1, geodata, missing.data="warn")
-#> Warning in formatData(phy = x, dt = tip.data, type = "tip", ...): The following nodes are
-#> not found in the dataset: olivacea
 ```
 
-
+```{r, echo=FALSE, results='hide'}
+g2 <- phylo4d(g1, geodata, missing.data="OK", extra.data="OK")
+```
 
 Another way to deal with this would be to use `prune()` to drop the
 offending tip from the tree first:
 
-
-```r
+```{r <geomerge3, results='hide'}
 g1sub <- prune(g1, "olivacea")
 g1B <- phylo4d(g1sub, geodata)
 ```
@@ -513,8 +393,7 @@ node.subtree
 
 Different ways to extract the *fuliginosa*-*scandens* clade:
 
-
-```r
+```{r geoextract, results='hide'}
 subset(g2, tips.include=c("fuliginosa", "fortis", "magnirostris",
   "conirostris", "scandens"))
 subset(g2, node.subtree=21)
@@ -523,8 +402,7 @@ subset(g2, mrca=c("scandens", "fortis"))
 
 One could drop the clade by doing
 
-
-```r
+```{r geodrop, results='hide'}
 subset(g2, tips.exclude=c("fuliginosa", "fortis", "magnirostris",
   "conirostris", "scandens"))
 subset(g2, tips.exclude=names(descendants(g2, MRCA(g2, c("difficilis",
@@ -544,106 +422,53 @@ the first argument, the node numbers/labels as the second argument
 label. It returns a vector with node numbers as values and labels as
 names:
 
-
-```r
+```{r getnode}
 data(geospiza)
 getNode(geospiza, 10)
-#> pauper 
-#>     10
 getNode(geospiza, "pauper")
-#> pauper 
-#>     10
 ```
 
 If no node is specified, they are all returned, and if a node can't be
 found it's returned as a `NA`. It is possible to control what happens
 when a node can't be found:
 
-
-```r
+```{r getnode2}
 getNode(geospiza)
-#>   fuliginosa       fortis magnirostris  conirostris     scandens   difficilis 
-#>            1            2            3            4            5            6 
-#>      pallida     parvulus   psittacula       pauper   Platyspiza        fusca 
-#>            7            8            9           10           11           12 
-#> Pinaroloxias     olivacea          N15          N16          N17          N18 
-#>           13           14           15           16           17           18 
-#>          N19          N20          N21          N22          N23          N24 
-#>           19           20           21           22           23           24 
-#>          N25          N26          N27 
-#>           25           26           27
 getNode(geospiza, 10:14)
-#>       pauper   Platyspiza        fusca Pinaroloxias     olivacea 
-#>           10           11           12           13           14
 getNode(geospiza, "melanogaster", missing="OK") # no warning
-#> <NA> 
-#>   NA
 getNode(geospiza, "melanogaster", missing="warn") # warning!
-#> Warning in getNode(geospiza, "melanogaster", missing = "warn"): Some nodes not found
-#> among all nodes in tree: melanogaster
-#> <NA> 
-#>   NA
 ```
 
 `children` and `ancestor` give the immediate neighboring nodes:
 
-
-```r
+```{r children}
 children(geospiza, 16)
-#>          N17 Pinaroloxias 
-#>           17           13
 ancestor(geospiza, 16)
-#> N15 
-#>  15
 ```
 
 while `descendants` and `ancestors` can traverse the tree up to the tips
 or root respectively:
 
-
-```r
+```{r descendants}
 descendants(geospiza, 16) # by default returns only the tips
-#> Pinaroloxias        fusca   Platyspiza   difficilis     scandens  conirostris 
-#>           13           12           11            6            5            4 
-#> magnirostris   fuliginosa       fortis      pallida       pauper     parvulus 
-#>            3            1            2            7           10            8 
-#>   psittacula 
-#>            9
 descendants(geospiza, "all") # also include the internal nodes
-#> Warning in getNode(phy, node, missing = "warn"): Some nodes not found among all nodes in
-#> tree: all
-#> named list()
 ancestors(geospiza, 20)
-#> N19 N18 N17 N16 N15 
-#>  19  18  17  16  15
 ancestors(geospiza, 20, "ALL") # uppercase ALL includes self
-#> N20 N19 N18 N17 N16 N15 
-#>  20  19  18  17  16  15
 ```
 
 `siblings` returns the other node(s) associated with the same ancestor:
 
-
-```r
+```{r siblings}
 siblings(geospiza, 20)
-#> N25 
-#>  25
 siblings(geospiza, 20, include.self=TRUE)
-#> N20 N25 
-#>  20  25
 ```
 
 `MRCA` returns the most common recent ancestor for a set of tips, and
 shortest path returns the nodes connecting 2 nodes:
 
-
-```r
+```{r mrca}
 MRCA(geospiza, 1:6)
-#> N20 
-#>  20
 shortestPath(geospiza, 4, "pauper")
-#> N19 N20 N21 N22 N25 N26 
-#>  19  20  21  22  25  26
 ```
 
 ## multiPhylo4 classes
@@ -669,8 +494,7 @@ operate on phylogenetic trees with data.
 We start with a randomly generated tree using `rcoal()` from `ape` to
 generate the tree topology and branch lengths:
 
-
-```r
+```{r rtree2}
 set.seed(1001)
 tree <- as(rcoal(12), "phylo4")
 ```
@@ -681,8 +505,7 @@ normally distributed traits (using to pick a multivariate normal deviate
 with a variance-covariance matrix that matches the structure of the
 tree).
 
-
-```r
+```{r vcvphylo}
 vmat <- as(tree, "phylo4vcov")
 vmat <- cov2cor(vmat)
 library(MASS)
@@ -692,13 +515,10 @@ trvec <- mvrnorm(1, mu=rep(0, 12), Sigma=vmat)
 The last step (easy) is to convert the `phylo4vcov` object back to a
 `phylo4d` object:
 
-
-```r
+```{r plotvcvphylo}
 treed <- phylo4d(tree, tip.data=as.data.frame(trvec))
 plot(treed)
 ```
-
-![plot of chunk plotvcvphylo](fig-vignettes-plotvcvphylo-1.png)
 
 ## Definitions/slots
 
