@@ -10,3 +10,6 @@ tmp/
 *.gcno
 revdep/
 /README.html
+inst/doc
+/doc/
+/Meta/
