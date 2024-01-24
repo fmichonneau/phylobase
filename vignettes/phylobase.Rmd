@@ -136,7 +136,7 @@ All fine and good, but how to we find out about all the great features
 of the `phylobase` plotting function? `R` has two nifty ways to find it,
 the first is to simply put a question mark in front of the whole call:
 
-```{r doc0, eval=FALSE, purl=FALSE}
+```{r doc0, eval=FALSE}
 `?`(plot(rand_p4_tree))
 ```
 
@@ -145,15 +145,15 @@ file (note: this only works with objects). The second ways is handy if
 you already know the class of your object, or want to compare to
 generics for different classes:
 
-```{r doc1, eval=FALSE, purl=FALSE}
+```{r doc1, eval=FALSE}
 `?`(method, plot("phylo4"))
 ```
 
 More information about how documentation works can be found in the
 methods package, by running the following command.
 
-```{r doc2, eval=FALSE, purl=FALSE}
-help('Documentation', package=\"methods\")
+```{r doc2, eval=FALSE}
+help('Documentation', package="methods")
 ```
 
 ## Trees without data
@@ -217,7 +217,7 @@ tipLabels(g1) <- tolower(tipLabels(g1))
 You could also modify selected labels, e.g. to modify the labels in positions 11
 and 13 (which happen to be the only labels with uppercase letters):
 
-```{r modifylabels, eval=FALSE, purl=FALSE}
+```{r modifylabels, eval=FALSE}
 tipLabels(g1)[c(11, 13)] <- c("platyspiza", "pinaroloxias")
 ```
 
@@ -323,7 +323,7 @@ However, since *G. olivacea* is included in the tree but not in the data
 set, we will initially run into some trouble:
 
 
-```{r geomergedata, error=TRUE, purl=FALSE}
+```{r geomergedata, error=TRUE}
 g2 <- phylo4d(g1, geodata)
 ```
 
@@ -335,7 +335,7 @@ To deal with *G. olivacea* missing from the data, we have a few choices.
 The easiest is to use to allow to create the new object with a warning
 (you can also use to proceed without warnings):
 
-```{r geomerge2, tidy=FALSE, warning=TRUE, purl=FALSE}
+```{r geomerge2, tidy=FALSE, warning=TRUE}
 g2 <- phylo4d(g1, geodata, missing.data="warn")
 ```
 
