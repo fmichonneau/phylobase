@@ -802,9 +802,9 @@ separately with `tdata(x,"tip")`, `tdata(x,"internal")` or
 `tdata(x,"all")`. There is no separate slot for edge data, but these can
 be stored as node data associated with the descendant node.
 
-[^1]: <http://ape.mpl.ird.fr/>
+[^1]: <https://emmanuelparadis.github.io/ape_development.html>
 
-[^2]: see <http://en.wikipedia.org/wiki/Tree_traversal> for more
+[^2]: see <https://en.wikipedia.org/wiki/Tree_traversal> for more
     information on orderings. (`ape`'s "pruningwise" is "bottom-up"
     ordering).
 

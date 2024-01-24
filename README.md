@@ -6,9 +6,9 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/fmichonneau/phylobase/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fmichonneau/phylobase/actions/workflows/R-CMD-check.yaml)
-[![codecov.io](http://codecov.io/github/fmichonneau/phylobase/coverage.svg?branch=master)](http://codecov.io/github/fmichonneau/phylobase?branch=master)
-![](http://cranlogs.r-pkg.org/badges/phylobase) [![CRAN
-version](http://www.r-pkg.org/badges/version/phylobase)](http://cran.r-project.org/package=phylobase)
+[![codecov.io](https://codecov.io/github/fmichonneau/phylobase/coverage.svg?branch=master)](https://codecov.io/github/fmichonneau/phylobase?branch=master)
+![](https://cranlogs.r-pkg.org/badges/phylobase) [![CRAN
+version](https://www.r-pkg.org/badges/version/phylobase)](http://cran.r-project.org/package=phylobase)
 <!-- badges: end -->
 
 ## About this package
@@ -29,7 +29,7 @@ instead of having to rewrite the base functions.
 -   Maintainer: Francois Michonneau
 -   Licence: GPL (\>= 2)
 -   Issues, bug reports, feature requests, discussion:
-    <http://github.com/fmichonneau/phylobase/issues>
+    <https://github.com/fmichonneau/phylobase/issues>
 
 ## Installation
 
@@ -47,7 +47,7 @@ install.packages("phylobase")
 The development version (the patch version number is odd, e.g., 0.6.9)
 is available on GitHub (<https://github.com/fmichonneau/phylobase>), and
 can be installed using the
-[`devtools`](http://cran.r-project.org/package=devtools) package.
+[`devtools`](https://cran.r-project.org/package=devtools) package.
 
 ``` r
 pak::install_github("fmichonneau/phylobase")
@@ -137,7 +137,7 @@ head(g2)
 
 `phylobase` has a robust parser for NEXUS files (it uses the NEXUS Class
 Library from Paul Lewis and Mark Holder,
-[NCL](http://sourceforge.net/projects/ncl/files/)). It can be used to
+[NCL](https://sourceforge.net/projects/ncl/files/)). It can be used to
 import simultaneously tree and species data.
 
 ``` r

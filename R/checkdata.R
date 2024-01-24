@@ -18,7 +18,7 @@
 ##' \code{checkTree}.  The rules for \code{phylo4} objects essentially
 ##' follow those for \code{phylo} objects from the \code{ape} package,
 ##' which are in turn defined in
-##' \url{http://ape-package.ird.fr/misc/FormatTreeR_24Oct2012.pdf}.
+##' \url{https://emmanuelparadis.github.io/misc/FormatTreeR.pdf}.
 ##' These are essentially that: \itemize{ \item if the tree has edge
 ##' lengths defined, the number of edge lengths must match the number
 ##' of edges; \item the number of tip labels must match the number of
