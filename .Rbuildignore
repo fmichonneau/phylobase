@@ -18,3 +18,4 @@ cleanup
 ^\.github$
 ^figure$
 ^README\.html$
+^CRAN-SUBMISSION$

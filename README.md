@@ -6,9 +6,9 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/fmichonneau/phylobase/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fmichonneau/phylobase/actions/workflows/R-CMD-check.yaml)
-[![codecov.io](https://codecov.io/github/fmichonneau/phylobase/coverage.svg?branch=master)](https://codecov.io/github/fmichonneau/phylobase?branch=master)
+\[\[codecov.io\]\[(<https://app.codecov.io/github/fmichonneau/phylobase?branch=master>)\](<https://app.codecov.io/github/fmichonneau/phylobase?branch=master>)
 ![](https://cranlogs.r-pkg.org/badges/phylobase) [![CRAN
-version](https://www.r-pkg.org/badges/version/phylobase)](http://cran.r-project.org/package=phylobase)
+version](https://www.r-pkg.org/badges/version/phylobase)](https://cran.r-project.org/package=phylobase)
 <!-- badges: end -->
 
 ## About this package
