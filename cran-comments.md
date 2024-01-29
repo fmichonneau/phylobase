@@ -1,13 +1,7 @@
-## Test environments
-
-- local Ubuntu 19.10, R 3.6.2
-- Ubuntu 16.04 (travis-ci), R 3.6.2 and R-devel
-- Windows with win-builder (R 3.6.2 and R-devel (2020-01-28 r77738)
-
-
 ## R CMD check results
 
-- There were no ERRORs or WARNINGs
+- This submission addresses NOTEs mentioned in the email send on 2024-01-22 by
+  Kurt Hornik.
 
 
 ## Downstream dependencies
