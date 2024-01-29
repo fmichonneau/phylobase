@@ -808,4 +808,4 @@ be stored as node data associated with the descendant node.
     information on orderings. (`ape`'s "pruningwise" is "bottom-up"
     ordering).
 
-[^3]: [ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf](ape.mpl.ird.fr/misc/FormatTreeR_28July2008.pdf){.uri}
+[^3]: <https://emmanuelparadis.github.io/misc/FormatTreeR.pdf>
